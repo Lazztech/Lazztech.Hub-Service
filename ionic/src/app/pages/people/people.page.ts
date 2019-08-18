@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-people',
@@ -12,7 +13,10 @@ export class PeoplePage implements OnInit {
   private apollo: Apollo;
   persons: [] = [];
 
-  constructor(apollo: Apollo) {
+  constructor(
+    apollo: Apollo,
+    public navCtrl: NavController
+  ) {
     this.apollo = apollo;
   }
 
@@ -39,6 +43,10 @@ export class PeoplePage implements OnInit {
       console.log(JSON.stringify(this.persons));
       // console.log(this.persons[0].images[0].image);
     });
+  }
+
+  goToPersonPage(id: number) {
+    this.navCtrl.navigateRoot('person/'+ id);
   }
 
 }

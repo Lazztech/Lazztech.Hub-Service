@@ -6,9 +6,9 @@ import { AccountResolver } from "./resolvers/accountResolver";
 import { AuthenticationResolver } from "./resolvers/authenticationResolver";
 import { HelloResolver } from "./resolvers/helloResolver";
 import { NotificationResolver } from "./resolvers/notificationResolver";
-import { UserGroupResolver } from "./resolvers/userGroupResolver";
 import { PersonImageResolver } from "./resolvers/personImageResolver";
 import { PersonsFaceResolver } from "./resolvers/personsFaceResolver";
+import { UserGroupResolver } from "./resolvers/userGroupResolver";
 
 export const configuredSchema = async (): Promise<GraphQLSchema> => {
     return await buildSchema({

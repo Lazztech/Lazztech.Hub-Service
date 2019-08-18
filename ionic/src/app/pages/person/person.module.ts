@@ -11,6 +11,10 @@ const routes: Routes = [
   {
     path: '',
     component: PersonPage
+  },
+  {
+    path: ':id',
+    component: PersonPage
   }
 ];
 
