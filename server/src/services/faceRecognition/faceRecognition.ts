@@ -5,9 +5,9 @@ import { request } from "http";
 import { interval, Observable } from "rxjs";
 import { Service } from "typedi";
 import { Image } from "../../dal/entity/image";
+import { JoinPersonImage } from "../../dal/entity/joinPersonImage";
 import { Person } from "../../dal/entity/person";
 import { PersonDescriptor } from "../../dal/entity/personDescriptor";
-import { PersonImage } from "../../dal/entity/personImage";
 import { canvas, faceDetectionNet, saveFile } from "./common";
 import { RecognitionResult } from "./recognitionResult";
 const uuidv1 = require("uuid/v1");
@@ -121,7 +121,7 @@ export class FaceRecognition {
 
     descriptor = await PersonDescriptor.create(descriptor).save();
 
-    const personImage = await PersonImage.create({
+    const personImage = await JoinPersonImage.create({
         personId: person.id,
         imageId: newImage.id,
         personDescriptorId: descriptor.id

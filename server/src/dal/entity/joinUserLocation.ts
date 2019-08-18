@@ -5,7 +5,7 @@ import { User } from "./user";
 
 @ObjectType()
 @Entity()
-export class UserLocation extends BaseEntity {
+export class JoinUserLocation extends BaseEntity {
 
     @Field((type) => ID)
     @PrimaryColumn()

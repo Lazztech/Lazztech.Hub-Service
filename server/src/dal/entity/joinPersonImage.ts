@@ -7,7 +7,7 @@ import { PersonDescriptor } from "./personDescriptor";
 
 @ObjectType()
 @Entity()
-export class PersonImage extends BaseEntity {
+export class JoinPersonImage extends BaseEntity {
 
     @Field((type) => ID)
     @PrimaryColumn()

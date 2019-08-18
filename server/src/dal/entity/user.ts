@@ -2,9 +2,9 @@ import { Field, ID, ObjectType } from "type-graphql";
 import { BaseEntity, Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { JoinUserGroup } from "./joinUserGroup";
 import { JoinUserInAppNotifications } from "./joinUserInAppNotifications";
+import { JoinUserLocation } from "./joinUserLocation";
 import { PasswordReset } from "./passwordReset";
 import { UserDevice } from "./userDevice";
-import { UserLocation } from "./userLocation";
 
 @ObjectType()
 @Entity()
@@ -47,6 +47,6 @@ export class User extends BaseEntity {
     @OneToMany(() => UserDevice, (userDevice) => userDevice.user)
     public userDevices: UserDevice[];
 
-    @OneToMany((type) => UserLocation, (userLocation) => userLocation.user)
-    public locationsConnection: UserLocation[];
+    @OneToMany((type) => JoinUserLocation, (userLocation) => userLocation.user)
+    public locationsConnection: JoinUserLocation[];
 }

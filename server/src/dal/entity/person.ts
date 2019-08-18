@@ -1,7 +1,7 @@
 import { Field, ID, ObjectType } from "type-graphql";
 import { BaseEntity, Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Image } from "./image";
-import { PersonImage } from "./personImage";
+import { JoinPersonImage } from "./joinPersonImage";
 
 @ObjectType()
 @Entity()
@@ -16,8 +16,8 @@ export class Person extends BaseEntity {
     public name?: string;
 
     // @Field((type) => [PersonImage], { nullable: true })
-    @OneToMany((type) => PersonImage, (personImage) => personImage.person)
-    public imagesConnection: PersonImage[];
+    @OneToMany((type) => JoinPersonImage, (personImage) => personImage.person)
+    public imagesConnection: JoinPersonImage[];
 
     @Field(() => [Image], { nullable: true })
     public async images(): Promise<Image[]> {
@@ -26,7 +26,7 @@ export class Person extends BaseEntity {
 
     private async getThisPersonsImages() {
         const images: Image[] = [];
-        await PersonImage.find({
+        await JoinPersonImage.find({
             where: { personId: this.id },
             relations: [ "image" ]
         }).then((result) => {

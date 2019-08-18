@@ -1,8 +1,8 @@
 import { Field, ID, ObjectType } from "type-graphql";
 import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { JoinPersonImage } from "./joinPersonImage";
 import { Person } from "./person";
 import { PersonDescriptor } from "./personDescriptor";
-import { PersonImage } from "./personImage";
 
 @ObjectType()
 @Entity()
@@ -16,16 +16,16 @@ export class Image extends BaseEntity {
     @Column({ nullable: true })
     public image: string;
 
+    @OneToMany((type) => JoinPersonImage, (personImage) => personImage.image)
+    public personsConnection: JoinPersonImage[];
+
     @Field((type) => String, { nullable: true })
     public async savedAtTimestamp(): Promise<string> {
-        const personImage = await PersonImage.findOne({
+        const personImage = await JoinPersonImage.findOne({
             where: { imageId: this.id }
         });
         return personImage.timestamp;
     }
-
-    @OneToMany((type) => PersonImage, (personImage) => personImage.image)
-    public personsConnection: PersonImage[];
 
     @Field((type) => [PersonDescriptor], { nullable: true })
     public async personDescriptors(): Promise<PersonDescriptor[]> {
@@ -39,7 +39,7 @@ export class Image extends BaseEntity {
 
     private async getThisImagesPersons() {
         const people: Person[] = [];
-        await PersonImage.find({
+        await JoinPersonImage.find({
             where: { imageId: this.id },
             relations: [ "person" ]
         }).then((result) => {
@@ -53,7 +53,7 @@ export class Image extends BaseEntity {
 
     private async getThisImagesDescriptors() {
         const descriptors: PersonDescriptor[] = [];
-        await PersonImage.find({
+        await JoinPersonImage.find({
             where: { imageId: this.id },
             relations: [ "personDescriptor" ]
         }).then((result) => {
