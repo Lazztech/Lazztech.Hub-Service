@@ -1,9 +1,27 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>people</ion-title>
+      <ion-buttons slot="start">
+          <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+    <ion-title>People</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+    <ion-list>
+        <ion-item *ngFor ="let person of persons" >
+            <ion-card>
+                <ion-img src="{{person.images[0].image}}"></ion-img>
+                <ion-card-header>
+                  <ion-card-subtitle>Card Subtitle</ion-card-subtitle>
+                  <ion-card-title>{{person.name}}</ion-card-title>
+                </ion-card-header>
+              
+                <ion-card-content>
+                    <ion-button fill="outline" slot="end" href="/person/{{person.id}}">Details</ion-button>
+                </ion-card-content>
+              </ion-card>
 
+         </ion-item>
+       </ion-list>
 </ion-content>
