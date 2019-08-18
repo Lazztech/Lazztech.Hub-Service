@@ -4,6 +4,7 @@ import { JoinUserGroup } from "./joinUserGroup";
 import { JoinUserInAppNotifications } from "./joinUserInAppNotifications";
 import { PasswordReset } from "./passwordReset";
 import { UserDevice } from "./userDevice";
+import { UserLocation } from "./userLocation";
 
 @ObjectType()
 @Entity()
@@ -45,4 +46,7 @@ export class User extends BaseEntity {
 
     @OneToMany(() => UserDevice, (userDevice) => userDevice.user)
     public userDevices: UserDevice[];
+
+    @OneToMany((type) => UserLocation, (userLocation) => userLocation.user)
+    public locationsConnection: UserLocation[];
 }
