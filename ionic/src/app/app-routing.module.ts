@@ -24,7 +24,10 @@ const routes: Routes = [
   { path: 'change-password', loadChildren: './pages/profile/change-password/change-password.module#ChangePasswordPageModule', canActivate: [AuthGuard] },
   { path: 'delete-account', loadChildren: './pages/profile/delete-account/delete-account.module#DeleteAccountPageModule', canActivate: [AuthGuard] },
   { path: 'invite', loadChildren: './pages/invite/invite.module#InvitePageModule', canActivate: [AuthGuard] },
-  { path: 'notifications', loadChildren: './pages/notifications/notifications.module#NotificationsPageModule', canActivate: [AuthGuard] }
+  { path: 'notifications', loadChildren: './pages/notifications/notifications.module#NotificationsPageModule', canActivate: [AuthGuard] },
+  { path: 'people', loadChildren: './pages/people/people.module#PeoplePageModule' },
+  { path: 'person', loadChildren: './pages/person/person.module#PersonPageModule' },
+  { path: 'timeline', loadChildren: './pages/timeline/timeline.module#TimelinePageModule' }
 ];
 
 @NgModule({
