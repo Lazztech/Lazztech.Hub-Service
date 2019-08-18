@@ -1,6 +1,6 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class InitialSetup1566158442837 implements MigrationInterface {
+export class InitialSetup1566159005456 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<any> {
         await queryRunner.query(`CREATE TABLE "in_app_notification" ("id" SERIAL NOT NULL, "text" character varying NOT NULL, "date" character varying NOT NULL, "thumbnail" character varying, "actionLink" character varying, CONSTRAINT "PK_9c57597f8e042ab80df73847de4" PRIMARY KEY ("id"))`);
@@ -17,6 +17,7 @@ export class InitialSetup1566158442837 implements MigrationInterface {
         await queryRunner.query(`CREATE TABLE "join_user_group" ("userId" integer NOT NULL, "locationId" integer NOT NULL, "groupId" integer, CONSTRAINT "PK_02c648cd4e69f7f2326fd9276fd" PRIMARY KEY ("userId", "locationId"))`);
         await queryRunner.query(`CREATE TABLE "group" ("id" SERIAL NOT NULL, "name" character varying, "description" character varying, CONSTRAINT "PK_256aa0fda9b1de1a73ee0b7106b" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "invite" ("id" SERIAL NOT NULL, "email" character varying NOT NULL, CONSTRAINT "PK_fc9fa190e5a3c5d80604a4f63e1" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "persons_face" ("id" SERIAL NOT NULL, "name" character varying, "image" character varying, "descriptor" numeric array, CONSTRAINT "PK_0103040298254e232d0d8f754a3" PRIMARY KEY ("id"))`);
         await queryRunner.query(`ALTER TABLE "join_user_in_app_notifications" ADD CONSTRAINT "FK_d342396ba51c5ed48dfef10fe28" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "join_user_in_app_notifications" ADD CONSTRAINT "FK_5a574454bde0417279789491071" FOREIGN KEY ("inAppNotificationId") REFERENCES "in_app_notification"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "join_person_image" ADD CONSTRAINT "FK_5547e6bb93fa200931f6afbbb2f" FOREIGN KEY ("personId") REFERENCES "person"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
@@ -44,6 +45,7 @@ export class InitialSetup1566158442837 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE "join_person_image" DROP CONSTRAINT "FK_5547e6bb93fa200931f6afbbb2f"`);
         await queryRunner.query(`ALTER TABLE "join_user_in_app_notifications" DROP CONSTRAINT "FK_5a574454bde0417279789491071"`);
         await queryRunner.query(`ALTER TABLE "join_user_in_app_notifications" DROP CONSTRAINT "FK_d342396ba51c5ed48dfef10fe28"`);
+        await queryRunner.query(`DROP TABLE "persons_face"`);
         await queryRunner.query(`DROP TABLE "invite"`);
         await queryRunner.query(`DROP TABLE "group"`);
         await queryRunner.query(`DROP TABLE "join_user_group"`);
