@@ -1,9 +1,46 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>person</ion-title>
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="/people"></ion-back-button>
+      </ion-buttons>
+    <ion-title>Person ID: {{id}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-list>
+      <ion-item>
+        <ion-card>
+            <ion-img src="{{person.images[0].image}}" width="640" height="480"></ion-img>
+            <canvas #canvas id="canvas" width="640" height="480"></canvas>
+            <ion-card-header>
+              <ion-card-subtitle>First Seen: {{person.images[0].savedAtTimestamp | date: 'yyy-MM-dd'}}</ion-card-subtitle>
+              <ion-card-title>{{person.name}}</ion-card-title>
+            </ion-card-header>
+          
+            <ion-card-content>
+              <!-- Input with placeholder --> 
+              <ion-input *ngIf="renaming" [(ngModel)]="newName" placeholder="Enter Input"></ion-input> 
+              <ion-button *ngIf="!renaming" fill="outline" slot="end" (click)="startRenaming()">Rename</ion-button>
+              <ion-button *ngIf="renaming" fill="outline" slot="end" (click)="rename()">Save</ion-button>
+              <ion-button *ngIf="renaming" fill="outline" slot="end" (click)="stopRenaming()">Cancel</ion-button>
+            </ion-card-content>
+          </ion-card>
+      </ion-item>
 
+      
+      <ion-item *ngFor ="let image of person.images" >
+          <ion-card>
+              <ion-img src="{{image.image}}"></ion-img>
+              <ion-card-header>
+                <ion-card-subtitle>{{image.savedAtTimestamp | date: 'yyy-MM-dd'}}</ion-card-subtitle>
+              </ion-card-header>
+              <ion-card-content>
+                <ion-button fill="outline" slot="end" href="/person/{{person.id}}">Reassign Person</ion-button>
+                <ion-button fill="outline" slot="end" href="/person/{{person.id}}">Delete Image</ion-button>
+              </ion-card-content>
+          </ion-card>
+       </ion-item>
+     </ion-list>
 </ion-content>
+
