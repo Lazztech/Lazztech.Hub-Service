@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-toolbar>
+      <ion-buttons slot="start">
+          <ion-button (click)="dismiss()">Close</ion-button>
+      </ion-buttons>
+    <ion-title>Change Name</ion-title>
+    <ion-progress-bar *ngIf="loading" type="indeterminate"></ion-progress-bar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+    <form [formGroup]="myForm" (ngSubmit)="changeName()" method="post">
+        <ion-item>
+          <ion-label position="floating">New First Name</ion-label>
+          <ion-input type="email" formControlName="firstName"></ion-input>
+        </ion-item>
+
+        <ion-text text-center padding color="danger">
+            <p *ngIf="firstName.invalid && firstName.touched" color="danger" >
+                Required
+            </p>
+        </ion-text>
+
+        <ion-item>
+            <ion-label position="floating">New Last Name</ion-label>
+            <ion-input type="email" formControlName="lastName"></ion-input>
+        </ion-item>
+
+        <ion-text text-center padding color="danger">
+            <p *ngIf="lastName.invalid && lastName.touched" color="danger" >
+                Required
+            </p>
+        </ion-text>
+        
+        <br/>
+    
+        <ion-button [disabled]="myForm.invalid" type="submit" expand="full" color="primary">Send</ion-button>
+      </form>
+</ion-content>

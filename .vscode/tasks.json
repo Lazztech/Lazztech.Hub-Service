@@ -1,0 +1,166 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558 
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run Server",
+            "type": "npm",
+            "script": "dev",
+            "path": "server/",
+            "problemMatcher": []
+        },
+        {
+            "label": "Ionic Serve",
+            "type": "shell",
+            "command": "ionic serve",
+            "options": {
+                "cwd": "${workspaceRoot}/ionic"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Build Server",
+            "type": "npm",
+            "script": "build",
+            "path": "server/",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Open localhost:8080",
+            "type": "shell",
+            "command": "open http://localhost:8080",
+            "problemMatcher": []
+        },
+        {
+            "label": "Open GraphQL Playground",
+            "type": "shell",
+            "command": "open http://localhost:8080/graphql",
+            "problemMatcher": []
+        },
+        {
+            "label": "New Server Typeorm Migration",
+            "type": "shell",
+            "command": "npm run build && typeorm migration:generate -n ${input:MigrationName}",
+            "options": {
+                "cwd": "${workspaceRoot}/server"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Run Server Typeorm Migrations",
+            "type": "shell",
+            "command": "npm run build && typeorm migration:run",
+            "options": {
+                "cwd": "${workspaceRoot}/server"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Revert Server Typeorm Migration",
+            "type": "shell",
+            "command": "npm run build && typeorm migration:revert",
+            "options": {
+                "cwd": "${workspaceRoot}/server"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "New Empty Server Typeorm Migration",
+            "type": "shell",
+            "command": "npm run build && typeorm migration:create -n ${input:MigrationName}",
+            "options": {
+                "cwd": "${workspaceRoot}/server"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Drop DB Tables",
+            "type": "shell",
+            "command": "typeorm schema:drop",
+            "options": {
+                "cwd": "${workspaceRoot}/server"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Npm Install All Projects",
+            "type": "shell",
+            "command": "cd googleAssistant/functions && npm install && cd ${workspaceRoot} && cd client && npm install && cd .. && cd server && npm install && cd ../ionic/Face && npm install",
+            "options": {
+                "cwd": "${workspaceRoot}"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Test Server",
+            "type": "npm",
+            "script": "test",
+            "path": "server/",
+            "problemMatcher": []
+        },
+        {
+            "label": "Docker Compose Up",
+            "type": "shell",
+            "command": "docker-compose up",
+            "options": {
+                "cwd": "${workspaceRoot}"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Docker Purge All",
+            "type": "shell",
+            "command": "docker kill $(docker ps -q) && docker rm $(docker ps -a -q) && docker rmi $(docker images -q)",
+            "options": {
+                "cwd": "${workspaceRoot}"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Docker Compose Build & Push",
+            "type": "shell",
+            "command": "docker-compose build && docker-compose push",
+            "options": {
+                "cwd": "${workspaceRoot}"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "SSH Into Digital Ocean",
+            "type": "shell",
+            "command": "ssh root@104.248.70.206",
+            "options": {
+                "cwd": "${workspaceRoot}"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Deploy Into Digital Ocean",
+            "type": "shell",
+            "command": "ssh root@104.248.70.206 \"rm -r Gian-TS-Stack && git clone https://github.com/gianlazz/Gian-TS-Stack.git\" && scp $(pwd)/docker-compose.yml root@104.248.70.206:/root/Gian-TS-Stack/docker-compose.yml && ssh root@104.248.70.206 \"docker-compose -f /root/Gian-TS-Stack/docker-compose.yml down && docker-compose -f /root/Gian-TS-Stack/docker-compose.yml pull && docker-compose -f /root/Gian-TS-Stack/docker-compose.yml up -d\"",
+            "options": {
+                "cwd": "${workspaceRoot}"
+            },
+            "problemMatcher": []
+        },
+    ],
+    "inputs": [
+        {
+            "id": "MigrationName",
+            "description": "Enter Typeorm Migration Name",
+            "default": "",
+            "type": "promptString"
+        },
+        {
+            "id": "SSHPassword",
+            "description": "Enter ssh password",
+            "default": "",
+            "type": "promptString"
+        }
+    ]
+}

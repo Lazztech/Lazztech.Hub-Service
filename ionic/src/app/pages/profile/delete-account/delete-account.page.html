@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-toolbar>
+      <ion-buttons slot="start">
+          <ion-button (click)="dismiss()">Close</ion-button>
+      </ion-buttons>
+    <ion-title>Delete Account</ion-title>
+    <ion-progress-bar *ngIf="loading" type="indeterminate"></ion-progress-bar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-text text-center padding color="danger">
+        <h5 >Warning this cannot be reversed!</h5>
+    </ion-text>
+    <ion-text text-center padding color="danger">
+        <h5 >If you are sure you would like to permanently delete your account enter your email and password to verify.</h5>
+    </ion-text>
+
+    <form [formGroup]="myForm" (ngSubmit)="deleteAccount()" method="post">
+        <ion-item>
+          <ion-label position="floating">Email</ion-label>
+          <ion-input type="email" formControlName="email"></ion-input>
+        </ion-item>
+
+        <ion-text text-center padding color="danger">
+            <p *ngIf="email.invalid && email.touched" color="danger" >
+                Please enter a valid email address
+            </p>
+        </ion-text>
+
+        <ion-item>
+            <ion-label position="floating">Password</ion-label>
+            <ion-input type="password" formControlName="password"></ion-input>
+        </ion-item>
+
+        <ion-text text-center padding color="danger">
+            <p *ngIf="password.invalid && password.touched" color="danger" >
+                Please enter a password with numbers, letters and at least 8 characters
+            </p>
+        </ion-text>
+        
+        <br/>
+    
+        <ion-button [disabled]="myForm.invalid" type="submit" expand="full" color="danger">Delete Account</ion-button>
+      </form>
+</ion-content>

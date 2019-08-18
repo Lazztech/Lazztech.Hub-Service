@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+        <ion-button (click)="dismissLogin()">Close</ion-button>
+    </ion-buttons>
+    <ion-title>Send Reset Pin</ion-title>
+    <ion-progress-bar *ngIf="loading" type="indeterminate"></ion-progress-bar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  
+  <p text-center>Forgot your password? No problem. Enter your email and we’ll send you a pin to reset your password.</p>
+
+    <form [formGroup]="myForm" (ngSubmit)="sendPin()" method="post">
+      <ion-item>
+        <ion-label position="floating">Email</ion-label>
+        <ion-input type="email" formControlName="email"></ion-input>
+      </ion-item>
+
+      <ion-text text-center padding color="danger">
+          <p *ngIf="email.invalid && email.touched" color="danger" >
+              Please enter a valid email address
+          </p>
+      </ion-text>
+      
+      <br/>
+  
+      <ion-button [disabled]="myForm.invalid" type="submit" expand="full" color="primary">Send</ion-button>
+    </form>
+
+</ion-content>

@@ -1,0 +1,7 @@
+{
+  "appId": "tech.lazz.app",
+  "appName": "app",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www"
+}

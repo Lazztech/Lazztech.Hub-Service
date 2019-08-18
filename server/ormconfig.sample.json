@@ -1,0 +1,24 @@
+{
+   "type": "postgres",
+   "host": "localhost",
+   "port": 5432,
+   "username": "test",
+   "password": "Password123",
+   "database": "postgres",
+   "synchronize": true,
+   "logging": true,
+   "entities": [
+      "*/dal/entity/**/*.js"
+   ],
+   "migrations": [
+      "*/dal/migration/**/*.js"
+   ],
+   "subscribers": [
+      "*/dal/subscriber/**/*.js"
+   ],
+   "cli": {
+      "entitiesDir": "src/dal/entity",
+      "migrationsDir": "src/dal/migration",
+      "subscribersDir": "src/dal/subscriber"
+   }
+}

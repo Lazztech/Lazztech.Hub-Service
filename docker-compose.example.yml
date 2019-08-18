@@ -1,0 +1,32 @@
+version: "3.4"
+services:
+  server: 
+    image: gianlazzarini/ts_stack_server
+    ports: 
+      - 80:80
+    build: server/
+    command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; npm start'
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgres://postgres:Password123@db:5432/postgres
+      - PORT=80
+      - DEPLOYMENT=Docker
+      - ACCESS_TOKEN_SECRET=SecretForToken
+      - EMAIL_FROM_ADDRESS=youremail@service.com
+      - EMAIL_PASSWORD=youremailpassword
+      - FIREBASE_SERVER_KEY=FIREBASE_SERVER_KEY}
+      - APP_NAME=GianTsStack
+    volumes:
+      - /root/ssl:/ssl
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=Password123
+      - POSTGRES_DB=postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:

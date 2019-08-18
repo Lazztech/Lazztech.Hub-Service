@@ -1,0 +1,62 @@
+<ion-header>
+  <ion-toolbar>
+      <ion-buttons slot="start">
+          <ion-button (click)="dismissRegister()">Close</ion-button>
+        </ion-buttons>
+    <ion-title>Register</ion-title>
+    <ion-progress-bar *ngIf="loading" type="indeterminate"></ion-progress-bar>
+  </ion-toolbar>
+</ion-header>
+<ion-content padding>
+  <form [formGroup]="myForm" (ngSubmit)="register()" method="post">
+    <ion-item>
+        <ion-label position="floating">First Name</ion-label>
+        <ion-input formControlName="firstName"></ion-input>
+    </ion-item>
+
+    <ion-text text-center padding color="danger">
+        <p *ngIf="firstName.invalid && firstName.touched" color="danger" >
+            Required
+        </p>
+    </ion-text>
+  
+    <ion-item>
+      <ion-label position="floating">Last Name</ion-label>
+      <ion-input formControlName="lastName"></ion-input>
+    </ion-item>
+
+    <ion-text text-center padding color="danger">
+        <p *ngIf="lastName.invalid && lastName.touched" color="danger" >
+            Required
+        </p>
+    </ion-text>
+  
+    <ion-item>
+      <ion-label position="floating">Email</ion-label>
+      <ion-input type="email" formControlName="email"></ion-input>
+    </ion-item>
+
+    <ion-text text-center padding color="danger">
+        <p *ngIf="email.invalid && email.touched" color="danger" >
+            Please enter a valid email address
+        </p>
+    </ion-text>
+  
+    <ion-item>
+      <ion-label position="floating">Password</ion-label>
+      <ion-input type="password" formControlName="password"></ion-input>
+    </ion-item>
+
+    <ion-text text-center padding color="danger">
+        <p *ngIf="password.invalid && password.touched" color="danger" >
+            Please enter a password with numbers, letters and at least 8 characters
+        </p>
+    </ion-text>
+
+    <br />
+
+    <ion-button [disabled]="myForm.invalid" type="submit" expand="full" color="danger">Register</ion-button>
+  </form>
+  <p text-center>Already have a account?</p>
+  <ion-button expand="full" color="primary" (click)="loginModal()">Login</ion-button>
+</ion-content> 

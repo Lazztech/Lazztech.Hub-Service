@@ -1,0 +1,68 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Server index.ts",
+            "type": "node",
+            "request": "launch",
+            "runtimeArgs": [
+                "-r",
+                "ts-node/register"
+            ],
+            "args": [
+                "${workspaceFolder}/server/src/index.ts"
+            ],
+            "cwd": "${workspaceRoot}/server",
+            "skipFiles": [
+                "${workspaceFolder}/server/node_modules/**/*.js",
+                "${workspaceFolder}/server/dist/**/*.js",
+                "<node_internals>/**/*.js"
+            ],
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Launch Ionic & Chrome",
+            "url": "http://localhost:8100",
+            "webRoot": "${workspaceFolder}/ionic",
+            "smartStep": true,
+            "skipFiles": [
+                "<node_internals>/**/*.js"
+            ],
+            "preLaunchTask": "Ionic Serve"
+        },
+        {
+            "type": "chrome",
+            "request": "attach",
+            "name": "Attach to Chrome",
+            "port": 9222,
+            "webRoot": "${workspaceFolder}/ionic",
+            "smartStep": true,
+            "skipFiles": [
+                "<node_internals>/**/*.js"
+            ],
+        },
+        {
+            "name": "Debug Jest Tests",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceRoot}/server",
+            "program": "${workspaceFolder}/server/node_modules/jest/bin/jest.js",
+            "args": [
+                "-i",
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "preLaunchTask": "Build Server"
+        }
+    ],
+    "compounds": [
+        {
+          "name": "Full-stack Debug",
+          "configurations": ["Debug Server index.ts", "Launch Ionic & Chrome", "Attach to Chrome"]
+        }
+    ]
+}
