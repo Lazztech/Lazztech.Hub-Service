@@ -24,7 +24,17 @@ export class AppComponent {
       title: 'Notifications',
       url: '/notifications',
       icon: 'notifications'
-    },    
+    },
+    {
+      title: 'Timeline',
+      url: '/timeline',
+      icon: 'list'
+    },
+    {
+      title: 'People',
+      url: '/people',
+      icon: 'person'
+    },   
     {
       title: 'Profile',
       url: '/profile',
