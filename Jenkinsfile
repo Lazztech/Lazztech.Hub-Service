@@ -55,10 +55,10 @@ pipeline {
         branch 'master'
       }
       steps{
-        sshagent(credentials : ['fb01b444-0666-4510-a47a-99fa4df46948']){
+        sshagent(credentials : ['LazztechHubSSHServerKey']){
           sh "# This line below is required to get ssh to work."
-          sh "ssh -o StrictHostKeyChecking=no -l root 104.248.70.206 uname -a"
-          sh """ssh root@104.248.70.206 << EOF
+          sh "ssh -o StrictHostKeyChecking=no -l root 157.230.148.108 uname -a"
+          sh """ssh root@157.230.148.108 << EOF
             docker ps
             rm -r -f Lazztech.Hub/
             git clone https://gianlazz:$GITHUB_PASSWORD@github.com/gianlazz/Lazztech.Hub.git

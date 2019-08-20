@@ -11,9 +11,13 @@
     - https://stackoverflow.com/questions/10054318/how-do-i-provide-a-username-and-password-when-running-git-clone-gitremote-git
     - Add GITHUB_PASSWORD secret text credential to jenkins
 - Enable github pages from master/docs in github repo settings
-- Setup netlify
+- Add ssh key for new server to jenkins
+    - [Jenkins doc](./Jenkins.md)
+    - Change the id in the deployment ssh section of the Jenkinsfile to the new id.
 
 
 # Not done yet
+- Add ssh key for new server to jenkins
+- Setup netlify
 - Replace ssh ip address with new server ip address
 
