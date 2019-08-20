@@ -14,7 +14,7 @@ pipeline {
   stages {
     stage('Cloning Git') {
       steps {
-        git branch: 'master', credentialsId: 'dfbd5064-e8e7-48ca-b2d2-5ac8360ebc4a', url: 'https://github.com/gianlazz/Lazztech.Hub.git'
+        checkout scm
       }
     }
     stage('Build') {
