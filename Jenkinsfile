@@ -3,6 +3,7 @@ pipeline {
     registry = "gianlazzarini/lazztech_hub_server"
     registryCredential = 'dockerhub'
     dockerImage = ''
+    GITHUB_PASSWORD = credentials('GITHUB_PASSWORD')
     ACCESS_TOKEN_SECRET = credentials('ACCESS_TOKEN_SECRET')
     EMAIL_FROM_ADDRESS = credentials('EMAIL_FROM_ADDRESS')
     EMAIL_PASSWORD = credentials('EMAIL_PASSWORD')
@@ -60,7 +61,7 @@ pipeline {
           sh """ssh root@104.248.70.206 << EOF
             docker ps
             rm -r -f Lazztech.Hub/
-            git clone https://github.com/gianlazz/Lazztech.Hub.git
+            git clone https://gianlazz:$GITHUB_PASSWORD@github.com/gianlazz/Lazztech.Hub.git
             ls
             pwd
             cd Lazztech.Hub
