@@ -1,7 +1,7 @@
 version: "3.4"
 services:
   server: 
-    image: gianlazzarini/ts_stack_server
+    image: gianlazzarini/lazztech_hub_server
     ports: 
       - 80:80
     build: server/

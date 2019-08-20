@@ -1,6 +1,6 @@
 pipeline {
   environment {
-    registry = "gianlazzarini/ts_stack_server"
+    registry = "gianlazzarini/lazztech_hub_server"
     registryCredential = 'dockerhub'
     dockerImage = ''
     ACCESS_TOKEN_SECRET = credentials('ACCESS_TOKEN_SECRET')
@@ -14,7 +14,7 @@ pipeline {
   stages {
     stage('Cloning Git') {
       steps {
-        git 'https://github.com/gianlazz/Gian-TS-Stack.git'
+        git 'https://github.com/gianlazz/Lazztech.Hub.git'
       }
     }
     stage('Build') {
@@ -59,11 +59,11 @@ pipeline {
           sh "ssh -o StrictHostKeyChecking=no -l root 104.248.70.206 uname -a"
           sh """ssh root@104.248.70.206 << EOF
             docker ps
-            rm -r -f Gian-TS-Stack/
-            git clone https://github.com/gianlazz/Gian-TS-Stack.git
+            rm -r -f Lazztech.Hub/
+            git clone https://github.com/gianlazz/Lazztech.Hub.git
             ls
             pwd
-            cd Gian-TS-Stack
+            cd Lazztech.Hub
             pwd
             docker-compose down
             ACCESS_TOKEN_SECRET=$ACCESS_TOKEN_SECRET EMAIL_FROM_ADDRESS=$EMAIL_FROM_ADDRESS EMAIL_PASSWORD=$EMAIL_PASSWORD FIREBASE_SERVER_KEY=$FIREBASE_SERVER_KEY docker-compose pull

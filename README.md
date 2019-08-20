@@ -3,7 +3,7 @@
 | Platform    | CI/CD |
 | ----------- | ----------- |
 | Ionic       | [![Netlify Status](https://api.netlify.com/api/v1/badges/7eef933d-d51d-4b50-b531-298e96b64d51/deploy-status)](https://app.netlify.com/sites/confident-dubinsky-3e5f30/deploys)       |
-| Server      | [![Build Status](http://jenkins.lazz.tech/job/Gian-TS-Stack/job/master/badge/icon?style=flat-square)](http://jenkins.lazz.tech/blue/organizations/jenkins/Gian-TS-Stack/)        |
+| Server      | [![Build Status](http://jenkins.lazz.tech/job/Lazztech.Hub/job/master/badge/icon?style=flat-square)](http://jenkins.lazz.tech/blue/organizations/jenkins/Lazztech.Hub/)        |
 
 ## QuickStart
 
