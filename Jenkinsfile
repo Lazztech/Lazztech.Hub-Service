@@ -14,7 +14,7 @@ pipeline {
   stages {
     stage('Cloning Git') {
       steps {
-        git 'https://github.com/gianlazz/Lazztech.Hub.git'
+        git 'git@github.com:gianlazz/Lazztech.Hub.git'
       }
     }
     stage('Build') {
