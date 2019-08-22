@@ -18,8 +18,8 @@ You'll need a key and certificate file which we'll name `key.key` and `cert.pem`
 To find the SSL Keys on cloudflare for your domain:
 Log In Select your domain > Select Crypto > Scroll to Origin Certificates > Click Create Certificate > Click Next 
 
-Copy the Certificate and past it into a file on you machine named `cert.pem`.
-Copy the Private key and past it into a file on your machine named `key.key`.
+Copy the Certificate and paste it into a file on you machine named `cert.pem`.
+Copy the Private key and paste it into a file on your machine named `key.key`.
 
 ## Enable HTTPS Redirect
 

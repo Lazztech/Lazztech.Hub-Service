@@ -1,7 +1,7 @@
 # How to setup this boilerplate for a new project
 
-- Replaced Gian-TS-Stack with Lazztech.Hub
-- Replaced ts_stack_server with lazztech_hub_server
+- Replaced Gian-TS-Stack with Lazztech.Hub address across repo
+- Replaced ts_stack_server with lazztech_hub_server address across repo
 - Added the pipeline to jenkins blue ocean
     - After adding your repo, go back to Manage Jenkins -> Configure System -> GitHub -> Advanced -> “Re-register hooks for all jobs”
         - http://jayd.ml/jenkins/2019/03/05/jenkins-pipeline-webhooks.html
@@ -14,10 +14,11 @@
 - Add ssh key for new server to jenkins
     - [Jenkins doc](./Jenkins.md)
     - Change the id in the deployment ssh section of the Jenkinsfile to the new id.
-
+- Replace ip address with new server ip address across repo
+- Setup the ssl certificate on the server
+    - [Setup HTTPS SSL](./SetupHttpsSSL.md)
 
 # Not done yet
-- Add ssh key for new server to jenkins
 - Setup netlify
-- Replace ssh ip address with new server ip address
+
 
