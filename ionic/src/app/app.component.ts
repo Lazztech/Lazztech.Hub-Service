@@ -26,11 +26,6 @@ export class AppComponent {
       icon: 'notifications'
     },
     {
-      title: 'Timeline',
-      url: '/timeline',
-      icon: 'list'
-    },
-    {
       title: 'People',
       url: '/people',
       icon: 'person'

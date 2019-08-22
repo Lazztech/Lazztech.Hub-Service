@@ -27,7 +27,6 @@ const routes: Routes = [
   { path: 'notifications', loadChildren: './pages/notifications/notifications.module#NotificationsPageModule', canActivate: [AuthGuard] },
   { path: 'people', loadChildren: './pages/people/people.module#PeoplePageModule', canActivate: [AuthGuard] },
   { path: 'person', loadChildren: './pages/person/person.module#PersonPageModule', canActivate: [AuthGuard] },
-  { path: 'timeline', loadChildren: './pages/timeline/timeline.module#TimelinePageModule', canActivate: [AuthGuard] }
 ];
 
 @NgModule({
