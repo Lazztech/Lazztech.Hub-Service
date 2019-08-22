@@ -21,9 +21,9 @@
             <ion-card-content>
               <!-- Input with placeholder --> 
               <ion-input *ngIf="renaming" [(ngModel)]="newName" placeholder="Enter Input"></ion-input> 
-              <ion-button *ngIf="!renaming" fill="outline" slot="end" (click)="startRenaming()">Rename</ion-button>
-              <ion-button *ngIf="renaming" fill="outline" slot="end" (click)="rename()">Save</ion-button>
-              <ion-button *ngIf="renaming" fill="outline" slot="end" (click)="stopRenaming()">Cancel</ion-button>
+              <ion-button *ngIf="!renaming" slot="end" (click)="startRenaming()">Rename</ion-button>
+              <ion-button *ngIf="renaming" slot="end" (click)="rename()">Save</ion-button>
+              <ion-button *ngIf="renaming" slot="end" (click)="stopRenaming()">Cancel</ion-button>
             </ion-card-content>
           </ion-card>
       </ion-item>
@@ -36,8 +36,8 @@
                 <ion-card-subtitle>{{image.savedAtTimestamp | date: 'yyy-MM-dd'}}</ion-card-subtitle>
               </ion-card-header>
               <ion-card-content>
-                <ion-button fill="outline" slot="end" href="/person/{{person.id}}">Reassign Person</ion-button>
-                <ion-button fill="outline" slot="end" href="/person/{{person.id}}">Delete Image</ion-button>
+                <ion-button slot="end" href="/person/{{person.id}}">Reassign Person</ion-button>
+                <ion-button slot="end" href="/person/{{person.id}}">Delete Image</ion-button>
               </ion-card-content>
           </ion-card>
        </ion-item>
