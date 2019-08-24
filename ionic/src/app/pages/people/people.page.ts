@@ -10,6 +10,8 @@ import { NavController } from '@ionic/angular';
 })
 export class PeoplePage implements OnInit {
 
+  loading = false;
+
   private apollo: Apollo;
   persons: [] = [];
 
@@ -21,7 +23,12 @@ export class PeoplePage implements OnInit {
   }
 
   ngOnInit() {
-    this.apollo.query({
+    this.loadPeople();
+  }
+
+  async loadPeople(){
+    this.loading = true;
+    const result = await this.apollo.query({
       query: gql`
         query {
           getAllPersons {
@@ -30,6 +37,7 @@ export class PeoplePage implements OnInit {
             images {
               id
               image
+              savedAtTimestamp
               personDescriptors {
                 id
                 descriptor
@@ -37,12 +45,19 @@ export class PeoplePage implements OnInit {
             }
           }
         }
-      `
-    }).subscribe(({data}) => {
-      this.persons = data['getAllPersons'];
-      console.log(JSON.stringify(this.persons));
-      // console.log(this.persons[0].images[0].image);
-    });
+      `,
+      fetchPolicy: "no-cache"
+    }).toPromise();
+
+    this.persons = result.data['getAllPersons'];
+    this.loading = false;
+  }
+
+  async doRefresh(event) {
+    console.log('Begin async operation');
+    this.loading = true;
+    await this.loadPeople();
+    event.target.complete();
   }
 
   goToPersonPage(id: number) {
