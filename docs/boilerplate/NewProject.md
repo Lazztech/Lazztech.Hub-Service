@@ -18,9 +18,11 @@
 - Setup the ssl certificate on the server
     - [Setup HTTPS SSL](./SetupHttpsSSL.md)
 - Change Ionic server variable to point at new server
-
-# Not done yet
 - Setup netlify
 - Add Ionic design assets
+    - https://appicon.co
+    - https://pgicons.abiro.com
+
+# Not done yet
 
 
