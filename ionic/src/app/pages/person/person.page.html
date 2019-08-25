@@ -28,19 +28,20 @@
           </ion-card>
       </ion-item>
 
-      
-      <ion-item *ngFor ="let image of person.images; let i = index" >
-          <ion-card *ngIf="i != 0">
-              <ion-img src="{{image.image}}"></ion-img>
-              <ion-card-header>
-                <ion-card-subtitle>{{image.savedAtTimestamp | date: 'yyy-MM-dd'}}</ion-card-subtitle>
-              </ion-card-header>
-              <ion-card-content>
-                <ion-button slot="end" href="/person/{{person.id}}">Reassign Person</ion-button>
-                <ion-button slot="end" href="/person/{{person.id}}">Delete Image</ion-button>
-              </ion-card-content>
-          </ion-card>
-       </ion-item>
+      <div *ngFor ="let image of person.images; let i = index" >
+          <ion-item *ngIf="i != 0">
+              <ion-card >
+                  <ion-img src="{{image.image}}"></ion-img>
+                  <ion-card-header>
+                    <ion-card-subtitle>{{image.savedAtTimestamp | date: 'yyy-MM-dd'}}</ion-card-subtitle>
+                  </ion-card-header>
+                  <ion-card-content>
+                    <ion-button slot="end" href="/person/{{person.id}}">Reassign Person</ion-button>
+                    <ion-button slot="end" href="/person/{{person.id}}">Delete Image</ion-button>
+                  </ion-card-content>
+              </ion-card>
+           </ion-item>
+      </div>
      </ion-list>
 </ion-content>
 
