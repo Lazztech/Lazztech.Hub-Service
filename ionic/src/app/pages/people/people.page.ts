@@ -23,6 +23,9 @@ export class PeoplePage implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  ionViewDidEnter() {
     this.loadPeople();
   }
 
