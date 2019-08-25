@@ -33,7 +33,7 @@ export class AppComponent {
     {
       title: 'Profile',
       url: '/profile',
-      icon: 'person'
+      icon: 'settings'
     },
     {
       title: 'Invite',

@@ -64,4 +64,8 @@ export class PeoplePage implements OnInit {
     this.navCtrl.navigateRoot('person/'+ id);
   }
 
+  goToAddPersonPage() {
+    this.navCtrl.navigateRoot('add-person');
+  }
+
 }
