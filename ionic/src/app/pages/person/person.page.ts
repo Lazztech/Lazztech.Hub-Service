@@ -3,6 +3,7 @@ import gql from 'graphql-tag';
 import { ActivatedRoute } from '@angular/router';
 import { Apollo } from 'apollo-angular';
 import * as faceapi from 'face-api.js';
+import { PeopleService } from 'src/app/services/people.service';
 
 
 @Component({
@@ -17,44 +18,22 @@ export class PersonPage implements OnInit {
   renaming: boolean;
   newName: string;
 
-  constructor(private route: ActivatedRoute, private apollo: Apollo) {
+  constructor(
+    private route: ActivatedRoute,
+    private apollo: Apollo,
+    private peopleService: PeopleService
+    ) {
     this.renaming = false;
   }
 
   ngOnInit() {
     this.id = parseInt(this.route.snapshot.paramMap.get('id'));
     console.log(this.id);
-    this.apollo.query({
-      query: gql`
-      query {
-        getPerson(id: ${this.id}) {
-          id
-          name
-          images {
-            id
-            image
-            savedAtTimestamp
-            personDescriptors {
-              id
-              x
-              y
-              height
-              width
-              person {
-                id
-              }
-            }
-          }
-        }
-      }
-      `
-    }).subscribe(({data}) => {
-      this.person = data['getPerson'];
-      console.log(JSON.stringify(this.person));
-      console.log(this.person.images[0].image);
+  }
 
-      this.drawCanvas("canvas");
-    });
+  async ionViewDidEnter() {
+    this.person = await this.peopleService.getPerson(this.id);
+    this.drawCanvas("canvas");
   }
 
   startRenaming() {
@@ -66,20 +45,11 @@ export class PersonPage implements OnInit {
   }
 
   async rename() {
-    this.apollo.mutate({
-      mutation: gql`
-      mutation {
-        renamePerson(personId: ${this.id}, newName: "${this.newName}")
-      }
-      `
-    }).subscribe(({data}) => {
-      if (data.renamePerson === true) {
-        this.person.name = this.newName;
-      } else {
-        console.log("Rename failed.");
-      }
-      this.renaming = false;
-    });
+    const result = await this.peopleService.renamePerson(this.id, this.newName);
+    if (result) {
+      this.person.name = this.newName;
+    }
+    this.renaming = false;
   }
 
   drawCanvas(canvasId: string) {

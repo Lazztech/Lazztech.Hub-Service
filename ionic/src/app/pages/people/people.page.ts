@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { NavController } from '@ionic/angular';
+import { PeopleService } from 'src/app/services/people.service';
 
 @Component({
   selector: 'app-people',
@@ -12,15 +13,13 @@ export class PeoplePage implements OnInit {
 
   loading = false;
 
-  private apollo: Apollo;
   persons: [] = [];
 
   constructor(
-    apollo: Apollo,
-    public navCtrl: NavController
-  ) {
-    this.apollo = apollo;
-  }
+    private apollo: Apollo,
+    public navCtrl: NavController,
+    private peopleService: PeopleService
+  ) { }
 
   ngOnInit() {
   }
@@ -31,28 +30,7 @@ export class PeoplePage implements OnInit {
 
   async loadPeople(){
     this.loading = true;
-    const result = await this.apollo.query({
-      query: gql`
-        query {
-          getAllPersons {
-            id
-            name
-            images {
-              id
-              image
-              savedAtTimestamp
-              personDescriptors {
-                id
-                descriptor
-              }
-            }
-          }
-        }
-      `,
-      fetchPolicy: "no-cache"
-    }).toPromise();
-
-    this.persons = result.data['getAllPersons'];
+    this.persons = await this.peopleService.loadAllPeople();
     this.loading = false;
   }
 
