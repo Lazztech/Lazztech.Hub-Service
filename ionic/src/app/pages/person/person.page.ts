@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import gql from 'graphql-tag';
 import { ActivatedRoute } from '@angular/router';
-import { Apollo } from 'apollo-angular';
 import * as faceapi from 'face-api.js';
 import { PeopleService } from 'src/app/services/people.service';
 
@@ -20,7 +18,6 @@ export class PersonPage implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private apollo: Apollo,
     private peopleService: PeopleService
     ) {
     this.renaming = false;

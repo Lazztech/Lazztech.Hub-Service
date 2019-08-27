@@ -78,4 +78,20 @@ export class PeopleService {
     const succeeded = result.data.renamePerson;
     return succeeded;
   }
+
+  async deletePersonByName(name: string): Promise<boolean> {
+    const result = await this.apollo.mutate({
+      mutation: gql`
+      mutation {
+        deleteRegisteredPersonsFaceByName(name: "${name}")
+      }
+      `}).toPromise();
+    
+    if (result.data.deleteRegisteredPersonsFaceByName == 1) {
+      return true;
+    } 
+    else {
+      return false;
+    }
+  }
 }

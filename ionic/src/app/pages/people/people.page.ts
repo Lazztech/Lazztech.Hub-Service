@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Apollo } from 'apollo-angular';
-import gql from 'graphql-tag';
 import { NavController } from '@ionic/angular';
 import { PeopleService } from 'src/app/services/people.service';
 
@@ -16,7 +14,6 @@ export class PeoplePage implements OnInit {
   persons: [] = [];
 
   constructor(
-    private apollo: Apollo,
     public navCtrl: NavController,
     private peopleService: PeopleService
   ) { }
