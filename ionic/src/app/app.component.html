@@ -40,8 +40,8 @@
           </ion-item>
         </ion-list>
       </ion-content>
-      <ion-item>
-          <ion-icon slot="start" (click)="toggleTheme()" name="moon"></ion-icon>
+      <ion-item (click)="toggleTheme()">
+          <ion-icon size="large" slot="start" name="moon"></ion-icon>
       </ion-item>
     </ion-menu>
     <ion-router-outlet main></ion-router-outlet>

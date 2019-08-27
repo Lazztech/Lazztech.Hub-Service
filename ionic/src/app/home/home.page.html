@@ -30,21 +30,5 @@
 </ion-header>
 
 <ion-content>
-    <ion-card class="welcome-card">
-      <ion-img src="/assets/shapes.svg"></ion-img>
-      <ion-card-header>
-        <ion-card-subtitle>Get Started</ion-card-subtitle>
-        <div *ngIf="user != undefined">
-            <ion-card-title>Welcome {{ user["firstName"]  }} {{ user["lastName"]  }}</ion-card-title>
-        </div>
-        <div *ngIf="user == undefined">
-            <ion-card-title>Welcome to Ionic</ion-card-title>
-        </div>
-      </ion-card-header>
-      <ion-card-content>
-        <p>Now that your app has been created, you'll want to start building out features and components. Check out some of the resources below for next steps.</p>
-      </ion-card-content>
-    </ion-card>
 
-    <ion-button (click)="testPushNotification()">Test Push Notifications</ion-button>
 </ion-content>
