@@ -49,7 +49,7 @@ export class HomePage implements OnInit, AfterViewInit {
     this.navCtrl.navigateRoot('notifications');
   }
 
-  async ionViewWillEnter() {
+  async ionViewDidEnter() {
     this.user = await this.authService.user();
     this.inAppNotificationCount = await this.notificationsService.getInAppNotifications().then(x => x.length);
   }
