@@ -6,6 +6,7 @@ import { UpdateService } from '../services/update.service';
 import { PwaInstallService } from '../services/pwa-install.service';
 import { Observable, of } from 'rxjs';
 import { NotificationsService } from '../services/notifications.service';
+import { PeopleService } from '../services/people.service';
 
 @Component({
   selector: 'app-home',
@@ -18,6 +19,8 @@ export class HomePage implements OnInit, AfterViewInit {
   updateReady = false;
   beforeInstall: Observable<boolean> = of(false);
   inAppNotificationCount = 0;
+
+  persons: [] = [];
   
   constructor(
     private menu: MenuController,
@@ -26,7 +29,8 @@ export class HomePage implements OnInit, AfterViewInit {
     private pwaInstallService: PwaInstallService,
     private platform: Platform,
     private notificationsService: NotificationsService,
-    public navCtrl: NavController
+    public navCtrl: NavController,
+    public peopleService: PeopleService
     ) { 
     this.menu.enable(true);
     this.beforeInstall = pwaInstallService.beforeInstall;
@@ -52,6 +56,8 @@ export class HomePage implements OnInit, AfterViewInit {
   async ionViewDidEnter() {
     this.user = await this.authService.user();
     this.inAppNotificationCount = await this.notificationsService.getInAppNotifications().then(x => x.length);
+
+    this.persons = await this.peopleService.loadAllPeople();
   }
 
   async ngOnInit() {
