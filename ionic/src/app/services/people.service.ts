@@ -99,7 +99,10 @@ export class PeopleService {
     const result = await this.apollo.query({
       query: gql`
       query {
-        getImage(id: "${id}")
+        getImage(id: "${id}") {
+          id
+          image
+        }
       }
       `
     }).toPromise();
