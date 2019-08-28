@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PeopleService } from 'src/app/services/people.service';
 import { ActivatedRoute } from '@angular/router';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-image',
@@ -13,6 +14,7 @@ export class ImagePage implements OnInit {
   image: any;
 
   constructor(
+    public navCtrl: NavController,
     private route: ActivatedRoute,
     private peopleService: PeopleService
   ) { }
@@ -23,6 +25,10 @@ export class ImagePage implements OnInit {
 
   async ionViewDidEnter() {
     this.image = await this.peopleService.getImage(this.id);
+  }
+
+  goToPersonPage(id: number) {
+    this.navCtrl.navigateRoot('person/'+ id);
   }
 
 }

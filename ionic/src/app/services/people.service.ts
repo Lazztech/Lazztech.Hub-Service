@@ -104,6 +104,7 @@ export class PeopleService {
           image
           savedAtTimestamp
           people {
+            id
             images {
               image
             }

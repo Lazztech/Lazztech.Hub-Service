@@ -10,7 +10,7 @@
 
 <ion-content>
   <div *ngFor="let person of image.people">
-          <ion-item>
+          <ion-item (click)="goToPersonPage(person.id)">
               <ion-avatar>
                   <ion-img width="100%" src="{{person.images[0].image}}"></ion-img>
                 </ion-avatar>
