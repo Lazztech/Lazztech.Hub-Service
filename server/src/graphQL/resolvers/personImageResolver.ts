@@ -54,6 +54,17 @@ export class PersonImageResolver {
     }
 
     @Authorized()
+    @Query(() => Image)
+    public async getImage(id: number): Promise<Image> {
+        const image = await Image.findOne({
+            where: {
+                id
+            }
+        });
+        return image;
+    }
+
+    @Authorized()
     @Query((type) => [JoinPersonImage])
     public async personImageThisWeek(): Promise<JoinPersonImage[]> {
         try {

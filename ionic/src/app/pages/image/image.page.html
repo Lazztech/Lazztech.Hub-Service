@@ -1,9 +1,47 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>image</ion-title>
+      <ion-buttons slot="start">
+          <ion-back-button></ion-back-button>
+        </ion-buttons>
+    <ion-title>Image</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-item>
+      <ion-avatar slot="start">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-avatar>
+        <ion-avatar slot="start">
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </ion-avatar>
+          <ion-avatar slot="start">
+              <ion-skeleton-text animated></ion-skeleton-text>
+            </ion-avatar>
+            <ion-avatar slot="start">
+                <ion-skeleton-text animated></ion-skeleton-text>
+              </ion-avatar>
+              <ion-avatar slot="start">
+                  <ion-skeleton-text animated></ion-skeleton-text>
+                </ion-avatar>
+                <ion-avatar slot="start">
+                    <ion-skeleton-text animated></ion-skeleton-text>
+                  </ion-avatar>
+                  <ion-avatar slot="start">
+                      <ion-skeleton-text animated></ion-skeleton-text>
+                    </ion-avatar>
+  </ion-item>
 
+    <ion-card >
+        <ion-img src="{{image.image}}"></ion-img>
+        <ion-card-header>
+          <ion-card-subtitle>{{image.savedAtTimestamp | date: 'yyy-MM-dd'}}</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-icon slot="start" size="large" name="chatboxes"></ion-icon>
+            <ion-icon slot="end" size="large" name="star"></ion-icon>
+        </ion-card-content>
+    </ion-card>
+
+    
 </ion-content>

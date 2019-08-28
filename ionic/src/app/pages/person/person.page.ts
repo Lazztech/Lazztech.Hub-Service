@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as faceapi from 'face-api.js';
 import { PeopleService } from 'src/app/services/people.service';
+import { NavController } from '@ionic/angular';
 
 
 @Component({
@@ -17,6 +18,7 @@ export class PersonPage implements OnInit {
   newName: string;
 
   constructor(
+    public navCtrl: NavController,
     private route: ActivatedRoute,
     private peopleService: PeopleService
     ) {
@@ -47,6 +49,10 @@ export class PersonPage implements OnInit {
       this.person.name = this.newName;
     }
     this.renaming = false;
+  }
+
+  goToImage(id: number) {
+    this.navCtrl.navigateRoot('image/'+ id);
   }
 
   drawCanvas(canvasId: string) {

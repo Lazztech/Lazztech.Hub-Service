@@ -31,7 +31,7 @@
       <div *ngFor ="let image of person.images; let i = index" >
           <ion-item *ngIf="i != 0">
               <ion-card >
-                  <ion-img src="{{image.image}}"></ion-img>
+                  <ion-img src="{{image.image}}" (click)=(goToImage(image.id))></ion-img>
                   <ion-card-header>
                     <ion-card-subtitle>{{image.savedAtTimestamp | date: 'yyy-MM-dd'}}</ion-card-subtitle>
                   </ion-card-header>
