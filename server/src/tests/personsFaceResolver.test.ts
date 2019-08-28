@@ -10,6 +10,7 @@ let conn: Connection;
 let ctx: IMyContext;
 beforeAll(async () => {
     conn = await testConn();
+    jest.setTimeout(120000);
 
     ctx = contextSetup();
     await registerOrLogin(ctx);
