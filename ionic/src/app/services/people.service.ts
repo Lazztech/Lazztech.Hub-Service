@@ -102,6 +102,7 @@ export class PeopleService {
         getImage(id: "${id}") {
           id
           image
+          savedAtTimestamp
         }
       }
       `

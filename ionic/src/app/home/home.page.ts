@@ -74,6 +74,10 @@ export class HomePage implements OnInit, AfterViewInit {
     this.pwaInstallService.showInstallBanner();
   }
 
+  goToImage(id: number) {
+    this.navCtrl.navigateRoot('image/'+ id);
+  }
+
   update() {
     console.log('updating...');
     this.updateService.updateToLatest();
