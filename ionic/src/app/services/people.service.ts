@@ -94,4 +94,16 @@ export class PeopleService {
       return false;
     }
   }
+
+  async getImage(id: number): Promise<any> {
+    const result = await this.apollo.query({
+      query: gql`
+      query {
+        getImage(id: "${id}")
+      }
+      `
+    }).toPromise();
+
+    return result.data['getImage'];
+  }
 }

@@ -28,6 +28,7 @@ const routes: Routes = [
   { path: 'people', loadChildren: './pages/people/people.module#PeoplePageModule', canActivate: [AuthGuard] },
   { path: 'person', loadChildren: './pages/person/person.module#PersonPageModule', canActivate: [AuthGuard] },
   { path: 'add-person', loadChildren: './pages/add-person/add-person.module#AddPersonPageModule' },
+  { path: 'image', loadChildren: './pages/image/image.module#ImagePageModule' },
 ];
 
 @NgModule({
