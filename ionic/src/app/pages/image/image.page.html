@@ -9,29 +9,14 @@
 </ion-header>
 
 <ion-content>
-  <ion-item>
-      <ion-avatar slot="start">
-          <ion-skeleton-text animated></ion-skeleton-text>
-        </ion-avatar>
-        <ion-avatar slot="start">
-            <ion-skeleton-text animated></ion-skeleton-text>
-          </ion-avatar>
-          <ion-avatar slot="start">
-              <ion-skeleton-text animated></ion-skeleton-text>
-            </ion-avatar>
-            <ion-avatar slot="start">
-                <ion-skeleton-text animated></ion-skeleton-text>
-              </ion-avatar>
-              <ion-avatar slot="start">
-                  <ion-skeleton-text animated></ion-skeleton-text>
+  <div *ngFor="let person of image.people">
+          <ion-item>
+              <ion-avatar>
+                  <ion-img width="100%" src="{{person.images[0].image}}"></ion-img>
                 </ion-avatar>
-                <ion-avatar slot="start">
-                    <ion-skeleton-text animated></ion-skeleton-text>
-                  </ion-avatar>
-                  <ion-avatar slot="start">
-                      <ion-skeleton-text animated></ion-skeleton-text>
-                    </ion-avatar>
-  </ion-item>
+          </ion-item>
+  </div>
+
 
     <ion-card >
         <ion-img src="{{image.image}}"></ion-img>

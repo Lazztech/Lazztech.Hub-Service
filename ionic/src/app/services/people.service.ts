@@ -103,11 +103,15 @@ export class PeopleService {
           id
           image
           savedAtTimestamp
+          people {
+            images {
+              image
+            }
+          }
         }
       }
       `
     }).toPromise();
-
     return result.data['getImage'];
   }
 }
