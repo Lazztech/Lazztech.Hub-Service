@@ -5,6 +5,8 @@ import { JoinUserInAppNotifications } from "./joinUserInAppNotifications";
 import { JoinUserLocation } from "./joinUserLocation";
 import { PasswordReset } from "./passwordReset";
 import { UserDevice } from "./userDevice";
+import { JoinUserHub } from "./joinUserHub";
+import { Hub } from "./hub";
 
 @ObjectType()
 @Entity()
@@ -38,6 +40,9 @@ export class User extends BaseEntity {
     @OneToMany((type) => JoinUserGroup, (userGroupJoin) => userGroupJoin.user)
     public groupsConnection: JoinUserGroup[];
 
+    @OneToMany((type) => JoinUserHub, (joinUserHub) => joinUserHub.user)
+    public hubsConnection: JoinUserHub[];
+
     @OneToOne(() => PasswordReset, {
         cascade: true
     })
@@ -49,4 +54,34 @@ export class User extends BaseEntity {
 
     @OneToMany((type) => JoinUserLocation, (userLocation) => userLocation.user)
     public locationsConnection: JoinUserLocation[];
+
+    public async ownedHubs(): Promise<Hub[]> {
+        const joinUserHubResults = await JoinUserHub.find({
+            where: { 
+                userId: this.id,
+                isOwner: true
+            },
+            relations: ["hub"]
+        });
+        const hubs: Hub[] = [];
+        joinUserHubResults.forEach((result) => {
+            hubs.push(result.hub);
+        });
+        return hubs;
+    }
+
+    public async memberOfHubs(): Promise<Hub[]> {
+        const joinUserHubResults = await JoinUserHub.find({
+            where: { 
+                userId: this.id,
+                isOwner: false
+            },
+            relations: ["hub"]
+        });
+        const hubs: Hub[] = [];
+        joinUserHubResults.forEach((result) => {
+            hubs.push(result.hub);
+        });
+        return hubs;
+    }
 }
