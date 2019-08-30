@@ -55,6 +55,7 @@ export class User extends BaseEntity {
     @OneToMany((type) => JoinUserLocation, (userLocation) => userLocation.user)
     public locationsConnection: JoinUserLocation[];
 
+    @Field(() => [Hub])
     public async ownedHubs(): Promise<Hub[]> {
         const joinUserHubResults = await JoinUserHub.find({
             where: {
@@ -70,6 +71,7 @@ export class User extends BaseEntity {
         return hubs;
     }
 
+    @Field(() => [Hub])
     public async memberOfHubs(): Promise<Hub[]> {
         const joinUserHubResults = await JoinUserHub.find({
             where: {
