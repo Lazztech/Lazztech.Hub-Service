@@ -1,12 +1,12 @@
 import { Field, ID, ObjectType } from "type-graphql";
 import { BaseEntity, Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Hub } from "./hub";
 import { JoinUserGroup } from "./joinUserGroup";
+import { JoinUserHub } from "./joinUserHub";
 import { JoinUserInAppNotifications } from "./joinUserInAppNotifications";
 import { JoinUserLocation } from "./joinUserLocation";
 import { PasswordReset } from "./passwordReset";
 import { UserDevice } from "./userDevice";
-import { JoinUserHub } from "./joinUserHub";
-import { Hub } from "./hub";
 
 @ObjectType()
 @Entity()
@@ -57,7 +57,7 @@ export class User extends BaseEntity {
 
     public async ownedHubs(): Promise<Hub[]> {
         const joinUserHubResults = await JoinUserHub.find({
-            where: { 
+            where: {
                 userId: this.id,
                 isOwner: true
             },
@@ -72,7 +72,7 @@ export class User extends BaseEntity {
 
     public async memberOfHubs(): Promise<Hub[]> {
         const joinUserHubResults = await JoinUserHub.find({
-            where: { 
+            where: {
                 userId: this.id,
                 isOwner: false
             },

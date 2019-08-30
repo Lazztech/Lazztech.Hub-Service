@@ -1,15 +1,14 @@
-import { Resolver, Authorized, Query, Mutation, Arg, Ctx } from "type-graphql";
-import { Hub } from "../../dal/entity/hub";
 import { verify } from "jsonwebtoken";
+import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
+import { Hub } from "../../dal/entity/hub";
+import { JoinUserHub } from "../../dal/entity/joinUserHub";
 import { User } from "../../dal/entity/user";
 import { IMyContext } from "../context.interface";
-import { JoinUserHub } from "../../dal/entity/joinUserHub";
-
 
 @Resolver()
 export class HubResolver {
-    
-    constructor() {}
+
+    // constructor() {}
 
     @Authorized()
     @Mutation(() => User)
@@ -49,7 +48,7 @@ export class HubResolver {
     @Mutation(() => Hub)
     public async renameHub(
         @Ctx() ctx: IMyContext,
-        @Arg("hubId") hubId: number, 
+        @Arg("hubId") hubId: number,
         @Arg("newName") newName: string
     ): Promise<Hub> {
         let accessToken = ctx.req.cookies["access-token"];
@@ -65,7 +64,7 @@ export class HubResolver {
         const joinUserHubResult = await JoinUserHub.findOne({
             where: {
                 userId: data.userId,
-                hubId: hubId,
+                hubId,
                 isOwner: true
             },
             relations: ["hub"]
@@ -81,7 +80,7 @@ export class HubResolver {
     @Mutation(() => Hub)
     public async changeHubImage(
         @Ctx() ctx: IMyContext,
-        @Arg("hubId") hubId: number, 
+        @Arg("hubId") hubId: number,
         @Arg("newImage") newImage: string
     ): Promise<Hub> {
         let accessToken = ctx.req.cookies["access-token"];
@@ -97,7 +96,7 @@ export class HubResolver {
         const joinUserHubResult = await JoinUserHub.findOne({
             where: {
                 userId: data.userId,
-                hubId: hubId,
+                hubId,
                 isOwner: true
             },
             relations: ["hub"]
@@ -108,5 +107,5 @@ export class HubResolver {
         hub = await hub.save();
         return hub;
     }
-    
+
 }

@@ -1,5 +1,5 @@
-import { ObjectType, Field, ID } from "type-graphql";
-import { Entity, BaseEntity, PrimaryGeneratedColumn, ManyToOne, OneToMany, Column } from "typeorm";
+import { Field, ID, ObjectType } from "type-graphql";
+import { BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { JoinUserHub } from "./joinUserHub";
 import { User } from "./user";
 
@@ -38,7 +38,7 @@ export class Hub extends BaseEntity {
         });
 
         return owners;
-    } 
+    }
 
     @Field(() => [User])
     public async members(): Promise<User[]> {

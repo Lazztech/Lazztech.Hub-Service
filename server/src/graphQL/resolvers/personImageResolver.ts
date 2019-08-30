@@ -4,7 +4,7 @@ import * as fs from "fs";
 import * as https from "https";
 import { Writable } from "stream";
 import { ReadableStreamBuffer, WritableStreamBuffer } from "stream-buffers";
-import { Arg, Authorized, Int, Mutation, Query, Resolver, ID } from "type-graphql";
+import { Arg, Authorized, ID, Int, Mutation, Query, Resolver } from "type-graphql";
 import { Between } from "typeorm";
 import { FaceRecognition } from "../../services/faceRecognition/faceRecognition";
 import { Image } from "./../../dal/entity/image";
