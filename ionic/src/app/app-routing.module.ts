@@ -29,6 +29,8 @@ const routes: Routes = [
   { path: 'person', loadChildren: './pages/person/person.module#PersonPageModule', canActivate: [AuthGuard] },
   { path: 'add-person', loadChildren: './pages/add-person/add-person.module#AddPersonPageModule' },
   { path: 'image', loadChildren: './pages/image/image.module#ImagePageModule' },
+  { path: 'hub', loadChildren: './pages/hub/hub.module#HubPageModule' },
+  { path: 'hubs', loadChildren: './pages/hubs/hubs.module#HubsPageModule' },
 ];
 
 @NgModule({
