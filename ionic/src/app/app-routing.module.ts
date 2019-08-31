@@ -32,6 +32,8 @@ const routes: Routes = [
   { path: 'hub', loadChildren: './pages/hub/hub.module#HubPageModule' },
   { path: 'hubs', loadChildren: './pages/hubs/hubs.module#HubsPageModule' },
   { path: 'add-hub', loadChildren: './pages/add-hub/add-hub.module#AddHubPageModule' },
+  { path: 'create-hub', loadChildren: './pages/create-hub/create-hub.module#CreateHubPageModule' },
+  { path: 'join-hub', loadChildren: './pages/join-hub/join-hub.module#JoinHubPageModule' },
 ];
 
 @NgModule({
