@@ -50,3 +50,6 @@ Resources:
 
 Caching
 - https://medium.com/@galen.corey/understanding-apollo-fetch-policies-705b5ad71980
+
+## Ionic/Capacitor Camera
+- https://capacitor.ionicframework.com/docs/guides/ionic-framework-app/#adding-camera-functionality

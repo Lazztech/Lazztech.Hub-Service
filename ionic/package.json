@@ -30,6 +30,7 @@
     "@ionic-native/status-bar": "^5.0.0",
     "@ionic-native/stripe": "^5.6.0",
     "@ionic/angular": "^4.1.0",
+    "@ionic/pwa-elements": "^1.3.0",
     "@ionic/storage": "^2.2.0",
     "@types/stripe-checkout": "^1.0.3",
     "@types/stripe-v3": "^3.1.0",
@@ -41,14 +42,14 @@
     "cordova-plugin-stripe": "1.5.3",
     "cordova-sqlite-storage": "3.2.0",
     "core-js": "^2.5.4",
+    "face-api.js": "^0.19.0",
     "firebase": "^6.3.1",
     "graphql": "^14.3.0",
     "graphql-tag": "^2.10.1",
     "rxjs": "~6.5.1",
     "stripe": "^7.0.0",
     "tslib": "^1.9.0",
-    "zone.js": "~0.8.29",
-    "face-api.js": "^0.19.0"
+    "zone.js": "~0.8.29"
   },
   "devDependencies": {
     "@angular-devkit/architect": "~0.13.8",
