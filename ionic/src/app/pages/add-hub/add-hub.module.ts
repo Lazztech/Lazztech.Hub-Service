@@ -10,7 +10,27 @@ import { AddHubPage } from './add-hub.page';
 const routes: Routes = [
   {
     path: '',
-    component: AddHubPage
+    component: AddHubPage,
+    children: [
+      {
+        path: 'create-hub',
+        children: [
+          {
+            path: '',
+            loadChildren: '../create-hub/create-hub.module#CreateHubPageModule'
+          }
+        ]
+      },
+      {
+        path: 'join-hub',
+        children: [
+          {
+            path: '',
+            loadChildren: '../join-hub/join-hub.module#JoinHubPageModule'
+          }
+        ]
+      }
+    ]
   }
 ];
 

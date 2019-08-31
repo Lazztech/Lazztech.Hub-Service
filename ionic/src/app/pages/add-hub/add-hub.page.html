@@ -4,9 +4,48 @@
           <ion-menu-button></ion-menu-button>
       </ion-buttons>
     <ion-title>Add Hub</ion-title>
+    <ion-progress-bar *ngIf="loading" type="indeterminate"></ion-progress-bar>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+
+    <!-- <ion-card>
+        <ion-item>
+            <ion-icon name="add" slot="start"></ion-icon>
+            <ion-label>Create a Hub</ion-label>
+            <ion-button slot="end">Create</ion-button>
+          </ion-item>
+      
+        <ion-card-content>
+          Setup your own Hub with a Lazztech Hub Camera. You will be the community Hub Owner and manage the privacy policy.
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card>
+          <ion-item>
+              <ion-icon name="add" slot="start"></ion-icon>
+              <ion-label>Join a Hub</ion-label>
+              <ion-button slot="end">Join</ion-button>
+            </ion-item>
+            
+          <ion-card-content>
+              Join a community Hub as a Hub Member. View the communities Hub privacy policy to opt in and configure your involvement as a community Hub Member.
+          </ion-card-content>
+        </ion-card> -->
+
+        <ion-tabs>
+            <!-- Tab bar -->
+            <ion-tab-bar slot="bottom">
+              <ion-tab-button tab="create-hub">
+                <ion-icon name="person"></ion-icon>
+                <ion-label>Create Hub</ion-label>
+              </ion-tab-button>
+              <ion-tab-button tab="join-hub">
+                <ion-icon name="camera"></ion-icon>
+                <ion-label>Join Hub</ion-label>
+              </ion-tab-button>
+            </ion-tab-bar>
+          </ion-tabs>
 
 </ion-content>
