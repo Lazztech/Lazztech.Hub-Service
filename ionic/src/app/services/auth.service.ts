@@ -97,14 +97,36 @@ export class AuthService {
   async user(): Promise<User> {
     const result = await this.apollo.query({
       query: gql`
-        query {
-          me { 
+      query {
+        me { 
+          id
+          firstName
+          lastName
+          email
+          ownedHubs {
             id
-            firstName
-            lastName
-            email
+            name
+            image
+            members {
+              id
+              firstName
+              lastName
+              email
+            }
+          }
+          memberOfHubs {
+            id
+            name
+            image
+            owners {
+              id
+              firstName
+              lastName
+              email
+            }
           }
         }
+      }
       `
     }).toPromise();
 

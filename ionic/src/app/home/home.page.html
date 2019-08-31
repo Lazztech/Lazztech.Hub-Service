@@ -59,6 +59,7 @@
       <ion-grid>
           <ion-row padding *ngFor="let person of persons">
               <ion-col>
+                  
                   <ion-label>
                       <h3>
                         <ion-text>{{person.name}}</ion-text>
@@ -67,7 +68,10 @@
                         <ion-text>First Seen: {{person.images[0].savedAtTimestamp | date: 'yyy-MM-dd'}}</ion-text>
                       </p>
                     </ion-label>
-                    <ion-img width="100%" src="{{person.images[0].image}}" href="javascript:void(0);" (click)="goToImage(person.images[0].id)"></ion-img>
+                    <ion-card >
+                        <ion-img width="100%" src="{{person.images[0].image}}" href="javascript:void(0);" (click)="goToImage(person.images[0].id)"></ion-img>
+                      </ion-card>
+                      
               </ion-col>
             </ion-row>
       </ion-grid>
