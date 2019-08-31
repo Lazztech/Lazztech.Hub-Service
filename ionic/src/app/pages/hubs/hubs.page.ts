@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-hubs',
@@ -7,9 +8,34 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HubsPage implements OnInit {
 
-  constructor() { }
+  loading = false;
+
+  ownedHubs: [] = [];
+
+  constructor(
+    public navCtrl: NavController,
+  ) { }
 
   ngOnInit() {
+  }
+
+  ionViewDidEnter() {
+    // this.loadPeople();
+  }
+
+  async doRefresh(event) {
+    console.log('Begin async operation');
+    this.loading = true;
+    // await this.loadPeople();
+    event.target.complete();
+  }
+
+  goToPersonPage(id: number) {
+    this.navCtrl.navigateRoot('hub/'+ id);
+  }
+
+  goToAddPersonPage() {
+    this.navCtrl.navigateRoot('add-hub');
   }
 
 }

@@ -26,6 +26,11 @@ export class AppComponent {
       icon: 'notifications'
     },
     {
+      title: 'Hubs',
+      url: '/hubs',
+      icon: 'cube'
+    },
+    {
       title: 'People',
       url: '/people',
       icon: 'person'
