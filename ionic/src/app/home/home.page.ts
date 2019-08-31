@@ -15,6 +15,8 @@ import { PeopleService } from '../services/people.service';
 })
 export class HomePage implements OnInit, AfterViewInit {
 
+  loading = false;
+
   user: User;
   updateReady = false;
   beforeInstall: Observable<boolean> = of(false);
@@ -55,9 +57,13 @@ export class HomePage implements OnInit, AfterViewInit {
 
   async ionViewDidEnter() {
     this.user = await this.authService.user();
-    this.inAppNotificationCount = await this.notificationsService.getInAppNotifications().then(x => x.length);
+    this.inAppNotificationCount = await this.notificationsService.getInAppNotifications().then(x => {
+      this.loading = true;
+      return x.length;
+    });
 
     this.persons = await this.peopleService.loadAllPeople();
+    this.loading = false;
   }
 
   async ngOnInit() {
@@ -85,6 +91,10 @@ export class HomePage implements OnInit, AfterViewInit {
 
   async testPushNotification() {
     await this.notificationsService.testPushNotificationToUser();
+  }
+
+  goToAddHubPage() {
+    this.navCtrl.navigateRoot('add-hub');
   }
   
 }

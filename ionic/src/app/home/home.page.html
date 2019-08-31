@@ -6,6 +6,7 @@
     <ion-title>
       Home
     </ion-title>
+    <ion-progress-bar *ngIf="loading" type="indeterminate"></ion-progress-bar>
     <div href="javascript:void(0);" (click)="goToNotifications()" lines="none" slot="end">
         <ion-badge *ngIf="inAppNotificationCount >= 1" mode="md" style="position: absolute; z-index: 2;">{{inAppNotificationCount}}</ion-badge>
         <ion-icon size="large" name="notifications"></ion-icon>
@@ -30,6 +31,30 @@
 </ion-header>
 
 <ion-content>
+
+      <ion-card>
+        <ion-item>
+          <ion-icon name="cube" slot="start"></ion-icon>
+          <ion-label>Create a Hub</ion-label>
+          <ion-button slot="end" (click)="goToAddHubPage()">Create</ion-button>
+        </ion-item>
+      
+        <ion-card-content>
+          Create a Hub as a Hub owner with a Lazztech Hub Camera.
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card>
+          <ion-item>
+            <ion-icon name="cube" slot="start"></ion-icon>
+            <ion-label>Join a Hub</ion-label>
+            <ion-button slot="end">Join</ion-button>
+          </ion-item>
+        
+          <ion-card-content>
+            Join a communities hub as a Hub member.
+          </ion-card-content>
+        </ion-card>
 
       <ion-grid>
           <ion-row padding *ngFor="let person of persons">
