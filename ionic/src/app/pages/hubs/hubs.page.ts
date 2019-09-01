@@ -28,6 +28,7 @@ export class HubsPage implements OnInit {
     this.loading = true;
     // await this.loadPeople();
     event.target.complete();
+    this.loading = false;
   }
 
   goToPersonPage(id: number) {
