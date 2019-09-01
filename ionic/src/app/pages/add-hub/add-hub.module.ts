@@ -29,6 +29,11 @@ const routes: Routes = [
             loadChildren: '../join-hub/join-hub.module#JoinHubPageModule'
           }
         ]
+      },
+      {
+        path: '',
+        redirectTo: '/app/add-hub/add-hub',
+        pathMatch: 'full'
       }
     ]
   }

@@ -94,7 +94,7 @@ export class HomePage implements OnInit, AfterViewInit {
   }
 
   goToAddHubPage() {
-    this.navCtrl.navigateRoot('add-hub');
+    this.navCtrl.navigateRoot('add-hub/join-hub');
   }
   
 }
