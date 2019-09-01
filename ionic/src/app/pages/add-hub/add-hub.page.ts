@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AddHubPage implements OnInit {
 
+  loading = false;
+
   constructor() { }
 
   ngOnInit() {
