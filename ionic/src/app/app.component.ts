@@ -100,18 +100,18 @@ export class AppComponent {
   }
 
   async toggleTheme() {
-    if (!this.isNotFirstToggleSet) {
-      this.isNotFirstToggleSet = true;
-      console.log('setting isNotFirstToggleSet = true')
-      console.log(`Is DarkMode: ${this.isDark}`);
-      if (this.isDark) {
-        return;
-      }
-    }
+    // if (!this.isNotFirstToggleSet) {
+    //   this.isNotFirstToggleSet = true;
+    //   console.log('setting isNotFirstToggleSet = true')
+    //   console.log(`Is DarkMode: ${this.isDark}`);
+    //   if (this.isDark) {
+    //     return;
+    //   }
+    // }
 
-    if (this.isNotFirstToggleSet) {
-      console.log("toggling theme");
+    // if (this.isNotFirstToggleSet) {
+    //   console.log("toggling theme");
       await this.themeService.toggle();
-    } 
+    // } 
   }
 }
