@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ModalController } from '@ionic/angular';
 import { ProfileService } from 'src/app/services/profile.service';
 import { AlertService } from 'src/app/services/alert.service';
+import { Plugins, CameraResultType, CameraSource } from '@capacitor/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-create-hub',
@@ -11,7 +12,7 @@ import { AlertService } from 'src/app/services/alert.service';
 })
 export class CreateHubPage implements OnInit {
 
-  photo: any;
+  image: any;
 
   loading = false;
 
@@ -24,7 +25,8 @@ export class CreateHubPage implements OnInit {
   constructor(
     private profileService: ProfileService,
     private alertService: AlertService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private sanitizer: DomSanitizer
   ) { }
 
   ngOnInit() {
@@ -35,6 +37,17 @@ export class CreateHubPage implements OnInit {
     });
 
     this.myForm.valueChanges.subscribe();
+  }
+
+  async takePicture() {
+    const image = await Plugins.Camera.getPhoto({
+      quality: 100,
+      allowEditing: false,
+      resultType: CameraResultType.DataUrl,
+      source: CameraSource.Camera
+    });
+
+    this.image = this.sanitizer.bypassSecurityTrustResourceUrl(image && (image.dataUrl));
   }
 
   async saveHub() {
