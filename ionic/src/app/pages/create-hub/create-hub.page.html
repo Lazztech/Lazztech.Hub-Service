@@ -4,14 +4,52 @@
   </ion-toolbar>
 </ion-header> -->
 
-<ion-content>
-    <!-- <ion-content>
-        <img [src]="photo" >
+
+<ion-content padding>
       
-        <ion-fab vertical="bottom" horizontal="center" slot="fixed">
-          <ion-fab-button (click)="takePicture()">
-            <ion-icon name="camera"></ion-icon>
-          </ion-fab-button>
-        </ion-fab>
-      </ion-content> -->
+
+    <form [formGroup]="myForm" (ngSubmit)="saveHub()" method="post">
+
+        <ion-label>Hub Image</ion-label>
+
+        <ion-card *ngIf="image">
+          <ion-img src="image"></ion-img>
+          </ion-card>
+
+          <ion-grid>
+              <ion-row>
+
+                <ion-col>
+                    <ion-button shape="round">
+                        <ion-icon name="camera"></ion-icon>
+                      Take
+                    </ion-button>
+                </ion-col>
+
+                <ion-col>
+                    <ion-button color="secondary" shape="round">
+                        <ion-icon name="images"></ion-icon>
+                      Upload
+                    </ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+
+        <ion-item>
+          <ion-label position="floating">Hub Name</ion-label>
+          <ion-input type="email" formControlName="hubName"></ion-input>
+        </ion-item>
+
+        <ion-text text-center padding color="danger">
+            <p *ngIf="hubName.invalid && hubName.touched" color="danger" >
+                Required
+            </p>
+        </ion-text>
+        
+        <br/>
+        
+        <ion-button [disabled]="myForm.invalid" type="submit" expand="full" color="primary">Send</ion-button>
+        
+      </form>
 </ion-content>
+

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Plugins, CameraResultType, CameraSource } from '@capacitor/core';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ModalController } from '@ionic/angular';
+import { ProfileService } from 'src/app/services/profile.service';
+import { AlertService } from 'src/app/services/alert.service';
 
 @Component({
   selector: 'app-create-hub',
@@ -11,22 +13,43 @@ export class CreateHubPage implements OnInit {
 
   photo: any;
 
+  loading = false;
+
+  myForm: FormGroup;
+
+  get hubName() {
+    return this.myForm.get('hubName');
+  }
+
   constructor(
-    private sanitizer: DomSanitizer
+    private profileService: ProfileService,
+    private alertService: AlertService,
+    private fb: FormBuilder
   ) { }
 
   ngOnInit() {
-  }
-
-  async takePicture() {
-    const image = await Plugins.Camera.getPhoto({
-      quality: 100,
-      allowEditing: false,
-      resultType: CameraResultType.DataUrl,
-      source: CameraSource.Camera
+    this.myForm = this.fb.group({
+      hubName: ['', [
+        Validators.required
+      ]]
     });
 
-    this.photo = this.sanitizer.bypassSecurityTrustResourceUrl(image && (image.dataUrl));
+    this.myForm.valueChanges.subscribe();
+  }
+
+  async saveHub() {
+    this.loading = true;
+
+    const formValue = this.myForm.value;
+
+    const result = await this.profileService.changeName(formValue.hubName, formValue.lastName);
+    if (result) {
+      this.loading = false;
+      this.alertService.presentToast("Changed name.");
+    } else {
+      this.loading = false;
+      this.alertService.presentRedToast("Failed to change name.");
+    }
   }
 
 }
