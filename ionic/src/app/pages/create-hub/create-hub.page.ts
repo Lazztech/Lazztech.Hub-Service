@@ -50,6 +50,17 @@ export class CreateHubPage implements OnInit {
     this.image = this.sanitizer.bypassSecurityTrustResourceUrl(image && (image.dataUrl));
   }
 
+  async selectPicture() {
+    const image = await Plugins.Camera.getPhoto({
+      quality: 100,
+      allowEditing: false,
+      resultType: CameraResultType.DataUrl,
+      source: CameraSource.Photos
+    });
+
+    this.image = this.sanitizer.bypassSecurityTrustResourceUrl(image && (image.dataUrl));
+  }
+
   async saveHub() {
     this.loading = true;
 
