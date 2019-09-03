@@ -11,12 +11,12 @@ export class HubResolver {
     // constructor() {}
 
     @Authorized()
-    @Mutation(() => User)
+    @Mutation(() => Hub)
     public async createHub(
         @Ctx() ctx: IMyContext,
         @Arg("name") name: string,
         @Arg("image") image: string
-    ): Promise<User> {
+    ): Promise<Hub> {
         let accessToken = ctx.req.cookies["access-token"];
         if (!accessToken) {
             accessToken = ctx.req.get("Authorization");
@@ -35,13 +35,11 @@ export class HubResolver {
         const result = await hub.save();
         let joinUserHub = await JoinUserHub.create({
             userId: data.userId,
-            hubId: hub.id
+            hubId: hub.id,
+            isOwner: true
         });
         joinUserHub = await joinUserHub.save();
-
-        const user = await User.findOne({ where: { id: data.userId}});
-
-        return user;
+        return hub;
     }
 
     @Authorized()
