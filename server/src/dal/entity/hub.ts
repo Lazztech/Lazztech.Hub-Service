@@ -11,18 +11,18 @@ export class Hub extends BaseEntity {
     @PrimaryGeneratedColumn()
     public id: number;
 
-    @Field()
+    @Field({ nullable: true})
     @Column()
     public name: string;
 
-    @Field()
+    @Field({ nullable: true})
     @Column()
     public image: string;
 
     @OneToMany((type) => JoinUserHub, (joinUserHub) => joinUserHub.hub)
     public usersConnection: JoinUserHub[];
 
-    @Field(() => [User])
+    @Field(() => [User], { nullable: true})
     public async owners(): Promise<User[]> {
         const joinUserHubResults = await JoinUserHub.find({
             where: {
@@ -40,7 +40,7 @@ export class Hub extends BaseEntity {
         return owners;
     }
 
-    @Field(() => [User])
+    @Field(() => [User], { nullable: true})
     public async members(): Promise<User[]> {
         const joinUserHubResults = await JoinUserHub.find({
             where: {
