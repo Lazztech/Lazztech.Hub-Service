@@ -45,6 +45,46 @@ export class HubResolver {
     }
 
     @Authorized()
+    @Query(() => [Hub])
+    public async ownedHubs(
+        @Ctx() ctx: IMyContext,
+    ): Promise<Hub[]> {
+        let accessToken = ctx.req.cookies["access-token"];
+        if (!accessToken) {
+            accessToken = ctx.req.get("Authorization");
+        }
+        if (!accessToken) {
+            console.error("Didn't find access token!");
+        }
+
+        const data = verify(accessToken, process.env.ACCESS_TOKEN_SECRET) as any;
+
+        const user = await User.findOne({ id: data.userId });
+        const ownedHubs = await user.ownedHubs();
+        return ownedHubs;
+    }
+
+    @Authorized()
+    @Query(() => [Hub])
+    public async memberOfHubs(
+        @Ctx() ctx: IMyContext,
+    ): Promise<Hub[]> {
+        let accessToken = ctx.req.cookies["access-token"];
+        if (!accessToken) {
+            accessToken = ctx.req.get("Authorization");
+        }
+        if (!accessToken) {
+            console.error("Didn't find access token!");
+        }
+
+        const data = verify(accessToken, process.env.ACCESS_TOKEN_SECRET) as any;
+
+        const user = await User.findOne({ id: data.userId });
+        const memberOfHubs = await user.memberOfHubs();
+        return memberOfHubs;
+    }
+
+    @Authorized()
     @Mutation(() => Hub)
     public async renameHub(
         @Ctx() ctx: IMyContext,
