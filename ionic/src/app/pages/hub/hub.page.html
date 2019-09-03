@@ -32,7 +32,17 @@
             </ion-row>
           </ion-grid>
   
-      <ion-label>{{hub.name}}</ion-label>
+          <ion-label>
+              <h3>
+                <ion-text>{{hub.name}}</ion-text>
+              </h3>
+              <p>
+                  <ion-text>Owners: {{hub.owners.length}}</ion-text>
+              </p>
+              <p>
+                <ion-text>Members: {{hub.members.length}}</ion-text>
+              </p>
+            </ion-label>
   </div>
     
 </ion-content>
