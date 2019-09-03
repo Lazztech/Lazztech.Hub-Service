@@ -47,11 +47,11 @@ export class HubsPage implements OnInit {
     this.memberOfHubs = await this.hubService.memberOfHubs();
   }
 
-  goToPersonPage(id: number) {
+  goToHubPage(id: number) {
     this.navCtrl.navigateRoot('hub/'+ id);
   }
 
-  goToAddPersonPage() {
+  goToAddHubPage() {
     this.navCtrl.navigateRoot('add-hub/join-hub');
   }
 

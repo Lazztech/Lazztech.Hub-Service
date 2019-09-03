@@ -11,6 +11,10 @@ const routes: Routes = [
   {
     path: '',
     component: HubPage
+  },
+  {
+    path: ':id',
+    component: HubPage
   }
 ];
 
