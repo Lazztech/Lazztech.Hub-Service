@@ -68,13 +68,13 @@ export class CreateHubPage implements OnInit {
     const formValue = this.myForm.value;
 
     const result = await this.hubService.createHub(formValue.hubName, this.image);
-    // if (result) {
+    if (result) {
       this.loading = false;
-    //   this.alertService.presentToast("Changed name.");
-    // } else {
-    //   this.loading = false;
-    //   this.alertService.presentRedToast("Failed to change name.");
-    // }
+      this.alertService.presentToast("Created Hub!");
+    } else {
+      this.loading = false;
+      this.alertService.presentRedToast("Failed to create Hub.");
+    }
   }
 
 }

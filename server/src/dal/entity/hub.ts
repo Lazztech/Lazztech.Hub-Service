@@ -11,7 +11,7 @@ export class Hub extends BaseEntity {
     @PrimaryGeneratedColumn()
     public id: number;
 
-    @Field({ nullable: true})
+    @Field()
     @Column()
     public name: string;
 
