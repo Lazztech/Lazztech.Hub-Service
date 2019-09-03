@@ -55,14 +55,14 @@ export class CreateHubPage implements OnInit {
 
     const formValue = this.myForm.value;
 
-    const result = await this.profileService.changeName(formValue.hubName, formValue.lastName);
-    if (result) {
+    // const result = await this.profileService.changeName(formValue.hubName, formValue.lastName);
+    // if (result) {
       this.loading = false;
-      this.alertService.presentToast("Changed name.");
-    } else {
-      this.loading = false;
-      this.alertService.presentRedToast("Failed to change name.");
-    }
+    //   this.alertService.presentToast("Changed name.");
+    // } else {
+    //   this.loading = false;
+    //   this.alertService.presentRedToast("Failed to change name.");
+    // }
   }
 
 }

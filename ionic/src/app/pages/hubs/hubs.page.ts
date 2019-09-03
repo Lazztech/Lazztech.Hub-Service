@@ -36,7 +36,7 @@ export class HubsPage implements OnInit {
   }
 
   goToAddPersonPage() {
-    this.navCtrl.navigateRoot('add-hub');
+    this.navCtrl.navigateRoot('add-hub/join-hub');
   }
 
 }
