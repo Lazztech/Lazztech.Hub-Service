@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Plugins, CameraResultType, CameraSource } from '@capacitor/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { HubService } from 'src/app/services/hub.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-hub',
@@ -13,12 +15,16 @@ export class HubPage implements OnInit {
 
   loading = false;
   hub: any;
+  id: number;
 
   constructor(
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private route: ActivatedRoute,
+    private hubService: HubService
   ) { }
 
   ngOnInit() {
+    this.id = parseInt(this.route.snapshot.paramMap.get('id'));
   }
 
   async ionViewDidEnter() {
@@ -28,7 +34,7 @@ export class HubPage implements OnInit {
   }
 
   async loadHub() {
-
+    this.hub = await this.hubService.hub(this.id);
   }
 
   async takePicture() {

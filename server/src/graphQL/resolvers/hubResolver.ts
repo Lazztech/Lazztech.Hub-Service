@@ -55,6 +55,7 @@ export class HubResolver {
         if (!accessToken) {
             console.error("Didn't find access token!");
         }
+        // Need to add check that user is either a member or owner.
 
         const data = verify(accessToken, process.env.ACCESS_TOKEN_SECRET) as any;
 
@@ -119,6 +120,7 @@ export class HubResolver {
             console.error("Didn't find access token!");
         }
 
+        // Finish implementing check that user is hub owner.
         const data = verify(accessToken, process.env.ACCESS_TOKEN_SECRET) as any;
 
         const joinUserHubResult = await JoinUserHub.findOne({
@@ -152,6 +154,8 @@ export class HubResolver {
         }
 
         const data = verify(accessToken, process.env.ACCESS_TOKEN_SECRET) as any;
+
+        // Finish implementing check that user is hub owner.
 
         const joinUserHubResult = await JoinUserHub.findOne({
             where: {

@@ -109,4 +109,41 @@ export class HubService {
 
     return response;
   }
+
+  async hub(id: number) {
+    const result = await this.apollo.query({
+      query: gql`
+      query {
+        hub(id: ${id}) {
+          id
+          name
+          image
+          owners {
+            id
+            firstName
+            lastName
+            email
+          }
+          members {
+            id
+            firstName
+            lastName
+            email
+          }
+        }
+      }
+      `
+    }).toPromise();
+
+    console.log(result);
+    const response = result.data["hub"];
+
+    if (response) {
+      console.log("got hub successful.");
+    } else {
+      console.log("hub query failure");
+    }
+
+    return response;
+  }
 }

@@ -1,37 +1,38 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Hub</ion-title>
+    <ion-title>Hub: {{hub.name}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
 
-    <ion-label>Hub Image</ion-label>
+  <div *ngIf="!loading">
+      <ion-label>Hub Image</ion-label>
 
-    <ion-card *ngIf="hub.image">
-        <img [src]="hub.image" >
-      </ion-card>
-
-      <ion-grid>
-          <ion-row>
-
-            <ion-col>
-                <ion-button float-left shape="round" (click)="takePicture()">
-                    <ion-icon name="camera"></ion-icon>
-                  Take
-                </ion-button>
-            </ion-col>
-
-            <ion-col>
-                <ion-button float-right color="secondary" shape="round" (click)="selectPicture()">
-                    <ion-icon name="images"></ion-icon>
-                  Upload
-                </ion-button>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-
-    <ion-label>{{hub.name}}</ion-label>
-
-
+      <ion-card *ngIf="hub.image">
+          <img [src]="hub.image" >
+        </ion-card>
+  
+        <ion-grid>
+            <ion-row>
+  
+              <ion-col>
+                  <ion-button float-left shape="round" (click)="takePicture()">
+                      <ion-icon name="camera"></ion-icon>
+                    Take
+                  </ion-button>
+              </ion-col>
+  
+              <ion-col>
+                  <ion-button float-right color="secondary" shape="round" (click)="selectPicture()">
+                      <ion-icon name="images"></ion-icon>
+                    Upload
+                  </ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+  
+      <ion-label>{{hub.name}}</ion-label>
+  </div>
+    
 </ion-content>
