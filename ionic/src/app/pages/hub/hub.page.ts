@@ -12,12 +12,23 @@ export class HubPage implements OnInit {
   image: any;
 
   loading = false;
+  hub: any;
 
   constructor(
     private sanitizer: DomSanitizer
   ) { }
 
   ngOnInit() {
+  }
+
+  async ionViewDidEnter() {
+    this.loading = true;
+    await this.loadHub();
+    this.loading = false;
+  }
+
+  async loadHub() {
+
   }
 
   async takePicture() {

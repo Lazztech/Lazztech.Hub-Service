@@ -43,6 +43,28 @@ export class HubResolver {
     }
 
     @Authorized()
+    @Query(() => Hub)
+    public async hub(
+        @Ctx() ctx: IMyContext,
+        @Arg("id") id: number,
+    ): Promise<Hub> {
+        let accessToken = ctx.req.cookies["access-token"];
+        if (!accessToken) {
+            accessToken = ctx.req.get("Authorization");
+        }
+        if (!accessToken) {
+            console.error("Didn't find access token!");
+        }
+
+        const data = verify(accessToken, process.env.ACCESS_TOKEN_SECRET) as any;
+
+        const user = await User.findOne({ id: data.userId });
+
+        const hub = await Hub.findOne({ id });
+        return hub;
+    }
+
+    @Authorized()
     @Query(() => [Hub])
     public async ownedHubs(
         @Ctx() ctx: IMyContext,
