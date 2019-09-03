@@ -4,6 +4,7 @@ import { ProfileService } from 'src/app/services/profile.service';
 import { AlertService } from 'src/app/services/alert.service';
 import { Plugins, CameraResultType, CameraSource } from '@capacitor/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { HubService } from 'src/app/services/hub.service';
 
 @Component({
   selector: 'app-create-hub',
@@ -23,7 +24,7 @@ export class CreateHubPage implements OnInit {
   }
 
   constructor(
-    private profileService: ProfileService,
+    private hubService: HubService,
     private alertService: AlertService,
     private fb: FormBuilder,
     private sanitizer: DomSanitizer
@@ -66,7 +67,7 @@ export class CreateHubPage implements OnInit {
 
     const formValue = this.myForm.value;
 
-    // const result = await this.profileService.changeName(formValue.hubName, formValue.lastName);
+    const result = await this.hubService.createHub(formValue.hubName, this.image);
     // if (result) {
       this.loading = false;
     //   this.alertService.presentToast("Changed name.");
