@@ -1,33 +1,51 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Hub: {{hub.name}}</ion-title>
+    <ion-title *ngIf="!loading">Hub: {{hub.name}}</ion-title>
+    <ion-title *ngIf="loading">Hub</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
 
   <div *ngIf="!loading">
-      <ion-label>Hub Image</ion-label>
-
-      <ion-card *ngIf="hub.image">
-          <img [src]="hub.image" >
-        </ion-card>
   
         <ion-grid>
             <ion-row>
-  
+                <ion-col>
+                    <ion-label>Join Hub</ion-label>
+                    <ngx-kjua text-center padding
+                    [text]="qrContent"
+
+                  ></ngx-kjua>
+
+                </ion-col>
+              </ion-row>
+            <ion-row>
               <ion-col>
+
+                  <ion-label>Hub Image</ion-label>
+                  <ion-card *ngIf="hub.image">
+                      <img [src]="hub.image" >
+                  </ion-card>
+
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+
                   <ion-button float-left shape="round" (click)="takePicture()">
                       <ion-icon name="camera"></ion-icon>
                     Take
                   </ion-button>
+
               </ion-col>
-  
               <ion-col>
-                  <ion-button float-right color="secondary" shape="round" (click)="selectPicture()">
+                  
+                <ion-button float-right color="secondary" shape="round" (click)="selectPicture()">
                       <ion-icon name="images"></ion-icon>
                     Upload
                   </ion-button>
+
               </ion-col>
             </ion-row>
           </ion-grid>

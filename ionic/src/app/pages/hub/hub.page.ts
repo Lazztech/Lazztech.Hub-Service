@@ -16,6 +16,7 @@ export class HubPage implements OnInit {
   loading = false;
   hub: any;
   id: number;
+  qrContent: string;
 
   constructor(
     private sanitizer: DomSanitizer,
@@ -25,6 +26,7 @@ export class HubPage implements OnInit {
 
   ngOnInit() {
     this.id = parseInt(this.route.snapshot.paramMap.get('id'));
+    this.qrContent = JSON.stringify({ id: this.id });
   }
 
   async ionViewDidEnter() {
@@ -35,6 +37,10 @@ export class HubPage implements OnInit {
 
   async loadHub() {
     this.hub = await this.hubService.hub(this.id);
+  }
+
+  async generateQR() {
+
   }
 
   async takePicture() {
