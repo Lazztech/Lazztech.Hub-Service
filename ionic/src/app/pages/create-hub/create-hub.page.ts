@@ -5,6 +5,7 @@ import { AlertService } from 'src/app/services/alert.service';
 import { Plugins, CameraResultType, CameraSource } from '@capacitor/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { HubService } from 'src/app/services/hub.service';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-create-hub',
@@ -27,7 +28,8 @@ export class CreateHubPage implements OnInit {
     private hubService: HubService,
     private alertService: AlertService,
     private fb: FormBuilder,
-    private sanitizer: DomSanitizer
+    public navCtrl: NavController,
+    private sanitizer: DomSanitizer,
   ) { }
 
   ngOnInit() {
@@ -71,6 +73,7 @@ export class CreateHubPage implements OnInit {
     const result = await this.hubService.createHub(formValue.hubName, this.image);
     if (result) {
       this.loading = false;
+      this.navCtrl.navigateRoot('hubs');
       this.alertService.presentToast("Created Hub!");
     } else {
       this.loading = false;
