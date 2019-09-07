@@ -62,7 +62,8 @@ export class CreateHubPage implements OnInit {
       source: CameraSource.Photos
     });
 
-    this.image = this.sanitizer.bypassSecurityTrustResourceUrl(image && (image.dataUrl));
+    // this.image = this.sanitizer.bypassSecurityTrustResourceUrl(image && (image.dataUrl));
+    this.image = image.dataUrl;
   }
 
   async saveHub() {
