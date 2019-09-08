@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Plugins, CameraResultType, CameraSource } from '@capacitor/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import QrScanner from 'qr-scanner';
-QrScanner.WORKER_PATH = './assets/qr-scanner-worker.min.js';
+import { HubService } from 'src/app/services/hub.service';
+import jsQR, { QRCode } from "jsqr";
+import { BrowserQRCodeReader } from '@zxing/library';
 
 
 @Component({
@@ -14,52 +15,72 @@ export class JoinHubPage implements OnInit {
 
   photo: any;
 
+  loading = false;
+  hub: any;
+
   constructor(
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private hubService: HubService
   ) { }
 
   ngOnInit() {
   }
 
-  async scanQR(base64: string) {
-    const blob = this.b64toBlob(base64);
-    QrScanner.scanImage(this.photo)
-    .then(result => console.log(result))
-    .catch(error => console.log(error || 'No QR code found.'));
+  async getHubDetails(id: number) {
+    this.hub = await this.hubService.hub(id);
   }
 
-  b64toBlob(b64Data, contentType='', sliceSize=512) {
-    const byteCharacters = atob(b64Data.replace(/^data:image\/(png|jpeg|jpg);base64,/, ''));
-    const byteArrays = [];
-  
-    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-      const slice = byteCharacters.slice(offset, offset + sliceSize);
-  
-      const byteNumbers = new Array(slice.length);
-      for (let i = 0; i < slice.length; i++) {
-        byteNumbers[i] = slice.charCodeAt(i);
-      }
-  
-      const byteArray = new Uint8Array(byteNumbers);
-      byteArrays.push(byteArray);
-    }
-  
-    const blob = new Blob(byteArrays, {type: contentType});
-    return blob;
+  async jsQR_fromBase64(base64: string): Promise<QRCode> {
+    return new Promise<QRCode>((resolve, reject) => {
+      const image: HTMLImageElement = document.createElement('img');
+      image.onload = () => {
+        const canvas: HTMLCanvasElement = document.createElement('canvas');
+        const context: CanvasRenderingContext2D = canvas.getContext('2d');
+
+        canvas.width = image.width;
+        canvas.height = image.height;
+        context.drawImage(image, 0, 0);
+
+        try {
+          const imageData: ImageData = context.getImageData(0, 0, image.width, image.height);
+
+          const qrCode: QRCode = jsQR(imageData.data, imageData.width, imageData.height);
+          resolve(qrCode);
+        } catch (e) {
+          alert(`Failed to scan: ${JSON.stringify(e)}`);
+          reject(e);
+        }
+      };
+      image.src = base64;
+    });
+  }
+
+  async scanQR(base64: string): Promise<any> {
+    // const result = await this.jsQR_fromBase64(base64).catch(x => alert(`Failed to scan: ${x}`));
+    const codeReader = new BrowserQRCodeReader();
+    const result = await codeReader.decodeFromImage(undefined, base64);
+    if (result)
+      return JSON.parse(result.getText());
+    else
+      alert(`Failed to scan QR code. Try again.`);
   }
 
   async takePicture() {
     const image = await Plugins.Camera.getPhoto({
-      quality: 100,
+      quality: 50,
       allowEditing: false,
       resultType: CameraResultType.DataUrl,
-      source: CameraSource.Camera
+      source: CameraSource.Camera,
     });
 
     // this.photo = this.sanitizer.bypassSecurityTrustResourceUrl(image && (image.dataUrl));
     this.photo = image.dataUrl;
+    alert(JSON.stringify(image));
+    console.log(JSON.stringify(image));
 
-    this.scanQR(image.dataUrl);
+    const result = await this.scanQR(image.dataUrl);
+    if (result)
+        this.getHubDetails(result.id);
   }
 
 }
