@@ -231,7 +231,7 @@ export class HubResolver {
         let buff = new Buffer(base64, 'base64');
         fs.writeFileSync('stack-abuse-logo-out.png', buff);
         const data = new Uint8ClampedArray(buff);
-        const dimensions = sizeOf(buff);
+        const dimensions = sizeOf(base64);
         const qrCode: QRCode = jsQR(data, dimensions.width, dimensions.height);
         if (qrCode) {
             return JSON.parse(qrCode.data);

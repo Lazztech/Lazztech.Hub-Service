@@ -151,7 +151,7 @@ export class HubService {
     const result = await this.apollo.query({
       query: gql`
       query {
-        getHubByQRImage(qrImageB64: "${qrImageB64})" {
+        getHubByQRImage(qrImageB64: "${qrImageB64}") {
           id
           name
           image
