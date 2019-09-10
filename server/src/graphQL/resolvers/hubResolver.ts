@@ -233,10 +233,12 @@ export class HubResolver {
         const data = new Uint8ClampedArray(buff);
         const dimensions = sizeOf(buff);
         const qrCode: QRCode = jsQR(data, dimensions.width, dimensions.height);
-        if (qrCode)
-          return JSON.parse(qrCode.data);
-        else
-          alert(`Failed to scan QR code. Try again.`);
+        if (qrCode) {
+            return JSON.parse(qrCode.data);
+        } 
+        else {
+            console.error("failed to decode qr code.");
+        } 
       }
 
 }
