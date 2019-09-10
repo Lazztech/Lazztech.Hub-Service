@@ -203,7 +203,7 @@ export class HubResolver {
     }
 
     @Authorized()
-    @Mutation(() => Hub)
+    @Query(() => Hub)
     public async getHubByQRImage(
         @Ctx() ctx: IMyContext,
         @Arg("qrImageB64") qrImageB64: string
