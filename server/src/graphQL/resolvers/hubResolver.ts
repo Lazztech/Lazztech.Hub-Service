@@ -5,6 +5,8 @@ import { JoinUserHub } from "../../dal/entity/joinUserHub";
 import { User } from "../../dal/entity/user";
 import { IMyContext } from "../context.interface";
 import jsQR, { QRCode } from "jsqr";
+import fs from "fs";
+import sizeOf from "image-size";
 
 @Resolver()
 export class HubResolver {
@@ -224,35 +226,15 @@ export class HubResolver {
         }
     }
 
-    async jsQR_fromBase64(base64: string): Promise<QRCode> {
-        return new Promise<QRCode>((resolve, reject) => {
-          const image: HTMLImageElement = document.createElement('img');
-          image.onload = () => {
-            const canvas: HTMLCanvasElement = document.createElement('canvas');
-            const context: CanvasRenderingContext2D = canvas.getContext('2d');
-    
-            canvas.width = image.width;
-            canvas.height = image.height;
-            context.drawImage(image, 0, 0);
-    
-            try {
-              const imageData: ImageData = context.getImageData(0, 0, image.width, image.height);
-    
-              const qrCode: QRCode = jsQR(imageData.data, imageData.width, imageData.height);
-              resolve(qrCode);
-            } catch (e) {
-              alert(`Failed to scan: ${JSON.stringify(e)}`);
-              reject(e);
-            }
-          };
-          image.src = base64;
-        });
-      }
     
       async scanQR(base64: string): Promise<any> {
-        const result = await this.jsQR_fromBase64(base64);
-        if (result)
-          return JSON.parse(result.data);
+        let buff = new Buffer(base64, 'base64');
+        fs.writeFileSync('stack-abuse-logo-out.png', buff);
+        const data = new Uint8ClampedArray(buff);
+        const dimensions = sizeOf(buff);
+        const qrCode: QRCode = jsQR(data, dimensions.width, dimensions.height);
+        if (qrCode)
+          return JSON.parse(qrCode.data);
         else
           alert(`Failed to scan QR code. Try again.`);
       }
