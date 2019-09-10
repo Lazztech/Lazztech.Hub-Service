@@ -4,7 +4,7 @@ import { Hub } from "../../dal/entity/hub";
 import { JoinUserHub } from "../../dal/entity/joinUserHub";
 import { User } from "../../dal/entity/user";
 import { IMyContext } from "../context.interface";
-import { BrowserQRCodeReader } from '@zxing/library';
+import jsQR, { QRCode } from "jsqr";
 
 @Resolver()
 export class HubResolver {
@@ -217,15 +217,44 @@ export class HubResolver {
         // Finish implementing check that user is hub owner.
         const data = verify(accessToken, process.env.ACCESS_TOKEN_SECRET) as any;
 
-        const codeReader = new BrowserQRCodeReader();
-        const result = await codeReader.decodeFromImage(undefined, qrImageB64);
-        let qrContent;
-        if (result) {
-            qrContent = JSON.parse(result.getText());
-            const hubID = qrContent.id;
-            const hub = await Hub.findOne({ id: hubID });
+        const id = await this.scanQR(qrImageB64);
+        if (id) {
+            const hub = await Hub.findOne({ id });
             return hub;
         }
     }
+
+    async jsQR_fromBase64(base64: string): Promise<QRCode> {
+        return new Promise<QRCode>((resolve, reject) => {
+          const image: HTMLImageElement = document.createElement('img');
+          image.onload = () => {
+            const canvas: HTMLCanvasElement = document.createElement('canvas');
+            const context: CanvasRenderingContext2D = canvas.getContext('2d');
+    
+            canvas.width = image.width;
+            canvas.height = image.height;
+            context.drawImage(image, 0, 0);
+    
+            try {
+              const imageData: ImageData = context.getImageData(0, 0, image.width, image.height);
+    
+              const qrCode: QRCode = jsQR(imageData.data, imageData.width, imageData.height);
+              resolve(qrCode);
+            } catch (e) {
+              alert(`Failed to scan: ${JSON.stringify(e)}`);
+              reject(e);
+            }
+          };
+          image.src = base64;
+        });
+      }
+    
+      async scanQR(base64: string): Promise<any> {
+        const result = await this.jsQR_fromBase64(base64);
+        if (result)
+          return JSON.parse(result.data);
+        else
+          alert(`Failed to scan QR code. Try again.`);
+      }
 
 }
