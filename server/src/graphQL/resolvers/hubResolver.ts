@@ -4,6 +4,7 @@ import { Hub } from "../../dal/entity/hub";
 import { JoinUserHub } from "../../dal/entity/joinUserHub";
 import { User } from "../../dal/entity/user";
 import { IMyContext } from "../context.interface";
+import { BrowserQRCodeReader } from '@zxing/library';
 
 @Resolver()
 export class HubResolver {
@@ -170,6 +171,61 @@ export class HubResolver {
         hub.image = newImage;
         hub = await hub.save();
         return hub;
+    }
+
+    @Authorized()
+    @Mutation(() => Boolean)
+    public async joinHub(
+        @Ctx() ctx: IMyContext,
+        @Arg("id") id: number,
+    ) {
+        let accessToken = ctx.req.cookies["access-token"];
+        if (!accessToken) {
+            accessToken = ctx.req.get("Authorization");
+        }
+        if (!accessToken) {
+            console.error("Didn't find access token!");
+        }
+
+        // Finish implementing check that user is hub owner.
+        const data = verify(accessToken, process.env.ACCESS_TOKEN_SECRET) as any;
+
+        let joinUserHub = await JoinUserHub.create({
+            userId: data.userId,
+            hubId: id,
+            isOwner: true
+        });
+        joinUserHub = await joinUserHub.save();
+        
+        return true;
+    }
+
+    @Authorized()
+    @Mutation(() => Hub)
+    public async getHubByQRImage(
+        @Ctx() ctx: IMyContext,
+        @Arg("qrImageB64") qrImageB64: string
+    ): Promise<Hub> {
+        let accessToken = ctx.req.cookies["access-token"];
+        if (!accessToken) {
+            accessToken = ctx.req.get("Authorization");
+        }
+        if (!accessToken) {
+            console.error("Didn't find access token!");
+        }
+
+        // Finish implementing check that user is hub owner.
+        const data = verify(accessToken, process.env.ACCESS_TOKEN_SECRET) as any;
+
+        const codeReader = new BrowserQRCodeReader();
+        const result = await codeReader.decodeFromImage(undefined, qrImageB64);
+        let qrContent;
+        if (result) {
+            qrContent = JSON.parse(result.getText());
+            const hubID = qrContent.id;
+            const hub = await Hub.findOne({ id: hubID });
+            return hub;
+        }
     }
 
 }

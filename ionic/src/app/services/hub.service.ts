@@ -146,4 +146,54 @@ export class HubService {
 
     return response;
   }
+
+  async getHubByQRImage(qrImageB64: string): Promise<boolean> {
+    const result = await this.apollo.query({
+      query: gql`
+      query {
+        getHubByQRImage(qrImageB64: ${qrImageB64}) {
+          id
+          name
+          image
+          owners {
+            id
+            firstName
+            lastName
+            email
+          }
+          members {
+            id
+            firstName
+            lastName
+            email
+          }
+        }
+      }
+      `
+    }).toPromise();
+
+    console.log(result);
+    const response = result.data["joinHub"];
+    if (response) {
+      console.log("got hub successful.");
+    } else {
+      console.log("hub query failure");
+    }
+
+    return response;
+  }
+
+  async joinHub(id: number): Promise<boolean> {
+    const result = await this.apollo.mutate({
+      mutation: gql`
+      mutation {
+        joinHub(id: ${id})
+      }
+      `
+    }).toPromise();
+
+    console.log(result);
+    const response = result.data.joinHub;
+    return response;
+  }
 }
