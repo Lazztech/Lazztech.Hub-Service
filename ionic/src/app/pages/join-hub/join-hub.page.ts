@@ -55,6 +55,7 @@ export class JoinHubPage implements OnInit {
 
     // this.photo = this.sanitizer.bypassSecurityTrustResourceUrl(image && (image.dataUrl));
     this.photo = image.dataUrl;
+    console.log(this.photo);
     const hub = await this.getHubByQRImage(image.dataUrl);
     if (hub)
       this.hub = hub;

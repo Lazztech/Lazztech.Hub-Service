@@ -1,12 +1,11 @@
+import { BarcodeFormat, BinaryBitmap, DecodeHintType, HybridBinarizer, MultiFormatReader, RGBLuminanceSource } from '@zxing/library/esm5';
+import jpeg from "jpeg-js";
 import { verify } from "jsonwebtoken";
 import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { Hub } from "../../dal/entity/hub";
 import { JoinUserHub } from "../../dal/entity/joinUserHub";
 import { User } from "../../dal/entity/user";
 import { IMyContext } from "../context.interface";
-import jsQR, { QRCode } from "jsqr";
-import fs from "fs";
-import sizeOf from "image-size";
 
 @Resolver()
 export class HubResolver {
@@ -198,7 +197,7 @@ export class HubResolver {
             isOwner: true
         });
         joinUserHub = await joinUserHub.save();
-        
+
         return true;
     }
 
@@ -219,26 +218,53 @@ export class HubResolver {
         // Finish implementing check that user is hub owner.
         const data = verify(accessToken, process.env.ACCESS_TOKEN_SECRET) as any;
 
-        const id = await this.scanQR(qrImageB64);
-        if (id) {
+        const result = await this.scanQR(qrImageB64);
+        if (result) {
+            const id = result.id;
             const hub = await Hub.findOne({ id });
             return hub;
         }
     }
 
-    
-      async scanQR(base64: string): Promise<any> {
-        let buff = new Buffer(base64, 'base64');
-        fs.writeFileSync('stack-abuse-logo-out.png', buff);
-        const data = new Uint8ClampedArray(buff);
-        const dimensions = sizeOf(base64);
-        const qrCode: QRCode = jsQR(data, dimensions.width, dimensions.height);
+      public async scanQR(base64: string): Promise<any> {
+        const buff = Buffer.from(base64.substr(23), 'base64');
+        console.log("created buff");
+
+        const rawImageData = jpeg.decode(buff);
+
+        const hints = new Map();
+        const formats = [BarcodeFormat.QR_CODE, BarcodeFormat.DATA_MATRIX];
+         
+        hints.set(DecodeHintType.POSSIBLE_FORMATS, formats);
+        hints.set(DecodeHintType.TRY_HARDER, true);
+         
+        const reader = new MultiFormatReader();
+         
+        reader.setHints(hints);
+        
+        const len = rawImageData.width * rawImageData.height;
+        
+        const luminancesUint8Array = new Uint8ClampedArray(len);
+        
+        for(let i = 0; i < len; i++){
+            luminancesUint8Array[i] = ((rawImageData.data[i*4]+rawImageData.data[i*4+1]*2+rawImageData.data[i*4+2]) / 4) & 0xFF;
+        }
+        
+        const luminanceSource = new RGBLuminanceSource(luminancesUint8Array, rawImageData.width, rawImageData.height);
+        
+        console.log(luminanceSource)
+        
+        const binaryBitmap = new BinaryBitmap(new HybridBinarizer(luminanceSource));
+        
+        const qrCode = reader.decode(binaryBitmap);
+        
+        console.log(qrCode);
+
         if (qrCode) {
-            return JSON.parse(qrCode.data);
-        } 
-        else {
+            return JSON.parse(qrCode.getText());
+        } else {
             console.error("failed to decode qr code.");
-        } 
+        }
       }
 
 }
