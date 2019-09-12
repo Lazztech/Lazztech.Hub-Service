@@ -173,7 +173,7 @@ export class HubService {
     }).toPromise();
 
     console.log(result);
-    const response = result.data["joinHub"];
+    const response = result.data["getHubByQRImage"];
     if (response) {
       console.log("got hub successful.");
     } else {

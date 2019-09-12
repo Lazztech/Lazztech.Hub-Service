@@ -6,8 +6,8 @@ export const environment = {
   production: false
 };
 
-export const SERVER_URL = 'https://hubserver.lazz.tech/graphql';
-//  export const SERVER_URL = 'http://localhost:8080/graphql';
+// export const SERVER_URL = 'https://hubserver.lazz.tech/graphql';
+ export const SERVER_URL = 'http://localhost:8080/graphql';
 
 /*
  * For easier debugging in development mode, you can import the following file
