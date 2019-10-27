@@ -1,9 +1,8 @@
-import { AzureFunction, Context, HttpRequest } from "@azure/functions"
-import { ApolloServer, gql } from "apollo-server-azure-functions"
-import { IMyContext } from "../src/graphQL/context.interface";
-import { configuredSchema, configuredSchemaSync } from "../src/graphQL/schemaBuilder";
-import { Container } from "typedi";
+import { ApolloServer } from "apollo-server-azure-functions";
 import { useContainer } from "class-validator";
+import { Container } from "typedi";
+import { IMyContext } from "../src/graphQL/context.interface";
+import { configuredSchemaSync } from "../src/graphQL/schemaBuilder";
 
 // const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
 //     context.log('HTTP trigger function processed a request.');
