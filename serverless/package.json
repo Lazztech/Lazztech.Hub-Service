@@ -9,7 +9,7 @@
     "start:host": "func start",
     "start": "npm run start:host & npm run watch",
     "build:production": "npm run prestart && npm prune --production",
-
+    "clean": "rimraf dist/*",
     "lint": "tslint -c tslint.json -p tsconfig.json --fix",
     "db:setup": "ts-node ./src/tests/test-utils/setup.ts",
     "test": "npm run clean && npm run db:setup && jest --runInBand --setupFiles dotenv/config"
@@ -75,6 +75,7 @@
     "npm-run-all": "^4.1.5",
     "ts-jest": "^24.0.2",
     "ts-node": "^8.1.0",
-    "tslint": "^5.14.0"
+    "tslint": "^5.14.0",
+    "rimraf": "^2.6.3"
   }
 }
