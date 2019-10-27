@@ -20,7 +20,7 @@
                 "${workspaceFolder}/server/node_modules/**/*.js",
                 "${workspaceFolder}/server/dist/**/*.js",
                 "<node_internals>/**/*.js"
-            ],
+            ]
         },
         {
             "type": "chrome",
@@ -43,7 +43,7 @@
             "smartStep": true,
             "skipFiles": [
                 "<node_internals>/**/*.js"
-            ],
+            ]
         },
         {
             "name": "Debug Jest Tests",
@@ -52,11 +52,18 @@
             "cwd": "${workspaceRoot}/server",
             "program": "${workspaceFolder}/server/node_modules/jest/bin/jest.js",
             "args": [
-                "-i",
+                "-i"
             ],
             "console": "integratedTerminal",
             "internalConsoleOptions": "neverOpen",
             "preLaunchTask": "Build Server"
+        },
+        {
+            "name": "Attach to Node Functions",
+            "type": "node",
+            "request": "attach",
+            "port": 9229,
+            "preLaunchTask": "func: host start"
         }
     ],
     "compounds": [

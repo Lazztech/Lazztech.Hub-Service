@@ -1,4 +1,3 @@
-import { async } from "q";
 import { Connection } from "typeorm";
 import { IMyContext } from "../graphQL/context.interface";
 import { gCall } from "./test-utils/gCall";

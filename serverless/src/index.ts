@@ -9,7 +9,7 @@ import { Container } from "typedi";
 import { createDockerDbConnection } from "./deploymentConfigs/createDockerDbConnection";
 import { createLocalDevDbConnection } from "./deploymentConfigs/createLocalDevDbConnection";
 import { checkEnvVariables } from "./deploymentConfigs/envChecker";
-import * as graphqlApi from "./graphQL/graphqlApi";
+// import * as graphqlApi from "./graphQL/graphqlApi";
 import { EmailService } from "./services/emailService";
 
 console.log("starting server");
@@ -41,7 +41,7 @@ const corsOptions = {
 };
 
 // Register GraphQL setup middleware
-graphqlApi.register( app, corsOptions );
+// graphqlApi.register( app, corsOptions );
 
 const emailer = new EmailService();
 try {
