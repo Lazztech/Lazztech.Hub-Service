@@ -3,13 +3,16 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "tsc",
+    "build": "lint tsc",
     "watch": "tsc -w",
     "prestart": "npm run build && func extensions install",
     "start:host": "func start",
     "start": "npm run start:host & npm run watch",
     "build:production": "npm run prestart && npm prune --production",
-    "test": "echo \"No tests yet...\""
+
+    "lint": "tslint -c tslint.json -p tsconfig.json --fix",
+    "db:setup": "ts-node ./src/tests/test-utils/setup.ts",
+    "test": "npm run clean && npm run db:setup && jest --runInBand --setupFiles dotenv/config"
   },
   "alias": {
     "apollo-boost": "./node_modules/apollo-boost/lib/bundle.umd.js",
