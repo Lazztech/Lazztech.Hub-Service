@@ -38,7 +38,12 @@ useContainer(Container);
         },
   });
 
-  exports.graphqlHandler = server.createHandler();
+  exports.graphqlHandler = server.createHandler({
+    cors: {
+      origin: '*',
+      credentials: true,
+    },
+  });
 // }
 
 // export default run;
