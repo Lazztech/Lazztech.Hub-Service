@@ -167,3 +167,4 @@ ionic/resources/**/*.png
 key.key
 docs/_site/
 docs/.sass-cache/
+cloudflare.pfx
