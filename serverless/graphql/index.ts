@@ -1,6 +1,8 @@
 import { ApolloServer } from "apollo-server-azure-functions";
 import { useContainer } from "class-validator";
 import { Container } from "typedi";
+import { createAzureSqlDbConnection } from "../src/deploymentConfigs/createAzureSqlDbConnection";
+import { serverlessEnvChecker } from "../src/deploymentConfigs/serverlessEnvChecker";
 import { IMyContext } from "../src/graphQL/context.interface";
 import { configuredSchemaSync } from "../src/graphQL/schemaBuilder";
 
@@ -23,6 +25,10 @@ import { configuredSchemaSync } from "../src/graphQL/schemaBuilder";
 // };
 
 useContainer(Container);
+serverlessEnvChecker();
+createAzureSqlDbConnection()
+  .then((connection) => console.log("Connected to Azure SQL with TypeORM."))
+  .catch((error) => console.log(error));;
 
 // const run = async () => {
   const schema = configuredSchemaSync();
