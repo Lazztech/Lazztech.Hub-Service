@@ -20,39 +20,6 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: group; Type: TABLE; Schema: public; Owner: test
---
-
-CREATE TABLE public."group" (
-    id integer NOT NULL,
-    name character varying,
-    description character varying
-);
-
-
-
---
--- Name: group_id_seq; Type: SEQUENCE; Schema: public; Owner: test
---
-
-CREATE SEQUENCE public.group_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-
---
--- Name: group_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: test
---
-
-ALTER SEQUENCE public.group_id_seq OWNED BY public."group".id;
-
-
---
 -- Name: hub; Type: TABLE; Schema: public; Owner: test
 --
 
@@ -185,32 +152,6 @@ ALTER SEQUENCE public.invite_id_seq OWNED BY public.invite.id;
 
 
 --
--- Name: join_person_image; Type: TABLE; Schema: public; Owner: test
---
-
-CREATE TABLE public.join_person_image (
-    "personId" integer NOT NULL,
-    "imageId" integer NOT NULL,
-    "personDescriptorId" integer NOT NULL,
-    "locationId" integer,
-    "timestamp" timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
-);
-
-
-
---
--- Name: join_user_group; Type: TABLE; Schema: public; Owner: test
---
-
-CREATE TABLE public.join_user_group (
-    "userId" integer NOT NULL,
-    "locationId" integer NOT NULL,
-    "groupId" integer
-);
-
-
-
---
 -- Name: join_user_hub; Type: TABLE; Schema: public; Owner: test
 --
 
@@ -324,42 +265,6 @@ CREATE TABLE public.person (
 
 
 --
--- Name: person_descriptor; Type: TABLE; Schema: public; Owner: test
---
-
-CREATE TABLE public.person_descriptor (
-    id integer NOT NULL,
-    descriptor numeric[],
-    x numeric NOT NULL,
-    y numeric NOT NULL,
-    height numeric NOT NULL,
-    width numeric NOT NULL
-);
-
-
-
---
--- Name: person_descriptor_id_seq; Type: SEQUENCE; Schema: public; Owner: test
---
-
-CREATE SEQUENCE public.person_descriptor_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-
---
--- Name: person_descriptor_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: test
---
-
-ALTER SEQUENCE public.person_descriptor_id_seq OWNED BY public.person_descriptor.id;
-
-
---
 -- Name: person_id_seq; Type: SEQUENCE; Schema: public; Owner: test
 --
 
@@ -378,40 +283,6 @@ CREATE SEQUENCE public.person_id_seq
 --
 
 ALTER SEQUENCE public.person_id_seq OWNED BY public.person.id;
-
-
---
--- Name: persons_face; Type: TABLE; Schema: public; Owner: test
---
-
-CREATE TABLE public.persons_face (
-    id integer NOT NULL,
-    name character varying,
-    image character varying,
-    descriptor numeric[]
-);
-
-
-
---
--- Name: persons_face_id_seq; Type: SEQUENCE; Schema: public; Owner: test
---
-
-CREATE SEQUENCE public.persons_face_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-
---
--- Name: persons_face_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: test
---
-
-ALTER SEQUENCE public.persons_face_id_seq OWNED BY public.persons_face.id;
 
 
 --
@@ -484,13 +355,6 @@ ALTER SEQUENCE public.user_id_seq OWNED BY public."user".id;
 
 
 --
--- Name: group id; Type: DEFAULT; Schema: public; Owner: test
---
-
-ALTER TABLE ONLY public."group" ALTER COLUMN id SET DEFAULT nextval('public.group_id_seq'::regclass);
-
-
---
 -- Name: hub id; Type: DEFAULT; Schema: public; Owner: test
 --
 
@@ -540,20 +404,6 @@ ALTER TABLE ONLY public.person ALTER COLUMN id SET DEFAULT nextval('public.perso
 
 
 --
--- Name: person_descriptor id; Type: DEFAULT; Schema: public; Owner: test
---
-
-ALTER TABLE ONLY public.person_descriptor ALTER COLUMN id SET DEFAULT nextval('public.person_descriptor_id_seq'::regclass);
-
-
---
--- Name: persons_face id; Type: DEFAULT; Schema: public; Owner: test
---
-
-ALTER TABLE ONLY public.persons_face ALTER COLUMN id SET DEFAULT nextval('public.persons_face_id_seq'::regclass);
-
-
---
 -- Name: user id; Type: DEFAULT; Schema: public; Owner: test
 --
 
@@ -568,35 +418,11 @@ ALTER TABLE ONLY public.user_device ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
--- Name: persons_face PK_0103040298254e232d0d8f754a3; Type: CONSTRAINT; Schema: public; Owner: test
---
-
-ALTER TABLE ONLY public.persons_face
-    ADD CONSTRAINT "PK_0103040298254e232d0d8f754a3" PRIMARY KEY (id);
-
-
---
 -- Name: user_device PK_0232591a0b48e1eb92f3ec5d0d1; Type: CONSTRAINT; Schema: public; Owner: test
 --
 
 ALTER TABLE ONLY public.user_device
     ADD CONSTRAINT "PK_0232591a0b48e1eb92f3ec5d0d1" PRIMARY KEY (id);
-
-
---
--- Name: join_user_group PK_02c648cd4e69f7f2326fd9276fd; Type: CONSTRAINT; Schema: public; Owner: test
---
-
-ALTER TABLE ONLY public.join_user_group
-    ADD CONSTRAINT "PK_02c648cd4e69f7f2326fd9276fd" PRIMARY KEY ("userId", "locationId");
-
-
---
--- Name: group PK_256aa0fda9b1de1a73ee0b7106b; Type: CONSTRAINT; Schema: public; Owner: test
---
-
-ALTER TABLE ONLY public."group"
-    ADD CONSTRAINT "PK_256aa0fda9b1de1a73ee0b7106b" PRIMARY KEY (id);
 
 
 --
@@ -621,14 +447,6 @@ ALTER TABLE ONLY public.person
 
 ALTER TABLE ONLY public.join_user_hub
     ADD CONSTRAINT "PK_712e6729d6544114c10cd4a2fa7" PRIMARY KEY ("userId", "hubId");
-
-
---
--- Name: person_descriptor PK_7719c42e299644100eee87e98f4; Type: CONSTRAINT; Schema: public; Owner: test
---
-
-ALTER TABLE ONLY public.person_descriptor
-    ADD CONSTRAINT "PK_7719c42e299644100eee87e98f4" PRIMARY KEY (id);
 
 
 --
@@ -672,14 +490,6 @@ ALTER TABLE ONLY public."user"
 
 
 --
--- Name: join_person_image PK_d6bbce6d30d324e5c968d1445be; Type: CONSTRAINT; Schema: public; Owner: test
---
-
-ALTER TABLE ONLY public.join_person_image
-    ADD CONSTRAINT "PK_d6bbce6d30d324e5c968d1445be" PRIMARY KEY ("personId", "imageId");
-
-
---
 -- Name: image PK_d6db1ab4ee9ad9dbe86c64e4cc3; Type: CONSTRAINT; Schema: public; Owner: test
 --
 
@@ -701,22 +511,6 @@ ALTER TABLE ONLY public.join_user_location
 
 ALTER TABLE ONLY public.invite
     ADD CONSTRAINT "PK_fc9fa190e5a3c5d80604a4f63e1" PRIMARY KEY (id);
-
-
---
--- Name: join_person_image REL_51086f77f13afca5c5df0543eb; Type: CONSTRAINT; Schema: public; Owner: test
---
-
-ALTER TABLE ONLY public.join_person_image
-    ADD CONSTRAINT "REL_51086f77f13afca5c5df0543eb" UNIQUE ("locationId");
-
-
---
--- Name: join_person_image REL_51e372b060cabde552c4dcb69a; Type: CONSTRAINT; Schema: public; Owner: test
---
-
-ALTER TABLE ONLY public.join_person_image
-    ADD CONSTRAINT "REL_51e372b060cabde552c4dcb69a" UNIQUE ("personDescriptorId");
 
 
 --
@@ -749,38 +543,6 @@ ALTER TABLE ONLY public."user"
 
 ALTER TABLE ONLY public.join_user_location
     ADD CONSTRAINT "FK_225f5a7155bf4e84ac7b852488f" FOREIGN KEY ("userId") REFERENCES public."user"(id);
-
-
---
--- Name: join_person_image FK_24b5eaf6da0b73d2bcffcc6a451; Type: FK CONSTRAINT; Schema: public; Owner: test
---
-
-ALTER TABLE ONLY public.join_person_image
-    ADD CONSTRAINT "FK_24b5eaf6da0b73d2bcffcc6a451" FOREIGN KEY ("imageId") REFERENCES public.image(id);
-
-
---
--- Name: join_person_image FK_51086f77f13afca5c5df0543ebf; Type: FK CONSTRAINT; Schema: public; Owner: test
---
-
-ALTER TABLE ONLY public.join_person_image
-    ADD CONSTRAINT "FK_51086f77f13afca5c5df0543ebf" FOREIGN KEY ("locationId") REFERENCES public.location(id);
-
-
---
--- Name: join_person_image FK_51e372b060cabde552c4dcb69a4; Type: FK CONSTRAINT; Schema: public; Owner: test
---
-
-ALTER TABLE ONLY public.join_person_image
-    ADD CONSTRAINT "FK_51e372b060cabde552c4dcb69a4" FOREIGN KEY ("personDescriptorId") REFERENCES public.person_descriptor(id);
-
-
---
--- Name: join_person_image FK_5547e6bb93fa200931f6afbbb2f; Type: FK CONSTRAINT; Schema: public; Owner: test
---
-
-ALTER TABLE ONLY public.join_person_image
-    ADD CONSTRAINT "FK_5547e6bb93fa200931f6afbbb2f" FOREIGN KEY ("personId") REFERENCES public.person(id);
 
 
 --
@@ -824,27 +586,11 @@ ALTER TABLE ONLY public.user_device
 
 
 --
--- Name: join_user_group FK_d231827af7b3b889d62f6ebb3e5; Type: FK CONSTRAINT; Schema: public; Owner: test
---
-
-ALTER TABLE ONLY public.join_user_group
-    ADD CONSTRAINT "FK_d231827af7b3b889d62f6ebb3e5" FOREIGN KEY ("userId") REFERENCES public."user"(id) ON DELETE CASCADE;
-
-
---
 -- Name: join_user_in_app_notifications FK_d342396ba51c5ed48dfef10fe28; Type: FK CONSTRAINT; Schema: public; Owner: test
 --
 
 ALTER TABLE ONLY public.join_user_in_app_notifications
     ADD CONSTRAINT "FK_d342396ba51c5ed48dfef10fe28" FOREIGN KEY ("userId") REFERENCES public."user"(id) ON DELETE CASCADE;
-
-
---
--- Name: join_user_group FK_ebc9c865bc14710e2fd94b26b89; Type: FK CONSTRAINT; Schema: public; Owner: test
---
-
-ALTER TABLE ONLY public.join_user_group
-    ADD CONSTRAINT "FK_ebc9c865bc14710e2fd94b26b89" FOREIGN KEY ("groupId") REFERENCES public."group"(id);
 
 
 --

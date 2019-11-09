@@ -27,13 +27,13 @@ import { createLocalDevDbConnection } from "../src/deploymentConfigs/createLocal
 
 useContainer(Container);
 serverlessEnvChecker();
-// createAzureSqlDbConnection()
-//   .then((connection) => console.log("Connected to Azure SQL with TypeORM."))
-//   .catch((error) => console.log(error));;
+createAzureSqlDbConnection()
+  .then((connection) => console.log("Connected to Azure SQL with TypeORM."))
+  .catch((error) => console.log(error));;
 
-createLocalDevDbConnection()
-  .then(con => console.log("Connected to local postgres db."))
-  .catch(error => console.log(error));
+// createLocalDevDbConnection()
+//   .then(con => console.log("Connected to local postgres db."))
+//   .catch(error => console.log(error));
 
 // const run = async () => {
   const schema = configuredSchemaSync();
