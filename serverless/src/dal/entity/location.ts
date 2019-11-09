@@ -1,6 +1,5 @@
 import { Field, ID, ObjectType } from "type-graphql";
-import { BaseEntity, Column, Entity, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
-import { JoinPersonImage } from "./joinPersonImage";
+import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { JoinUserLocation } from "./joinUserLocation";
 
 @ObjectType()
@@ -16,6 +15,7 @@ export class Location extends BaseEntity {
     public name: string;
 
     @Field()
+    
     @Column({ nullable: true })
     public description: string;
 
@@ -29,8 +29,5 @@ export class Location extends BaseEntity {
 
     @OneToMany((type) => JoinUserLocation, (joinUserLocation) => joinUserLocation.location)
     public usersConnection: JoinUserLocation[];
-
-    @OneToOne((type) => JoinPersonImage, (personImage) => personImage.location)
-    public personImageConnection: Location;
 
 }

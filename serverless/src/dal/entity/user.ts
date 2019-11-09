@@ -1,7 +1,6 @@
 import { Field, ID, ObjectType } from "type-graphql";
 import { BaseEntity, Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Hub } from "./hub";
-import { JoinUserGroup } from "./joinUserGroup";
 import { JoinUserHub } from "./joinUserHub";
 import { JoinUserInAppNotifications } from "./joinUserInAppNotifications";
 import { JoinUserLocation } from "./joinUserLocation";
@@ -36,9 +35,6 @@ export class User extends BaseEntity {
         (userInAppNotificationsJoin) => userInAppNotificationsJoin.user,
     )
     public inAppNotificationsConnection: JoinUserInAppNotifications[];
-
-    @OneToMany((type) => JoinUserGroup, (userGroupJoin) => userGroupJoin.user)
-    public groupsConnection: JoinUserGroup[];
 
     @OneToMany((type) => JoinUserHub, (joinUserHub) => joinUserHub.user)
     public hubsConnection: JoinUserHub[];

@@ -4,6 +4,15 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "Export SQL Schema",
+            "type": "shell",
+            "command": "pg_dump -s postgres -U test -p ${input:GenericInput} | grep -v -F \"OWNER TO test;\" > export.sql",
+            "options": {
+                "cwd": "${workspaceRoot}/serverless"
+            },
+            "problemMatcher": []
+        },
+        {
             "label": "Ionic Prepare iOS",
             "type": "shell",
             "command": "ionic build && npx cap sync && npx cap copy && npx cap open ios",
@@ -197,6 +206,12 @@
         }
     ],
     "inputs": [
+        {
+            "id": "GenericInput",
+            "description": "Enter Input",
+            "default": "",
+            "type": "promptString"
+        }
         {
             "id": "MigrationName",
             "description": "Enter Typeorm Migration Name",

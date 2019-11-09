@@ -5,6 +5,7 @@ import { createAzureSqlDbConnection } from "../src/deploymentConfigs/createAzure
 import { serverlessEnvChecker } from "../src/deploymentConfigs/serverlessEnvChecker";
 import { IMyContext } from "../src/graphQL/context.interface";
 import { configuredSchemaSync } from "../src/graphQL/schemaBuilder";
+import { createLocalDevDbConnection } from "../src/deploymentConfigs/createLocalDevDbConnection";
 
 // const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
 //     context.log('HTTP trigger function processed a request.');
@@ -26,9 +27,13 @@ import { configuredSchemaSync } from "../src/graphQL/schemaBuilder";
 
 useContainer(Container);
 serverlessEnvChecker();
-createAzureSqlDbConnection()
-  .then((connection) => console.log("Connected to Azure SQL with TypeORM."))
-  .catch((error) => console.log(error));;
+// createAzureSqlDbConnection()
+//   .then((connection) => console.log("Connected to Azure SQL with TypeORM."))
+//   .catch((error) => console.log(error));;
+
+createLocalDevDbConnection()
+  .then(con => console.log("Connected to local postgres db."))
+  .catch(error => console.log(error));
 
 // const run = async () => {
   const schema = configuredSchemaSync();

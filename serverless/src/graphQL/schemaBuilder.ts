@@ -7,12 +7,10 @@ import { AuthenticationResolver } from "./resolvers/authenticationResolver";
 import { HelloResolver } from "./resolvers/helloResolver";
 import { HubResolver } from "./resolvers/hubResolver";
 import { NotificationResolver } from "./resolvers/notificationResolver";
-import { UserGroupResolver } from "./resolvers/userGroupResolver";
 
 const resolvers = [
   HelloResolver,
   AuthenticationResolver,
-  UserGroupResolver,
   AccountResolver,
   NotificationResolver,
   HubResolver
