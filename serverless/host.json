@@ -4,5 +4,8 @@
     "http": {
         "routePrefix": ""
     }
-  }
+  },
+  "watchDirectories": [ 
+    "src" 
+  ]
 }

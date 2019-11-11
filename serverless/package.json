@@ -30,6 +30,7 @@
     "apollo-boost": "^0.3.1",
     "apollo-server-azure-functions": "^2.9.7",
     "apollo-server-express": "^2.4.8",
+    "azure-function-express": "^2.0.0",
     "bcryptjs": "^2.4.3",
     "canvas": "^2.4.1",
     "cookie-parser": "^1.4.4",

@@ -49,9 +49,11 @@ createAzureSqlDbConnection()
         },
   });
 
+  server.
+
   exports.graphqlHandler = server.createHandler({
     cors: {
-      origin: '*',
+      origin: true,
       credentials: true,
     },
   });
