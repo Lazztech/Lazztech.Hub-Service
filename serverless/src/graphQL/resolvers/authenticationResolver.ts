@@ -52,7 +52,7 @@ export class AuthenticationResolver {
         }
 
         const accessToken = sign({ userId: user.id}, process.env.ACCESS_TOKEN_SECRET);
-        ctx.res.cookie("access-token", accessToken);
+        // ctx.res.cookie("access-token", accessToken);
 
         return accessToken;
     }
@@ -94,7 +94,7 @@ export class AuthenticationResolver {
         await joinUserInAppNotification.save();
 
         const accessToken = sign({ userId: user.id}, process.env.ACCESS_TOKEN_SECRET);
-        ctx.res.cookie("access-token", accessToken);
+        // ctx.res.cookie("access-token", accessToken);
 
         return accessToken;
     }
