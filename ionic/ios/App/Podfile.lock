@@ -71,7 +71,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Capacitor: f245413edff86ebf3d18bf76cadaee4be58b4a04
   CapacitorCordova: 25811fd90c0ea23ea135a42a217d1918873fa566
-  CordovaPlugins: 7d46576b41bf0e9b853dd0723643d421d4a0e96c
+  CordovaPlugins: 05e1155089bd76ef64f6d4c4ca288699e7cd35a0
   Firebase: dedc9e48ea3f3649ad5f6b982f8a0c73508a14b5
   FirebaseAnalyticsInterop: efbe45c8385ec626e29f9525e5ebd38520dfb6c1
   FirebaseCore: aecf02fb2274ec361b9bebeac112f5daa18273bd
