@@ -42,11 +42,29 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'people',
+        children: [
+          {
+            path: '',
+            loadChildren: '../people/people.module#PeoplePageModule'
+          }
+        ]
+      },
+      {
         path: 'profile',
         children: [
           {
             path: '',
             loadChildren: '../profile/profile.module#ProfilePageModule'
+          }
+        ]
+      },
+      {
+        path: 'invite',
+        children: [
+          {
+            path: '',
+            loadChildren: '../invite/invite.module#InvitePageModule'
           }
         ]
       },

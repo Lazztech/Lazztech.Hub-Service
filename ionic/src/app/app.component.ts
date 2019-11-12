@@ -15,34 +15,34 @@ import { NotificationsService } from './services/notifications.service';
 })
 export class AppComponent {
   public appPages = [
-    {
-      title: 'Home',
-      url: '/home',
-      icon: 'home'
-    },
-    {
-      title: 'Notifications',
-      url: '/notifications',
-      icon: 'notifications'
-    },
-    {
-      title: 'Hubs',
-      url: '/hubs',
-      icon: 'cube'
-    },
-    {
-      title: 'People',
-      url: '/people',
-      icon: 'person'
-    },   
+    // {
+    //   title: 'Home',
+    //   url: '/home',
+    //   icon: 'home'
+    // },
+    // {
+    //   title: 'Notifications',
+    //   url: '/notifications',
+    //   icon: 'notifications'
+    // },
+    // {
+    //   title: 'Hubs',
+    //   url: '/hubs',
+    //   icon: 'cube'
+    // },
+    // {
+    //   title: 'People',
+    //   url: '/people',
+    //   icon: 'person'
+    // },   
     {
       title: 'Profile',
-      url: '/profile',
+      url: '/tabs/profile',
       icon: 'settings'
     },
     {
       title: 'Invite',
-      url: '/invite',
+      url: '/tabs/invite',
       icon: 'add'
     }
   ];
