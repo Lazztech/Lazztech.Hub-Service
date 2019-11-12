@@ -6,6 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { AddHubPage } from './add-hub.page';
+import { HomePageModule } from 'src/app/home/home.module';
 
 const routes: Routes = [
   {

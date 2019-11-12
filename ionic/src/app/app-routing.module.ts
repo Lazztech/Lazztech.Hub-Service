@@ -8,6 +8,9 @@ const routes: Routes = [
     redirectTo: 'landing',
     pathMatch: 'full'
   },
+  { path: 'tabs', 
+    loadChildren: './pages/tabs/tabs.module#TabsPageModule'
+  },
   {
     path: 'home',
     loadChildren: './home/home.module#HomePageModule',

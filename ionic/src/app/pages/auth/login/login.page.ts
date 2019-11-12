@@ -78,7 +78,7 @@ export class LoginPage implements OnInit {
     if (token) {
       this.loading = false;
       this.dismissLogin();
-      await this.navCtrl.navigateRoot('/home');
+      await this.navCtrl.navigateRoot('/tabs');
     } else {
       this.loading = false;
       this.alertService.presentRedToast("Login failed!");
