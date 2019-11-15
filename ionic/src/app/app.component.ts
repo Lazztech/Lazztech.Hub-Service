@@ -36,7 +36,7 @@ export class AppComponent {
     //   icon: 'person'
     // },   
     {
-      title: 'Profile',
+      title: 'Settings',
       url: '/tabs/profile',
       icon: 'settings'
     },
