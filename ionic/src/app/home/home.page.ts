@@ -7,6 +7,9 @@ import { PwaInstallService } from '../services/pwa-install.service';
 import { Observable, of } from 'rxjs';
 import { NotificationsService } from '../services/notifications.service';
 import { PeopleService } from '../services/people.service';
+import { Plugins } from '@capacitor/core';
+
+const { Geolocation } = Plugins;
 
 @Component({
   selector: 'app-home',
@@ -51,6 +54,17 @@ export class HomePage implements OnInit, AfterViewInit {
     pwaInstallService.showInstallBanner();
   }
 
+  async getCurrentPosition() {
+    const coordinates = await Geolocation.getCurrentPosition();
+    console.log('Current', coordinates);
+  }
+
+  watchPosition() {
+    const wait = Geolocation.watchPosition({}, (position, err) => {
+      console.log(position);
+    })
+  }
+
   goToNotifications() {
     this.navCtrl.navigateRoot('notifications');
   }
@@ -64,6 +78,8 @@ export class HomePage implements OnInit, AfterViewInit {
 
     this.persons = await this.peopleService.loadAllPeople();
     this.loading = false;
+    await this.getCurrentPosition();
+    this.watchPosition();
   }
 
   async ngOnInit() {

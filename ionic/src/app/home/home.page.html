@@ -48,25 +48,39 @@
         </ion-card-content>
       </ion-card>
 
-      <ion-card>
+      <ion-list>
+            <ion-card>
+                <ion-card-content>
+                    <ion-icon float-right size="large" name="square"></ion-icon>
+                    <ion-badge float-right mode="md">5</ion-badge>
+                    <ion-icon float-right size="large" name="square-outline"></ion-icon>
+                    <ion-badge float-right mode="md">5</ion-badge>
+      
+                    <ion-avatar >
+                        <ion-skeleton-text animated></ion-skeleton-text>
+                      </ion-avatar>
+                      &nbsp;
+                      <div float-right>Lazzarini House</div>
+                </ion-card-content>
+              </ion-card>
+
+              <ion-card>
+                  <ion-card-content>
+                      <ion-icon float-right size="large" name="square"></ion-icon>
+                      <ion-badge float-right mode="md">5</ion-badge>
+                      <ion-icon float-right size="large" name="square-outline"></ion-icon>
+                      <ion-badge float-right mode="md">5</ion-badge>
         
-          <ion-card-content>
+                      <ion-avatar >
+                          <ion-skeleton-text animated></ion-skeleton-text>
+                        </ion-avatar>
+                        &nbsp;
+                        <div float-right>Lazzarini House</div>
+                  </ion-card-content>
+                </ion-card>
+      </ion-list>
 
-              <ion-icon float-right size="large" name="square"></ion-icon>
-              <ion-badge float-right mode="md">5</ion-badge>
-              <ion-icon float-right size="large" name="square-outline"></ion-icon>
-              <ion-badge float-right mode="md">5</ion-badge>
-
-              <ion-avatar >
-                  <ion-skeleton-text animated></ion-skeleton-text>
-                </ion-avatar>
-                &nbsp;
-                <div float-right>Lazzarini House</div>
-          </ion-card-content>
-
-        </ion-card>
-
-      <ion-grid>
+      <!-- <ion-grid>
           <ion-row padding *ngFor="let person of persons">
               <ion-col>
                   
@@ -84,6 +98,55 @@
                       
               </ion-col>
             </ion-row>
-      </ion-grid>
+      </ion-grid> -->
+
+      <ion-list>
+      <ion-item>
+          <ion-avatar slot="start">
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </ion-avatar>
+          <ion-label>
+            <h3>
+              <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+            </h3>
+            <p>
+              <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+            </p>
+            <p>
+              <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+            </p>
+          </ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-thumbnail slot="start">
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </ion-thumbnail>
+          <ion-label>
+            <h3>
+              <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+            </h3>
+            <p>
+              <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+            </p>
+            <p>
+              <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+            </p>
+          </ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-skeleton-text animated style="width: 27px; height: 27px" slot="start"></ion-skeleton-text>
+          <ion-label>
+            <h3>
+              <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+            </h3>
+            <p>
+              <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+            </p>
+            <p>
+              <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+            </p>
+          </ion-label>
+        </ion-item>
+  </ion-list>
 
 </ion-content>
