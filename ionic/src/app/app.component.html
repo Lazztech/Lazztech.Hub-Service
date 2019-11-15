@@ -4,6 +4,14 @@
       <ion-header>
         <ion-toolbar>
           <ion-title>LAZZTECH</ion-title>
+          <!-- <ion-item (click)="toggleTheme()">
+              <ion-icon size="large" slot="end" name="moon"></ion-icon>
+          </ion-item> -->
+
+          <div slot="end" (click)="toggleTheme()">
+              <ion-icon size="large" slot="end" name="moon"></ion-icon>
+              &nbsp;              
+          </div>
           <!-- <div slot="end" *ngIf="connected == true">
               <ion-label color="medium" slot="end">
                   online &nbsp;
@@ -41,7 +49,7 @@
           </ion-item>
         </ion-list>
 
-        <ion-grid>
+        <!-- <ion-grid>
 
             <ion-row>
               <ion-col>
@@ -61,13 +69,13 @@
                   </ion-row>
                 </ion-col>
             </ion-row>
-          </ion-grid>
+          </ion-grid> -->
       </ion-content>
 
 
-      <ion-item (click)="toggleTheme()">
+      <!-- <ion-item (click)="toggleTheme()">
           <ion-icon size="large" slot="start" name="moon"></ion-icon>
-      </ion-item>
+      </ion-item> -->
     </ion-menu>
     <ion-router-outlet main></ion-router-outlet>
   </ion-split-pane>
