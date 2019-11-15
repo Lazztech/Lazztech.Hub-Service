@@ -6,6 +6,8 @@ import { serverlessEnvChecker } from "../src/deploymentConfigs/serverlessEnvChec
 import { IMyContext } from "../src/graphQL/context.interface";
 import { configuredSchemaSync } from "../src/graphQL/schemaBuilder";
 import { createLocalDevDbConnection } from "../src/deploymentConfigs/createLocalDevDbConnection";
+import { HttpRequest } from "@azure/functions";
+import { verify } from "jsonwebtoken";
 
 // const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
 //     context.log('HTTP trigger function processed a request.');
@@ -40,18 +42,23 @@ createAzureSqlDbConnection()
 
   const server = new ApolloServer({
       schema,
-      context: ({ req, res }: IMyContext): IMyContext => {
-          const context = {
-            req,
-            res,
-          };
-          return context as any;
-        },
+      context: (req: HttpRequest) => {
+        //FIXME: This needs to be better understood and cleaned up.
+        const req1 = req as any;
+        const accessToken = req1.request.headers["authorization"];
+        const data = verify(accessToken, process.env.ACCESS_TOKEN_SECRET) as any;
+        const context = {
+          req: req1.request,
+          userId: data.userId
+        };
+        return context;
+      },
   });
 
   exports.graphqlHandler = server.createHandler({
     cors: {
       origin: true,
       credentials: true,
-    },
+
+    }
   });

@@ -20,17 +20,18 @@ export class AuthenticationResolver {
 
     @Authorized()
     @Query(() => User, { nullable: true })
-    public async me(@Ctx() ctx: IMyContext): Promise<User> {
-        let accessToken = ctx.req.cookies["access-token"];
-        if (!accessToken) {
-            accessToken = ctx.req.get("Authorization");
-        }
-        if (!accessToken) {
-            console.error("Didn't find access token!");
-        }
+    public async me(@Ctx() ctx: any): Promise<User> {
+        //FIXME:
+        // let accessToken = ctx.req.cookies["access-token"];
+        // if (!accessToken) {
+        //     accessToken = ctx.req.get("Authorization");
+        // }
+        // if (!accessToken) {
+        //     console.error("Didn't find access token!");
+        // }
 
-        const data = verify(accessToken, process.env.ACCESS_TOKEN_SECRET) as any;
-        return await User.findOne({ where: { id: data.userId}});
+        // const data = verify(accessToken, process.env.ACCESS_TOKEN_SECRET) as any;
+        return await User.findOne({ where: { id: ctx.userId}});
     }
 
     @Mutation(() => String, { nullable: true })
@@ -103,6 +104,7 @@ export class AuthenticationResolver {
     public async logout(
         @Ctx() ctx: IMyContext
     ): Promise<boolean> {
+        //FIXME:
         ctx.res.cookie("access-token", "", { expires: new Date(Date.now())});
         return true;
     }

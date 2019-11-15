@@ -3,7 +3,11 @@ import { AuthChecker } from "type-graphql";
 import { User } from "../dal/entity/user";
 import { IMyContext } from "./context.interface";
 
-export const customAuthChecker: AuthChecker<IMyContext> = async (
+// export const customAuthChecker: AuthChecker<IMyContext> = async (
+//     { root, args, context, info },
+//     roles,
+//   ) => {
+  export const customAuthChecker: AuthChecker<any> = async (
     { root, args, context, info },
     roles,
   ) => {
@@ -19,7 +23,11 @@ export const customAuthChecker: AuthChecker<IMyContext> = async (
     // let accessToken = context.req.cookies["access-token"];
     // if (!accessToken) {
       // console.error("Custom Auth Checker didn't find an access-token in cookie.");
-      let accessToken = context.req.get("Authorization");
+      //FIXME: This needs to be better understood and cleaned up.
+      let accessToken = context.req.headers["authorization"];
+      // let accessToken = context.req.headers["Authorization"];
+      // let accessToken = context.req.get("Authorization");
+
     // }
     if (!accessToken) {
       console.error("Custom Auth Checker didn't find Authorization header access token.");
