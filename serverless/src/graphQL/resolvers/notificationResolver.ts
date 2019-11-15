@@ -17,20 +17,10 @@ export class NotificationResolver {
     @Authorized()
     @Query(() => [InAppNotification])
     public async getInAppNotifications(
-        @Ctx() ctx: IMyContext,
+        @Ctx() ctx: any, //FIXME: should be a strongly typed interface
     ): Promise<InAppNotification[]> {
-        let accessToken = ctx.req.cookies["access-token"];
-        if (!accessToken) {
-            accessToken = ctx.req.get("Authorization");
-        }
-        if (!accessToken) {
-            console.error("Didn't find access token!");
-        }
-
-        const data = verify(accessToken, process.env.ACCESS_TOKEN_SECRET) as any;
-
         const joinInAppNotifications = await JoinUserInAppNotifications.find({
-            where: { userId: data.userId},
+            where: { userId: ctx.userId},
             relations: ["inAppNotification"]
         });
 

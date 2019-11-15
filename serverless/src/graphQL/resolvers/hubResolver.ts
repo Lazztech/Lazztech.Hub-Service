@@ -70,19 +70,9 @@ export class HubResolver {
     @Authorized()
     @Query(() => [Hub])
     public async ownedHubs(
-        @Ctx() ctx: IMyContext,
+        @Ctx() ctx: any, //FIXME: should be an interface
     ): Promise<Hub[]> {
-        let accessToken = ctx.req.cookies["access-token"];
-        if (!accessToken) {
-            accessToken = ctx.req.get("Authorization");
-        }
-        if (!accessToken) {
-            console.error("Didn't find access token!");
-        }
-
-        const data = verify(accessToken, process.env.ACCESS_TOKEN_SECRET) as any;
-
-        const user = await User.findOne({ id: data.userId });
+        const user = await User.findOne({ id: ctx.userId });
         const ownedHubs = await user.ownedHubs();
         return ownedHubs;
     }
@@ -90,19 +80,9 @@ export class HubResolver {
     @Authorized()
     @Query(() => [Hub])
     public async memberOfHubs(
-        @Ctx() ctx: IMyContext,
+        @Ctx() ctx: any, //FIXME: should be an interface
     ): Promise<Hub[]> {
-        let accessToken = ctx.req.cookies["access-token"];
-        if (!accessToken) {
-            accessToken = ctx.req.get("Authorization");
-        }
-        if (!accessToken) {
-            console.error("Didn't find access token!");
-        }
-
-        const data = verify(accessToken, process.env.ACCESS_TOKEN_SECRET) as any;
-
-        const user = await User.findOne({ id: data.userId });
+        const user = await User.findOne({ id: ctx.userId });
         const memberOfHubs = await user.memberOfHubs();
         return memberOfHubs;
     }
