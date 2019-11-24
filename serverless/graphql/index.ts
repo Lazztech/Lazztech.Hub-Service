@@ -46,10 +46,10 @@ createAzureSqlDbConnection()
         //FIXME: This needs to be better understood and cleaned up.
         const req1 = req as any;
         const accessToken = req1.request.headers["authorization"];
-        const data = verify(accessToken, process.env.ACCESS_TOKEN_SECRET) as any;
+        const data = accessToken ? verify(accessToken, process.env.ACCESS_TOKEN_SECRET) as any : undefined ;
         const context = {
           req: req1.request,
-          userId: data.userId
+          userId: data ? data.userId : undefined
         };
         return context;
       },
