@@ -74,7 +74,7 @@ export class CreateHubPage implements OnInit {
     const result = await this.hubService.createHub(formValue.hubName, this.image);
     if (result) {
       this.loading = false;
-      this.navCtrl.navigateRoot('hubs');
+      this.navCtrl.navigateRoot('tabs/hubs');
       this.alertService.presentToast("Created Hub!");
     } else {
       this.loading = false;
