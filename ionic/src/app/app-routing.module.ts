@@ -3,19 +3,9 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
-  {
-    path: '',
-    redirectTo: 'landing',
-    pathMatch: 'full'
-  },
-  { path: 'tabs', 
-    loadChildren: './pages/tabs/tabs.module#TabsPageModule'
-  },
-  {
-    path: 'home',
-    loadChildren: './home/home.module#HomePageModule',
-    canActivate: [AuthGuard]
-  },
+  { path: '', redirectTo: 'landing', pathMatch: 'full' },
+  { path: 'tabs', loadChildren: './pages/tabs/tabs.module#TabsPageModule', canActivate: [AuthGuard] },
+  { path: 'home', loadChildren: './home/home.module#HomePageModule', canActivate: [AuthGuard] },
   { path: 'landing', loadChildren: './pages/landing/landing.module#LandingPageModule' },
   { path: 'login', loadChildren: './pages/auth/login/login.module#LoginPageModule' },
   { path: 'register', loadChildren: './pages/auth/register/register.module#RegisterPageModule' },
@@ -30,13 +20,13 @@ const routes: Routes = [
   { path: 'notifications', loadChildren: './pages/notifications/notifications.module#NotificationsPageModule', canActivate: [AuthGuard] },
   { path: 'people', loadChildren: './pages/people/people.module#PeoplePageModule', canActivate: [AuthGuard] },
   { path: 'person', loadChildren: './pages/person/person.module#PersonPageModule', canActivate: [AuthGuard] },
-  { path: 'add-person', loadChildren: './pages/add-person/add-person.module#AddPersonPageModule' },
-  { path: 'image', loadChildren: './pages/image/image.module#ImagePageModule' },
-  { path: 'hub', loadChildren: './pages/hub/hub.module#HubPageModule' },
-  { path: 'hubs', loadChildren: './pages/hubs/hubs.module#HubsPageModule' },
-  { path: 'add-hub', loadChildren: './pages/add-hub/add-hub.module#AddHubPageModule' },
-  { path: 'create-hub', loadChildren: './pages/create-hub/create-hub.module#CreateHubPageModule' },
-  { path: 'join-hub', loadChildren: './pages/join-hub/join-hub.module#JoinHubPageModule' },
+  { path: 'add-person', loadChildren: './pages/add-person/add-person.module#AddPersonPageModule', canActivate: [AuthGuard] },
+  { path: 'image', loadChildren: './pages/image/image.module#ImagePageModule', canActivate: [AuthGuard] },
+  { path: 'hub', loadChildren: './pages/hub/hub.module#HubPageModule', canActivate: [AuthGuard] },
+  { path: 'hubs', loadChildren: './pages/hubs/hubs.module#HubsPageModule', canActivate: [AuthGuard] },
+  { path: 'add-hub', loadChildren: './pages/add-hub/add-hub.module#AddHubPageModule', canActivate: [AuthGuard] },
+  { path: 'create-hub', loadChildren: './pages/create-hub/create-hub.module#CreateHubPageModule', canActivate: [AuthGuard] },
+  { path: 'join-hub', loadChildren: './pages/join-hub/join-hub.module#JoinHubPageModule', canActivate: [AuthGuard] },
 ];
 
 @NgModule({
