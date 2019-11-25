@@ -3,6 +3,9 @@
     <ion-buttons slot="start">
       <!-- <ion-menu-button></ion-menu-button> -->
     </ion-buttons>
+          <div slot="end" href="javascript:void(0);" (click)="toggleTheme()">
+            <ion-icon size="large" name="moon"></ion-icon>
+        </div>
     <ion-title>Profile</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -15,30 +18,15 @@
         <ion-card-subtitle *ngIf="user">{{ user["email"] }}</ion-card-subtitle>
       </ion-card-header>
     
-      <ion-card-content>
-      </ion-card-content>
+      <!-- <ion-card-content>
+      </ion-card-content> -->
 
       <ion-list lines="none">
 
-        <ion-item href="javascript:void(0);" (click)="changeName()">
-          <ion-icon name="person" color="medium" slot="start"></ion-icon>
-          <ion-label>Change Name</ion-label>
-        </ion-item>
-  
-        <ion-item href="javascript:void(0);" (click)="changeEmail()">
-          <ion-icon name="mail" color="medium" slot="start"></ion-icon>
-          <ion-label>Change Email Address</ion-label>
-        </ion-item>
-  
-        <ion-item href="javascript:void(0);" (click)="changePassword()">
-          <ion-icon name="lock" color="medium" slot="start"></ion-icon>
-          <ion-label>Change Password</ion-label>
-        </ion-item>
-  
-        <ion-item href="javascript:void(0);" (click)="deleteAccount()">
-          <ion-icon name="warning" color="medium" slot="start"></ion-icon>
-          <ion-label>Delete Account</ion-label>
-        </ion-item>
+        <ion-item href="javascript:void(0);" (click)="logout()">
+            <ion-icon name="log-out" color="medium" slot="start"></ion-icon>
+            <ion-label>Logout</ion-label>
+          </ion-item>
 
       </ion-list>
 
@@ -50,6 +38,27 @@
       </ion-card-header>
 
       <ion-list lines="none">
+
+          <ion-item href="javascript:void(0);" (click)="changeName()">
+              <ion-icon name="person" color="medium" slot="start"></ion-icon>
+              <ion-label>Change Name</ion-label>
+            </ion-item>
+      
+            <ion-item href="javascript:void(0);" (click)="changeEmail()">
+              <ion-icon name="mail" color="medium" slot="start"></ion-icon>
+              <ion-label>Change Email Address</ion-label>
+            </ion-item>
+      
+            <ion-item href="javascript:void(0);" (click)="changePassword()">
+              <ion-icon name="lock" color="medium" slot="start"></ion-icon>
+              <ion-label>Change Password</ion-label>
+            </ion-item>
+      
+            <ion-item href="javascript:void(0);" (click)="deleteAccount()">
+              <ion-icon name="warning" color="medium" slot="start"></ion-icon>
+              <ion-label>Delete Account</ion-label>
+            </ion-item>
+
         <ion-item href="javascript:void(0);" (click)="checkForUpdates()">
           <ion-icon name="globe" color="medium" slot="start"></ion-icon>
           <ion-label>Check For Updates</ion-label>

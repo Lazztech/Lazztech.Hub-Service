@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../../models/user';
-import { MenuController, ModalController } from '@ionic/angular';
+import { MenuController, ModalController, NavController } from '@ionic/angular';
 import { AuthService } from '../../services/auth.service';
 import { UpdateService } from 'src/app/services/update.service';
 import { AlertService } from 'src/app/services/alert.service';
@@ -10,6 +10,7 @@ import { ChangeNamePage } from './change-name/change-name.page';
 import { ChangeEmailPage } from './change-email/change-email.page';
 import { ChangePasswordPage } from './change-password/change-password.page';
 import { DeleteAccountPage } from './delete-account/delete-account.page';
+import { ThemeService } from 'src/app/services/theme.service';
 
 @Component({
   selector: 'app-profile',
@@ -27,7 +28,9 @@ export class ProfilePage implements OnInit {
     private alertService: AlertService,
     private profileService: ProfileService,
     private storage: Storage,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private themeService: ThemeService,
+    private navCtrl: NavController,
     ) { 
     this.menu.enable(true);
   }
@@ -37,6 +40,12 @@ export class ProfilePage implements OnInit {
 
   async ionViewWillEnter() {
     this.user = await this.authService.user();    
+  }
+
+  async logout() {
+    await this.authService.logout();
+    this.alertService.presentToast('Logged Out');
+    this.navCtrl.navigateRoot('/landing');
   }
 
   async changeName() {
@@ -77,6 +86,23 @@ export class ProfilePage implements OnInit {
 
   async clearStorage() {
     await this.profileService.clearStorage();
+  }
+
+  async toggleTheme() {
+    //FIXME: clean this up
+    // if (!this.isNotFirstToggleSet) {
+    //   this.isNotFirstToggleSet = true;
+    //   console.log('setting isNotFirstToggleSet = true')
+    //   console.log(`Is DarkMode: ${this.isDark}`);
+    //   if (this.isDark) {
+    //     return;
+    //   }
+    // }
+
+    // if (this.isNotFirstToggleSet) {
+    //   console.log("toggling theme");
+      await this.themeService.toggle();
+    // } 
   }
 
 }
