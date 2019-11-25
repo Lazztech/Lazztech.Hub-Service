@@ -1,11 +1,9 @@
 import { BarcodeFormat, BinaryBitmap, DecodeHintType, HybridBinarizer, MultiFormatReader, RGBLuminanceSource } from "@zxing/library/esm5";
 import jpeg from "jpeg-js";
-import { verify } from "jsonwebtoken";
 import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { Hub } from "../../dal/entity/hub";
 import { JoinUserHub } from "../../dal/entity/joinUserHub";
 import { User } from "../../dal/entity/user";
-import { IMyContext } from "../context.interface";
 
 @Resolver()
 export class HubResolver {
@@ -15,20 +13,10 @@ export class HubResolver {
     @Authorized()
     @Mutation(() => Hub)
     public async createHub(
-        @Ctx() ctx: IMyContext,
+        @Ctx() ctx: any, //FIXME: should be an interface
         @Arg("name") name: string,
         @Arg("image") image: string
     ): Promise<Hub> {
-        let accessToken = ctx.req.cookies["access-token"];
-        if (!accessToken) {
-            accessToken = ctx.req.get("Authorization");
-        }
-        if (!accessToken) {
-            console.error("Didn't find access token!");
-        }
-
-        const data = verify(accessToken, process.env.ACCESS_TOKEN_SECRET) as any;
-
         // Creates hub with user as owner.
         const hub = Hub.create({
             name,
@@ -36,7 +24,7 @@ export class HubResolver {
         });
         const result = await hub.save();
         let joinUserHub = await JoinUserHub.create({
-            userId: data.userId,
+            userId: ctx.userId,
             hubId: hub.id,
             isOwner: true
         });
@@ -47,21 +35,11 @@ export class HubResolver {
     @Authorized()
     @Query(() => Hub)
     public async hub(
-        @Ctx() ctx: IMyContext,
+        @Ctx() ctx: any, //FIXME: should be an interface
         @Arg("id") id: number,
     ): Promise<Hub> {
-        let accessToken = ctx.req.cookies["access-token"];
-        if (!accessToken) {
-            accessToken = ctx.req.get("Authorization");
-        }
-        if (!accessToken) {
-            console.error("Didn't find access token!");
-        }
-        // Need to add check that user is either a member or owner.
-
-        const data = verify(accessToken, process.env.ACCESS_TOKEN_SECRET) as any;
-
-        const user = await User.findOne({ id: data.userId });
+        //FIXME: Need to add check that user is either a member or owner.
+        const user = await User.findOne({ id: ctx.userId });
 
         const hub = await Hub.findOne({ id });
         return hub;
@@ -90,24 +68,15 @@ export class HubResolver {
     @Authorized()
     @Mutation(() => Hub)
     public async renameHub(
-        @Ctx() ctx: IMyContext,
+        @Ctx() ctx: any, //FIXME: should be an interface
         @Arg("hubId") hubId: number,
         @Arg("newName") newName: string
     ): Promise<Hub> {
-        let accessToken = ctx.req.cookies["access-token"];
-        if (!accessToken) {
-            accessToken = ctx.req.get("Authorization");
-        }
-        if (!accessToken) {
-            console.error("Didn't find access token!");
-        }
-
-        // Finish implementing check that user is hub owner.
-        const data = verify(accessToken, process.env.ACCESS_TOKEN_SECRET) as any;
+        //FIXME: Finish implementing check that user is hub owner.
 
         const joinUserHubResult = await JoinUserHub.findOne({
             where: {
-                userId: data.userId,
+                userId: ctx.userId,
                 hubId,
                 isOwner: true
             },
@@ -123,25 +92,15 @@ export class HubResolver {
     @Authorized()
     @Mutation(() => Hub)
     public async changeHubImage(
-        @Ctx() ctx: IMyContext,
+        @Ctx() ctx: any, //FIXME: should be an interface
         @Arg("hubId") hubId: number,
         @Arg("newImage") newImage: string
     ): Promise<Hub> {
-        let accessToken = ctx.req.cookies["access-token"];
-        if (!accessToken) {
-            accessToken = ctx.req.get("Authorization");
-        }
-        if (!accessToken) {
-            console.error("Didn't find access token!");
-        }
-
-        const data = verify(accessToken, process.env.ACCESS_TOKEN_SECRET) as any;
-
-        // Finish implementing check that user is hub owner.
+        //FIXME: Finish implementing check that user is hub owner.
 
         const joinUserHubResult = await JoinUserHub.findOne({
             where: {
-                userId: data.userId,
+                userId: ctx.userId,
                 hubId,
                 isOwner: true
             },
@@ -157,22 +116,13 @@ export class HubResolver {
     @Authorized()
     @Mutation(() => Boolean)
     public async joinHub(
-        @Ctx() ctx: IMyContext,
+        @Ctx() ctx: any, //FIXME: should be an interface
         @Arg("id") id: number,
     ) {
-        let accessToken = ctx.req.cookies["access-token"];
-        if (!accessToken) {
-            accessToken = ctx.req.get("Authorization");
-        }
-        if (!accessToken) {
-            console.error("Didn't find access token!");
-        }
-
-        // Finish implementing check that user is hub owner.
-        const data = verify(accessToken, process.env.ACCESS_TOKEN_SECRET) as any;
+        //FIXME: Finish implementing check that user is hub owner.
 
         let joinUserHub = await JoinUserHub.create({
-            userId: data.userId,
+            userId: ctx.userId,
             hubId: id,
             isOwner: true
         });
@@ -184,20 +134,11 @@ export class HubResolver {
     @Authorized()
     @Query(() => Hub)
     public async getHubByQRImage(
-        @Ctx() ctx: IMyContext,
+        @Ctx() ctx: any, //FIXME: should be an interface
         @Arg("qrImageB64") qrImageB64: string
     ): Promise<Hub> {
-        let accessToken = ctx.req.cookies["access-token"];
-        if (!accessToken) {
-            accessToken = ctx.req.get("Authorization");
-        }
-        if (!accessToken) {
-            console.error("Didn't find access token!");
-        }
-
-        // Finish implementing check that user is hub owner.
-        const data = verify(accessToken, process.env.ACCESS_TOKEN_SECRET) as any;
-
+        //FIXME: Finish implementing check that user is hub owner.
+        
         const result = await this.scanQR(qrImageB64);
         if (result) {
             const id = result.id;
