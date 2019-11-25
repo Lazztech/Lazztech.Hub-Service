@@ -10,20 +10,11 @@ export class AccountResolver {
     @Authorized()
     @Mutation(() => User)
     public async changeName(
-        @Ctx() ctx: IMyContext,
+        @Ctx() ctx: any, //FIXME: should be an interface
         @Arg("firstName") firstName: string,
         @Arg("lastName") lastName: string
     ): Promise<User> {
-        let accessToken = ctx.req.cookies["access-token"];
-        if (!accessToken) {
-            accessToken = ctx.req.get("Authorization");
-        }
-        if (!accessToken) {
-            console.error("Didn't find access token!");
-        }
-
-        const data = verify(accessToken, process.env.ACCESS_TOKEN_SECRET) as any;
-        const user = await User.findOne({ where: { id: data.userId}});
+        const user = await User.findOne({ where: { id: ctx.userId}});
         user.firstName = firstName;
         user.lastName = lastName;
         await user.save();
@@ -34,19 +25,10 @@ export class AccountResolver {
     @Authorized()
     @Mutation(() => User)
     public async changeEmail(
-        @Ctx() ctx: IMyContext,
+        @Ctx() ctx: any, //FIXME: should be an interface
         @Arg("newEmail") newEmail: string
     ): Promise<User> {
-        let accessToken = ctx.req.cookies["access-token"];
-        if (!accessToken) {
-            accessToken = ctx.req.get("Authorization");
-        }
-        if (!accessToken) {
-            console.error("Didn't find access token!");
-        }
-
-        const data = verify(accessToken, process.env.ACCESS_TOKEN_SECRET) as any;
-        const user = await User.findOne({ where: { id: data.userId}});
+        const user = await User.findOne({ where: { id: ctx.userId}});
         user.email = newEmail;
         await user.save();
 
@@ -56,20 +38,11 @@ export class AccountResolver {
     @Authorized()
     @Mutation(() => Boolean)
     public async changePassword(
-        @Ctx() ctx: IMyContext,
+        @Ctx() ctx: any, //FIXME: should be an interface
         @Arg("oldPassword") oldPassword: string,
         @Arg("newPassword") newPassword: string
     ): Promise<boolean> {
-        let accessToken = ctx.req.cookies["access-token"];
-        if (!accessToken) {
-            accessToken = ctx.req.get("Authorization");
-        }
-        if (!accessToken) {
-            console.error("Didn't find access token!");
-        }
-
-        const data = verify(accessToken, process.env.ACCESS_TOKEN_SECRET) as any;
-        const user = await User.findOne({ where: { id: data.userId}});
+        const user = await User.findOne({ where: { id: ctx.userId}});
 
         const valid = await bcrypt.compare(oldPassword, user.password);
 
@@ -87,20 +60,11 @@ export class AccountResolver {
     @Authorized()
     @Mutation(() => Boolean)
     public async deleteAccount(
-        @Ctx() ctx: IMyContext,
+        @Ctx() ctx: any, //FIXME: should be an interface
         @Arg("email") email: string,
         @Arg("password") password: string
     ): Promise<boolean> {
-        let accessToken = ctx.req.cookies["access-token"];
-        if (!accessToken) {
-            accessToken = ctx.req.get("Authorization");
-        }
-        if (!accessToken) {
-            console.error("Didn't find access token!");
-        }
-
-        const data = verify(accessToken, process.env.ACCESS_TOKEN_SECRET) as any;
-        const user = await User.findOne({ where: { id: data.userId}});
+        const user = await User.findOne({ where: { id: ctx.userId}});
 
         const valid = await bcrypt.compare(password, user.password);
 

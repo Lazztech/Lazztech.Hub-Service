@@ -35,19 +35,10 @@ export class NotificationResolver {
     @Authorized()
     @Mutation(() => Boolean)
     public async addUserFcmNotificationToken(
-        @Ctx() ctx: IMyContext,
+        @Ctx() ctx: any, //FIXME: should be a strongly typed interface
         @Arg("token") token: string
     ): Promise<boolean> {
-        let accessToken = ctx.req.cookies["access-token"];
-        if (!accessToken) {
-            accessToken = ctx.req.get("Authorization");
-        }
-        if (!accessToken) {
-            console.error("Didn't find access token!");
-        }
-
-        const data = verify(accessToken, process.env.ACCESS_TOKEN_SECRET) as any;
-        const user = await User.findOne({ where: { id: data.userId}});
+        const user = await User.findOne({ where: { id: ctx.userId}});
 
         const userDevice = new UserDevice();
         userDevice.userId = user.id;

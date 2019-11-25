@@ -20,17 +20,9 @@ export class AuthenticationResolver {
 
     @Authorized()
     @Query(() => User, { nullable: true })
-    public async me(@Ctx() ctx: any): Promise<User> {
-        //FIXME:
-        // let accessToken = ctx.req.cookies["access-token"];
-        // if (!accessToken) {
-        //     accessToken = ctx.req.get("Authorization");
-        // }
-        // if (!accessToken) {
-        //     console.error("Didn't find access token!");
-        // }
-
-        // const data = verify(accessToken, process.env.ACCESS_TOKEN_SECRET) as any;
+    public async me(
+        @Ctx() ctx: any //FIXME: should be a strongly typed interface
+        ): Promise<User> {
         return await User.findOne({ where: { id: ctx.userId}});
     }
 
