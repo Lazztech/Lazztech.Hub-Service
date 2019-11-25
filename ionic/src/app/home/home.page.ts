@@ -1,13 +1,12 @@
-import { Component, AfterViewInit, OnInit } from '@angular/core';
-import { MenuController, Platform, NavController } from '@ionic/angular';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Plugins } from '@capacitor/core';
+import { MenuController, NavController, Platform } from '@ionic/angular';
+import { Observable, of } from 'rxjs';
 import { User } from '../models/user';
 import { AuthService } from '../services/auth.service';
-import { UpdateService } from '../services/update.service';
-import { PwaInstallService } from '../services/pwa-install.service';
-import { Observable, of } from 'rxjs';
 import { NotificationsService } from '../services/notifications.service';
-import { PeopleService } from '../services/people.service';
-import { Plugins } from '@capacitor/core';
+import { PwaInstallService } from '../services/pwa-install.service';
+import { UpdateService } from '../services/update.service';
 
 const { Geolocation } = Plugins;
 
@@ -35,7 +34,6 @@ export class HomePage implements OnInit, AfterViewInit {
     private platform: Platform,
     private notificationsService: NotificationsService,
     public navCtrl: NavController,
-    public peopleService: PeopleService
     ) { 
     this.menu.enable(true);
     this.beforeInstall = pwaInstallService.beforeInstall;
@@ -65,6 +63,15 @@ export class HomePage implements OnInit, AfterViewInit {
     })
   }
 
+  async doRefresh(event) {
+    console.log('Begin async operation');
+    this.loading = true;
+    // await this.loadOwnedHubs();
+    // await this.loadMemberOfHubs();
+    this.loading = false;
+    event.target.complete();
+  }
+
   goToNotifications() {
     this.navCtrl.navigateRoot('notifications');
   }
@@ -75,8 +82,7 @@ export class HomePage implements OnInit, AfterViewInit {
       this.loading = true;
       return x.length;
     });
-
-    this.persons = await this.peopleService.loadAllPeople();
+    
     this.loading = false;
     await this.getCurrentPosition();
     this.watchPosition();
