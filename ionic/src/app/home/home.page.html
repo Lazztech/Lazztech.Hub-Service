@@ -4,7 +4,7 @@
       <!-- <ion-menu-button></ion-menu-button> -->
     </ion-buttons>
     <ion-title>
-      Home
+      LAZZTECH HUB
     </ion-title>
     <ion-progress-bar *ngIf="loading" type="indeterminate"></ion-progress-bar>
     <!-- <div href="javascript:void(0);" (click)="goToNotifications()" lines="none" slot="end">
@@ -37,39 +37,22 @@
             <ion-card-subtitle>Get Started</ion-card-subtitle>
         </ion-card-header>
 
-        <ion-item>
+        <ion-item (click)="goToAddHubPage()">
           <ion-icon name="cube" slot="start"></ion-icon>
           <ion-label>Add a Hub</ion-label>
-          <ion-button slot="end" (click)="goToAddHubPage()">Add</ion-button>
+          <ion-icon slot="end" name="arrow-forward"></ion-icon>
         </ion-item>
       
         <ion-card-content>
-            Join a communities Hub as a member or create a Hub as a Hub owner with a Lazztech Hub Camera.
+            Join or start a community hub and receive notifications when people gather.
         </ion-card-content>
       </ion-card>
 
       <ion-list>
-            <ion-card>
-                <ion-card-content>
-                    <ion-icon float-right size="large" name="square"></ion-icon>
-                    <ion-badge float-right mode="md">5</ion-badge>
-                    <ion-icon float-right size="large" name="square-outline"></ion-icon>
-                    <ion-badge float-right mode="md">5</ion-badge>
-      
-                    <ion-avatar >
-                        <ion-skeleton-text animated></ion-skeleton-text>
-                      </ion-avatar>
-                      &nbsp;
-                      <div float-right>Lazzarini House</div>
-                </ion-card-content>
-              </ion-card>
-
               <ion-card>
                   <ion-card-content>
-                      <ion-icon float-right size="large" name="square"></ion-icon>
-                      <ion-badge float-right mode="md">5</ion-badge>
-                      <ion-icon float-right size="large" name="square-outline"></ion-icon>
-                      <ion-badge float-right mode="md">5</ion-badge>
+                      <ion-badge float-right color="success">5 / 5</ion-badge>
+                      <div float-right>&nbsp;Present:&nbsp;</div>
         
                       <ion-avatar >
                           <ion-skeleton-text animated></ion-skeleton-text>
@@ -99,54 +82,5 @@
               </ion-col>
             </ion-row>
       </ion-grid> -->
-
-      <ion-list>
-      <ion-item>
-          <ion-avatar slot="start">
-            <ion-skeleton-text animated></ion-skeleton-text>
-          </ion-avatar>
-          <ion-label>
-            <h3>
-              <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
-            </h3>
-            <p>
-              <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
-            </p>
-            <p>
-              <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
-            </p>
-          </ion-label>
-        </ion-item>
-        <ion-item>
-          <ion-thumbnail slot="start">
-            <ion-skeleton-text animated></ion-skeleton-text>
-          </ion-thumbnail>
-          <ion-label>
-            <h3>
-              <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
-            </h3>
-            <p>
-              <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
-            </p>
-            <p>
-              <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
-            </p>
-          </ion-label>
-        </ion-item>
-        <ion-item>
-          <ion-skeleton-text animated style="width: 27px; height: 27px" slot="start"></ion-skeleton-text>
-          <ion-label>
-            <h3>
-              <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
-            </h3>
-            <p>
-              <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
-            </p>
-            <p>
-              <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
-            </p>
-          </ion-label>
-        </ion-item>
-  </ion-list>
 
 </ion-content>

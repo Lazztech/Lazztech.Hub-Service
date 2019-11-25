@@ -28,7 +28,7 @@ export class AuthGuard implements CanActivate {
         if (online) {
           this.authService.verifyAccountExists().then((stillValid) => {
             if (!stillValid) {
-              this.alertService.presentRedToast("Account no longer exists!", 6000);
+              this.alertService.presentRedToast("Logged out.", 6000);
               this.authService.logout();
               this.router.navigate(['/landing']);
               return false;
