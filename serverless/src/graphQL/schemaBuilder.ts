@@ -4,12 +4,10 @@ import Container from "typedi";
 import { customAuthChecker } from "./customAuthChecker";
 import { AccountResolver } from "./resolvers/accountResolver";
 import { AuthenticationResolver } from "./resolvers/authenticationResolver";
-import { HelloResolver } from "./resolvers/helloResolver";
 import { HubResolver } from "./resolvers/hubResolver";
 import { NotificationResolver } from "./resolvers/notificationResolver";
 
 const resolvers = [
-  HelloResolver,
   AuthenticationResolver,
   AccountResolver,
   NotificationResolver,
