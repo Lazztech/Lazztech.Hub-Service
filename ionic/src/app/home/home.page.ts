@@ -60,6 +60,7 @@ export class HomePage implements OnInit, AfterViewInit {
   watchPosition() {
     const wait = Geolocation.watchPosition({}, (position, err) => {
       console.log(position);
+      this.notificationsService.localNotification("position", JSON.stringify(position));
     })
   }
 
@@ -86,6 +87,7 @@ export class HomePage implements OnInit, AfterViewInit {
     this.loading = false;
     await this.getCurrentPosition();
     this.watchPosition();
+    // await this.notificationsService.localNotification();
   }
 
   async ngOnInit() {
@@ -113,6 +115,10 @@ export class HomePage implements OnInit, AfterViewInit {
 
   async testPushNotification() {
     await this.notificationsService.testPushNotificationToUser();
+  }
+
+  async testLocationNotification () {
+
   }
 
   goToAddHubPage() {

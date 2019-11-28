@@ -12,6 +12,7 @@ import {
   PushNotificationActionPerformed } from '@capacitor/core';
 import { Platform } from '@ionic/angular';
 import { InAppNotification } from '../models/inAppNotification';
+const { LocalNotifications } = Plugins;
 
 const { PushNotifications } = Plugins;
 
@@ -37,6 +38,33 @@ export class NotificationsService {
     private platform: Platform
     // private storage: Storage
   ) { }
+
+  async localNotification(title: string, body: string, schedule?: Date): Promise<void> {
+    let result = await LocalNotifications.areEnabled();
+    if (!result.value) {
+      let result = LocalNotifications.requestPermissions();
+    }
+
+    if (!schedule) {
+      schedule = new Date(Date.now());
+    }
+
+    await LocalNotifications.schedule({
+      notifications: [
+        {
+          title: title,
+          body: body,
+          id: 1,
+          // schedule: { at: new Date(Date.now() + 1000 * 5) },
+          schedule: { at: schedule },
+          sound: null,
+          attachments: null,
+          actionTypeId: "",
+          extra: null
+        }
+      ]
+    });
+  }
 
   async getInAppNotifications(): Promise<InAppNotification[]> {
     const result = await this.apollo.query({
