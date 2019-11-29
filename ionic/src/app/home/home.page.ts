@@ -52,17 +52,17 @@ export class HomePage implements OnInit, AfterViewInit {
     pwaInstallService.showInstallBanner();
   }
 
-  async getCurrentPosition() {
-    const coordinates = await Geolocation.getCurrentPosition();
-    console.log('Current', coordinates);
-  }
+  // async getCurrentPosition() {
+  //   const coordinates = await Geolocation.getCurrentPosition();
+  //   console.log('Current', coordinates);
+  // }
 
-  watchPosition() {
-    const wait = Geolocation.watchPosition({}, (position, err) => {
-      console.log(position);
-      this.notificationsService.localNotification("position", JSON.stringify(position));
-    })
-  }
+  // watchPosition() {
+  //   const wait = Geolocation.watchPosition({}, (position, err) => {
+  //     console.log(position);
+  //     this.notificationsService.localNotification("position", JSON.stringify(position));
+  //   })
+  // }
 
   async doRefresh(event) {
     console.log('Begin async operation');
@@ -85,8 +85,8 @@ export class HomePage implements OnInit, AfterViewInit {
     });
     
     this.loading = false;
-    await this.getCurrentPosition();
-    this.watchPosition();
+    // await this.getCurrentPosition();
+    // this.watchPosition();
     // await this.notificationsService.localNotification();
   }
 
@@ -122,7 +122,7 @@ export class HomePage implements OnInit, AfterViewInit {
   }
 
   goToAddHubPage() {
-    this.navCtrl.navigateRoot('add-hub/join-hub');
+    this.navCtrl.navigateForward('add-hub/join-hub');
   }
   
 }
