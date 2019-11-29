@@ -48,11 +48,11 @@ export class HubsPage implements OnInit {
   }
 
   goToHubPage(id: number) {
-    this.navCtrl.navigateRoot('hub/'+ id);
+    this.navCtrl.navigateForward('hub/'+ id);
   }
 
   goToAddHubPage() {
-    this.navCtrl.navigateRoot('add-hub/join-hub');
+    this.navCtrl.navigateForward('add-hub/join-hub');
   }
 
 }
