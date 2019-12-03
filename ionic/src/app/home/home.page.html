@@ -53,18 +53,69 @@
       </ion-card>
 
       <ion-list>
-              <ion-card>
-                  <ion-card-content>
-                      <ion-badge float-right color="success">5 / 5</ion-badge>
-                      <div float-right>&nbsp;Present:&nbsp;</div>
-        
-                      <ion-avatar >
-                          <ion-skeleton-text animated></ion-skeleton-text>
-                        </ion-avatar>
-                        &nbsp;
-                        <div float-right>Lazzarini House</div>
-                  </ion-card-content>
-                </ion-card>
+          <ion-list-header>
+              <ion-text>Starred</ion-text>
+          </ion-list-header>
+          <ion-card *ngIf="!loading">
+              <ion-card-content>
+                  <ion-row>
+                      <ion-col style = "margin-right: 0px;">
+                          <ion-thumbnail >
+                              <ion-img width="100%" item-left src="{{hub.image}}"></ion-img>
+                            </ion-thumbnail>
+                      </ion-col>
+                
+                      <ion-col style = "margin-left: 0px;">
+                        <ion-badge float-right color="success">5 / 5</ion-badge>
+                        <div float-right>Present:&nbsp;</div>
+                        <br>
+                        <div float-right>{{hub.name}}</div>
+                      </ion-col>
+                </ion-row>
+              </ion-card-content>
+            </ion-card>
+
+            <ion-card *ngIf="!loading">
+                <ion-card-content>
+                    <ion-row>
+                        <ion-col style = "margin-right: 0px;">
+                            <ion-thumbnail >
+                                <ion-img width="100%" item-left src="{{hub.image}}"></ion-img>
+                              </ion-thumbnail>
+                        </ion-col>
+                  
+                        <ion-col style = "margin-left: 0px;">
+                          <ion-badge float-right color="success">5 / 5</ion-badge>
+                          <div float-right>Present:&nbsp;</div>
+                          <br>
+                          <div float-right>{{hub.name}}</div>
+                        </ion-col>
+                  </ion-row>
+                </ion-card-content>
+              </ion-card>
+
+            <ion-list-header>
+                <ion-text>Nearby</ion-text>
+            </ion-list-header>
+
+            <ion-card *ngIf="!loading">
+                <ion-card-content>
+                    <ion-row>
+                        <ion-col style = "margin-right: 0px;">
+                            <ion-thumbnail >
+                                <ion-img width="100%" item-left src="{{hub.image}}"></ion-img>
+                              </ion-thumbnail>
+                        </ion-col>
+                  
+                        <ion-col style = "margin-left: 0px;">
+                          <ion-badge float-right color="success">5 / 5</ion-badge>
+                          <div float-right>Present:&nbsp;</div>
+                          <br>
+                          <div float-right>{{hub.name}}</div>
+                        </ion-col>
+                  </ion-row>
+                </ion-card-content>
+              </ion-card>
       </ion-list>
 
       <!-- <ion-grid>
