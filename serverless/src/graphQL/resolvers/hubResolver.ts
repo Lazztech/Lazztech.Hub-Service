@@ -4,6 +4,7 @@ import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { Hub } from "../../dal/entity/hub";
 import { JoinUserHub } from "../../dal/entity/joinUserHub";
 import { User } from "../../dal/entity/user";
+import { IsLatitude } from "class-validator";
 
 @Resolver()
 export class HubResolver {
@@ -15,10 +16,14 @@ export class HubResolver {
     public async createHub(
         @Ctx() ctx: any, //FIXME: should be an interface
         @Arg("name") name: string,
-        @Arg("image") image: string
+        @Arg("image") image: string,
+        @Arg("latitude") latitude: string,
+        @Arg("longitude") longitude: string
     ): Promise<Hub> {
         // Creates hub with user as owner.
         const hub = Hub.create({
+            latitude,
+            longitude,
             name,
             image
         });

@@ -11,14 +11,16 @@ export class HubService {
     private apollo: Apollo,
   ) { }
 
-  async createHub(name: string, image: string) {
+  async createHub(name: string, image: string, latitude: string, longitude: string) {
     const result = await this.apollo.mutate({
       mutation: gql`
       mutation {
-        createHub(image: "${image}", name: "${name}") {
+        createHub(image: "${image}", name: "${name}", latitude: "${latitude}", longitude: "${longitude}") {
           id
           name
           image
+          latitude
+          longitude
         }
       }
       `

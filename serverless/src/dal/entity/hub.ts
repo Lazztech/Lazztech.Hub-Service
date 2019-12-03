@@ -19,6 +19,14 @@ export class Hub extends BaseEntity {
     @Column()
     public image: string;
 
+    @Field()
+    @Column()
+    public latitude: string;
+
+    @Field()
+    @Column()
+    public longitude: string;
+
     @OneToMany((type) => JoinUserHub, (joinUserHub) => joinUserHub.hub)
     public usersConnection: JoinUserHub[];
 
