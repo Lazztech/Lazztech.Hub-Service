@@ -25,7 +25,6 @@ const routes: Routes = [
   { path: 'hub', loadChildren: './pages/hub/hub.module#HubPageModule', canActivate: [AuthGuard] },
   { path: 'hubs', loadChildren: './pages/hubs/hubs.module#HubsPageModule', canActivate: [AuthGuard] },
   { path: 'add-hub', loadChildren: './pages/add-hub/add-hub.module#AddHubPageModule', canActivate: [AuthGuard] },
-  { path: 'create-hub', loadChildren: './pages/create-hub/create-hub.module#CreateHubPageModule', canActivate: [AuthGuard] },
   { path: 'join-hub', loadChildren: './pages/join-hub/join-hub.module#JoinHubPageModule', canActivate: [AuthGuard] },
 ];
 

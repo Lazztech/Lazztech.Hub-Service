@@ -1,27 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
 import { AddHubPage } from './add-hub.page';
 import { HomePageModule } from 'src/app/home/home.module';
+import { ComponentsModule } from 'src/app/components/components.module';
 
 const routes: Routes = [
   {
     path: '',
     component: AddHubPage,
     children: [
-      {
-        path: 'create-hub',
-        children: [
-          {
-            path: '',
-            loadChildren: '../create-hub/create-hub.module#CreateHubPageModule'
-          }
-        ]
-      },
       {
         path: 'join-hub',
         children: [
@@ -45,7 +37,9 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    ReactiveFormsModule,
+    ComponentsModule
   ],
   declarations: [AddHubPage]
 })

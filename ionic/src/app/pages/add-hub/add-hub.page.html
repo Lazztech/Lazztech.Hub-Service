@@ -17,7 +17,7 @@
             <ion-label>Create a Hub</ion-label>
             <ion-button slot="end">Create</ion-button>
           </ion-item>
-      
+
         <ion-card-content>
           Setup your own Hub with a Lazztech Hub Camera. You will be the community Hub Owner and manage the privacy policy.
         </ion-card-content>
@@ -29,24 +29,104 @@
               <ion-label>Join a Hub</ion-label>
               <ion-button slot="end">Join</ion-button>
             </ion-item>
-            
+
           <ion-card-content>
               Join a community Hub as a Hub Member. View the communities Hub privacy policy to opt in and configure your involvement as a community Hub Member.
           </ion-card-content>
         </ion-card> -->
 
-        <ion-tabs>
-            <!-- Tab bar -->
-            <ion-tab-bar slot="bottom">
-            <ion-tab-button tab="join-hub">
-                <ion-icon name="camera"></ion-icon>
-                <ion-label>Join Hub</ion-label>
-              </ion-tab-button>
-              <ion-tab-button tab="create-hub">
-                <ion-icon name="person"></ion-icon>
-                <ion-label>Create Hub</ion-label>
-              </ion-tab-button>
-            </ion-tab-bar>
-          </ion-tabs>
+        <form [formGroup]="myForm" (ngSubmit)="saveHub()" method="post" style="height:100%;">
+
+          <!-- <ion-label>Hub Image</ion-label> -->
+
+            <ion-grid>
+                <ion-row align-items-center>
+                    <ion-col>
+                        <ion-card *ngIf="image">
+                            <img [src]="image" >
+                          </ion-card>
+                          <ion-card *ngIf="!image">
+                              <img src="/assets/icons/house_placeholder.png" >
+                          </ion-card>
+                    </ion-col>
+
+                  <ion-col>
+                      <ion-button expand="full" (click)="takePicture()">
+                          <ion-icon name="camera"></ion-icon>
+                        Take
+                      </ion-button>
+                  </ion-col>
+
+                  <ion-col>
+                      <ion-button expand="full" (click)="selectPicture()">
+                          <ion-icon name="images"></ion-icon>
+                        Upload
+                      </ion-button>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+
+              <ion-item>
+                  <ion-label position="floating">Hub Name</ion-label>
+                  <ion-input type="email" formControlName="hubName"></ion-input>
+                </ion-item>
+  
+                <ion-text text-center color="danger">
+                    <p *ngIf="hubName.invalid && hubName.touched" color="danger" >
+                        Required
+                    </p>
+                </ion-text>
+
+              <ion-card *ngIf="!loading" style="height:30%;">
+                  <ion-card-content style="height:100%; width: 100%;">
+                      <app-google-map></app-google-map>
+                  </ion-card-content>
+                </ion-card>
+
+              <!-- <ion-button [disabled]="myForm.invalid" type="submit" expand="full" color="primary">Create</ion-button> -->
+
+              <ion-grid>
+                  <ion-row align-items-center>
+                      <ion-col>
+                            <ion-card class="glowing-card">
+                                <!-- <img src="/assets/icons/house_placeholder.png" > -->
+
+                                  <ion-card-content>
+                                      <ion-card-subtitle>free tier</ion-card-subtitle>
+                                      <!-- <ion-card-title>Lazztech Hub</ion-card-title> -->
+                                      <!-- <p>Tier</p> -->
+
+                                    <p>8 person hub</p>
+                                  </ion-card-content>
+                            </ion-card>
+                      </ion-col>
+
+                    <ion-col>
+                        <ion-card>
+                            <!-- <img src="/assets/icons/house_placeholder.png" > -->
+                            <ion-card-content>
+                                <ion-card-subtitle>paid tier</ion-card-subtitle>
+                                <!-- <ion-card-title>Lazztech Hub</ion-card-title> -->
+                                <!-- <p>Tier</p> -->
+
+                              <p>25 person hub</p>
+                            </ion-card-content>
+                        </ion-card>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+
+        </form>
 
 </ion-content>
+
+<ion-footer>
+    <ion-toolbar>
+        <ion-row>
+          <ion-col>
+            <!-- <ion-button color="primary" expand="full" color="primary" (click)="login()">Create</ion-button> -->
+            <ion-button [disabled]="myForm.invalid" type="submit" expand="full" color="primary">Create</ion-button>
+          </ion-col>
+        </ion-row>
+    </ion-toolbar>
+  </ion-footer>
