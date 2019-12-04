@@ -1,17 +1,21 @@
 {
-    "type": "postgres",
-    "host": "localhost",
-    "port": 5432,
-    "username": "test",
+    "type": "mssql",
+    "host": "lazztechhub-db.database.windows.net",
+    "username": "gian",
     "password": "Password123",
-    "database": "postgres",
+    "database": "lazztechhubdev-db",
     "synchronize": true,
     "logging": true,
+    "extra": {
+       "options": {
+          "encrypt": true
+       }
+    },
     "entities": [
        "*/dal/entity/**/*.js"
     ],
     "migrations": [
-       "*/dal/migration/**/*.js"
+       "*/dal/mssqlMigrations/**/*.js"
     ],
     "subscribers": [
        "*/dal/subscriber/**/*.js"

@@ -20,11 +20,11 @@ export class Hub extends BaseEntity {
     public image: string;
 
     @Field()
-    @Column()
+    @Column({ nullable: true})
     public latitude: string;
 
     @Field()
-    @Column()
+    @Column({ nullable: true})
     public longitude: string;
 
     @OneToMany((type) => JoinUserHub, (joinUserHub) => joinUserHub.hub)
