@@ -77,9 +77,12 @@
                     </p>
                 </ion-text>
 
-              <ion-card *ngIf="!loading" style="height:30%;">
+              <!-- <ion-card *ngIf="!loading" style="height:30%;"> -->
+                  <ion-card style="height:30%;">
+
                   <ion-card-content style="height:100%; width: 100%;">
-                      <app-google-map></app-google-map>
+                      <app-google-map *ngIf="(coordinates$ | async) as coords" [coords]="coords"></app-google-map>
+                      <!-- *ngIf="(coordinates | async) as coords" -->
                   </ion-card-content>
                 </ion-card>
 
@@ -88,7 +91,7 @@
               <ion-grid>
                   <ion-row align-items-center>
                       <ion-col>
-                            <ion-card class="glowing-card">
+                            <ion-card (click)="isFree()" [ngClass]="paid ? null : 'glowing-card'">
                                 <!-- <img src="/assets/icons/house_placeholder.png" > -->
 
                                   <ion-card-content>
@@ -102,7 +105,7 @@
                       </ion-col>
 
                     <ion-col>
-                        <ion-card>
+                        <ion-card (click)="isPaid()" [ngClass]="paid ? 'glowing-card' : null">
                             <!-- <img src="/assets/icons/house_placeholder.png" > -->
                             <ion-card-content>
                                 <ion-card-subtitle>paid tier</ion-card-subtitle>
@@ -125,7 +128,7 @@
         <ion-row>
           <ion-col>
             <!-- <ion-button color="primary" expand="full" color="primary" (click)="login()">Create</ion-button> -->
-            <ion-button [disabled]="myForm.invalid" type="submit" expand="full" color="primary">Create</ion-button>
+            <ion-button [disabled]="myForm.invalid" (click)="saveHub()" type="submit" expand="full" color="primary">Create</ion-button>
           </ion-col>
         </ion-row>
     </ion-toolbar>

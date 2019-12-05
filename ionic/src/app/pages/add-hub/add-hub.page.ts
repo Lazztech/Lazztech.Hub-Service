@@ -2,10 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ProfileService } from 'src/app/services/profile.service';
 import { AlertService } from 'src/app/services/alert.service';
-import { Plugins, CameraResultType, CameraSource } from '@capacitor/core';
+import { Plugins, CameraResultType, CameraSource, GeolocationPosition, Capacitor } from '@capacitor/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { HubService } from 'src/app/services/hub.service';
 import { NavController } from '@ionic/angular';
+
+import { Observable, of, from as fromPromise } from 'rxjs';
+import { tap, map, switchMap } from 'rxjs/operators';
+
+const { Geolocation } = Plugins;
 
 @Component({
   selector: 'app-add-hub',
@@ -14,9 +19,25 @@ import { NavController } from '@ionic/angular';
 })
 export class AddHubPage implements OnInit {
 
+  loading = true;
   image: any;
+  paid = false;
+  //FIXME: make this observable based & refactor
+  coordinates$: Observable<GeolocationPosition>;
+  // coordinates: Promise<{ lat: number; lng: number }> = Geolocation.getCurrentPosition().then(x => {
+  //   const result = {
+  //     lat: x.coords.latitude,
+  //     lng: x.coords.longitude
+  //   }
+  //   console.log(result);
+  //   this.loading = false;
+  //   return result;
+  // });
 
-  loading = false;
+  defaultPos: { lat: number; lng: number } = {
+    lat: 47.5421318,
+    lng: -122.1755343
+  };
 
   myForm: FormGroup;
 
@@ -39,7 +60,23 @@ export class AddHubPage implements OnInit {
       ]]
     });
 
+    this.getCurrentPosition().then(() => this.loading = false);
     this.myForm.valueChanges.subscribe();
+  }
+
+  async getCurrentPosition() {
+    // const isAvailable = Capacitor.isPluginAvailable('GeoLocation');
+    // //FIXME: this should have an else clause
+    // if (isAvailable) {
+      const coordinates = Geolocation.getCurrentPosition();
+      // console.log(coordinates);
+      this.coordinates$ = fromPromise(coordinates).pipe(
+        switchMap((data: any) => of(data.coords)),
+        tap(data => console.log(data))
+      );
+      this.loading = false;
+      return coordinates;
+    // }
   }
 
   async takePicture() {
@@ -66,12 +103,31 @@ export class AddHubPage implements OnInit {
     this.image = image.dataUrl;
   }
 
+
+
+  isFree() {
+    if (this.paid) {
+      this.paid = false;
+    }
+  }
+
+  isPaid() {
+    if (!this.paid) {
+      this.paid = true;
+    }
+  }
+
   async saveHub() {
     this.loading = true;
 
     const formValue = this.myForm.value;
     //FIXME: add latitude and longitude
-    const result = await this.hubService.createHub(formValue.hubName, this.image, "", "");
+    const result = await this.hubService.createHub(
+      formValue.hubName,
+      this.image,
+      `${this.coordinates.then(x => x.coords.latitude)}`,
+      `${this.coordinates.then(x => x.coords.longitude)}`
+      );
     if (result) {
       this.loading = false;
       this.navCtrl.navigateRoot('tabs/hubs');

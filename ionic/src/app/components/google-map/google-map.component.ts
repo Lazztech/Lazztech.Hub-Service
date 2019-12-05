@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, Input } from '@angular/core';
 /// <reference types="@types/googlemaps" />
 
 @Component({
@@ -8,6 +8,9 @@ import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 })
 export class GoogleMapComponent implements AfterViewInit {
 
+
+  @Input()
+  coords: { latitude: any; longitude: any; }
   // @ViewChild('map') mapElement;
   map: any;
 
@@ -18,210 +21,22 @@ export class GoogleMapComponent implements AfterViewInit {
   }
 
   initMap() {
-    let coords = new google.maps.LatLng(47.5421318, -122.1755343);
+    console.log(this.coords);
+    // const position = new google.maps.LatLng(this.coords.lat, this.coords.lng);
+    const position = { lat: this.coords.latitude, lng: this.coords.longitude }
+    console.log(position);
     let mapOptions: google.maps.MapOptions = {
-      center: coords,
+      center: position,
       zoom: 14,
       disableDefaultUI: true,
       draggable: false,
       mapTypeId: google.maps.MapTypeId.ROADMAP,
-    //   styles: [{
-    //     "featureType": "all",
-    //     "elementType": "labels.text.fill",
-    //     "stylers": [{
-    //         "saturation": 36
-    //     }, {
-    //         "color": "#000000"
-    //     }, {
-    //         "lightness": 40
-    //     }]
-    // }, {
-    //     "featureType": "all",
-    //     "elementType": "labels.text.stroke",
-    //     "stylers": [{
-    //         "visibility": "on"
-    //     }, {
-    //         "color": "#000000"
-    //     }, {
-    //         "lightness": 16
-    //     }]
-    // }, {
-    //     "featureType": "all",
-    //     "elementType": "labels.icon",
-    //     "stylers": [{
-    //         "visibility": "off"
-    //     }]
-    // }, {
-    //     "featureType": "administrative",
-    //     "elementType": "geometry.fill",
-    //     "stylers": [{
-    //         "color": "#000000"
-    //     }, {
-    //         "lightness": 20
-    //     }]
-    // }, {
-    //     "featureType": "administrative",
-    //     "elementType": "geometry.stroke",
-    //     "stylers": [{
-    //         "color": "#000000"
-    //     }, {
-    //         "lightness": 17
-    //     }, {
-    //         "weight": 1.2
-    //     }]
-    // }, {
-    //     "featureType": "administrative",
-    //     "elementType": "labels",
-    //     "stylers": [{
-    //         "visibility": "off"
-    //     }]
-    // }, {
-    //     "featureType": "administrative.country",
-    //     "elementType": "all",
-    //     "stylers": [{
-    //         "visibility": "simplified"
-    //     }]
-    // }, {
-    //     "featureType": "administrative.country",
-    //     "elementType": "geometry",
-    //     "stylers": [{
-    //         "visibility": "simplified"
-    //     }]
-    // }, {
-    //     "featureType": "administrative.country",
-    //     "elementType": "labels.text",
-    //     "stylers": [{
-    //         "visibility": "simplified"
-    //     }]
-    // }, {
-    //     "featureType": "administrative.province",
-    //     "elementType": "all",
-    //     "stylers": [{
-    //         "visibility": "off"
-    //     }]
-    // }, {
-    //     "featureType": "administrative.locality",
-    //     "elementType": "all",
-    //     "stylers": [{
-    //         "visibility": "simplified"
-    //     }, {
-    //         "saturation": "-100"
-    //     }, {
-    //         "lightness": "30"
-    //     }]
-    // }, {
-    //     "featureType": "administrative.neighborhood",
-    //     "elementType": "all",
-    //     "stylers": [{
-    //         "visibility": "off"
-    //     }]
-    // }, {
-    //     "featureType": "administrative.land_parcel",
-    //     "elementType": "all",
-    //     "stylers": [{
-    //         "visibility": "off"
-    //     }]
-    // }, {
-    //     "featureType": "landscape",
-    //     "elementType": "all",
-    //     "stylers": [{
-    //         "visibility": "simplified"
-    //     }, {
-    //         "gamma": "0.00"
-    //     }, {
-    //         "lightness": "74"
-    //     }]
-    // }, {
-    //     "featureType": "landscape",
-    //     "elementType": "geometry",
-    //     "stylers": [{
-    //         "color": "#000000"
-    //     }, {
-    //         "lightness": 20
-    //     }]
-    // }, {
-    //     "featureType": "landscape.man_made",
-    //     "elementType": "all",
-    //     "stylers": [{
-    //         "lightness": "3"
-    //     }]
-    // }, {
-    //     "featureType": "poi",
-    //     "elementType": "all",
-    //     "stylers": [{
-    //         "visibility": "off"
-    //     }]
-    // }, {
-    //     "featureType": "poi",
-    //     "elementType": "geometry",
-    //     "stylers": [{
-    //         "color": "#000000"
-    //     }, {
-    //         "lightness": 21
-    //     }]
-    // }, {
-    //     "featureType": "road",
-    //     "elementType": "geometry",
-    //     "stylers": [{
-    //         "visibility": "simplified"
-    //     }]
-    // }, {
-    //     "featureType": "road.highway",
-    //     "elementType": "geometry.fill",
-    //     "stylers": [{
-    //         "color": "#000000"
-    //     }, {
-    //         "lightness": 17
-    //     }]
-    // }, {
-    //     "featureType": "road.highway",
-    //     "elementType": "geometry.stroke",
-    //     "stylers": [{
-    //         "color": "#000000"
-    //     }, {
-    //         "lightness": 29
-    //     }, {
-    //         "weight": 0.2
-    //     }]
-    // }, {
-    //     "featureType": "road.arterial",
-    //     "elementType": "geometry",
-    //     "stylers": [{
-    //         "color": "#000000"
-    //     }, {
-    //         "lightness": 18
-    //     }]
-    // }, {
-    //     "featureType": "road.local",
-    //     "elementType": "geometry",
-    //     "stylers": [{
-    //         "color": "#000000"
-    //     }, {
-    //         "lightness": 16
-    //     }]
-    // }, {
-    //     "featureType": "transit",
-    //     "elementType": "geometry",
-    //     "stylers": [{
-    //         "color": "#000000"
-    //     }, {
-    //         "lightness": 19
-    //     }]
-    // }, {
-    //     "featureType": "water",
-    //     "elementType": "geometry",
-    //     "stylers": [{
-    //         "color": "#000000"
-    //     }, {
-    //         "lightness": 17
-    //     }]
-    // }]
     };
 
     this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
     let marker = new google.maps.Marker({
-      position: coords,
+      position: position,
       map: this.map
     });
   }

@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
@@ -41,6 +41,7 @@ const routes: Routes = [
     ReactiveFormsModule,
     ComponentsModule
   ],
-  declarations: [AddHubPage]
+  declarations: [AddHubPage],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AddHubPageModule {}
