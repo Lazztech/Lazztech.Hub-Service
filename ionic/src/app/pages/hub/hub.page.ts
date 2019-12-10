@@ -3,6 +3,7 @@ import { Plugins, CameraResultType, CameraSource } from '@capacitor/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { HubService } from 'src/app/services/hub.service';
 import { ActivatedRoute } from '@angular/router';
+import { ActionSheetController, NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-hub',
@@ -17,11 +18,14 @@ export class HubPage implements OnInit {
   hub: any;
   id: number;
   qrContent: string;
+  coords: { latitude: number, longitude: number };
 
   constructor(
     private sanitizer: DomSanitizer,
     private route: ActivatedRoute,
-    private hubService: HubService
+    private hubService: HubService,
+    public actionSheetController: ActionSheetController,
+    public navCtrl: NavController
   ) { }
 
   ngOnInit() {
@@ -32,6 +36,12 @@ export class HubPage implements OnInit {
   async ionViewDidEnter() {
     this.loading = true;
     await this.loadHub();
+    const coords = { 
+      latitude: this.hub.latitude,
+      longitude: this.hub.longitude
+    };
+    this.coords = coords;
+    console.log(this.coords);
     this.loading = false;
   }
 
@@ -39,8 +49,50 @@ export class HubPage implements OnInit {
     this.hub = await this.hubService.hub(this.id);
   }
 
-  async generateQR() {
-
+  async presentActionSheet() {
+    const actionSheet = await this.actionSheetController.create({
+      // header: 'Albums',
+      buttons: [{
+        text: 'Delete',
+        role: 'destructive',
+        icon: 'trash',
+        handler: async () => {
+          this.loading = true;
+          const result = await this.hubService.deleteHub(this.id);
+          this.loading = false;
+          this.navCtrl.back();
+          console.log('Delete clicked');
+        }
+      }, {
+        text: 'Share',
+        icon: 'share',
+        handler: () => {
+          console.log('Share clicked');
+        }
+      }, 
+      // {
+      //   text: 'Play (open modal)',
+      //   icon: 'arrow-dropright-circle',
+      //   handler: () => {
+      //     console.log('Play clicked');
+      //   }
+      // }, 
+      {
+        text: 'Favorite',
+        icon: 'heart',
+        handler: () => {
+          console.log('Favorite clicked');
+        }
+      }, {
+        text: 'Cancel',
+        icon: 'close',
+        role: 'cancel',
+        handler: () => {
+          console.log('Cancel clicked');
+        }
+      }]
+    });
+    await actionSheet.present();
   }
 
   async takePicture() {

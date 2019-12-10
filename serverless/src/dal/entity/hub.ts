@@ -20,13 +20,13 @@ export class Hub extends BaseEntity {
     @Column({ type: "nvarchar", length: "MAX" , nullable: true})
     public image: string;
 
-    @Field()
-    @Column({ nullable: true})
-    public latitude: string;
+    @Field({ nullable: true})
+    @Column({ type: "float", nullable: true})
+    public latitude: number;
 
-    @Field()
-    @Column({ nullable: true})
-    public longitude: string;
+    @Field({ nullable: true})
+    @Column({ type: "float", nullable: true})
+    public longitude: number;
 
     @OneToMany((type) => JoinUserHub, (joinUserHub) => joinUserHub.hub)
     public usersConnection: JoinUserHub[];

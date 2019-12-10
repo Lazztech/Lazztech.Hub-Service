@@ -21,7 +21,9 @@ export class JoinUserHub extends BaseEntity {
     public user: User;
 
     @Field((type) => Hub)
-    @ManyToOne(() => Hub, (hub) => hub.usersConnection)
+    @ManyToOne(() => Hub, (hub) => hub.usersConnection, {
+        onDelete: "CASCADE"
+    })
     @JoinColumn()
     public hub: Hub;
 

@@ -3,8 +3,12 @@
       <ion-buttons slot="start">
           <ion-back-button></ion-back-button>
         </ion-buttons>
+        <div slot="end" href="javascript:void(0);" (click)="presentActionSheet()">
+            <ion-icon size="large" name="more"></ion-icon>
+        </div>
     <ion-title *ngIf="!loading">{{hub.name}}</ion-title>
     <ion-title *ngIf="loading">Hub</ion-title>
+    <ion-progress-bar *ngIf="loading" type="indeterminate"></ion-progress-bar>
   </ion-toolbar>
 </ion-header>
 
@@ -31,7 +35,7 @@
 
   <ion-card *ngIf="!loading" style="height:30%">
       <ion-card-content style="height:100%">
-          <app-google-map></app-google-map>
+          <app-google-map *ngIf="hub" [coords]="coords"></app-google-map>
       </ion-card-content>
     </ion-card>
 

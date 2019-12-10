@@ -11,11 +11,11 @@ export class HubService {
     private apollo: Apollo,
   ) { }
 
-  async createHub(name: string, image: string, latitude: string, longitude: string) {
+  async createHub(name: string, image: string, latitude: number, longitude: number) {
     const result = await this.apollo.mutate({
       mutation: gql`
       mutation {
-        createHub(image: "${image}", name: "${name}", latitude: "${latitude}", longitude: "${longitude}") {
+        createHub(image: "${image}", name: "${name}", latitude: ${latitude}, longitude: ${longitude}) {
           id
           name
           image
@@ -120,6 +120,8 @@ export class HubService {
           id
           name
           image
+          latitude
+          longitude
           owners {
             id
             firstName
@@ -196,6 +198,20 @@ export class HubService {
 
     console.log(result);
     const response = result.data.joinHub;
+    return response;
+  }
+
+  async deleteHub(id: number): Promise<boolean> {
+    const result = await this.apollo.mutate({
+      mutation: gql`
+      mutation {
+        deleteHub(hubId: ${id})
+      }
+      `
+    }).toPromise();
+
+    console.log(result);
+    const response = result.data.deleteHub;
     return response;
   }
 }

@@ -8,7 +8,7 @@ import { HubService } from 'src/app/services/hub.service';
 import { NavController } from '@ionic/angular';
 
 import { Observable, of, from as fromPromise } from 'rxjs';
-import { tap, map, switchMap } from 'rxjs/operators';
+import { tap, map, switchMap, take } from 'rxjs/operators';
 
 const { Geolocation } = Plugins;
 
@@ -74,7 +74,7 @@ export class AddHubPage implements OnInit {
         switchMap((data: any) => of(data.coords)),
         tap(data => console.log(data))
       );
-      this.loading = false;
+      // this.loading = false;
       return coordinates;
     // }
   }
@@ -122,11 +122,13 @@ export class AddHubPage implements OnInit {
 
     const formValue = this.myForm.value;
     //FIXME: add latitude and longitude
+    const coords = await this.coordinates$.pipe(take(1)).toPromise() as any;
+    console.log(coords);
     const result = await this.hubService.createHub(
       formValue.hubName,
       this.image,
-      `${this.coordinates.then(x => x.coords.latitude)}`,
-      `${this.coordinates.then(x => x.coords.longitude)}`
+      `${coords.latitude}`,
+      `${coords.longitude}`
       );
     if (result) {
       this.loading = false;

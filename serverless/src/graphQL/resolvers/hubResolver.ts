@@ -17,8 +17,8 @@ export class HubResolver {
         @Ctx() ctx: any, //FIXME: should be an interface
         @Arg("name") name: string,
         @Arg("image") image: string,
-        @Arg("latitude") latitude: string,
-        @Arg("longitude") longitude: string
+        @Arg("latitude") latitude: number,
+        @Arg("longitude") longitude: number
     ): Promise<Hub> {
         // Creates hub with user as owner.
         const hub = Hub.create({
@@ -68,6 +68,22 @@ export class HubResolver {
         const user = await User.findOne({ id: ctx.userId });
         const memberOfHubs = await user.memberOfHubs();
         return memberOfHubs;
+    }
+
+    @Authorized()
+    @Mutation(() => Boolean)
+    public async deleteHub(
+        @Ctx() ctx: any, //FIXME: should be an interface
+        @Arg("hubId") hubId: number,
+    ) {
+        const hub = await Hub.findOne({
+            where: {
+                id: hubId
+            },
+            // relations: ["usersConnection"]
+        });
+        await hub.remove();
+        return true;
     }
 
     @Authorized()
