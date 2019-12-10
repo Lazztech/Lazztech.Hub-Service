@@ -127,8 +127,8 @@ export class AddHubPage implements OnInit {
     const result = await this.hubService.createHub(
       formValue.hubName,
       this.image,
-      `${coords.latitude}`,
-      `${coords.longitude}`
+      coords.latitude,
+      coords.longitude
       );
     if (result) {
       this.loading = false;
