@@ -60,7 +60,8 @@ export class HubService {
           }
         }
       }
-      `
+      `,
+      fetchPolicy: "network-only"
     }).toPromise();
 
     console.log(result);
@@ -97,7 +98,8 @@ export class HubService {
           }
         }
       }
-      `
+      `,
+      fetchPolicy: "network-only"
     }).toPromise();
 
     console.log(result);
@@ -136,7 +138,8 @@ export class HubService {
           }
         }
       }
-      `
+      `,
+      fetchPolicy: "network-only"
     }).toPromise();
 
     console.log(result);
@@ -173,7 +176,8 @@ export class HubService {
           }
         }
       }
-      `
+      `,
+      fetchPolicy: "network-only"
     }).toPromise();
 
     console.log(result);
