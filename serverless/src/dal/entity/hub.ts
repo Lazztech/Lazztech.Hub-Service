@@ -67,4 +67,7 @@ export class Hub extends BaseEntity {
         return members;
     }
 
+    @Field()
+    public starred: boolean;
+
 }

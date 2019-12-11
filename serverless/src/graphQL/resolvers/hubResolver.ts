@@ -44,10 +44,21 @@ export class HubResolver {
         @Arg("id") id: number,
     ): Promise<Hub> {
         //FIXME: Need to add check that user is either a member or owner.
-        const user = await User.findOne({ id: ctx.userId });
+        // const user = await User.findOne({ id: ctx.userId });
 
-        const hub = await Hub.findOne({ id });
-        return hub;
+        // const hub = await Hub.findOne({ 
+        //     where: {id},
+        //     relations: ["usersConnection"]
+        //  });
+        const userHubRelationship = await JoinUserHub.findOne({
+            where: {
+                hubId: id,
+                userId: ctx.userId
+            }, 
+            relations: ["hub"]
+        });
+        userHubRelationship.hub.starred = userHubRelationship.starred;
+        return userHubRelationship.hub;
     }
 
     @Authorized()
@@ -166,6 +177,30 @@ export class HubResolver {
             const hub = await Hub.findOne({ id });
             return hub;
         }
+    }
+
+    @Authorized()
+    @Mutation(() => Boolean)
+    public async setHubStarred(
+        @Ctx() ctx: any, //FIXME: should be an interface
+        @Arg("hubId") hubId: number,
+    ) {
+        const hubRelationship = await JoinUserHub.findOne({userId: ctx.userId, hubId: hubId});
+        hubRelationship.starred = true;
+        await hubRelationship.save();
+        return true;
+    }
+
+    @Authorized()
+    @Mutation(() => Boolean)
+    public async setHubNotStarred(
+        @Ctx() ctx: any, //FIXME: should be an interface
+        @Arg("hubId") hubId: number,
+    ) {
+        const hubRelationship = await JoinUserHub.findOne({userId: ctx.userId, hubId: hubId});
+        hubRelationship.starred = false;
+        await hubRelationship.save();
+        return true;
     }
 
     @Authorized()

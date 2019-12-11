@@ -31,4 +31,8 @@ export class JoinUserHub extends BaseEntity {
     @Column()
     public isOwner: boolean;
 
+    @Field()
+    @Column({default: false})
+    public starred: boolean;
+
 }

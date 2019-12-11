@@ -107,9 +107,24 @@ export class HubPage implements OnInit {
         }
       }, 
       {
-        text: 'Star',
+        text: this.hub.starred ? 'Remove Star' : 'Add Star',
         // icon: 'heart',
-        handler: () => {
+        handler: async () => {
+          let result = false;
+          this.loading = true;
+          if (this.hub.starred) {
+            result = await this.hubService.setHubNotStarred(this.id);
+            this.hub.starred = false;
+          } else {
+            result = await this.hubService.setHubStarred(this.id);
+            this.hub.starred = true;
+          }
+
+          if (!result) {
+            this.hub.starred = !this.hub.starred;
+          }
+
+          this.loading = false;
           console.log('Star clicked');
         }
       },

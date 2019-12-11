@@ -122,6 +122,7 @@ export class HubService {
           id
           name
           image
+          starred
           latitude
           longitude
           owners {
@@ -230,6 +231,34 @@ export class HubService {
 
     console.log(result);
     const response = result.data.updateHubPhoto;
+    return response;
+  }
+
+  async setHubStarred(hubId: number) {
+    const result = await this.apollo.mutate({
+      mutation: gql`
+      mutation {
+        setHubStarred(hubId: ${hubId})
+      }
+      `
+    }).toPromise();
+
+    console.log(result);
+    const response = result.data.setHubStarred;
+    return response;
+  }
+
+  async setHubNotStarred(hubId: number) {
+    const result = await this.apollo.mutate({
+      mutation: gql`
+      mutation {
+        setHubNotStarred(hubId: ${hubId})
+      }
+      `
+    }).toPromise();
+
+    console.log(result);
+    const response = result.data.setHubNotStarred;
     return response;
   }
 }
