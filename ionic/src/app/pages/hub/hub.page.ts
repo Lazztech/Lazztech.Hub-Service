@@ -52,10 +52,11 @@ export class HubPage implements OnInit {
   async presentActionSheet() {
     const actionSheet = await this.actionSheetController.create({
       // header: 'Albums',
-      buttons: [{
+      buttons: [
+        {
         text: 'Delete',
         role: 'destructive',
-        icon: 'trash',
+        // icon: 'trash',
         handler: async () => {
           this.loading = true;
           const result = await this.hubService.deleteHub(this.id);
@@ -63,34 +64,62 @@ export class HubPage implements OnInit {
           this.navCtrl.back();
           console.log('Delete clicked');
         }
-      }, {
+      }, 
+      {
         text: 'Share',
-        icon: 'share',
+        // icon: 'share',
         handler: () => {
           console.log('Share clicked');
         }
       }, 
-      // {
-      //   text: 'Play (open modal)',
-      //   icon: 'arrow-dropright-circle',
-      //   handler: () => {
-      //     console.log('Play clicked');
-      //   }
-      // }, 
+      {
+        text: 'Take Picture',
+        // icon: 'arrow-dropright-circle',
+        handler: async () => {
+          console.log('Take Picture clicked');
+          await this.selectPicture();
+          this.loading = true;
+          const oldImage = this.hub.image;
+          this.hub.image = this.image;
+          const result = await this.hubService.updateHubPhoto(this.id, this.image);
+          if (!result) {
+            this.hub.image = oldImage;
+          }
+          this.loading = false;
+        }
+      },
+      {
+        text: 'Select Picture',
+        // icon: 'arrow-dropright-circle',
+        handler: async () => {
+          console.log('Select Picture clicked');
+          await this.selectPicture();
+          this.loading = true;
+          const oldImage = this.hub.image;
+          this.hub.image = this.image;
+          const result = await this.hubService.updateHubPhoto(this.id, this.image);
+          if (!result) {
+            this.hub.image = oldImage;
+          }
+          this.loading = false;
+        }
+      }, 
       {
         text: 'Favorite',
-        icon: 'heart',
+        // icon: 'heart',
         handler: () => {
           console.log('Favorite clicked');
         }
-      }, {
+      },
+      {
         text: 'Cancel',
-        icon: 'close',
+        // icon: 'close',
         role: 'cancel',
         handler: () => {
           console.log('Cancel clicked');
         }
-      }]
+      }
+    ]
     });
     await actionSheet.present();
   }
@@ -103,7 +132,7 @@ export class HubPage implements OnInit {
       source: CameraSource.Camera
     });
 
-    this.image = this.sanitizer.bypassSecurityTrustResourceUrl(image && (image.dataUrl));
+    this.image = image.dataUrl;
   }
 
   async selectPicture() {
@@ -114,7 +143,7 @@ export class HubPage implements OnInit {
       source: CameraSource.Photos
     });
 
-    this.image = this.sanitizer.bypassSecurityTrustResourceUrl(image && (image.dataUrl));
+    this.image = image.dataUrl;
   }
 
 }

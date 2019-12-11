@@ -87,7 +87,6 @@ export class AddHubPage implements OnInit {
       source: CameraSource.Camera
     });
 
-    // this.image = this.sanitizer.bypassSecurityTrustResourceUrl(image && (image.dataUrl));
     this.image = image.dataUrl;
   }
 
@@ -99,7 +98,6 @@ export class AddHubPage implements OnInit {
       source: CameraSource.Photos
     });
 
-    // this.image = this.sanitizer.bypassSecurityTrustResourceUrl(image && (image.dataUrl));
     this.image = image.dataUrl;
   }
 

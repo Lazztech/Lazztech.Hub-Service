@@ -218,4 +218,18 @@ export class HubService {
     const response = result.data.deleteHub;
     return response;
   }
+
+  async updateHubPhoto(id: number, image: string): Promise<boolean> {
+    const result = await this.apollo.mutate({
+      mutation: gql`
+      mutation {
+        updateHubPhoto(id: ${id}, image: "${image}")
+      }
+      `
+    }).toPromise();
+
+    console.log(result);
+    const response = result.data.updateHubPhoto;
+    return response;
+  }
 }

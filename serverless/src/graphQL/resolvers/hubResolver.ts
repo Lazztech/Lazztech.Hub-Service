@@ -168,6 +168,19 @@ export class HubResolver {
         }
     }
 
+    @Authorized()
+    @Mutation(() => Boolean)
+    public async updateHubPhoto(
+        @Ctx() ctx: any, //FIXME: should be an interface
+        @Arg("id") id: number,
+        @Arg("image") image: string
+    ): Promise<boolean> {
+        let hub = await Hub.findOne({ id });
+        hub.image = image;
+        hub = await hub.save();
+        return true;
+    }
+
       public async scanQR(base64: string): Promise<any> {
         const buff = Buffer.from(base64.substr(23), "base64");
         console.log("created buff");
