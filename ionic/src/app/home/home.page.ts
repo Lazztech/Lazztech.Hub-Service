@@ -7,6 +7,7 @@ import { AuthService } from '../services/auth.service';
 import { NotificationsService } from '../services/notifications.service';
 import { PwaInstallService } from '../services/pwa-install.service';
 import { UpdateService } from '../services/update.service';
+import { HubService } from '../services/hub.service';
 
 const { Geolocation } = Plugins;
 
@@ -18,7 +19,7 @@ const { Geolocation } = Plugins;
 export class HomePage implements OnInit, AfterViewInit {
 
   loading = false;
-
+  starredHubs = [];
   user: User;
   updateReady = false;
   beforeInstall: Observable<boolean> = of(false);
@@ -34,6 +35,7 @@ export class HomePage implements OnInit, AfterViewInit {
     private platform: Platform,
     private notificationsService: NotificationsService,
     public navCtrl: NavController,
+    private hubService: HubService
     ) { 
     this.menu.enable(true);
     this.beforeInstall = pwaInstallService.beforeInstall;
@@ -83,7 +85,7 @@ export class HomePage implements OnInit, AfterViewInit {
       this.loading = true;
       return x.length;
     });
-    
+    this.starredHubs = await this.hubService.starredHubs();
     this.loading = false;
     // await this.getCurrentPosition();
     // this.watchPosition();

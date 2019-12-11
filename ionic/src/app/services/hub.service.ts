@@ -114,6 +114,45 @@ export class HubService {
     return response;
   }
 
+  async starredHubs() {
+    const result = await this.apollo.query({
+      query: gql`
+      query {
+        starredHubs {
+          id
+          name
+          image
+          starred
+          owners {
+            id
+            firstName
+            lastName
+            email
+          }
+          members {
+            id
+            firstName
+            lastName
+            email
+          }
+        }
+      }
+      `,
+      fetchPolicy: "network-only"
+    }).toPromise();
+
+    console.log(result);
+    const response = result.data["starredHubs"];
+
+    if (response) {
+      console.log("createHub successful.");
+    } else {
+      console.log("createHub failure");
+    }
+
+    return response;
+  }
+
   async hub(id: number) {
     const result = await this.apollo.query({
       query: gql`

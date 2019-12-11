@@ -82,6 +82,28 @@ export class HubResolver {
     }
 
     @Authorized()
+    @Query(() => [Hub])
+    public async starredHubs(
+        @Ctx() ctx: any, //FIXME: should be an interface
+    ) {
+        const userHubRelationships = await JoinUserHub.find({
+            where: {
+                userId: ctx.userId,
+                starred: true
+            }, 
+            relations: ["hub"]
+        });
+        const hubs = [];
+        for (let index = 0; index < userHubRelationships.length; index++) {
+            const element = userHubRelationships[index];
+            // element.starred = element.starred;
+            element.starred = true;
+            hubs.push(element.hub)
+        }
+        return hubs;
+    }
+
+    @Authorized()
     @Mutation(() => Boolean)
     public async deleteHub(
         @Ctx() ctx: any, //FIXME: should be an interface
