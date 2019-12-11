@@ -9,6 +9,7 @@ import { NavController } from '@ionic/angular';
 
 import { Observable, of, from as fromPromise } from 'rxjs';
 import { tap, map, switchMap, take } from 'rxjs/operators';
+import { CameraService } from 'src/app/services/camera.service';
 
 const { Geolocation } = Plugins;
 
@@ -51,6 +52,7 @@ export class AddHubPage implements OnInit {
     private fb: FormBuilder,
     public navCtrl: NavController,
     private sanitizer: DomSanitizer,
+    private cameraService: CameraService
   ) { }
 
   ngOnInit() {
@@ -80,25 +82,13 @@ export class AddHubPage implements OnInit {
   }
 
   async takePicture() {
-    const image = await Plugins.Camera.getPhoto({
-      quality: 100,
-      allowEditing: false,
-      resultType: CameraResultType.DataUrl,
-      source: CameraSource.Camera
-    });
-
-    this.image = image.dataUrl;
+    const image = await this.cameraService.takePicture()
+    this.image = image;
   }
 
   async selectPicture() {
-    const image = await Plugins.Camera.getPhoto({
-      quality: 100,
-      allowEditing: false,
-      resultType: CameraResultType.DataUrl,
-      source: CameraSource.Photos
-    });
-
-    this.image = image.dataUrl;
+    const image = await this.cameraService.selectPicture();
+    this.image = image;
   }
 
 

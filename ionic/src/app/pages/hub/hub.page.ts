@@ -4,6 +4,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { HubService } from 'src/app/services/hub.service';
 import { ActivatedRoute } from '@angular/router';
 import { ActionSheetController, NavController } from '@ionic/angular';
+import { CameraService } from 'src/app/services/camera.service';
 
 @Component({
   selector: 'app-hub',
@@ -12,7 +13,7 @@ import { ActionSheetController, NavController } from '@ionic/angular';
 })
 export class HubPage implements OnInit {
 
-  image: any;
+  // image: any;
 
   loading = false;
   hub: any;
@@ -25,7 +26,8 @@ export class HubPage implements OnInit {
     private route: ActivatedRoute,
     private hubService: HubService,
     public actionSheetController: ActionSheetController,
-    public navCtrl: NavController
+    public navCtrl: NavController,
+    public cameraService: CameraService
   ) { }
 
   ngOnInit() {
@@ -77,11 +79,11 @@ export class HubPage implements OnInit {
         // icon: 'arrow-dropright-circle',
         handler: async () => {
           console.log('Take Picture clicked');
-          await this.selectPicture();
+          const newImage = await this.cameraService.takePicture();
           this.loading = true;
           const oldImage = this.hub.image;
-          this.hub.image = this.image;
-          const result = await this.hubService.updateHubPhoto(this.id, this.image);
+          this.hub.image = newImage;
+          const result = await this.hubService.updateHubPhoto(this.id, newImage);
           if (!result) {
             this.hub.image = oldImage;
           }
@@ -92,12 +94,12 @@ export class HubPage implements OnInit {
         text: 'Select Picture',
         // icon: 'arrow-dropright-circle',
         handler: async () => {
-          console.log('Select Picture clicked');
-          await this.selectPicture();
+          console.log('Take Picture clicked');
+          const newImage = await this.cameraService.selectPicture();
           this.loading = true;
           const oldImage = this.hub.image;
-          this.hub.image = this.image;
-          const result = await this.hubService.updateHubPhoto(this.id, this.image);
+          this.hub.image = newImage;
+          const result = await this.hubService.updateHubPhoto(this.id, newImage);
           if (!result) {
             this.hub.image = oldImage;
           }
@@ -105,10 +107,10 @@ export class HubPage implements OnInit {
         }
       }, 
       {
-        text: 'Favorite',
+        text: 'Star',
         // icon: 'heart',
         handler: () => {
-          console.log('Favorite clicked');
+          console.log('Star clicked');
         }
       },
       {
@@ -122,28 +124,6 @@ export class HubPage implements OnInit {
     ]
     });
     await actionSheet.present();
-  }
-
-  async takePicture() {
-    const image = await Plugins.Camera.getPhoto({
-      quality: 100,
-      allowEditing: false,
-      resultType: CameraResultType.DataUrl,
-      source: CameraSource.Camera
-    });
-
-    this.image = image.dataUrl;
-  }
-
-  async selectPicture() {
-    const image = await Plugins.Camera.getPhoto({
-      quality: 100,
-      allowEditing: false,
-      resultType: CameraResultType.DataUrl,
-      source: CameraSource.Photos
-    });
-
-    this.image = image.dataUrl;
   }
 
 }

@@ -6,6 +6,7 @@ import jsQR, { QRCode } from "jsqr";
 import { BrowserQRCodeReader } from '@zxing/library';
 import { NavController } from '@ionic/angular';
 import { AlertService } from 'src/app/services/alert.service';
+import { CameraService } from 'src/app/services/camera.service';
 
 
 @Component({
@@ -24,7 +25,8 @@ export class JoinHubPage implements OnInit {
     private sanitizer: DomSanitizer,
     private hubService: HubService,
     private navCtrl: NavController,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private cameraService: CameraService
   ) { }
 
   ngOnInit() {
@@ -44,19 +46,11 @@ export class JoinHubPage implements OnInit {
   }
 
   async takePicture() {
-    const image = await Plugins.Camera.getPhoto({
-      quality: 50,
-      allowEditing: false,
-      resultType: CameraResultType.DataUrl,
-      source: CameraSource.Camera,
-      height: 200,
-      width: 200
-    });
+    const image = await this.cameraService.takePicture();
 
-    // this.photo = this.sanitizer.bypassSecurityTrustResourceUrl(image && (image.dataUrl));
-    this.photo = image.dataUrl;
+    this.photo = image;
     console.log(this.photo);
-    const hub = await this.getHubByQRImage(image.dataUrl);
+    const hub = await this.getHubByQRImage(image);
     if (hub)
       this.hub = hub;
     else
