@@ -57,7 +57,7 @@
               <ion-text>Starred</ion-text>
           </ion-list-header>
           <div *ngFor="let hub of starredHubs">
-            <app-hub-card *ngIf="!loading" [hub]="hub"></app-hub-card>
+            <app-hub-card *ngIf="!loading" [hub]="hub" (click)="goToHubPage(hub.id)"></app-hub-card>
           </div>
 
             <ion-list-header>

@@ -126,5 +126,9 @@ export class HomePage implements OnInit, AfterViewInit {
   goToAddHubPage() {
     this.navCtrl.navigateForward('add-hub/join-hub');
   }
+
+  goToHubPage(id: number) {
+    this.navCtrl.navigateForward('hub/'+ id);
+  }
   
 }

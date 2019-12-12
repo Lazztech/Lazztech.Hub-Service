@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { LocationService } from 'src/app/services/location.service';
 
 @Component({
   selector: 'app-hub-card',
@@ -10,8 +11,17 @@ export class HubCardComponent implements OnInit {
   @Input()
   hub: any
 
-  constructor() { }
+  @Input()
+  currentCoords: { latitude: number, longitude: number };
 
-  ngOnInit() {}
+  private distanceInMeters: number;
+
+  constructor(
+    private locationService: LocationService
+  ) { }
+
+  async ngOnInit() {
+    this.distanceInMeters = await this.locationService.getDistanceFromHub(this.hub, this.currentCoords);
+  }
 
 }

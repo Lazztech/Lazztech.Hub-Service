@@ -48,6 +48,7 @@
     "core-js": "^2.5.4",
     "face-api.js": "^0.19.0",
     "firebase": "^6.3.1",
+    "geolib": "^3.2.0",
     "graphql": "^14.3.0",
     "graphql-tag": "^2.10.1",
     "ionic-native-http-connection-backend": "^6.1.1",

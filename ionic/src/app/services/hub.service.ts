@@ -123,6 +123,8 @@ export class HubService {
           name
           image
           starred
+          latitude
+          longitude
           owners {
             id
             firstName
