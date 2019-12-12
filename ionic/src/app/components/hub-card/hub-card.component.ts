@@ -13,6 +13,8 @@ export class HubCardComponent implements OnInit {
 
   @Input()
   currentCoords: { latitude: number, longitude: number };
+  
+  atHub: boolean;
 
   private distanceInMeters: number;
 
@@ -22,6 +24,7 @@ export class HubCardComponent implements OnInit {
 
   async ngOnInit() {
     this.distanceInMeters = await this.locationService.getDistanceFromHub(this.hub, this.currentCoords);
+    this.atHub = await this.locationService.atHub(this.hub, this.currentCoords);
   }
 
 }
