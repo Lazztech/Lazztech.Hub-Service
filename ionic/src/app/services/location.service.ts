@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Plugins } from '@capacitor/core';
+import { Plugins, GeolocationPosition, GeolocationOptions } from '@capacitor/core';
 import * as geolib from 'geolib';
 const { Geolocation } = Plugins;
 
@@ -9,24 +9,24 @@ const { Geolocation } = Plugins;
 })
 export class LocationService {
 
-  constructor() { }
+  //FIXME: make this an observable. It should always resolve to a valid result. Right now it starts undefined.
+  coords: { latitude: number, longitude: number };
+
+  constructor() {
+    // this.coords = {latitude: 0, longitude: 0};
+    this.watchLocation();
+   }
 
   /**
    * 
-   * @param hub 
-   * @param currentCoords optional param if not provided will grab the current coords for you
+   * @param hub
    * @param distance optional param with default of 50 meters
    */
-  async atHub(hub: any, currentCoords?: { latitude: number, longitude: number }, distance: number = 50) {
+  async atHub(hub: any, distance: number = 50) {
     const hubCoords = { latitude: hub.latitude, longitude: hub.longitude };
 
-    if(!currentCoords) {
-      const geoLocationPosition = await this.getCurrentPosition();
-      currentCoords = { latitude: geoLocationPosition.coords.latitude, longitude: geoLocationPosition.coords.longitude };
-    }
-
     const result = geolib.isPointWithinRadius(
-      currentCoords,
+      this.coords,
       hubCoords,
       distance
     );
@@ -38,26 +38,45 @@ export class LocationService {
       return coordinates;
   }
 
+  async watchLocation(minuteInterval: number = 1) {
+    const geoLocationPosition = await this.getCurrentPosition();
+    this.coords = { latitude: geoLocationPosition.coords.latitude, longitude: geoLocationPosition.coords.longitude };
+
+    const ms = (minuteInterval * 60) * 1000;
+    setInterval(async () => {
+      const geoLocationPosition = await this.getCurrentPosition();
+      this.coords = { latitude: geoLocationPosition.coords.latitude, longitude: geoLocationPosition.coords.longitude };
+    }, ms);
+  }
+
   /**
    * 
    * @param hub 
-   * @param currentCoords optional param if not provided will grab the current coords for you
    * @returns distance in meters
    */
-  async getDistanceFromHub(hub: any, currentCoords?: { latitude: number, longitude: number }) {
+  async getDistanceFromHub(hub: any) {
     const hubCoords = { latitude: hub.latitude, longitude: hub.longitude };
 
-    if(!currentCoords) {
-      const geoLocationPosition = await this.getCurrentPosition();
-      currentCoords = { latitude: geoLocationPosition.coords.latitude, longitude: geoLocationPosition.coords.longitude };
-    }
-
     const distance = geolib.getDistance(
-      currentCoords,
+      this.coords,
       hubCoords
     );
 
     return distance;
   }
+
+
+  getCurrentPositionFastIos = async (options: GeolocationOptions = {}): Promise<GeolocationPosition> => {
+    return new Promise<GeolocationPosition>((resolve, reject) => {
+      const id = Geolocation.watchPosition(options, (position, err) => {
+        Geolocation.clearWatch({id});
+        if(err) {
+          reject(err);
+          return;
+        }
+        resolve(position);
+      });
+    });
+  };
 
 }
