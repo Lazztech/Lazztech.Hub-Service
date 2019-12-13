@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { LocationService } from 'src/app/services/location.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-hub-card',
@@ -10,10 +11,8 @@ export class HubCardComponent implements OnInit {
 
   @Input()
   hub: any
-
-  currentCoords: { latitude: number, longitude: number };
   
-  atHub: boolean;
+  atHub: boolean = false;
 
   private distanceInMeters: number;
 
@@ -21,10 +20,19 @@ export class HubCardComponent implements OnInit {
     private locationService: LocationService
   ) { }
 
+  //FIXME: this may result in a memory leak without destroying the subscription
   async ngOnInit() {
-    this.currentCoords = this.locationService.coords;
-    this.distanceInMeters = await this.locationService.getDistanceFromHub(this.hub);
-    this.atHub = await this.locationService.atHub(this.hub);
+    this.locationService.watchLocation().subscribe(x => {
+      console.log(x);
+      const coords = { latitude: x.latitude, longitude: x.longitude };
+      console.log(coords);
+      this.atHub = this.locationService.atHub(this.hub, coords);
+      console.log(this.atHub);
+      if (!this.atHub) {
+        this.distanceInMeters = this.locationService.getDistanceFromHub(this.hub, coords);
+        console.log(this.distanceInMeters);
+      }
+    });
   }
 
 }

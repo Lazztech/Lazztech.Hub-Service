@@ -151,7 +151,22 @@ export class AuthService {
         fetchPolicy: "network-only"
       }).toPromise();
 
-      if (result.data['me']) {
+      if (result.data['me'].errors) {
+          // code: "INTERNAL_SERVER_ERROR"
+          //FIXME: this may break on a different deployment platform
+          if (result.data['me'].errors[0].code == "INTERNAL_SERVER_ERROR") {
+            for (let index = 0; index < 3; index++) {
+              console.log(`verifyAccountExists returned INTERNAL_SERVER_ERROR retry ${index + 1}`)
+              const result = await this.verifyAccountExists()
+              if (result) {
+                return true;
+              }
+            }
+            console.log("verifyAccountExists failed");
+            return false;
+          }
+      } else if(result.data['me']) {
+
         return true;
       } else {
 

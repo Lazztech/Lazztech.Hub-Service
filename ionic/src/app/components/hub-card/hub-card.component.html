@@ -7,8 +7,10 @@
   <ion-card-content>
       <ion-row>
           <ion-col style = "margin-right: 0px;">
-              <ion-thumbnail >
-                  <ion-img width="100%" item-left src="{{hub.image}}"></ion-img>
+              <ion-thumbnail>
+                  <ion-img *ngIf="hub.image === undefined" width="100%" item-left src="/assets/icons/house_placeholder.png"></ion-img>
+
+                  <ion-img *ngIf="hub.image !== undefined" width="100%" item-left src="{{hub.image}}"></ion-img>
                 </ion-thumbnail>
           </ion-col>
     
