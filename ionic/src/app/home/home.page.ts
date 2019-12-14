@@ -54,18 +54,6 @@ export class HomePage implements OnInit, AfterViewInit {
     pwaInstallService.showInstallBanner();
   }
 
-  // async getCurrentPosition() {
-  //   const coordinates = await Geolocation.getCurrentPosition();
-  //   console.log('Current', coordinates);
-  // }
-
-  // watchPosition() {
-  //   const wait = Geolocation.watchPosition({}, (position, err) => {
-  //     console.log(position);
-  //     this.notificationsService.localNotification("position", JSON.stringify(position));
-  //   })
-  // }
-
   async doRefresh(event) {
     console.log('Begin async operation');
     this.loading = true;
