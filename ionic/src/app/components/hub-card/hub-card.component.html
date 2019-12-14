@@ -1,8 +1,7 @@
 <ion-card>
     <ion-card-header>
-        <ion-card-subtitle float-left>name: {{hub.name}}</ion-card-subtitle>
-        <ion-card-subtitle float-right *ngIf="!atHub && distanceInMeters">{{distanceInMeters}} meters</ion-card-subtitle>
-        <ion-card-subtitle float-right *ngIf="atHub">you're here!</ion-card-subtitle>
+        <ion-icon float-right name="star"></ion-icon>
+        <ion-card-subtitle float-left>{{hub.name}}</ion-card-subtitle>
     </ion-card-header>
   <ion-card-content>
       <ion-row>
@@ -15,9 +14,10 @@
           </ion-col>
     
           <ion-col style = "margin-left: 0px;">
-            <div float-right>Present: &nbsp;<ion-badge float-right color="success">5 / 5 </ion-badge></div>
-            <!-- <br>
-            <div float-right *ngIf="distanceInMeters">&nbsp;{{distanceInMeters}}m distance</div> -->
+            <ion-card-subtitle float-right color="success">5 / 5 present</ion-card-subtitle>
+            <br>
+            <ion-card-subtitle float-right *ngIf="!atHub && distanceInMeters">{{distanceInMeters}} meters</ion-card-subtitle>
+            <ion-card-subtitle float-right *ngIf="atHub">you're here!</ion-card-subtitle>
           </ion-col>
     </ion-row>
   </ion-card-content>
