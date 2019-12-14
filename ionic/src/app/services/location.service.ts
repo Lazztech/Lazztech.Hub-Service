@@ -11,13 +11,10 @@ const { Geolocation } = Plugins;
 })
 export class LocationService {
 
-  //FIXME: make this an observable. It should always resolve to a valid result. Right now it starts undefined.
-  // coords: Observable<{ latitude: number, longitude: number }>;
+  coords$: Observable<{ latitude: number, longitude: number }>;
 
   constructor() {
-    // this.coords = {latitude: 0, longitude: 0};
-    // this.watchLocation();
-    // this.coords = this.watchLocation();
+    this.coords$ = this.watchLocation();
    }
 
   /**
@@ -40,7 +37,7 @@ export class LocationService {
       return coordinates;
   }
 
-  watchLocation(minuteInterval: number = 1):Observable<{ latitude: number, longitude: number}> {
+  private watchLocation(minuteInterval: number = 1):Observable<{ latitude: number, longitude: number}> {
     // const geoLocationPosition = await this.getCurrentPosition();
     // this.coords = { latitude: geoLocationPosition.coords.latitude, longitude: geoLocationPosition.coords.longitude };
 
@@ -52,10 +49,13 @@ export class LocationService {
 
     const result = Observable.create(
       (observer: Observer<{ latitude: number, longitude: number}>) => {
-        Geolocation.watchPosition({ enableHighAccuracy: true }, (x: GeolocationPosition) => {
+        Geolocation.watchPosition({ enableHighAccuracy: true }, (x: GeolocationPosition, err) => {
+        if (err){
+          console.log(err);
+        }
         const coords = { latitude: x.coords.latitude, longitude: x.coords.longitude };
         observer.next(coords);
-        observer.complete();
+        // observer.complete();
       });
     });
 

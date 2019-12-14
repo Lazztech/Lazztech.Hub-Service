@@ -1,28 +1,33 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { LocationService } from 'src/app/services/location.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-hub-card',
   templateUrl: './hub-card.component.html',
   styleUrls: ['./hub-card.component.scss'],
 })
-export class HubCardComponent implements OnInit {
+export class HubCardComponent implements OnInit, OnDestroy {
 
   @Input()
   hub: any
   
   atHub: boolean = false;
 
+  coords$: Observable<{longitude: number, latitude: number}>;
+  subscription: Subscription;
+
   private distanceInMeters: number;
 
   constructor(
-    private locationService: LocationService
+    private locationService: LocationService,
+    private changeRef: ChangeDetectorRef
   ) { }
 
   //FIXME: this may result in a memory leak without destroying the subscription
   async ngOnInit() {
-    this.locationService.watchLocation().subscribe(x => {
+    this.subscription = this.locationService.coords$.subscribe(x => {
       console.log(x);
       const coords = { latitude: x.latitude, longitude: x.longitude };
       console.log(coords);
@@ -32,7 +37,12 @@ export class HubCardComponent implements OnInit {
         this.distanceInMeters = this.locationService.getDistanceFromHub(this.hub, coords);
         console.log(this.distanceInMeters);
       }
+      this.changeRef.detectChanges();
     });
+  }
+
+  async ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
 }
