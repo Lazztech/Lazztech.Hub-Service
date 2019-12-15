@@ -1,13 +1,14 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { Plugins } from '@capacitor/core';
 import { MenuController, NavController, Platform } from '@ionic/angular';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { User } from '../models/user';
 import { AuthService } from '../services/auth.service';
 import { NotificationsService } from '../services/notifications.service';
 import { PwaInstallService } from '../services/pwa-install.service';
 import { UpdateService } from '../services/update.service';
 import { HubService } from '../services/hub.service';
+import { LocationService } from '../services/location.service';
 
 const { Geolocation } = Plugins;
 
@@ -16,7 +17,7 @@ const { Geolocation } = Plugins;
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage implements OnInit, AfterViewInit {
+export class HomePage implements OnInit, AfterViewInit, OnDestroy {
 
   loading = false;
   starredHubs = [];
@@ -25,7 +26,8 @@ export class HomePage implements OnInit, AfterViewInit {
   beforeInstall: Observable<boolean> = of(false);
   inAppNotificationCount = 0;
 
-  persons: [] = [];
+  locationSubscription: Subscription;
+  coords: {latitude: number, longitude: number};
   
   constructor(
     private menu: MenuController,
@@ -35,7 +37,9 @@ export class HomePage implements OnInit, AfterViewInit {
     private platform: Platform,
     private notificationsService: NotificationsService,
     public navCtrl: NavController,
-    private hubService: HubService
+    private hubService: HubService,
+    private locationService: LocationService,
+    private changeRef: ChangeDetectorRef
     ) { 
     this.menu.enable(true);
     this.beforeInstall = pwaInstallService.beforeInstall;
@@ -73,6 +77,14 @@ export class HomePage implements OnInit, AfterViewInit {
       this.loading = true;
       return x.length;
     });
+    this.locationSubscription = this.locationService.coords$.subscribe(async x => {
+      await this.platform.ready();
+      console.log(x);
+      const coords = { latitude: x.latitude, longitude: x.longitude };
+      console.log(coords);
+      this.coords = coords;
+      this.changeRef.detectChanges();
+    });
     this.starredHubs = await this.hubService.starredHubs();
     this.loading = false;
     // await this.getCurrentPosition();
@@ -82,6 +94,12 @@ export class HomePage implements OnInit, AfterViewInit {
 
   async ngOnInit() {
     
+  }
+
+  async ngOnDestroy() {
+    if (this.locationSubscription) {
+      this.locationSubscription.unsubscribe();
+    }
   }
 
   ngAfterViewInit() {

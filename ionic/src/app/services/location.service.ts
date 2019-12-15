@@ -49,13 +49,14 @@ export class LocationService {
 
     const result = Observable.create(
       (observer: Observer<{ latitude: number, longitude: number}>) => {
-        Geolocation.watchPosition({ enableHighAccuracy: true }, (x: GeolocationPosition, err) => {
+        const id = Geolocation.watchPosition({ enableHighAccuracy: true }, (x: GeolocationPosition, err) => {
+        // Geolocation.clearWatch({id});
         if (err){
           console.log(err);
+          // observer.complete();
         }
         const coords = { latitude: x.coords.latitude, longitude: x.coords.longitude };
         observer.next(coords);
-        // observer.complete();
       });
     });
 

@@ -1,17 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Plugins, CameraResultType, CameraSource } from '@capacitor/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { HubService } from 'src/app/services/hub.service';
 import { ActivatedRoute } from '@angular/router';
-import { ActionSheetController, NavController } from '@ionic/angular';
+import { ActionSheetController, NavController, Platform } from '@ionic/angular';
 import { CameraService } from 'src/app/services/camera.service';
+import { Subscription } from 'rxjs';
+import { LocationService } from 'src/app/services/location.service';
 
 @Component({
   selector: 'app-hub',
   templateUrl: './hub.page.html',
   styleUrls: ['./hub.page.scss'],
 })
-export class HubPage implements OnInit {
+export class HubPage implements OnInit, OnDestroy {
 
   // image: any;
 
@@ -19,7 +21,9 @@ export class HubPage implements OnInit {
   hub: any;
   id: number;
   qrContent: string;
-  coords: { latitude: number, longitude: number };
+  locationSubscription: Subscription;
+  hubCoords: {latitude: number, longitude: number};
+  userCoords: {latitude: number, longitude: number};
 
   constructor(
     private sanitizer: DomSanitizer,
@@ -27,7 +31,10 @@ export class HubPage implements OnInit {
     private hubService: HubService,
     public actionSheetController: ActionSheetController,
     public navCtrl: NavController,
-    public cameraService: CameraService
+    public cameraService: CameraService,
+    private platform: Platform,
+    private changeRef: ChangeDetectorRef,
+    private locationService: LocationService
   ) { }
 
   ngOnInit() {
@@ -38,12 +45,20 @@ export class HubPage implements OnInit {
   async ionViewDidEnter() {
     this.loading = true;
     await this.loadHub();
-    const coords = { 
+    this.locationSubscription = this.locationService.coords$.subscribe(async x => {
+      await this.platform.ready();
+      console.log(x);
+      const coords = { latitude: x.latitude, longitude: x.longitude };
+      console.log(coords);
+      this.userCoords = coords;
+      this.changeRef.detectChanges();
+    });
+    const hubCoords = { 
       latitude: this.hub.latitude,
       longitude: this.hub.longitude
     };
-    this.coords = coords;
-    console.log(this.coords);
+    this.hubCoords = hubCoords;
+    console.log(this.hubCoords);
     this.loading = false;
   }
 
@@ -139,6 +154,12 @@ export class HubPage implements OnInit {
     ]
     });
     await actionSheet.present();
+  }
+
+  async ngOnDestroy() {
+    if (this.locationSubscription) {
+      this.locationSubscription.unsubscribe();
+    }
   }
 
 }

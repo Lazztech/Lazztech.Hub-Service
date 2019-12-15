@@ -14,11 +14,11 @@
 
 <ion-content>
 
-    <app-hub-card *ngIf="!loading" [hub]="hub"></app-hub-card>
+    <app-hub-card *ngIf="!loading" [hub]="hub" [coords]="userCoords"></app-hub-card>
 
   <ion-card *ngIf="!loading" style="height:30%">
       <ion-card-content style="height:100%">
-          <app-google-map *ngIf="hub" [coords]="coords"></app-google-map>
+          <app-google-map *ngIf="hub" [coords]="hubCoords"></app-google-map>
       </ion-card-content>
     </ion-card>
 
