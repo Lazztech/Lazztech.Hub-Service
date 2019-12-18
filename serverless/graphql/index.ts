@@ -29,6 +29,7 @@ import { verify } from "jsonwebtoken";
 
 useContainer(Container);
 serverlessEnvChecker();
+//FIXME need to await the completion of the the sql startup
 createAzureSqlDbConnection()
   .then((connection) => console.log("Connected to Azure SQL with TypeORM."))
   .catch((error) => console.log(error));;

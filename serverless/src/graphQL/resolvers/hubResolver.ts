@@ -5,6 +5,7 @@ import { Hub } from "../../dal/entity/hub";
 import { JoinUserHub } from "../../dal/entity/joinUserHub";
 import { User } from "../../dal/entity/user";
 import { IsLatitude } from "class-validator";
+import { storePublicImageFromBase64, deletePublicImageFromUrl } from "../../services/fileService";
 
 @Resolver()
 export class HubResolver {
@@ -20,12 +21,15 @@ export class HubResolver {
         @Arg("latitude") latitude: number,
         @Arg("longitude") longitude: number
     ): Promise<Hub> {
+
+        const imageUrl = await storePublicImageFromBase64(image);
+        
         // Creates hub with user as owner.
         const hub = Hub.create({
             latitude,
             longitude,
             name,
-            image
+            image: imageUrl
         });
         const result = await hub.save();
         let joinUserHub = await JoinUserHub.create({
@@ -145,6 +149,7 @@ export class HubResolver {
 
     @Authorized()
     @Mutation(() => Hub)
+    //FIXME duplicate with updateHubPhoto? Remove one.
     public async changeHubImage(
         @Ctx() ctx: any, //FIXME: should be an interface
         @Arg("hubId") hubId: number,
@@ -161,8 +166,13 @@ export class HubResolver {
             relations: ["hub"]
         });
 
+
         let hub = joinUserHubResult.hub;
-        hub.image = newImage;
+
+        await deletePublicImageFromUrl(hub.image);
+        const imageUrl = await storePublicImageFromBase64(newImage);
+
+        hub.image = imageUrl;
         hub = await hub.save();
         return hub;
     }
@@ -233,7 +243,12 @@ export class HubResolver {
         @Arg("image") image: string
     ): Promise<boolean> {
         let hub = await Hub.findOne({ id });
-        hub.image = image;
+
+        await deletePublicImageFromUrl(hub.image);
+        const imageUrl = await storePublicImageFromBase64(image);
+
+        hub.image = imageUrl;
+
         hub = await hub.save();
         return true;
     }
