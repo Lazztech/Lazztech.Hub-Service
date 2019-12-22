@@ -36,7 +36,7 @@ import { IMyContext } from "./context.interface";
 
     const data = verify(accessToken, process.env.ACCESS_TOKEN_SECRET) as any;
     if (data.userId) {
-      const user =  await User.findOne({ where: { id: data.userId}});
+      const user =  await User.findOne({ where: { id: data.userId}}).catch(err => console.error(err));
       if (user) {
         return true;
         console.log("verified access token.");

@@ -45,6 +45,7 @@ export class HubPage implements OnInit, OnDestroy {
   async ionViewDidEnter() {
     this.loading = true;
     await this.loadHub();
+    //FIXME this should be refactored into the HubService to avoid repeating code
     this.locationSubscription = this.locationService.coords$.subscribe(async x => {
       await this.platform.ready();
       console.log(x);
