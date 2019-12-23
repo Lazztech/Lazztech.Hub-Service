@@ -3,18 +3,17 @@ import { GqlExecutionContext } from '@nestjs/graphql';
 import { verify } from 'jsonwebtoken';
 
 import { User } from 'src/dal/entity/user';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
+
+  constructor(private readonly configService: ConfigService) {}
+
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const ctx = GqlExecutionContext.create(context);
     let accessToken = ctx.getContext().req.headers['authorization'];
 
-    // let accessToken = context.req.headers["authorization"];
-    // let accessToken = context.req.headers["Authorization"];
-    // let accessToken = context.req.get("Authorization");
-
-    // }
     if (!accessToken) {
       console.error(
         "Custom Auth Checker didn't find Authorization header access token.",
@@ -22,12 +21,14 @@ export class AuthGuard implements CanActivate {
       return false;
     }
 
-    const data = verify(accessToken, process.env.ACCESS_TOKEN_SECRET) as any;
+    const tokenSecret = this.configService.get<string>('ACCESS_TOKEN_SECRET');
+    const data = verify(accessToken, tokenSecret) as any;
     if (data.userId) {
       const user = await User.findOne({
         where: { id: data.userId },
       }).catch(err => console.error(err));
       if (user) {
+        ctx.getContext().req.headers['userId'] = data.userId;
         return true;
         console.log('verified access token.');
       } else {

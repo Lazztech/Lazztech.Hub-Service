@@ -14,12 +14,22 @@ type Hub {
   starred: Boolean
 }
 
+type Image {
+  id: ID!
+  image: String
+}
+
 type InAppNotification {
   id: ID!
   text: String!
   date: String!
   thumbnail: String
   actionLink: String
+}
+
+type Invite {
+  id: ID!
+  email: String!
 }
 
 type JoinUserHub {
@@ -54,7 +64,6 @@ type Location {
 }
 
 type Mutation {
-  addUserFcmNotificationToken(token: String!): Boolean!
   changeName(lastName: String!, firstName: String!): User!
   changeEmail(newEmail: String!): User!
   changePassword(newPassword: String!, oldPassword: String!): Boolean!
@@ -67,16 +76,22 @@ type Mutation {
   setHubStarred(hubId: Float!): Boolean!
   setHubNotStarred(hubId: Float!): Boolean!
   updateHubPhoto(image: String!, id: Float!): Boolean!
+  addUserFcmNotificationToken(token: String!): Boolean!
+}
+
+type Person {
+  id: ID!
+  name: String
 }
 
 type Query {
-  getInAppNotifications: [InAppNotification!]!
-  sendPushNotification(userId: Float!): Boolean!
   hub(id: Float!): Hub!
   ownedHubs: [Hub!]!
   memberOfHubs: [Hub!]!
   starredHubs: [Hub!]!
   getHubByQRImage(qrImageB64: String!): Hub!
+  getInAppNotifications: [InAppNotification!]!
+  sendPushNotification(userId: Float!): Boolean!
 }
 
 type User {

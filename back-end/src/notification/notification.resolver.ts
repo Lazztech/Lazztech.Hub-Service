@@ -7,6 +7,7 @@ import { Resolver, Query, Mutation } from '@nestjs/graphql';
 import { Authorized, Ctx, Arg } from 'type-graphql';
 import { AuthGuard } from 'src/guards/authguard.service';
 import { UseGuards } from '@nestjs/common';
+import { UserId } from 'src/decorators/user.decorator';
 
 @Resolver()
 export class NotificationResolver {
@@ -16,10 +17,10 @@ export class NotificationResolver {
   @UseGuards(AuthGuard)
   @Query(() => [InAppNotification])
   public async getInAppNotifications(
-    @Ctx() ctx: any, //FIXME: should be a strongly typed interface
+    @UserId() userId,
   ): Promise<InAppNotification[]> {
     const joinInAppNotifications = await JoinUserInAppNotifications.find({
-      where: { userId: ctx.userId },
+      where: { userId: userId },
       relations: ['inAppNotification'],
     });
 
@@ -35,10 +36,10 @@ export class NotificationResolver {
   @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
   public async addUserFcmNotificationToken(
-    @Ctx() ctx: any, //FIXME: should be a strongly typed interface
+    @UserId() userId,
     @Arg('token') token: string,
   ): Promise<boolean> {
-    const user = await User.findOne({ where: { id: ctx.userId } });
+    const user = await User.findOne({ where: { id: userId } });
 
     const userDevice = new UserDevice();
     userDevice.userId = user.id;
