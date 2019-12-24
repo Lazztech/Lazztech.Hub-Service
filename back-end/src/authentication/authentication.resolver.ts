@@ -1,37 +1,33 @@
+import { Response, UseGuards } from '@nestjs/common';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import * as bcrypt from 'bcryptjs';
-import { sign, verify } from 'jsonwebtoken';
+import { sign } from 'jsonwebtoken';
+import { UserId } from 'src/decorators/user.decorator';
+import { AuthGuard } from 'src/guards/authguard.service';
 import { InAppNotification } from '../dal/entity/inAppNotification';
 import { Invite } from '../dal/entity/invite';
 import { JoinUserInAppNotifications } from '../dal/entity/joinUserInAppNotifications';
 import { PasswordReset } from '../dal/entity/passwordReset';
 import { User } from '../dal/entity/user';
-import { EmailService } from '../services/emailService';
-import { IMyContext } from '../graphQL/context.interface';
 import { RegisterInput } from '../graphQL/inputTypes/inputUser';
-import { Resolver, Query, Mutation } from '@nestjs/graphql';
-import { Authorized, Ctx, Arg } from 'type-graphql';
-import { UseGuards } from '@nestjs/common';
-import { AuthGuard } from 'src/guards/authguard.service';
-const datetime = require('node-datetime');
+import { EmailService } from '../services/emailService';
+import datetime from 'node-datetime';
 
 @Resolver()
 export class AuthenticationResolver {
   constructor(private emailService: EmailService) {}
 
-  //@Authorized()
   @UseGuards(AuthGuard)
   @Query(() => User, { nullable: true })
-  public async me(
-    @Ctx() ctx: any, //FIXME: should be a strongly typed interface
-  ): Promise<User> {
-    return await User.findOne({ where: { id: ctx.userId } });
+  public async me(@UserId() userId): Promise<User> {
+    console.log(userId);
+    return await User.findOne({ where: { id: userId } });
   }
 
   @Mutation(() => String, { nullable: true })
   public async login(
-    @Arg('email') email: string,
-    @Arg('password') password: string,
-    @Ctx() ctx: IMyContext,
+    @Args('email') email: string,
+    @Args('password') password: string,
   ): Promise<string> {
     const user = await User.findOne({ where: { email } });
 
@@ -47,17 +43,16 @@ export class AuthenticationResolver {
 
     const accessToken = sign(
       { userId: user.id },
+      //FIXME nestjs does not expose envs this way
       process.env.ACCESS_TOKEN_SECRET,
     );
-    // ctx.res.cookie("access-token", accessToken);
 
     return accessToken;
   }
 
   @Mutation(() => String, { nullable: true })
   public async register(
-    @Arg('data') { firstName, lastName, email, password }: RegisterInput,
-    @Ctx() ctx: IMyContext,
+    @Args('data') { firstName, lastName, email, password }: RegisterInput,
   ): Promise<string> {
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
@@ -92,25 +87,25 @@ export class AuthenticationResolver {
 
     const accessToken = sign(
       { userId: user.id },
+      //FIXME nestjs does not expose envs this way
       process.env.ACCESS_TOKEN_SECRET,
     );
-    // ctx.res.cookie("access-token", accessToken);
 
     return accessToken;
   }
 
   @Mutation(() => Boolean)
-  public async logout(@Ctx() ctx: IMyContext): Promise<boolean> {
-    //FIXME:
-    ctx.res.cookie('access-token', '', { expires: new Date(Date.now()) });
+  public async logout(@Response() res): Promise<boolean> {
+    //FIXME: not using cookies anymore?
+    res.cookie('access-token', '', { expires: new Date(Date.now()) });
     return true;
   }
 
   @Mutation(() => Boolean)
   public async resetPassword(
-    @Arg('usersEmail') usersEmail: string,
-    @Arg('resetPin') resetPin: string,
-    @Arg('newPassword') newPassword: string,
+    @Args('usersEmail') usersEmail: string,
+    @Args('resetPin') resetPin: string,
+    @Args('newPassword') newPassword: string,
   ): Promise<boolean> {
     const user = await User.findOne({
       where: { email: usersEmail },
@@ -131,7 +126,7 @@ export class AuthenticationResolver {
 
   @Mutation(() => Boolean)
   public async sendPasswordResetEmail(
-    @Arg('email') email: string,
+    @Args('email') email: string,
   ): Promise<boolean> {
     const user = await User.findOne({
       where: { email },
@@ -154,7 +149,7 @@ export class AuthenticationResolver {
   //@Authorized()
   @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
-  public async newInvite(@Arg('email') email: string): Promise<boolean> {
+  public async newInvite(@Args('email') email: string): Promise<boolean> {
     try {
       const invite = await Invite.create({
         email,

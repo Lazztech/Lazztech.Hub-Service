@@ -68,14 +68,20 @@ type Mutation {
   changeEmail(newEmail: String!): User!
   changePassword(newPassword: String!, oldPassword: String!): Boolean!
   deleteAccount(password: String!, email: String!): Boolean!
+  login(password: String!, email: String!): String
+  register(data: RegisterInput!): String
+  logout: Boolean!
+  resetPassword(newPassword: String!, resetPin: String!, usersEmail: String!): Boolean!
+  sendPasswordResetEmail(email: String!): Boolean!
+  newInvite(email: String!): Boolean!
   createHub(longitude: Float!, latitude: Float!, image: String!, name: String!): Hub!
-  deleteHub(hubId: Float!): Boolean!
-  renameHub(newName: String!, hubId: Float!): Hub!
-  changeHubImage(newImage: String!, hubId: Float!): Hub!
-  joinHub(id: Float!): Boolean!
-  setHubStarred(hubId: Float!): Boolean!
-  setHubNotStarred(hubId: Float!): Boolean!
-  updateHubPhoto(image: String!, id: Float!): Boolean!
+  deleteHub(hubId: Int!): Boolean!
+  renameHub(newName: String!, hubId: Int!): Hub!
+  changeHubImage(newImage: String!, hubId: Int!): Hub!
+  joinHub(id: Int!): Boolean!
+  setHubStarred(hubId: Int!): Boolean!
+  setHubNotStarred(hubId: Int!): Boolean!
+  updateHubPhoto(image: String!, id: Int!): Boolean!
   addUserFcmNotificationToken(token: String!): Boolean!
 }
 
@@ -85,13 +91,21 @@ type Person {
 }
 
 type Query {
-  hub(id: Float!): Hub!
+  me: User
+  hub(id: Int!): Hub!
   ownedHubs: [Hub!]!
   memberOfHubs: [Hub!]!
   starredHubs: [Hub!]!
   getHubByQRImage(qrImageB64: String!): Hub!
   getInAppNotifications: [InAppNotification!]!
   sendPushNotification(userId: Float!): Boolean!
+}
+
+input RegisterInput {
+  firstName: String!
+  lastName: String!
+  email: String!
+  password: String!
 }
 
 type User {

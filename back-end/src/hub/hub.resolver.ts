@@ -1,9 +1,8 @@
 import { UseGuards } from '@nestjs/common';
-import { Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Mutation, Query, Resolver, Args } from '@nestjs/graphql';
 import { UserId } from 'src/decorators/user.decorator';
 import { AuthGuard } from 'src/guards/authguard.service';
 import { QrService } from 'src/services/qr.service';
-import { Arg } from 'type-graphql';
 import { Hub } from '../dal/entity/hub';
 import { JoinUserHub } from '../dal/entity/joinUserHub';
 import { User } from '../dal/entity/user';
@@ -11,6 +10,7 @@ import {
   deletePublicImageFromUrl,
   storePublicImageFromBase64,
 } from '../services/fileService';
+import { Float, Int } from 'type-graphql';
 
 @Resolver()
 export class HubResolver {
@@ -21,10 +21,10 @@ export class HubResolver {
   @Mutation(() => Hub)
   public async createHub(
     @UserId() userId,
-    @Arg('name') name: string,
-    @Arg('image') image: string,
-    @Arg('latitude') latitude: number,
-    @Arg('longitude') longitude: number,
+    @Args({ name: 'name', type: () => String }) name: string,
+    @Args({ name: 'image', type: () => String }) image: string,
+    @Args({ name: 'latitude', type: () => Float }) latitude: number,
+    @Args({ name: 'longitude', type: () => Float }) longitude: number,
   ): Promise<Hub> {
     const imageUrl = await storePublicImageFromBase64(image);
 
@@ -48,14 +48,12 @@ export class HubResolver {
   //@Authorized()
   @UseGuards(AuthGuard)
   @Query(() => Hub)
-  public async hub(@UserId() userId, @Arg('id') id: number): Promise<Hub> {
+  public async hub(
+    @UserId() userId,
+    @Args({ name: 'id', type: () => Int }) id: number,
+  ): Promise<Hub> {
     //FIXME: Need to add check that user is either a member or owner.
-    // const user = await User.findOne({ id: ctx.userId });
 
-    // const hub = await Hub.findOne({
-    //     where: {id},
-    //     relations: ["usersConnection"]
-    //  });
     const userHubRelationship = await JoinUserHub.findOne({
       where: {
         hubId: id,
@@ -109,7 +107,9 @@ export class HubResolver {
   //@Authorized()
   @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
-  public async deleteHub(@Arg('hubId') hubId: number) {
+  public async deleteHub(
+    @Args({ name: 'hubId', type: () => Int }) hubId: number,
+  ) {
     const hub = await Hub.findOne({
       where: {
         id: hubId,
@@ -125,8 +125,8 @@ export class HubResolver {
   @Mutation(() => Hub)
   public async renameHub(
     @UserId() userId,
-    @Arg('hubId') hubId: number,
-    @Arg('newName') newName: string,
+    @Args({ name: 'hubId', type: () => Int }) hubId: number,
+    @Args({ name: 'newName', type: () => String }) newName: string,
   ): Promise<Hub> {
     //FIXME: Finish implementing check that user is hub owner.
 
@@ -151,8 +151,8 @@ export class HubResolver {
   //FIXME duplicate with updateHubPhoto? Remove one.
   public async changeHubImage(
     @UserId() userId,
-    @Arg('hubId') hubId: number,
-    @Arg('newImage') newImage: string,
+    @Args({ name: 'hubId', type: () => Int }) hubId: number,
+    @Args({ name: 'newImage', type: () => String }) newImage: string,
   ): Promise<Hub> {
     //FIXME: Finish implementing check that user is hub owner.
 
@@ -178,7 +178,10 @@ export class HubResolver {
   //@Authorized()
   @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
-  public async joinHub(@UserId() userId, @Arg('id') id: number) {
+  public async joinHub(
+    @UserId() userId,
+    @Args({ name: 'id', type: () => Int }) id: number,
+  ) {
     //FIXME: Finish implementing check that user is hub owner.
 
     let joinUserHub = await JoinUserHub.create({
@@ -195,7 +198,7 @@ export class HubResolver {
   @UseGuards(AuthGuard)
   @Query(() => Hub)
   public async getHubByQRImage(
-    @Arg('qrImageB64') qrImageB64: string,
+    @Args({ name: 'qrImageB64', type: () => String }) qrImageB64: string,
   ): Promise<Hub> {
     //FIXME: Finish implementing check that user is hub owner.
 
@@ -210,7 +213,10 @@ export class HubResolver {
   //@Authorized()
   @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
-  public async setHubStarred(@UserId() userId, @Arg('hubId') hubId: number) {
+  public async setHubStarred(
+    @UserId() userId,
+    @Args({ name: 'hubId', type: () => Int }) hubId: number,
+  ) {
     const hubRelationship = await JoinUserHub.findOne({
       userId: userId,
       hubId: hubId,
@@ -223,7 +229,10 @@ export class HubResolver {
   //@Authorized()
   @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
-  public async setHubNotStarred(@UserId() userId, @Arg('hubId') hubId: number) {
+  public async setHubNotStarred(
+    @UserId() userId,
+    @Args({ name: 'hubId', type: () => Int }) hubId: number,
+  ) {
     const hubRelationship = await JoinUserHub.findOne({
       userId: userId,
       hubId: hubId,
@@ -238,8 +247,8 @@ export class HubResolver {
   @Mutation(() => Boolean)
   public async updateHubPhoto(
     @UserId() userId,
-    @Arg('id') id: number,
-    @Arg('image') image: string,
+    @Args({ name: 'id', type: () => Int }) id: number,
+    @Args({ name: 'image', type: () => String }) image: string,
   ): Promise<boolean> {
     //FIXME make sure that this is only done by the owner of the hub
 

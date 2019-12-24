@@ -1,11 +1,11 @@
 // import nodemailer, { Transporter } from 'nodemailer';
+import { Injectable } from '@nestjs/common';
 import * as crypto from 'crypto';
 import * as nodemailer from 'nodemailer';
-import { Service } from 'typedi';
 import { PasswordReset } from '../dal/entity/passwordReset';
 import { IEmailService } from './emailService.interface';
 
-@Service()
+@Injectable()
 export class EmailService implements IEmailService {
   private transporter: nodemailer.Transporter;
 

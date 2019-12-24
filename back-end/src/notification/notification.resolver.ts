@@ -3,8 +3,7 @@ import { JoinUserInAppNotifications } from '../dal/entity/joinUserInAppNotificat
 import { User } from '../dal/entity/user';
 import { UserDevice } from '../dal/entity/userDevice';
 import { NotificationService } from './notification.service';
-import { Resolver, Query, Mutation } from '@nestjs/graphql';
-import { Authorized, Ctx, Arg } from 'type-graphql';
+import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { AuthGuard } from 'src/guards/authguard.service';
 import { UseGuards } from '@nestjs/common';
 import { UserId } from 'src/decorators/user.decorator';
@@ -37,7 +36,7 @@ export class NotificationResolver {
   @Mutation(() => Boolean)
   public async addUserFcmNotificationToken(
     @UserId() userId,
-    @Arg('token') token: string,
+    @Args({ name: 'token', type: () => String }) token: string,
   ): Promise<boolean> {
     const user = await User.findOne({ where: { id: userId } });
 
@@ -51,7 +50,7 @@ export class NotificationResolver {
   }
 
   @Query(() => Boolean)
-  public async sendPushNotification(@Arg('userId') userId: number) {
+  public async sendPushNotification(@Args('userId') userId: number) {
     await this.notificationService.sendPushToUser(
       userId,
       'this is a test push message',
