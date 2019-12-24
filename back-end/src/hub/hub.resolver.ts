@@ -6,15 +6,12 @@ import { QrService } from 'src/services/qr.service';
 import { Hub } from '../dal/entity/hub';
 import { JoinUserHub } from '../dal/entity/joinUserHub';
 import { User } from '../dal/entity/user';
-import {
-  deletePublicImageFromUrl,
-  storePublicImageFromBase64,
-} from '../services/fileService';
 import { Float, Int } from 'type-graphql';
+import { FileService } from 'src/services/file.service';
 
 @Resolver()
 export class HubResolver {
-  constructor(private qrService: QrService) {}
+  constructor(private qrService: QrService, private fileService: FileService) {}
 
   //@Authorized()
   @UseGuards(AuthGuard)
@@ -26,7 +23,7 @@ export class HubResolver {
     @Args({ name: 'latitude', type: () => Float }) latitude: number,
     @Args({ name: 'longitude', type: () => Float }) longitude: number,
   ): Promise<Hub> {
-    const imageUrl = await storePublicImageFromBase64(image);
+    const imageUrl = await this.fileService.storePublicImageFromBase64(image);
 
     // Creates hub with user as owner.
     const hub = Hub.create({
@@ -167,8 +164,10 @@ export class HubResolver {
 
     let hub = joinUserHubResult.hub;
 
-    await deletePublicImageFromUrl(hub.image);
-    const imageUrl = await storePublicImageFromBase64(newImage);
+    await this.fileService.deletePublicImageFromUrl(hub.image);
+    const imageUrl = await this.fileService.storePublicImageFromBase64(
+      newImage,
+    );
 
     hub.image = imageUrl;
     hub = await hub.save();
@@ -254,8 +253,8 @@ export class HubResolver {
 
     let hub = await Hub.findOne({ id });
 
-    await deletePublicImageFromUrl(hub.image);
-    const imageUrl = await storePublicImageFromBase64(image);
+    await this.fileService.deletePublicImageFromUrl(hub.image);
+    const imageUrl = await this.fileService.storePublicImageFromBase64(image);
 
     hub.image = imageUrl;
 

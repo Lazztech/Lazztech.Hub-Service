@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
 import { QrService } from './qr.service';
-import { EmailService } from './emailService';
+import { EmailService } from './email.service';
+import { FileService } from './file.service';
 
 @Module({
   imports: [],
   controllers: [],
-  providers: [EmailService, QrService],
-  exports: [EmailService, QrService],
+  providers: [FileService, EmailService, QrService],
+  exports: [FileService, EmailService, QrService],
 })
 export class ServicesModule {}

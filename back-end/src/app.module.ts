@@ -1,3 +1,4 @@
+import { FileService } from './services/file.service';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -53,6 +54,6 @@ import configuration from './config/configuration';
     }),
   ],
   controllers: [AppController],
-  providers: [AuthGuard, AppService],
+  providers: [FileService, AuthGuard, AppService],
 })
 export class AppModule {}

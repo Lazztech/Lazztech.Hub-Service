@@ -10,7 +10,7 @@ import { JoinUserInAppNotifications } from '../dal/entity/joinUserInAppNotificat
 import { PasswordReset } from '../dal/entity/passwordReset';
 import { User } from '../dal/entity/user';
 import { RegisterInput } from '../graphQL/inputTypes/inputUser';
-import { EmailService } from '../services/emailService';
+import { EmailService } from '../services/email.service';
 import datetime from 'node-datetime';
 import { ConfigService } from '@nestjs/config';
 
@@ -18,8 +18,8 @@ import { ConfigService } from '@nestjs/config';
 export class AuthenticationResolver {
   constructor(
     private emailService: EmailService,
-    private readonly configService: ConfigService
-    ) {}
+    private readonly configService: ConfigService,
+  ) {}
 
   @UseGuards(AuthGuard)
   @Query(() => User, { nullable: true })
@@ -46,10 +46,7 @@ export class AuthenticationResolver {
     }
 
     const tokenSecret = this.configService.get<string>('ACCESS_TOKEN_SECRET');
-    const accessToken = sign(
-      { userId: user.id },
-      tokenSecret,
-    );
+    const accessToken = sign({ userId: user.id }, tokenSecret);
 
     return accessToken;
   }
@@ -90,10 +87,7 @@ export class AuthenticationResolver {
     await joinUserInAppNotification.save();
 
     const tokenSecret = this.configService.get<string>('ACCESS_TOKEN_SECRET');
-    const accessToken = sign(
-      { userId: user.id },
-      tokenSecret
-    );
+    const accessToken = sign({ userId: user.id }, tokenSecret);
 
     return accessToken;
   }
