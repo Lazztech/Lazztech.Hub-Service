@@ -12,10 +12,14 @@ import { User } from '../dal/entity/user';
 import { RegisterInput } from '../graphQL/inputTypes/inputUser';
 import { EmailService } from '../services/emailService';
 import datetime from 'node-datetime';
+import { ConfigService } from '@nestjs/config';
 
 @Resolver()
 export class AuthenticationResolver {
-  constructor(private emailService: EmailService) {}
+  constructor(
+    private emailService: EmailService,
+    private readonly configService: ConfigService
+    ) {}
 
   @UseGuards(AuthGuard)
   @Query(() => User, { nullable: true })
@@ -41,10 +45,10 @@ export class AuthenticationResolver {
       return null;
     }
 
+    const tokenSecret = this.configService.get<string>('ACCESS_TOKEN_SECRET');
     const accessToken = sign(
       { userId: user.id },
-      //FIXME nestjs does not expose envs this way
-      process.env.ACCESS_TOKEN_SECRET,
+      tokenSecret,
     );
 
     return accessToken;
@@ -85,10 +89,10 @@ export class AuthenticationResolver {
     });
     await joinUserInAppNotification.save();
 
+    const tokenSecret = this.configService.get<string>('ACCESS_TOKEN_SECRET');
     const accessToken = sign(
       { userId: user.id },
-      //FIXME nestjs does not expose envs this way
-      process.env.ACCESS_TOKEN_SECRET,
+      tokenSecret
     );
 
     return accessToken;
