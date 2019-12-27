@@ -25,6 +25,7 @@
     "@capacitor/cli": "1.0.0",
     "@capacitor/core": "1.0.0",
     "@capacitor/ios": "^1.1.1",
+    "@ionic-native/background-geolocation": "^5.18.0",
     "@ionic-native/core": "^5.0.0",
     "@ionic-native/http": "^5.16.0",
     "@ionic-native/splash-screen": "^5.0.0",
@@ -91,7 +92,8 @@
     "plugins": {
       "cordova-plugin-stripe": {},
       "cordova-sqlite-storage": {},
-      "cordova-plugin-advanced-http": {}
+      "cordova-plugin-advanced-http": {},
+      "cordova-plugin-background-geolocation": {}
     }
   }
 }

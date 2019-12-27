@@ -8,6 +8,7 @@ import { NetworkService } from './services/network.service';
 import { ThemeService } from './services/theme.service';
 import { UpdateService } from './services/update.service';
 import { NotificationsService } from './services/notifications.service';
+import { BackgroundGeolocation, BackgroundGeolocationConfig, BackgroundGeolocationEvents, BackgroundGeolocationResponse } from '@ionic-native/background-geolocation/ngx';
 
 @Component({
   selector: 'app-root',
@@ -63,6 +64,7 @@ export class AppComponent {
     private networkService: NetworkService,
     private updateService: UpdateService,
     private notificationsService: NotificationsService,
+    private backgroundGeolocation: BackgroundGeolocation
   ) {
     this.initializeApp();
     console.log(`Is DarkMode: ${this.isDark}`);
@@ -72,6 +74,34 @@ export class AppComponent {
     this.platform.ready().then(async () => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+
+      const config: BackgroundGeolocationConfig = {
+        desiredAccuracy: 10,
+        stationaryRadius: 20,
+        distanceFilter: 30,
+        debug: true, //  enable this hear sounds for background-geolocation life-cycle.
+        stopOnTerminate: false, // enable this to clear background location settings when the app terminates
+      };
+
+      this.backgroundGeolocation.configure(config)
+      .then(() => {
+
+      this.backgroundGeolocation.on(BackgroundGeolocationEvents.location).subscribe((location: BackgroundGeolocationResponse) => {
+        console.log(location);
+
+        // IMPORTANT:  You must execute the finish method here to inform the native plugin that you're finished,
+        // and the background-task may be completed.  You must do this regardless if your operations are successful or not.
+        // IF YOU DON'T, ios will CRASH YOUR APP for spending too much time in the background.
+        this.backgroundGeolocation.finish(); // FOR IOS ONLY
+      });
+
+      });
+
+      // start recording location
+      this.backgroundGeolocation.start();
+
+      // If you wish to turn OFF background-tracking, call the #stop method.
+      // this.backgroundGeolocation.stop();
 
       //THIS SHOULD BE DONE CONDITIONALLY BY PLATFORM AND CONSOLIDATED INTO THE NOTIFICATIONS SERVICE
       //FOR iOS & ANDROID
