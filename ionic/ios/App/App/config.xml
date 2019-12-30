@@ -2,8 +2,19 @@
   <widget version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <access origin="*" />
   
+  <feature name="BackgroundGeolocation">
+    <param name="ios-package" value="CDVBackgroundGeolocation"/>
+  </feature>
+
+
   <feature name="CordovaHttpPlugin">
     <param name="ios-package" value="CordovaHttpPlugin"/>
+  </feature>
+
+
+  <feature name="BackgroundFetch">
+    <param name="ios-package" value="CDVBackgroundFetch"/>
+    <param name="onload" value="true"/>
   </feature>
 
 

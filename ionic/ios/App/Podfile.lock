@@ -2,8 +2,14 @@ PODS:
   - Capacitor (1.1.1):
     - CapacitorCordova (= 1.1.1)
   - CapacitorCordova (1.1.1)
+  - CocoaLumberjack (3.5.3):
+    - CocoaLumberjack/Core (= 3.5.3)
+  - CocoaLumberjack/Core (3.5.3)
   - CordovaPlugins (1.0.0):
     - CapacitorCordova
+  - CordovaPluginsStatic (1.0.0):
+    - CapacitorCordova
+    - CocoaLumberjack (~> 3.5.0)
   - Firebase/CoreOnly (6.5.0):
     - FirebaseCore (= 6.1.0)
   - Firebase/Messaging (6.5.0):
@@ -48,10 +54,12 @@ DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
   - CordovaPlugins (from `../capacitor-cordova-ios-plugins`)
+  - CordovaPluginsStatic (from `../capacitor-cordova-ios-plugins`)
   - Firebase/Messaging
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - CocoaLumberjack
     - Firebase
     - FirebaseAnalyticsInterop
     - FirebaseCore
@@ -67,11 +75,15 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/ios"
   CordovaPlugins:
     :path: "../capacitor-cordova-ios-plugins"
+  CordovaPluginsStatic:
+    :path: "../capacitor-cordova-ios-plugins"
 
 SPEC CHECKSUMS:
   Capacitor: f245413edff86ebf3d18bf76cadaee4be58b4a04
   CapacitorCordova: 25811fd90c0ea23ea135a42a217d1918873fa566
-  CordovaPlugins: 05e1155089bd76ef64f6d4c4ca288699e7cd35a0
+  CocoaLumberjack: 2f44e60eb91c176d471fdba43b9e3eae6a721947
+  CordovaPlugins: 877d1b0949760ece99a32384c8f54cfa11d8c39a
+  CordovaPluginsStatic: de7c386e657ccb17b4444fb889b2194df2c1b159
   Firebase: dedc9e48ea3f3649ad5f6b982f8a0c73508a14b5
   FirebaseAnalyticsInterop: efbe45c8385ec626e29f9525e5ebd38520dfb6c1
   FirebaseCore: aecf02fb2274ec361b9bebeac112f5daa18273bd
@@ -80,6 +92,6 @@ SPEC CHECKSUMS:
   GoogleUtilities: d2b0e277a95962e09bb27f5cd42f5f0b6a506c7d
   Protobuf: 1097ca58584c8d9be81bfbf2c5ff5975648dd87a
 
-PODFILE CHECKSUM: ee7350d48deb660449b2d87361ee3876b7cb1c46
+PODFILE CHECKSUM: 51e7354ac69647e24bc574a1679da22df9dcda8b
 
 COCOAPODS: 1.7.5
