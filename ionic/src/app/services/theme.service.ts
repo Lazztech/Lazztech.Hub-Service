@@ -1,6 +1,11 @@
 import { Injectable, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { Storage } from '@ionic/storage';
+import {
+  Plugins,
+  StatusBarStyle,
+} from '@capacitor/core';
+const { StatusBar } = Plugins;
 
 @Injectable({
   providedIn: 'root'
@@ -129,11 +134,17 @@ export class ThemeService {
 
   async setLight() {
     this.setGlobalCSS(this.lightTheme);
+    StatusBar.setStyle({
+        style: StatusBarStyle.Light
+    });
     await this.storage.set('theme', this.lightTheme); // <--- SAVE THEME HERE
   }
 
   async setDark() {
     this.setGlobalCSS(this.darkTheme);
+    StatusBar.setStyle({
+      style: StatusBarStyle.Dark
+    });
     await this.storage.set('theme', this.darkTheme); // <--- SAVE THEME HERE
   }
 

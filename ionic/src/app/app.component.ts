@@ -1,6 +1,12 @@
 import { Component } from '@angular/core';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
+// import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+// import { StatusBar } from '@ionic-native/status-bar/ngx';
+import {
+  Plugins,
+  StatusBarStyle,
+} from '@capacitor/core';
+const { StatusBar } = Plugins;
+const { SplashScreen } = Plugins
 import { NavController, Platform } from '@ionic/angular';
 import { AlertService } from './services/alert.service';
 import { AuthService } from './services/auth.service';
@@ -49,7 +55,7 @@ export class AppComponent {
     //   title: 'People',
     //   url: '/people',
     //   icon: 'person'
-    // },   
+    // },
     {
       title: 'Settings',
       url: '/tabs/profile',
@@ -69,8 +75,8 @@ export class AppComponent {
 
   constructor(
     private platform: Platform,
-    private splashScreen: SplashScreen,
-    private statusBar: StatusBar,
+    // private splashScreen: SplashScreen,
+    // private statusBar: StatusBar,
     private authService: AuthService,
     private navCtrl: NavController,
     private alertService: AlertService,
@@ -85,8 +91,11 @@ export class AppComponent {
 
   async initializeApp() {
     this.platform.ready().then(async () => {
-      this.statusBar.styleDefault();
-      this.splashScreen.hide();
+      StatusBar.setStyle({
+        style: StatusBarStyle.Dark
+      });
+      // this.splashScreen.hide();
+      SplashScreen.hide();
 
       this.configureBackgroundGeolocation();
       //THIS SHOULD BE DONE CONDITIONALLY BY PLATFORM AND CONSOLIDATED INTO THE NOTIFICATIONS SERVICE
