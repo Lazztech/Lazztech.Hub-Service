@@ -8,6 +8,21 @@ import { NetworkService } from './services/network.service';
 import { ThemeService } from './services/theme.service';
 import { UpdateService } from './services/update.service';
 import { NotificationsService } from './services/notifications.service';
+import BackgroundGeolocation, {
+  State,
+  Config,
+  Location,
+  LocationError,
+  Geofence,
+  HttpEvent,
+  MotionActivityEvent,
+  ProviderChangeEvent,
+  MotionChangeEvent,
+  GeofenceEvent,
+  GeofencesChangeEvent,
+  HeartbeatEvent,
+  ConnectivityChangeEvent
+} from "cordova-background-geolocation-lt";
 
 @Component({
   selector: 'app-root',
@@ -73,6 +88,7 @@ export class AppComponent {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
 
+      this.configureBackgroundGeolocation();
       //THIS SHOULD BE DONE CONDITIONALLY BY PLATFORM AND CONSOLIDATED INTO THE NOTIFICATIONS SERVICE
       //FOR iOS & ANDROID
       await this.notificationsService.setupPushForAllPlatforms();
@@ -90,6 +106,44 @@ export class AppComponent {
       });
 
       this.authService.getToken();
+    });
+  }
+
+  configureBackgroundGeolocation() {
+    // 1.  Listen to events.
+    BackgroundGeolocation.onLocation(location => {
+      console.log('[location] - ', location);
+    });
+
+    BackgroundGeolocation.onMotionChange(event => {
+      console.log('[motionchange] - ', event.isMoving, event.location);
+    });
+
+    BackgroundGeolocation.onHttp(response => {
+      console.log('[http] - ', response.success, response.status, response.responseText);
+    });
+
+    BackgroundGeolocation.onProviderChange(event => {
+      console.log('[providerchange] - ', event.enabled, event.status, event.gps);
+    });
+
+    // 2.  Configure the plugin with #ready
+    BackgroundGeolocation.ready({
+      reset: true,
+      debug: true,
+      logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
+      desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
+      distanceFilter: 10,
+      url: 'http://my.server.com/locations',
+      autoSync: true,
+      stopOnTerminate: false,
+      startOnBoot: true
+    }, (state) => {
+      console.log('[ready] BackgroundGeolocation is ready to use');
+      if (!state.enabled) {
+        // 3.  Start tracking.
+        BackgroundGeolocation.start();
+      }
     });
   }
 
