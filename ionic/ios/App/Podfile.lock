@@ -1,13 +1,13 @@
 PODS:
-  - Capacitor (1.1.1):
-    - CapacitorCordova (= 1.1.1)
-  - CapacitorCordova (1.1.1)
+  - Capacitor (1.4.0):
+    - CapacitorCordova (= 1.4.0)
+  - CapacitorCordova (1.4.0)
   - CocoaLumberjack (3.5.3):
     - CocoaLumberjack/Core (= 3.5.3)
   - CocoaLumberjack/Core (3.5.3)
-  - CordovaPlugins (1.0.0):
+  - CordovaPlugins (1.4.0):
     - CapacitorCordova
-  - CordovaPluginsStatic (1.0.0):
+  - CordovaPluginsStatic (1.4.0):
     - CapacitorCordova
     - CocoaLumberjack (~> 3.5.0)
   - Firebase/CoreOnly (6.5.0):
@@ -79,11 +79,11 @@ EXTERNAL SOURCES:
     :path: "../capacitor-cordova-ios-plugins"
 
 SPEC CHECKSUMS:
-  Capacitor: f245413edff86ebf3d18bf76cadaee4be58b4a04
-  CapacitorCordova: 25811fd90c0ea23ea135a42a217d1918873fa566
+  Capacitor: e548fe61e71fa160367a36387f54483647ca20f6
+  CapacitorCordova: 17c1ed13e5303aa5153fb405adb4196cc56b40d5
   CocoaLumberjack: 2f44e60eb91c176d471fdba43b9e3eae6a721947
-  CordovaPlugins: 877d1b0949760ece99a32384c8f54cfa11d8c39a
-  CordovaPluginsStatic: de7c386e657ccb17b4444fb889b2194df2c1b159
+  CordovaPlugins: 22760154a89903a2fe57a1ce18a6f266b6fd0c79
+  CordovaPluginsStatic: 889597a2adea6743f46df302e59366e34466fd8c
   Firebase: dedc9e48ea3f3649ad5f6b982f8a0c73508a14b5
   FirebaseAnalyticsInterop: efbe45c8385ec626e29f9525e5ebd38520dfb6c1
   FirebaseCore: aecf02fb2274ec361b9bebeac112f5daa18273bd

@@ -92,7 +92,7 @@ export class AppComponent {
   async initializeApp() {
     this.platform.ready().then(async () => {
       StatusBar.setStyle({
-        style: StatusBarStyle.Dark
+        style: StatusBarStyle.Light
       });
       // this.splashScreen.hide();
       SplashScreen.hide();
