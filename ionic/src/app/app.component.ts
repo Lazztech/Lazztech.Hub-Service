@@ -136,7 +136,7 @@ export class AppComponent {
       distanceFilter: 10,
       url: 'http://my.server.com/locations',
       autoSync: true,
-      stopOnTerminate: false,
+      stopOnTerminate: true,
       startOnBoot: true
     }, (state) => {
       console.log('[ready] BackgroundGeolocation is ready to use');
