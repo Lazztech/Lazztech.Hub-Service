@@ -29,6 +29,7 @@ import BackgroundGeolocation, {
   HeartbeatEvent,
   ConnectivityChangeEvent
 } from "cordova-background-geolocation-lt";
+import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
 
 @Component({
   selector: 'app-root',
@@ -84,6 +85,7 @@ export class AppComponent {
     private networkService: NetworkService,
     private updateService: UpdateService,
     private notificationsService: NotificationsService,
+    private faio: FingerprintAIO
   ) {
     this.initializeApp();
     console.log(`Is DarkMode: ${this.isDark}`);
@@ -115,6 +117,13 @@ export class AppComponent {
       });
 
       this.authService.getToken();
+
+      //FIXME this may need more thought
+      this.platform.pause.subscribe(async () => {
+        await this.faio.show({
+          subtitle: "authorize"
+        })
+      })
     });
   }
 

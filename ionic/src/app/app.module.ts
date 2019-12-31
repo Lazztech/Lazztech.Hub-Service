@@ -25,6 +25,7 @@ import { NativeHttpModule, NativeHttpBackend, NativeHttpFallback } from 'ionic-n
 
 import { ReactiveFormsModule } from '@angular/forms';
 import BackgroundGeolocation from 'cordova-background-geolocation-lt';
+import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -46,7 +47,8 @@ import BackgroundGeolocation from 'cordova-background-geolocation-lt';
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     {provide: HttpBackend, useClass: NativeHttpFallback, deps: [Platform, NativeHttpBackend, HttpXhrBackend]},
-    BackgroundGeolocation
+    BackgroundGeolocation,
+    FingerprintAIO
   ],
   bootstrap: [AppComponent]
 })
