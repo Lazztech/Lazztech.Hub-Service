@@ -93,8 +93,13 @@ export class AppComponent {
 
   async initializeApp() {
     this.platform.ready().then(async () => {
+
+      console.log(`Is DarkMode: ${this.isDark}`);
+      this.isDark = await this.themeService.isDark();
+      console.log(`Is DarkMode: ${this.isDark}`);
+
       StatusBar.setStyle({
-        style: StatusBarStyle.Light
+        style: this.isDark ? StatusBarStyle.Dark : StatusBarStyle.Light
       });
       // this.splashScreen.hide();
       SplashScreen.hide();
@@ -106,10 +111,6 @@ export class AppComponent {
 
       this.updateService.checkForUpdate();
 
-      console.log(`Is DarkMode: ${this.isDark}`);
-      this.isDark = await this.themeService.isDark();
-      console.log(`Is DarkMode: ${this.isDark}`);
-
       this.connected = await this.networkService.isConnected();
       this.networkService.handler = this.networkService.network.addListener('networkStatusChange', async (status) => {
         console.log("Network status changed", status);
@@ -119,7 +120,7 @@ export class AppComponent {
       this.authService.getToken();
 
       //FIXME this may need more thought
-      this.platform.pause.subscribe(async () => {
+      this.platform.resume.subscribe(async () => {
         await this.faio.show({
           subtitle: "authorize"
         })
