@@ -39,6 +39,7 @@ type JoinUserHub {
   hub: Hub!
   isOwner: Boolean!
   starred: Boolean!
+  isPresent: Boolean!
 }
 
 type JoinUserInAppNotifications {
@@ -82,6 +83,8 @@ type Mutation {
   setHubStarred(hubId: Int!): Boolean!
   setHubNotStarred(hubId: Int!): Boolean!
   updateHubPhoto(image: String!, id: Int!): Boolean!
+  enteredHubGeofence(hubId: Int!): Boolean!
+  exitedHubGeofence(hubId: Int!): Boolean!
   addUserFcmNotificationToken(token: String!): Boolean!
 }
 

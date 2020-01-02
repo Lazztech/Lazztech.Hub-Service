@@ -180,7 +180,7 @@ export class HubResolver {
   public async joinHub(
     @UserId() userId,
     @Args({ name: 'id', type: () => Int }) id: number,
-  ) {
+  ): Promise<boolean> {
     //FIXME: Finish implementing check that user is hub owner.
 
     let joinUserHub = await JoinUserHub.create({
@@ -259,6 +259,48 @@ export class HubResolver {
     hub.image = imageUrl;
 
     hub = await hub.save();
+    return true;
+  }
+
+  @UseGuards(AuthGuard)
+  @Mutation(() =>Boolean)
+  public async enteredHubGeofence(
+    @UserId() userId,
+    @Args({name: 'hubId', type: () => Int}) hubId: number
+  ): Promise<boolean> {
+
+    let hubRelationship = await JoinUserHub.findOne({
+      userId,
+      hubId
+    });
+
+    if(!hubRelationship)
+      throw Error(`no corresponding hub relationship found for userId: ${userId} & hubId: ${hubId}`)
+
+    hubRelationship.isPresent = true;
+    hubRelationship = await hubRelationship.save();
+
+    return true;
+  }
+
+  @UseGuards(AuthGuard)
+  @Mutation(() =>Boolean)
+  public async exitedHubGeofence(
+    @UserId() userId,
+    @Args({name: 'hubId', type: () => Int}) hubId: number
+  ): Promise<boolean> {
+
+    let hubRelationship = await JoinUserHub.findOne({
+      userId,
+      hubId
+    });
+
+    if(!hubRelationship)
+      throw Error(`no corresponding hub relationship found for userId: ${userId} & hubId: ${hubId}`)
+
+    hubRelationship.isPresent = false;
+    hubRelationship = await hubRelationship.save();
+
     return true;
   }
 }

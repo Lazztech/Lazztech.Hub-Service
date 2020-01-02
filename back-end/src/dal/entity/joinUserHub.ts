@@ -49,4 +49,11 @@ export class JoinUserHub extends BaseEntity {
   @Field()
   @Column({ default: false })
   public starred: boolean;
+
+  /**
+   * Boolean value for if user is presently at the hub.
+   */
+  @Field()
+  @Column({ default: false })
+  public isPresent: boolean;
 }
