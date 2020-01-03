@@ -46,6 +46,8 @@ export class HubService {
           id
           name
           image
+          latitude
+          longitude
           owners {
             id
             firstName
@@ -301,5 +303,31 @@ export class HubService {
     console.log(result);
     const response = result.data.setHubNotStarred;
     return response;
+  }
+
+  async enteredHubGeofence(hubId: number) {
+    const result = await this.apollo.mutate({
+      mutation: gql`
+      mutation {
+        enteredHubGeofence(hubId: ${hubId})
+      }
+      `
+    }).toPromise();
+    
+    console.log(`enteredHubGeofence hubId ${hubId} returned ${result}`);
+    return result;
+  }
+
+  async exitedHubGeofence(hubId: number) {
+    const result = await this.apollo.mutate({
+      mutation: gql`
+      mutation {
+        exitedHubGeofence(hubId: ${hubId})
+      }
+      `
+    }).toPromise();
+    
+    console.log(`exitedHubGeofence hubId ${hubId} returned ${result}`);
+    return result;
   }
 }

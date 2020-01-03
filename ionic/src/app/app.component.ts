@@ -14,22 +14,8 @@ import { NetworkService } from './services/network.service';
 import { ThemeService } from './services/theme.service';
 import { UpdateService } from './services/update.service';
 import { NotificationsService } from './services/notifications.service';
-import BackgroundGeolocation, {
-  State,
-  Config,
-  Location,
-  LocationError,
-  Geofence,
-  HttpEvent,
-  MotionActivityEvent,
-  ProviderChangeEvent,
-  MotionChangeEvent,
-  GeofenceEvent,
-  GeofencesChangeEvent,
-  HeartbeatEvent,
-  ConnectivityChangeEvent
-} from "cordova-background-geolocation-lt";
 import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
+import { GeofenceService } from './services/geofence.service';
 
 @Component({
   selector: 'app-root',
@@ -37,26 +23,6 @@ import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
 })
 export class AppComponent {
   public appPages = [
-    // {
-    //   title: 'Home',
-    //   url: '/home',
-    //   icon: 'home'
-    // },
-    // {
-    //   title: 'Notifications',
-    //   url: '/notifications',
-    //   icon: 'notifications'
-    // },
-    // {
-    //   title: 'Hubs',
-    //   url: '/hubs',
-    //   icon: 'cube'
-    // },
-    // {
-    //   title: 'People',
-    //   url: '/people',
-    //   icon: 'person'
-    // },
     {
       title: 'Settings',
       url: '/tabs/profile',
@@ -85,7 +51,8 @@ export class AppComponent {
     private networkService: NetworkService,
     private updateService: UpdateService,
     private notificationsService: NotificationsService,
-    private faio: FingerprintAIO
+    private faio: FingerprintAIO,
+    private geofenceService: GeofenceService
   ) {
     this.initializeApp();
     console.log(`Is DarkMode: ${this.isDark}`);
@@ -104,7 +71,6 @@ export class AppComponent {
       // this.splashScreen.hide();
       SplashScreen.hide();
 
-      this.configureBackgroundGeolocation();
       //THIS SHOULD BE DONE CONDITIONALLY BY PLATFORM AND CONSOLIDATED INTO THE NOTIFICATIONS SERVICE
       //FOR iOS & ANDROID
       await this.notificationsService.setupPushForAllPlatforms();
@@ -119,52 +85,19 @@ export class AppComponent {
 
       this.authService.getToken();
 
+      await this.geofenceService.configureBackgroundGeolocation();
+      await this.geofenceService.refreshHubGeofences();
+
       //FIXME this may need more thought
-      this.platform.resume.subscribe(async () => {
-        await this.faio.show({
-          subtitle: "authorize"
-        })
-      })
+      // this.platform.resume.subscribe(async () => {
+      //   await this.faio.show({
+      //     subtitle: "authorize"
+      //   })
+      // })
     });
   }
 
-  configureBackgroundGeolocation() {
-    // 1.  Listen to events.
-    BackgroundGeolocation.onLocation(location => {
-      console.log('[location] - ', location);
-    });
-
-    BackgroundGeolocation.onMotionChange(event => {
-      console.log('[motionchange] - ', event.isMoving, event.location);
-    });
-
-    BackgroundGeolocation.onHttp(response => {
-      console.log('[http] - ', response.success, response.status, response.responseText);
-    });
-
-    BackgroundGeolocation.onProviderChange(event => {
-      console.log('[providerchange] - ', event.enabled, event.status, event.gps);
-    });
-
-    // 2.  Configure the plugin with #ready
-    BackgroundGeolocation.ready({
-      reset: true,
-      debug: true,
-      logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
-      desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
-      distanceFilter: 10,
-      url: 'http://my.server.com/locations',
-      autoSync: true,
-      stopOnTerminate: true,
-      startOnBoot: true
-    }, (state) => {
-      console.log('[ready] BackgroundGeolocation is ready to use');
-      if (!state.enabled) {
-        // 3.  Start tracking.
-        BackgroundGeolocation.start();
-      }
-    });
-  }
+  
 
   async logout() {
     await this.authService.logout();
