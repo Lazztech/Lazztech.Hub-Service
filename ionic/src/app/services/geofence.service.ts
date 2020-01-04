@@ -54,10 +54,9 @@ export class GeofenceService {
 
   async refreshHubGeofences() {
     await this.removeAllGeofences();
-    //FIXME this should be for all hubs that the user has a relationship with.
-    const hubs = await this.hubService.ownedHubs();
-    for (let index = 0; index < hubs.length; index++) {
-      const element = hubs[index];
+    const userHubs = await this.hubService.usersHubs();
+    for (let index = 0; index < userHubs.length; index++) {
+      const element = userHubs[index].hub;
       await this.addGeofence({
         identifier: JSON.stringify(element),
         latitude: element.latitude,
