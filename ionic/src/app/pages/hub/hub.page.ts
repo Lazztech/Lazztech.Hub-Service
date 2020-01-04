@@ -1,12 +1,13 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { Plugins, CameraResultType, CameraSource } from '@capacitor/core';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { HubService } from 'src/app/services/hub.service';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { ActionSheetController, NavController, Platform } from '@ionic/angular';
-import { CameraService } from 'src/app/services/camera.service';
 import { Subscription } from 'rxjs';
+import { CameraService } from 'src/app/services/camera.service';
+import { HubService } from 'src/app/services/hub.service';
 import { LocationService } from 'src/app/services/location.service';
+import { ActionSheetButton } from '@ionic/core'; 
+import { ActionSheetOption, ActionSheetOptions } from '@capacitor/core';
 
 @Component({
   selector: 'app-hub',
@@ -69,10 +70,22 @@ export class HubPage implements OnInit, OnDestroy {
   }
 
   async presentActionSheet() {
+    const editHubButton = (this.userHub.isOwner)
+    ? {
+      text: 'Edit',
+      // icon: 'share',
+      handler: () => {
+        this.navCtrl.navigateForward('edit-hub/'+ this.id);
+        console.log('Edit clicked');
+      },
+    }
+    : null ;
+
     const actionSheet = await this.actionSheetController.create({
       // header: 'Albums',
       buttons: [
         {
+          //TODO remove this as it's too easy to delete hub
         text: 'Delete',
         role: 'destructive',
         // icon: 'trash',
@@ -91,15 +104,7 @@ export class HubPage implements OnInit, OnDestroy {
           console.log('Share clicked');
         }
       },
-      {
-        //TODO should only appear if the user is an owner
-        text: 'Edit',
-        // icon: 'share',
-        handler: () => {
-          this.navCtrl.navigateForward('edit-hub/'+ this.id);
-          console.log('Edit clicked');
-        }
-      }, 
+        editHubButton, 
       {
         text: 'Take Picture',
         // icon: 'arrow-dropright-circle',
@@ -162,7 +167,7 @@ export class HubPage implements OnInit, OnDestroy {
           console.log('Cancel clicked');
         }
       }
-    ]
+    ].filter((item) => item !== null)
     });
     await actionSheet.present();
   }
