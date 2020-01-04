@@ -25,6 +25,7 @@ const routes: Routes = [
   { path: 'hub', loadChildren: './pages/hub/hub.module#HubPageModule', canActivate: [AuthGuard] },
   { path: 'add-hub', loadChildren: './pages/add-hub/add-hub.module#AddHubPageModule', canActivate: [AuthGuard] },
   { path: 'join-hub', loadChildren: './pages/join-hub/join-hub.module#JoinHubPageModule', canActivate: [AuthGuard] },
+  { path: 'edit-hub', loadChildren: './pages/hub/edit-hub/edit-hub.module#EditHubPageModule' },
 ];
 
 @NgModule({

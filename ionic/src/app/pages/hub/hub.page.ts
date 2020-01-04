@@ -34,7 +34,7 @@ export class HubPage implements OnInit, OnDestroy {
     public cameraService: CameraService,
     private platform: Platform,
     private changeRef: ChangeDetectorRef,
-    private locationService: LocationService
+    private locationService: LocationService,
   ) { }
 
   ngOnInit() {
@@ -96,7 +96,8 @@ export class HubPage implements OnInit, OnDestroy {
         text: 'Edit',
         // icon: 'share',
         handler: () => {
-          console.log('Share clicked');
+          this.navCtrl.navigateForward('edit-hub/'+ this.id);
+          console.log('Edit clicked');
         }
       }, 
       {
