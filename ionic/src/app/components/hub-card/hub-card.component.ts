@@ -24,6 +24,9 @@ export class HubCardComponent implements OnDestroy, OnChanges {
   @Input()
   starred: boolean = false;
 
+  @Input()
+  isOwner: boolean = false;
+
   subscription: Subscription;
 
   private distanceInMeters: number;
