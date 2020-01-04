@@ -62,7 +62,7 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy {
   async doRefresh(event) {
     console.log('Begin async operation');
     this.loading = true;
-    this.userHubs = await this.hubService.usersHubs();
+    this.userHubs = await this.hubService.usersHubs("network-only");
     this.loading = false;
     event.target.complete();
   }

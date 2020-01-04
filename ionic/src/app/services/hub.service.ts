@@ -73,7 +73,7 @@ export class HubService {
     return response;
   }
 
-  async hub(id: number) {
+  async hub(id: number, fetchPolicy: FetchPolicy = "network-only") {
     const result = await this.apollo.query({
       query: gql`
       query {
@@ -99,7 +99,7 @@ export class HubService {
         }
       }
       `,
-      fetchPolicy: "network-only"
+      fetchPolicy
     }).toPromise();
 
     console.log(result);
@@ -114,7 +114,7 @@ export class HubService {
     return response;
   }
 
-  async getHubByQRImage(qrImageB64: string): Promise<boolean> {
+  async getHubByQRImage(qrImageB64: string, fetchPolicy: FetchPolicy = "network-only"): Promise<boolean> {
     const result = await this.apollo.query({
       query: gql`
       query {
@@ -137,7 +137,7 @@ export class HubService {
         }
       }
       `,
-      fetchPolicy: "network-only"
+      fetchPolicy
     }).toPromise();
 
     console.log(result);

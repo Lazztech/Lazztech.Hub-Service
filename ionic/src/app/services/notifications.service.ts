@@ -12,6 +12,7 @@ import {
   PushNotificationActionPerformed } from '@capacitor/core';
 import { Platform } from '@ionic/angular';
 import { InAppNotification } from '../models/inAppNotification';
+import { FetchPolicy } from 'apollo-client';
 const { LocalNotifications } = Plugins;
 
 const { PushNotifications } = Plugins;
@@ -66,7 +67,7 @@ export class NotificationsService {
     });
   }
 
-  async getInAppNotifications(): Promise<InAppNotification[]> {
+  async getInAppNotifications(fetchPolicy: FetchPolicy = "network-only"): Promise<InAppNotification[]> {
     const result = await this.apollo.query({
       query: gql`
         query {
@@ -79,7 +80,7 @@ export class NotificationsService {
           }
         }
       `,
-      fetchPolicy: "no-cache"
+      fetchPolicy
     }).toPromise();
 
     console.log(result);

@@ -20,20 +20,21 @@ export class NotificationsPage implements OnInit {
   ngOnInit() {
   }
 
-  ionViewDidEnter() {
-    this.loadNotifications();
-  }
-
-  async loadNotifications() {
+  async ionViewDidEnter() {
     this.loading = true;
     this.inAppNotifications = await this.notificationsService.getInAppNotifications();
     this.loading = false;
   }
 
+  async loadNotifications() {
+
+  }
+
   async doRefresh(event) {
     console.log('Begin async operation');
     try {
-      await this.loadNotifications();
+      this.loading = true;
+      this.inAppNotifications = await this.notificationsService.getInAppNotifications("network-only");
       event.target.complete();
     } catch (error) {
       event.target.complete();
