@@ -62,6 +62,30 @@ export class HubResolver {
     return userHubRelationship.hub;
   }
 
+  @UseGuards(AuthGuard)
+  @Query(() => [Hub])
+  public async searchHubByName(
+    @UserId() userId,
+    @Args({ name: 'search', type: () => String}) search: string
+  ): Promise<Hub[]> {
+    const userHubRelationship = await JoinUserHub.find({
+      where: {
+        userId: userId,
+      },
+      relations: ['hub'],
+    });
+    search = search.toLowerCase();
+    let results: Hub[] = [];
+    for (let index = 0; index < userHubRelationship.length; index++) {
+      const element = userHubRelationship[index];
+      if (element.hub.name.toLowerCase().includes(search)) {
+        results.push(element.hub);
+      }
+    }
+
+    return results;
+  }
+
   //@Authorized()
   @UseGuards(AuthGuard)
   @Query(() => [Hub])
