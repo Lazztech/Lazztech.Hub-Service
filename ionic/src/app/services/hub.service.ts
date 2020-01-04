@@ -38,6 +38,41 @@ export class HubService {
     return response;
   }
 
+  async usersHubs() {
+    const result = await this.apollo.query({
+      query: gql`
+      query {
+        usersHubs{
+          userId
+          hubId
+          isOwner
+          starred
+          isPresent
+          hub {
+            id
+            name
+            image
+            latitude
+            longitude
+          }
+        }
+      }
+      `,
+      fetchPolicy: "network-only"
+    }).toPromise();
+
+    const response = result.data["usersHubs"];
+
+    if (response) {
+      //FIXME
+      console.log("usersHubs successful.");
+    } else {
+      console.log("usersHubs failure");
+    }
+
+    return response;
+  }
+
   async ownedHubs() {
     const result = await this.apollo.query({
       query: gql`
@@ -70,6 +105,7 @@ export class HubService {
     const response = result.data["ownedHubs"];
 
     if (response) {
+      //FIXME
       console.log("createHub successful.");
     } else {
       console.log("createHub failure");

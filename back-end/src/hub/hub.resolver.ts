@@ -63,6 +63,20 @@ export class HubResolver {
   }
 
   @UseGuards(AuthGuard)
+  @Query(() => [JoinUserHub])
+  public async usersHubs(
+    @UserId() userId
+  ): Promise<JoinUserHub[]> {
+    const userHubRelationships = await JoinUserHub.find({
+      where: {
+        userId: userId,
+      },
+      relations: ['hub'],
+    });
+    return userHubRelationships;
+  }
+
+  @UseGuards(AuthGuard)
   @Query(() => [Hub])
   public async searchHubByName(
     @UserId() userId,

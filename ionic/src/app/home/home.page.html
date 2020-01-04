@@ -54,15 +54,15 @@
 
       <ion-list>
           <ion-list-header>
-              <ion-text>Starred</ion-text>
+              <ion-text>Hubs</ion-text>
           </ion-list-header>
-          <div *ngFor="let hub of starredHubs">
-            <app-hub-card *ngIf="!loading" [hub]="hub" [coords]="coords" (click)="goToHubPage(hub.id)"></app-hub-card>
+          <div *ngFor="let userHub of userHubs">
+            <app-hub-card *ngIf="!loading" 
+            [hub]="userHub.hub" 
+            [coords]="coords"
+            [starred]="userHub.starred"
+            (click)="goToHubPage(userHub.hubId)"></app-hub-card>
           </div>
-
-            <ion-list-header>
-                <ion-text>Nearby</ion-text>
-            </ion-list-header>
       </ion-list>
 
       <!-- <ion-grid>

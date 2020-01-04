@@ -15,10 +15,14 @@ export class HubCardComponent implements OnDestroy, OnChanges {
   
   atHub: boolean = false;
 
+  //FIXME is this used?
   coords$: Observable<{longitude: number, latitude: number}>;
 
   @Input()
   coords: {longitude: number, latitude: number};
+
+  @Input()
+  starred: boolean = false;
 
   subscription: Subscription;
 

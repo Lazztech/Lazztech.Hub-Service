@@ -34,6 +34,7 @@ export class Hub extends BaseEntity {
   @Column({ type: 'float', nullable: true })
   public longitude: number;
 
+  @Field(() => [JoinUserHub], { nullable: true })
   @OneToMany(
     type => JoinUserHub,
     joinUserHub => joinUserHub.hub,

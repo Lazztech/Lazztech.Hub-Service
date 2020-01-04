@@ -20,7 +20,7 @@ const { Geolocation } = Plugins;
 export class HomePage implements OnInit, AfterViewInit, OnDestroy {
 
   loading = false;
-  starredHubs = [];
+  userHubs = [];
   user: User;
   updateReady = false;
   beforeInstall: Observable<boolean> = of(false);
@@ -43,26 +43,26 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy {
     ) { 
     this.menu.enable(true);
     this.beforeInstall = pwaInstallService.beforeInstall;
-    this.updateService.checkForUpdate();
-    if (this.updateService.swUpdate.isEnabled) {
-      this.updateService.updateAvailable = this.updateService.swUpdate.available;
-      this.updateService.swUpdate.available.subscribe(() => {
-          // if(confirm("New version available. Load New Version?")) {
-          //     window.location.reload();
-          // }
+    //FIXME this update service should be replaced
+    // this.updateService.checkForUpdate();
+    // if (this.updateService.swUpdate.isEnabled) {
+    //   this.updateService.updateAvailable = this.updateService.swUpdate.available;
+    //   this.updateService.swUpdate.available.subscribe(() => {
+    //       // if(confirm("New version available. Load New Version?")) {
+    //       //     window.location.reload();
+    //       // }
 
-          this.updateReady = true;
-      });
-    }
+    //       this.updateReady = true;
+    //   });
+    // }
 
-    pwaInstallService.showInstallBanner();
+    // pwaInstallService.showInstallBanner();
   }
 
   async doRefresh(event) {
     console.log('Begin async operation');
     this.loading = true;
-    // await this.loadOwnedHubs();
-    // await this.loadMemberOfHubs();
+    this.userHubs = await this.hubService.usersHubs();
     this.loading = false;
     event.target.complete();
   }
@@ -85,11 +85,8 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy {
       this.coords = coords;
       this.changeRef.detectChanges();
     });
-    this.starredHubs = await this.hubService.starredHubs();
+    this.userHubs = await this.hubService.usersHubs();
     this.loading = false;
-    // await this.getCurrentPosition();
-    // this.watchPosition();
-    // await this.notificationsService.localNotification();
   }
 
   async ngOnInit() {
@@ -121,10 +118,12 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy {
     this.updateService.updateToLatest();
   }
 
+  //TODO remove me
   async testPushNotification() {
     await this.notificationsService.testPushNotificationToUser();
   }
 
+  //TODO remove me
   async testLocationNotification () {
 
   }

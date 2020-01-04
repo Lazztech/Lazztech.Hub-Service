@@ -9,6 +9,7 @@ type Hub {
   image: String
   latitude: Float
   longitude: Float
+  usersConnection: [JoinUserHub!]
   owners: [User!]
   members: [User!]
   starred: Boolean
@@ -96,6 +97,7 @@ type Person {
 type Query {
   me: User
   hub(id: Int!): Hub!
+  usersHubs: [JoinUserHub!]!
   searchHubByName(search: String!): [Hub!]!
   ownedHubs: [Hub!]!
   memberOfHubs: [Hub!]!
