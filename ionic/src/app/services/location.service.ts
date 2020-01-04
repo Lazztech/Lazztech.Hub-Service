@@ -22,7 +22,7 @@ export class LocationService {
    * @param hub
    * @param distance optional param with default of 50 meters
    */
-  atHub(hub: any, coords: any, distance: number = 50) {
+  atHub(hub: any, coords: any, distance: number = 200) {
     const hubCoords = { latitude: hub.latitude, longitude: hub.longitude };
     const result = geolib.isPointWithinRadius(
       coords,
