@@ -42,7 +42,7 @@
         </ion-refresher-content>
     </ion-refresher>
 
-    <ion-searchbar></ion-searchbar>
+    <ion-searchbar (ionInput)="filterHubs($event)"></ion-searchbar>
 
       <ion-card class="welcome-card" *ngIf="!loading && userHubs.length == 0">
         <ion-card-header>

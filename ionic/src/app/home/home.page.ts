@@ -105,14 +105,18 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  //TODO remove me
   installAppPrompt() {
     this.pwaInstallService.showInstallBanner();
   }
 
+
+  //TODO remove me
   goToImage(id: number) {
     this.navCtrl.navigateRoot('image/'+ id);
   }
 
+  //TODO remove me
   update() {
     console.log('updating...');
     this.updateService.updateToLatest();
@@ -135,5 +139,18 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy {
   goToHubPage(id: number) {
     this.navCtrl.navigateForward('hub/'+ id);
   }
+
+  async filterHubs(ev:any) {
+    this.userHubs = await this.hubService.usersHubs("cache-only");
+    const val = ev.target.value;
+    if (val && val.trim() != '') {
+      this.userHubs = this.userHubs.filter(x => {
+        console.log(x.hub.name.toLowerCase())
+        return x.hub.name.toLowerCase().includes(val.toLowerCase())
+      })
+    }
+  }
+
+
   
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
+import { FetchPolicy } from 'apollo-client';
 
 @Injectable({
   providedIn: 'root'
@@ -38,7 +39,7 @@ export class HubService {
     return response;
   }
 
-  async usersHubs() {
+  async usersHubs(fetchPolicy: FetchPolicy = "network-only") {
     const result = await this.apollo.query({
       query: gql`
       query {
@@ -58,7 +59,7 @@ export class HubService {
         }
       }
       `,
-      fetchPolicy: "network-only"
+      fetchPolicy
     }).toPromise();
 
     const response = result.data["usersHubs"];
