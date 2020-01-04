@@ -6,7 +6,7 @@
         <div slot="end" href="javascript:void(0);" (click)="presentActionSheet()">
             <ion-icon size="large" name="more"></ion-icon>
         </div>
-    <ion-title *ngIf="!loading">{{hub.name}}</ion-title>
+    <ion-title *ngIf="!loading">{{userHub.hub.name}}</ion-title>
     <ion-title *ngIf="loading">Hub</ion-title>
     <ion-progress-bar *ngIf="loading" type="indeterminate"></ion-progress-bar>
   </ion-toolbar>
@@ -14,7 +14,12 @@
 
 <ion-content>
 
-    <app-hub-card *ngIf="!loading" [hub]="hub" [coords]="userCoords"></app-hub-card>
+    <app-hub-card *ngIf="!loading" 
+    [hub]="userHub.hub" 
+    [coords]="hubCoords"
+    [starred]="userHub.starred"
+    [isOwner]="userHub.isOwner">
+  </app-hub-card>
 
   <ion-card *ngIf="!loading" style="height:30%">
       <ion-card-content style="height:100%">

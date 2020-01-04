@@ -18,7 +18,7 @@ export class HubPage implements OnInit, OnDestroy {
   // image: any;
 
   loading = false;
-  hub: any;
+  userHub: any;
   id: number;
   qrContent: string;
   locationSubscription: Subscription;
@@ -55,8 +55,8 @@ export class HubPage implements OnInit, OnDestroy {
       this.changeRef.detectChanges();
     });
     const hubCoords = { 
-      latitude: this.hub.latitude,
-      longitude: this.hub.longitude
+      latitude: this.userHub.hub.latitude,
+      longitude: this.userHub.hub.longitude
     };
     this.hubCoords = hubCoords;
     console.log(this.hubCoords);
@@ -64,7 +64,8 @@ export class HubPage implements OnInit, OnDestroy {
   }
 
   async loadHub() {
-    this.hub = await this.hubService.hub(this.id);
+    this.userHub = await this.hubService.hub(this.id);
+    console.log(JSON.stringify(this.userHub));
   }
 
   async presentActionSheet() {
@@ -89,6 +90,14 @@ export class HubPage implements OnInit, OnDestroy {
         handler: () => {
           console.log('Share clicked');
         }
+      },
+      {
+        //TODO should only appear if the user is an owner
+        text: 'Edit',
+        // icon: 'share',
+        handler: () => {
+          console.log('Share clicked');
+        }
       }, 
       {
         text: 'Take Picture',
@@ -97,11 +106,11 @@ export class HubPage implements OnInit, OnDestroy {
           console.log('Take Picture clicked');
           const newImage = await this.cameraService.takePicture();
           this.loading = true;
-          const oldImage = this.hub.image;
-          this.hub.image = newImage;
+          const oldImage = this.userHub.image;
+          this.userHub.image = newImage;
           const result = await this.hubService.updateHubPhoto(this.id, newImage);
           if (!result) {
-            this.hub.image = oldImage;
+            this.userHub.image = oldImage;
           }
           this.loading = false;
         }
@@ -113,31 +122,31 @@ export class HubPage implements OnInit, OnDestroy {
           console.log('Take Picture clicked');
           const newImage = await this.cameraService.selectPicture();
           this.loading = true;
-          const oldImage = this.hub.image;
-          this.hub.image = newImage;
+          const oldImage = this.userHub.image;
+          this.userHub.image = newImage;
           const result = await this.hubService.updateHubPhoto(this.id, newImage);
           if (!result) {
-            this.hub.image = oldImage;
+            this.userHub.image = oldImage;
           }
           this.loading = false;
         }
       }, 
       {
-        text: this.hub.starred ? 'Remove Star' : 'Add Star',
+        text: this.userHub.starred ? 'Remove Star' : 'Add Star',
         // icon: 'heart',
         handler: async () => {
           let result = false;
           this.loading = true;
-          if (this.hub.starred) {
+          if (this.userHub.starred) {
             result = await this.hubService.setHubNotStarred(this.id);
-            this.hub.starred = false;
+            this.userHub.starred = false;
           } else {
             result = await this.hubService.setHubStarred(this.id);
-            this.hub.starred = true;
+            this.userHub.starred = true;
           }
 
           if (!result) {
-            this.hub.starred = !this.hub.starred;
+            this.userHub.starred = !this.userHub.starred;
           }
 
           this.loading = false;

@@ -42,13 +42,12 @@ export class HubResolver {
     return hub;
   }
 
-  //@Authorized()
   @UseGuards(AuthGuard)
-  @Query(() => Hub)
+  @Query(() => JoinUserHub)
   public async hub(
     @UserId() userId,
     @Args({ name: 'id', type: () => Int }) id: number,
-  ): Promise<Hub> {
+  ): Promise<JoinUserHub> {
     //FIXME: Need to add check that user is either a member or owner.
 
     const userHubRelationship = await JoinUserHub.findOne({
@@ -58,8 +57,7 @@ export class HubResolver {
       },
       relations: ['hub'],
     });
-    userHubRelationship.hub.starred = userHubRelationship.starred;
-    return userHubRelationship.hub;
+    return userHubRelationship;
   }
 
   @UseGuards(AuthGuard)
@@ -163,8 +161,6 @@ export class HubResolver {
     @Args({ name: 'hubId', type: () => Int }) hubId: number,
     @Args({ name: 'newName', type: () => String }) newName: string,
   ): Promise<Hub> {
-    //FIXME: Finish implementing check that user is hub owner.
-
     const joinUserHubResult = await JoinUserHub.findOne({
       where: {
         userId: userId,

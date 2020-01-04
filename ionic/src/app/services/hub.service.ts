@@ -73,28 +73,46 @@ export class HubService {
     return response;
   }
 
+  async renameHub(hubId: number, newName: string, fetchPolicy: FetchPolicy = "network-only") {
+    const result = await this.apollo.mutate({
+      mutation: gql`
+      mutation {
+        renameHub(hubId: ${hubId}, newName: ${newName}) {
+          name
+        }
+      }
+      `,
+      fetchPolicy
+    }).toPromise();
+
+    console.log(result);
+    const response = result.data.renameHub;
+
+    if (response) {
+      console.log("renameHub successful.");
+    } else {
+      console.log("renameHub failure");
+    }
+
+    return response;
+  }
+
   async hub(id: number, fetchPolicy: FetchPolicy = "network-only") {
     const result = await this.apollo.query({
       query: gql`
       query {
         hub(id: ${id}) {
-          id
-          name
-          image
+          userId
+          hubId
+          isOwner
           starred
-          latitude
-          longitude
-          owners {
+          isPresent
+          hub {
             id
-            firstName
-            lastName
-            email
-          }
-          members {
-            id
-            firstName
-            lastName
-            email
+            name
+            image
+            latitude
+            longitude
           }
         }
       }

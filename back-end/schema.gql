@@ -96,7 +96,7 @@ type Person {
 
 type Query {
   me: User
-  hub(id: Int!): Hub!
+  hub(id: Int!): JoinUserHub!
   usersHubs: [JoinUserHub!]!
   searchHubByName(search: String!): [Hub!]!
   ownedHubs: [Hub!]!
