@@ -36,7 +36,7 @@
             refreshingSpinner="dots">
         </ion-refresher-content>
     </ion-refresher>
-      <ion-card class="welcome-card">
+      <ion-card class="welcome-card" *ngIf="!loading && userHubs.length == 0">
         <ion-card-header>
             <ion-card-subtitle>Get Started</ion-card-subtitle>
         </ion-card-header>
