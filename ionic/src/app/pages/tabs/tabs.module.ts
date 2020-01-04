@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { HomePageModule } from 'src/app/home/home.module';
-import { HubsPageModule } from '../hubs/hubs.module';
 import { NotificationsPageModule } from '../notifications/notifications.module';
 import { ProfilePageModule } from '../profile/profile.module';
 import { TabsPage } from './tabs.page';
@@ -20,15 +19,6 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: '../../home/home.module#HomePageModule'
-          }
-        ]
-      },
-      {
-        path: 'hubs',
-        children: [
-          {
-            path: '',
-            loadChildren: '../hubs/hubs.module#HubsPageModule'
           }
         ]
       },
