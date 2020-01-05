@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
-import { PeopleService } from 'src/app/services/people.service';
 
 @Component({
   selector: 'app-people',
@@ -15,7 +14,6 @@ export class PeoplePage implements OnInit {
 
   constructor(
     public navCtrl: NavController,
-    private peopleService: PeopleService
   ) { }
 
   ngOnInit() {
@@ -27,7 +25,7 @@ export class PeoplePage implements OnInit {
 
   async loadPeople(){
     this.loading = true;
-    this.persons = await this.peopleService.loadAllPeople();
+    // this.persons = await this.peopleService.loadAllPeople();
     this.loading = false;
   }
 
@@ -40,10 +38,6 @@ export class PeoplePage implements OnInit {
 
   goToPersonPage(id: number) {
     this.navCtrl.navigateRoot('person/'+ id);
-  }
-
-  goToAddPersonPage() {
-    this.navCtrl.navigateRoot('add-person');
   }
 
 }
