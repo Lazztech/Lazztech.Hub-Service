@@ -34,7 +34,7 @@ export class EditHubPage implements OnInit {
     this.myForm = this.fb.group({
       hubName: ['', [
         Validators.required,
-        Validators.maxLength(10)
+        Validators.maxLength(25)
       ]]
     });
 
