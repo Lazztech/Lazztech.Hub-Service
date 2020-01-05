@@ -156,9 +156,9 @@ export class GeofenceService {
       logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
       desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
       distanceFilter: 10,
-      url: 'http://my.server.com/locations',
-      autoSync: true,
-      stopOnTerminate: true,
+      // url: 'http://my.server.com/locations',
+      // autoSync: true,
+      stopOnTerminate: false,
       startOnBoot: true
     }, (state) => {
       console.log('[ready] BackgroundGeolocation is ready to use');
