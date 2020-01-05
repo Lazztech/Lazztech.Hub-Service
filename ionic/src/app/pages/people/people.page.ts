@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
+import { HubService } from 'src/app/services/hub.service';
 
 @Component({
   selector: 'app-people',
@@ -10,34 +11,44 @@ export class PeoplePage implements OnInit {
 
   loading = false;
 
-  persons: [] = [];
+  persons = [];
 
   constructor(
     public navCtrl: NavController,
+    public hubService: HubService
   ) { }
 
   ngOnInit() {
   }
 
-  ionViewDidEnter() {
-    this.loadPeople();
-  }
-
-  async loadPeople(){
+  async ionViewDidEnter() {
     this.loading = true;
-    // this.persons = await this.peopleService.loadAllPeople();
+    this.persons = await this.hubService.usersPeople();
     this.loading = false;
   }
 
   async doRefresh(event) {
     console.log('Begin async operation');
     this.loading = true;
-    await this.loadPeople();
+    this.persons = await this.hubService.usersPeople();
     event.target.complete();
+    this.loading = false;
   }
 
   goToPersonPage(id: number) {
     this.navCtrl.navigateRoot('person/'+ id);
+  }
+
+  async filterPeople(ev:any) {
+    this.persons = await this.hubService.usersPeople("cache-only");
+    const val = ev.target.value;
+    if (val && val.trim() != '') {
+      this.persons = this.persons.filter(x => {
+        let name = x.firstName.trim().toLowerCase() + x.lastName.trim().toLowerCase();
+        console.log(name);
+        return name.includes(val.trim().toLowerCase())
+      })
+    }
   }
 
 }

@@ -73,6 +73,47 @@ export class HubResolver {
   }
 
   @UseGuards(AuthGuard)
+  @Query(() => [User])
+  public async usersPeople(
+    @UserId() userId
+  ): Promise<User[]> {
+    //TODO optimize this
+    const userHubRelationships = await JoinUserHub.find({
+      where: {
+        userId: userId,
+      },
+    });
+
+    const usersHubIds: Array<number> = [];
+    for (let index = 0; index < userHubRelationships.length; index++) {
+      const element = userHubRelationships[index];
+      usersHubIds.push(element.hubId);
+    }
+
+    let usersPeople: Array<User> = [];
+    for (let index = 0; index < usersHubIds.length; index++) {
+      const usersHubId = usersHubIds[index];
+      const userHubRelationships = await JoinUserHub.find({
+        where: {
+          hubId: usersHubId,
+        },
+        relations: ['user'],
+      });
+
+      for (let index = 0; index < userHubRelationships.length; index++) {
+        const otherUserId = userHubRelationships[index].userId;
+
+        const user = userHubRelationships[index].user;
+        if (usersPeople.find(x => x.id == otherUserId) == undefined) {
+          usersPeople.push(user);
+        }
+      }
+    }
+
+    return usersPeople;
+  }
+
+  @UseGuards(AuthGuard)
   @Query(() => [Hub])
   public async searchHubByName(
     @UserId() userId,

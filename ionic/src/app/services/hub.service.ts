@@ -73,6 +73,31 @@ export class HubService {
     return response;
   }
 
+  async usersPeople(fetchPolicy: FetchPolicy = "network-only") {
+    const result = await this.apollo.query({
+      query: gql`
+      query {
+        usersPeople {
+          id
+          firstName
+          lastName
+        }
+      }
+      `,
+      fetchPolicy
+    }).toPromise();
+
+    const response = result.data["usersPeople"];
+
+    if (response) { 
+      console.log("usersPeople successful.");
+    } else {
+      console.log("usersPeople failure");
+    }
+
+    return response;
+  }
+
   async renameHub(hubId: number, newName: string) {
     const result = await this.apollo.mutate({
       mutation: gql`
