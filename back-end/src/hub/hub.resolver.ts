@@ -48,8 +48,6 @@ export class HubResolver {
     @UserId() userId,
     @Args({ name: 'id', type: () => Int }) id: number,
   ): Promise<JoinUserHub> {
-    //FIXME: Need to add check that user is either a member or owner.
-
     const userHubRelationship = await JoinUserHub.findOne({
       where: {
         hubId: id,

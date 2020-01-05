@@ -73,16 +73,16 @@ export class HubService {
     return response;
   }
 
-  async renameHub(hubId: number, newName: string, fetchPolicy: FetchPolicy = "network-only") {
+  async renameHub(hubId: number, newName: string) {
     const result = await this.apollo.mutate({
       mutation: gql`
       mutation {
-        renameHub(hubId: ${hubId}, newName: ${newName}) {
+        renameHub(hubId: ${hubId}, newName: "${newName}") {
           name
         }
       }
       `,
-      fetchPolicy
+      // fetchPolicy
     }).toPromise();
 
     console.log(result);
