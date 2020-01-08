@@ -54,7 +54,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: '../invite/invite.module#InvitePageModule'
+            loadChildren: '../hub/invite/invite.module#InvitePageModule'
           }
         ]
       },

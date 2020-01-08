@@ -72,12 +72,23 @@ export class HubPage implements OnInit, OnDestroy {
   async presentActionSheet() {
     const editHubButton = (this.userHub.isOwner)
     ? {
-      text: 'Edit',
+      text: 'Settings',
       // icon: 'share',
       handler: () => {
         this.navCtrl.navigateForward('edit-hub/'+ this.id);
         console.log('Edit clicked');
       },
+    }
+    : null ;
+
+    const inviteButton = (this.userHub.isOwner)
+    ? {
+      text: 'Invite',
+      // icon: 'share',
+      handler: () => {
+        this.navCtrl.navigateForward('invite/'+ this.id);
+        console.log('Invite clicked');
+      }
     }
     : null ;
 
@@ -97,13 +108,7 @@ export class HubPage implements OnInit, OnDestroy {
           console.log('Delete clicked');
         }
       }, 
-      {
-        text: 'Share',
-        // icon: 'share',
-        handler: () => {
-          console.log('Share clicked');
-        }
-      },
+        inviteButton,
         editHubButton, 
       {
         text: 'Take Picture',

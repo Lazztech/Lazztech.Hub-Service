@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { AlertService } from 'src/app/services/alert.service';
-import { ProfileService } from 'src/app/services/profile.service';
+import { HubService } from 'src/app/services/hub.service';
 
 @Component({
   selector: 'app-invite',
@@ -13,18 +14,21 @@ export class InvitePage implements OnInit {
   loading = false;
 
   myForm: FormGroup;
+  id: number;
 
   get email() {
     return this.myForm.get('email');
   }
 
   constructor(
-    private profileService: ProfileService,
+    private hubService: HubService,
     private fb: FormBuilder,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private route: ActivatedRoute,
   ) { }
 
   ngOnInit() {
+    this.id = parseInt(this.route.snapshot.paramMap.get('id'));
     this.myForm = this.fb.group({
       email: ['', [
         Validators.required,
@@ -40,10 +44,10 @@ export class InvitePage implements OnInit {
 
     const formValue = this.myForm.value;    
 
-    const result = await this.profileService.inviteUser(formValue.email);
+    const result = await this.hubService.inviteUserToHub(this.id, formValue.email);
     if (result) {
       this.loading = false;
-      this.alertService.presentToast("Invite sent!");
+      this.alertService.presentToast("Invited!");
     } else {
       this.loading = false;      
       this.alertService.presentRedToast("Failed.");

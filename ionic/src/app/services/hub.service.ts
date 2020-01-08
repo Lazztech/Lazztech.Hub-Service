@@ -157,6 +157,20 @@ export class HubService {
     return response;
   }
 
+  async inviteUserToHub(hubId: number, inviteesEmail: string) {
+    const result = await this.apollo.mutate({
+      mutation: gql`
+      mutation {
+        inviteUserToHub(hubId: ${hubId}, inviteesEmail: "${inviteesEmail}")
+      }
+      `
+    }).toPromise();
+
+    console.log(result);
+    const response = result.data.inviteUserToHub;
+    return response;
+  }
+
   async getHubByQRImage(qrImageB64: string, fetchPolicy: FetchPolicy = "network-only"): Promise<boolean> {
     const result = await this.apollo.query({
       query: gql`

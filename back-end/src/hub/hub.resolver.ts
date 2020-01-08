@@ -73,6 +73,43 @@ export class HubResolver {
   }
 
   @UseGuards(AuthGuard)
+  @Mutation(() => Boolean)
+  public async inviteUserToHub(
+    @UserId() userId,
+    @Args({ name: 'hubId', type: () => Int }) hubId: number,
+    @Args({ name: 'inviteesEmail', type: () => String }) inviteesEmail: string
+  ): Promise<boolean> {
+    const userHubRelationships = await JoinUserHub.findOne({
+      where: {
+        userId: userId,
+        hubId: hubId,
+        isOwner: true,
+      },
+      relations: ['hub'],
+    });
+    const invitee = await User.findOne({
+      where: {
+        email: inviteesEmail
+      }
+    });
+    if (!invitee) {
+      //TODO safe to db table of invites as unfulfilled.
+      // send email
+      // check for pending invites when the user creates
+      // and account with that email.
+    }
+
+    let newRelationship = JoinUserHub.create({
+      userId: invitee.id,
+      hubId,
+      isOwner: false
+    });
+    newRelationship = await newRelationship.save();
+    
+    return true;
+  }
+
+  @UseGuards(AuthGuard)
   @Query(() => [User])
   public async usersPeople(
     @UserId() userId

@@ -11,6 +11,10 @@ const routes: Routes = [
   {
     path: '',
     component: InvitePage
+  },
+  {
+    path: ':id',
+    component: InvitePage
   }
 ];
 

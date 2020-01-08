@@ -1,9 +1,9 @@
 import { isNull, isNullOrUndefined } from 'util';
-
+//TODO setup nestjs joi env validation
 export function checkEnvVariables() {
-  if (isNullOrUndefined(process.env.PORT) || process.env.PORT === '') {
-    throw Error('Missing process.env.PORT');
-  }
+  // if (isNullOrUndefined(process.env.PORT) || process.env.PORT === '') {
+  //   throw Error('Missing process.env.PORT');
+  // }
 
   if (
     isNullOrUndefined(process.env.ACCESS_TOKEN_SECRET) ||

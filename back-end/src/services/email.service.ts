@@ -4,17 +4,21 @@ import * as crypto from 'crypto';
 import * as nodemailer from 'nodemailer';
 import { PasswordReset } from '../dal/entity/passwordReset';
 import { IEmailService } from './emailService.interface';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class EmailService implements IEmailService {
   private transporter: nodemailer.Transporter;
 
-  constructor() {
+  constructor(
+    private readonly configService: ConfigService
+  ) {
     this.transporter = nodemailer.createTransport({
       service: 'Gmail',
+      //TODO setup env configuration validation with joi
       auth: {
-        user: process.env.EMAIL_FROM_ADDRESS,
-        pass: process.env.EMAIL_PASSWORD,
+        user: this.configService.get<string>('EMAIL_FROM_ADDRESS'),
+        pass: this.configService.get<string>('EMAIL_PASSWORD')
       },
     });
   }
@@ -34,7 +38,7 @@ export class EmailService implements IEmailService {
     }
 
     const mailOptions: nodemailer.SendMailOptions = {
-      from: process.env.EMAIL_FROM_ADDRESS,
+      from: this.configService.get<string>('EMAIL_FROM_ADDRESS'),
       to: email,
       subject: `Password reset for ${name}!`,
       text: `Hello, ${name}, please paste in the follow to reset your password: ${pin}`,
@@ -55,8 +59,8 @@ export class EmailService implements IEmailService {
 
   public async sendErrorToFromAddress(text: string): Promise<void> {
     const mailOptions: nodemailer.SendMailOptions = {
-      from: process.env.EMAIL_FROM_ADDRESS,
-      to: process.env.EMAIL_FROM_ADDRESS,
+      from: this.configService.get<string>('EMAIL_FROM_ADDRESS'),
+      to: this.configService.get<string>('EMAIL_FROM_ADDRESS'),
       subject: 'Server Error!',
       text,
     } as nodemailer.SendMailOptions;
@@ -71,8 +75,8 @@ export class EmailService implements IEmailService {
     text: string,
   ): Promise<void> {
     const mailOptions: nodemailer.SendMailOptions = {
-      from: process.env.EMAIL_FROM_ADDRESS,
-      to: process.env.EMAIL_FROM_ADDRESS,
+      from: this.configService.get<string>('EMAIL_FROM_ADDRESS'),
+      to: this.configService.get<string>('EMAIL_FROM_ADDRESS'),
       subject,
       text,
     } as nodemailer.SendMailOptions;
@@ -85,9 +89,9 @@ export class EmailService implements IEmailService {
   public async sendInviteEmail(toAddress: string): Promise<void> {
     const mailOptions: nodemailer.SendMailOptions = {
       from: toAddress,
-      to: process.env.EMAIL_FROM_ADDRESS,
-      subject: `${process.env.APP_NAME} Invite`,
-      text: `You've been invited to register on ${process.env.APP_NAME}! Just use the email address you've received this at when you register.`,
+      to: this.configService.get<string>('EMAIL_FROM_ADDRESS'),
+      subject: `${this.configService.get<string>('APP_NAME')} Invite`,
+      text: `You've been invited to register on ${this.configService.get<string>('APP_NAME')}! Just use the email address you've received this at when you register.`,
     } as nodemailer.SendMailOptions;
 
     const messageId = await this.transporter
