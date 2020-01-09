@@ -53,7 +53,11 @@ export class HubResolver {
         hubId: id,
         userId: userId,
       },
-      relations: ['hub'],
+      relations: [
+        'hub',
+        'hub.usersConnection',
+        'hub.usersConnection.user'
+      ],
     });
     return userHubRelationship;
   }

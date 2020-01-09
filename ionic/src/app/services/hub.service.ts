@@ -138,6 +138,15 @@ export class HubService {
             image
             latitude
             longitude
+            usersConnection {
+              user {
+                id
+                firstName
+                lastName
+              }
+              isOwner
+              isPresent
+            }
           }
         }
       }
