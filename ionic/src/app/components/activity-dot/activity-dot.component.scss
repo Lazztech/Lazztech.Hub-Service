@@ -8,11 +8,6 @@
 	}
 }
 
-body {
-	padding: 40px;
-	background-color: #222;
-}
-
 .dot	{
 	border-radius: 50%;
 	border: 2px solid #61EF61;
@@ -20,7 +15,7 @@ body {
 	height: 10px;
 	text-align: center;
 	position: relative;
-	animation: anim-glow 2s ease infinite;
+	// animation: anim-glow 2s ease infinite;
 		
 	i {
 		border-radius: 50%;
@@ -28,7 +23,7 @@ body {
 		width: 2px;
 		height: 2px;
 		display: inline-block;
-		vertical-align: 6px;
+		vertical-align: 9px; //FIXME needs to be not hardcoded may look wrong on different devices
 		background-color: #61EF61;
 	}
 }
