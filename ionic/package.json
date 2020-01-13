@@ -6,7 +6,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "cd ionic/ && ng build",
+    "build": "cd ionic",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
