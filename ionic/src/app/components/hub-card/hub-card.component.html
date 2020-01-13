@@ -2,6 +2,7 @@
     <ion-card-header>
         <ion-icon *ngIf="starred && !isOwner" float-right name="star"></ion-icon>
         <ion-card-subtitle *ngIf="isOwner" float-right>Admin</ion-card-subtitle>
+        <app-activity-dot float-left padding-end></app-activity-dot>
         <ion-card-subtitle float-left>{{hub.name}}</ion-card-subtitle>
     </ion-card-header>
   <ion-card-content>
