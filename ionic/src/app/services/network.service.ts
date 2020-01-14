@@ -17,19 +17,19 @@ export class NetworkService {
   constructor(
     private alertService: AlertService
   ) { 
-    this.handler = Network.addListener('networkStatusChange', async (status) => {
-      console.log("Network status changed", status);
+    // this.handler = Network.addListener('networkStatusChange', async (status) => {
+    //   console.log("Network status changed", status);
 
-      try {
-        if (status.connected) {
-          await alertService.presentToast(JSON.stringify(status));
-        } else {
-          await alertService.presentRedToast(JSON.stringify(status));
-        }
-      } catch (error) {
-        console.log(error)
-      }
-    });
+    //   try {
+    //     if (status.connected) {
+    //       await alertService.presentToast(JSON.stringify(status));
+    //     } else {
+    //       await alertService.presentRedToast(JSON.stringify(status));
+    //     }
+    //   } catch (error) {
+    //     console.log(error)
+    //   }
+    // });
     // To stop listening:
     // handler.remove();
   }
