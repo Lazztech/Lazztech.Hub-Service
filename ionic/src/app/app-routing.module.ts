@@ -18,7 +18,6 @@ const routes: Routes = [
   { path: 'delete-account', loadChildren: './pages/profile/delete-account/delete-account.module#DeleteAccountPageModule', canActivate: [AuthGuard] },
   { path: 'notifications', loadChildren: './pages/notifications/notifications.module#NotificationsPageModule', canActivate: [AuthGuard] },
   { path: 'people', loadChildren: './pages/people/people.module#PeoplePageModule', canActivate: [AuthGuard] },
-  { path: 'add-person', loadChildren: './pages/add-person/add-person.module#AddPersonPageModule', canActivate: [AuthGuard] },
   { path: 'hub', loadChildren: './pages/hub/hub.module#HubPageModule', canActivate: [AuthGuard] },
   { path: 'add-hub', loadChildren: './pages/add-hub/add-hub.module#AddHubPageModule', canActivate: [AuthGuard] },
   { path: 'join-hub', loadChildren: './pages/join-hub/join-hub.module#JoinHubPageModule', canActivate: [AuthGuard] },
