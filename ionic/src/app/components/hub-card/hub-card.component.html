@@ -16,7 +16,7 @@
           </ion-col>
     
           <ion-col style = "margin-left: 0px;">
-            <ion-card-subtitle float-right color="success">5 / 5 present</ion-card-subtitle>
+            <ion-card-subtitle float-right color="success">{{presentCount}} / {{hub.usersConnection.length}} present</ion-card-subtitle>
             <br>
             <ion-card-subtitle float-right *ngIf="!atHub && distanceInMeters">{{distanceInMeters}} meters</ion-card-subtitle>
             <ion-card-subtitle float-right *ngIf="atHub">you're here!</ion-card-subtitle>

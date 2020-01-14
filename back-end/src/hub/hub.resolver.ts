@@ -71,7 +71,10 @@ export class HubResolver {
       where: {
         userId: userId,
       },
-      relations: ['hub'],
+      relations: [
+        'hub',
+        'hub.usersConnection',
+      ],
     });
     return userHubRelationships;
   }

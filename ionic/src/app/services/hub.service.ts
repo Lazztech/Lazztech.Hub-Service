@@ -55,6 +55,10 @@ export class HubService {
             image
             latitude
             longitude
+            usersConnection {
+              isPresent
+              isOwner
+            }
           }
         }
       }

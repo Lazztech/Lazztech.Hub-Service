@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, OnDestroy, OnChanges } from '@angular/core';
 import { LocationService } from 'src/app/services/location.service';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, zip } from 'rxjs';
 import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
@@ -28,6 +28,7 @@ export class HubCardComponent implements OnDestroy, OnChanges {
   isOwner: boolean = false;
 
   subscription: Subscription;
+  presentCount = 0;
 
   private distanceInMeters: number;
 
@@ -51,6 +52,8 @@ export class HubCardComponent implements OnDestroy, OnChanges {
     //   }
     //   this.changeRef.detectChanges();
     // });
+
+    this.presentCount = this.hub.usersConnection.filter(x => x.isPresent).length;
   }
 
   ngOnChanges() {
