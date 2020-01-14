@@ -4,18 +4,21 @@ import { HubCardComponent } from './hub-card/hub-card.component';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { ActivityDotComponent } from './activity-dot/activity-dot.component';
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
     declarations: [
         GoogleMapComponent, 
         HubCardComponent,
-        ActivityDotComponent
+        ActivityDotComponent,
+        ProfileComponent
     ],
     imports: [IonicModule, CommonModule],
     exports: [
         GoogleMapComponent, 
         HubCardComponent,
-        ActivityDotComponent
+        ActivityDotComponent,
+        ProfileComponent
     ]
 })
 export class ComponentsModule {

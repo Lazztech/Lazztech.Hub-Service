@@ -10,6 +10,7 @@ import { ChangeNamePage } from './change-name/change-name.page';
 import { ChangeEmailPage } from './change-email/change-email.page';
 import { ChangePasswordPage } from './change-password/change-password.page';
 import { DeleteAccountPage } from './delete-account/delete-account.page';
+import { ComponentsModule } from 'src/app/components/components.module';
 
 const routes: Routes = [
   {
@@ -24,7 +25,8 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ComponentsModule
   ],
   declarations: [ProfilePage, ChangeNamePage, ChangeEmailPage, ChangePasswordPage, DeleteAccountPage],
   entryComponents: [ChangeNamePage, ChangeEmailPage, ChangePasswordPage, DeleteAccountPage]
