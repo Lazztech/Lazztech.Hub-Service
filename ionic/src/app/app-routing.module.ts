@@ -23,6 +23,7 @@ const routes: Routes = [
   { path: 'join-hub', loadChildren: './pages/join-hub/join-hub.module#JoinHubPageModule', canActivate: [AuthGuard] },
   { path: 'edit-hub', loadChildren: './pages/hub/edit-hub/edit-hub.module#EditHubPageModule', canActivate: [AuthGuard] },
   { path: 'invite', loadChildren: './pages/hub/invite/invite.module#InvitePageModule', canActivate: [AuthGuard] },
+  { path: 'person', loadChildren: './pages/people/person/person.module#PersonPageModule', canActivate: [AuthGuard] },
 ];
 
 @NgModule({

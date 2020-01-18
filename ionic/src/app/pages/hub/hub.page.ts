@@ -69,6 +69,10 @@ export class HubPage implements OnInit, OnDestroy {
     console.log(JSON.stringify(this.userHub));
   }
 
+  goToPersonPage(id: number) {
+    this.navCtrl.navigateForward('person/'+ id);
+  }
+
   async presentActionSheet() {
     const editHubButton = (this.userHub.isOwner)
     ? {

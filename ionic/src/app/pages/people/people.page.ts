@@ -36,7 +36,7 @@ export class PeoplePage implements OnInit {
   }
 
   goToPersonPage(id: number) {
-    this.navCtrl.navigateRoot('person/'+ id);
+    this.navCtrl.navigateForward('person/'+ id);
   }
 
   async filterPeople(ev:any) {
