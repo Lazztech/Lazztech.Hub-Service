@@ -33,7 +33,7 @@
   </ion-list-header>
 
   <div *ngFor="let userConnection of userHub.hub.usersConnection">
-    <ion-item *ngIf="userConnection.isPresent" href="javascript:void(0);" (click)="goToPersonPage(userConnection.user.id)">
+    <ion-item *ngIf="userConnection.isPresent" href="javascript:void(0);" (click)="goToPersonPage(userConnection.user.id, userConnection.user)">
       <!-- TODO add user image -->
       <!-- <ion-avatar slot="start">
       <ion-img width="100%" src="{{person.images[0].image}}"></ion-img>
@@ -57,7 +57,7 @@
   </ion-list-header>
 
   <div *ngFor="let userConnection of userHub.hub.usersConnection">
-    <ion-item *ngIf="!userConnection.isPresent" href="javascript:void(0);" (click)="goToPersonPage(person.id)">
+    <ion-item *ngIf="!userConnection.isPresent" href="javascript:void(0);" (click)="goToPersonPage(userConnection.user.id, userConnection.user)">
       <!-- TODO add user image -->
       <!-- <ion-avatar slot="start">
       <ion-img width="100%" src="{{person.images[0].image}}"></ion-img>

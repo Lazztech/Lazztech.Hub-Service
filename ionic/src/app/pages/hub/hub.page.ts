@@ -69,8 +69,13 @@ export class HubPage implements OnInit, OnDestroy {
     console.log(JSON.stringify(this.userHub));
   }
 
-  goToPersonPage(id: number) {
-    this.navCtrl.navigateForward('person/'+ id);
+  goToPersonPage(id: number, user: any) {
+    console.log(user)
+    this.navCtrl.navigateForward('person/'+ id, {
+      state: {
+        user
+      }
+    });
   }
 
   async presentActionSheet() {
