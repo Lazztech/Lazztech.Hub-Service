@@ -12,4 +12,17 @@
   <app-profile-details
   [user]="user">
   </app-profile-details>
+
+  <ion-list>
+    <ion-list-header>
+        <ion-text>Common Hubs</ion-text>
+    </ion-list-header>
+    <div *ngFor="let userHub of userHubs">
+      <app-hub-card *ngIf="!loading" 
+      [hub]="userHub.hub"
+      [starred]="userHub.starred"
+      [isOwner]="userHub.isOwner"
+      (click)="goToHubPage(userHub.hubId)"></app-hub-card>
+    </div>
+</ion-list>
 </ion-content>

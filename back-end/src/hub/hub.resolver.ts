@@ -80,6 +80,36 @@ export class HubResolver {
   }
 
   @UseGuards(AuthGuard)
+  @Query(() => [JoinUserHub])
+  public async commonUsersHubs(
+    @UserId() userId,
+    @Args({ name: 'otherUsersId', type: () => Int }) otherUsersId: number,
+  ) {
+    const userHubRelationships = await JoinUserHub.find({
+      where: {
+        userId: userId,
+      },
+      relations: [
+        'hub',
+        'hub.usersConnection',
+        'hub.usersConnection.hub',
+        'hub.usersConnection.hub.usersConnection',
+      ],
+    });
+
+    let commonHubRelationships = [];
+
+    for (let index = 0; index < userHubRelationships.length; index++) {
+      const element = userHubRelationships[index];
+      if (element.hub.usersConnection.find(x => x.userId == otherUsersId)) {
+        commonHubRelationships.push(element.hub.usersConnection.find(x => x.userId == otherUsersId))
+      }
+    }
+
+    return commonHubRelationships;
+  }
+
+  @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
   public async inviteUserToHub(
     @UserId() userId,

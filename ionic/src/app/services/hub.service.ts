@@ -102,6 +102,44 @@ export class HubService {
     return response;
   }
 
+  async commonUsersHubs(otherUsersId: number, fetchPolicy: FetchPolicy = "network-only") {
+    const result = await this.apollo.query({
+      query: gql`
+      query {
+        commonUsersHubs(otherUsersId: ${otherUsersId}) {
+          userId
+          hubId
+          isOwner
+          starred
+          isPresent
+          hub {
+            id
+            name
+            image
+            latitude
+            longitude
+            usersConnection {
+              isPresent
+              isOwner
+            }
+          }
+        }
+      }
+      `,
+      fetchPolicy
+    }).toPromise();
+
+    const response = result.data["commonUsersHubs"];
+
+    if (response) { 
+      console.log("commonUsersHubs successful.");
+    } else {
+      console.log("commonUsersHubs failure");
+    }
+
+    return response;
+  }
+
   async renameHub(hubId: number, newName: string) {
     const result = await this.apollo.mutate({
       mutation: gql`
