@@ -43,8 +43,7 @@ export class DeleteAccountPage implements OnInit {
       ]],
       password: ['', [
         Validators.required,
-        Validators.pattern('^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$'),
-        Validators.minLength(8)
+        Validators.minLength(10)
       ]]
     });
 
@@ -60,7 +59,7 @@ export class DeleteAccountPage implements OnInit {
     this.loading = true;
 
     const formValue = this.myForm.value;
-    
+
     const result = await this.profileService.deleteAccount(formValue.email, formValue.password);
     if (result) {
       await this.storage.clear();

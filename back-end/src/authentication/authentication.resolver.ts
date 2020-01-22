@@ -11,7 +11,6 @@ import { PasswordReset } from '../dal/entity/passwordReset';
 import { User } from '../dal/entity/user';
 import { RegisterInput } from '../graphQL/inputTypes/inputUser';
 import { EmailService } from '../services/email.service';
-import datetime from 'node-datetime';
 import { ConfigService } from '@nestjs/config';
 
 @Resolver()
@@ -70,13 +69,14 @@ export class AuthenticationResolver {
       password: hashedPassword,
     }).save();
 
-    const dt = datetime.create();
-    const formattedDateTime = dt.format('Y-m-d H:M');
+    //FIXME?
+    const dt = Date.now();
+    // const formattedDateTime = dt.format('Y-m-d H:M');
 
     const inAppNotification1 = InAppNotification.create({
       text: `You'll find your notifications here.
             You can pull down to refresh and check for more.`,
-      date: formattedDateTime,
+      date: dt.toString(),
     });
     await inAppNotification1.save();
 

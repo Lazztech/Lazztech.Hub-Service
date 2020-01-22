@@ -1,9 +1,8 @@
 import { UseGuards } from '@nestjs/common';
-import { Mutation, Resolver } from '@nestjs/graphql';
+import { Mutation, Resolver, Args } from '@nestjs/graphql';
 import * as bcrypt from 'bcryptjs';
 import { UserId } from 'src/decorators/user.decorator';
 import { AuthGuard } from 'src/guards/authguard.service';
-import { Arg } from 'type-graphql';
 import { User } from '../dal/entity/user';
 
 @Resolver()
@@ -13,8 +12,8 @@ export class AccountResolver {
   @Mutation(() => User)
   public async changeName(
     @UserId() userId,
-    @Arg('firstName') firstName: string,
-    @Arg('lastName') lastName: string,
+    @Args({ name: 'firstName', type: () => String }) firstName: string,
+    @Args({name: 'lastName', type: () => String }) lastName: string,
   ): Promise<User> {
     const user = await User.findOne({ where: { id: userId } });
     user.firstName = firstName;
@@ -29,7 +28,7 @@ export class AccountResolver {
   @Mutation(() => User)
   public async changeEmail(
     @UserId() userId,
-    @Arg('newEmail') newEmail: string,
+    @Args({ name: 'newEmail', type: () => String }) newEmail: string,
   ): Promise<User> {
     const user = await User.findOne({ where: { id: userId } });
     user.email = newEmail;
@@ -43,8 +42,8 @@ export class AccountResolver {
   @Mutation(() => Boolean)
   public async changePassword(
     @UserId() userId,
-    @Arg('oldPassword') oldPassword: string,
-    @Arg('newPassword') newPassword: string,
+    @Args({ name: 'oldPassword', type: () => String }) oldPassword: string,
+    @Args({ name: 'newPassword', type: () => String }) newPassword: string,
   ): Promise<boolean> {
     const user = await User.findOne({ where: { id: userId } });
 
@@ -66,8 +65,8 @@ export class AccountResolver {
   @Mutation(() => Boolean)
   public async deleteAccount(
     @UserId() userId,
-    @Arg('email') email: string,
-    @Arg('password') password: string,
+    @Args({ name: 'email', type: () => String }) email: string,
+    @Args({ name: 'password', type: () => String }) password: string,
   ): Promise<boolean> {
     const user = await User.findOne({ where: { id: userId } });
 
