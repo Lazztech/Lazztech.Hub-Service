@@ -57,8 +57,12 @@ export class GeofenceService {
     const userHubs = await this.hubService.usersHubs();
     for (let index = 0; index < userHubs.length; index++) {
       const element = userHubs[index].hub;
+      const identifier = {
+        id: element.id,
+        name: element.name
+      };
       await this.addGeofence({
-        identifier: JSON.stringify(element),
+        identifier: JSON.stringify(identifier),
         latitude: element.latitude,
         longitude: element.longitude,
         notifyOnEntry: true,
@@ -76,7 +80,22 @@ export class GeofenceService {
         const hub = JSON.parse(geofence.identifier);
 
         if (geofence.action == "ENTER") {
-          this.hubService.enteredHubGeofence(hub.id);
+          this.hubService.enteredHubGeofence(hub.id).catch(err => {
+            LocalNotifications.schedule({
+              notifications: [
+                {
+                  title: "Geofence error",
+                  body: JSON.stringify(err),
+                  id: parseInt(hub.id),
+                  schedule: { at: new Date(Date.now()) },
+                  sound: 'beep.aiff',
+                  attachments: null,
+                  actionTypeId: "",
+                  extra: null,
+                }
+              ]
+            })
+          });
 
           LocalNotifications.schedule({
             notifications: [
@@ -95,7 +114,22 @@ export class GeofenceService {
         }
 
         if (geofence.action == "EXIT") {
-          this.hubService.exitedHubGeofence(hub.id);
+          this.hubService.exitedHubGeofence(hub.id).catch(err => {
+            LocalNotifications.schedule({
+              notifications: [
+                {
+                  title: "Geofence error",
+                  body: JSON.stringify(err),
+                  id: parseInt(hub.id),
+                  schedule: { at: new Date(Date.now()) },
+                  sound: 'beep.aiff',
+                  attachments: null,
+                  actionTypeId: "",
+                  extra: null
+                }
+              ]
+            })
+          });
 
           LocalNotifications.schedule({
             notifications: [
