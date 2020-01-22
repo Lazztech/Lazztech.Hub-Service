@@ -16,6 +16,7 @@ import { UpdateService } from './services/update.service';
 import { NotificationsService } from './services/notifications.service';
 import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
 import { GeofenceService } from './services/geofence.service';
+import { DebuggerService } from './services/debugger.service';
 
 @Component({
   selector: 'app-root',
@@ -52,7 +53,8 @@ export class AppComponent {
     private updateService: UpdateService,
     private notificationsService: NotificationsService,
     private faio: FingerprintAIO,
-    private geofenceService: GeofenceService
+    private geofenceService: GeofenceService,
+    private debuggerService: DebuggerService
   ) {
     this.initializeApp();
     console.log(`Is DarkMode: ${this.isDark}`);
@@ -70,6 +72,8 @@ export class AppComponent {
       });
       // this.splashScreen.hide();
       SplashScreen.hide();
+
+      this.debuggerService.start();
 
       //THIS SHOULD BE DONE CONDITIONALLY BY PLATFORM AND CONSOLIDATED INTO THE NOTIFICATIONS SERVICE
       //FOR iOS & ANDROID
