@@ -73,7 +73,7 @@ export class AppComponent {
       // this.splashScreen.hide();
       SplashScreen.hide();
 
-      this.debuggerService.start();
+      // this.debuggerService.start();
 
       //THIS SHOULD BE DONE CONDITIONALLY BY PLATFORM AND CONSOLIDATED INTO THE NOTIFICATIONS SERVICE
       //FOR iOS & ANDROID
