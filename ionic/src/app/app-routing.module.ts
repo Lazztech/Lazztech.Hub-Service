@@ -12,10 +12,6 @@ const routes: Routes = [
   { path: 'profile', loadChildren: './pages/profile/profile.module#ProfilePageModule', canActivate: [AuthGuard] },
   { path: 'password-reset', loadChildren: './pages/auth/password-reset/password-reset.module#PasswordResetPageModule', canActivate: [AuthGuard] },
   { path: 'reset-pin', loadChildren: './pages/auth/reset-pin/reset-pin.module#ResetPinPageModule', canActivate: [AuthGuard] },
-  { path: 'change-name', loadChildren: './pages/profile/change-name/change-name.module#ChangeNamePageModule', canActivate: [AuthGuard] },
-  { path: 'change-email', loadChildren: './pages/profile/change-email/change-email.module#ChangeEmailPageModule', canActivate: [AuthGuard] },
-  { path: 'change-password', loadChildren: './pages/profile/change-password/change-password.module#ChangePasswordPageModule', canActivate: [AuthGuard] },
-  { path: 'delete-account', loadChildren: './pages/profile/delete-account/delete-account.module#DeleteAccountPageModule', canActivate: [AuthGuard] },
   { path: 'notifications', loadChildren: './pages/notifications/notifications.module#NotificationsPageModule', canActivate: [AuthGuard] },
   { path: 'people', loadChildren: './pages/people/people.module#PeoplePageModule', canActivate: [AuthGuard] },
   { path: 'hub', loadChildren: './pages/hub/hub.module#HubPageModule', canActivate: [AuthGuard] },
@@ -24,6 +20,12 @@ const routes: Routes = [
   { path: 'edit-hub', loadChildren: './pages/hub/edit-hub/edit-hub.module#EditHubPageModule', canActivate: [AuthGuard] },
   { path: 'invite', loadChildren: './pages/hub/invite/invite.module#InvitePageModule', canActivate: [AuthGuard] },
   { path: 'person', loadChildren: './pages/people/person/person.module#PersonPageModule', canActivate: [AuthGuard] },
+  { path: 'settings', loadChildren: './pages/profile/settings/settings.module#SettingsPageModule', canActivate: [AuthGuard] },
+  { path: 'change-name', loadChildren: './pages/profile/settings/change-name/change-name.module#ChangeNamePageModule', canActivate: [AuthGuard] },
+  { path: 'change-email', loadChildren: './pages/profile/settings/change-email/change-email.module#ChangeEmailPageModule', canActivate: [AuthGuard] },
+  { path: 'change-password', loadChildren: './pages/profile/settings/change-password/change-password.module#ChangePasswordPageModule', canActivate: [AuthGuard] },
+  { path: 'delete-account', loadChildren: './pages/profile/settings/delete-account/delete-account.module#DeleteAccountPageModule', canActivate: [AuthGuard] },
+  { path: 'privacy', loadChildren: './pages/profile/privacy/privacy.module#PrivacyPageModule', canActivate: [AuthGuard] },
 ];
 
 @NgModule({
