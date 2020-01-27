@@ -4,9 +4,15 @@ import * as bcrypt from 'bcryptjs';
 import { UserId } from 'src/decorators/user.decorator';
 import { AuthGuard } from 'src/guards/authguard.service';
 import { User } from '../dal/entity/user';
+import { FileService } from 'src/services/file.service';
 
 @Resolver()
 export class AccountResolver {
+
+  constructor(
+      private fileService: FileService
+    ) {}
+
   //@Authorized()
   @UseGuards(AuthGuard)
   @Mutation(() => User)
@@ -58,6 +64,24 @@ export class AccountResolver {
     } else {
       return false;
     }
+  }
+
+  @UseGuards(AuthGuard)
+  @Mutation(() => User)
+  public async changeUserImage(
+    @UserId() userId,
+    @Args({ name: 'newImage', type: () => String }) newImage: string,
+  ): Promise<User> {
+    let user = await User.findOne(userId);
+
+    await this.fileService.deletePublicImageFromUrl(user.image);
+    const imageUrl = await this.fileService.storePublicImageFromBase64(
+      newImage,
+    );
+
+    user.image = imageUrl;
+    user = await user.save();
+    return user;
   }
 
   //@Authorized()

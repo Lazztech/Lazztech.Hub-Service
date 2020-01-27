@@ -19,22 +19,15 @@
 
     <ion-searchbar (ionInput)="filterPeople($event)" showCancelButton="focus"></ion-searchbar>
 
-
-
-
     <ion-list *ngIf="!loading">
           <ion-item *ngFor="let person of persons" href="javascript:void(0);" (click)="goToPersonPage(person.id, person)">
-            <!-- TODO add user image -->
-            <!-- <ion-avatar slot="start">
-            <ion-img width="100%" src="{{person.images[0].image}}"></ion-img>
-            </ion-avatar> -->
+            <ion-avatar slot="start">
+              <ion-img width="100%" src="{{person.image}}"></ion-img>
+            </ion-avatar>
             <ion-label>
               <h3>
                 <ion-text>{{person.firstName}} {{person.lastName}}</ion-text>
               </h3>
-              <!-- <p>
-                <ion-text>First Seen: {{person.images[0].savedAtTimestamp | date: 'yyy-MM-dd'}}</ion-text>
-              </p> -->
             </ion-label>
           </ion-item>
         </ion-list>

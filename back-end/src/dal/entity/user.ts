@@ -30,6 +30,10 @@ export class User extends BaseEntity {
   @Column()
   public lastName: string;
 
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  public image: string;
+
   @Field()
   // @Column("text", { unique: true })
   @Column()

@@ -10,12 +10,13 @@
           <ion-icon size="large" name="more"></ion-icon>
       </div>
     <ion-title>Profile</ion-title>
+    <ion-progress-bar *ngIf="loading" type="indeterminate"></ion-progress-bar>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
 
-  <app-profile-details
+  <app-profile-details href="javascript:void(0);" (click)="userActionSheet()"
   [user]="user">
   </app-profile-details>
 
