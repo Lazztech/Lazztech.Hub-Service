@@ -51,12 +51,7 @@ export class ProfilePage implements OnInit {
           console.log('Take Picture clicked');
           this.cameraService.takePicture().then(image => {
             this.loading = true;
-            // const oldImage = this.userHub.image;
-            // this.userHub.image = newImage;
-            // const result = await this.hubService.updateHubPhoto(this.id, newImage);
-            // if (!result) {
-            //   this.userHub.image = oldImage;
-            // }
+            //TODO
             this.loading = false;
           });
         }
@@ -67,12 +62,7 @@ export class ProfilePage implements OnInit {
           console.log('Take Picture clicked');
           await this.cameraService.selectPicture().then(image => {
             this.loading = true;
-            // const oldImage = this.userHub.image;
-            // this.userHub.image = newImage;
-            // const result = await this.hubService.updateHubPhoto(this.id, newImage);
-            // if (!result) {
-            //   this.userHub.image = oldImage;
-            // }
+            //TODO
             this.loading = false;
           });
         }

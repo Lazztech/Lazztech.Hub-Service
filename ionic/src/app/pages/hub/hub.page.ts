@@ -128,7 +128,7 @@ export class HubPage implements OnInit, OnDestroy {
           this.loading = true;
           const oldImage = this.userHub.image;
           this.userHub.image = newImage;
-          const result = await this.hubService.updateHubPhoto(this.id, newImage);
+          const result = await this.hubService.changeHubImage(this.id, newImage);
           if (!result) {
             this.userHub.image = oldImage;
           }
@@ -144,7 +144,7 @@ export class HubPage implements OnInit, OnDestroy {
           this.loading = true;
           const oldImage = this.userHub.image;
           this.userHub.image = newImage;
-          const result = await this.hubService.updateHubPhoto(this.id, newImage);
+          const result = await this.hubService.changeHubImage(this.id, newImage);
           if (!result) {
             this.userHub.image = oldImage;
           }

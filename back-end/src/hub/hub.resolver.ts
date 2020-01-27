@@ -292,7 +292,6 @@ export class HubResolver {
   //@Authorized()
   @UseGuards(AuthGuard)
   @Mutation(() => Hub)
-  //FIXME duplicate with updateHubPhoto? Remove one.
   public async changeHubImage(
     @UserId() userId,
     @Args({ name: 'hubId', type: () => Int }) hubId: number,
@@ -385,27 +384,6 @@ export class HubResolver {
     });
     hubRelationship.starred = false;
     await hubRelationship.save();
-    return true;
-  }
-
-  //@Authorized()
-  @UseGuards(AuthGuard)
-  @Mutation(() => Boolean)
-  public async updateHubPhoto(
-    @UserId() userId,
-    @Args({ name: 'id', type: () => Int }) id: number,
-    @Args({ name: 'image', type: () => String }) image: string,
-  ): Promise<boolean> {
-    //FIXME make sure that this is only done by the owner of the hub
-
-    let hub = await Hub.findOne({ id });
-
-    await this.fileService.deletePublicImageFromUrl(hub.image);
-    const imageUrl = await this.fileService.storePublicImageFromBase64(image);
-
-    hub.image = imageUrl;
-
-    hub = await hub.save();
     return true;
   }
 

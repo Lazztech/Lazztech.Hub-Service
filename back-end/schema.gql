@@ -85,7 +85,6 @@ type Mutation {
   joinHub(id: Int!): Boolean!
   setHubStarred(hubId: Int!): Boolean!
   setHubNotStarred(hubId: Int!): Boolean!
-  updateHubPhoto(image: String!, id: Int!): Boolean!
   enteredHubGeofence(hubId: Int!): Boolean!
   exitedHubGeofence(hubId: Int!): Boolean!
   addUserFcmNotificationToken(token: String!): Boolean!
