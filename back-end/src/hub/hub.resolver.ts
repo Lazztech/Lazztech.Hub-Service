@@ -297,8 +297,6 @@ export class HubResolver {
     @Args({ name: 'hubId', type: () => Int }) hubId: number,
     @Args({ name: 'newImage', type: () => String }) newImage: string,
   ): Promise<Hub> {
-    //FIXME: Finish implementing check that user is hub owner.
-
     const joinUserHubResult = await JoinUserHub.findOne({
       where: {
         userId: userId,
@@ -327,8 +325,6 @@ export class HubResolver {
     @UserId() userId,
     @Args({ name: 'id', type: () => Int }) id: number,
   ): Promise<boolean> {
-    //FIXME: Finish implementing check that user is hub owner.
-
     let joinUserHub = await JoinUserHub.create({
       userId: userId,
       hubId: id,
