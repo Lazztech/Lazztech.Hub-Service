@@ -10,8 +10,10 @@ export class CameraService {
 
   async takePicture() {
     const image = await Plugins.Camera.getPhoto({
+      width: 500,
+      height: 500,
       quality: 100,
-      allowEditing: false,
+      allowEditing: true,
       resultType: CameraResultType.DataUrl,
       source: CameraSource.Camera
     });
@@ -21,8 +23,10 @@ export class CameraService {
 
   async selectPicture() {
     const image = await Plugins.Camera.getPhoto({
+      width: 500,
+      height: 500,
       quality: 100,
-      allowEditing: false,
+      allowEditing: true,
       resultType: CameraResultType.DataUrl,
       source: CameraSource.Photos
     });

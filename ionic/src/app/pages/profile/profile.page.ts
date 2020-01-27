@@ -31,6 +31,7 @@ export class ProfilePage implements OnInit {
     private navCtrl: NavController,
     public actionSheetController: ActionSheetController,
     public cameraService: CameraService,
+    public profileService: ProfileService,
     ) { 
     this.menu.enable(true);
   }
@@ -49,10 +50,12 @@ export class ProfilePage implements OnInit {
         text: 'Take Picture',
         handler: () => {
           console.log('Take Picture clicked');
-          this.cameraService.takePicture().then(image => {
+          this.cameraService.takePicture().then(async image => {
             this.loading = true;
-            //TODO
-            this.loading = false;
+            this.profileService.changeUserImage(image).then(result => {
+              this.user.image = result.image
+              this.loading = false;
+            }); 
           });
         }
       },
@@ -60,10 +63,12 @@ export class ProfilePage implements OnInit {
         text: 'Select Picture',
         handler: async () => {
           console.log('Take Picture clicked');
-          await this.cameraService.selectPicture().then(image => {
+          await this.cameraService.selectPicture().then(async image => {
             this.loading = true;
-            //TODO
-            this.loading = false;
+            this.profileService.changeUserImage(image).then(result => {
+              this.user.image = result.image
+              this.loading = false;
+            }); 
           });
         }
       }, 

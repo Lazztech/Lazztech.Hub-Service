@@ -308,7 +308,9 @@ export class HubResolver {
 
     let hub = joinUserHubResult.hub;
 
-    await this.fileService.deletePublicImageFromUrl(hub.image);
+    if (hub.image) {
+      await this.fileService.deletePublicImageFromUrl(hub.image);
+    }
     const imageUrl = await this.fileService.storePublicImageFromBase64(
       newImage,
     );

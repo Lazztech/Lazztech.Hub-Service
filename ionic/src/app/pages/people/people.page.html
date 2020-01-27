@@ -22,7 +22,9 @@
     <ion-list *ngIf="!loading">
           <ion-item *ngFor="let person of persons" href="javascript:void(0);" (click)="goToPersonPage(person.id, person)">
             <ion-avatar slot="start">
-              <ion-img width="100%" src="{{person.image}}"></ion-img>
+                  <!-- FIXME don't use this image or store a copy locally -->
+                  <img width="100%" *ngIf="!person.image" src="https://ionicframework.com/docs/demos/api/avatar/avatar.svg">
+                  <ion-img width="100%" *ngIf="person.image" src="{{person.image}}"></ion-img>
             </ion-avatar>
             <ion-label>
               <h3>

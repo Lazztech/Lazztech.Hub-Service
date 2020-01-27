@@ -102,29 +102,8 @@ export class AuthService {
           id
           firstName
           lastName
+          image
           email
-          ownedHubs {
-            id
-            name
-            image
-            members {
-              id
-              firstName
-              lastName
-              email
-            }
-          }
-          memberOfHubs {
-            id
-            name
-            image
-            owners {
-              id
-              firstName
-              lastName
-              email
-            }
-          }
         }
       }
       `

@@ -1,6 +1,8 @@
 <div>
-  <ion-avatar padding-top style="margin: auto;" class="custom-avatar">
-    <img src="https://ionicframework.com/docs/demos/api/avatar/avatar.svg">
+  <ion-avatar padding-top class="custom-avatar">
+    <!-- FIXME don't use this image or store a copy locally -->
+    <img width="100%" *ngIf="!user.image" src="https://ionicframework.com/docs/demos/api/avatar/avatar.svg">
+    <img *ngIf="user.image" src="{{user.image}}">
   </ion-avatar>
 
   <ion-text text-center>

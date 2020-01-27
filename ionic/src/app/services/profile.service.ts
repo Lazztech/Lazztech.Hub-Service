@@ -78,6 +78,22 @@ export class ProfileService {
     }
   }
 
+  async changeUserImage(image: string): Promise<any> {
+    const result = await this.apollo.mutate({
+      mutation: gql`
+      mutation {
+        changeUserImage(newImage: "${image}") {
+          image
+        }
+      }
+      `
+    }).toPromise();
+
+    console.log(result);
+    const response = result.data.changeUserImage;
+    return response;
+  }
+
   async deleteAccount(emailAddress: string, password: string) {
     const result = await this.apollo.mutate({
       mutation: gql`

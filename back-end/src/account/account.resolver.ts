@@ -74,7 +74,9 @@ export class AccountResolver {
   ): Promise<User> {
     let user = await User.findOne(userId);
 
-    await this.fileService.deletePublicImageFromUrl(user.image);
+    if (user.image) {
+      await this.fileService.deletePublicImageFromUrl(user.image);
+    }
     const imageUrl = await this.fileService.storePublicImageFromBase64(
       newImage,
     );
