@@ -12,8 +12,12 @@ export class HubCardComponent implements OnDestroy, OnChanges {
 
   @Input()
   hub: any
+
+  @Input()
+  active: boolean = false;
   
   atHub: boolean = false;
+  isActive = false;
 
   //FIXME is this used?
   coords$: Observable<{longitude: number, latitude: number}>;

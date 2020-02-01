@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-activity-dot',
@@ -7,8 +7,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ActivityDotComponent implements OnInit {
 
+  @Input()
+  active = false;
+
+  private green = false;
+  private orange = false;
+  private grey = false;
+
   constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    if (this.active) {
+      this.green = true;
+    }
+    else if (!this.active) {
+      this.grey = true;
+    }
+  }
 
 }

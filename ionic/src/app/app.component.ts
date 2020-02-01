@@ -61,15 +61,14 @@ export class AppComponent {
   }
 
   async initializeApp() {
+    console.log(`Is DarkMode: ${this.isDark}`);
+    this.isDark = await this.themeService.isDark();
+    console.log(`Is DarkMode: ${this.isDark}`);
+
+    StatusBar.setStyle({
+      style: this.isDark ? StatusBarStyle.Dark : StatusBarStyle.Light
+    });
     this.platform.ready().then(async () => {
-
-      console.log(`Is DarkMode: ${this.isDark}`);
-      this.isDark = await this.themeService.isDark();
-      console.log(`Is DarkMode: ${this.isDark}`);
-
-      StatusBar.setStyle({
-        style: this.isDark ? StatusBarStyle.Dark : StatusBarStyle.Light
-      });
       // this.splashScreen.hide();
       SplashScreen.hide();
 
