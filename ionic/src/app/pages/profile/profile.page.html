@@ -7,7 +7,7 @@
             <ion-icon size="large" name="moon"></ion-icon>
         </div>
         <div slot="end" href="javascript:void(0);" (click)="presentActionSheet()">
-          <ion-icon size="large" name="more"></ion-icon>
+          <ion-icon size="large" name="cog"></ion-icon>
       </div>
     <ion-title>Profile</ion-title>
     <ion-progress-bar *ngIf="loading" type="indeterminate"></ion-progress-bar>
@@ -21,23 +21,26 @@
   </app-profile-details>
 
     <ion-card>
-      <!-- <ion-card-header>
-        <ion-card-title *ngIf="user">{{ user["firstName"]  }} {{ user["lastName"]  }}</ion-card-title>
-        <ion-card-subtitle *ngIf="user">{{ user["email"] }}</ion-card-subtitle>
-      </ion-card-header> -->
-    
-      <!-- <ion-card-content>
-      </ion-card-content> -->
-
       <ion-list lines="none">
-
         <ion-item href="javascript:void(0);" (click)="logout()">
             <ion-icon name="log-out" color="medium" slot="start"></ion-icon>
             <ion-label>Logout</ion-label>
           </ion-item>
-
       </ion-list>
-
     </ion-card>
+    
+    <ion-list>
+      <ion-list-header>
+          <ion-text>Hubs You Admin</ion-text>
+      </ion-list-header>
+      <div *ngFor="let userHub of userHubs">
+        <app-hub-card *ngIf="!loading"
+        [hub]="userHub.hub"
+        [active]="true"
+        [starred]="userHub.starred"
+        [isOwner]="userHub.isOwner"
+        (click)="goToHubPage(userHub.hubId)"></app-hub-card>
+      </div>
+  </ion-list>
 
 </ion-content>

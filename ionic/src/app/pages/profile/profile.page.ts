@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { User } from '../../models/user';
-import { MenuController, ModalController, NavController, ActionSheetController } from '@ionic/angular';
+import { MenuController, ModalController, NavController, ActionSheetController, IonContent } from '@ionic/angular';
 import { AuthService } from '../../services/auth.service';
 import { UpdateService } from 'src/app/services/update.service';
 import { AlertService } from 'src/app/services/alert.service';
@@ -12,6 +12,7 @@ import { ChangePasswordPage } from './settings/change-password/change-password.p
 import { DeleteAccountPage } from './settings/delete-account/delete-account.page';
 import { ThemeService } from 'src/app/services/theme.service';
 import { CameraService } from 'src/app/services/camera.service';
+import { HubService } from 'src/app/services/hub.service';
 
 @Component({
   selector: 'app-profile',
@@ -22,6 +23,7 @@ export class ProfilePage implements OnInit {
 
   loading = false;
   user: User;
+  userHubs = [];
 
   constructor(
     private menu: MenuController,
@@ -32,6 +34,7 @@ export class ProfilePage implements OnInit {
     public actionSheetController: ActionSheetController,
     public cameraService: CameraService,
     public profileService: ProfileService,
+    private hubService: HubService
     ) { 
     this.menu.enable(true);
   }
@@ -40,7 +43,11 @@ export class ProfilePage implements OnInit {
   }
 
   async ionViewWillEnter() {
-    this.user = await this.authService.user();    
+    this.loading = true;
+    this.user = await this.authService.user(); 
+    this.userHubs = await this.hubService.usersHubs();
+    this.userHubs = this.userHubs.filter(x => x.isOwner);
+    this.loading = false;   
   }
 
   async userActionSheet() {
