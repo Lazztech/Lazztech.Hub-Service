@@ -28,7 +28,7 @@
           </ion-item>
       </ion-list>
     </ion-card>
-    
+
     <ion-list>
       <ion-list-header>
           <ion-text>Hubs You Admin</ion-text>
@@ -36,10 +36,10 @@
       <div *ngFor="let userHub of userHubs">
         <app-hub-card *ngIf="!loading"
         [hub]="userHub.hub"
-        [active]="true"
+        [adminControls]="true"
         [starred]="userHub.starred"
         [isOwner]="userHub.isOwner"
-        (click)="goToHubPage(userHub.hubId)"></app-hub-card>
+        ></app-hub-card>
       </div>
   </ion-list>
 

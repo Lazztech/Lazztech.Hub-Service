@@ -15,9 +15,11 @@ export class HubCardComponent implements OnDestroy, OnChanges {
 
   @Input()
   active: boolean = false;
+
+  @Input()
+  adminControls = false;
   
   atHub: boolean = false;
-  isActive = false;
 
   //FIXME is this used?
   coords$: Observable<{longitude: number, latitude: number}>;
@@ -70,8 +72,12 @@ export class HubCardComponent implements OnDestroy, OnChanges {
       this.changeRef.detectChanges();
   }
 
-  async ngOnDestroy() {
+  activeToggle($event) {
+    console.log(this.active);
+    // this.active = !this.active;
+  }
 
+  async ngOnDestroy() {
   }
 
 }

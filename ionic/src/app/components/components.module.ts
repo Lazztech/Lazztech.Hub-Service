@@ -5,6 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { ActivityDotComponent } from './activity-dot/activity-dot.component';
 import { ProfileComponent } from './profile/profile.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
     declarations: [
@@ -13,7 +14,11 @@ import { ProfileComponent } from './profile/profile.component';
         ActivityDotComponent,
         ProfileComponent
     ],
-    imports: [IonicModule, CommonModule],
+    imports: [
+        IonicModule, 
+        CommonModule,
+        FormsModule,
+    ],
     exports: [
         GoogleMapComponent, 
         HubCardComponent,

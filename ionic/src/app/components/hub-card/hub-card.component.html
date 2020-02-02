@@ -18,11 +18,23 @@
                 </ion-thumbnail>
           </ion-col>
     
-          <ion-col style = "margin-left: 0px;">
+          <ion-col *ngIf="!adminControls" style = "margin-left: 0px;">
             <ion-card-subtitle float-right color="success">{{presentCount}} / {{hub.usersConnection.length}} present</ion-card-subtitle>
             <br>
             <ion-card-subtitle float-right *ngIf="!atHub && distanceInMeters">{{distanceInMeters}} meters</ion-card-subtitle>
             <ion-card-subtitle float-right *ngIf="atHub">you're here!</ion-card-subtitle>
+          </ion-col>
+
+          <ion-col *ngIf="adminControls" style = "margin-left: 0px;">
+            <ion-card-subtitle float-right color="warning">Notify</ion-card-subtitle>
+            <br>
+            <ion-toggle checked float-right color="warning"></ion-toggle>
+          </ion-col>
+
+          <ion-col *ngIf="adminControls" style = "margin-left: 0px;">
+            <ion-card-subtitle float-right color="success">On / Off</ion-card-subtitle>
+            <br>
+            <ion-toggle [(ngModel)]="active" [checked]="active" (ionChange)="activeToggle($event)" float-right color="success"></ion-toggle>
           </ion-col>
     </ion-row>
   </ion-card-content>
