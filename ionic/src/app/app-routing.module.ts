@@ -26,6 +26,7 @@ const routes: Routes = [
   { path: 'change-password', loadChildren: './pages/profile/settings/change-password/change-password.module#ChangePasswordPageModule', canActivate: [AuthGuard] },
   { path: 'delete-account', loadChildren: './pages/profile/settings/delete-account/delete-account.module#DeleteAccountPageModule', canActivate: [AuthGuard] },
   { path: 'privacy', loadChildren: './pages/profile/privacy/privacy.module#PrivacyPageModule', canActivate: [AuthGuard] },
+  { path: 'map', loadChildren: './pages/map/map.module#MapPageModule' },
 ];
 
 @NgModule({

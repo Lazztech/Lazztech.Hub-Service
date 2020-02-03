@@ -21,7 +21,7 @@
     [isOwner]="userHub.isOwner">
   </app-hub-card>
 
-  <ion-card *ngIf="!loading" style="height:30%">
+  <ion-card *ngIf="!loading" style="height:30%" (click)="goToMap()">
       <ion-card-content style="height:100%">
           <app-google-map *ngIf="userHub" [coords]="hubCoords"></app-google-map>
       </ion-card-content>

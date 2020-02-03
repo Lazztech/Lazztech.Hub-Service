@@ -78,6 +78,14 @@ export class HubPage implements OnInit, OnDestroy {
     });
   }
 
+  goToMap() {
+    this.navCtrl.navigateForward('map', {
+      state: {
+        hubCoords: this.hubCoords
+      }
+    });
+  }
+
   async presentActionSheet() {
     const editHubButton = (this.userHub.isOwner)
     ? {
