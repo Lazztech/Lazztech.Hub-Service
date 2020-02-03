@@ -12,6 +12,10 @@ const routes: Routes = [
   {
     path: '',
     component: MapPage
+  },
+  {
+    path: ':id',
+    component: MapPage
   }
 ];
 

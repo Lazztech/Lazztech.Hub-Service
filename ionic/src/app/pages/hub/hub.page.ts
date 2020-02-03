@@ -79,11 +79,7 @@ export class HubPage implements OnInit, OnDestroy {
   }
 
   goToMap() {
-    this.navCtrl.navigateForward('map', {
-      state: {
-        hubCoords: this.hubCoords
-      }
-    });
+    this.navCtrl.navigateForward('map/' + this.id);
   }
 
   async presentActionSheet() {
