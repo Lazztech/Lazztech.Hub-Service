@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { ActionSheetController, NavController, Platform } from '@ionic/angular';
@@ -8,6 +8,7 @@ import { HubService } from 'src/app/services/hub.service';
 import { LocationService } from 'src/app/services/location.service';
 import { ActionSheetButton } from '@ionic/core'; 
 import { ActionSheetOption, ActionSheetOptions } from '@capacitor/core';
+import { GoogleMapComponent } from 'src/app/components/google-map/google-map.component';
 
 @Component({
   selector: 'app-hub',
@@ -25,6 +26,8 @@ export class HubPage implements OnInit, OnDestroy {
   locationSubscription: Subscription;
   hubCoords: {latitude: number, longitude: number};
   userCoords: {latitude: number, longitude: number};
+  @ViewChild(GoogleMapComponent) child:GoogleMapComponent;
+
 
   constructor(
     private sanitizer: DomSanitizer,
@@ -64,6 +67,16 @@ export class HubPage implements OnInit, OnDestroy {
     this.loading = false;
   }
 
+  ionViewWillEnter() {
+    this.child.updateMap()
+  }
+
+  ionViewWillLeave() {
+    // unset div & visibility on exit
+    // this.child.mapElement.nativeElement.setVisible(false);
+    this.child.mapElement.nativeElement.remove();
+  }
+
   async loadHub() {
     this.userHub = await this.hubService.hub(this.id);
     console.log(JSON.stringify(this.userHub));
@@ -79,7 +92,11 @@ export class HubPage implements OnInit, OnDestroy {
   }
 
   goToMap() {
-    this.navCtrl.navigateForward('map/' + this.id);
+    this.navCtrl.navigateForward('map', {
+      state: {
+        hubCoords: this.hubCoords
+      }
+    });
   }
 
   async presentActionSheet() {
