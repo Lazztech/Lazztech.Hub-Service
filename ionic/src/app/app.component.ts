@@ -73,11 +73,7 @@ export class AppComponent {
       SplashScreen.hide();
 
       // this.debuggerService.start();
-
-      //THIS SHOULD BE DONE CONDITIONALLY BY PLATFORM AND CONSOLIDATED INTO THE NOTIFICATIONS SERVICE
-      //FOR iOS & ANDROID
-      await this.notificationsService.setupPushForAllPlatforms();
-
+      
       this.updateService.checkForUpdate();
 
       this.connected = await this.networkService.isConnected();

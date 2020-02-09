@@ -5,6 +5,7 @@ import { AlertService } from 'src/app/services/alert.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { RegisterPage } from '../register/register.page';
 import { ResetPinPage } from '../reset-pin/reset-pin.page';
+import { NotificationsService } from 'src/app/services/notifications.service';
 
 @Component({
   selector: 'app-login',
@@ -30,7 +31,8 @@ export class LoginPage implements OnInit {
     private authService: AuthService,
     private navCtrl: NavController,
     private alertService: AlertService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private notificationsService: NotificationsService
     ) { }
 
   ngOnInit() {
@@ -78,6 +80,9 @@ export class LoginPage implements OnInit {
     if (token) {
       this.loading = false;
       this.dismissLogin();
+      //FIXME is this how I want this? It needs token to work on first launch.
+      this.notificationsService.setupPushForAllPlatforms();
+
       await this.navCtrl.navigateRoot('/tabs');
     } else {
       this.loading = false;

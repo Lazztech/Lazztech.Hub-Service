@@ -8,10 +8,15 @@ import { JoinUserHub } from '../dal/entity/joinUserHub';
 import { User } from '../dal/entity/user';
 import { Float, Int } from 'type-graphql';
 import { FileService } from 'src/services/file.service';
+import { HubService } from './hub.service';
 
 @Resolver()
 export class HubResolver {
-  constructor(private qrService: QrService, private fileService: FileService) {}
+  constructor(
+    private qrService: QrService, 
+    private fileService: FileService,
+    private hubService: HubService
+    ) {}
 
   //@Authorized()
   @UseGuards(AuthGuard)
@@ -448,6 +453,15 @@ export class HubResolver {
     let hub = hubRelationship.hub;
     hub.active = true;
     hub = await hub.save();
+
+    const hubRelationships = await JoinUserHub.find({
+      where: {
+        hubId
+      },
+      relations: ["hub"]
+    });
+    await this.hubService.notifyOfHubActivated(hubRelationships);
+
     return hub;
   }
 

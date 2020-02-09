@@ -1,11 +1,16 @@
 import { Service } from 'typedi';
 import { User } from '../dal/entity/user';
+import { ConfigService } from '@nestjs/config';
 const fetch = require('node-fetch');
 
 @Service()
 export class NotificationService {
-  private serverKey: string = process.env.FIREBASE_SERVER_KEY;
+  private serverKey: string = this.configService.get<string>('FIREBASE_SERVER_KEY');
   private sendEndpoint = 'https://fcm.googleapis.com/fcm/send';
+
+  constructor(
+    private configService: ConfigService
+  ) { }
 
   public async sendPushToUser(
     userId: number,

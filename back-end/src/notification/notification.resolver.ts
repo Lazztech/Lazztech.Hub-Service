@@ -31,6 +31,7 @@ export class NotificationResolver {
     return usersNotifications;
   }
 
+  //FIXME this should be authorized
   //@Authorized()
   @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
@@ -38,13 +39,22 @@ export class NotificationResolver {
     @UserId() userId,
     @Args({ name: 'token', type: () => String }) token: string,
   ): Promise<boolean> {
-    const user = await User.findOne({ where: { id: userId } });
+    const user = await User.findOne({ 
+      where: { id: userId },
+      relations: ['userDevices']
+    });
 
-    const userDevice = new UserDevice();
-    userDevice.userId = user.id;
-    userDevice.fcmPushUserToken = token;
-    const result = await userDevice.save();
-    console.log(result);
+    if (!user.userDevices.find(x => x.fcmPushUserToken == token)) {
+      const userDevice = new UserDevice();
+      userDevice.userId = user.id;
+      userDevice.fcmPushUserToken = token;
+      const result = await userDevice.save();
+      console.log(result);
+      //TODO notify via email that a new device has been used on the account for security.
+    }
+    else {
+      console.log('User device token already stored.');
+    }
 
     return true;
   }

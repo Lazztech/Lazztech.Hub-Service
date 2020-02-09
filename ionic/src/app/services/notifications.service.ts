@@ -22,6 +22,7 @@ const { PushNotifications } = Plugins;
 })
 export class NotificationsService {
 
+  //FIXME move this to the Ionic environments file
   firebaseConfig = {
     apiKey: "AIzaSyBBglG9CZgnduympgyS4mjSwVR8apl2Ztw",
     authDomain: "stack-push-notifications.firebaseapp.com",
@@ -36,8 +37,8 @@ export class NotificationsService {
   constructor(
     private apollo: Apollo,
     private authService: AuthService,
-    private platform: Platform
-    // private storage: Storage
+    private platform: Platform,
+    private storage: Storage
   ) { }
 
   async localNotification(title: string, body: string, schedule?: Date): Promise<void> {
@@ -117,13 +118,18 @@ export class NotificationsService {
 
     PushNotifications.register();
 
-    // const nativePushToken = await this.storage.get('native-push-token');    
+    //TODO Remove?
+    // const nativePushToken = await this.storage.get('native-push-token');
+    // if (nativePushToken) {
+    //   await this.submitNotificationToken(nativePushToken);
+    // }
 
     PushNotifications.addListener('registration', 
-      (token: PushNotificationToken) => {
-        // await this.storage.set('native-push-token', token.value);
+      async (token: PushNotificationToken) => {
+        await this.storage.set('native-push-token', token.value);
+        await this.submitNotificationToken(token.value);
 
-        // alert('Push registration success, token: ' + token.value);
+        alert('Push registration success, token: ' + token.value);
       }
     );
 
