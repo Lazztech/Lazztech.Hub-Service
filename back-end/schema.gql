@@ -6,13 +6,13 @@
 type Hub {
   id: ID!
   name: String!
+  active: Boolean
   image: String
   latitude: Float
   longitude: Float
   usersConnection: [JoinUserHub!]
   owners: [User!]
   members: [User!]
-  starred: Boolean
 }
 
 type Image {
@@ -87,6 +87,8 @@ type Mutation {
   setHubNotStarred(hubId: Int!): Boolean!
   enteredHubGeofence(hubId: Int!): Boolean!
   exitedHubGeofence(hubId: Int!): Boolean!
+  activateHub(hubId: Int!): Hub!
+  deactivateHub(hubId: Int!): Hub!
   addUserFcmNotificationToken(token: String!): Boolean!
 }
 

@@ -426,4 +426,52 @@ export class HubResolver {
 
     return true;
   }
+
+  @UseGuards(AuthGuard)
+  @Mutation(() => Hub)
+  public async activateHub(
+    @UserId() userId,
+    @Args({name: 'hubId', type: () => Int}) hubId: number
+  ) {
+    let hubRelationship = await JoinUserHub.findOne({
+      where: {
+        userId,
+        hubId,
+        isOwner: true
+      },
+      relations: ["hub"]
+    });
+
+    if(!hubRelationship)
+      throw Error(`no corresponding hub relationship found for userId: ${userId} & hubId: ${hubId}`)
+
+    let hub = hubRelationship.hub;
+    hub.active = true;
+    hub = await hub.save();
+    return hub;
+  }
+
+  @UseGuards(AuthGuard)
+  @Mutation(() => Hub)
+  public async deactivateHub(
+    @UserId() userId,
+    @Args({name: 'hubId', type: () => Int}) hubId: number
+  ) {
+    let hubRelationship = await JoinUserHub.findOne({
+      where: {
+        userId,
+        hubId,
+        isOwner: true
+      },
+      relations: ["hub"]
+    });
+
+    if(!hubRelationship)
+      throw Error(`no corresponding hub relationship found for userId: ${userId} & hubId: ${hubId}`)
+
+    let hub = hubRelationship.hub;
+    hub.active = false;
+    hub = await hub.save();
+    return hub;
+  }
 }

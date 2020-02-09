@@ -20,6 +20,10 @@ export class Hub extends BaseEntity {
   @Field()
   @Column()
   public name: string;
+  
+  @Field({ nullable: true })
+  @Column({ default: false })
+  public active: boolean;
 
   //FIXME: this may break if not using mssql as the type is specific to mssql
   @Field({ nullable: true })
@@ -77,6 +81,4 @@ export class Hub extends BaseEntity {
     return members;
   }
 
-  @Field({ nullable: true })
-  public starred: boolean;
 }

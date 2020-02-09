@@ -52,6 +52,7 @@ export class HubService {
           hub {
             id
             name
+            active
             image
             latitude
             longitude
@@ -116,6 +117,7 @@ export class HubService {
           hub {
             id
             name
+            active
             image
             latitude
             longitude
@@ -178,6 +180,7 @@ export class HubService {
           hub {
             id
             name
+            active
             image
             latitude
             longitude
@@ -356,4 +359,38 @@ export class HubService {
     console.log(`exitedHubGeofence hubId ${hubId} returned ${result}`);
     return result;
   }
+
+  async activateHub(hubId: number) {
+    const result = await this.apollo.mutate({
+      mutation: gql`
+      mutation {
+        activateHub(hubId: ${hubId}) {
+          id
+          active
+        }
+      }
+      `
+    }).toPromise();
+    
+    console.log(`exitedHubGeofence hubId ${hubId} returned ${result}`);
+    return result;
+  }
+
+  async deactivateHub(hubId: number) {
+    const result = await this.apollo.mutate({
+      mutation: gql`
+      mutation {
+        deactivateHub(hubId: ${hubId}) {
+          id
+          active
+        }
+      }
+      `
+    }).toPromise();
+    
+    console.log(`exitedHubGeofence hubId ${hubId} returned ${result}`);
+    return result;
+  }
+
+
 }

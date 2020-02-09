@@ -2,6 +2,7 @@ import { Component, OnInit, Input, OnDestroy, OnChanges } from '@angular/core';
 import { LocationService } from 'src/app/services/location.service';
 import { Observable, Subscription, zip } from 'rxjs';
 import { ChangeDetectorRef } from '@angular/core';
+import { HubService } from 'src/app/services/hub.service';
 
 @Component({
   selector: 'app-hub-card',
@@ -40,7 +41,8 @@ export class HubCardComponent implements OnDestroy, OnChanges {
 
   constructor(
     private locationService: LocationService,
-    private changeRef: ChangeDetectorRef
+    private changeRef: ChangeDetectorRef,
+    private hubService: HubService
   ) { }
 
   //FIXME: this may result in a memory leak without destroying the subscription
@@ -58,12 +60,13 @@ export class HubCardComponent implements OnDestroy, OnChanges {
     //   }
     //   this.changeRef.detectChanges();
     // });
-
+    this.active = this.hub.active;
     this.presentCount = this.hub.usersConnection.filter(x => x.isPresent).length;
   }
 
   ngOnChanges() {
       this.atHub = this.locationService.atHub(this.hub, this.coords);
+      this.active = this.hub.active;
       console.log(this.atHub);
       if (!this.atHub) {
         this.distanceInMeters = this.locationService.getDistanceFromHub(this.hub, this.coords);
@@ -72,9 +75,17 @@ export class HubCardComponent implements OnDestroy, OnChanges {
       this.changeRef.detectChanges();
   }
 
-  activeToggle($event) {
+  async activeToggle($event) {
     console.log(this.active);
-    // this.active = !this.active;
+    console.log($event)
+
+    if ($event.detail.checked) {
+      await this.hubService.activateHub(this.hub.id);
+    } else {
+      await this.hubService.deactivateHub(this.hub.id);
+    }
+
+    // this.active = !this.active;\\
   }
 
   async ngOnDestroy() {
