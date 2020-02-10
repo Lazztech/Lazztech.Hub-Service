@@ -10,9 +10,10 @@ import {
   PushNotification,
   PushNotificationToken,
   PushNotificationActionPerformed } from '@capacitor/core';
-import { Platform } from '@ionic/angular';
+import { Platform, ToastController } from '@ionic/angular';
 import { InAppNotification } from '../models/inAppNotification';
 import { FetchPolicy } from 'apollo-client';
+import { AlertService } from './alert.service';
 const { LocalNotifications } = Plugins;
 
 const { PushNotifications } = Plugins;
@@ -38,7 +39,9 @@ export class NotificationsService {
     private apollo: Apollo,
     private authService: AuthService,
     private platform: Platform,
-    private storage: Storage
+    private storage: Storage,
+    // private alertService: AlertService,
+    private toastController: ToastController,
   ) { }
 
   async localNotification(title: string, body: string, schedule?: Date): Promise<void> {
@@ -129,7 +132,7 @@ export class NotificationsService {
         await this.storage.set('native-push-token', token.value);
         await this.submitNotificationToken(token.value);
 
-        alert('Push registration success, token: ' + token.value);
+        // alert('Push registration success, token: ' + token.value);
       }
     );
 
@@ -141,8 +144,18 @@ export class NotificationsService {
     );
 
     PushNotifications.addListener('pushNotificationReceived', 
-      (notification: PushNotification) => {
-        alert('Push received: ' + JSON.stringify(notification));
+      async (notification: PushNotification) => {
+        // alert('Push received: ' + JSON.stringify(notification));
+        //TODO move to alertService?
+        const toast = await this.toastController.create({
+          header: notification.title,
+          message: notification.body,
+          duration: 2000,
+          position: 'top',
+          color: 'dark'
+        });
+        console.log("presenting toast");
+        await toast.present();
       }
     );
 
