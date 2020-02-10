@@ -15,6 +15,10 @@ export class InAppNotification extends BaseEntity {
   @PrimaryGeneratedColumn()
   public id: number;
 
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  public header: string;
+
   @Field()
   @Column()
   public text: string;

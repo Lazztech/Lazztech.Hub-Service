@@ -30,17 +30,17 @@
                 <ion-skeleton-text animated></ion-skeleton-text>
               </ion-avatar>
               <ion-avatar *ngIf="notification.thumbnail" slot="start">
-                  <img src="notification.thumbnail" alt="">
+                  <img src="{{notification.thumbnail}}" alt="">
                 </ion-avatar>
               <ion-label text-wrap>
                 <h2>
-                  HubStruck Notifications
+                  {{notification.header}}
                 </h2>
                 <p>                  
                   {{notification.text}}
                 </p>
                 <p>
-                  {{notification.date}}
+                  {{notification.date | date:'yyyy-MM-dd hh:mm:ss'}}
                 </p>
               </ion-label>
             </ion-item>

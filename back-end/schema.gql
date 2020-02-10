@@ -22,6 +22,7 @@ type Image {
 
 type InAppNotification {
   id: ID!
+  header: String
   text: String!
   date: String!
   thumbnail: String
