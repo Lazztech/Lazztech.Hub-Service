@@ -11,7 +11,7 @@ export class GoogleMapComponent implements AfterViewInit {
 
   @Input()
   coords: { latitude: any; longitude: any; }
-  @ViewChild('map', {static: false}) mapElement: ElementRef;
+  @ViewChild('map') mapElement: ElementRef;
   map: any;
 
   constructor() { }

@@ -19,7 +19,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: '../join-hub/join-hub.module#JoinHubPageModule'
+            loadChildren: () => import('../join-hub/join-hub.module').then(m => m.JoinHubPageModule)
           }
         ]
       },

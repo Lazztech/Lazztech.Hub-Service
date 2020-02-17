@@ -18,7 +18,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: '../../home/home.module#HomePageModule'
+            loadChildren: () => import('../../home/home.module').then(m => m.HomePageModule)
           }
         ]
       },
@@ -27,7 +27,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: '../notifications/notifications.module#NotificationsPageModule'
+            loadChildren: () => import('../notifications/notifications.module').then(m => m.NotificationsPageModule)
           }
         ]
       },
@@ -36,7 +36,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: '../people/people.module#PeoplePageModule'
+            loadChildren: () => import('../people/people.module').then(m => m.PeoplePageModule)
           }
         ]
       },
@@ -45,7 +45,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: '../profile/profile.module#ProfilePageModule'
+            loadChildren: () => import('../profile/profile.module').then(m => m.ProfilePageModule)
           }
         ]
       },
@@ -54,7 +54,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: '../hub/invite/invite.module#InvitePageModule'
+            loadChildren: () => import('../hub/invite/invite.module').then(m => m.InvitePageModule)
           }
         ]
       },

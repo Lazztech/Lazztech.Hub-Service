@@ -26,7 +26,7 @@ export class HubPage implements OnInit, OnDestroy {
   locationSubscription: Subscription;
   hubCoords: {latitude: number, longitude: number};
   userCoords: {latitude: number, longitude: number};
-  @ViewChild(GoogleMapComponent, {static: false}) child:GoogleMapComponent;
+  @ViewChild(GoogleMapComponent) child:GoogleMapComponent;
 
 
   constructor(

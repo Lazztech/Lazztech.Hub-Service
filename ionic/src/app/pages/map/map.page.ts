@@ -17,7 +17,7 @@ export class MapPage implements OnInit {
   hubId: number;
   loading = false;
 
-  @ViewChild(GoogleMapComponent, {static: false}) child:GoogleMapComponent;
+  @ViewChild(GoogleMapComponent) child:GoogleMapComponent;
 
   constructor(
     private route : ActivatedRoute,
