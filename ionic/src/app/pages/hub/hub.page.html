@@ -6,7 +6,7 @@
         <div slot="end" href="javascript:void(0);" (click)="presentActionSheet()">
             <ion-icon size="large" name="more"></ion-icon>
         </div>
-    <ion-title *ngIf="!loading">{{userHub.hub.name}}</ion-title>
+    <ion-title *ngIf="!loading && userHub">{{userHub.hub.name}}</ion-title>
     <ion-title *ngIf="loading">Hub</ion-title>
     <ion-progress-bar *ngIf="loading" type="indeterminate"></ion-progress-bar>
   </ion-toolbar>
@@ -14,20 +14,20 @@
 
 <ion-content>
 
-    <app-hub-card *ngIf="!loading" 
+    <app-hub-card *ngIf="!loading && userHub" 
     [hub]="userHub.hub" 
     [coords]="hubCoords"
     [starred]="userHub.starred"
     [isOwner]="userHub.isOwner">
   </app-hub-card>
 
-  <ion-card *ngIf="!loading" style="height:30%" (click)="goToMap()">
+  <ion-card *ngIf="!loading && userHub && hubCoords" style="height:30%" (click)="goToMap()">
       <ion-card-content style="height:100%">
           <app-google-map *ngIf="userHub" [coords]="hubCoords"></app-google-map>
       </ion-card-content>
     </ion-card>
 
-<ion-list *ngIf="!loading">
+<ion-list *ngIf="!loading && userHub">
   <ion-list-header>
     <ion-text>Present</ion-text>
   </ion-list-header>
@@ -52,7 +52,7 @@
 
 </ion-list>
 
-<ion-list *ngIf="!loading">
+<ion-list *ngIf="!loading && userHub">
   <ion-list-header>
     <ion-text>Away</ion-text>
   </ion-list-header>
