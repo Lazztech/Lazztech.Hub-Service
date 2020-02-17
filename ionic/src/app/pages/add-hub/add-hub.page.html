@@ -40,7 +40,7 @@
           <!-- <ion-label>Hub Image</ion-label> -->
 
             <ion-grid>
-                <ion-row align-items-center>
+                <ion-row class="ion-align-items-center">
                     <ion-col>
                         <ion-card *ngIf="image">
                             <img [src]="image" >
@@ -71,7 +71,7 @@
                   <ion-input type="email" formControlName="hubName"></ion-input>
                 </ion-item>
   
-                <ion-text text-center color="danger">
+                <ion-text class="ion-text-center" color="danger">
                     <p *ngIf="hubName.invalid && hubName.touched" color="danger" >
                         Required
                     </p>
@@ -89,7 +89,7 @@
               <!-- <ion-button [disabled]="myForm.invalid" type="submit" expand="full" color="primary">Create</ion-button> -->
 
               <ion-grid>
-                  <ion-row align-items-center>
+                  <ion-row class="ion-align-items-center">
                       <ion-col>
                             <ion-card (click)="isFree()" [ngClass]="paid ? null : 'glowing-card'">
                                 <!-- <img src="/assets/icons/house_placeholder.png" > -->
