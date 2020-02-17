@@ -40,10 +40,10 @@
         <ion-img width="100%" *ngIf="userConnection.user.image" src="{{userConnection.user.image}}"></ion-img>
       </ion-avatar>
       <ion-label>
-        <h3 float-left>
+        <h3 class="ion-float-left">
           <ion-text>{{userConnection.user.firstName}} {{userConnection.user.lastName}}</ion-text>
         </h3>
-        <p *ngIf="userConnection.isOwner" float-right>
+        <p *ngIf="userConnection.isOwner" class="ion-float-right">
           <ion-text>Admin</ion-text>
         </p>
       </ion-label>
@@ -65,7 +65,7 @@
         <ion-img width="100%" *ngIf="userConnection.user.image" src="{{userConnection.user.image}}"></ion-img>
       </ion-avatar>
       <ion-label>
-        <h3 float-left>
+        <h3 class="ion-float-left">
           <ion-text>{{userConnection.user.firstName}} {{userConnection.user.lastName}}</ion-text>
         </h3>
         <p *ngIf="userConnection.isOwner" float-right>
