@@ -1,11 +1,11 @@
 <div>
-  <ion-avatar padding-top class="custom-avatar">
+  <ion-avatar class="ion-padding-top custom-avatar">
     <!-- FIXME don't use this image or store a copy locally -->
     <img width="100%" *ngIf="!user.image" src="https://ionicframework.com/docs/demos/api/avatar/avatar.svg">
     <img *ngIf="user.image" src="{{user.image}}">
   </ion-avatar>
 
-  <ion-text text-center>
+  <ion-text class="ion-text-center">
     <h1 style="font-weight: bold" >{{user.firstName}} {{user.lastName}}</h1>
     <p>{{user.email}}</p>
   </ion-text>
