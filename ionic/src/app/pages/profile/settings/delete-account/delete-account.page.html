@@ -8,11 +8,11 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
-    <ion-text text-center padding color="danger">
+<ion-content class="ion-padding">
+    <ion-text class="ion-padding ion-text-center" color="danger">
         <h5 >Warning this cannot be reversed!</h5>
     </ion-text>
-    <ion-text text-center padding color="danger">
+    <ion-text class="ion-padding ion-text-center" color="danger">
         <h5 >If you are sure you would like to permanently delete your account enter your email and password to verify.</h5>
     </ion-text>
 
@@ -22,7 +22,7 @@
           <ion-input type="email" formControlName="email"></ion-input>
         </ion-item>
 
-        <ion-text text-center padding color="danger">
+        <ion-text class="ion-padding ion-text-center" color="danger">
             <p *ngIf="email.invalid && email.touched" color="danger" >
                 Please enter a valid email address
             </p>
@@ -33,7 +33,7 @@
             <ion-input type="password" formControlName="password"></ion-input>
         </ion-item>
 
-        <ion-text text-center padding color="danger">
+        <ion-text class="ion-padding ion-text-center" color="danger">
             <p *ngIf="password.invalid && password.touched" color="danger" >
                 Please enter a password
             </p>

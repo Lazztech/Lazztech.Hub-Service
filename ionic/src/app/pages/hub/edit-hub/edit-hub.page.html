@@ -32,7 +32,7 @@
             <ion-input value="{{userHub.hub.name}}" formControlName="hubName"></ion-input>
           </ion-item>
 
-          <ion-text text-center padding color="danger">
+          <ion-text class="ion-padding ion-text-center" color="danger">
             <p *ngIf="hubName.invalid && hubName.touched" color="danger" >
                 Required to have 25 character max
             </p>

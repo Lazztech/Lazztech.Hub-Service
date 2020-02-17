@@ -7,14 +7,14 @@
     <ion-progress-bar *ngIf="loading" type="indeterminate"></ion-progress-bar>
   </ion-toolbar>
 </ion-header>
-<ion-content padding>
+<ion-content class="ion-padding">
   <form [formGroup]="myForm" (ngSubmit)="login()" method="post">
     <ion-item>
       <ion-label position="floating">Email</ion-label>
       <ion-input type="email" formControlName="email"></ion-input>
     </ion-item>
 
-    <ion-text text-center padding color="danger">
+    <ion-text class="ion-padding ion-text-center" color="danger">
         <p *ngIf="email.invalid && email.touched" color="danger" >
             Please enter a valid email address
         </p>
@@ -25,7 +25,7 @@
       <ion-input type="password" formControlName="password"></ion-input>
     </ion-item>
 
-    <ion-text text-center padding color="danger">
+    <ion-text class="ion-padding ion-text-center" color="danger">
         <p *ngIf="password.invalid && password.touched" color="danger" >
             Please enter a password at least 10 characters
         </p>
@@ -35,7 +35,7 @@
 
     <ion-button [disabled]="myForm.invalid" type="submit" expand="full" color="primary">Login</ion-button>
   </form>
-  <p text-center>Don't have a account?</p>
+  <p class="ion-text-center">Don't have a account?</p>
   <ion-button expand="full" color="danger" (click)="registerModal()">Register</ion-button>
 </ion-content>
 

@@ -8,9 +8,9 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content class="ion-padding">
   
-  <p text-center>Forgot your password? No problem. Enter your email and we’ll send you a pin to reset your password.</p>
+  <p class="ion-text-center">Forgot your password? No problem. Enter your email and we’ll send you a pin to reset your password.</p>
 
     <form [formGroup]="myForm" (ngSubmit)="sendPin()" method="post">
       <ion-item>
@@ -18,7 +18,7 @@
         <ion-input type="email" formControlName="email"></ion-input>
       </ion-item>
 
-      <ion-text text-center padding color="danger">
+      <ion-text class="ion-padding ion-text-center" color="danger">
           <p *ngIf="email.invalid && email.touched" color="danger" >
               Please enter a valid email address
           </p>
