@@ -10,9 +10,9 @@ export class ActivityDotComponent implements OnInit, OnChanges {
   @Input()
   active = false;
 
-  private green = false;
-  private orange = false;
-  private grey = false;
+  public green = false;
+  public orange = false;
+  public grey = false;
 
   constructor(
     private changeRef: ChangeDetectorRef
