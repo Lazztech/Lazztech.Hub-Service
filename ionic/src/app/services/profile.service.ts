@@ -28,7 +28,7 @@ export class ProfileService {
     }).toPromise();
 
     console.log(result);
-    if (result.data.changeName) {
+    if ((result as any).data.changeName) {
       console.log("Changed name successfully.");
       return true;
     } else {
@@ -50,7 +50,7 @@ export class ProfileService {
     }).toPromise();
 
     console.log(result);
-    if (result.data.changeEmail) {
+    if ((result as any).data.changeEmail) {
       console.log("Changed email successfully");
       return true;
     } else {
@@ -69,7 +69,7 @@ export class ProfileService {
     }).toPromise();
 
     console.log(result);
-    if (result.data.changePassword) {
+    if ((result as any).data.changePassword) {
       console.log("Changed password successfully");
       return true;
     } else {
@@ -90,7 +90,7 @@ export class ProfileService {
     }).toPromise();
 
     console.log(result);
-    const response = result.data.changeUserImage;
+    const response = (result as any).data.changeUserImage;
     return response;
   }
 
@@ -104,7 +104,7 @@ export class ProfileService {
     }).toPromise();
 
     console.log(result);
-    if (result.data.deleteAccount) {
+    if ((result as any).data.deleteAccount) {
       console.log("Deleted account successfully");
       return true;
     } else {
@@ -123,7 +123,7 @@ export class ProfileService {
     }).toPromise();
 
     console.log(result);
-    if (result.data.newInvite) {
+    if ((result as any).data.newInvite) {
       console.log("Invite sent!");
       return true;
     } else {

@@ -249,7 +249,7 @@ export class NotificationsService {
       `
     }).toPromise();
 
-    if (result.data.addUserFcmNotificationToken) {
+    if ((result as any).data.addUserFcmNotificationToken) {
       console.log("addUserFcmNotificationToken successful.");
     } else {
       console.error("addUserFcmNotificationToken failed!");

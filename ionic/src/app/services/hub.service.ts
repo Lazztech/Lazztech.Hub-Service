@@ -28,7 +28,7 @@ export class HubService {
     }).toPromise();
 
     console.log(result);
-    const response = result.data.createHub;
+    const response = (result as any).data.createHub;
 
     if (response) {
       console.log("createHub successful.");
@@ -156,7 +156,7 @@ export class HubService {
     }).toPromise();
 
     console.log(result);
-    const response = result.data.renameHub;
+    const response = (result as any).data.renameHub;
 
     if (response) {
       console.log("renameHub successful.");
@@ -223,7 +223,7 @@ export class HubService {
     }).toPromise();
 
     console.log(result);
-    const response = result.data.inviteUserToHub;
+    const response = (result as any).data.inviteUserToHub;
     return response;
   }
 
@@ -274,7 +274,7 @@ export class HubService {
     }).toPromise();
 
     console.log(result);
-    const response = result.data.joinHub;
+    const response = (result as any).data.joinHub;
     return response;
   }
 
@@ -288,7 +288,7 @@ export class HubService {
     }).toPromise();
 
     console.log(result);
-    const response = result.data.deleteHub;
+    const response = (result as any).data.deleteHub;
     return response;
   }
 
@@ -302,7 +302,7 @@ export class HubService {
     }).toPromise();
 
     console.log(result);
-    const response = result.data.changeHubImage;
+    const response = (result as any).data.changeHubImage;
     return response;
   }
 
@@ -316,7 +316,7 @@ export class HubService {
     }).toPromise();
 
     console.log(result);
-    const response = result.data.setHubStarred;
+    const response = (result as any).data.setHubStarred;
     return response;
   }
 
@@ -330,7 +330,7 @@ export class HubService {
     }).toPromise();
 
     console.log(result);
-    const response = result.data.setHubNotStarred;
+    const response = (result as any).data.setHubNotStarred;
     return response;
   }
 

@@ -26,7 +26,7 @@ export class AuthService {
     }).toPromise();
 
     console.log(result);
-    this.token = result.data.login;
+    this.token = (result as any).data.login;
 
     if (this.token) {
       console.log("Login successful.");
@@ -60,7 +60,7 @@ export class AuthService {
     }).toPromise();
 
     console.log(result);
-    this.token = result.data.register;
+    this.token = (result as any).data.register;
     return this.token;
   }
 
@@ -74,7 +74,7 @@ export class AuthService {
     }).toPromise();
 
     console.log(result);
-    return result.data.sendPasswordResetEmail;
+    return (result as any).data.sendPasswordResetEmail;
   }
 
   async resetPassword(email: string, newPassword: string, resetPin: string): Promise<boolean> {
@@ -91,7 +91,7 @@ export class AuthService {
     }).toPromise();
 
     console.log(result);
-    return result.data.resetPassword;
+    return (result as any).data.resetPassword;
   }
 
   async user(): Promise<User> {
