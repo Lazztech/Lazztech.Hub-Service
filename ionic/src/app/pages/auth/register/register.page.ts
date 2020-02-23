@@ -68,6 +68,7 @@ export class RegisterPage implements OnInit {
     this.dismissRegister();
     const loginModal = await this.modalController.create({
       component: LoginPage,
+      swipeToClose: true,
     });
     return await loginModal.present();
   }

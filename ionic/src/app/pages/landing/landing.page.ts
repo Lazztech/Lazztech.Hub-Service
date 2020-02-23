@@ -46,7 +46,8 @@ export class LandingPage implements OnInit {
 
   async register() {
     const registerModal = await this.modalController.create({
-      component: RegisterPage
+      component: RegisterPage,
+      swipeToClose: true,
     });
     return await registerModal.present();
   }
@@ -54,6 +55,7 @@ export class LandingPage implements OnInit {
   async login() {
     const loginModal = await this.modalController.create({
       component: LoginPage,
+      swipeToClose: true,
     });
     return await loginModal.present();
   }

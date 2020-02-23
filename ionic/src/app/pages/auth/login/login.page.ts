@@ -57,7 +57,8 @@ export class LoginPage implements OnInit {
   async registerModal() {
     this.dismissLogin();
     const registerModal = await this.modalController.create({
-      component: RegisterPage
+      component: RegisterPage,
+      swipeToClose: true,
     });
     return await registerModal.present();
   }
@@ -65,7 +66,8 @@ export class LoginPage implements OnInit {
   async resetModal() {
     this.dismissLogin();
     const resetModal = await this.modalController.create({
-      component: ResetPinPage
+      component: ResetPinPage,
+      swipeToClose: true,
     });
     return await resetModal.present();
   }
