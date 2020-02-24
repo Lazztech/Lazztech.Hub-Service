@@ -15,9 +15,6 @@ export class HubCardComponent implements OnDestroy, OnChanges {
   hub: any
 
   @Input()
-  active: boolean = false;
-
-  @Input()
   adminControls = false;
   
   atHub: boolean = false;
@@ -60,13 +57,11 @@ export class HubCardComponent implements OnDestroy, OnChanges {
     //   }
     //   this.changeRef.detectChanges();
     // });
-    this.active = this.hub.active;
     this.presentCount = this.hub.usersConnection.filter(x => x.isPresent).length;
   }
 
   ngOnChanges() {
       this.atHub = this.locationService.atHub(this.hub, this.coords);
-      this.active = this.hub.active;
       console.log(this.atHub);
       if (!this.atHub) {
         this.distanceInMeters = this.locationService.getDistanceFromHub(this.hub, this.coords);
@@ -76,7 +71,7 @@ export class HubCardComponent implements OnDestroy, OnChanges {
   }
 
   async activeToggle($event) {
-    console.log(this.active);
+    console.log(this.hub.active);
     console.log($event)
 
     if ($event.detail.checked) {

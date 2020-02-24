@@ -4,7 +4,7 @@
         <ion-card-subtitle *ngIf="!isOwner" class="ion-float-right">Member</ion-card-subtitle>
         <ion-icon *ngIf="starred && !isOwner" class="ion-float-right ion-padding-end" name="star"></ion-icon>
         <app-activity-dot class="ion-float-left ion-padding-end"
-        [active]="active"
+        [active]="hub.active"
         ></app-activity-dot>
         <ion-card-subtitle class="ion-float-left">{{hub.name}}</ion-card-subtitle>
     </ion-card-header>
@@ -35,7 +35,7 @@
         <ion-col *ngIf="adminControls">
           <ion-card-subtitle class="ion-float-right" color="success">On / Off</ion-card-subtitle>
           <br>
-          <ion-toggle [(ngModel)]="active" [checked]="active" (ionChange)="activeToggle($event)" class="ion-float-right" color="success"></ion-toggle>
+          <ion-toggle [(ngModel)]="hub.active" (ionChange)="activeToggle($event)" class="ion-float-right" color="success"></ion-toggle>
         </ion-col>
   </ion-row>
     </ion-grid>
