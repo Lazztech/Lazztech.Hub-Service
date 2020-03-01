@@ -6,13 +6,15 @@ import { CommonModule } from '@angular/common';
 import { ActivityDotComponent } from './activity-dot/activity-dot.component';
 import { ProfileComponent } from './profile/profile.component';
 import { FormsModule } from '@angular/forms';
+import { MicroChatComponent } from './micro-chat/micro-chat.component';
 
 @NgModule({
     declarations: [
         GoogleMapComponent, 
         HubCardComponent,
         ActivityDotComponent,
-        ProfileComponent
+        ProfileComponent,
+        MicroChatComponent
     ],
     imports: [
         IonicModule, 
@@ -23,7 +25,8 @@ import { FormsModule } from '@angular/forms';
         GoogleMapComponent, 
         HubCardComponent,
         ActivityDotComponent,
-        ProfileComponent
+        ProfileComponent,
+        MicroChatComponent
     ]
 })
 export class ComponentsModule {

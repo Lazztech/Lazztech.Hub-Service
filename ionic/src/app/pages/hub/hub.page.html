@@ -21,6 +21,8 @@
     [isOwner]="userHub.isOwner">
   </app-hub-card>
 
+  <app-micro-chat *ngIf="!loading && userHub"></app-micro-chat>
+
   <ion-card *ngIf="!loading && userHub && hubCoords" style="height:30%" (click)="goToMap()">
       <ion-card-content style="height:100%">
           <app-google-map *ngIf="userHub" [coords]="hubCoords"></app-google-map>
