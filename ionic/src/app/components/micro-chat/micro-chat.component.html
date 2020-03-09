@@ -1,25 +1,19 @@
 <div scrollX="true" class="ion-padding-start">
-  <ion-chip class="scroll-item">
-    <!-- <ion-icon name="heart" color="dark"></ion-icon> -->
+  <ion-chip class="scroll-item" (click)="microChatActionSheet(1)">
     <ion-label>Wave 👋</ion-label>
   </ion-chip>
-  <ion-chip class="scroll-item">
+  <ion-chip class="scroll-item" (click)="microChatActionSheet(1)">
     <ion-label>OMW 🚗</ion-label>
   </ion-chip>
-  <ion-chip class="scroll-item">
-    <ion-icon name="heart" color="dark"></ion-icon>
-    <ion-label>Default</ion-label>
-  </ion-chip>
-  <ion-chip class="scroll-item">
-    <ion-icon name="heart" color="dark"></ion-icon>
-    <ion-label>Default</ion-label>
-  </ion-chip>
-  <ion-chip class="scroll-item">
-    <ion-icon name="heart" color="dark"></ion-icon>
-    <ion-label>Default</ion-label>
-  </ion-chip>
-  <ion-chip class="scroll-item ion-padding-end">
-    <ion-icon name="heart" color="dark"></ion-icon>
-    <ion-label>Default</ion-label>
+  <div *ngIf="userHub">
+    <div *ngFor="let microChat of userHub.hub.microChats">
+      <ion-chip class="scroll-item" (click)="microChatActionSheet(microChat.id)">
+        <ion-label>{{microChat.text}} {{microChat.emoji}}</ion-label>
+      </ion-chip>
+    </div>
+  </div>
+  <ion-chip class="scroll-item" (click)="addNewMicroChat()">
+    <ion-icon name="add" color="light"></ion-icon>
+    <ion-label>Add New</ion-label>
   </ion-chip>
 </div>

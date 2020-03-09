@@ -392,5 +392,20 @@ export class HubService {
     return result;
   }
 
-
+  async sendMicroChat(hubId: number, microChatId) {
+    const result = await this.apollo.mutate({
+      mutation: gql`
+      mutation {
+        microChatToHub(hubId: ${hubId}, microChatId: ${microChatId}) {
+          id
+          emoji
+          text
+        }
+      }
+      `
+    }).toPromise();
+    
+    console.log(`exitedHubGeofence hubId ${hubId} returned ${result}`);
+    return result;
+  }
 }
