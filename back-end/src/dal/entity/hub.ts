@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { JoinUserHub } from './joinUserHub';
 import { User } from './user';
+import { MicroChat } from './microChat';
 
 @ObjectType()
 @Entity()
@@ -44,6 +45,13 @@ export class Hub extends BaseEntity {
     joinUserHub => joinUserHub.hub,
   )
   public usersConnection: JoinUserHub[];
+
+  @Field(() => [MicroChat], { nullable: true })
+  @OneToMany(
+    type => MicroChat,
+    microChat => microChat.hubId
+  )
+  public microChats: MicroChat[];
 
   @Field(() => [User], { nullable: true })
   public async owners(): Promise<User[]> {

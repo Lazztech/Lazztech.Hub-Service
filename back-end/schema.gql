@@ -11,6 +11,7 @@ type Hub {
   latitude: Float
   longitude: Float
   usersConnection: [JoinUserHub!]
+  microChats: [MicroChat!]
   owners: [User!]
   members: [User!]
 }
@@ -66,6 +67,13 @@ type Location {
   longitude: String!
 }
 
+type MicroChat {
+  id: ID!
+  hubId: ID!
+  emoji: String!
+  text: String!
+}
+
 type Mutation {
   changeName(lastName: String!, firstName: String!): User!
   changeEmail(newEmail: String!): User!
@@ -90,6 +98,7 @@ type Mutation {
   exitedHubGeofence(hubId: Int!): Boolean!
   activateHub(hubId: Int!): Hub!
   deactivateHub(hubId: Int!): Hub!
+  microChatToHub(microChatId: Int!, hubId: Int!): MicroChat!
   addUserFcmNotificationToken(token: String!): Boolean!
 }
 

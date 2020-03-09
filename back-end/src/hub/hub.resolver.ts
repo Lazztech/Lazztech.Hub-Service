@@ -9,6 +9,7 @@ import { User } from '../dal/entity/user';
 import { Float, Int } from 'type-graphql';
 import { FileService } from 'src/services/file.service';
 import { HubService } from './hub.service';
+import { MicroChat } from 'src/dal/entity/microChat';
 
 @Resolver()
 export class HubResolver {
@@ -487,5 +488,29 @@ export class HubResolver {
     hub.active = false;
     hub = await hub.save();
     return hub;
+  }
+
+  @UseGuards(AuthGuard)
+  @Mutation(() => MicroChat)
+  public async microChatToHub(
+    @UserId() userId,
+    @Args({name: 'hubId', type: () => Int}) hubId: number,
+    @Args({name: 'microChatId', type: () => Int}) microChatId: number,
+  ) {
+    const microChat = new MicroChat();
+    microChat.emoji = "💩";
+    microChat.text = "poopin";
+    const user = await User.findOne(userId);
+    const hub = await Hub.findOne({
+      where: {
+        id: hubId
+      },
+      relations: [
+        "usersConnection",
+        "usersConnection.user"
+      ]
+    });
+    await this.hubService.microChatToHub(user, hub, microChat);
+    return microChat;
   }
 }

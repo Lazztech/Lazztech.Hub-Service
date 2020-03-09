@@ -1,15 +1,23 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { NotificationService } from 'src/notification/notification.service';
 import { JoinUserHub } from 'src/dal/entity/joinUserHub';
 import { JoinUserInAppNotifications } from 'src/dal/entity/joinUserInAppNotifications';
 import { InAppNotification } from 'src/dal/entity/inAppNotification';
+import { User } from 'src/dal/entity/user';
+import { Hub } from 'src/dal/entity/hub';
+import { MicroChat } from 'src/dal/entity/microChat';
 
 @Injectable()
 export class HubService {
 
+    private readonly logger = new Logger(HubService.name);
     constructor(
         private notificationService: NotificationService
-    ) {}
+    ) {
+        this.logger.log({
+            method: "constructor",
+        })
+    }
 
     async notifyOfHubActivated(userHubRelationships: JoinUserHub[], except?: JoinUserHub[]) {
         for (let index = 0; index < userHubRelationships.length; index++) {
@@ -39,6 +47,44 @@ export class HubService {
                       });
                       await joinUserInAppNotification.save();
             }
+        }
+    }
+
+    async microChatToHub(fromUser: User, hub: Hub, microChat: MicroChat) {
+        const members = await hub.usersConnection;
+        for (let index = 0; index < members.length; index++) {
+            const memberConnetion = members[index];
+            // if (member.id != fromUser.id) {
+                await this.notificationService.sendPushToUser(
+                    memberConnetion.user.id,
+                    `${microChat.emoji} ${microChat.text}`,
+                    `From ${fromUser.firstName} to ${hub.name}`,
+                    ""
+                    ).catch(err => console.error(err));
+                
+                const inAppNotification = InAppNotification.create({
+                    thumbnail: fromUser.image,
+                    header: `${microChat.emoji} ${microChat.text}`,
+                    text: `From ${fromUser.firstName} to ${hub.name}`,
+                    date: Date.now().toString(),
+                    });
+                    await inAppNotification.save();
+                
+                    const joinUserInAppNotification = JoinUserInAppNotifications.create({
+                    userId: fromUser.id,
+                    inAppNotificationId: inAppNotification.id,
+                    });
+                await joinUserInAppNotification.save();
+                
+                this.logger.log({
+                    method: this.microChatToHub.name,
+                    params: [
+                        fromUser,
+                        hub,
+                        microChat
+                    ]
+                });
+            // }
         }
     }
 
