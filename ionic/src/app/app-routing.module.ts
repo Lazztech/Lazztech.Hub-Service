@@ -27,6 +27,10 @@ const routes: Routes = [
   { path: 'delete-account', loadChildren: () => import('./pages/profile/settings/delete-account/delete-account.module').then(m => m.DeleteAccountPageModule), canActivate: [AuthGuard] },
   { path: 'privacy', loadChildren: () => import('./pages/profile/privacy/privacy.module').then(m => m.PrivacyPageModule), canActivate: [AuthGuard] },
   { path: 'map', loadChildren: () => import('./pages/map/map.module').then(m => m.MapPageModule) },
+  {
+    path: 'micro-chat-add',
+    loadChildren: () => import('./pages/micro-chat-add/micro-chat-add.module').then( m => m.MicroChatAddPageModule)
+  },
 ];
 
 @NgModule({

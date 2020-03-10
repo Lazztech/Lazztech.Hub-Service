@@ -5,8 +5,10 @@ import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { ActivityDotComponent } from './activity-dot/activity-dot.component';
 import { ProfileComponent } from './profile/profile.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MicroChatComponent } from './micro-chat/micro-chat.component';
+import { MicroChatAddPageModule } from '../pages/micro-chat-add/micro-chat-add.module';
+import { MicroChatAddPage } from '../pages/micro-chat-add/micro-chat-add.page';
 
 @NgModule({
     declarations: [
@@ -14,12 +16,14 @@ import { MicroChatComponent } from './micro-chat/micro-chat.component';
         HubCardComponent,
         ActivityDotComponent,
         ProfileComponent,
-        MicroChatComponent
+        MicroChatComponent,
+        MicroChatAddPage
     ],
     imports: [
         IonicModule, 
         CommonModule,
         FormsModule,
+        ReactiveFormsModule
     ],
     exports: [
         GoogleMapComponent, 

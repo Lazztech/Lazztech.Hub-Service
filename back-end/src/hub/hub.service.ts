@@ -57,14 +57,14 @@ export class HubService {
             // if (member.id != fromUser.id) {
                 await this.notificationService.sendPushToUser(
                     memberConnetion.user.id,
-                    `${microChat.emoji} ${microChat.text}`,
-                    `From ${fromUser.firstName} to ${hub.name}`,
+                    `${microChat.text}`,
+                    `From ${fromUser.firstName} to the ${hub.name} hub`,
                     ""
                     ).catch(err => console.error(err));
                 
                 const inAppNotification = InAppNotification.create({
                     thumbnail: fromUser.image,
-                    header: `${microChat.emoji} ${microChat.text}`,
+                    header: `${microChat.text}`,
                     text: `From ${fromUser.firstName} to ${hub.name}`,
                     date: Date.now().toString(),
                     });

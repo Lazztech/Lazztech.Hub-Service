@@ -49,7 +49,7 @@ export class Hub extends BaseEntity {
   @Field(() => [MicroChat], { nullable: true })
   @OneToMany(
     type => MicroChat,
-    microChat => microChat.hubId
+    microChat => microChat.hub
   )
   public microChats: MicroChat[];
 

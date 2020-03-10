@@ -167,16 +167,6 @@
             "problemMatcher": []
         },
         {
-            "type": "func",
-            "command": "host start",
-            "problemMatcher": "$func-watch",
-            "isBackground": true,
-            "dependsOn": "npm build",
-            "options": {
-                "cwd": "${workspaceFolder}/serverless"
-            }
-        },
-        {
             "type": "shell",
             "label": "npm build",
             "command": "npm run build",

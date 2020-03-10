@@ -1,4 +1,4 @@
-import { UseGuards } from '@nestjs/common';
+import { UseGuards, Logger } from '@nestjs/common';
 import { Mutation, Query, Resolver, Args } from '@nestjs/graphql';
 import { UserId } from 'src/decorators/user.decorator';
 import { AuthGuard } from 'src/guards/authguard.service';
@@ -13,6 +13,9 @@ import { MicroChat } from 'src/dal/entity/microChat';
 
 @Resolver()
 export class HubResolver {
+
+  private logger = new Logger(HubResolver.name);
+
   constructor(
     private qrService: QrService, 
     private fileService: FileService,
@@ -62,7 +65,8 @@ export class HubResolver {
       relations: [
         'hub',
         'hub.usersConnection',
-        'hub.usersConnection.user'
+        'hub.usersConnection.user',
+        'hub.microChats'
       ],
     });
     return userHubRelationship;
@@ -497,9 +501,6 @@ export class HubResolver {
     @Args({name: 'hubId', type: () => Int}) hubId: number,
     @Args({name: 'microChatId', type: () => Int}) microChatId: number,
   ) {
-    const microChat = new MicroChat();
-    microChat.emoji = "💩";
-    microChat.text = "poopin";
     const user = await User.findOne(userId);
     const hub = await Hub.findOne({
       where: {
@@ -507,10 +508,76 @@ export class HubResolver {
       },
       relations: [
         "usersConnection",
-        "usersConnection.user"
+        "usersConnection.user",
+        "microChats"
       ]
     });
+    const microChat = hub.microChats.find(x => x.id === microChatId);
     await this.hubService.microChatToHub(user, hub, microChat);
     return microChat;
+  }
+
+  @UseGuards(AuthGuard)
+  @Mutation(() => MicroChat)
+  public async createMicroChat(
+    @UserId() userId,
+    @Args({name: 'hubId', type: () => Int}) hubId: number,
+    @Args({name: 'microChatText', type: () => String}) microChatText: string,
+  ) {
+    const usersConnection = await JoinUserHub.findOne({
+      where: {
+        userId,
+        hubId
+      },
+      relations: [
+        "user",
+        "hub",
+        "hub.microChats"
+      ]
+    });
+
+    if (!usersConnection) {
+      this.logger.error("No valid relationship found between user and hub for that action.")
+    }
+
+    let microChat = new MicroChat();
+    microChat.hubId = hubId;
+    microChat.text = microChatText;
+    microChat = await microChat.save();
+
+    this.logger.log(`createMicroChat(userId: ${userId}, hubId: ${hubId}, microChatText: ${microChatText}) completed successfully.`)
+
+    return microChat;
+  }
+
+  @UseGuards(AuthGuard)
+  @Mutation(() => Boolean)
+  public async deleteMicroChat(
+    @UserId() userId,
+    @Args({name: 'hubId', type: () => Int}) hubId: number,
+    @Args({name: 'microChatId', type: () => Int}) microChatId: number,
+  ) {
+    const usersConnection = await JoinUserHub.findOne({
+      where: {
+        userId,
+        hubId
+      },
+      relations: [
+        "user",
+        "hub",
+        "hub.microChats"
+      ]
+    });
+
+    if (!usersConnection) {
+      this.logger.error("No valid relationship found between user and hub for that action.")
+    }
+    
+    const microChat = usersConnection.hub.microChats.find(x => x.id == microChatId);
+    await microChat.remove();
+
+    this.logger.log(`deleteMicroChat(userId: ${userId}, hubId: ${hubId}, microChatId ${microChatId}) completed successfully.`)
+
+    return true;
   }
 }

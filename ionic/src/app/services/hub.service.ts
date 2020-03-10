@@ -194,6 +194,10 @@ export class HubService {
               isOwner
               isPresent
             }
+            microChats {
+              id
+              text
+            }
           }
         }
       }
@@ -398,14 +402,36 @@ export class HubService {
       mutation {
         microChatToHub(hubId: ${hubId}, microChatId: ${microChatId}) {
           id
-          emoji
           text
         }
       }
       `
     }).toPromise();
-    
-    console.log(`exitedHubGeofence hubId ${hubId} returned ${result}`);
+    return result;
+  }
+
+  async createMicroChat(hubId: number, microChatText: string) {
+    const result = await this.apollo.mutate({
+      mutation: gql`
+      mutation {
+        createMicroChat(hubId: ${hubId}, microChatText: "${microChatText}") {
+          id
+          text
+        }
+      }
+      `
+    }).toPromise();
+    return result;
+  }
+
+  async deleteMicroChat(hubId: number, microChatId: number) {
+    const result = await this.apollo.mutate({
+      mutation: gql`
+      mutation {
+        deleteMicroChat(hubId: ${hubId}, microChatId: ${microChatId})
+      }
+      `
+    }).toPromise();
     return result;
   }
 }

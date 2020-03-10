@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="dismissModal()">Close</ion-button>
+    </ion-buttons>
+    <ion-title>Add New Micro Chat</ion-title>
+    <ion-progress-bar *ngIf="loading" type="indeterminate"></ion-progress-bar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="myForm" (ngSubmit)="save()" method="post">
+    <ion-item>
+      <ion-label position="floating">MicroChat Text</ion-label>
+      <ion-input formControlName="text"></ion-input>
+    </ion-item>
+
+    <ion-text class="ion-text-center" color="danger">
+        <p *ngIf="text.invalid && text.touched" color="danger" >
+            Please enter some text no longer than 10 characters
+        </p>
+    </ion-text>
+    
+    <br/>
+  </form>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+      <ion-row>
+        <ion-col>
+          <ion-button [disabled]="myForm.invalid" (click)="save()" type="submit" expand="full" color="primary">Create</ion-button>
+        </ion-col>
+      </ion-row>
+  </ion-toolbar>
+</ion-footer>

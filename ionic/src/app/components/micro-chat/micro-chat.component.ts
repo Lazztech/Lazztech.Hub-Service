@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { HubService } from 'src/app/services/hub.service';
 import { ActionSheetController, IonRouterOutlet, ModalController } from '@ionic/angular';
+import { MicroChatAddPage } from 'src/app/pages/micro-chat-add/micro-chat-add.page';
 
 @Component({
   selector: 'app-micro-chat',
@@ -25,12 +26,13 @@ export class MicroChatComponent implements OnInit {
   ngOnInit() {}
 
   async addNewMicroChat() {
-    // const modal = await this.modalController.create({
-    //   component: AddNewMicrochatPage,
-    //   swipeToClose: true,
-    //   presentingElement: this.routerOutlet.nativeEl
-    // });
-    // return await modal.present();
+    const modal = await this.modalController.create({
+      component: MicroChatAddPage,
+      swipeToClose: true,
+      presentingElement: this.routerOutlet.nativeEl,
+      componentProps: { hubId: this.hubId }
+    });
+    return await modal.present();
   }
 
   async microChatActionSheet(microChatId) {
@@ -44,6 +46,18 @@ export class MicroChatComponent implements OnInit {
           await this.hubService.sendMicroChat(this.hubId, microChatId);
           console.log('Send microChat clicked');
           return true;
+        }
+      },
+      {
+        text: 'Delete',
+        // icon: 'close',
+        role: 'destructive',
+        handler: () => {
+          console.log('Delete clicked');
+          const result = confirm("Are you sure you want to delete the MicroChat?");
+          if (result) {
+            this.hubService.deleteMicroChat(this.hubId, microChatId);
+          }
         }
       },
       {

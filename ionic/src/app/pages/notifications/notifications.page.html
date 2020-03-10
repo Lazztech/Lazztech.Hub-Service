@@ -4,6 +4,9 @@
           <!-- <ion-menu-button></ion-menu-button> -->
         </ion-buttons>
     <ion-title>Notifications</ion-title>
+    <div slot="end" href="javascript:void(0);">
+      <ion-icon size="large" name="trash-outline"></ion-icon>
+    </div>
     <ion-progress-bar *ngIf="loading" type="indeterminate"></ion-progress-bar>
   </ion-toolbar>
 </ion-header>
@@ -40,7 +43,7 @@
                   {{notification.text}}
                 </p>
                 <p>
-                  {{notification.date | date:'yyyy-MM-dd hh:mm:ss'}}
+                  <!-- {{notification.date | date:'yyyy-MM-dd hh:mm:ss'}} -->
                 </p>
               </ion-label>
             </ion-item>

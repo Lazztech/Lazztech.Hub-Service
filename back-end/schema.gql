@@ -69,8 +69,8 @@ type Location {
 
 type MicroChat {
   id: ID!
-  hubId: ID!
-  emoji: String!
+  hubId: Float!
+  hub: ID!
   text: String!
 }
 
@@ -99,6 +99,8 @@ type Mutation {
   activateHub(hubId: Int!): Hub!
   deactivateHub(hubId: Int!): Hub!
   microChatToHub(microChatId: Int!, hubId: Int!): MicroChat!
+  createMicroChat(microChatText: String!, hubId: Int!): MicroChat!
+  deleteMicroChat(microChatId: Int!, hubId: Int!): Boolean!
   addUserFcmNotificationToken(token: String!): Boolean!
 }
 

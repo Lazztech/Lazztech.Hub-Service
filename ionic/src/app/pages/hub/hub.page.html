@@ -4,7 +4,7 @@
           <ion-back-button></ion-back-button>
         </ion-buttons>
         <div slot="end" href="javascript:void(0);" (click)="presentActionSheet()">
-            <ion-icon size="large" name="more"></ion-icon>
+            <ion-icon size="large" name="options-outline"></ion-icon>
         </div>
     <ion-title *ngIf="!loading && userHub">{{userHub.hub.name}}</ion-title>
     <ion-title *ngIf="loading">Hub</ion-title>
@@ -23,6 +23,7 @@
 
   <app-micro-chat *ngIf="!loading && userHub"
     [hubId]="id"
+    [userHub]="userHub"
   ></app-micro-chat>
 
   <ion-card *ngIf="!loading && userHub && hubCoords" style="height:30%" (click)="goToMap()">
