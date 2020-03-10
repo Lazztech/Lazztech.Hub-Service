@@ -5,7 +5,7 @@
         </ion-buttons>
     <ion-title>Notifications</ion-title>
     <div slot="end" href="javascript:void(0);">
-      <ion-icon size="large" name="trash-outline"></ion-icon>
+      <ion-icon size="large" name="trash-outline" (click)="deleteNotifications()"></ion-icon>
     </div>
     <ion-progress-bar *ngIf="loading" type="indeterminate"></ion-progress-bar>
   </ion-toolbar>

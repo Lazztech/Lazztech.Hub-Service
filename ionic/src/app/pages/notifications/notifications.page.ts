@@ -42,4 +42,11 @@ export class NotificationsPage implements OnInit {
     }
   }
 
+
+  async deleteNotifications() {
+    const result = confirm("Delete all notifications?");
+    if (result) {
+      
+    }
+  }
 }
