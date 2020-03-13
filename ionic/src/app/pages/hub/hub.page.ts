@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { ActionSheetController, NavController, Platform } from '@ionic/angular';
@@ -26,8 +26,6 @@ export class HubPage implements OnInit, OnDestroy {
   locationSubscription: Subscription;
   hubCoords: {latitude: number, longitude: number};
   userCoords: {latitude: number, longitude: number};
-  @ViewChild(GoogleMapComponent) child:GoogleMapComponent;
-
 
   constructor(
     private sanitizer: DomSanitizer,
@@ -65,16 +63,6 @@ export class HubPage implements OnInit, OnDestroy {
     this.hubCoords = hubCoords;
     console.log(this.hubCoords);
     this.loading = false;
-  }
-
-  ionViewWillEnter() {
-    this.child.updateMap()
-  }
-
-  ionViewWillLeave() {
-    // unset div & visibility on exit
-    // this.child.mapElement.nativeElement.setVisible(false);
-    this.child.mapElement.nativeElement.remove();
   }
 
   async loadHub() {

@@ -40,16 +40,6 @@ export class MapPage implements OnInit {
     // this.loading = false;
   }
 
-  ionViewWillEnter() {
-    this.child.updateMap()
-  }
-
-  ionViewWillLeave() {
-    // unset div & visibility on exit
-    this.child.mapElement.nativeElement.setVisible(false);
-    this.child.mapElement.nativeElement.remove();
-  }
-
   async ngOnInit() {
     // this.hubId = parseInt(this.route.snapshot.paramMap.get('id'));
     // this.loading = true;

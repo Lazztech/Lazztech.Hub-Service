@@ -115,26 +115,10 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy {
     this.pwaInstallService.showInstallBanner();
   }
 
-
-  //TODO remove me
-  goToImage(id: number) {
-    this.navCtrl.navigateRoot('image/'+ id);
-  }
-
   //TODO remove me
   update() {
     console.log('updating...');
     this.updateService.updateToLatest();
-  }
-
-  //TODO remove me
-  async testPushNotification() {
-    await this.notificationsService.testPushNotificationToUser();
-  }
-
-  //TODO remove me
-  async testLocationNotification () {
-
   }
 
   goToAddHubPage() {
@@ -156,14 +140,4 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  ionViewWillEnter() {
-    // this.child.updateMap()
-  }
-
-  ionViewWillLeave() {
-    // unset div & visibility on exit
-    // this.child.mapElement.nativeElement.setVisible(false);
-    // this.child.mapElement.nativeElement.remove();
-  }
-  
 }
