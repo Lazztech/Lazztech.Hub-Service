@@ -44,6 +44,12 @@
 
     <ion-searchbar (ionInput)="filterHubs($event)" showCancelButton="focus"></ion-searchbar>
 
+    <ion-card *ngIf="!loading && coords" style="height:30%" (click)="goToMap()">
+      <ion-card-content style="height:100%">
+          <app-google-map [center]="coords" [markers]="markers"></app-google-map>
+      </ion-card-content>
+    </ion-card>
+
       <ion-card class="welcome-card" *ngIf="!loading && userHubs.length == 0">
         <ion-card-header>
             <ion-card-subtitle>Get Started</ion-card-subtitle>

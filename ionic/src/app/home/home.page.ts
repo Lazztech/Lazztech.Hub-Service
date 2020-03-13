@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ChangeDetectorRef, OnDestroy, ViewChild } from '@angular/core';
 import { Plugins } from '@capacitor/core';
 import { MenuController, NavController, Platform } from '@ionic/angular';
 import { Observable, of, Subscription } from 'rxjs';
@@ -9,6 +9,7 @@ import { PwaInstallService } from '../services/pwa-install.service';
 import { UpdateService } from '../services/update.service';
 import { HubService } from '../services/hub.service';
 import { LocationService } from '../services/location.service';
+import { GoogleMapComponent } from '../components/google-map/google-map.component';
 
 const { Geolocation } = Plugins;
 
@@ -19,7 +20,7 @@ const { Geolocation } = Plugins;
 })
 export class HomePage implements OnInit, AfterViewInit, OnDestroy {
 
-  loading = false;
+  loading = true;
   userHubs = [];
   user: User;
   updateReady = false;
@@ -28,6 +29,9 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy {
 
   locationSubscription: Subscription;
   coords: {latitude: number, longitude: number};
+  markers = [];
+  
+  @ViewChild(GoogleMapComponent) child:GoogleMapComponent;
   
   constructor(
     private menu: MenuController,
@@ -73,10 +77,6 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy {
 
   async ionViewDidEnter() {
     this.user = await this.authService.user();
-    this.inAppNotificationCount = await this.notificationsService.getInAppNotifications().then(x => {
-      this.loading = true;
-      return x.length;
-    });
     this.locationSubscription = this.locationService.coords$.subscribe(async x => {
       await this.platform.ready();
       console.log(x);
@@ -86,6 +86,11 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy {
       this.changeRef.detectChanges();
     });
     this.userHubs = await this.hubService.usersHubs();
+    for (let index = 0; index < this.userHubs.length; index++) {
+      const userHub = this.userHubs[index];
+      const marker = { latitude: userHub.hub.latitude, longitude: userHub.hub.longitude };
+      this.markers.push(marker);
+    }
     this.loading = false;
   }
 
@@ -151,6 +156,14 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  ionViewWillEnter() {
+    // this.child.updateMap()
+  }
 
+  ionViewWillLeave() {
+    // unset div & visibility on exit
+    // this.child.mapElement.nativeElement.setVisible(false);
+    // this.child.mapElement.nativeElement.remove();
+  }
   
 }
