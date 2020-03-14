@@ -28,7 +28,7 @@
 
   <ion-card *ngIf="!loading && userHub && hubCoords" style="height:30%" (click)="goToMap()">
       <ion-card-content style="height:100%">
-          <app-google-map *ngIf="userHub && hubCoords" [center]="hubCoords"></app-google-map>
+          <app-google-map *ngIf="userHub && hubCoords" [center]="hubCoords" [hubs]="[userHub.hub]"></app-google-map>
       </ion-card-content>
     </ion-card>
 
