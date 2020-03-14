@@ -22,6 +22,7 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy {
 
   loading = true;
   userHubs = [];
+  hubs = [];
   user: User;
   updateReady = false;
   beforeInstall: Observable<boolean> = of(false);
@@ -29,7 +30,6 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy {
 
   locationSubscription: Subscription;
   coords: {latitude: number, longitude: number};
-  markers = [];
   
   @ViewChild(GoogleMapComponent) child:GoogleMapComponent;
   
@@ -88,8 +88,7 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy {
     this.userHubs = await this.hubService.usersHubs();
     for (let index = 0; index < this.userHubs.length; index++) {
       const userHub = this.userHubs[index];
-      const marker = { latitude: userHub.hub.latitude, longitude: userHub.hub.longitude };
-      this.markers.push(marker);
+      this.hubs.push(userHub.hub);
     }
     this.loading = false;
   }

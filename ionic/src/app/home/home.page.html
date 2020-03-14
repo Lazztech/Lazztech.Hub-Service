@@ -46,7 +46,7 @@
 
     <ion-card *ngIf="!loading && coords" style="height:30%" (click)="goToMap()">
       <ion-card-content style="height:100%">
-          <app-google-map [center]="coords" [markers]="markers"></app-google-map>
+          <app-google-map [center]="coords" [navOnMarker]="true" [hubs]="hubs"></app-google-map>
       </ion-card-content>
     </ion-card>
 

@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, AfterViewInit, Input, OnChanges, ElementR
 /// <reference types="@types/googlemaps" />
 import { darkStyle } from './map-dark-style';
 import { GOOGLE_MAPS_KEY } from 'src/environments/environment.prod';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-google-map',
@@ -10,17 +11,21 @@ import { GOOGLE_MAPS_KEY } from 'src/environments/environment.prod';
 })
 export class GoogleMapComponent implements AfterViewInit {
 
-
-  @Input()
-  markers = [];
-
   @Input() 
   center: { latitude: any; longitude: any; };
+
+  @Input()
+  hubs = [];
+
+  @Input()
+  navOnMarker = false;
 
   @ViewChild('mapCanvas') mapElement: ElementRef;
   map: any;
 
-  constructor() { }
+  constructor(
+    public navCtrl: NavController,
+  ) { }
 
   ngAfterViewInit() {
     this.initMap();
@@ -48,14 +53,21 @@ export class GoogleMapComponent implements AfterViewInit {
 
     this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
 
-    if (this.markers) {
-      for (let index = 0; index < this.markers.length; index++) {
-        const position = { lat: this.markers[index].latitude, lng: this.markers[index].longitude };
+    if (this.hubs) {
+      for (let index = 0; index < this.hubs.length; index++) {
+        const hub = this.hubs[index];
+        const position = { lat: this.hubs[index].latitude, lng: this.hubs[index].longitude };
   
         let marker = new google.maps.Marker({
           position: position,
           map: this.map
         });
+
+        if (this.navOnMarker) {
+          marker.addListener('click', () => {
+            this.navCtrl.navigateForward('hub/'+ hub.id);
+          });
+        }
       }
     } else {
       let marker = new google.maps.Marker({
