@@ -16,6 +16,9 @@ export class HubCardComponent implements OnDestroy, OnChanges {
 
   @Input()
   adminControls = false;
+
+  @Input()
+  showDescription = false;
   
   atHub: boolean = false;
 

@@ -3,9 +3,9 @@
       <ion-buttons slot="start">
           <ion-back-button></ion-back-button>
         </ion-buttons>
-        <div slot="end" href="javascript:void(0);" (click)="presentActionSheet()">
+        <!-- <div slot="end" href="javascript:void(0);" (click)="presentActionSheet()">
             <ion-icon size="large" name="options-outline"></ion-icon>
-        </div>
+        </div> -->
     <ion-title *ngIf="!loading && userHub">{{userHub.hub.name}}</ion-title>
     <ion-title *ngIf="loading">Hub</ion-title>
     <ion-progress-bar *ngIf="loading" type="indeterminate"></ion-progress-bar>
@@ -18,7 +18,9 @@
     [hub]="userHub.hub" 
     [coords]="hubCoords"
     [starred]="userHub.starred"
-    [isOwner]="userHub.isOwner">
+    [isOwner]="userHub.isOwner"
+    [showDescription]="true"
+    (click)="presentActionSheet()">
   </app-hub-card>
 
   <app-micro-chat *ngIf="!loading && userHub"

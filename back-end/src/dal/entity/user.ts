@@ -32,6 +32,10 @@ export class User extends BaseEntity {
 
   @Field({ nullable: true })
   @Column({ nullable: true })
+  public description: string;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
   public image: string;
 
   @Field()

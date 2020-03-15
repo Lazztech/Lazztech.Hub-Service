@@ -21,6 +21,10 @@ export class EditHubPage implements OnInit {
     return this.myForm.get('hubName');
   }
 
+  get hubDescription() {
+    return this.myForm.get('hubDescription');
+  }
+
   constructor(
     public navCtrl: NavController,
     private route: ActivatedRoute,
@@ -33,6 +37,10 @@ export class EditHubPage implements OnInit {
 
     this.myForm = this.fb.group({
       hubName: ['', [
+        Validators.required,
+        Validators.maxLength(25)
+      ]],
+      hubDescription: ['', [
         Validators.required,
         Validators.maxLength(25)
       ]]
@@ -50,7 +58,7 @@ export class EditHubPage implements OnInit {
   async save() {
     this.loading = true;
     const formValue = this.myForm.value;
-    await this.hubService.renameHub(this.id, formValue.hubName);
+    await this.hubService.editHub(this.id, formValue.hubName, formValue.hubDescription);
     this.loading = false;
     await this.navCtrl.back();
   }

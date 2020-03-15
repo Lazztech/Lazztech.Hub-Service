@@ -25,7 +25,7 @@
 
     <ion-list>
 
-      <form [formGroup]="myForm" method="post">
+      <form *ngIf="userHub" [formGroup]="myForm" method="post">
 
           <ion-item>
             <ion-label>Name</ion-label>
@@ -37,6 +37,17 @@
                 Required to have 25 character max
             </p>
         </ion-text>
+
+        <ion-item>
+          <ion-label>Description</ion-label>
+          <ion-input value="{{userHub.hub.description}}" formControlName="hubDescription"></ion-input>
+        </ion-item>
+
+        <ion-text class="ion-padding ion-text-center" color="danger">
+          <p *ngIf="hubName.invalid && hubName.touched" color="danger" >
+              Required to have 25 character max
+          </p>
+      </ion-text>
 
       </form>
     

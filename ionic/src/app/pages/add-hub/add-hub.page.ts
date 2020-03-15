@@ -46,6 +46,10 @@ export class AddHubPage implements OnInit {
     return this.myForm.get('hubName');
   }
 
+  get hubDescription() {
+    return this.myForm.get('hubDescription');
+  }
+
   constructor(
     private hubService: HubService,
     private alertService: AlertService,
@@ -58,6 +62,9 @@ export class AddHubPage implements OnInit {
   ngOnInit() {
     this.myForm = this.fb.group({
       hubName: ['', [
+        Validators.required
+      ]],
+      hubDescription: ['', [
         Validators.required
       ]]
     });
@@ -114,6 +121,7 @@ export class AddHubPage implements OnInit {
     console.log(coords);
     const result = await this.hubService.createHub(
       formValue.hubName,
+      formValue.description,
       this.image,
       coords.latitude,
       coords.longitude

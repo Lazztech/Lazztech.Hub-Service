@@ -28,6 +28,7 @@ export class HubResolver {
   public async createHub(
     @UserId() userId,
     @Args({ name: 'name', type: () => String }) name: string,
+    @Args({ name: 'description', type: () => String }) description: string,
     @Args({ name: 'image', type: () => String }) image: string,
     @Args({ name: 'latitude', type: () => Float }) latitude: number,
     @Args({ name: 'longitude', type: () => Float }) longitude: number,
@@ -39,6 +40,7 @@ export class HubResolver {
       latitude,
       longitude,
       name,
+      description,
       image: imageUrl,
     });
     const result = await hub.save();
@@ -279,10 +281,11 @@ export class HubResolver {
   //@Authorized()
   @UseGuards(AuthGuard)
   @Mutation(() => Hub)
-  public async renameHub(
+  public async editHub(
     @UserId() userId,
     @Args({ name: 'hubId', type: () => Int }) hubId: number,
-    @Args({ name: 'newName', type: () => String }) newName: string,
+    @Args({ name: 'name', type: () => String }) name: string,
+    @Args({ name: 'description', type: () => String }) description: string,
   ): Promise<Hub> {
     const joinUserHubResult = await JoinUserHub.findOne({
       where: {
@@ -294,7 +297,8 @@ export class HubResolver {
     });
 
     let hub = joinUserHubResult.hub;
-    hub.name = newName;
+    hub.name = name;
+    hub.description = description;
     hub = await hub.save();
     return hub;
   }

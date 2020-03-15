@@ -12,13 +12,14 @@ export class HubService {
     private apollo: Apollo,
   ) { }
 
-  async createHub(name: string, image: string, latitude: number, longitude: number) {
+  async createHub(name: string, description: string, image: string, latitude: number, longitude: number) {
     const result = await this.apollo.mutate({
       mutation: gql`
       mutation {
-        createHub(image: "${image}", name: "${name}", latitude: ${latitude}, longitude: ${longitude}) {
+        createHub(image: "${image}", name: "${name}", description: "${description}" latitude: ${latitude}, longitude: ${longitude}) {
           id
           name
+          description
           image
           latitude
           longitude
@@ -52,6 +53,7 @@ export class HubService {
           hub {
             id
             name
+            description
             active
             image
             latitude
@@ -143,12 +145,14 @@ export class HubService {
     return response;
   }
 
-  async renameHub(hubId: number, newName: string) {
+  async editHub(hubId: number, name: string, description: string) {
     const result = await this.apollo.mutate({
       mutation: gql`
       mutation {
-        renameHub(hubId: ${hubId}, newName: "${newName}") {
+        editHub(hubId: ${hubId}, name: "${name}", description: "${description}") {
+          id
           name
+          description
         }
       }
       `,
@@ -156,12 +160,12 @@ export class HubService {
     }).toPromise();
 
     console.log(result);
-    const response = (result as any).data.renameHub;
+    const response = (result as any).data.editHub;
 
     if (response) {
-      console.log("renameHub successful.");
+      console.log("editHub successful.");
     } else {
-      console.log("renameHub failure");
+      console.log("editHub failure");
     }
 
     return response;
@@ -180,6 +184,7 @@ export class HubService {
           hub {
             id
             name
+            description
             active
             image
             latitude

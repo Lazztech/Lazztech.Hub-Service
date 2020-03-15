@@ -21,6 +21,10 @@ export class Hub extends BaseEntity {
   @Field()
   @Column()
   public name: string;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  public description: string;
   
   @Field({ nullable: true })
   @Column({ default: false })
