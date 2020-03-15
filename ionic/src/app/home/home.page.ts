@@ -139,4 +139,13 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  goToMap() {
+    this.navCtrl.navigateForward('map', {
+      state: {
+        hubCoords: this.coords,
+        hubs: this.hubs
+      }
+    });
+  }
+
 }

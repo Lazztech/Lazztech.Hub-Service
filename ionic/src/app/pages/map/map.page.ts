@@ -13,7 +13,7 @@ export class MapPage implements OnInit {
 
   queryParamsSubscription: Subscription;
   hubCoords: any;
-  hub: any;
+  hubs = [];
 
   hubId: number;
   loading = false;
@@ -34,7 +34,12 @@ export class MapPage implements OnInit {
     // });
     if (this.router.getCurrentNavigation().extras.state) {
       this.hubCoords = this.router.getCurrentNavigation().extras.state.hubCoords;
-      this.hub = this.router.getCurrentNavigation().extras.state.hub;
+      if (this.router.getCurrentNavigation().extras.state.hub) {
+        this.hubs.push(this.router.getCurrentNavigation().extras.state.hub);
+      }
+      if (this.router.getCurrentNavigation().extras.state.hubs) {
+        this.hubs = this.router.getCurrentNavigation().extras.state.hubs;
+      }
       console.log(this.hubCoords);
     }
     // this.hubCoords = {latitude: 47.5421555, longitude: -122.1732493};
