@@ -16,14 +16,16 @@ export class AccountResolver {
   //@Authorized()
   @UseGuards(AuthGuard)
   @Mutation(() => User)
-  public async changeName(
+  public async editUserDetails(
     @UserId() userId,
     @Args({ name: 'firstName', type: () => String }) firstName: string,
     @Args({name: 'lastName', type: () => String }) lastName: string,
+    @Args({name: 'description', type: () => String }) description: string,
   ): Promise<User> {
     const user = await User.findOne({ where: { id: userId } });
     user.firstName = firstName;
     user.lastName = lastName;
+    user.description = description;
     await user.save();
 
     return user;

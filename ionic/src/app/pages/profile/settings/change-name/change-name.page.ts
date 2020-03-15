@@ -23,6 +23,10 @@ export class ChangeNamePage implements OnInit {
     return this.myForm.get('lastName');
   }
 
+  get description() {
+    return this.myForm.get('description');
+  }
+
   constructor(
     private modalController: ModalController,
     private profileService: ProfileService,
@@ -37,6 +41,9 @@ export class ChangeNamePage implements OnInit {
       ]],
       lastName: ['', [
         Validators.required
+      ]],
+      description: ['', [
+        // Validators.required
       ]]
     });
 
@@ -52,7 +59,7 @@ export class ChangeNamePage implements OnInit {
 
     const formValue = this.myForm.value;
 
-    const result = await this.profileService.changeName(formValue.firstName, formValue.lastName);
+    const result = await this.profileService.editUserDetails(formValue.firstName, formValue.lastName, formValue.description);
     if (result) {
       this.loading = false;
       this.alertService.presentToast("Changed name.");

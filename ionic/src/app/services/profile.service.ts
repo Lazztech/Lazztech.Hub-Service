@@ -14,25 +14,26 @@ export class ProfileService {
     private storage: Storage
   ) { }
 
-  async changeName(firstName: string, lastName: string): Promise<boolean> {
+  async editUserDetails(firstName: string, lastName: string, description: string): Promise<boolean> {
     const result = await this.apollo.mutate({
       mutation: gql`
         mutation {
-          changeName(firstName: "${firstName}", lastName: "${lastName}") {
+          editUserDetails(firstName: "${firstName}", lastName: "${lastName}", description: "${description}") {
             id
             firstName
             lastName
+            description
           }
         }
       `
     }).toPromise();
 
     console.log(result);
-    if ((result as any).data.changeName) {
-      console.log("Changed name successfully.");
+    if ((result as any).data.editUserDetails) {
+      console.log("editUserDetails successfully.");
       return true;
     } else {
-      console.log("Failed to change name.");
+      console.log("Failed to editUserDetails.");
       return false;
     }
   }

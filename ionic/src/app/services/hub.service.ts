@@ -88,6 +88,7 @@ export class HubService {
           id
           firstName
           lastName
+          description
           image
         }
       }
@@ -194,6 +195,7 @@ export class HubService {
                 id
                 firstName
                 lastName
+                description
                 image
               }
               isOwner

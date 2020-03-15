@@ -76,7 +76,7 @@ type MicroChat {
 }
 
 type Mutation {
-  changeName(lastName: String!, firstName: String!): User!
+  editUserDetails(description: String!, lastName: String!, firstName: String!): User!
   changeEmail(newEmail: String!): User!
   changePassword(newPassword: String!, oldPassword: String!): Boolean!
   changeUserImage(newImage: String!): User!

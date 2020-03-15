@@ -102,6 +102,7 @@ export class AuthService {
           id
           firstName
           lastName
+          description
           image
           email
         }

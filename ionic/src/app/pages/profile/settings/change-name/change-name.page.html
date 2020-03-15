@@ -15,7 +15,7 @@
           <ion-input type="email" formControlName="firstName"></ion-input>
         </ion-item>
 
-        <ion-text class="ion-padding ion-text-center" color="danger">
+        <ion-text class="ion-text-center" color="danger">
             <p *ngIf="firstName.invalid && firstName.touched" color="danger" >
                 Required
             </p>
@@ -26,11 +26,22 @@
             <ion-input type="email" formControlName="lastName"></ion-input>
         </ion-item>
 
-        <ion-text class="ion-padding ion-text-center" color="danger">
+        <ion-text class="ion-text-center" color="danger">
             <p *ngIf="lastName.invalid && lastName.touched" color="danger" >
                 Required
             </p>
         </ion-text>
+
+        <ion-item>
+          <ion-label position="floating">Description</ion-label>
+          <ion-input type="email" formControlName="description"></ion-input>
+      </ion-item>
+
+      <ion-text class="ion-text-center" color="danger">
+          <p *ngIf="description.invalid && description.touched" color="danger" >
+              Required
+          </p>
+      </ion-text>
         
         <br/>
     
