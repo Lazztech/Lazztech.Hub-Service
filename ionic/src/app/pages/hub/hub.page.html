@@ -32,10 +32,25 @@
       </ion-card-content>
     </ion-card>
 
-    <ion-button *ngIf="!loading && userHub" color="primary" expand="full" class="ion-padding-start ion-padding-end" (click)="requestRide()">
-      Request a ride with 
-      <ion-icon style="font-size: 64px;" src="/assets/icons/Uber_Logo_White_RGB.svg"></ion-icon>
-    </ion-button>
+    <ion-grid *ngIf="!loading && userHub" class="ion-no-padding">
+      <ion-row>
+
+        <ion-col class="ion-padding-start">
+          <ion-button color="primary" expand="full" (click)="requestRide()">
+            Ride with
+            <ion-icon style="font-size: 64px;" src="/assets/icons/Uber_Logo_White_RGB.svg"></ion-icon>
+          </ion-button>
+        </ion-col>
+
+        <ion-col class="ion-padding-start ion-padding-end">
+          <ion-button color="primary" expand="full" color="danger" (click)="navigate()">
+            Navigate
+            <ion-icon class="ion-padding-start" size="large" name="map"></ion-icon>
+          </ion-button>
+        </ion-col>
+
+      </ion-row>
+    </ion-grid>
 
 <ion-list *ngIf="!loading && userHub">
   <ion-list-header>
