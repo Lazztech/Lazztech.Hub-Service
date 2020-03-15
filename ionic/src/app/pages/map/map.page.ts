@@ -13,6 +13,7 @@ export class MapPage implements OnInit {
 
   queryParamsSubscription: Subscription;
   hubCoords: any;
+  hub: any;
 
   hubId: number;
   loading = false;
@@ -33,6 +34,7 @@ export class MapPage implements OnInit {
     // });
     if (this.router.getCurrentNavigation().extras.state) {
       this.hubCoords = this.router.getCurrentNavigation().extras.state.hubCoords;
+      this.hub = this.router.getCurrentNavigation().extras.state.hub;
       console.log(this.hubCoords);
     }
     // this.hubCoords = {latitude: 47.5421555, longitude: -122.1732493};
