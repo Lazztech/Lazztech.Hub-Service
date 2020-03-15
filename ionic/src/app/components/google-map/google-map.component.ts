@@ -20,6 +20,9 @@ export class GoogleMapComponent implements AfterViewInit {
   @Input()
   navOnMarker = false;
 
+  @Input()
+  showControls = false;
+
   @ViewChild('mapCanvas') mapElement: ElementRef;
   map: any;
 
@@ -45,8 +48,8 @@ export class GoogleMapComponent implements AfterViewInit {
     let mapOptions: google.maps.MapOptions = {
       center: position,
       zoom: 13,
-      disableDefaultUI: true,
-      draggable: false,
+      disableDefaultUI: !this.showControls,
+      draggable: this.showControls,
       mapTypeId: google.maps.MapTypeId.ROADMAP,
       // styles: darkStyle
     };
