@@ -33,6 +33,9 @@
       <ion-list-header>
           <ion-text>Hubs You Admin</ion-text>
       </ion-list-header>
+      <ion-item lines="none">
+        <ion-note>Toggle hub activity setting to show or hide the presence details of hub members.</ion-note>
+      </ion-item>
       <div *ngFor="let userHub of userHubs">
         <app-hub-card *ngIf="!loading"
         [hub]="userHub.hub"
