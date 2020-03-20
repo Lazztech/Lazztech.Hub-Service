@@ -27,7 +27,7 @@ import configuration from './config/configuration';
       username: 'gian',
       password: 'Password123',
       database: 'lazztechhubdev-db',
-      logging: true,
+      logging: false,
       // migrationsRun: true,
       extra: {
         options: {
