@@ -54,7 +54,7 @@ export class NotificationService {
         body: JSON.stringify(notification),
       });
 
-      this.logger.log(result);
+      this.logger.log(`Sent push notification to ${fcmUserTokens.length} devices: ${JSON.stringify(notification)}`);
     }
   }
 }
