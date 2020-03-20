@@ -6,6 +6,7 @@ import { AccountResolver } from '../account/account.resolver';
 import { AuthenticationResolver } from '../authentication/authentication.resolver';
 import { HubResolver } from '../hub/hub.resolver';
 import { NotificationResolver } from '../notification/notification.resolver';
+import { Logger } from '@nestjs/common';
 
 const resolvers = [
   AuthenticationResolver,
@@ -17,6 +18,9 @@ const container = Container;
 const authChecker = customAuthChecker;
 
 export const configuredSchema = async (): Promise<GraphQLSchema> => {
+  const logger = new Logger(configuredSchema.name);
+  logger.log("executing");
+
   return await buildSchema({
     resolvers,
     container,
@@ -25,6 +29,9 @@ export const configuredSchema = async (): Promise<GraphQLSchema> => {
 };
 
 export const configuredSchemaSync = (): GraphQLSchema => {
+  const logger = new Logger(configuredSchemaSync.name);
+  logger.log("executing");
+
   return buildSchemaSync({
     resolvers,
     container,

@@ -14,12 +14,12 @@ export class HubService {
     constructor(
         private notificationService: NotificationService
     ) {
-        this.logger.log({
-            method: "constructor",
-        })
+        this.logger.log("constructor")
     }
 
     async notifyOfHubActivated(userHubRelationships: JoinUserHub[], except?: JoinUserHub[]) {
+        this.logger.log(this.notifyOfHubActivated.name);
+
         for (let index = 0; index < userHubRelationships.length; index++) {
             const element = userHubRelationships[index];
             if (except) {
@@ -51,6 +51,8 @@ export class HubService {
     }
 
     async microChatToHub(fromUser: User, hub: Hub, microChat: MicroChat) {
+        this.logger.log(this.microChatToHub.name);
+
         const members = await hub.usersConnection;
         for (let index = 0; index < members.length; index++) {
             const memberConnetion = members[index];

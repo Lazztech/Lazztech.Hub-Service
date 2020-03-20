@@ -1,6 +1,9 @@
 import { createConnection } from 'typeorm';
+import { Logger } from '@nestjs/common';
 
 export function createLocalDevDbConnection() {
+  const logger = new Logger(createLocalDevDbConnection.name);
+
   return createConnection({
     type: 'postgres',
     host: 'localhost',

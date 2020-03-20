@@ -1,4 +1,4 @@
-import { Response, UseGuards } from '@nestjs/common';
+import { Response, UseGuards, Logger } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import * as bcrypt from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
@@ -15,14 +15,20 @@ import { ConfigService } from '@nestjs/config';
 
 @Resolver()
 export class AuthenticationResolver {
+
+  private logger = new Logger(AuthenticationResolver.name);
+
   constructor(
     private emailService: EmailService,
     private readonly configService: ConfigService,
-  ) {}
+  ) {
+    this.logger.log("constructor");
+  }
 
   @UseGuards(AuthGuard)
   @Query(() => User, { nullable: true })
   public async me(@UserId() userId): Promise<User> {
+    this.logger.log(this.me.name);
     console.log(userId);
     return await User.findOne({ where: { id: userId } });
   }
@@ -32,6 +38,8 @@ export class AuthenticationResolver {
     @Args('email') email: string,
     @Args('password') password: string,
   ): Promise<string> {
+    this.logger.log(this.login.name);
+
     const user = await User.findOne({ where: { email } });
 
     if (!user) {
@@ -54,6 +62,8 @@ export class AuthenticationResolver {
   public async register(
     @Args('data') { firstName, lastName, email, password }: RegisterInput,
   ): Promise<string> {
+    this.logger.log(this.register.name);
+
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
       return null;
@@ -95,6 +105,8 @@ export class AuthenticationResolver {
   @Mutation(() => Boolean)
   public async logout(@Response() res): Promise<boolean> {
     //FIXME: not using cookies anymore?
+    this.logger.log(this.logout.name);
+
     res.cookie('access-token', '', { expires: new Date(Date.now()) });
     return true;
   }
@@ -105,6 +117,8 @@ export class AuthenticationResolver {
     @Args('resetPin') resetPin: string,
     @Args('newPassword') newPassword: string,
   ): Promise<boolean> {
+    this.logger.log(this.resetPassword.name);
+
     const user = await User.findOne({
       where: { email: usersEmail },
       relations: ['passwordReset'],
@@ -126,6 +140,8 @@ export class AuthenticationResolver {
   public async sendPasswordResetEmail(
     @Args('email') email: string,
   ): Promise<boolean> {
+    this.logger.log(this.sendPasswordResetEmail.name);
+
     const user = await User.findOne({
       where: { email },
       relations: ['passwordReset'],
@@ -148,6 +164,8 @@ export class AuthenticationResolver {
   @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
   public async newInvite(@Args('email') email: string): Promise<boolean> {
+    this.logger.log(this.newInvite.name);
+
     try {
       const invite = await Invite.create({
         email,

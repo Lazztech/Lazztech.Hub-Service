@@ -14,10 +14,14 @@ import { JoinUserInAppNotifications } from './joinUserInAppNotifications';
 import { JoinUserLocation } from './joinUserLocation';
 import { PasswordReset } from './passwordReset';
 import { UserDevice } from './userDevice';
+import { Logger } from '@nestjs/common';
 
 @ObjectType()
 @Entity()
 export class User extends BaseEntity {
+
+  private logger = new Logger(User.name);
+
   @Field(type => ID)
   @PrimaryGeneratedColumn()
   public id: number;
@@ -78,6 +82,8 @@ export class User extends BaseEntity {
 
   @Field(() => [Hub])
   public async ownedHubs(): Promise<Hub[]> {
+    this.logger.log(this.ownedHubs.name);
+
     const joinUserHubResults = await JoinUserHub.find({
       where: {
         userId: this.id,
@@ -94,6 +100,8 @@ export class User extends BaseEntity {
 
   @Field(() => [Hub])
   public async memberOfHubs(): Promise<Hub[]> {
+    this.logger.log(this.memberOfHubs.name);
+
     const joinUserHubResults = await JoinUserHub.find({
       where: {
         userId: this.id,

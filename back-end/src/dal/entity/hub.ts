@@ -10,10 +10,14 @@ import {
 import { JoinUserHub } from './joinUserHub';
 import { User } from './user';
 import { MicroChat } from './microChat';
+import { Logger } from '@nestjs/common';
 
 @ObjectType()
 @Entity()
 export class Hub extends BaseEntity {
+
+  private logger = new Logger(Hub.name);
+
   @Field(type => ID)
   @PrimaryGeneratedColumn()
   public id: number;
@@ -59,6 +63,8 @@ export class Hub extends BaseEntity {
 
   @Field(() => [User], { nullable: true })
   public async owners(): Promise<User[]> {
+    this.logger.log(this.owners.name);
+
     const joinUserHubResults = await JoinUserHub.find({
       where: {
         hubId: this.id,
@@ -77,6 +83,8 @@ export class Hub extends BaseEntity {
 
   @Field(() => [User], { nullable: true })
   public async members(): Promise<User[]> {
+    this.logger.log(this.members.name);
+
     const joinUserHubResults = await JoinUserHub.find({
       where: {
         hubId: this.id,

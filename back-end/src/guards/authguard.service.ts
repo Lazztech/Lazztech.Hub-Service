@@ -1,4 +1,4 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable, Logger } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { verify } from 'jsonwebtoken';
 
@@ -7,9 +7,15 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private readonly configService: ConfigService) {}
+  private logger = new Logger(AuthGuard.name);
+
+  constructor(private readonly configService: ConfigService) {
+    this.logger.log("constructor");
+  }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    this.logger.log(this.canActivate.name);
+
     const ctx = GqlExecutionContext.create(context);
     let accessToken = ctx.getContext().req.headers['authorization'];
 

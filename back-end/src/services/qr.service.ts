@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import {
   BarcodeFormat,
   BinaryBitmap,
@@ -11,7 +11,16 @@ import * as jpeg from 'jpeg-js';
 
 @Injectable()
 export class QrService {
+
+  private logger = new Logger(QrService.name);
+
+  constructor() {
+    this.logger.log("constructor");
+  }
+
   public async scanQR(base64: string): Promise<any> {
+    this.logger.log(this.scanQR.name);
+
     const buff = Buffer.from(base64.substr(23), 'base64');
     console.log('created buff');
 

@@ -2,6 +2,7 @@ import { verify } from 'jsonwebtoken';
 import { AuthChecker } from 'type-graphql';
 import { User } from '../dal/entity/user';
 import { IMyContext } from './context.interface';
+import { Logger } from '@nestjs/common';
 
 // export const customAuthChecker: AuthChecker<IMyContext> = async (
 //     { root, args, context, info },
@@ -11,6 +12,9 @@ export const customAuthChecker: AuthChecker<any> = async (
   { root, args, context, info },
   roles,
 ) => {
+  const logger = new Logger(customAuthChecker.name);
+  logger.log("executing");
+
   // here we can read the user from context
   // and check his permission in the db against the `roles` argument
   // that comes from the `@Authorized` decorator, eg. ["ADMIN", "MODERATOR"]

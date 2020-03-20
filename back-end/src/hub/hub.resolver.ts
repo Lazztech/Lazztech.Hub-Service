@@ -33,6 +33,8 @@ export class HubResolver {
     @Args({ name: 'latitude', type: () => Float }) latitude: number,
     @Args({ name: 'longitude', type: () => Float }) longitude: number,
   ): Promise<Hub> {
+    this.logger.log(this.createHub.name);
+
     const imageUrl = await this.fileService.storePublicImageFromBase64(image);
 
     // Creates hub with user as owner.
@@ -59,6 +61,8 @@ export class HubResolver {
     @UserId() userId,
     @Args({ name: 'id', type: () => Int }) id: number,
   ): Promise<JoinUserHub> {
+    this.logger.log(this.hub.name);
+
     const userHubRelationship = await JoinUserHub.findOne({
       where: {
         hubId: id,
@@ -79,6 +83,8 @@ export class HubResolver {
   public async usersHubs(
     @UserId() userId
   ): Promise<JoinUserHub[]> {
+    this.logger.log(this.usersHubs.name);
+
     const userHubRelationships = await JoinUserHub.find({
       where: {
         userId: userId,
@@ -97,6 +103,8 @@ export class HubResolver {
     @UserId() userId,
     @Args({ name: 'otherUsersId', type: () => Int }) otherUsersId: number,
   ) {
+    this.logger.log(this.commonUsersHubs.name);
+
     const userHubRelationships = await JoinUserHub.find({
       where: {
         userId: userId,
@@ -128,6 +136,8 @@ export class HubResolver {
     @Args({ name: 'hubId', type: () => Int }) hubId: number,
     @Args({ name: 'inviteesEmail', type: () => String }) inviteesEmail: string
   ): Promise<boolean> {
+    this.logger.log(this.inviteUserToHub.name);
+
     const userHubRelationships = await JoinUserHub.findOne({
       where: {
         userId: userId,
@@ -163,6 +173,8 @@ export class HubResolver {
   public async usersPeople(
     @UserId() userId
   ): Promise<User[]> {
+    this.logger.log(this.usersPeople.name);
+
     //TODO optimize this
     const userHubRelationships = await JoinUserHub.find({
       where: {
@@ -205,6 +217,8 @@ export class HubResolver {
     @UserId() userId,
     @Args({ name: 'search', type: () => String}) search: string
   ): Promise<Hub[]> {
+    this.logger.log(this.searchHubByName.name);
+
     const userHubRelationship = await JoinUserHub.find({
       where: {
         userId: userId,
@@ -227,6 +241,8 @@ export class HubResolver {
   @UseGuards(AuthGuard)
   @Query(() => [Hub])
   public async ownedHubs(@UserId() userId): Promise<Hub[]> {
+    this.logger.log(this.ownedHubs.name);
+
     const user = await User.findOne({ id: userId });
     const ownedHubs = await user.ownedHubs();
     return ownedHubs;
@@ -236,6 +252,8 @@ export class HubResolver {
   @UseGuards(AuthGuard)
   @Query(() => [Hub])
   public async memberOfHubs(@UserId() userId): Promise<Hub[]> {
+    this.logger.log(this.memberOfHubs.name);
+
     const user = await User.findOne({ id: userId });
     const memberOfHubs = await user.memberOfHubs();
     return memberOfHubs;
@@ -245,6 +263,8 @@ export class HubResolver {
   @UseGuards(AuthGuard)
   @Query(() => [Hub])
   public async starredHubs(@UserId() userId) {
+    this.logger.log(this.starredHubs.name);
+
     const userHubRelationships = await JoinUserHub.find({
       where: {
         userId: userId,
@@ -268,6 +288,8 @@ export class HubResolver {
   public async deleteHub(
     @Args({ name: 'hubId', type: () => Int }) hubId: number,
   ) {
+    this.logger.log(this.deleteHub.name);
+
     const hub = await Hub.findOne({
       where: {
         id: hubId,
@@ -287,6 +309,8 @@ export class HubResolver {
     @Args({ name: 'name', type: () => String }) name: string,
     @Args({ name: 'description', type: () => String }) description: string,
   ): Promise<Hub> {
+    this.logger.log(this.editHub.name);
+
     const joinUserHubResult = await JoinUserHub.findOne({
       where: {
         userId: userId,
@@ -311,6 +335,8 @@ export class HubResolver {
     @Args({ name: 'hubId', type: () => Int }) hubId: number,
     @Args({ name: 'newImage', type: () => String }) newImage: string,
   ): Promise<Hub> {
+    this.logger.log(this.changeHubImage.name);
+
     const joinUserHubResult = await JoinUserHub.findOne({
       where: {
         userId: userId,
@@ -341,6 +367,8 @@ export class HubResolver {
     @UserId() userId,
     @Args({ name: 'id', type: () => Int }) id: number,
   ): Promise<boolean> {
+    this.logger.log(this.joinHub.name);
+
     let joinUserHub = await JoinUserHub.create({
       userId: userId,
       hubId: id,
@@ -357,6 +385,8 @@ export class HubResolver {
   public async getHubByQRImage(
     @Args({ name: 'qrImageB64', type: () => String }) qrImageB64: string,
   ): Promise<Hub> {
+    this.logger.log(this.getHubByQRImage.name);
+
     //FIXME: Finish implementing check that user is hub owner.
 
     const result = await this.qrService.scanQR(qrImageB64);
@@ -374,6 +404,8 @@ export class HubResolver {
     @UserId() userId,
     @Args({ name: 'hubId', type: () => Int }) hubId: number,
   ) {
+    this.logger.log(this.setHubStarred.name);
+
     const hubRelationship = await JoinUserHub.findOne({
       userId: userId,
       hubId: hubId,
@@ -390,6 +422,8 @@ export class HubResolver {
     @UserId() userId,
     @Args({ name: 'hubId', type: () => Int }) hubId: number,
   ) {
+    this.logger.log(this.setHubNotStarred.name);
+
     const hubRelationship = await JoinUserHub.findOne({
       userId: userId,
       hubId: hubId,
@@ -405,6 +439,7 @@ export class HubResolver {
     @UserId() userId,
     @Args({name: 'hubId', type: () => Int}) hubId: number
   ): Promise<boolean> {
+    this.logger.log(this.enteredHubGeofence.name);
 
     let hubRelationship = await JoinUserHub.findOne({
       userId,
@@ -426,6 +461,7 @@ export class HubResolver {
     @UserId() userId,
     @Args({name: 'hubId', type: () => Int}) hubId: number
   ): Promise<boolean> {
+    this.logger.log(this.exitedHubGeofence.name);
 
     let hubRelationship = await JoinUserHub.findOne({
       userId,
@@ -447,6 +483,8 @@ export class HubResolver {
     @UserId() userId,
     @Args({name: 'hubId', type: () => Int}) hubId: number
   ) {
+    this.logger.log(this.activateHub.name);
+
     let hubRelationship = await JoinUserHub.findOne({
       where: {
         userId,
@@ -480,6 +518,8 @@ export class HubResolver {
     @UserId() userId,
     @Args({name: 'hubId', type: () => Int}) hubId: number
   ) {
+    this.logger.log(this.deactivateHub.name);
+
     let hubRelationship = await JoinUserHub.findOne({
       where: {
         userId,
@@ -505,6 +545,8 @@ export class HubResolver {
     @Args({name: 'hubId', type: () => Int}) hubId: number,
     @Args({name: 'microChatId', type: () => Int}) microChatId: number,
   ) {
+    this.logger.log(this.microChatToHub.name);
+
     const user = await User.findOne(userId);
     const hub = await Hub.findOne({
       where: {
@@ -528,6 +570,8 @@ export class HubResolver {
     @Args({name: 'hubId', type: () => Int}) hubId: number,
     @Args({name: 'microChatText', type: () => String}) microChatText: string,
   ) {
+    this.logger.log(this.createMicroChat.name);
+
     const usersConnection = await JoinUserHub.findOne({
       where: {
         userId,
@@ -561,6 +605,8 @@ export class HubResolver {
     @Args({name: 'hubId', type: () => Int}) hubId: number,
     @Args({name: 'microChatId', type: () => Int}) microChatId: number,
   ) {
+    this.logger.log(this.deleteMicroChat.name);
+
     const usersConnection = await JoinUserHub.findOne({
       where: {
         userId,

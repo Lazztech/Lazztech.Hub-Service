@@ -1,6 +1,10 @@
 import { isNull, isNullOrUndefined } from 'util';
+import { Logger } from '@nestjs/common';
 
 export function serverlessEnvChecker() {
+  const logger = new Logger(serverlessEnvChecker.name);
+  logger.log("executing");
+
   // if (isNullOrUndefined(process.env.PORT) || process.env.PORT === "") {
   //     throw Error("Missing process.env.PORT");
   // }

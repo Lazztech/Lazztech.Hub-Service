@@ -3,6 +3,8 @@ import { AppService } from './app.service';
 
 @Controller()
 export class AppController {
+  //TODO What should this be used for? A health check?
+
   constructor(private readonly appService: AppService) {}
 
   @Get()

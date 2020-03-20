@@ -1,6 +1,7 @@
 import { Service } from 'typedi';
 import { User } from '../dal/entity/user';
 import { ConfigService } from '@nestjs/config';
+import { Logger } from '@nestjs/common';
 const fetch = require('node-fetch');
 
 @Service()
@@ -8,9 +9,13 @@ export class NotificationService {
   private serverKey: string = this.configService.get<string>('FIREBASE_SERVER_KEY');
   private sendEndpoint = 'https://fcm.googleapis.com/fcm/send';
 
+  private logger = new Logger(NotificationService.name);
+
   constructor(
     private configService: ConfigService
-  ) { }
+  ) { 
+    this.logger.log("constructor");
+  }
 
   public async sendPushToUser(
     userId: number,
@@ -18,6 +23,8 @@ export class NotificationService {
     body: string,
     clickAction: string,
   ) {
+    this.logger.log(this.sendPushToUser.name);
+
     const user = await User.findOne({
       where: { id: userId },
       relations: ['userDevices'],

@@ -5,12 +5,17 @@ import { UserDevice } from '../dal/entity/userDevice';
 import { NotificationService } from './notification.service';
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { AuthGuard } from 'src/guards/authguard.service';
-import { UseGuards } from '@nestjs/common';
+import { UseGuards, Logger } from '@nestjs/common';
 import { UserId } from 'src/decorators/user.decorator';
 
 @Resolver()
 export class NotificationResolver {
-  constructor(private notificationService: NotificationService) {}
+
+  private logger = new Logger(NotificationResolver.name);
+
+  constructor(private notificationService: NotificationService) {
+    this.logger.log("constructor");
+  }
 
   //@Authorized()
   @UseGuards(AuthGuard)
@@ -18,6 +23,8 @@ export class NotificationResolver {
   public async getInAppNotifications(
     @UserId() userId,
   ): Promise<InAppNotification[]> {
+    this.logger.log(this.getInAppNotifications.name);
+
     const joinInAppNotifications = await JoinUserInAppNotifications.find({
       where: { userId: userId },
       relations: ['inAppNotification'],
@@ -39,6 +46,8 @@ export class NotificationResolver {
     @UserId() userId,
     @Args({ name: 'token', type: () => String }) token: string,
   ): Promise<boolean> {
+    this.logger.log(this.addUserFcmNotificationToken.name);
+
     const user = await User.findOne({ 
       where: { id: userId },
       relations: ['userDevices']
@@ -61,6 +70,8 @@ export class NotificationResolver {
 
   @Query(() => Boolean)
   public async sendPushNotification(@Args('userId') userId: number) {
+    this.logger.log(this.sendPushNotification.name);
+
     await this.notificationService.sendPushToUser(
       userId,
       'this is a test push message',

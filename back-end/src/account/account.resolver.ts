@@ -1,4 +1,4 @@
-import { UseGuards } from '@nestjs/common';
+import { UseGuards, Logger } from '@nestjs/common';
 import { Mutation, Resolver, Args } from '@nestjs/graphql';
 import * as bcrypt from 'bcryptjs';
 import { UserId } from 'src/decorators/user.decorator';
@@ -9,9 +9,13 @@ import { FileService } from 'src/services/file.service';
 @Resolver()
 export class AccountResolver {
 
+  private logger = new Logger(AccountResolver.name)
+
   constructor(
       private fileService: FileService
-    ) {}
+    ) {
+      this.logger.log("constructor");
+    }
 
   //@Authorized()
   @UseGuards(AuthGuard)
@@ -22,6 +26,8 @@ export class AccountResolver {
     @Args({name: 'lastName', type: () => String }) lastName: string,
     @Args({name: 'description', type: () => String }) description: string,
   ): Promise<User> {
+    this.logger.log(this.editUserDetails.name);
+
     const user = await User.findOne({ where: { id: userId } });
     user.firstName = firstName;
     user.lastName = lastName;
@@ -38,6 +44,8 @@ export class AccountResolver {
     @UserId() userId,
     @Args({ name: 'newEmail', type: () => String }) newEmail: string,
   ): Promise<User> {
+    this.logger.log(this.changeEmail.name);
+
     const user = await User.findOne({ where: { id: userId } });
     user.email = newEmail;
     await user.save();
@@ -53,6 +61,8 @@ export class AccountResolver {
     @Args({ name: 'oldPassword', type: () => String }) oldPassword: string,
     @Args({ name: 'newPassword', type: () => String }) newPassword: string,
   ): Promise<boolean> {
+    this.logger.log(this.changePassword.name)
+
     const user = await User.findOne({ where: { id: userId } });
 
     const valid = await bcrypt.compare(oldPassword, user.password);
@@ -74,6 +84,8 @@ export class AccountResolver {
     @UserId() userId,
     @Args({ name: 'newImage', type: () => String }) newImage: string,
   ): Promise<User> {
+    this.logger.log(this.changeUserImage.name);
+
     let user = await User.findOne(userId);
 
     if (user.image) {
@@ -96,6 +108,8 @@ export class AccountResolver {
     @Args({ name: 'email', type: () => String }) email: string,
     @Args({ name: 'password', type: () => String }) password: string,
   ): Promise<boolean> {
+    this.logger.log(this.deleteAccount.name);
+
     const user = await User.findOne({ where: { id: userId } });
 
     const valid = await bcrypt.compare(password, user.password);

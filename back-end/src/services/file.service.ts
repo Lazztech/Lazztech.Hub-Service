@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { isNullOrUndefined } from 'util';
 import { BlobServiceClient, PublicAccessType } from '@azure/storage-blob';
@@ -6,9 +6,16 @@ import * as uuidv1 from 'uuid/v1';
 
 @Injectable()
 export class FileService {
-  constructor(private readonly configService: ConfigService) {}
+
+  private logger = new Logger(FileService.name);
+
+  constructor(private readonly configService: ConfigService) {
+    this.logger.log("constructor");
+  }
 
   async storePublicImageFromBase64(base64Image: string): Promise<string> {
+    this.logger.log(this.storePublicImageFromBase64.name);
+
     const blobServiceClient = await BlobServiceClient.fromConnectionString(
       this.getStorageConnectionString(),
     );
@@ -49,6 +56,9 @@ export class FileService {
   }
 
   async deletePublicImageFromUrl(url: string): Promise<void> {
+    this.logger.log(this.deletePublicImageFromUrl.name);
+    //FIXME Ensure any images that are no longer needed get deleted, for a hub that's been deleted for example!
+
     //FIXME this section should not be duplicated, needs to be DRY
     const blobServiceClient = await BlobServiceClient.fromConnectionString(
       this.getStorageConnectionString(),
@@ -76,6 +86,8 @@ export class FileService {
   }
 
   getStorageConnectionString() {
+    this.logger.log(this.getStorageConnectionString.name);
+
     const storageString = this.configService.get<string>('AzureWebJobsStorage');
 
     if (
@@ -91,6 +103,8 @@ export class FileService {
   //FIXME example function from docs
   // A helper function used to read a Node.js readable stream into a string
   private async streamToString(readableStream) {
+    this.logger.log(this.streamToString.name);
+
     return new Promise((resolve, reject) => {
       const chunks = [];
       readableStream.on('data', data => {

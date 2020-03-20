@@ -3,6 +3,8 @@ import { InputPerson } from './InputPerson';
 
 @InputType()
 export class InputPersonDescriptor {
+//FIXME No longer needed?
+
   @Field(type => InputPerson, { nullable: true })
   public person?: InputPerson;
 

@@ -1,6 +1,10 @@
 import { createConnection } from 'typeorm';
+import { Logger } from '@nestjs/common';
 
 export function createAzureSqlDbConnection() {
+  const logger = new Logger(createAzureSqlDbConnection.name);
+  logger.log("executing");
+
   return createConnection({
     type: 'mssql',
     // url: "lazztechhub-db.database.windows.net",

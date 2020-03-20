@@ -1,6 +1,10 @@
 import { createConnection } from 'typeorm';
+import { Logger } from '@nestjs/common';
 
 export function createDockerDbConnection() {
+  const logger = new Logger(createDockerDbConnection.name);
+  logger.log("executing");
+
   return createConnection({
     type: 'postgres',
     url: process.env.DATABASE_URL,
