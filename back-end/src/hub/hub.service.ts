@@ -30,7 +30,7 @@ export class HubService {
                     `"${element.hub.name}" hub became active`,
                     `Touch to go to hub.`,
                     ""
-                    ).catch(err => console.error(err));
+                    ).catch(err => this.logger.error(err));
 
                     //TODO change db schema to better support this relationship but normalized.
                     const inAppNotification = InAppNotification.create({
@@ -62,7 +62,7 @@ export class HubService {
                     `${microChat.text}`,
                     `From ${fromUser.firstName} to the ${hub.name} hub`,
                     ""
-                    ).catch(err => console.error(err));
+                    ).catch(err => this.logger.error(err));
                 
                 const inAppNotification = InAppNotification.create({
                     thumbnail: fromUser.image,

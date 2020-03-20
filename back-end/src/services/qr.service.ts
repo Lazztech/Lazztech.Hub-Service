@@ -22,7 +22,7 @@ export class QrService {
     this.logger.log(this.scanQR.name);
 
     const buff = Buffer.from(base64.substr(23), 'base64');
-    console.log('created buff');
+    this.logger.log('created buff');
 
     const rawImageData = jpeg.decode(buff);
 
@@ -56,18 +56,18 @@ export class QrService {
       rawImageData.height,
     );
 
-    console.log(luminanceSource);
+    this.logger.log(luminanceSource);
 
     const binaryBitmap = new BinaryBitmap(new HybridBinarizer(luminanceSource));
 
     const qrCode = reader.decode(binaryBitmap);
 
-    console.log(qrCode);
+    this.logger.log(qrCode);
 
     if (qrCode) {
       return JSON.parse(qrCode.getText());
     } else {
-      console.error('failed to decode qr code.');
+      this.logger.error('failed to decode qr code.');
     }
   }
 }

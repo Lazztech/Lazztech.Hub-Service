@@ -4,10 +4,6 @@ import { User } from '../dal/entity/user';
 import { IMyContext } from './context.interface';
 import { Logger } from '@nestjs/common';
 
-// export const customAuthChecker: AuthChecker<IMyContext> = async (
-//     { root, args, context, info },
-//     roles,
-//   ) => {
 export const customAuthChecker: AuthChecker<any> = async (
   { root, args, context, info },
   roles,
@@ -18,22 +14,11 @@ export const customAuthChecker: AuthChecker<any> = async (
   // here we can read the user from context
   // and check his permission in the db against the `roles` argument
   // that comes from the `@Authorized` decorator, eg. ["ADMIN", "MODERATOR"]
-  // if (context.req.cookies.) {
-  //   return true;
-  // }
-  console.log('Executing customAuthChecker');
 
-  // let accessToken = context.req.cookies["access-token"];
-  // if (!accessToken) {
-  // console.error("Custom Auth Checker didn't find an access-token in cookie.");
-  //FIXME: This needs to be better understood and cleaned up.
   let accessToken = context.req.headers['authorization'];
-  // let accessToken = context.req.headers["Authorization"];
-  // let accessToken = context.req.get("Authorization");
 
-  // }
   if (!accessToken) {
-    console.error(
+    logger.error(
       "Custom Auth Checker didn't find Authorization header access token.",
     );
     return false;
@@ -41,14 +26,12 @@ export const customAuthChecker: AuthChecker<any> = async (
 
   const data = verify(accessToken, process.env.ACCESS_TOKEN_SECRET) as any;
   if (data.userId) {
-    const user = await User.findOne({ where: { id: data.userId } }).catch(err =>
-      console.error(err),
-    );
+    const user = await User.findOne({ where: { id: data.userId } });
     if (user) {
+      logger.log('Verified access token.');
       return true;
-      console.log('verified access token.');
     } else {
-      console.error('unable to verify access token.');
+      logger.error('Unable to verify access token.');
       return false;
     }
   }

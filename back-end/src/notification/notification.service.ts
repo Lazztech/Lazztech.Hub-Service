@@ -54,7 +54,7 @@ export class NotificationService {
         body: JSON.stringify(notification),
       });
 
-      console.log(result);
+      this.logger.log(result);
     }
   }
 }

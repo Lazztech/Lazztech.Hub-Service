@@ -58,11 +58,11 @@ export class NotificationResolver {
       userDevice.userId = user.id;
       userDevice.fcmPushUserToken = token;
       const result = await userDevice.save();
-      console.log(result);
+      this.logger.log(result);
       //TODO notify via email that a new device has been used on the account for security.
     }
     else {
-      console.log('User device token already stored.');
+      this.logger.warn('User device token already stored.');
     }
 
     return true;

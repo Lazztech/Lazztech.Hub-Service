@@ -45,13 +45,9 @@ export class FileService {
       buf,
       buf.byteLength,
     );
-    console.log(
-      'Blob was uploaded successfully. requestId: ',
-      uploadBlobResponse.requestId,
-    );
+    this.logger.log('Blob was uploaded successfully. requestId: ' +  uploadBlobResponse.requestId);
 
     const url = blobServiceClient.url + containerName + '/' + blobName;
-    // console.log("URL: " + blobServiceClient.url + "/" + containerName + "/" + blob.name);
     return url;
   }
 

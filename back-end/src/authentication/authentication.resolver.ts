@@ -29,7 +29,6 @@ export class AuthenticationResolver {
   @Query(() => User, { nullable: true })
   public async me(@UserId() userId): Promise<User> {
     this.logger.log(this.me.name);
-    console.log(userId);
     return await User.findOne({ where: { id: userId } });
   }
 
@@ -174,7 +173,7 @@ export class AuthenticationResolver {
       await this.emailService.sendInviteEmail(email);
       return true;
     } catch (error) {
-      console.error(error);
+      this.logger.error(error);
     }
   }
 }

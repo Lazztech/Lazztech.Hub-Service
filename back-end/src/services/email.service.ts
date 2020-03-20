@@ -57,7 +57,7 @@ export class EmailService implements IEmailService {
     if (messageId) {
       return pin;
     } else {
-      console.error('Email send failed.');
+      this.logger.error('Email send failed.');
       return null;
     }
   }
