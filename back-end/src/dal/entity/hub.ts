@@ -34,9 +34,8 @@ export class Hub extends BaseEntity {
   @Column({ default: false })
   public active: boolean;
 
-  //FIXME: this may break if not using mssql as the type is specific to mssql
   @Field({ nullable: true })
-  @Column({ type: 'nvarchar', length: 'MAX', nullable: true })
+  @Column({ nullable: true })
   public image: string;
 
   @Field({ nullable: true })
