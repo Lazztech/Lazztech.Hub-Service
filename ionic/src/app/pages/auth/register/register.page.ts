@@ -84,7 +84,7 @@ export class RegisterPage implements OnInit {
       await this.authService.login(formValue.email, formValue.password);
       this.loading = false;
       this.dismissRegister();
-      await this.navCtrl.navigateRoot('/home');
+      await this.navCtrl.navigateRoot('/tabs');
     } else {
       this.loading = false;
       this.alertService.presentToast('Registration Failed');
