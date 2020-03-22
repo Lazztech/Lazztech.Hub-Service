@@ -1,14 +1,10 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { ActionSheetController, NavController, Platform } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { CameraService } from 'src/app/services/camera.service';
 import { HubService } from 'src/app/services/hub.service';
 import { LocationService } from 'src/app/services/location.service';
-import { ActionSheetButton } from '@ionic/core'; 
-import { ActionSheetOption, ActionSheetOptions } from '@capacitor/core';
-import { GoogleMapComponent } from 'src/app/components/google-map/google-map.component';
 
 @Component({
   selector: 'app-hub',
@@ -16,8 +12,6 @@ import { GoogleMapComponent } from 'src/app/components/google-map/google-map.com
   styleUrls: ['./hub.page.scss'],
 })
 export class HubPage implements OnInit, OnDestroy {
-
-  // image: any;
 
   loading = false;
   userHub: any;
@@ -28,7 +22,6 @@ export class HubPage implements OnInit, OnDestroy {
   userCoords: {latitude: number, longitude: number};
 
   constructor(
-    private sanitizer: DomSanitizer,
     private route: ActivatedRoute,
     private hubService: HubService,
     public actionSheetController: ActionSheetController,

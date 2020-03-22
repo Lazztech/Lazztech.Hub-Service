@@ -1,15 +1,15 @@
-import { AfterViewInit, Component, OnInit, ChangeDetectorRef, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Plugins } from '@capacitor/core';
 import { MenuController, NavController, Platform } from '@ionic/angular';
-import { Observable, of, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
+import { GoogleMapComponent } from '../components/google-map/google-map.component';
 import { User } from '../models/user';
 import { AuthService } from '../services/auth.service';
+import { HubService } from '../services/hub.service';
+import { LocationService } from '../services/location.service';
 import { NotificationsService } from '../services/notifications.service';
 import { PwaInstallService } from '../services/pwa-install.service';
 import { UpdateService } from '../services/update.service';
-import { HubService } from '../services/hub.service';
-import { LocationService } from '../services/location.service';
-import { GoogleMapComponent } from '../components/google-map/google-map.component';
 
 const { Geolocation } = Plugins;
 
@@ -24,9 +24,6 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy {
   userHubs = [];
   hubs = [];
   user: User;
-  updateReady = false;
-  beforeInstall: Observable<boolean> = of(false);
-  inAppNotificationCount = 0;
 
   locationSubscription: Subscription;
   coords: {latitude: number, longitude: number};
@@ -46,21 +43,6 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy {
     private changeRef: ChangeDetectorRef
     ) { 
     this.menu.enable(true);
-    this.beforeInstall = pwaInstallService.beforeInstall;
-    //FIXME this update service should be replaced
-    // this.updateService.checkForUpdate();
-    // if (this.updateService.swUpdate.isEnabled) {
-    //   this.updateService.updateAvailable = this.updateService.swUpdate.available;
-    //   this.updateService.swUpdate.available.subscribe(() => {
-    //       // if(confirm("New version available. Load New Version?")) {
-    //       //     window.location.reload();
-    //       // }
-
-    //       this.updateReady = true;
-    //   });
-    // }
-
-    // pwaInstallService.showInstallBanner();
   }
 
   async doRefresh(event) {
@@ -69,10 +51,6 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy {
     this.userHubs = await this.hubService.usersHubs("network-only");
     this.loading = false;
     event.target.complete();
-  }
-
-  goToNotifications() {
-    this.navCtrl.navigateRoot('notifications');
   }
 
   async ionViewDidEnter() {
