@@ -9,7 +9,7 @@ export class NotificationService {
   private serverKey: string = this.configService.get<string>('FIREBASE_SERVER_KEY');
   private sendEndpoint = 'https://fcm.googleapis.com/fcm/send';
 
-  private logger = new Logger(NotificationService.name);
+  private logger = new Logger(NotificationService.name, true);
 
   constructor(
     private configService: ConfigService

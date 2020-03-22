@@ -10,7 +10,7 @@ import { MicroChat } from 'src/dal/entity/microChat';
 @Injectable()
 export class HubService {
 
-    private readonly logger = new Logger(HubService.name);
+    private readonly logger = new Logger(HubService.name, true);
     constructor(
         private notificationService: NotificationService
     ) {

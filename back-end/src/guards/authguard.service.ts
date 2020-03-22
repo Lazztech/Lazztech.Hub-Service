@@ -7,7 +7,7 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  private logger = new Logger(AuthGuard.name);
+  private logger = new Logger(AuthGuard.name, true);
 
   constructor(private readonly configService: ConfigService) {
     this.logger.log("constructor");

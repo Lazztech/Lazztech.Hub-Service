@@ -14,7 +14,7 @@ import { MicroChat } from 'src/dal/entity/microChat';
 @Resolver()
 export class HubResolver {
 
-  private logger = new Logger(HubResolver.name);
+  private logger = new Logger(HubResolver.name, true);
 
   constructor(
     private qrService: QrService, 

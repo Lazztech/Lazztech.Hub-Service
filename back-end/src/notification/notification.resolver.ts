@@ -11,7 +11,7 @@ import { UserId } from 'src/decorators/user.decorator';
 @Resolver()
 export class NotificationResolver {
 
-  private logger = new Logger(NotificationResolver.name);
+  private logger = new Logger(NotificationResolver.name, true);
 
   constructor(private notificationService: NotificationService) {
     this.logger.log("constructor");

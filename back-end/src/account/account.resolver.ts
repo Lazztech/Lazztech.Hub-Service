@@ -9,7 +9,7 @@ import { FileService } from 'src/services/file.service';
 @Resolver()
 export class AccountResolver {
 
-  private logger = new Logger(AccountResolver.name)
+  private logger = new Logger(AccountResolver.name, true)
 
   constructor(
       private fileService: FileService

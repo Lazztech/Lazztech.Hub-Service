@@ -16,7 +16,7 @@ import { ConfigService } from '@nestjs/config';
 @Resolver()
 export class AuthenticationResolver {
 
-  private logger = new Logger(AuthenticationResolver.name);
+  private logger = new Logger(AuthenticationResolver.name, true);
 
   constructor(
     private emailService: EmailService,

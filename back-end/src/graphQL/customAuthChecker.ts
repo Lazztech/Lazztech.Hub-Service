@@ -8,7 +8,7 @@ export const customAuthChecker: AuthChecker<any> = async (
   { root, args, context, info },
   roles,
 ) => {
-  const logger = new Logger(customAuthChecker.name);
+  const logger = new Logger(customAuthChecker.name, true);
   logger.log("executing");
 
   // here we can read the user from context

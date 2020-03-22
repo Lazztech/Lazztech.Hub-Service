@@ -9,7 +9,7 @@ import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class EmailService implements IEmailService {
   private transporter: nodemailer.Transporter;
-  private logger = new Logger(EmailService.name);
+  private logger = new Logger(EmailService.name, true);
 
   constructor(
     private readonly configService: ConfigService

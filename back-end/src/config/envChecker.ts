@@ -2,7 +2,7 @@ import { isNull, isNullOrUndefined } from 'util';
 import { Logger } from '@nestjs/common';
 //TODO setup nestjs joi env validation
 export function checkEnvVariables() {
-  const logger = new Logger(checkEnvVariables.name);
+  const logger = new Logger(checkEnvVariables.name, true);
   logger.log("executing");
   
   // if (isNullOrUndefined(process.env.PORT) || process.env.PORT === '') {

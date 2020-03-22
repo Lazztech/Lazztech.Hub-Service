@@ -8,7 +8,7 @@ export default () => ({
   FIREBASE_SERVER_KEY:
     '***REMOVED***',
   APP_NAME: 'Lazztech Hub',
-  AzureWebJobsStorage: "DefaultEndpointsProtocol=https;AccountName=lazztechhubdev;AccountKey=3C8ozm1gMa73MwesBI7Kuj9kV4UUFmRjbijDiMimt7NsPDeGrNg5erfpTezbJp/Id81nbwc4g9Bwe5gmvtsqlA==;EndpointSuffix=core.windows.net",
+  AzureWebJobsStorage: "***REMOVED***",
   EMAIL_FROM_ADDRESS: "gianlazzarini@gmail.com",
   EMAIL_PASSWORD: "***REMOVED***"
 });

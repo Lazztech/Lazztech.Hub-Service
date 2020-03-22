@@ -12,7 +12,7 @@ import * as jpeg from 'jpeg-js';
 @Injectable()
 export class QrService {
 
-  private logger = new Logger(QrService.name);
+  private logger = new Logger(QrService.name, true);
 
   constructor() {
     this.logger.log("constructor");

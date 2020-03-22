@@ -7,7 +7,7 @@ import * as uuidv1 from 'uuid/v1';
 @Injectable()
 export class FileService {
 
-  private logger = new Logger(FileService.name);
+  private logger = new Logger(FileService.name, true);
 
   constructor(private readonly configService: ConfigService) {
     this.logger.log("constructor");

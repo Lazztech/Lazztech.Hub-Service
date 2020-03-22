@@ -5,8 +5,8 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 export class AppService {
   //FIXME is this unused code or should I purpose it?
 
-  logger = new Logger(AppService.name);
-  static staticLogger = new Logger(AppService.name);
+  logger = new Logger(AppService.name, true);
+  static staticLogger = new Logger(AppService.name, true);
 
   getHello(): string {
     return 'Copyright Lazztech LLC';
@@ -42,8 +42,8 @@ export class AppService {
     this.staticLogger.log(this.getDevDbConnection.name);
     const options: TypeOrmModuleOptions = {
       type: 'postgres',
-      host: 'lazztechhubdev.postgres.database.azure.com',
-      username: 'gian@lazztechhubdev',
+      host: '***REMOVED***',
+      username: '***REMOVED***',
       password: 'Password123',
       database: 'postgres',
       logging: false,
