@@ -56,7 +56,7 @@ export class GoogleMapComponent implements AfterViewInit {
 
     this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
 
-    if (this.hubs) {
+    if (this.hubs && this.hubs.length) {
       for (let index = 0; index < this.hubs.length; index++) {
         const hub = this.hubs[index];
         const position = { lat: this.hubs[index].latitude, lng: this.hubs[index].longitude };
