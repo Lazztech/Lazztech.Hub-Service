@@ -42,12 +42,14 @@ export class AuthenticationResolver {
     const user = await User.findOne({ where: { email } });
 
     if (!user) {
+      this.logger.warn(`User not found by email address: ${email}.`);
       return null;
     }
 
     const valid = await bcrypt.compare(password, user.password);
 
     if (!valid) {
+      this.logger.warn(`Password not valid for user.id: ${user.id}.`);
       return null;
     }
 
@@ -65,6 +67,7 @@ export class AuthenticationResolver {
 
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
+      this.logger.log(`User already exists with email address: ${email}`);
       return null;
     }
 
