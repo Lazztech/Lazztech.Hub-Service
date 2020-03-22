@@ -11,32 +11,8 @@
 
 <ion-content>
 
-    <!-- <ion-card>
-        <ion-item>
-            <ion-icon name="add" slot="start"></ion-icon>
-            <ion-label>Create a Hub</ion-label>
-            <ion-button slot="end">Create</ion-button>
-          </ion-item>
-
-        <ion-card-content>
-          Setup your own Hub with a Lazztech Hub Camera. You will be the community Hub Owner and manage the privacy policy.
-        </ion-card-content>
-      </ion-card>
-
-      <ion-card>
-          <ion-item>
-              <ion-icon name="add" slot="start"></ion-icon>
-              <ion-label>Join a Hub</ion-label>
-              <ion-button slot="end">Join</ion-button>
-            </ion-item>
-
-          <ion-card-content>
-              Join a community Hub as a Hub Member. View the communities Hub privacy policy to opt in and configure your involvement as a community Hub Member.
-          </ion-card-content>
-        </ion-card> -->
-
         <form [formGroup]="myForm" (ngSubmit)="saveHub()" method="post" style="height:100%;">
-          <ion-list>
+          <ion-list style="height:100%;">
             <ion-list-header>
                 <ion-text>Image</ion-text>
             </ion-list-header>
@@ -94,15 +70,12 @@
                   </p>
               </ion-text>
 
-                <ion-card style="height:30%;">
-
+              <ion-card style="height:30%;">
                 <ion-card-content style="height:100%; width: 100%;">
-                    <app-google-map *ngIf="(coordinates$ | async) as coords" [coords]="coords"></app-google-map>
+                    <app-google-map *ngIf="(coordinates$ | async) as coords" [center]="coords"></app-google-map>
                     <!-- *ngIf="(coordinates | async) as coords" -->
                 </ion-card-content>
               </ion-card>
-
-            <!-- <ion-button [disabled]="myForm.invalid" type="submit" expand="full" color="primary">Create</ion-button> -->
 
             <ion-list-header>
               <ion-text>Tier</ion-text>
