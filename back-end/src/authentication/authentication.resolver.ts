@@ -81,9 +81,7 @@ export class AuthenticationResolver {
       password: hashedPassword,
     }).save();
 
-    //FIXME?
     const dt = Date.now();
-    // const formattedDateTime = dt.format('Y-m-d H:M');
 
     const inAppNotification1 = InAppNotification.create({
       text: `You'll find your notifications here.
@@ -162,7 +160,6 @@ export class AuthenticationResolver {
     }
   }
 
-  //@Authorized()
   @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
   public async newInvite(@Args('email') email: string): Promise<boolean> {
