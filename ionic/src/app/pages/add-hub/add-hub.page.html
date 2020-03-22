@@ -50,7 +50,7 @@
 
             <ion-item>
                 <ion-label position="floating">Hub Name</ion-label>
-                <ion-input type="email" formControlName="hubName"></ion-input>
+                <ion-input type="text" formControlName="hubName"></ion-input>
               </ion-item>
 
               <ion-text class="ion-text-center" color="danger">
@@ -61,18 +61,18 @@
 
               <ion-item>
                 <ion-label position="floating">Hub Description</ion-label>
-                <ion-input type="email" formControlName="hubName"></ion-input>
+                <ion-input type="text" formControlName="hubDescription"></ion-input>
               </ion-item>
 
               <ion-text class="ion-text-center" color="danger">
-                  <p *ngIf="hubName.invalid && hubName.touched" color="danger" >
+                  <p *ngIf="hubDescription.invalid && hubDescription.touched" color="danger" >
                       Required
                   </p>
               </ion-text>
 
               <ion-card style="height:30%;">
                 <ion-card-content style="height:100%; width: 100%;">
-                    <app-google-map *ngIf="(coordinates$ | async) as coords" [center]="coords"></app-google-map>
+                    <app-google-map *ngIf="coords" [center]="coords"></app-google-map>
                     <!-- *ngIf="(coordinates | async) as coords" -->
                 </ion-card-content>
               </ion-card>

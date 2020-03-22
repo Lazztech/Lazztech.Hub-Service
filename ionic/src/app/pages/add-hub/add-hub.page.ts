@@ -1,15 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ProfileService } from 'src/app/services/profile.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { GeolocationPosition, Plugins } from '@capacitor/core';
+import { NavController, Platform } from '@ionic/angular';
+import { Observable, Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { AlertService } from 'src/app/services/alert.service';
-import { Plugins, CameraResultType, CameraSource, GeolocationPosition, Capacitor } from '@capacitor/core';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { HubService } from 'src/app/services/hub.service';
-import { NavController } from '@ionic/angular';
-
-import { Observable, of, from as fromPromise } from 'rxjs';
-import { tap, map, switchMap, take } from 'rxjs/operators';
 import { CameraService } from 'src/app/services/camera.service';
+import { GeofenceService } from 'src/app/services/geofence.service';
+import { HubService } from 'src/app/services/hub.service';
+import { LocationService } from 'src/app/services/location.service';
+
 
 const { Geolocation } = Plugins;
 
@@ -18,29 +18,15 @@ const { Geolocation } = Plugins;
   templateUrl: './add-hub.page.html',
   styleUrls: ['./add-hub.page.scss'],
 })
-export class AddHubPage implements OnInit {
+export class AddHubPage implements OnInit, OnDestroy {
 
   loading = true;
   image: any;
   paid = false;
-  //FIXME: make this observable based & refactor
-  coordinates$: Observable<GeolocationPosition>;
-  // coordinates: Promise<{ lat: number; lng: number }> = Geolocation.getCurrentPosition().then(x => {
-  //   const result = {
-  //     lat: x.coords.latitude,
-  //     lng: x.coords.longitude
-  //   }
-  //   console.log(result);
-  //   this.loading = false;
-  //   return result;
-  // });
-
-  defaultPos: { lat: number; lng: number } = {
-    lat: 47.5421318,
-    lng: -122.1755343
-  };
-
   myForm: FormGroup;
+
+  locationSubscription: Subscription;
+  coords: {latitude: number, longitude: number};
 
   get hubName() {
     return this.myForm.get('hubName');
@@ -52,10 +38,12 @@ export class AddHubPage implements OnInit {
 
   constructor(
     private hubService: HubService,
+    private geofenceService: GeofenceService,
+    private locationService: LocationService,
     private alertService: AlertService,
+    private platform: Platform,
     private fb: FormBuilder,
     public navCtrl: NavController,
-    private sanitizer: DomSanitizer,
     private cameraService: CameraService
   ) { }
 
@@ -69,23 +57,13 @@ export class AddHubPage implements OnInit {
       ]]
     });
 
-    this.getCurrentPosition().then(() => this.loading = false);
     this.myForm.valueChanges.subscribe();
   }
 
-  async getCurrentPosition() {
-    // const isAvailable = Capacitor.isPluginAvailable('GeoLocation');
-    // //FIXME: this should have an else clause
-    // if (isAvailable) {
-      const coordinates = Geolocation.getCurrentPosition();
-      // console.log(coordinates);
-      this.coordinates$ = fromPromise(coordinates).pipe(
-        switchMap((data: any) => of(data.coords)),
-        tap(data => console.log(data))
-      );
-      // this.loading = false;
-      return coordinates;
-    // }
+  async ionViewDidEnter() {
+        //FIXME this should be refactored into the HubService to avoid repeating code
+    this.coords = await this.locationService.coords$.pipe(take(1)).toPromise();
+    this.loading = false;
   }
 
   async takePicture() {
@@ -97,8 +75,6 @@ export class AddHubPage implements OnInit {
     const image = await this.cameraService.selectPicture();
     this.image = image;
   }
-
-
 
   isFree() {
     if (this.paid) {
@@ -114,27 +90,39 @@ export class AddHubPage implements OnInit {
 
   async saveHub() {
     this.loading = true;
-
     const formValue = this.myForm.value;
-    //FIXME: add latitude and longitude
-    const coords = await this.coordinates$.pipe(take(1)).toPromise() as any;
-    console.log(coords);
+    console.log(this.coords);
     const result = await this.hubService.createHub(
       formValue.hubName,
       formValue.description,
       this.image,
-      coords.latitude,
-      coords.longitude
-      );
+      this.coords.latitude,
+      this.coords.longitude
+    );
     if (result) {
       this.loading = false;
-      this.navCtrl.navigateRoot('tabs/hubs');
-      this.alertService.presentToast("Created Hub!");
+      await this.geofenceService.addGeofence({
+        identifier: JSON.stringify({
+          id: result.id,
+          name: result.name
+        }),
+        latitude: this.coords.latitude,
+        longitude: this.coords.longitude,
+        notifyOnEntry: true,
+        notifyOnExit: true
+      });
+      await this.navCtrl.navigateRoot('tabs/');
+      await this.alertService.presentToast("Created Hub!");
     } else {
       this.loading = false;
       this.alertService.presentRedToast("Failed to create Hub.");
     }
   }
 
+  async ngOnDestroy() {
+    if (this.locationSubscription) {
+      this.locationSubscription.unsubscribe();
+    }
+  }
 
 }
