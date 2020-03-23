@@ -22,33 +22,30 @@ export class HubService {
 
     for (let index = 0; index < userHubRelationships.length; index++) {
       const element = userHubRelationships[index];
-      if (except) {
-        //TODO
-      } else {
-        await this.notificationService
-          .sendPushToUser(
-            element.userId,
-            `"${element.hub.name}" hub became active`,
-            `Touch to go to hub.`,
-            '',
-          )
-          .catch(err => this.logger.error(err));
+      await this.notificationService
+        .sendPushToUser(
+          element.userId,
+          `"${element.hub.name}" hub became active`,
+          `Touch to go to hub.`,
+          '',
+        )
+        .catch(err => this.logger.error(err));
 
-        //TODO change db schema to better support this relationship but normalized.
-        const inAppNotification = InAppNotification.create({
-          thumbnail: element.hub.image,
-          header: `"${element.hub.name}" hub became active`,
-          text: `Touch to go to hub.`,
-          date: Date.now().toString(),
-        });
-        await inAppNotification.save();
+      //TODO change db schema to better support this relationship but normalized.
+      const inAppNotification = InAppNotification.create({
+        thumbnail: element.hub.image,
+        header: `"${element.hub.name}" hub became active`,
+        text: `Touch to go to hub.`,
+        date: Date.now().toString(),
+      });
+      await inAppNotification.save();
 
-        const joinUserInAppNotification = JoinUserInAppNotifications.create({
-          userId: element.userId,
-          inAppNotificationId: inAppNotification.id,
-        });
-        await joinUserInAppNotification.save();
-      }
+      const joinUserInAppNotification = JoinUserInAppNotifications.create({
+        userId: element.userId,
+        inAppNotificationId: inAppNotification.id,
+      });
+      await joinUserInAppNotification.save();
+    
     }
   }
 
@@ -58,7 +55,6 @@ export class HubService {
     const members = await hub.usersConnection;
     for (let index = 0; index < members.length; index++) {
       const memberConnetion = members[index];
-      // if (member.id != fromUser.id) {
       await this.notificationService
         .sendPushToUser(
           memberConnetion.user.id,
@@ -86,7 +82,6 @@ export class HubService {
         method: this.microChatToHub.name,
         params: [fromUser, hub, microChat],
       });
-      // }
     }
   }
 }

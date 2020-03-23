@@ -15,8 +15,8 @@ describe('AppController', () => {
   });
 
   describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
+    it('should return "Copyright Lazztech LLC"', () => {
+      expect(appController.getHello()).toBe("Copyright Lazztech LLC");
     });
   });
 });
