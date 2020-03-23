@@ -138,7 +138,7 @@ export class HubResolver {
   ): Promise<boolean> {
     this.logger.log(this.inviteUserToHub.name);
 
-    const userHubRelationships = await JoinUserHub.findOne({
+    const userHubRelationship = await JoinUserHub.findOne({
       where: {
         userId: userId,
         hubId: hubId,
@@ -146,6 +146,11 @@ export class HubResolver {
       },
       relations: ['hub'],
     });
+    if (!userHubRelationship) {
+      this.logger.warn(`Could not find admin relationship to hubId: ${hubId} for userId: ${userId}.`);
+      return false;
+    }
+
     const invitee = await User.findOne({
       where: {
         email: inviteesEmail
