@@ -152,10 +152,12 @@ export class HubResolver {
       }
     });
     if (!invitee) {
-      //TODO safe to db table of invites as unfulfilled.
-      // send email
-      // check for pending invites when the user creates
-      // and account with that email.
+      this.logger.warn(`Did not find user to invite by email address: ${inviteesEmail}`);
+      return false;
+    }
+    if (invitee.id == userId) {
+      this.logger.warn(`Cannot invite self to hub.`);
+      return false;
     }
 
     let newRelationship = JoinUserHub.create({
