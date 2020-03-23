@@ -15,7 +15,6 @@ import { Logger } from '@nestjs/common';
 @ObjectType()
 @Entity()
 export class Hub extends BaseEntity {
-
   private logger = new Logger(Hub.name, true);
 
   @Field(type => ID)
@@ -29,7 +28,7 @@ export class Hub extends BaseEntity {
   @Field({ nullable: true })
   @Column({ nullable: true })
   public description: string;
-  
+
   @Field({ nullable: true })
   @Column({ default: false })
   public active: boolean;
@@ -56,7 +55,7 @@ export class Hub extends BaseEntity {
   @Field(() => [MicroChat], { nullable: true })
   @OneToMany(
     type => MicroChat,
-    microChat => microChat.hub
+    microChat => microChat.hub,
   )
   public microChats: MicroChat[];
 
@@ -99,5 +98,4 @@ export class Hub extends BaseEntity {
 
     return members;
   }
-
 }

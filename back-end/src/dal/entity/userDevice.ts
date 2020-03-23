@@ -14,7 +14,7 @@ export class UserDevice extends BaseEntity {
   @PrimaryGeneratedColumn()
   public id: number;
 
-  @Column("text", { unique: true })
+  @Column('text', { unique: true })
   @Column()
   public fcmPushUserToken: string;
 

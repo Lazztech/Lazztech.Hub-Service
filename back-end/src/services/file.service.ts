@@ -6,11 +6,10 @@ import * as uuidv1 from 'uuid/v1';
 
 @Injectable()
 export class FileService {
-
   private logger = new Logger(FileService.name, true);
 
   constructor(private readonly configService: ConfigService) {
-    this.logger.log("constructor");
+    this.logger.log('constructor');
   }
 
   async storePublicImageFromBase64(base64Image: string): Promise<string> {
@@ -45,7 +44,10 @@ export class FileService {
       buf,
       buf.byteLength,
     );
-    this.logger.log('Blob was uploaded successfully. requestId: ' +  uploadBlobResponse.requestId);
+    this.logger.log(
+      'Blob was uploaded successfully. requestId: ' +
+        uploadBlobResponse.requestId,
+    );
 
     const url = blobServiceClient.url + containerName + '/' + blobName;
     return url;
@@ -86,10 +88,7 @@ export class FileService {
 
     const storageString = this.configService.get<string>('AzureWebJobsStorage');
 
-    if (
-      isNullOrUndefined(storageString) ||
-      storageString === ''
-    ) {
+    if (isNullOrUndefined(storageString) || storageString === '') {
       throw Error('Missing process.env.AzureWebJobsStorage');
     }
 

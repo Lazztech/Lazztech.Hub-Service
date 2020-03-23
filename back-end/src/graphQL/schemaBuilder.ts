@@ -19,7 +19,7 @@ const authChecker = customAuthChecker;
 
 export const configuredSchema = async (): Promise<GraphQLSchema> => {
   const logger = new Logger(configuredSchema.name, true);
-  logger.log("executing");
+  logger.log('executing');
 
   return await buildSchema({
     resolvers,
@@ -30,7 +30,7 @@ export const configuredSchema = async (): Promise<GraphQLSchema> => {
 
 export const configuredSchemaSync = (): GraphQLSchema => {
   const logger = new Logger(configuredSchemaSync.name, true);
-  logger.log("executing");
+  logger.log('executing');
 
   return buildSchemaSync({
     resolvers,

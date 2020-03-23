@@ -8,14 +8,11 @@ import { FileService } from 'src/services/file.service';
 
 @Resolver()
 export class AccountResolver {
+  private logger = new Logger(AccountResolver.name, true);
 
-  private logger = new Logger(AccountResolver.name, true)
-
-  constructor(
-      private fileService: FileService
-    ) {
-      this.logger.log("constructor");
-    }
+  constructor(private fileService: FileService) {
+    this.logger.log('constructor');
+  }
 
   //@Authorized()
   @UseGuards(AuthGuard)
@@ -23,8 +20,8 @@ export class AccountResolver {
   public async editUserDetails(
     @UserId() userId,
     @Args({ name: 'firstName', type: () => String }) firstName: string,
-    @Args({name: 'lastName', type: () => String }) lastName: string,
-    @Args({name: 'description', type: () => String }) description: string,
+    @Args({ name: 'lastName', type: () => String }) lastName: string,
+    @Args({ name: 'description', type: () => String }) description: string,
   ): Promise<User> {
     this.logger.log(this.editUserDetails.name);
 
@@ -61,7 +58,7 @@ export class AccountResolver {
     @Args({ name: 'oldPassword', type: () => String }) oldPassword: string,
     @Args({ name: 'newPassword', type: () => String }) newPassword: string,
   ): Promise<boolean> {
-    this.logger.log(this.changePassword.name)
+    this.logger.log(this.changePassword.name);
 
     const user = await User.findOne({ where: { id: userId } });
 

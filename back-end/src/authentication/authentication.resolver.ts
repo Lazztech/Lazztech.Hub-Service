@@ -15,14 +15,13 @@ import { ConfigService } from '@nestjs/config';
 
 @Resolver()
 export class AuthenticationResolver {
-
   private logger = new Logger(AuthenticationResolver.name, true);
 
   constructor(
     private emailService: EmailService,
     private readonly configService: ConfigService,
   ) {
-    this.logger.log("constructor");
+    this.logger.log('constructor');
   }
 
   @UseGuards(AuthGuard)

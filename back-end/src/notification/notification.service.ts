@@ -6,15 +6,15 @@ const fetch = require('node-fetch');
 
 @Service()
 export class NotificationService {
-  private serverKey: string = this.configService.get<string>('FIREBASE_SERVER_KEY');
+  private serverKey: string = this.configService.get<string>(
+    'FIREBASE_SERVER_KEY',
+  );
   private sendEndpoint = 'https://fcm.googleapis.com/fcm/send';
 
   private logger = new Logger(NotificationService.name, true);
 
-  constructor(
-    private configService: ConfigService
-  ) { 
-    this.logger.log("constructor");
+  constructor(private configService: ConfigService) {
+    this.logger.log('constructor');
   }
 
   public async sendPushToUser(
@@ -54,7 +54,11 @@ export class NotificationService {
         body: JSON.stringify(notification),
       });
 
-      this.logger.log(`Sent push notification to ${fcmUserTokens.length} devices: ${JSON.stringify(notification)}`);
+      this.logger.log(
+        `Sent push notification to ${
+          fcmUserTokens.length
+        } devices: ${JSON.stringify(notification)}`,
+      );
     }
   }
 }

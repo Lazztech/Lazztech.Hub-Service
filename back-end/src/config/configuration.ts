@@ -8,7 +8,8 @@ export default () => ({
   FIREBASE_SERVER_KEY:
     '***REMOVED***',
   APP_NAME: 'Lazztech Hub',
-  AzureWebJobsStorage: "***REMOVED***",
-  EMAIL_FROM_ADDRESS: "gianlazzarini@gmail.com",
-  EMAIL_PASSWORD: "***REMOVED***"
+  AzureWebJobsStorage:
+    '***REMOVED***',
+  EMAIL_FROM_ADDRESS: 'gianlazzarini@gmail.com',
+  EMAIL_PASSWORD: '***REMOVED***',
 });

@@ -13,14 +13,13 @@ import { MicroChat } from 'src/dal/entity/microChat';
 
 @Resolver()
 export class HubResolver {
-
   private logger = new Logger(HubResolver.name, true);
 
   constructor(
-    private qrService: QrService, 
+    private qrService: QrService,
     private fileService: FileService,
-    private hubService: HubService
-    ) {}
+    private hubService: HubService,
+  ) {}
 
   //@Authorized()
   @UseGuards(AuthGuard)
@@ -72,7 +71,7 @@ export class HubResolver {
         'hub',
         'hub.usersConnection',
         'hub.usersConnection.user',
-        'hub.microChats'
+        'hub.microChats',
       ],
     });
     return userHubRelationship;
@@ -80,19 +79,14 @@ export class HubResolver {
 
   @UseGuards(AuthGuard)
   @Query(() => [JoinUserHub])
-  public async usersHubs(
-    @UserId() userId
-  ): Promise<JoinUserHub[]> {
+  public async usersHubs(@UserId() userId): Promise<JoinUserHub[]> {
     this.logger.log(this.usersHubs.name);
 
     const userHubRelationships = await JoinUserHub.find({
       where: {
         userId: userId,
       },
-      relations: [
-        'hub',
-        'hub.usersConnection',
-      ],
+      relations: ['hub', 'hub.usersConnection'],
     });
     return userHubRelationships;
   }
@@ -122,7 +116,9 @@ export class HubResolver {
     for (let index = 0; index < userHubRelationships.length; index++) {
       const element = userHubRelationships[index];
       if (element.hub.usersConnection.find(x => x.userId == otherUsersId)) {
-        commonHubRelationships.push(element.hub.usersConnection.find(x => x.userId == otherUsersId))
+        commonHubRelationships.push(
+          element.hub.usersConnection.find(x => x.userId == otherUsersId),
+        );
       }
     }
 
@@ -134,7 +130,7 @@ export class HubResolver {
   public async inviteUserToHub(
     @UserId() userId,
     @Args({ name: 'hubId', type: () => Int }) hubId: number,
-    @Args({ name: 'inviteesEmail', type: () => String }) inviteesEmail: string
+    @Args({ name: 'inviteesEmail', type: () => String }) inviteesEmail: string,
   ): Promise<boolean> {
     this.logger.log(this.inviteUserToHub.name);
 
@@ -147,17 +143,21 @@ export class HubResolver {
       relations: ['hub'],
     });
     if (!userHubRelationship) {
-      this.logger.warn(`Could not find admin relationship to hubId: ${hubId} for userId: ${userId}.`);
+      this.logger.warn(
+        `Could not find admin relationship to hubId: ${hubId} for userId: ${userId}.`,
+      );
       return false;
     }
 
     const invitee = await User.findOne({
       where: {
-        email: inviteesEmail
-      }
+        email: inviteesEmail,
+      },
     });
     if (!invitee) {
-      this.logger.warn(`Did not find user to invite by email address: ${inviteesEmail}`);
+      this.logger.warn(
+        `Did not find user to invite by email address: ${inviteesEmail}`,
+      );
       return false;
     }
     if (invitee.id == userId) {
@@ -168,18 +168,16 @@ export class HubResolver {
     let newRelationship = JoinUserHub.create({
       userId: invitee.id,
       hubId,
-      isOwner: false
+      isOwner: false,
     });
     newRelationship = await newRelationship.save();
-    
+
     return true;
   }
 
   @UseGuards(AuthGuard)
   @Query(() => [User])
-  public async usersPeople(
-    @UserId() userId
-  ): Promise<User[]> {
+  public async usersPeople(@UserId() userId): Promise<User[]> {
     this.logger.log(this.usersPeople.name);
 
     //TODO optimize this
@@ -222,7 +220,7 @@ export class HubResolver {
   @Query(() => [Hub])
   public async searchHubByName(
     @UserId() userId,
-    @Args({ name: 'search', type: () => String}) search: string
+    @Args({ name: 'search', type: () => String }) search: string,
   ): Promise<Hub[]> {
     this.logger.log(this.searchHubByName.name);
 
@@ -441,20 +439,22 @@ export class HubResolver {
   }
 
   @UseGuards(AuthGuard)
-  @Mutation(() =>Boolean)
+  @Mutation(() => Boolean)
   public async enteredHubGeofence(
     @UserId() userId,
-    @Args({name: 'hubId', type: () => Int}) hubId: number
+    @Args({ name: 'hubId', type: () => Int }) hubId: number,
   ): Promise<boolean> {
     this.logger.log(this.enteredHubGeofence.name);
 
     let hubRelationship = await JoinUserHub.findOne({
       userId,
-      hubId
+      hubId,
     });
 
-    if(!hubRelationship)
-      throw Error(`no corresponding hub relationship found for userId: ${userId} & hubId: ${hubId}`)
+    if (!hubRelationship)
+      throw Error(
+        `no corresponding hub relationship found for userId: ${userId} & hubId: ${hubId}`,
+      );
 
     hubRelationship.isPresent = true;
     hubRelationship = await hubRelationship.save();
@@ -463,20 +463,22 @@ export class HubResolver {
   }
 
   @UseGuards(AuthGuard)
-  @Mutation(() =>Boolean)
+  @Mutation(() => Boolean)
   public async exitedHubGeofence(
     @UserId() userId,
-    @Args({name: 'hubId', type: () => Int}) hubId: number
+    @Args({ name: 'hubId', type: () => Int }) hubId: number,
   ): Promise<boolean> {
     this.logger.log(this.exitedHubGeofence.name);
 
     let hubRelationship = await JoinUserHub.findOne({
       userId,
-      hubId
+      hubId,
     });
 
-    if(!hubRelationship)
-      throw Error(`no corresponding hub relationship found for userId: ${userId} & hubId: ${hubId}`)
+    if (!hubRelationship)
+      throw Error(
+        `no corresponding hub relationship found for userId: ${userId} & hubId: ${hubId}`,
+      );
 
     hubRelationship.isPresent = false;
     hubRelationship = await hubRelationship.save();
@@ -488,7 +490,7 @@ export class HubResolver {
   @Mutation(() => Hub)
   public async activateHub(
     @UserId() userId,
-    @Args({name: 'hubId', type: () => Int}) hubId: number
+    @Args({ name: 'hubId', type: () => Int }) hubId: number,
   ) {
     this.logger.log(this.activateHub.name);
 
@@ -496,13 +498,15 @@ export class HubResolver {
       where: {
         userId,
         hubId,
-        isOwner: true
+        isOwner: true,
       },
-      relations: ["hub"]
+      relations: ['hub'],
     });
 
-    if(!hubRelationship)
-      throw Error(`no corresponding hub relationship found for userId: ${userId} & hubId: ${hubId}`)
+    if (!hubRelationship)
+      throw Error(
+        `no corresponding hub relationship found for userId: ${userId} & hubId: ${hubId}`,
+      );
 
     let hub = hubRelationship.hub;
     hub.active = true;
@@ -510,9 +514,9 @@ export class HubResolver {
 
     const hubRelationships = await JoinUserHub.find({
       where: {
-        hubId
+        hubId,
       },
-      relations: ["hub"]
+      relations: ['hub'],
     });
     await this.hubService.notifyOfHubActivated(hubRelationships);
 
@@ -523,7 +527,7 @@ export class HubResolver {
   @Mutation(() => Hub)
   public async deactivateHub(
     @UserId() userId,
-    @Args({name: 'hubId', type: () => Int}) hubId: number
+    @Args({ name: 'hubId', type: () => Int }) hubId: number,
   ) {
     this.logger.log(this.deactivateHub.name);
 
@@ -531,13 +535,15 @@ export class HubResolver {
       where: {
         userId,
         hubId,
-        isOwner: true
+        isOwner: true,
       },
-      relations: ["hub"]
+      relations: ['hub'],
     });
 
-    if(!hubRelationship)
-      throw Error(`no corresponding hub relationship found for userId: ${userId} & hubId: ${hubId}`)
+    if (!hubRelationship)
+      throw Error(
+        `no corresponding hub relationship found for userId: ${userId} & hubId: ${hubId}`,
+      );
 
     let hub = hubRelationship.hub;
     hub.active = false;
@@ -549,21 +555,17 @@ export class HubResolver {
   @Mutation(() => MicroChat)
   public async microChatToHub(
     @UserId() userId,
-    @Args({name: 'hubId', type: () => Int}) hubId: number,
-    @Args({name: 'microChatId', type: () => Int}) microChatId: number,
+    @Args({ name: 'hubId', type: () => Int }) hubId: number,
+    @Args({ name: 'microChatId', type: () => Int }) microChatId: number,
   ) {
     this.logger.log(this.microChatToHub.name);
 
     const user = await User.findOne(userId);
     const hub = await Hub.findOne({
       where: {
-        id: hubId
+        id: hubId,
       },
-      relations: [
-        "usersConnection",
-        "usersConnection.user",
-        "microChats"
-      ]
+      relations: ['usersConnection', 'usersConnection.user', 'microChats'],
     });
     const microChat = hub.microChats.find(x => x.id === microChatId);
     await this.hubService.microChatToHub(user, hub, microChat);
@@ -574,25 +576,23 @@ export class HubResolver {
   @Mutation(() => MicroChat)
   public async createMicroChat(
     @UserId() userId,
-    @Args({name: 'hubId', type: () => Int}) hubId: number,
-    @Args({name: 'microChatText', type: () => String}) microChatText: string,
+    @Args({ name: 'hubId', type: () => Int }) hubId: number,
+    @Args({ name: 'microChatText', type: () => String }) microChatText: string,
   ) {
     this.logger.log(this.createMicroChat.name);
 
     const usersConnection = await JoinUserHub.findOne({
       where: {
         userId,
-        hubId
+        hubId,
       },
-      relations: [
-        "user",
-        "hub",
-        "hub.microChats"
-      ]
+      relations: ['user', 'hub', 'hub.microChats'],
     });
 
     if (!usersConnection) {
-      this.logger.error("No valid relationship found between user and hub for that action.")
+      this.logger.error(
+        'No valid relationship found between user and hub for that action.',
+      );
     }
 
     let microChat = new MicroChat();
@@ -600,7 +600,9 @@ export class HubResolver {
     microChat.text = microChatText;
     microChat = await microChat.save();
 
-    this.logger.log(`createMicroChat(userId: ${userId}, hubId: ${hubId}, microChatText: ${microChatText}) completed successfully.`)
+    this.logger.log(
+      `createMicroChat(userId: ${userId}, hubId: ${hubId}, microChatText: ${microChatText}) completed successfully.`,
+    );
 
     return microChat;
   }
@@ -609,31 +611,33 @@ export class HubResolver {
   @Mutation(() => Boolean)
   public async deleteMicroChat(
     @UserId() userId,
-    @Args({name: 'hubId', type: () => Int}) hubId: number,
-    @Args({name: 'microChatId', type: () => Int}) microChatId: number,
+    @Args({ name: 'hubId', type: () => Int }) hubId: number,
+    @Args({ name: 'microChatId', type: () => Int }) microChatId: number,
   ) {
     this.logger.log(this.deleteMicroChat.name);
 
     const usersConnection = await JoinUserHub.findOne({
       where: {
         userId,
-        hubId
+        hubId,
       },
-      relations: [
-        "user",
-        "hub",
-        "hub.microChats"
-      ]
+      relations: ['user', 'hub', 'hub.microChats'],
     });
 
     if (!usersConnection) {
-      this.logger.error("No valid relationship found between user and hub for that action.")
+      this.logger.error(
+        'No valid relationship found between user and hub for that action.',
+      );
     }
-    
-    const microChat = usersConnection.hub.microChats.find(x => x.id == microChatId);
+
+    const microChat = usersConnection.hub.microChats.find(
+      x => x.id == microChatId,
+    );
     await microChat.remove();
 
-    this.logger.log(`deleteMicroChat(userId: ${userId}, hubId: ${hubId}, microChatId ${microChatId}) completed successfully.`)
+    this.logger.log(
+      `deleteMicroChat(userId: ${userId}, hubId: ${hubId}, microChatId ${microChatId}) completed successfully.`,
+    );
 
     return true;
   }

@@ -11,17 +11,15 @@ export class EmailService implements IEmailService {
   private transporter: nodemailer.Transporter;
   private logger = new Logger(EmailService.name, true);
 
-  constructor(
-    private readonly configService: ConfigService
-  ) {
-    this.logger.log("constructor");
+  constructor(private readonly configService: ConfigService) {
+    this.logger.log('constructor');
 
     this.transporter = nodemailer.createTransport({
       service: 'Gmail',
       //TODO setup env configuration validation with joi
       auth: {
         user: this.configService.get<string>('EMAIL_FROM_ADDRESS'),
-        pass: this.configService.get<string>('EMAIL_PASSWORD')
+        pass: this.configService.get<string>('EMAIL_PASSWORD'),
       },
     });
   }
@@ -82,7 +80,7 @@ export class EmailService implements IEmailService {
     text: string,
   ): Promise<void> {
     this.logger.log(this.sendEmailToFromAddress.name);
-    
+
     const mailOptions: nodemailer.SendMailOptions = {
       from: this.configService.get<string>('EMAIL_FROM_ADDRESS'),
       to: this.configService.get<string>('EMAIL_FROM_ADDRESS'),
@@ -102,7 +100,11 @@ export class EmailService implements IEmailService {
       from: toAddress,
       to: this.configService.get<string>('EMAIL_FROM_ADDRESS'),
       subject: `${this.configService.get<string>('APP_NAME')} Invite`,
-      text: `You've been invited to register on ${this.configService.get<string>('APP_NAME')}! Just use the email address you've received this at when you register.`,
+      text: `You've been invited to register on ${this.configService.get<
+        string
+      >(
+        'APP_NAME',
+      )}! Just use the email address you've received this at when you register.`,
     } as nodemailer.SendMailOptions;
 
     const messageId = await this.transporter

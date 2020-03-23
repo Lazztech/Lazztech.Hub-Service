@@ -1,4 +1,9 @@
-import { CanActivate, ExecutionContext, Injectable, Logger } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { verify } from 'jsonwebtoken';
 
@@ -10,7 +15,7 @@ export class AuthGuard implements CanActivate {
   private logger = new Logger(AuthGuard.name, true);
 
   constructor(private readonly configService: ConfigService) {
-    this.logger.log("constructor");
+    this.logger.log('constructor');
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -20,7 +25,9 @@ export class AuthGuard implements CanActivate {
     let accessToken = ctx.getContext().req.headers['authorization'];
 
     if (!accessToken) {
-      this.logger.error("Custom Auth Checker didn't find Authorization header access token.");
+      this.logger.error(
+        "Custom Auth Checker didn't find Authorization header access token.",
+      );
       return false;
     }
 

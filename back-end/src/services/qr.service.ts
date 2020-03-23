@@ -11,11 +11,10 @@ import * as jpeg from 'jpeg-js';
 
 @Injectable()
 export class QrService {
-
   private logger = new Logger(QrService.name, true);
 
   constructor() {
-    this.logger.log("constructor");
+    this.logger.log('constructor');
   }
 
   public async scanQR(base64: string): Promise<any> {

@@ -9,7 +9,7 @@ export const customAuthChecker: AuthChecker<any> = async (
   roles,
 ) => {
   const logger = new Logger(customAuthChecker.name, true);
-  logger.log("executing");
+  logger.log('executing');
 
   // here we can read the user from context
   // and check his permission in the db against the `roles` argument

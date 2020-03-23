@@ -10,11 +10,10 @@ import { UserId } from 'src/decorators/user.decorator';
 
 @Resolver()
 export class NotificationResolver {
-
   private logger = new Logger(NotificationResolver.name, true);
 
   constructor(private notificationService: NotificationService) {
-    this.logger.log("constructor");
+    this.logger.log('constructor');
   }
 
   //@Authorized()
@@ -48,9 +47,9 @@ export class NotificationResolver {
   ): Promise<boolean> {
     this.logger.log(this.addUserFcmNotificationToken.name);
 
-    const user = await User.findOne({ 
+    const user = await User.findOne({
       where: { id: userId },
-      relations: ['userDevices']
+      relations: ['userDevices'],
     });
 
     if (!user.userDevices.find(x => x.fcmPushUserToken == token)) {
@@ -60,8 +59,7 @@ export class NotificationResolver {
       const result = await userDevice.save();
       this.logger.log(result);
       //TODO notify via email that a new device has been used on the account for security.
-    }
-    else {
+    } else {
       this.logger.warn('User device token already stored.');
     }
 
