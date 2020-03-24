@@ -1,5 +1,5 @@
+import { IMyContext } from "src/graphQL/context.interface";
 import { Connection } from "typeorm";
-import { IMyContext } from "../../../src/graphQL/context.interface";
 import { gCall } from "./test-utils/gCall";
 import { registerOrLogin } from "./test-utils/registerOrLogin";
 import { contextSetup } from "./test-utils/setupGraphQLContext";

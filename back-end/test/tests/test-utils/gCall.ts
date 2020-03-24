@@ -1,7 +1,6 @@
 import { graphql, GraphQLSchema } from "graphql";
 import Maybe from "graphql/tsutils/Maybe";
-import { IMyContext } from "../../../../src/graphQL/context.interface";
-import { configuredSchema } from "../../../../src/graphQL/schemaBuilder";
+import { configuredSchema } from "src/graphQL/schemaBuilder";
 
 interface IOptions {
     source: string;
