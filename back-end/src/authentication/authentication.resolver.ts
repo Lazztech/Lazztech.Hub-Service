@@ -9,7 +9,7 @@ import { Invite } from '../dal/entity/invite';
 import { JoinUserInAppNotifications } from '../dal/entity/joinUserInAppNotifications';
 import { PasswordReset } from '../dal/entity/passwordReset';
 import { User } from '../dal/entity/user';
-import { RegisterInput } from '../graphQL/inputTypes/inputUser';
+import { UserInput } from './user.input';
 import { EmailService } from '../services/email.service';
 import { ConfigService } from '@nestjs/config';
 
@@ -60,7 +60,7 @@ export class AuthenticationResolver {
 
   @Mutation(() => String, { nullable: true })
   public async register(
-    @Args('data') { firstName, lastName, email, password }: RegisterInput,
+    @Args('data') { firstName, lastName, email, password }: UserInput,
   ): Promise<string> {
     this.logger.log(this.register.name);
 

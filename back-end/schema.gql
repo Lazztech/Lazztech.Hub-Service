@@ -82,7 +82,7 @@ type Mutation {
   changeUserImage(newImage: String!): User!
   deleteAccount(password: String!, email: String!): Boolean!
   login(password: String!, email: String!): String
-  register(data: RegisterInput!): String
+  register(data: UserInput!): String
   logout: Boolean!
   resetPassword(newPassword: String!, resetPin: String!, usersEmail: String!): Boolean!
   sendPasswordResetEmail(email: String!): Boolean!
@@ -125,13 +125,6 @@ type Query {
   sendPushNotification(userId: Float!): Boolean!
 }
 
-input RegisterInput {
-  firstName: String!
-  lastName: String!
-  email: String!
-  password: String!
-}
-
 type User {
   id: ID!
   firstName: String!
@@ -141,4 +134,11 @@ type User {
   email: String!
   ownedHubs: [Hub!]!
   memberOfHubs: [Hub!]!
+}
+
+input UserInput {
+  firstName: String!
+  lastName: String!
+  email: String!
+  password: String!
 }
