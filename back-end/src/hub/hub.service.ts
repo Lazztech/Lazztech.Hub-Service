@@ -16,7 +16,6 @@ export class HubService {
 
   async notifyOfHubActivated(
     userHubRelationships: JoinUserHub[],
-    except?: JoinUserHub[],
   ) {
     this.logger.log(this.notifyOfHubActivated.name);
 

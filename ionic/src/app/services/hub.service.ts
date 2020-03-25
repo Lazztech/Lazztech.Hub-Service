@@ -238,6 +238,7 @@ export class HubService {
     return response;
   }
 
+
   async getHubByQRImage(qrImageB64: string, fetchPolicy: FetchPolicy = "network-only"): Promise<boolean> {
     const result = await this.apollo.query({
       query: gql`

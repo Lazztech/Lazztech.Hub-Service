@@ -12,6 +12,7 @@ import { HubService } from './hub.service';
 import { MicroChat } from 'src/dal/entity/microChat';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { UserService } from 'src/user/user.service';
 
 @Resolver()
 export class HubResolver {
@@ -21,13 +22,13 @@ export class HubResolver {
     private qrService: QrService,
     private fileService: FileService,
     private hubService: HubService,
+    private userService: UserService,
     @InjectRepository(Hub)
     private hubRepository: Repository<Hub>,
     @InjectRepository(JoinUserHub)
     private joinUserHubRepository: Repository<JoinUserHub>
   ) {}
 
-  //@Authorized()
   @UseGuards(AuthGuard)
   @Mutation(() => Hub)
   public async createHub(
@@ -52,12 +53,12 @@ export class HubResolver {
     });
 
     const result = await this.hubRepository.save(hub);
-    let joinUserHub = await JoinUserHub.create({
+    let joinUserHub = await this.joinUserHubRepository.create({
       userId: userId,
       hubId: hub.id,
       isOwner: true,
     });
-    joinUserHub = await joinUserHub.save();
+    joinUserHub = await this.joinUserHubRepository.save(joinUserHub);
     return hub;
   }
 
@@ -69,7 +70,7 @@ export class HubResolver {
   ): Promise<JoinUserHub> {
     this.logger.log(this.hub.name);
 
-    const userHubRelationship = await JoinUserHub.findOne({
+    const userHubRelationship = await this.joinUserHubRepository.findOne({
       where: {
         hubId: id,
         userId: userId,
@@ -89,7 +90,7 @@ export class HubResolver {
   public async usersHubs(@UserId() userId): Promise<JoinUserHub[]> {
     this.logger.log(this.usersHubs.name);
 
-    const userHubRelationships = await JoinUserHub.find({
+    const userHubRelationships = await this.joinUserHubRepository.find({
       where: {
         userId: userId,
       },
@@ -106,7 +107,7 @@ export class HubResolver {
   ) {
     this.logger.log(this.commonUsersHubs.name);
 
-    const userHubRelationships = await JoinUserHub.find({
+    const userHubRelationships = await this.joinUserHubRepository.find({
       where: {
         userId: userId,
       },
@@ -141,7 +142,7 @@ export class HubResolver {
   ): Promise<boolean> {
     this.logger.log(this.inviteUserToHub.name);
 
-    const userHubRelationship = await JoinUserHub.findOne({
+    const userHubRelationship = await this.joinUserHubRepository.findOne({
       where: {
         userId: userId,
         hubId: hubId,
@@ -172,12 +173,12 @@ export class HubResolver {
       return false;
     }
 
-    let newRelationship = JoinUserHub.create({
+    let newRelationship = this.joinUserHubRepository.create({
       userId: invitee.id,
       hubId,
       isOwner: false,
     });
-    newRelationship = await newRelationship.save();
+    newRelationship = await this.joinUserHubRepository.save(newRelationship);
 
     return true;
   }
@@ -188,7 +189,7 @@ export class HubResolver {
     this.logger.log(this.usersPeople.name);
 
     //TODO optimize this
-    const userHubRelationships = await JoinUserHub.find({
+    const userHubRelationships = await this.joinUserHubRepository.find({
       where: {
         userId: userId,
       },
@@ -203,7 +204,7 @@ export class HubResolver {
     let usersPeople: Array<User> = [];
     for (let index = 0; index < usersHubIds.length; index++) {
       const usersHubId = usersHubIds[index];
-      const userHubRelationships = await JoinUserHub.find({
+      const userHubRelationships = await this.joinUserHubRepository.find({
         where: {
           hubId: usersHubId,
         },
@@ -231,7 +232,7 @@ export class HubResolver {
   ): Promise<Hub[]> {
     this.logger.log(this.searchHubByName.name);
 
-    const userHubRelationship = await JoinUserHub.find({
+    const userHubRelationship = await this.joinUserHubRepository.find({
       where: {
         userId: userId,
       },
@@ -249,35 +250,28 @@ export class HubResolver {
     return results;
   }
 
-  //@Authorized()
   @UseGuards(AuthGuard)
   @Query(() => [Hub])
   public async ownedHubs(@UserId() userId): Promise<Hub[]> {
     this.logger.log(this.ownedHubs.name);
-
-    const user = await User.findOne({ id: userId });
-    const ownedHubs = await user.ownedHubs();
+    const ownedHubs = await this.userService.getUsersOwnedHubs(userId);
     return ownedHubs;
   }
 
-  //@Authorized()
   @UseGuards(AuthGuard)
   @Query(() => [Hub])
   public async memberOfHubs(@UserId() userId): Promise<Hub[]> {
     this.logger.log(this.memberOfHubs.name);
-
-    const user = await User.findOne({ id: userId });
-    const memberOfHubs = await user.memberOfHubs();
+    const memberOfHubs = await this.userService.memberOfHubs(userId);
     return memberOfHubs;
   }
 
-  //@Authorized()
   @UseGuards(AuthGuard)
   @Query(() => [Hub])
   public async starredHubs(@UserId() userId) {
     this.logger.log(this.starredHubs.name);
 
-    const userHubRelationships = await JoinUserHub.find({
+    const userHubRelationships = await this.joinUserHubRepository.find({
       where: {
         userId: userId,
         starred: true,
@@ -294,7 +288,6 @@ export class HubResolver {
     return hubs;
   }
 
-  //@Authorized()
   @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
   public async deleteHub(
@@ -311,7 +304,6 @@ export class HubResolver {
     return true;
   }
 
-  //@Authorized()
   @UseGuards(AuthGuard)
   @Mutation(() => Hub)
   public async editHub(
@@ -322,7 +314,7 @@ export class HubResolver {
   ): Promise<Hub> {
     this.logger.log(this.editHub.name);
 
-    const joinUserHubResult = await JoinUserHub.findOne({
+    const joinUserHubResult = await this.joinUserHubRepository.findOne({
       where: {
         userId: userId,
         hubId,
@@ -338,7 +330,6 @@ export class HubResolver {
     return hub;
   }
 
-  //@Authorized()
   @UseGuards(AuthGuard)
   @Mutation(() => Hub)
   public async changeHubImage(
@@ -348,7 +339,7 @@ export class HubResolver {
   ): Promise<Hub> {
     this.logger.log(this.changeHubImage.name);
 
-    const joinUserHubResult = await JoinUserHub.findOne({
+    const joinUserHubResult = await this.joinUserHubRepository.findOne({
       where: {
         userId: userId,
         hubId,
@@ -371,7 +362,6 @@ export class HubResolver {
     return hub;
   }
 
-  //@Authorized()
   @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
   public async joinHub(
@@ -380,17 +370,16 @@ export class HubResolver {
   ): Promise<boolean> {
     this.logger.log(this.joinHub.name);
 
-    let joinUserHub = await JoinUserHub.create({
+    let joinUserHub = await this.joinUserHubRepository.create({
       userId: userId,
       hubId: id,
       isOwner: true,
     });
-    joinUserHub = await joinUserHub.save();
+    joinUserHub = await this.joinUserHubRepository.save(joinUserHub);
 
     return true;
   }
 
-  //@Authorized()
   @UseGuards(AuthGuard)
   @Query(() => Hub)
   public async getHubByQRImage(
@@ -408,7 +397,6 @@ export class HubResolver {
     }
   }
 
-  //@Authorized()
   @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
   public async setHubStarred(
@@ -417,16 +405,15 @@ export class HubResolver {
   ) {
     this.logger.log(this.setHubStarred.name);
 
-    const hubRelationship = await JoinUserHub.findOne({
+    const hubRelationship = await this.joinUserHubRepository.findOne({
       userId: userId,
       hubId: hubId,
     });
     hubRelationship.starred = true;
-    await hubRelationship.save();
+    await this.joinUserHubRepository.save(hubRelationship);
     return true;
   }
 
-  //@Authorized()
   @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
   public async setHubNotStarred(
@@ -435,12 +422,12 @@ export class HubResolver {
   ) {
     this.logger.log(this.setHubNotStarred.name);
 
-    const hubRelationship = await JoinUserHub.findOne({
+    const hubRelationship = await this.joinUserHubRepository.findOne({
       userId: userId,
       hubId: hubId,
     });
     hubRelationship.starred = false;
-    await hubRelationship.save();
+    await this.joinUserHubRepository.save(hubRelationship);
     return true;
   }
 
@@ -452,7 +439,7 @@ export class HubResolver {
   ): Promise<boolean> {
     this.logger.log(this.enteredHubGeofence.name);
 
-    let hubRelationship = await JoinUserHub.findOne({
+    let hubRelationship = await this.joinUserHubRepository.findOne({
       userId,
       hubId,
     });
@@ -463,7 +450,7 @@ export class HubResolver {
       );
 
     hubRelationship.isPresent = true;
-    hubRelationship = await hubRelationship.save();
+    hubRelationship = await this.joinUserHubRepository.save(hubRelationship);
 
     return true;
   }
@@ -476,7 +463,7 @@ export class HubResolver {
   ): Promise<boolean> {
     this.logger.log(this.exitedHubGeofence.name);
 
-    let hubRelationship = await JoinUserHub.findOne({
+    let hubRelationship = await this.joinUserHubRepository.findOne({
       userId,
       hubId,
     });
@@ -487,7 +474,7 @@ export class HubResolver {
       );
 
     hubRelationship.isPresent = false;
-    hubRelationship = await hubRelationship.save();
+    hubRelationship = await this.joinUserHubRepository.save(hubRelationship);
 
     return true;
   }
@@ -500,7 +487,7 @@ export class HubResolver {
   ) {
     this.logger.log(this.activateHub.name);
 
-    let hubRelationship = await JoinUserHub.findOne({
+    let hubRelationship = await this.joinUserHubRepository.findOne({
       where: {
         userId,
         hubId,
@@ -518,7 +505,7 @@ export class HubResolver {
     hub.active = true;
     hub = await this.hubRepository.save(hub);
 
-    const hubRelationships = await JoinUserHub.find({
+    const hubRelationships = await this.joinUserHubRepository.find({
       where: {
         hubId,
       },
@@ -537,7 +524,7 @@ export class HubResolver {
   ) {
     this.logger.log(this.deactivateHub.name);
 
-    let hubRelationship = await JoinUserHub.findOne({
+    let hubRelationship = await this.joinUserHubRepository.findOne({
       where: {
         userId,
         hubId,
@@ -587,7 +574,7 @@ export class HubResolver {
   ) {
     this.logger.log(this.createMicroChat.name);
 
-    const usersConnection = await JoinUserHub.findOne({
+    const usersConnection = await this.joinUserHubRepository.findOne({
       where: {
         userId,
         hubId,
@@ -622,7 +609,7 @@ export class HubResolver {
   ) {
     this.logger.log(this.deleteMicroChat.name);
 
-    const usersConnection = await JoinUserHub.findOne({
+    const usersConnection = await this.joinUserHubRepository.findOne({
       where: {
         userId,
         hubId,

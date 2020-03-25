@@ -13,7 +13,7 @@ import { User } from './user';
 
 @ObjectType()
 @Entity()
-export class JoinUserHub extends BaseEntity {
+export class JoinUserHub {
   @Field(type => ID)
   @PrimaryColumn()
   public userId: number;

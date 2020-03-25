@@ -1,22 +1,12 @@
-import { Field, ID, ObjectType } from 'type-graphql';
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { JoinUserHub } from './joinUserHub';
-import { User } from './user';
-import { MicroChat } from './microChat';
 import { Logger } from '@nestjs/common';
+import { Field, ID, ObjectType } from 'type-graphql';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { JoinUserHub } from './joinUserHub';
+import { MicroChat } from './microChat';
 
 @ObjectType()
 @Entity()
 export class Hub {
-  private logger = new Logger(Hub.name, true);
-
   @Field(type => ID)
   @PrimaryGeneratedColumn()
   public id: number;
@@ -58,44 +48,4 @@ export class Hub {
     microChat => microChat.hub,
   )
   public microChats: MicroChat[];
-
-  @Field(() => [User], { nullable: true })
-  public async owners(): Promise<User[]> {
-    this.logger.log(this.owners.name);
-
-    const joinUserHubResults = await JoinUserHub.find({
-      where: {
-        hubId: this.id,
-        isOwner: true,
-      },
-      relations: ['user'],
-    });
-    const owners: User[] = [];
-    joinUserHubResults.forEach(result => {
-      const user = result.user;
-      owners.push(user);
-    });
-
-    return owners;
-  }
-
-  @Field(() => [User], { nullable: true })
-  public async members(): Promise<User[]> {
-    this.logger.log(this.members.name);
-
-    const joinUserHubResults = await JoinUserHub.find({
-      where: {
-        hubId: this.id,
-        isOwner: false,
-      },
-      relations: ['user'],
-    });
-    const members: User[] = [];
-    joinUserHubResults.forEach(result => {
-      const user = result.user;
-      members.push(user);
-    });
-
-    return members;
-  }
 }

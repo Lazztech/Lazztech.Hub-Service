@@ -78,40 +78,4 @@ export class User extends BaseEntity {
     userLocation => userLocation.user,
   )
   public locationsConnection: JoinUserLocation[];
-
-  @Field(() => [Hub])
-  public async ownedHubs(): Promise<Hub[]> {
-    this.logger.log(this.ownedHubs.name);
-
-    const joinUserHubResults = await JoinUserHub.find({
-      where: {
-        userId: this.id,
-        isOwner: true,
-      },
-      relations: ['hub'],
-    });
-    const hubs: Hub[] = [];
-    joinUserHubResults.forEach(result => {
-      hubs.push(result.hub);
-    });
-    return hubs;
-  }
-
-  @Field(() => [Hub])
-  public async memberOfHubs(): Promise<Hub[]> {
-    this.logger.log(this.memberOfHubs.name);
-
-    const joinUserHubResults = await JoinUserHub.find({
-      where: {
-        userId: this.id,
-        isOwner: false,
-      },
-      relations: ['hub'],
-    });
-    const hubs: Hub[] = [];
-    joinUserHubResults.forEach(result => {
-      hubs.push(result.hub);
-    });
-    return hubs;
-  }
 }

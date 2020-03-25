@@ -28,16 +28,19 @@ describe('HubService', () => {
     expect(hubService).toBeDefined();
   });
 
-  it(`should not notify those passed in as exceptions`, async () => {
+  it(`notifyOfHubActivated() should notify all`, async () => {
     //TODO finish this & refactor hub.service
     let userHubRelationships: JoinUserHub[] = [
-      {} as JoinUserHub
-    ];
-    let except: JoinUserHub[] = [
-      {} as JoinUserHub
+      {
+        userId: 1,
+        hub: {
+          name: "One"
+        }
+      } as JoinUserHub
     ];
     let spy = jest.spyOn(notificationService, "sendPushToUser")
-    await hubService.notifyOfHubActivated(userHubRelationships, except);
+    //TODO mock database before running.
+    // await hubService.notifyOfHubActivated(userHubRelationships);
 
   });
 

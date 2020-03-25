@@ -11,7 +11,9 @@ import { HubModule } from './hub/hub.module';
 import { NotificationModule } from './notification/notification.module';
 import { ServicesModule } from './services/services.module';
 import { ConfigModule } from '@nestjs/config';
+import { UserService } from './user/user.service';
 import configuration from './config/configuration';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -25,6 +27,7 @@ import configuration from './config/configuration';
     AuthenticationModule,
     AccountModule,
     HubModule,
+    UserModule,
     GraphQLModule.forRoot({
       autoSchemaFile: 'schema.gql',
       context: ({ req }) => ({ req }),
