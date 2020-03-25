@@ -1,4 +1,4 @@
-import { User } from '../dal/entity/user';
+import { User } from '../../../src/dal/entity/user';
 
 export interface IMyContext {
   req: any;

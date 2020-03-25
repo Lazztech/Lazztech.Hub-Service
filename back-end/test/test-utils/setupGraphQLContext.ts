@@ -1,4 +1,4 @@
-import { IMyContext } from "test/tests/test-utils/context.interface";
+import { IMyContext } from "../tests/test-utils/context.interface";
 
 export const contextSetup = (): IMyContext => {
     const cookies: {[key: string]: any} = [];

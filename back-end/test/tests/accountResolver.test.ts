@@ -1,4 +1,4 @@
-import { IMyContext } from "src/graphQL/context.interface";
+import { IMyContext } from "test/tests/test-utils/context.interface";
 import { Connection } from "typeorm";
 import { gCall } from "./test-utils/gCall";
 import { registerOrLogin } from "./test-utils/registerOrLogin";

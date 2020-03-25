@@ -3,7 +3,7 @@ import { gCall } from "./test-utils/gCall";
 import { registerOrLogin } from "./test-utils/registerOrLogin";
 import { contextSetup } from "./test-utils/setupGraphQLContext";
 import { testConn } from "./test-utils/testConn";
-import { IMyContext } from "src/graphQL/context.interface";
+import { IMyContext } from "test/tests/test-utils/context.interface";
 import { User } from "src/dal/entity/user";
 
 let conn: Connection;
