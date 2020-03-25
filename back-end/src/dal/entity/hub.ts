@@ -14,7 +14,7 @@ import { Logger } from '@nestjs/common';
 
 @ObjectType()
 @Entity()
-export class Hub extends BaseEntity {
+export class Hub {
   private logger = new Logger(Hub.name, true);
 
   @Field(type => ID)

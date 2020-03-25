@@ -10,6 +10,8 @@ import { Float, Int } from 'type-graphql';
 import { FileService } from 'src/services/file.service';
 import { HubService } from './hub.service';
 import { MicroChat } from 'src/dal/entity/microChat';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Resolver()
 export class HubResolver {
@@ -19,6 +21,10 @@ export class HubResolver {
     private qrService: QrService,
     private fileService: FileService,
     private hubService: HubService,
+    @InjectRepository(Hub)
+    private hubRepository: Repository<Hub>,
+    @InjectRepository(JoinUserHub)
+    private joinUserHubRepository: Repository<JoinUserHub>
   ) {}
 
   //@Authorized()
@@ -37,14 +43,15 @@ export class HubResolver {
     const imageUrl = await this.fileService.storePublicImageFromBase64(image);
 
     // Creates hub with user as owner.
-    const hub = Hub.create({
+    const hub = this.hubRepository.create({
       latitude,
       longitude,
       name,
       description,
       image: imageUrl,
     });
-    const result = await hub.save();
+
+    const result = await this.hubRepository.save(hub);
     let joinUserHub = await JoinUserHub.create({
       userId: userId,
       hubId: hub.id,
@@ -295,13 +302,12 @@ export class HubResolver {
   ) {
     this.logger.log(this.deleteHub.name);
 
-    const hub = await Hub.findOne({
+    const hub = await this.hubRepository.findOne({
       where: {
         id: hubId,
       },
-      // relations: ["usersConnection"]
     });
-    await hub.remove();
+    await this.hubRepository.remove(hub);
     return true;
   }
 
@@ -328,7 +334,7 @@ export class HubResolver {
     let hub = joinUserHubResult.hub;
     hub.name = name;
     hub.description = description;
-    hub = await hub.save();
+    hub = await this.hubRepository.save(hub);
     return hub;
   }
 
@@ -361,7 +367,7 @@ export class HubResolver {
     );
 
     hub.image = imageUrl;
-    hub = await hub.save();
+    hub = await this.hubRepository.save(hub);
     return hub;
   }
 
@@ -397,7 +403,7 @@ export class HubResolver {
     const result = await this.qrService.scanQR(qrImageB64);
     if (result) {
       const id = result.id;
-      const hub = await Hub.findOne({ id });
+      const hub = await this.hubRepository.findOne({ id });
       return hub;
     }
   }
@@ -510,7 +516,7 @@ export class HubResolver {
 
     let hub = hubRelationship.hub;
     hub.active = true;
-    hub = await hub.save();
+    hub = await this.hubRepository.save(hub);
 
     const hubRelationships = await JoinUserHub.find({
       where: {
@@ -547,7 +553,7 @@ export class HubResolver {
 
     let hub = hubRelationship.hub;
     hub.active = false;
-    hub = await hub.save();
+    hub = await this.hubRepository.save(hub);
     return hub;
   }
 
@@ -561,7 +567,7 @@ export class HubResolver {
     this.logger.log(this.microChatToHub.name);
 
     const user = await User.findOne(userId);
-    const hub = await Hub.findOne({
+    const hub = await this.hubRepository.findOne({
       where: {
         id: hubId,
       },
