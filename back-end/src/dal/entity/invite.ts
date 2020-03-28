@@ -3,7 +3,7 @@ import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @ObjectType()
 @Entity()
-export class Invite extends BaseEntity {
+export class Invite {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
   public id: number;

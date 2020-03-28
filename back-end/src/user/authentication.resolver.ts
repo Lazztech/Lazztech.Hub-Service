@@ -25,7 +25,9 @@ export class AuthenticationResolver {
     @InjectRepository(User)
     private userRepository: Repository<User>,
     @InjectRepository(InAppNotification)
-    private inAppNotificationRepository: Repository<InAppNotification>
+    private inAppNotificationRepository: Repository<InAppNotification>,
+    @InjectRepository(Invite)
+    private inviteRepository: Repository<Invite>
   ) {
     this.logger.log('constructor');
   }
@@ -171,15 +173,12 @@ export class AuthenticationResolver {
   public async newInvite(@Args('email') email: string): Promise<boolean> {
     this.logger.log(this.newInvite.name);
 
-    try {
-      const invite = await Invite.create({
-        email,
-      }).save();
+    let invite = this.inviteRepository.create({
+      email,
+    })
+    invite = await this.inviteRepository.save(invite);
 
-      await this.emailService.sendInviteEmail(email);
-      return true;
-    } catch (error) {
-      this.logger.error(error);
-    }
+    await this.emailService.sendInviteEmail(email);
+    return true;
   }
 }
