@@ -29,7 +29,9 @@ export class AuthenticationResolver {
     @InjectRepository(Invite)
     private inviteRepository: Repository<Invite>,
     @InjectRepository(JoinUserInAppNotifications)
-    private joinUserInAppNotificationRepository: Repository<JoinUserInAppNotifications>
+    private joinUserInAppNotificationRepository: Repository<JoinUserInAppNotifications>,
+    @InjectRepository(PasswordReset)
+    private passwordResetRepository: Repository<PasswordReset>
   ) {
     this.logger.log('constructor');
   }
@@ -162,7 +164,7 @@ export class AuthenticationResolver {
         user.email,
         `${user.firstName} ${user.lastName}`,
       );
-      user.passwordReset = await PasswordReset.create({ pin });
+      user.passwordReset = await this.passwordResetRepository.create({ pin });
       await this.userRepository.save(user);
       return true;
     } else {

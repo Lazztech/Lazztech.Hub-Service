@@ -5,13 +5,19 @@ import * as nodemailer from 'nodemailer';
 import { PasswordReset } from '../dal/entity/passwordReset';
 import { IEmailService } from './emailService.interface';
 import { ConfigService } from '@nestjs/config';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class EmailService implements IEmailService {
   private transporter: nodemailer.Transporter;
   private logger = new Logger(EmailService.name, true);
 
-  constructor(private readonly configService: ConfigService) {
+  constructor(
+    private readonly configService: ConfigService,
+    @InjectRepository(PasswordReset)
+    private passwordResetRepository: Repository<PasswordReset>
+    ) {
     this.logger.log('constructor');
 
     this.transporter = nodemailer.createTransport({
@@ -34,7 +40,7 @@ export class EmailService implements IEmailService {
     let isNewPin = false;
     while (!isNewPin) {
       pin = this.generateRandomPin();
-      const result = await PasswordReset.findOne({ pin });
+      const result = await this.passwordResetRepository.findOne({ pin });
       if (!result) {
         isNewPin = true;
       }

@@ -10,7 +10,7 @@ import {
 import { User } from './user';
 
 @Entity()
-export class PasswordReset extends BaseEntity {
+export class PasswordReset {
   @Field(type => ID)
   @PrimaryGeneratedColumn()
   public id: number;
