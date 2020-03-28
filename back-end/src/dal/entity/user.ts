@@ -1,20 +1,10 @@
+import { Logger } from '@nestjs/common';
 import { Field, ID, ObjectType } from 'type-graphql';
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  JoinColumn,
-  OneToMany,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { Hub } from './hub';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { JoinUserHub } from './joinUserHub';
 import { JoinUserInAppNotifications } from './joinUserInAppNotifications';
-import { JoinUserLocation } from './joinUserLocation';
 import { PasswordReset } from './passwordReset';
 import { UserDevice } from './userDevice';
-import { Logger } from '@nestjs/common';
 
 @ObjectType()
 @Entity()
@@ -42,7 +32,6 @@ export class User {
   public image: string;
 
   @Field()
-  // @Column("text", { unique: true })
   @Column()
   public email: string;
 
@@ -73,9 +62,4 @@ export class User {
   )
   public userDevices: UserDevice[];
 
-  @OneToMany(
-    type => JoinUserLocation,
-    userLocation => userLocation.user,
-  )
-  public locationsConnection: JoinUserLocation[];
 }
