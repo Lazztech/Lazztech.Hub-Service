@@ -1,4 +1,3 @@
-import { Logger } from '@nestjs/common';
 import { Field, ID, ObjectType } from 'type-graphql';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { JoinUserHub } from './joinUserHub';

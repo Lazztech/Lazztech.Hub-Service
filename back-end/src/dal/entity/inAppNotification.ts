@@ -1,16 +1,10 @@
 import { Field, ID, ObjectType } from 'type-graphql';
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { JoinUserInAppNotifications } from './joinUserInAppNotifications';
 
 @ObjectType()
 @Entity()
-export class InAppNotification extends BaseEntity {
+export class InAppNotification {
   @Field(type => ID)
   @PrimaryGeneratedColumn()
   public id: number;

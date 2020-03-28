@@ -23,7 +23,9 @@ export class AuthenticationResolver {
     private emailService: EmailService,
     private readonly configService: ConfigService,
     @InjectRepository(User)
-    private userRepository: Repository<User>
+    private userRepository: Repository<User>,
+    @InjectRepository(InAppNotification)
+    private inAppNotificationRepository: Repository<InAppNotification>
   ) {
     this.logger.log('constructor');
   }
@@ -87,16 +89,16 @@ export class AuthenticationResolver {
 
     const dt = Date.now();
 
-    const inAppNotification1 = InAppNotification.create({
+    const inAppNotification = this.inAppNotificationRepository.create({
       text: `You'll find your notifications here.
             You can pull down to refresh and check for more.`,
       date: dt.toString(),
     });
-    await inAppNotification1.save();
+    await this.inAppNotificationRepository.save(inAppNotification);
 
     const joinUserInAppNotification = JoinUserInAppNotifications.create({
       userId: user.id,
-      inAppNotificationId: inAppNotification1.id,
+      inAppNotificationId: inAppNotification.id,
     });
     await joinUserInAppNotification.save();
 

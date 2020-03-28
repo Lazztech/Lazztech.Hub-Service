@@ -6,11 +6,17 @@ import { InAppNotification } from 'src/dal/entity/inAppNotification';
 import { User } from 'src/dal/entity/user';
 import { Hub } from 'src/dal/entity/hub';
 import { MicroChat } from 'src/dal/entity/microChat';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class HubService {
   private readonly logger = new Logger(HubService.name, true);
-  constructor(private notificationService: NotificationService) {
+  constructor(
+    private notificationService: NotificationService,
+    @InjectRepository(InAppNotification)
+    private inAppNotificationRepository: Repository<InAppNotification>
+    ) {
     this.logger.log('constructor');
   }
 
@@ -31,13 +37,13 @@ export class HubService {
         .catch(err => this.logger.error(err));
 
       //TODO change db schema to better support this relationship but normalized.
-      const inAppNotification = InAppNotification.create({
+      const inAppNotification = this.inAppNotificationRepository.create({
         thumbnail: element.hub.image,
         header: `"${element.hub.name}" hub became active`,
         text: `Touch to go to hub.`,
         date: Date.now().toString(),
       });
-      await inAppNotification.save();
+      await this.inAppNotificationRepository.save(inAppNotification);
 
       const joinUserInAppNotification = JoinUserInAppNotifications.create({
         userId: element.userId,
@@ -63,13 +69,13 @@ export class HubService {
         )
         .catch(err => this.logger.error(err));
 
-      const inAppNotification = InAppNotification.create({
+      const inAppNotification = this.inAppNotificationRepository.create({
         thumbnail: fromUser.image,
         header: `${microChat.text}`,
         text: `From ${fromUser.firstName} to ${hub.name}`,
         date: Date.now().toString(),
       });
-      await inAppNotification.save();
+      await this.inAppNotificationRepository.save(inAppNotification);
 
       const joinUserInAppNotification = JoinUserInAppNotifications.create({
         userId: fromUser.id,
