@@ -19,7 +19,9 @@ export class NotificationResolver {
     @InjectRepository(User)
     private userRepository: Repository<User>,
     @InjectRepository(JoinUserInAppNotifications)
-    private joinUserInAppNotificationsRepository: Repository<JoinUserInAppNotifications>
+    private joinUserInAppNotificationsRepository: Repository<JoinUserInAppNotifications>,
+    @InjectRepository(UserDevice)
+    private userDeviceRepository: Repository<UserDevice>
     ) {
     this.logger.log('constructor');
   }
@@ -64,7 +66,7 @@ export class NotificationResolver {
       const userDevice = new UserDevice();
       userDevice.userId = user.id;
       userDevice.fcmPushUserToken = token;
-      const result = await userDevice.save();
+      const result = await this.userDeviceRepository.save(userDevice);
       this.logger.log(result);
       //TODO notify via email that a new device has been used on the account for security.
     } else {

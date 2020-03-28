@@ -1,13 +1,5 @@
 import { Field, ID } from 'type-graphql';
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  OneToOne,
-  PrimaryColumn,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { User } from './user';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class PasswordReset {

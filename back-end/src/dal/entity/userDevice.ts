@@ -1,15 +1,9 @@
 import { Field, ID } from 'type-graphql';
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from './user';
 
 @Entity()
-export class UserDevice extends BaseEntity {
+export class UserDevice {
   @Field(type => ID)
   @PrimaryGeneratedColumn()
   public id: number;
