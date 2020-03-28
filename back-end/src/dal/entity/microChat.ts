@@ -12,7 +12,7 @@ import { Hub } from './hub';
 
 @ObjectType()
 @Entity()
-export class MicroChat extends BaseEntity {
+export class MicroChat {
   @Field(type => ID)
   @PrimaryGeneratedColumn()
   public id: number;

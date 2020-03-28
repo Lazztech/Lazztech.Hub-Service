@@ -26,7 +26,9 @@ export class HubResolver {
     @InjectRepository(Hub)
     private hubRepository: Repository<Hub>,
     @InjectRepository(JoinUserHub)
-    private joinUserHubRepository: Repository<JoinUserHub>
+    private joinUserHubRepository: Repository<JoinUserHub>,
+    @InjectRepository(MicroChat)
+    private microChatRepository: Repository<MicroChat>
   ) {}
 
   @UseGuards(AuthGuard)
@@ -591,7 +593,7 @@ export class HubResolver {
     let microChat = new MicroChat();
     microChat.hubId = hubId;
     microChat.text = microChatText;
-    microChat = await microChat.save();
+    microChat = await this.microChatRepository.save(microChat);
 
     this.logger.log(
       `createMicroChat(userId: ${userId}, hubId: ${hubId}, microChatText: ${microChatText}) completed successfully.`,
@@ -626,7 +628,7 @@ export class HubResolver {
     const microChat = usersConnection.hub.microChats.find(
       x => x.id == microChatId,
     );
-    await microChat.remove();
+    await this.microChatRepository.remove(microChat);
 
     this.logger.log(
       `deleteMicroChat(userId: ${userId}, hubId: ${hubId}, microChatId ${microChatId}) completed successfully.`,
