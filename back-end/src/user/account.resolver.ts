@@ -5,12 +5,18 @@ import { UserId } from 'src/decorators/user.decorator';
 import { AuthGuard } from 'src/guards/authguard.service';
 import { User } from '../dal/entity/user';
 import { FileService } from 'src/services/file.service';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Resolver()
 export class AccountResolver {
   private logger = new Logger(AccountResolver.name, true);
 
-  constructor(private fileService: FileService) {
+  constructor(
+    private fileService: FileService,
+    @InjectRepository(User)
+    private userRepository: Repository<User>
+    ) {
     this.logger.log('constructor');
   }
 
@@ -25,11 +31,11 @@ export class AccountResolver {
   ): Promise<User> {
     this.logger.log(this.editUserDetails.name);
 
-    const user = await User.findOne({ where: { id: userId } });
+    const user = await this.userRepository.findOne({ where: { id: userId } });
     user.firstName = firstName;
     user.lastName = lastName;
     user.description = description;
-    await user.save();
+    await this.userRepository.save(user);
 
     return user;
   }
@@ -43,9 +49,9 @@ export class AccountResolver {
   ): Promise<User> {
     this.logger.log(this.changeEmail.name);
 
-    const user = await User.findOne({ where: { id: userId } });
+    const user = await this.userRepository.findOne({ where: { id: userId } });
     user.email = newEmail;
-    await user.save();
+    await this.userRepository.save(user);
 
     return user;
   }
@@ -60,14 +66,14 @@ export class AccountResolver {
   ): Promise<boolean> {
     this.logger.log(this.changePassword.name);
 
-    const user = await User.findOne({ where: { id: userId } });
+    const user = await this.userRepository.findOne({ where: { id: userId } });
 
     const valid = await bcrypt.compare(oldPassword, user.password);
 
     if (valid) {
       const newHashedPassword = await bcrypt.hash(newPassword, 12);
       user.password = newHashedPassword;
-      await user.save();
+      await this.userRepository.save(user);
 
       return true;
     } else {
@@ -83,7 +89,7 @@ export class AccountResolver {
   ): Promise<User> {
     this.logger.log(this.changeUserImage.name);
 
-    let user = await User.findOne(userId);
+    let user = await this.userRepository.findOne(userId);
 
     if (user.image) {
       await this.fileService.deletePublicImageFromUrl(user.image);
@@ -93,7 +99,7 @@ export class AccountResolver {
     );
 
     user.image = imageUrl;
-    user = await user.save();
+    user = await this.userRepository.save(user);
     return user;
   }
 
@@ -107,12 +113,12 @@ export class AccountResolver {
   ): Promise<boolean> {
     this.logger.log(this.deleteAccount.name);
 
-    const user = await User.findOne({ where: { id: userId } });
+    const user = await this.userRepository.findOne({ where: { id: userId } });
 
     const valid = await bcrypt.compare(password, user.password);
 
     if (valid && email === user.email) {
-      await user.remove();
+      await this.userRepository.remove(user);
       return true;
     } else {
       return false;

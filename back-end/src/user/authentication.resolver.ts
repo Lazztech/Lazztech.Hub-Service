@@ -12,6 +12,8 @@ import { User } from '../dal/entity/user';
 import { UserInput } from './user.input';
 import { EmailService } from '../services/email.service';
 import { ConfigService } from '@nestjs/config';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Resolver()
 export class AuthenticationResolver {
@@ -20,6 +22,8 @@ export class AuthenticationResolver {
   constructor(
     private emailService: EmailService,
     private readonly configService: ConfigService,
+    @InjectRepository(User)
+    private userRepository: Repository<User>
   ) {
     this.logger.log('constructor');
   }
@@ -28,7 +32,7 @@ export class AuthenticationResolver {
   @Query(() => User, { nullable: true })
   public async me(@UserId() userId): Promise<User> {
     this.logger.log(this.me.name);
-    return await User.findOne({ where: { id: userId } });
+    return await this.userRepository.findOne({ where: { id: userId } });
   }
 
   @Mutation(() => String, { nullable: true })
@@ -38,7 +42,7 @@ export class AuthenticationResolver {
   ): Promise<string> {
     this.logger.log(this.login.name);
 
-    const user = await User.findOne({ where: { email } });
+    const user = await this.userRepository.findOne({ where: { email } });
 
     if (!user) {
       this.logger.warn(`User not found by email address: ${email}.`);
@@ -64,7 +68,7 @@ export class AuthenticationResolver {
   ): Promise<string> {
     this.logger.log(this.register.name);
 
-    const existingUser = await User.findOne({ where: { email } });
+    const existingUser = await this.userRepository.findOne({ where: { email } });
     if (existingUser) {
       this.logger.log(`User already exists with email address: ${email}`);
       return null;
@@ -72,13 +76,14 @@ export class AuthenticationResolver {
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    // THIS SECTION SHOULD BE AN ACID TRANSACTION
-    const user = await User.create({
+    //TODO THIS SECTION SHOULD BE AN ACID TRANSACTION
+    let user = await this.userRepository.create({
       firstName,
       lastName,
       email,
       password: hashedPassword,
-    }).save();
+    });
+    user = await this.userRepository.save(user);
 
     const dt = Date.now();
 
@@ -118,7 +123,7 @@ export class AuthenticationResolver {
   ): Promise<boolean> {
     this.logger.log(this.resetPassword.name);
 
-    const user = await User.findOne({
+    const user = await this.userRepository.findOne({
       where: { email: usersEmail },
       relations: ['passwordReset'],
     });
@@ -128,7 +133,7 @@ export class AuthenticationResolver {
     if (pinMatches) {
       const hashedPassword = await bcrypt.hash(newPassword, 12);
       user.password = hashedPassword;
-      await user.save();
+      await this.userRepository.save(user);
       return true;
     } else {
       return false;
@@ -141,7 +146,7 @@ export class AuthenticationResolver {
   ): Promise<boolean> {
     this.logger.log(this.sendPasswordResetEmail.name);
 
-    const user = await User.findOne({
+    const user = await this.userRepository.findOne({
       where: { email },
       relations: ['passwordReset'],
     });
@@ -152,7 +157,7 @@ export class AuthenticationResolver {
         `${user.firstName} ${user.lastName}`,
       );
       user.passwordReset = await PasswordReset.create({ pin });
-      await user.save();
+      await this.userRepository.save(user);
       return true;
     } else {
       return false;

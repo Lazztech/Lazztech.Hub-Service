@@ -7,12 +7,18 @@ import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { AuthGuard } from 'src/guards/authguard.service';
 import { UseGuards, Logger } from '@nestjs/common';
 import { UserId } from 'src/decorators/user.decorator';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Resolver()
 export class NotificationResolver {
   private logger = new Logger(NotificationResolver.name, true);
 
-  constructor(private notificationService: NotificationService) {
+  constructor(
+    private notificationService: NotificationService,
+    @InjectRepository(User)
+    private userRepository: Repository<User>
+    ) {
     this.logger.log('constructor');
   }
 
@@ -47,7 +53,7 @@ export class NotificationResolver {
   ): Promise<boolean> {
     this.logger.log(this.addUserFcmNotificationToken.name);
 
-    const user = await User.findOne({
+    const user = await this.userRepository.findOne({
       where: { id: userId },
       relations: ['userDevices'],
     });

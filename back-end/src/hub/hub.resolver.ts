@@ -28,7 +28,9 @@ export class HubResolver {
     @InjectRepository(JoinUserHub)
     private joinUserHubRepository: Repository<JoinUserHub>,
     @InjectRepository(MicroChat)
-    private microChatRepository: Repository<MicroChat>
+    private microChatRepository: Repository<MicroChat>,
+    @InjectRepository(User)
+    private userRepository: Repository<User> 
   ) {}
 
   @UseGuards(AuthGuard)
@@ -159,7 +161,7 @@ export class HubResolver {
       return false;
     }
 
-    const invitee = await User.findOne({
+    const invitee = await this.userRepository.findOne({
       where: {
         email: inviteesEmail,
       },
@@ -555,7 +557,7 @@ export class HubResolver {
   ) {
     this.logger.log(this.microChatToHub.name);
 
-    const user = await User.findOne(userId);
+    const user = await this.userRepository.findOne(userId);
     const hub = await this.hubRepository.findOne({
       where: {
         id: hubId,

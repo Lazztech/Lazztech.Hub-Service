@@ -2,6 +2,8 @@ import { Service } from 'typedi';
 import { User } from '../dal/entity/user';
 import { ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 const fetch = require('node-fetch');
 
 @Service()
@@ -9,11 +11,17 @@ export class NotificationService {
   private serverKey: string = this.configService.get<string>(
     'FIREBASE_SERVER_KEY',
   );
-  private sendEndpoint = 'https://fcm.googleapis.com/fcm/send';
+  private sendEndpoint: string = this.configService.get<string>(
+    'PUSH_NOTIFICATION_ENDPOINT',
+  );
 
   private logger = new Logger(NotificationService.name, true);
 
-  constructor(private configService: ConfigService) {
+  constructor(
+    private configService: ConfigService,
+    @InjectRepository(User)
+    private userRepository: Repository<User>
+    ) {
     this.logger.log('constructor');
   }
 
@@ -25,7 +33,7 @@ export class NotificationService {
   ) {
     this.logger.log(this.sendPushToUser.name);
 
-    const user = await User.findOne({
+    const user = await this.userRepository.findOne({
       where: { id: userId },
       relations: ['userDevices'],
     });

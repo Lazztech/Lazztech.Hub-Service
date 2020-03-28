@@ -2,8 +2,8 @@ import { Logger } from '@nestjs/common';
 import { GraphQLSchema } from 'graphql';
 import { buildSchema } from 'type-graphql';
 import Container from 'typedi';
-import { AccountResolver } from '../../../src/account/account.resolver';
-import { AuthenticationResolver } from '../../../src/authentication/authentication.resolver';
+import { AccountResolver } from '../../../src/user/account.resolver';
+import { AuthenticationResolver } from '../../../src/user/authentication.resolver';
 import { HubResolver } from '../../../src/hub/hub.resolver';
 import { NotificationResolver } from '../../../src/notification/notification.resolver';
 
