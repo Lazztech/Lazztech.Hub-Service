@@ -17,7 +17,9 @@ export class NotificationResolver {
   constructor(
     private notificationService: NotificationService,
     @InjectRepository(User)
-    private userRepository: Repository<User>
+    private userRepository: Repository<User>,
+    @InjectRepository(JoinUserInAppNotifications)
+    private joinUserInAppNotificationsRepository: Repository<JoinUserInAppNotifications>
     ) {
     this.logger.log('constructor');
   }
@@ -30,7 +32,7 @@ export class NotificationResolver {
   ): Promise<InAppNotification[]> {
     this.logger.log(this.getInAppNotifications.name);
 
-    const joinInAppNotifications = await JoinUserInAppNotifications.find({
+    const joinInAppNotifications = await this.joinUserInAppNotificationsRepository.find({
       where: { userId: userId },
       relations: ['inAppNotification'],
     });

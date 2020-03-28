@@ -15,7 +15,9 @@ export class HubService {
   constructor(
     private notificationService: NotificationService,
     @InjectRepository(InAppNotification)
-    private inAppNotificationRepository: Repository<InAppNotification>
+    private inAppNotificationRepository: Repository<InAppNotification>,
+    @InjectRepository(JoinUserInAppNotifications)
+    private joinUserInAppNotificationsRepository: Repository<JoinUserInAppNotifications> 
     ) {
     this.logger.log('constructor');
   }
@@ -45,11 +47,11 @@ export class HubService {
       });
       await this.inAppNotificationRepository.save(inAppNotification);
 
-      const joinUserInAppNotification = JoinUserInAppNotifications.create({
+      const joinUserInAppNotification = this.joinUserInAppNotificationsRepository.create({
         userId: element.userId,
         inAppNotificationId: inAppNotification.id,
       });
-      await joinUserInAppNotification.save();
+      await this.joinUserInAppNotificationsRepository.save(joinUserInAppNotification);
     
     }
   }
@@ -77,11 +79,11 @@ export class HubService {
       });
       await this.inAppNotificationRepository.save(inAppNotification);
 
-      const joinUserInAppNotification = JoinUserInAppNotifications.create({
+      const joinUserInAppNotification = this.joinUserInAppNotificationsRepository.create({
         userId: fromUser.id,
         inAppNotificationId: inAppNotification.id,
       });
-      await joinUserInAppNotification.save();
+      await this.joinUserInAppNotificationsRepository.save(joinUserInAppNotification);
 
       this.logger.log({
         method: this.microChatToHub.name,

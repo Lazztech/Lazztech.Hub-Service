@@ -27,7 +27,9 @@ export class AuthenticationResolver {
     @InjectRepository(InAppNotification)
     private inAppNotificationRepository: Repository<InAppNotification>,
     @InjectRepository(Invite)
-    private inviteRepository: Repository<Invite>
+    private inviteRepository: Repository<Invite>,
+    @InjectRepository(JoinUserInAppNotifications)
+    private joinUserInAppNotificationRepository: Repository<JoinUserInAppNotifications>
   ) {
     this.logger.log('constructor');
   }
@@ -98,11 +100,11 @@ export class AuthenticationResolver {
     });
     await this.inAppNotificationRepository.save(inAppNotification);
 
-    const joinUserInAppNotification = JoinUserInAppNotifications.create({
+    const joinUserInAppNotification = this.joinUserInAppNotificationRepository.create({
       userId: user.id,
       inAppNotificationId: inAppNotification.id,
     });
-    await joinUserInAppNotification.save();
+    await this.joinUserInAppNotificationRepository.save(joinUserInAppNotification);
 
     const tokenSecret = this.configService.get<string>('ACCESS_TOKEN_SECRET');
     const accessToken = sign({ userId: user.id }, tokenSecret);
