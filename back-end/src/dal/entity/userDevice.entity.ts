@@ -1,6 +1,6 @@
 import { Field, ID } from 'type-graphql';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { User } from './user';
+import { User } from './user.entity';
 
 @Entity()
 export class UserDevice {

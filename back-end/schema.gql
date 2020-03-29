@@ -13,13 +13,6 @@ type Hub {
   longitude: Float
   usersConnection: [JoinUserHub!]
   microChats: [MicroChat!]
-  owners: [User!]
-  members: [User!]
-}
-
-type Image {
-  id: ID!
-  image: String
 }
 
 type InAppNotification {
@@ -53,21 +46,6 @@ type JoinUserInAppNotifications {
   inAppNotification: InAppNotification!
 }
 
-type JoinUserLocation {
-  userId: ID!
-  locationId: ID!
-  user: User!
-  location: Location!
-}
-
-type Location {
-  id: ID!
-  name: String!
-  description: String!
-  latitude: String!
-  longitude: String!
-}
-
 type MicroChat {
   id: ID!
   hubId: Float!
@@ -76,17 +54,6 @@ type MicroChat {
 }
 
 type Mutation {
-  editUserDetails(description: String!, lastName: String!, firstName: String!): User!
-  changeEmail(newEmail: String!): User!
-  changePassword(newPassword: String!, oldPassword: String!): Boolean!
-  changeUserImage(newImage: String!): User!
-  deleteAccount(password: String!, email: String!): Boolean!
-  login(password: String!, email: String!): String
-  register(data: UserInput!): String
-  logout: Boolean!
-  resetPassword(newPassword: String!, resetPin: String!, usersEmail: String!): Boolean!
-  sendPasswordResetEmail(email: String!): Boolean!
-  newInvite(email: String!): Boolean!
   createHub(longitude: Float!, latitude: Float!, image: String!, description: String!, name: String!): Hub!
   inviteUserToHub(inviteesEmail: String!, hubId: Int!): Boolean!
   deleteHub(hubId: Int!): Boolean!
@@ -102,16 +69,21 @@ type Mutation {
   microChatToHub(microChatId: Int!, hubId: Int!): MicroChat!
   createMicroChat(microChatText: String!, hubId: Int!): MicroChat!
   deleteMicroChat(microChatId: Int!, hubId: Int!): Boolean!
+  editUserDetails(description: String!, lastName: String!, firstName: String!): User!
+  changeEmail(newEmail: String!): User!
+  changePassword(newPassword: String!, oldPassword: String!): Boolean!
+  changeUserImage(newImage: String!): User!
+  deleteAccount(password: String!, email: String!): Boolean!
+  login(password: String!, email: String!): String
+  register(data: UserInput!): String
+  logout: Boolean!
+  resetPassword(newPassword: String!, resetPin: String!, usersEmail: String!): Boolean!
+  sendPasswordResetEmail(email: String!): Boolean!
+  newInvite(email: String!): Boolean!
   addUserFcmNotificationToken(token: String!): Boolean!
 }
 
-type Person {
-  id: ID!
-  name: String
-}
-
 type Query {
-  me: User
   hub(id: Int!): JoinUserHub!
   usersHubs: [JoinUserHub!]!
   commonUsersHubs(otherUsersId: Int!): [JoinUserHub!]!
@@ -121,6 +93,7 @@ type Query {
   memberOfHubs: [Hub!]!
   starredHubs: [Hub!]!
   getHubByQRImage(qrImageB64: String!): Hub!
+  me: User
   getInAppNotifications: [InAppNotification!]!
   sendPushNotification(userId: Float!): Boolean!
 }
@@ -132,8 +105,6 @@ type User {
   description: String
   image: String
   email: String!
-  ownedHubs: [Hub!]!
-  memberOfHubs: [Hub!]!
 }
 
 input UserInput {

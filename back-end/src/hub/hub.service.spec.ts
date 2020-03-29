@@ -3,7 +3,7 @@ import { NotificationService } from '../notification/notification.service';
 import { HubService } from './hub.service';
 import { ConfigModule } from '@nestjs/config';
 import configuration from 'src/config/configuration';
-import { JoinUserHub } from 'src/dal/entity/joinUserHub';
+import { JoinUserHub } from 'src/dal/entity/joinUserHub.entity';
 
 describe('HubService', () => {
   let hubService: HubService;

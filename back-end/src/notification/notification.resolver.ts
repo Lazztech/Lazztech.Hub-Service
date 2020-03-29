@@ -1,7 +1,7 @@
-import { InAppNotification } from '../dal/entity/inAppNotification';
-import { JoinUserInAppNotifications } from '../dal/entity/joinUserInAppNotifications';
-import { User } from '../dal/entity/user';
-import { UserDevice } from '../dal/entity/userDevice';
+import { InAppNotification } from '../dal/entity/inAppNotification.entity';
+import { JoinUserInAppNotifications } from '../dal/entity/joinUserInAppNotifications.entity';
+import { User } from '../dal/entity/user.entity';
+import { UserDevice } from '../dal/entity/userDevice.entity';
 import { NotificationService } from './notification.service';
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { AuthGuard } from 'src/guards/authguard.service';

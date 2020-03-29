@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { InjectRepository } from '@nestjs/typeorm';
 import { verify } from 'jsonwebtoken';
-import { User } from 'src/dal/entity/user';
+import { User } from 'src/dal/entity/user.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()

@@ -1,7 +1,7 @@
 import { Field, ID, ObjectType } from 'type-graphql';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { JoinUserHub } from './joinUserHub';
-import { MicroChat } from './microChat';
+import { JoinUserHub } from './joinUserHub.entity';
+import { MicroChat } from './microChat.entity';
 
 @ObjectType()
 @Entity()

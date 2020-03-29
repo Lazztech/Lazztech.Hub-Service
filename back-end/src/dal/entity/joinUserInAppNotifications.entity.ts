@@ -1,7 +1,7 @@
 import { Field, ID, ObjectType } from 'type-graphql';
 import { Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
-import { InAppNotification } from './inAppNotification';
-import { User } from './user';
+import { InAppNotification } from './inAppNotification.entity';
+import { User } from './user.entity';
 
 @ObjectType()
 @Entity()

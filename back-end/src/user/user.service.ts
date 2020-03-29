@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Hub } from 'src/dal/entity/hub';
+import { Hub } from 'src/dal/entity/hub.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { JoinUserHub } from 'src/dal/entity/joinUserHub';
+import { JoinUserHub } from 'src/dal/entity/joinUserHub.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()

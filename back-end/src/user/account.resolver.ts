@@ -3,7 +3,7 @@ import { Mutation, Resolver, Args } from '@nestjs/graphql';
 import * as bcrypt from 'bcryptjs';
 import { UserId } from 'src/decorators/user.decorator';
 import { AuthGuard } from 'src/guards/authguard.service';
-import { User } from '../dal/entity/user';
+import { User } from '../dal/entity/user.entity';
 import { FileService } from 'src/services/file.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';

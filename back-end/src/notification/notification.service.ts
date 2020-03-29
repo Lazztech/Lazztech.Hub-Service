@@ -1,5 +1,5 @@
 import { Service } from 'typedi';
-import { User } from '../dal/entity/user';
+import { User } from '../dal/entity/user.entity';
 import { ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';

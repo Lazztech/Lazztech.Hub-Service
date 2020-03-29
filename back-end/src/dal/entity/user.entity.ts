@@ -1,10 +1,10 @@
 import { Logger } from '@nestjs/common';
 import { Field, ID, ObjectType } from 'type-graphql';
 import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { JoinUserHub } from './joinUserHub';
-import { JoinUserInAppNotifications } from './joinUserInAppNotifications';
-import { PasswordReset } from './passwordReset';
-import { UserDevice } from './userDevice';
+import { JoinUserHub } from './joinUserHub.entity';
+import { JoinUserInAppNotifications } from './joinUserInAppNotifications.entity';
+import { PasswordReset } from './passwordReset.entity';
+import { UserDevice } from './userDevice.entity';
 
 @ObjectType()
 @Entity()

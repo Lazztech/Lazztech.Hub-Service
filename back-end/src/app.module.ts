@@ -5,10 +5,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import configuration from './config/configuration';
+import { User } from './dal/entity/user.entity';
 import { AuthGuard } from './guards/authguard.service';
 import { HubModule } from './hub/hub.module';
 import { NotificationModule } from './notification/notification.module';
-import { FileService } from './services/file.service';
 import { ServicesModule } from './services/services.module';
 import { UserModule } from './user/user.module';
 
@@ -18,7 +18,22 @@ import { UserModule } from './user/user.module';
       load: [configuration],
       isGlobal: true,
     }),
-    TypeOrmModule.forRoot(AppService.getDevDbConnection()),
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: '***REMOVED***',
+      username: '***REMOVED***',
+      password: 'Password123',
+      database: 'postgres',
+      logging: true,
+      // migrationsRun: true,
+      synchronize: true,
+      entities: [__dirname + '/dal/entity/**/*.*.*'],
+      migrations: [__dirname + '/dal/migrations/**/*.*'],
+      subscribers: [__dirname + '/dal/migrations/**/*.*'],
+    }),
+    TypeOrmModule.forFeature([
+      User,
+    ]),
     ServicesModule,
     NotificationModule,
     HubModule,
@@ -33,6 +48,6 @@ import { UserModule } from './user/user.module';
     }),
   ],
   controllers: [AppController],
-  providers: [FileService, AuthGuard, AppService],
+  providers: [AuthGuard, AppService],
 })
 export class AppModule {}
