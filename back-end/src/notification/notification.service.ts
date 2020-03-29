@@ -20,8 +20,8 @@ export class NotificationService {
   constructor(
     private configService: ConfigService,
     @InjectRepository(User)
-    private userRepository: Repository<User>
-    ) {
+    private userRepository: Repository<User>,
+  ) {
     this.logger.log('constructor');
   }
 

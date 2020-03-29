@@ -1,4 +1,9 @@
-import { CanActivate, ExecutionContext, Injectable, Logger } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -13,8 +18,8 @@ export class AuthGuard implements CanActivate {
   constructor(
     private readonly configService: ConfigService,
     @InjectRepository(User)
-    private userRepository: Repository<User>
-    ) {
+    private userRepository: Repository<User>,
+  ) {
     this.logger.log('constructor');
   }
 
@@ -34,7 +39,9 @@ export class AuthGuard implements CanActivate {
     const tokenSecret = this.configService.get<string>('ACCESS_TOKEN_SECRET');
     const data = verify(accessToken, tokenSecret) as any;
     if (data.userId) {
-      const user = await this.userRepository.findOne({ where: { id: data.userId } });
+      const user = await this.userRepository.findOne({
+        where: { id: data.userId },
+      });
       if (user) {
         ctx.getContext().req.headers['userId'] = data.userId;
         this.logger.log('verified access token.');

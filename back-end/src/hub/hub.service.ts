@@ -17,14 +17,14 @@ export class HubService {
     @InjectRepository(InAppNotification)
     private inAppNotificationRepository: Repository<InAppNotification>,
     @InjectRepository(JoinUserInAppNotifications)
-    private joinUserInAppNotificationsRepository: Repository<JoinUserInAppNotifications> 
-    ) {
+    private joinUserInAppNotificationsRepository: Repository<
+      JoinUserInAppNotifications
+    >,
+  ) {
     this.logger.log('constructor');
   }
 
-  async notifyOfHubActivated(
-    userHubRelationships: JoinUserHub[],
-  ) {
+  async notifyOfHubActivated(userHubRelationships: JoinUserHub[]) {
     this.logger.log(this.notifyOfHubActivated.name);
 
     for (let index = 0; index < userHubRelationships.length; index++) {
@@ -47,12 +47,15 @@ export class HubService {
       });
       await this.inAppNotificationRepository.save(inAppNotification);
 
-      const joinUserInAppNotification = this.joinUserInAppNotificationsRepository.create({
-        userId: element.userId,
-        inAppNotificationId: inAppNotification.id,
-      });
-      await this.joinUserInAppNotificationsRepository.save(joinUserInAppNotification);
-    
+      const joinUserInAppNotification = this.joinUserInAppNotificationsRepository.create(
+        {
+          userId: element.userId,
+          inAppNotificationId: inAppNotification.id,
+        },
+      );
+      await this.joinUserInAppNotificationsRepository.save(
+        joinUserInAppNotification,
+      );
     }
   }
 
@@ -79,11 +82,15 @@ export class HubService {
       });
       await this.inAppNotificationRepository.save(inAppNotification);
 
-      const joinUserInAppNotification = this.joinUserInAppNotificationsRepository.create({
-        userId: fromUser.id,
-        inAppNotificationId: inAppNotification.id,
-      });
-      await this.joinUserInAppNotificationsRepository.save(joinUserInAppNotification);
+      const joinUserInAppNotification = this.joinUserInAppNotificationsRepository.create(
+        {
+          userId: fromUser.id,
+          inAppNotificationId: inAppNotification.id,
+        },
+      );
+      await this.joinUserInAppNotificationsRepository.save(
+        joinUserInAppNotification,
+      );
 
       this.logger.log({
         method: this.microChatToHub.name,

@@ -19,9 +19,9 @@ import { JoinUserHub } from 'src/dal/entity/joinUserHub.entity';
       Invite,
       JoinUserInAppNotifications,
       PasswordReset,
-      JoinUserHub
+      JoinUserHub,
     ]),
-    ServicesModule
+    ServicesModule,
   ],
   controllers: [],
   providers: [UserService, AccountResolver, AuthenticationResolver],

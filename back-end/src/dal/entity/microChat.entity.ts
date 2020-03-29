@@ -1,5 +1,12 @@
 import { Field, ID, ObjectType } from 'type-graphql';
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryColumn,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Hub } from './hub.entity';
 
 @ObjectType()

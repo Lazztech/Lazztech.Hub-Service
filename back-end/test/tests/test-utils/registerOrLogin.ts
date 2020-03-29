@@ -1,7 +1,7 @@
-import { gCall } from "./gCall";
+import { gCall } from './gCall';
 
 export const registerOrLogin = async (contextValue: any) => {
-    const mutation = `
+  const mutation = `
     mutation {
         register(data: {
         firstName: "Gian",
@@ -11,14 +11,14 @@ export const registerOrLogin = async (contextValue: any) => {
         })
     }
     `;
-    const response = await gCall({ source: mutation, contextValue });
-    console.log(response);
-    if (response.data.register == null) {
-        const loginMutation = `
+  const response = await gCall({ source: mutation, contextValue });
+  console.log(response);
+  if (response.data.register == null) {
+    const loginMutation = `
         mutation {
             login(password: "Password0", email: "gianlazzarini@gmail.com")
         }
         `;
-        await gCall({ source: loginMutation, contextValue });
-    }
+    await gCall({ source: loginMutation, contextValue });
+  }
 };

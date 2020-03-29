@@ -8,11 +8,7 @@ import { UserDevice } from 'src/dal/entity/userDevice.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([
-      User,
-      JoinUserInAppNotifications,
-      UserDevice
-    ])
+    TypeOrmModule.forFeature([User, JoinUserInAppNotifications, UserDevice]),
   ],
   controllers: [],
   providers: [NotificationResolver, NotificationService],

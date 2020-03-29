@@ -24,14 +24,9 @@ import { InAppNotification } from 'src/dal/entity/inAppNotification.entity';
       InAppNotification,
     ]),
     ServicesModule,
-    UserModule
+    UserModule,
   ],
   controllers: [],
-  providers: [
-    HubResolver, 
-    HubService, 
-    NotificationService,
-    UserService
-  ],
+  providers: [HubResolver, HubService, NotificationService, UserService],
 })
 export class HubModule {}

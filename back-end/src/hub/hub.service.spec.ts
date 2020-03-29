@@ -11,11 +11,11 @@ describe('HubService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [    
+      imports: [
         ConfigModule.forRoot({
-        load: [configuration],
-        isGlobal: true,
-      }),
+          load: [configuration],
+          isGlobal: true,
+        }),
       ],
       providers: [HubService, NotificationService],
     }).compile();
@@ -34,14 +34,12 @@ describe('HubService', () => {
       {
         userId: 1,
         hub: {
-          name: "One"
-        }
-      } as JoinUserHub
+          name: 'One',
+        },
+      } as JoinUserHub,
     ];
-    let spy = jest.spyOn(notificationService, "sendPushToUser")
+    let spy = jest.spyOn(notificationService, 'sendPushToUser');
     //TODO mock database before running.
     // await hubService.notifyOfHubActivated(userHubRelationships);
-
   });
-
 });

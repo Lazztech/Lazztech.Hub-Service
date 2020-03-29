@@ -30,7 +30,7 @@ export class HubResolver {
     @InjectRepository(MicroChat)
     private microChatRepository: Repository<MicroChat>,
     @InjectRepository(User)
-    private userRepository: Repository<User> 
+    private userRepository: Repository<User>,
   ) {}
 
   @UseGuards(AuthGuard)

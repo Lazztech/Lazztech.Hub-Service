@@ -1,6 +1,13 @@
 import { Logger } from '@nestjs/common';
 import { Field, ID, ObjectType } from 'type-graphql';
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { JoinUserHub } from './joinUserHub.entity';
 import { JoinUserInAppNotifications } from './joinUserInAppNotifications.entity';
 import { PasswordReset } from './passwordReset.entity';
@@ -61,5 +68,4 @@ export class User {
     userDevice => userDevice.user,
   )
   public userDevices: UserDevice[];
-
 }

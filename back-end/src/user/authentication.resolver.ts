@@ -29,9 +29,11 @@ export class AuthenticationResolver {
     @InjectRepository(Invite)
     private inviteRepository: Repository<Invite>,
     @InjectRepository(JoinUserInAppNotifications)
-    private joinUserInAppNotificationRepository: Repository<JoinUserInAppNotifications>,
+    private joinUserInAppNotificationRepository: Repository<
+      JoinUserInAppNotifications
+    >,
     @InjectRepository(PasswordReset)
-    private passwordResetRepository: Repository<PasswordReset>
+    private passwordResetRepository: Repository<PasswordReset>,
   ) {
     this.logger.log('constructor');
   }
@@ -76,7 +78,9 @@ export class AuthenticationResolver {
   ): Promise<string> {
     this.logger.log(this.register.name);
 
-    const existingUser = await this.userRepository.findOne({ where: { email } });
+    const existingUser = await this.userRepository.findOne({
+      where: { email },
+    });
     if (existingUser) {
       this.logger.log(`User already exists with email address: ${email}`);
       return null;
@@ -102,11 +106,15 @@ export class AuthenticationResolver {
     });
     await this.inAppNotificationRepository.save(inAppNotification);
 
-    const joinUserInAppNotification = this.joinUserInAppNotificationRepository.create({
-      userId: user.id,
-      inAppNotificationId: inAppNotification.id,
-    });
-    await this.joinUserInAppNotificationRepository.save(joinUserInAppNotification);
+    const joinUserInAppNotification = this.joinUserInAppNotificationRepository.create(
+      {
+        userId: user.id,
+        inAppNotificationId: inAppNotification.id,
+      },
+    );
+    await this.joinUserInAppNotificationRepository.save(
+      joinUserInAppNotification,
+    );
 
     const tokenSecret = this.configService.get<string>('ACCESS_TOKEN_SECRET');
     const accessToken = sign({ userId: user.id }, tokenSecret);
@@ -179,7 +187,7 @@ export class AuthenticationResolver {
 
     let invite = this.inviteRepository.create({
       email,
-    })
+    });
     invite = await this.inviteRepository.save(invite);
 
     await this.emailService.sendInviteEmail(email);

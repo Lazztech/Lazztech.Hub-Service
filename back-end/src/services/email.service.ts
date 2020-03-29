@@ -16,8 +16,8 @@ export class EmailService implements IEmailService {
   constructor(
     private readonly configService: ConfigService,
     @InjectRepository(PasswordReset)
-    private passwordResetRepository: Repository<PasswordReset>
-    ) {
+    private passwordResetRepository: Repository<PasswordReset>,
+  ) {
     this.logger.log('constructor');
 
     this.transporter = nodemailer.createTransport({

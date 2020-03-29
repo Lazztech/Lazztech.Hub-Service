@@ -16,7 +16,7 @@ describe('AppController', () => {
 
   describe('root', () => {
     it('should return "Copyright Lazztech LLC"', () => {
-      expect(appController.getHello()).toBe("Copyright Lazztech LLC");
+      expect(appController.getHello()).toBe('Copyright Lazztech LLC');
     });
   });
 });

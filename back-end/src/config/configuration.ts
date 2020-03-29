@@ -12,5 +12,5 @@ export default () => ({
     '***REMOVED***',
   EMAIL_FROM_ADDRESS: 'gianlazzarini@gmail.com',
   EMAIL_PASSWORD: '***REMOVED***',
-  PUSH_NOTIFICATION_ENDPOINT: 'https://fcm.googleapis.com/fcm/send'
+  PUSH_NOTIFICATION_ENDPOINT: 'https://fcm.googleapis.com/fcm/send',
 });

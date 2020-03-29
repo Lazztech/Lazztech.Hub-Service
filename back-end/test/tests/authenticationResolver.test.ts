@@ -1,61 +1,61 @@
-import { Connection } from "typeorm";
-import { gCall } from "./test-utils/gCall";
-import { registerOrLogin } from "./test-utils/registerOrLogin";
-import { contextSetup } from "./test-utils/setupGraphQLContext";
-import { testConn } from "./test-utils/testConn";
-import { IMyContext } from "test/tests/test-utils/context.interface";
-import { User } from "src/dal/entity/user.entity";
+import { Connection } from 'typeorm';
+import { gCall } from './test-utils/gCall';
+import { registerOrLogin } from './test-utils/registerOrLogin';
+import { contextSetup } from './test-utils/setupGraphQLContext';
+import { testConn } from './test-utils/testConn';
+import { IMyContext } from 'test/tests/test-utils/context.interface';
+import { User } from 'src/dal/entity/user.entity';
 
 let conn: Connection;
 let ctx: IMyContext;
 beforeAll(async () => {
-    conn = await testConn();
-    jest.setTimeout(40000);
+  conn = await testConn();
+  jest.setTimeout(40000);
 
-    ctx = contextSetup();
-    console.log("Setting up test account.");
-    await registerOrLogin(ctx);
-    console.log(ctx);
-    console.log("Registered test account.");
+  ctx = contextSetup();
+  console.log('Setting up test account.');
+  await registerOrLogin(ctx);
+  console.log(ctx);
+  console.log('Registered test account.');
 });
 afterAll(async () => {
-    await conn.close();
+  await conn.close();
 });
 
-describe("AuthenticationResolver", () => {
-    it("logout mutation should return true and delete the jwt cookie.", async () => {
-        // Arrange
-        const mutation = `
+describe('AuthenticationResolver', () => {
+  it('logout mutation should return true and delete the jwt cookie.', async () => {
+    // Arrange
+    const mutation = `
         mutation {
             logout
           }
         `;
-        // Act
-        const response = await gCall({ source: mutation, contextValue: ctx });
-        // Assert
-        expect(response).toMatchObject({
-            data: {
-              logout: true
-            }
-          });
+    // Act
+    const response = await gCall({ source: mutation, contextValue: ctx });
+    // Assert
+    expect(response).toMatchObject({
+      data: {
+        logout: true,
+      },
     });
+  });
 
-    it("login mutation should return true and store the jwt cookie.", async () => {
-        // Arrange`
-        const mutation = `
+  it('login mutation should return true and store the jwt cookie.', async () => {
+    // Arrange`
+    const mutation = `
         mutation {
             login(password: "Password0", email: "gianlazzarini@gmail.com")
           }
         `;
-        // Act
-        const response = await gCall({ source: mutation, contextValue: ctx });
-        // Assert
-        expect(response.data.login).not.toBeNull();
-    });
+    // Act
+    const response = await gCall({ source: mutation, contextValue: ctx });
+    // Assert
+    expect(response.data.login).not.toBeNull();
+  });
 
-    it("me mutation should return my public user details from using my jwt to find me.", async () => {
-        // Arrange
-        const query = `
+  it('me mutation should return my public user details from using my jwt to find me.', async () => {
+    // Arrange
+    const query = `
         query {
             me {
               id
@@ -65,14 +65,14 @@ describe("AuthenticationResolver", () => {
             }
           }
         `;
-        // Act
-        console.log("me mutation test context: " + JSON.stringify(ctx));
+    // Act
+    console.log('me mutation test context: ' + JSON.stringify(ctx));
 
-        const response = await gCall({ source: query, contextValue: ctx });
-        const me: User = response.data.me;
-        // Assert
-        expect(me.firstName).toEqual("Gian");
-        expect(me.lastName).toEqual("Lazzarini");
-        expect(me.email).toEqual("gianlazzarini@gmail.com");
-    });
+    const response = await gCall({ source: query, contextValue: ctx });
+    const me: User = response.data.me;
+    // Assert
+    expect(me.firstName).toEqual('Gian');
+    expect(me.lastName).toEqual('Lazzarini');
+    expect(me.email).toEqual('gianlazzarini@gmail.com');
+  });
 });

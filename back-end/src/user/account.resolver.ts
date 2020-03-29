@@ -15,8 +15,8 @@ export class AccountResolver {
   constructor(
     private fileService: FileService,
     @InjectRepository(User)
-    private userRepository: Repository<User>
-    ) {
+    private userRepository: Repository<User>,
+  ) {
     this.logger.log('constructor');
   }
 

@@ -6,11 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PasswordReset } from 'src/dal/entity/passwordReset.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([
-      PasswordReset,
-    ])
-  ],
+  imports: [TypeOrmModule.forFeature([PasswordReset])],
   controllers: [],
   providers: [FileService, EmailService, QrService],
   exports: [FileService, EmailService, QrService],
