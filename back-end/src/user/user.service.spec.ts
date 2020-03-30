@@ -40,6 +40,7 @@ describe('UserService', () => {
         hub: {
           name: "hub1"
         } as Hub,
+        isOwner: true,
       } as JoinUserHub,
       {
         userId: testUserId,
@@ -48,11 +49,37 @@ describe('UserService', () => {
         hub: {
           name: "hub2"
         } as Hub,
+        isOwner: true,
       } as JoinUserHub,
     ];
     const hubResults: Hub[] = testResults.map(x => x.hub);
     // notice we are pulling the repo variable and using jest.spyOn with no issues
     jest.spyOn(repo, 'find').mockResolvedValueOnce(testResults);
     expect(await service.getUsersOwnedHubs(testUserId)).toEqual(hubResults);
+  });
+
+  it(`should return for memberOfHubs`, async () => {
+    // mock file for reuse
+    const testUserId = 1;
+    const testResults: JoinUserHub[] = [
+      {
+        userId: testUserId,
+        isOwner: false,
+        hub: {
+          name: "hub1"
+        } as Hub,
+      } as JoinUserHub,
+      {
+        userId: testUserId,
+        isOwner: false,
+        hub: {
+          name: "hub2"
+        } as Hub,
+      } as JoinUserHub,
+    ];
+    const hubResults: Hub[] = testResults.map(x => x.hub);
+    // notice we are pulling the repo variable and using jest.spyOn with no issues
+    jest.spyOn(repo, 'find').mockResolvedValueOnce(testResults);
+    expect(await service.memberOfHubs(testUserId)).toEqual(hubResults);
   });
 });
