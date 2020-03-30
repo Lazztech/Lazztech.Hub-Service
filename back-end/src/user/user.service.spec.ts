@@ -4,6 +4,8 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { JoinUserHub } from 'src/dal/entity/joinUserHub.entity';
 import { Repository } from 'typeorm';
 import { Hub } from 'src/dal/entity/hub.entity';
+import { User } from 'src/dal/entity/user.entity';
+import { ConfigService } from '@nestjs/config';
 
 describe('UserService', () => {
   let service: UserService;
@@ -13,8 +15,13 @@ describe('UserService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         UserService,
+        ConfigService,
         {
           provide: getRepositoryToken(JoinUserHub),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(User),
           useClass: Repository,
         },
       ],

@@ -14,6 +14,7 @@ import { EmailService } from '../services/email.service';
 import { ConfigService } from '@nestjs/config';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { UserService } from './user.service';
 
 @Resolver()
 export class AuthenticationResolver {
@@ -22,6 +23,7 @@ export class AuthenticationResolver {
   constructor(
     private emailService: EmailService,
     private readonly configService: ConfigService,
+    private userService: UserService,
     @InjectRepository(User)
     private userRepository: Repository<User>,
     @InjectRepository(InAppNotification)
@@ -51,24 +53,7 @@ export class AuthenticationResolver {
     @Args('password') password: string,
   ): Promise<string> {
     this.logger.log(this.login.name);
-
-    const user = await this.userRepository.findOne({ where: { email } });
-
-    if (!user) {
-      this.logger.warn(`User not found by email address: ${email}.`);
-      return null;
-    }
-
-    const valid = await bcrypt.compare(password, user.password);
-
-    if (!valid) {
-      this.logger.warn(`Password not valid for user.id: ${user.id}.`);
-      return null;
-    }
-
-    const tokenSecret = this.configService.get<string>('ACCESS_TOKEN_SECRET');
-    const accessToken = sign({ userId: user.id }, tokenSecret);
-
+    const accessToken = await this.userService.login(password, email);
     return accessToken;
   }
 

@@ -3,6 +3,10 @@ import { Hub } from 'src/dal/entity/hub.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JoinUserHub } from 'src/dal/entity/joinUserHub.entity';
 import { Repository } from 'typeorm';
+import { sign } from 'jsonwebtoken';
+import { User } from 'src/dal/entity/user.entity';
+import * as bcrypt from 'bcryptjs';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UserService {
@@ -11,6 +15,9 @@ export class UserService {
   constructor(
     @InjectRepository(JoinUserHub)
     private joinUserHubRepository: Repository<JoinUserHub>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+    private readonly configService: ConfigService,
   ) {
     this.logger.log('constructor');
   }
@@ -41,5 +48,26 @@ export class UserService {
     });
     const hubs: Hub[] = joinUserHubResults.map(result => result.hub);
     return hubs;
+  }
+
+  public async login(password: string, email: string) {
+    const user = await this.userRepository.findOne({ where: { email } });
+
+    if (!user) {
+      this.logger.warn(`User not found by email address for user.id: ${user.id}`);
+      return null;
+    }
+
+    const valid = await bcrypt.compare(password, user.password);
+
+    if (!valid) {
+      this.logger.warn(`Password not valid for user.id: ${user.id}.`);
+      return null;
+    }
+
+    const tokenSecret = this.configService.get<string>('ACCESS_TOKEN_SECRET');
+    const accessToken = sign({ userId: user.id }, tokenSecret);
+
+    return accessToken;
   }
 }
