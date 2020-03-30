@@ -7,6 +7,7 @@ import * as uuidv1 from 'uuid/v1';
 @Injectable()
 export class FileService {
   private logger = new Logger(FileService.name, true);
+  containerName = 'publicimages';
 
   constructor(private readonly configService: ConfigService) {
     this.logger.log('constructor');
@@ -18,18 +19,8 @@ export class FileService {
     const blobServiceClient = await BlobServiceClient.fromConnectionString(
       this.getStorageConnectionString(),
     );
-    const containerName = 'publicimages';
-    const containerClient = await blobServiceClient.getContainerClient(
-      containerName,
-    );
-    const exists = await containerClient.exists();
-    if (!exists) {
-      const createContainerResponse = await containerClient.create();
-      const x = await containerClient.getAccessPolicy();
-      await containerClient.setAccessPolicy('container');
-      //FIXME remove this
-      const y = await containerClient.getAccessPolicy();
-    }
+    const containerClient = await this.getPublicContainerClient(blobServiceClient);
+    await this.ensureContainerExists(containerClient);
 
     const mimeType = base64Image.split(';')[0];
     const extension = '.' + mimeType.split('/')[1];
@@ -49,30 +40,31 @@ export class FileService {
         uploadBlobResponse.requestId,
     );
 
-    const url = blobServiceClient.url + containerName + '/' + blobName;
+    const url = blobServiceClient.url + this.containerName + '/' + blobName;
     return url;
+  }
+
+  private async ensureContainerExists(containerClient) {
+    const exists = await containerClient.exists();
+    if (!exists) {
+      await this.createContainer(containerClient);
+    }
+  }
+
+  private async createContainer(containerClient) {
+    const createContainerResponse = await containerClient.create();
+    const x = await containerClient.getAccessPolicy();
+    await containerClient.setAccessPolicy('container');
   }
 
   async deletePublicImageFromUrl(url: string): Promise<void> {
     this.logger.log(this.deletePublicImageFromUrl.name);
     //FIXME Ensure any images that are no longer needed get deleted, for a hub that's been deleted for example!
-
-    //FIXME this section should not be duplicated, needs to be DRY
     const blobServiceClient = await BlobServiceClient.fromConnectionString(
       this.getStorageConnectionString(),
     );
-    const containerName = 'publicimages';
-    const containerClient = await blobServiceClient.getContainerClient(
-      containerName,
-    );
-    const exists = await containerClient.exists();
-    if (!exists) {
-      const createContainerResponse = await containerClient.create();
-      const x = await containerClient.getAccessPolicy();
-      await containerClient.setAccessPolicy('container');
-      //FIXME remove this
-      const y = await containerClient.getAccessPolicy();
-    }
+    const containerClient = await this.getPublicContainerClient(blobServiceClient);
+    await this.ensureContainerExists(containerClient);
 
     //Get last string after last '/'
     const blobName = url.split('/').length[url.split('/').length - 1];
@@ -82,33 +74,21 @@ export class FileService {
       const response = await containerClient.delete();
     }
   }
+  
+  async getPublicContainerClient(blobServiceClient: BlobServiceClient) {
+    const containerClient = await blobServiceClient.getContainerClient(
+      this.containerName,
+    );
+    return containerClient;
+  }
 
   getStorageConnectionString() {
     this.logger.log(this.getStorageConnectionString.name);
-
     const storageString = this.configService.get<string>('AzureWebJobsStorage');
-
     if (isNullOrUndefined(storageString) || storageString === '') {
       throw Error('Missing process.env.AzureWebJobsStorage');
     }
-
     return storageString;
   }
 
-  //FIXME example function from docs
-  // A helper function used to read a Node.js readable stream into a string
-  private async streamToString(readableStream) {
-    this.logger.log(this.streamToString.name);
-
-    return new Promise((resolve, reject) => {
-      const chunks = [];
-      readableStream.on('data', data => {
-        chunks.push(data.toString());
-      });
-      readableStream.on('end', () => {
-        resolve(chunks.join(''));
-      });
-      readableStream.on('error', reject);
-    });
-  }
 }
