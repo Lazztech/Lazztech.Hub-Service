@@ -25,10 +25,7 @@ export class UserService {
       },
       relations: ['hub'],
     });
-    const hubs: Hub[] = [];
-    joinUserHubResults.forEach(result => {
-      hubs.push(result.hub);
-    });
+    const hubs: Hub[] = joinUserHubResults.map(result => result.hub);
     return hubs;
   }
 
@@ -42,10 +39,7 @@ export class UserService {
       },
       relations: ['hub'],
     });
-    const hubs: Hub[] = [];
-    joinUserHubResults.forEach(result => {
-      hubs.push(result.hub);
-    });
+    const hubs: Hub[] = joinUserHubResults.map(result => result.hub);
     return hubs;
   }
 }
