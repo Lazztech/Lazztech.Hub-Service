@@ -55,6 +55,7 @@ export class UserService {
 
     if (!user) {
       this.logger.warn(`User not found by email address for user.id: ${user.id}`);
+      //FIXME throw error instead of returning null
       return null;
     }
 
@@ -62,6 +63,7 @@ export class UserService {
 
     if (!valid) {
       this.logger.warn(`Password not valid for user.id: ${user.id}.`);
+      //FIXME throw error instead of returning null
       return null;
     }
 
