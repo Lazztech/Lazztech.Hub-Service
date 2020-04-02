@@ -26,14 +26,8 @@ export class AuthenticationResolver {
     private userService: UserService,
     @InjectRepository(User)
     private userRepository: Repository<User>,
-    @InjectRepository(InAppNotification)
-    private inAppNotificationRepository: Repository<InAppNotification>,
     @InjectRepository(Invite)
     private inviteRepository: Repository<Invite>,
-    @InjectRepository(JoinUserInAppNotifications)
-    private joinUserInAppNotificationRepository: Repository<
-      JoinUserInAppNotifications
-    >,
     @InjectRepository(PasswordReset)
     private passwordResetRepository: Repository<PasswordReset>,
   ) {
@@ -62,48 +56,8 @@ export class AuthenticationResolver {
     @Args('data') { firstName, lastName, email, password }: UserInput,
   ): Promise<string> {
     this.logger.log(this.register.name);
-
-    const existingUser = await this.userRepository.findOne({
-      where: { email },
-    });
-    if (existingUser) {
-      this.logger.log(`User already exists with email address: ${email}`);
-      return null;
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 12);
-
-    //TODO THIS SECTION SHOULD BE AN ACID TRANSACTION
-    let user = await this.userRepository.create({
-      firstName,
-      lastName,
-      email,
-      password: hashedPassword,
-    });
-    user = await this.userRepository.save(user);
-
-    const dt = Date.now();
-
-    const inAppNotification = this.inAppNotificationRepository.create({
-      text: `You'll find your notifications here.
-            You can pull down to refresh and check for more.`,
-      date: dt.toString(),
-    });
-    await this.inAppNotificationRepository.save(inAppNotification);
-
-    const joinUserInAppNotification = this.joinUserInAppNotificationRepository.create(
-      {
-        userId: user.id,
-        inAppNotificationId: inAppNotification.id,
-      },
-    );
-    await this.joinUserInAppNotificationRepository.save(
-      joinUserInAppNotification,
-    );
-
-    const tokenSecret = this.configService.get<string>('ACCESS_TOKEN_SECRET');
-    const accessToken = sign({ userId: user.id }, tokenSecret);
-
+    
+    const accessToken = await this.userService.register(firstName, lastName, email, password);
     return accessToken;
   }
 
