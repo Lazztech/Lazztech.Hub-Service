@@ -3,7 +3,7 @@ import { GraphQLSchema } from 'graphql';
 import { buildSchema } from 'type-graphql';
 import Container from 'typedi';
 import { AccountResolver } from '../../../src/user/account.resolver';
-import { AuthenticationResolver } from '../../../src/user/authentication.resolver';
+import { AuthenticationResolver } from '../../../src/user/authentication/authentication.resolver';
 import { HubResolver } from '../../../src/hub/hub.resolver';
 import { NotificationResolver } from '../../../src/notification/notification.resolver';
 
