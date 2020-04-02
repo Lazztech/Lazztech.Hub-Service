@@ -1,21 +1,23 @@
-import { UseGuards, Logger } from '@nestjs/common';
-import { Mutation, Resolver, Args } from '@nestjs/graphql';
-import * as bcrypt from 'bcryptjs';
+import { Logger, UseGuards } from '@nestjs/common';
+import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Invite } from 'src/dal/entity/invite.entity';
 import { UserId } from 'src/decorators/user.decorator';
 import { AuthGuard } from 'src/guards/authguard.service';
-import { User } from '../dal/entity/user.entity';
-import { FileService } from 'src/services/file.service';
-import { InjectRepository } from '@nestjs/typeorm';
+import { EmailService } from 'src/services/email.service';
 import { Repository } from 'typeorm';
+import { User } from '../dal/entity/user.entity';
+import { UserService } from './user.service';
 
 @Resolver()
 export class AccountResolver {
   private logger = new Logger(AccountResolver.name, true);
 
   constructor(
-    private fileService: FileService,
-    @InjectRepository(User)
-    private userRepository: Repository<User>,
+    private userService: UserService,
+    private emailService: EmailService,
+    @InjectRepository(Invite)
+    private inviteRepository: Repository<Invite>,
   ) {
     this.logger.log('constructor');
   }
@@ -31,12 +33,7 @@ export class AccountResolver {
   ): Promise<User> {
     this.logger.log(this.editUserDetails.name);
 
-    const user = await this.userRepository.findOne({ where: { id: userId } });
-    user.firstName = firstName;
-    user.lastName = lastName;
-    user.description = description;
-    await this.userRepository.save(user);
-
+    const user = await this.userService.editUserDetails(userId, firstName, lastName, description);
     return user;
   }
 
@@ -49,36 +46,23 @@ export class AccountResolver {
   ): Promise<User> {
     this.logger.log(this.changeEmail.name);
 
-    const user = await this.userRepository.findOne({ where: { id: userId } });
-    user.email = newEmail;
-    await this.userRepository.save(user);
-
+    const user = await this.userService.changeEmail(userId, newEmail);
     return user;
   }
 
   //@Authorized()
   @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
-  public async changePassword(
-    @UserId() userId,
-    @Args({ name: 'oldPassword', type: () => String }) oldPassword: string,
-    @Args({ name: 'newPassword', type: () => String }) newPassword: string,
-  ): Promise<boolean> {
-    this.logger.log(this.changePassword.name);
+  public async newInvite(@Args('email') email: string): Promise<boolean> {
+    this.logger.log(this.newInvite.name);
 
-    const user = await this.userRepository.findOne({ where: { id: userId } });
+    let invite = this.inviteRepository.create({
+      email,
+    });
+    invite = await this.inviteRepository.save(invite);
 
-    const valid = await bcrypt.compare(oldPassword, user.password);
-
-    if (valid) {
-      const newHashedPassword = await bcrypt.hash(newPassword, 12);
-      user.password = newHashedPassword;
-      await this.userRepository.save(user);
-
-      return true;
-    } else {
-      return false;
-    }
+    await this.emailService.sendInviteEmail(email);
+    return true;
   }
 
   @UseGuards(AuthGuard)
@@ -89,39 +73,8 @@ export class AccountResolver {
   ): Promise<User> {
     this.logger.log(this.changeUserImage.name);
 
-    let user = await this.userRepository.findOne(userId);
-
-    if (user.image) {
-      await this.fileService.deletePublicImageFromUrl(user.image);
-    }
-    const imageUrl = await this.fileService.storePublicImageFromBase64(
-      newImage,
-    );
-
-    user.image = imageUrl;
-    user = await this.userRepository.save(user);
+    let user = await this.userService.changeUserImage(userId, newImage);
     return user;
   }
 
-  //@Authorized()
-  @UseGuards(AuthGuard)
-  @Mutation(() => Boolean)
-  public async deleteAccount(
-    @UserId() userId,
-    @Args({ name: 'email', type: () => String }) email: string,
-    @Args({ name: 'password', type: () => String }) password: string,
-  ): Promise<boolean> {
-    this.logger.log(this.deleteAccount.name);
-
-    const user = await this.userRepository.findOne({ where: { id: userId } });
-
-    const valid = await bcrypt.compare(password, user.password);
-
-    if (valid && email === user.email) {
-      await this.userRepository.remove(user);
-      return true;
-    } else {
-      return false;
-    }
-  }
 }

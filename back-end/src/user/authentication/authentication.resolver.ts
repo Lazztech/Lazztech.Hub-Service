@@ -5,7 +5,6 @@ import * as bcrypt from 'bcryptjs';
 import { UserId } from 'src/decorators/user.decorator';
 import { AuthGuard } from 'src/guards/authguard.service';
 import { Repository } from 'typeorm';
-import { Invite } from '../../dal/entity/invite.entity';
 import { PasswordReset } from '../../dal/entity/passwordReset.entity';
 import { User } from '../../dal/entity/user.entity';
 import { EmailService } from '../../services/email.service';
@@ -21,8 +20,6 @@ export class AuthenticationResolver {
     private authService: AuthenticationService,
     @InjectRepository(User)
     private userRepository: Repository<User>,
-    @InjectRepository(Invite)
-    private inviteRepository: Repository<Invite>,
     @InjectRepository(PasswordReset)
     private passwordResetRepository: Repository<PasswordReset>,
   ) {
@@ -116,15 +113,38 @@ export class AuthenticationResolver {
 
   @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
-  public async newInvite(@Args('email') email: string): Promise<boolean> {
-    this.logger.log(this.newInvite.name);
+  public async changePassword(
+    @UserId() userId,
+    @Args({ name: 'oldPassword', type: () => String }) oldPassword: string,
+    @Args({ name: 'newPassword', type: () => String }) newPassword: string,
+  ): Promise<boolean> {
+    this.logger.log(this.changePassword.name);
 
-    let invite = this.inviteRepository.create({
-      email,
-    });
-    invite = await this.inviteRepository.save(invite);
+    const user = await this.userRepository.findOne({ where: { id: userId } });
 
-    await this.emailService.sendInviteEmail(email);
-    return true;
+    const valid = await bcrypt.compare(oldPassword, user.password);
+
+    if (valid) {
+      const newHashedPassword = await bcrypt.hash(newPassword, 12);
+      user.password = newHashedPassword;
+      await this.userRepository.save(user);
+
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  @UseGuards(AuthGuard)
+  @Mutation(() => Boolean)
+  public async deleteAccount(
+    @UserId() userId,
+    @Args({ name: 'email', type: () => String }) email: string,
+    @Args({ name: 'password', type: () => String }) password: string,
+  ): Promise<boolean> {
+    this.logger.log(this.deleteAccount.name);
+
+    const result = await this.authService.deleteAccount(userId, email, password);
+    return result;
   }
 }

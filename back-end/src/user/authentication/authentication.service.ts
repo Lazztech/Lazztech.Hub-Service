@@ -85,4 +85,17 @@ export class AuthenticationService {
         });
         await this.joinUserInAppNotificationRepository.save(joinUserInAppNotification);
     }
+
+    public async deleteAccount(userId: number, email: string, password: string) {
+        const user = await this.userRepository.findOne({ where: { id: userId } });
+    
+        const valid = await bcrypt.compare(password, user.password);
+    
+        if (valid && email === user.email) {
+          await this.userRepository.remove(user);
+          return true;
+        } else {
+          return false;
+        }
+      }
 }
