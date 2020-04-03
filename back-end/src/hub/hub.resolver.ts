@@ -19,8 +19,6 @@ export class HubResolver {
   private logger = new Logger(HubResolver.name, true);
 
   constructor(
-    private qrService: QrService,
-    private fileService: FileService,
     private hubService: HubService,
     private userService: UserService,
     @InjectRepository(Hub)
@@ -44,25 +42,7 @@ export class HubResolver {
     @Args({ name: 'longitude', type: () => Float }) longitude: number,
   ): Promise<Hub> {
     this.logger.log(this.createHub.name);
-
-    const imageUrl = await this.fileService.storePublicImageFromBase64(image);
-
-    // Creates hub with user as owner.
-    const hub = this.hubRepository.create({
-      latitude,
-      longitude,
-      name,
-      description,
-      image: imageUrl,
-    });
-
-    const result = await this.hubRepository.save(hub);
-    let joinUserHub = await this.joinUserHubRepository.create({
-      userId: userId,
-      hubId: hub.id,
-      isOwner: true,
-    });
-    joinUserHub = await this.joinUserHubRepository.save(joinUserHub);
+    const hub = await this.hubService.createHub(userId, name, description, image, latitude, longitude);
     return hub;
   }
 
@@ -73,34 +53,16 @@ export class HubResolver {
     @Args({ name: 'id', type: () => Int }) id: number,
   ): Promise<JoinUserHub> {
     this.logger.log(this.hub.name);
-
-    const userHubRelationship = await this.joinUserHubRepository.findOne({
-      where: {
-        hubId: id,
-        userId: userId,
-      },
-      relations: [
-        'hub',
-        'hub.usersConnection',
-        'hub.usersConnection.user',
-        'hub.microChats',
-      ],
-    });
-    return userHubRelationship;
+    const result = await this.hubService.getOneUserHub(userId, id);
+    return result;
   }
 
   @UseGuards(AuthGuard)
   @Query(() => [JoinUserHub])
   public async usersHubs(@UserId() userId): Promise<JoinUserHub[]> {
     this.logger.log(this.usersHubs.name);
-
-    const userHubRelationships = await this.joinUserHubRepository.find({
-      where: {
-        userId: userId,
-      },
-      relations: ['hub', 'hub.usersConnection'],
-    });
-    return userHubRelationships;
+    const result = await this.hubService.getUserHubs(userId);
+    return result;
   }
 
   @UseGuards(AuthGuard)
@@ -110,31 +72,8 @@ export class HubResolver {
     @Args({ name: 'otherUsersId', type: () => Int }) otherUsersId: number,
   ) {
     this.logger.log(this.commonUsersHubs.name);
-
-    const userHubRelationships = await this.joinUserHubRepository.find({
-      where: {
-        userId: userId,
-      },
-      relations: [
-        'hub',
-        'hub.usersConnection',
-        'hub.usersConnection.hub',
-        'hub.usersConnection.hub.usersConnection',
-      ],
-    });
-
-    let commonHubRelationships = [];
-
-    for (let index = 0; index < userHubRelationships.length; index++) {
-      const element = userHubRelationships[index];
-      if (element.hub.usersConnection.find(x => x.userId == otherUsersId)) {
-        commonHubRelationships.push(
-          element.hub.usersConnection.find(x => x.userId == otherUsersId),
-        );
-      }
-    }
-
-    return commonHubRelationships;
+    const result = await this.hubService.commonUsersHubs(userId, otherUsersId)
+    return result;
   }
 
   @UseGuards(AuthGuard)
@@ -145,45 +84,7 @@ export class HubResolver {
     @Args({ name: 'inviteesEmail', type: () => String }) inviteesEmail: string,
   ): Promise<boolean> {
     this.logger.log(this.inviteUserToHub.name);
-
-    const userHubRelationship = await this.joinUserHubRepository.findOne({
-      where: {
-        userId: userId,
-        hubId: hubId,
-        isOwner: true,
-      },
-      relations: ['hub'],
-    });
-    if (!userHubRelationship) {
-      this.logger.warn(
-        `Could not find admin relationship to hubId: ${hubId} for userId: ${userId}.`,
-      );
-      return false;
-    }
-
-    const invitee = await this.userRepository.findOne({
-      where: {
-        email: inviteesEmail,
-      },
-    });
-    if (!invitee) {
-      this.logger.warn(
-        `Did not find user to invite by email address: ${inviteesEmail}`,
-      );
-      return false;
-    }
-    if (invitee.id == userId) {
-      this.logger.warn(`Cannot invite self to hub.`);
-      return false;
-    }
-
-    let newRelationship = this.joinUserHubRepository.create({
-      userId: invitee.id,
-      hubId,
-      isOwner: false,
-    });
-    newRelationship = await this.joinUserHubRepository.save(newRelationship);
-
+    await this.hubService.inviteUserToHub(userId, hubId, inviteesEmail);
     return true;
   }
 
@@ -191,41 +92,8 @@ export class HubResolver {
   @Query(() => [User])
   public async usersPeople(@UserId() userId): Promise<User[]> {
     this.logger.log(this.usersPeople.name);
-
-    //TODO optimize this
-    const userHubRelationships = await this.joinUserHubRepository.find({
-      where: {
-        userId: userId,
-      },
-    });
-
-    const usersHubIds: Array<number> = [];
-    for (let index = 0; index < userHubRelationships.length; index++) {
-      const element = userHubRelationships[index];
-      usersHubIds.push(element.hubId);
-    }
-
-    let usersPeople: Array<User> = [];
-    for (let index = 0; index < usersHubIds.length; index++) {
-      const usersHubId = usersHubIds[index];
-      const userHubRelationships = await this.joinUserHubRepository.find({
-        where: {
-          hubId: usersHubId,
-        },
-        relations: ['user'],
-      });
-
-      for (let index = 0; index < userHubRelationships.length; index++) {
-        const otherUserId = userHubRelationships[index].userId;
-
-        const user = userHubRelationships[index].user;
-        if (usersPeople.find(x => x.id == otherUserId) == undefined) {
-          usersPeople.push(user);
-        }
-      }
-    }
-
-    return usersPeople;
+    const result = await this.hubService.usersPeople(userId);
+    return result;
   }
 
   @UseGuards(AuthGuard)
@@ -274,37 +142,18 @@ export class HubResolver {
   @Query(() => [Hub])
   public async starredHubs(@UserId() userId) {
     this.logger.log(this.starredHubs.name);
-
-    const userHubRelationships = await this.joinUserHubRepository.find({
-      where: {
-        userId: userId,
-        starred: true,
-      },
-      relations: ['hub'],
-    });
-    const hubs = [];
-    for (let index = 0; index < userHubRelationships.length; index++) {
-      const element = userHubRelationships[index];
-      // element.starred = element.starred;
-      element.starred = true;
-      hubs.push(element.hub);
-    }
-    return hubs;
+    const result = await this.hubService.getStarredHubs(userId);
+    return result;
   }
 
   @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
   public async deleteHub(
+    @UserId() userId,
     @Args({ name: 'hubId', type: () => Int }) hubId: number,
   ) {
     this.logger.log(this.deleteHub.name);
-
-    const hub = await this.hubRepository.findOne({
-      where: {
-        id: hubId,
-      },
-    });
-    await this.hubRepository.remove(hub);
+    await this.hubService.deleteHub(userId, hubId);
     return true;
   }
 
@@ -317,21 +166,8 @@ export class HubResolver {
     @Args({ name: 'description', type: () => String }) description: string,
   ): Promise<Hub> {
     this.logger.log(this.editHub.name);
-
-    const joinUserHubResult = await this.joinUserHubRepository.findOne({
-      where: {
-        userId: userId,
-        hubId,
-        isOwner: true,
-      },
-      relations: ['hub'],
-    });
-
-    let hub = joinUserHubResult.hub;
-    hub.name = name;
-    hub.description = description;
-    hub = await this.hubRepository.save(hub);
-    return hub;
+    const result = await this.hubService.editHub(userId, hubId, name, description);
+    return result;
   }
 
   @UseGuards(AuthGuard)
@@ -342,28 +178,8 @@ export class HubResolver {
     @Args({ name: 'newImage', type: () => String }) newImage: string,
   ): Promise<Hub> {
     this.logger.log(this.changeHubImage.name);
-
-    const joinUserHubResult = await this.joinUserHubRepository.findOne({
-      where: {
-        userId: userId,
-        hubId,
-        isOwner: true,
-      },
-      relations: ['hub'],
-    });
-
-    let hub = joinUserHubResult.hub;
-
-    if (hub.image) {
-      await this.fileService.deletePublicImageFromUrl(hub.image);
-    }
-    const imageUrl = await this.fileService.storePublicImageFromBase64(
-      newImage,
-    );
-
-    hub.image = imageUrl;
-    hub = await this.hubRepository.save(hub);
-    return hub;
+    const result = await this.hubService.changeHubImage(userId, hubId, newImage);
+    return result;
   }
 
   @UseGuards(AuthGuard)
@@ -373,14 +189,7 @@ export class HubResolver {
     @Args({ name: 'id', type: () => Int }) id: number,
   ): Promise<boolean> {
     this.logger.log(this.joinHub.name);
-
-    let joinUserHub = await this.joinUserHubRepository.create({
-      userId: userId,
-      hubId: id,
-      isOwner: true,
-    });
-    joinUserHub = await this.joinUserHubRepository.save(joinUserHub);
-
+    await this.hubService.joinHub(userId, id);
     return true;
   }
 
@@ -390,15 +199,8 @@ export class HubResolver {
     @Args({ name: 'qrImageB64', type: () => String }) qrImageB64: string,
   ): Promise<Hub> {
     this.logger.log(this.getHubByQRImage.name);
-
-    //FIXME: Finish implementing check that user is hub owner.
-
-    const result = await this.qrService.scanQR(qrImageB64);
-    if (result) {
-      const id = result.id;
-      const hub = await this.hubRepository.findOne({ id });
-      return hub;
-    }
+    const result = await this.hubService.getHubByQRImage(qrImageB64);
+    return;
   }
 
   @UseGuards(AuthGuard)
@@ -408,13 +210,7 @@ export class HubResolver {
     @Args({ name: 'hubId', type: () => Int }) hubId: number,
   ) {
     this.logger.log(this.setHubStarred.name);
-
-    const hubRelationship = await this.joinUserHubRepository.findOne({
-      userId: userId,
-      hubId: hubId,
-    });
-    hubRelationship.starred = true;
-    await this.joinUserHubRepository.save(hubRelationship);
+    await this.hubService.setHubStarred(userId, hubId);
     return true;
   }
 
@@ -425,13 +221,7 @@ export class HubResolver {
     @Args({ name: 'hubId', type: () => Int }) hubId: number,
   ) {
     this.logger.log(this.setHubNotStarred.name);
-
-    const hubRelationship = await this.joinUserHubRepository.findOne({
-      userId: userId,
-      hubId: hubId,
-    });
-    hubRelationship.starred = false;
-    await this.joinUserHubRepository.save(hubRelationship);
+    await this.setHubNotStarred(userId, hubId);
     return true;
   }
 
@@ -442,20 +232,7 @@ export class HubResolver {
     @Args({ name: 'hubId', type: () => Int }) hubId: number,
   ): Promise<boolean> {
     this.logger.log(this.enteredHubGeofence.name);
-
-    let hubRelationship = await this.joinUserHubRepository.findOne({
-      userId,
-      hubId,
-    });
-
-    if (!hubRelationship)
-      throw Error(
-        `no corresponding hub relationship found for userId: ${userId} & hubId: ${hubId}`,
-      );
-
-    hubRelationship.isPresent = true;
-    hubRelationship = await this.joinUserHubRepository.save(hubRelationship);
-
+    await this.hubService.enteredHubGeofence(userId, hubId);
     return true;
   }
 
@@ -466,20 +243,7 @@ export class HubResolver {
     @Args({ name: 'hubId', type: () => Int }) hubId: number,
   ): Promise<boolean> {
     this.logger.log(this.exitedHubGeofence.name);
-
-    let hubRelationship = await this.joinUserHubRepository.findOne({
-      userId,
-      hubId,
-    });
-
-    if (!hubRelationship)
-      throw Error(
-        `no corresponding hub relationship found for userId: ${userId} & hubId: ${hubId}`,
-      );
-
-    hubRelationship.isPresent = false;
-    hubRelationship = await this.joinUserHubRepository.save(hubRelationship);
-
+    await this.hubService.exitedHubGeofence(userId, hubId);
     return true;
   }
 
@@ -490,34 +254,8 @@ export class HubResolver {
     @Args({ name: 'hubId', type: () => Int }) hubId: number,
   ) {
     this.logger.log(this.activateHub.name);
-
-    let hubRelationship = await this.joinUserHubRepository.findOne({
-      where: {
-        userId,
-        hubId,
-        isOwner: true,
-      },
-      relations: ['hub'],
-    });
-
-    if (!hubRelationship)
-      throw Error(
-        `no corresponding hub relationship found for userId: ${userId} & hubId: ${hubId}`,
-      );
-
-    let hub = hubRelationship.hub;
-    hub.active = true;
-    hub = await this.hubRepository.save(hub);
-
-    const hubRelationships = await this.joinUserHubRepository.find({
-      where: {
-        hubId,
-      },
-      relations: ['hub'],
-    });
-    await this.hubService.notifyOfHubActivated(hubRelationships);
-
-    return hub;
+    const result = await this.hubService.activateHub(userId, hubId);
+    return result;
   }
 
   @UseGuards(AuthGuard)
@@ -527,25 +265,8 @@ export class HubResolver {
     @Args({ name: 'hubId', type: () => Int }) hubId: number,
   ) {
     this.logger.log(this.deactivateHub.name);
-
-    let hubRelationship = await this.joinUserHubRepository.findOne({
-      where: {
-        userId,
-        hubId,
-        isOwner: true,
-      },
-      relations: ['hub'],
-    });
-
-    if (!hubRelationship)
-      throw Error(
-        `no corresponding hub relationship found for userId: ${userId} & hubId: ${hubId}`,
-      );
-
-    let hub = hubRelationship.hub;
-    hub.active = false;
-    hub = await this.hubRepository.save(hub);
-    return hub;
+    const result = await this.hubService.deactivateHub(userId, hubId);
+    return result;
   }
 
   @UseGuards(AuthGuard)
