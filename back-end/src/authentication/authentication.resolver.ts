@@ -4,8 +4,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserId } from 'src/decorators/user.decorator';
 import { AuthGuard } from 'src/guards/authguard.service';
 import { Repository } from 'typeorm';
-import { User } from '../../dal/entity/user.entity';
-import { UserInput } from '../user.input';
+import { User } from '../dal/entity/user.entity';
+import { UserInput } from '../user/user.input';
 import { AuthenticationService } from './authentication.service';
 
 @Resolver()

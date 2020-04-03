@@ -14,11 +14,11 @@ export class UserService {
 
   constructor(
     private fileService: FileService,
+    private emailService: EmailService,
     @InjectRepository(JoinUserHub)
     private joinUserHubRepository: Repository<JoinUserHub>,
     @InjectRepository(User)
     private userRepository: Repository<User>,
-    private emailService: EmailService,
     @InjectRepository(Invite)
     private inviteRepository: Repository<Invite>,
   ) {

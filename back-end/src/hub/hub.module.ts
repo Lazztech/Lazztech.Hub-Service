@@ -12,6 +12,7 @@ import { UserModule } from 'src/user/user.module';
 import { UserService } from 'src/user/user.service';
 import { JoinUserInAppNotifications } from 'src/dal/entity/joinUserInAppNotifications.entity';
 import { InAppNotification } from 'src/dal/entity/inAppNotification.entity';
+import { Invite } from 'src/dal/entity/invite.entity';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { InAppNotification } from 'src/dal/entity/inAppNotification.entity';
       MicroChat,
       User,
       InAppNotification,
+      Invite,
     ]),
     ServicesModule,
     UserModule,

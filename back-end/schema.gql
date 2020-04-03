@@ -71,16 +71,16 @@ type Mutation {
   deleteMicroChat(microChatId: Int!, hubId: Int!): Boolean!
   editUserDetails(description: String!, lastName: String!, firstName: String!): User!
   changeEmail(newEmail: String!): User!
-  changePassword(newPassword: String!, oldPassword: String!): Boolean!
+  newInvite(email: String!): Boolean!
   changeUserImage(newImage: String!): User!
-  deleteAccount(password: String!, email: String!): Boolean!
+  addUserFcmNotificationToken(token: String!): Boolean!
   login(password: String!, email: String!): String
   register(data: UserInput!): String
   logout: Boolean!
   resetPassword(newPassword: String!, resetPin: String!, usersEmail: String!): Boolean!
   sendPasswordResetEmail(email: String!): Boolean!
-  newInvite(email: String!): Boolean!
-  addUserFcmNotificationToken(token: String!): Boolean!
+  changePassword(newPassword: String!, oldPassword: String!): Boolean!
+  deleteAccount(password: String!, email: String!): Boolean!
 }
 
 type Query {
