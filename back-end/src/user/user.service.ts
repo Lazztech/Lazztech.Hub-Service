@@ -5,6 +5,8 @@ import { JoinUserHub } from 'src/dal/entity/joinUserHub.entity';
 import { Repository } from 'typeorm';
 import { User } from 'src/dal/entity/user.entity';
 import { FileService } from 'src/services/file.service';
+import { EmailService } from 'src/services/email.service';
+import { Invite } from 'src/dal/entity/invite.entity';
 
 @Injectable()
 export class UserService {
@@ -16,8 +18,15 @@ export class UserService {
     private joinUserHubRepository: Repository<JoinUserHub>,
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    private emailService: EmailService,
+    @InjectRepository(Invite)
+    private inviteRepository: Repository<Invite>,
   ) {
     this.logger.log('constructor');
+  }
+
+  public async getUser(userId: any) {
+    return await this.userRepository.findOne({ where: { id: userId } });
   }
 
   public async getUsersOwnedHubs(userId: number): Promise<Hub[]> {
@@ -62,6 +71,15 @@ export class UserService {
     user.email = newEmail;
     await this.userRepository.save(user);
     return user;
+  }
+
+  public async newInvite(email: string) {
+    let invite = this.inviteRepository.create({
+      email,
+    });
+    invite = await this.inviteRepository.save(invite);
+
+    await this.emailService.sendInviteEmail(email);
   }
 
   public async changeUserImage(userId: any, newImage: string) {

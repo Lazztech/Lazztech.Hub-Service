@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ServicesModule } from 'src/services/services.module';
-import { AccountResolver } from './account.resolver';
+import { UserResolver } from './user.resolver';
 import { AuthenticationResolver } from './authentication/authentication.resolver';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { InAppNotification } from 'src/dal/entity/inAppNotification.entity';
@@ -25,6 +25,6 @@ import { AuthenticationService } from './authentication/authentication.service';
     ServicesModule,
   ],
   controllers: [],
-  providers: [UserService, AccountResolver, AuthenticationResolver, AuthenticationService],
+  providers: [UserService, UserResolver, AuthenticationResolver, AuthenticationService],
 })
 export class UserModule {}

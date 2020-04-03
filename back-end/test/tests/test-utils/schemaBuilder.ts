@@ -2,14 +2,14 @@ import { Logger } from '@nestjs/common';
 import { GraphQLSchema } from 'graphql';
 import { buildSchema } from 'type-graphql';
 import Container from 'typedi';
-import { AccountResolver } from '../../../src/user/account.resolver';
+import { UserResolver } from '../../../src/user/user.resolver';
 import { AuthenticationResolver } from '../../../src/user/authentication/authentication.resolver';
 import { HubResolver } from '../../../src/hub/hub.resolver';
 import { NotificationResolver } from '../../../src/notification/notification.resolver';
 
 const resolvers = [
   AuthenticationResolver,
-  AccountResolver,
+  UserResolver,
   NotificationResolver,
   HubResolver,
 ];
