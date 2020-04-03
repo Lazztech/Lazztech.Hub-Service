@@ -1,5 +1,5 @@
 import { Logger, UseGuards } from '@nestjs/common';
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Resolver, Query } from '@nestjs/graphql';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Invite } from 'src/dal/entity/invite.entity';
 import { UserId } from 'src/decorators/user.decorator';
@@ -18,11 +18,19 @@ export class AccountResolver {
     private emailService: EmailService,
     @InjectRepository(Invite)
     private inviteRepository: Repository<Invite>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
   ) {
     this.logger.log('constructor');
   }
 
-  //@Authorized()
+  @UseGuards(AuthGuard)
+  @Query(() => User, { nullable: true })
+  public async me(@UserId() userId): Promise<User> {
+    this.logger.log(this.me.name);
+    return await this.userRepository.findOne({ where: { id: userId } });
+  }
+
   @UseGuards(AuthGuard)
   @Mutation(() => User)
   public async editUserDetails(
@@ -37,7 +45,6 @@ export class AccountResolver {
     return user;
   }
 
-  //@Authorized()
   @UseGuards(AuthGuard)
   @Mutation(() => User)
   public async changeEmail(
@@ -50,7 +57,6 @@ export class AccountResolver {
     return user;
   }
 
-  //@Authorized()
   @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
   public async newInvite(@Args('email') email: string): Promise<boolean> {

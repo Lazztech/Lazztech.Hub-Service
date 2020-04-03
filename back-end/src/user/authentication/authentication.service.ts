@@ -7,12 +7,17 @@ import { JoinUserInAppNotifications } from 'src/dal/entity/joinUserInAppNotifica
 import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
+import { EmailService } from 'src/services/email.service';
+import { PasswordReset } from 'src/dal/entity/passwordReset.entity';
 
 @Injectable()
 export class AuthenticationService {
     private logger = new Logger(AuthenticationService.name);
 
     constructor(
+        private emailService: EmailService,
+        @InjectRepository(PasswordReset)
+        private passwordResetRepository: Repository<PasswordReset>,
         @InjectRepository(User)
         private userRepository: Repository<User>,
         @InjectRepository(InAppNotification)
@@ -86,16 +91,69 @@ export class AuthenticationService {
         await this.joinUserInAppNotificationRepository.save(joinUserInAppNotification);
     }
 
+    public async changePassword(userId: any, oldPassword: string, newPassword: string) {
+        const user = await this.userRepository.findOne({ where: { id: userId } });
+
+        const valid = await bcrypt.compare(oldPassword, user.password);
+
+        if (valid) {
+            const newHashedPassword = await bcrypt.hash(newPassword, 12);
+            user.password = newHashedPassword;
+            await this.userRepository.save(user);
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public async deleteAccount(userId: number, email: string, password: string) {
         const user = await this.userRepository.findOne({ where: { id: userId } });
-    
+
         const valid = await bcrypt.compare(password, user.password);
-    
+
         if (valid && email === user.email) {
-          await this.userRepository.remove(user);
-          return true;
+            await this.userRepository.remove(user);
+            return true;
         } else {
-          return false;
+            return false;
         }
-      }
+    }
+
+    public async resetPassword(usersEmail: string, resetPin: string, newPassword: string) {
+        const user = await this.userRepository.findOne({
+            where: { email: usersEmail },
+            relations: ['passwordReset'],
+          });
+      
+          const pinMatches = user.passwordReset.pin === resetPin;
+      
+          if (pinMatches) {
+            const hashedPassword = await bcrypt.hash(newPassword, 12);
+            user.password = hashedPassword;
+            await this.userRepository.save(user);
+            return true;
+          } else {
+            return false;
+          }
+    }
+
+    async sendPasswordResetEmail(email: string) {
+        const user = await this.userRepository.findOne({
+            where: { email },
+            relations: ['passwordReset'],
+        });
+
+        if (user) {
+            const pin = await this.emailService.sendPasswordResetEmail(
+                user.email,
+                `${user.firstName} ${user.lastName}`,
+            );
+            user.passwordReset = await this.passwordResetRepository.create({ pin });
+            await this.userRepository.save(user);
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

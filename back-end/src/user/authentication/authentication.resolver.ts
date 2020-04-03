@@ -1,13 +1,10 @@
 import { Logger, Response, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as bcrypt from 'bcryptjs';
 import { UserId } from 'src/decorators/user.decorator';
 import { AuthGuard } from 'src/guards/authguard.service';
 import { Repository } from 'typeorm';
-import { PasswordReset } from '../../dal/entity/passwordReset.entity';
 import { User } from '../../dal/entity/user.entity';
-import { EmailService } from '../../services/email.service';
 import { UserInput } from '../user.input';
 import { AuthenticationService } from './authentication.service';
 
@@ -16,21 +13,9 @@ export class AuthenticationResolver {
   private logger = new Logger(AuthenticationResolver.name, true);
 
   constructor(
-    private emailService: EmailService,
     private authService: AuthenticationService,
-    @InjectRepository(User)
-    private userRepository: Repository<User>,
-    @InjectRepository(PasswordReset)
-    private passwordResetRepository: Repository<PasswordReset>,
   ) {
     this.logger.log('constructor');
-  }
-
-  @UseGuards(AuthGuard)
-  @Query(() => User, { nullable: true })
-  public async me(@UserId() userId): Promise<User> {
-    this.logger.log(this.me.name);
-    return await this.userRepository.findOne({ where: { id: userId } });
   }
 
   @Mutation(() => String, { nullable: true })
@@ -69,22 +54,8 @@ export class AuthenticationResolver {
     @Args('newPassword') newPassword: string,
   ): Promise<boolean> {
     this.logger.log(this.resetPassword.name);
-
-    const user = await this.userRepository.findOne({
-      where: { email: usersEmail },
-      relations: ['passwordReset'],
-    });
-
-    const pinMatches = user.passwordReset.pin === resetPin;
-
-    if (pinMatches) {
-      const hashedPassword = await bcrypt.hash(newPassword, 12);
-      user.password = hashedPassword;
-      await this.userRepository.save(user);
-      return true;
-    } else {
-      return false;
-    }
+    const result = await this.authService.resetPassword(usersEmail, resetPin, newPassword);
+    return result;
   }
 
   @Mutation(() => Boolean)
@@ -92,23 +63,8 @@ export class AuthenticationResolver {
     @Args('email') email: string,
   ): Promise<boolean> {
     this.logger.log(this.sendPasswordResetEmail.name);
-
-    const user = await this.userRepository.findOne({
-      where: { email },
-      relations: ['passwordReset'],
-    });
-
-    if (user) {
-      const pin = await this.emailService.sendPasswordResetEmail(
-        user.email,
-        `${user.firstName} ${user.lastName}`,
-      );
-      user.passwordReset = await this.passwordResetRepository.create({ pin });
-      await this.userRepository.save(user);
-      return true;
-    } else {
-      return false;
-    }
+    const result = await this.authService.sendPasswordResetEmail(email);
+    return result;
   }
 
   @UseGuards(AuthGuard)
@@ -119,20 +75,8 @@ export class AuthenticationResolver {
     @Args({ name: 'newPassword', type: () => String }) newPassword: string,
   ): Promise<boolean> {
     this.logger.log(this.changePassword.name);
-
-    const user = await this.userRepository.findOne({ where: { id: userId } });
-
-    const valid = await bcrypt.compare(oldPassword, user.password);
-
-    if (valid) {
-      const newHashedPassword = await bcrypt.hash(newPassword, 12);
-      user.password = newHashedPassword;
-      await this.userRepository.save(user);
-
-      return true;
-    } else {
-      return false;
-    }
+    const result = await this.authService.changePassword(userId, oldPassword, newPassword);
+    return result;
   }
 
   @UseGuards(AuthGuard)
@@ -143,7 +87,6 @@ export class AuthenticationResolver {
     @Args({ name: 'password', type: () => String }) password: string,
   ): Promise<boolean> {
     this.logger.log(this.deleteAccount.name);
-
     const result = await this.authService.deleteAccount(userId, email, password);
     return result;
   }
