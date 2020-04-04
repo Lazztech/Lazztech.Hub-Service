@@ -9,6 +9,8 @@ import * as bcrypt from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 import { EmailService } from 'src/services/email.service';
 import { PasswordReset } from 'src/dal/entity/passwordReset.entity';
+import { ResetPassword } from './dto/resetPassword.input';
+import { ChangePassword } from './dto/changePassword.input';
 
 @Injectable()
 export class AuthenticationService {
@@ -91,13 +93,13 @@ export class AuthenticationService {
         await this.joinUserInAppNotificationRepository.save(joinUserInAppNotification);
     }
 
-    public async changePassword(userId: any, oldPassword: string, newPassword: string) {
+    public async changePassword(userId: any, details: ChangePassword) {
         const user = await this.userRepository.findOne({ where: { id: userId } });
 
-        const valid = await bcrypt.compare(oldPassword, user.password);
+        const valid = await bcrypt.compare(details.oldPassword, user.password);
 
         if (valid) {
-            const newHashedPassword = await bcrypt.hash(newPassword, 12);
+            const newHashedPassword = await bcrypt.hash(details.newPassword, 12);
             user.password = newHashedPassword;
             await this.userRepository.save(user);
 
@@ -120,16 +122,16 @@ export class AuthenticationService {
         }
     }
 
-    public async resetPassword(usersEmail: string, resetPin: string, newPassword: string) {
+    public async resetPassword(details: ResetPassword) {
         const user = await this.userRepository.findOne({
-            where: { email: usersEmail },
+            where: { email: details.usersEmail },
             relations: ['passwordReset'],
           });
       
-          const pinMatches = user.passwordReset.pin === resetPin;
+          const pinMatches = user.passwordReset.pin === details.resetPin;
       
           if (pinMatches) {
-            const hashedPassword = await bcrypt.hash(newPassword, 12);
+            const hashedPassword = await bcrypt.hash(details.newPassword, 12);
             user.password = hashedPassword;
             await this.userRepository.save(user);
             return true;

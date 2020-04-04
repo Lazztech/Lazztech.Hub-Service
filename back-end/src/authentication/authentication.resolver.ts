@@ -51,7 +51,7 @@ export class AuthenticationResolver {
     @Args('newPassword') newPassword: string,
   ): Promise<boolean> {
     this.logger.log(this.resetPassword.name);
-    const result = await this.authService.resetPassword(usersEmail, resetPin, newPassword);
+    const result = await this.authService.resetPassword({usersEmail, resetPin, newPassword});
     return result;
   }
 
@@ -72,7 +72,7 @@ export class AuthenticationResolver {
     @Args({ name: 'newPassword', type: () => String }) newPassword: string,
   ): Promise<boolean> {
     this.logger.log(this.changePassword.name);
-    const result = await this.authService.changePassword(userId, oldPassword, newPassword);
+    const result = await this.authService.changePassword(userId, {oldPassword, newPassword});
     return result;
   }
 
