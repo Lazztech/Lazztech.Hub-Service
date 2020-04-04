@@ -7,6 +7,9 @@ import { User } from 'src/dal/entity/user.entity';
 import { FileService } from 'src/services/file.service';
 import { EmailService } from 'src/services/email.service';
 import { Invite } from 'src/dal/entity/invite.entity';
+import { EditUserDetails } from './dto/editUserDetails.input';
+import { ChangeEmail } from './dto/changeEmail.input';
+import { ChangeUserImage } from './dto/changeUserImage.input';
 
 @Injectable()
 export class UserService {
@@ -57,18 +60,18 @@ export class UserService {
     return hubs;
   }
 
-  public async editUserDetails(userId: any, firstName: string, lastName: string, description: string) {
-    const user = await this.userRepository.findOne({ where: { id: userId } });
-    user.firstName = firstName;
-    user.lastName = lastName;
-    user.description = description;
+  public async editUserDetails(details: EditUserDetails) {
+    const user = await this.userRepository.findOne({ where: { id: details.userId } });
+    user.firstName = details.firstName;
+    user.lastName = details.lastName;
+    user.description = details.description;
     await this.userRepository.save(user);
     return user;
   }
 
-  public async changeEmail(userId: any, newEmail: string) {
-    const user = await this.userRepository.findOne({ where: { id: userId } });
-    user.email = newEmail;
+  public async changeEmail(details: ChangeEmail) {
+    const user = await this.userRepository.findOne({ where: { id: details.userId } });
+    user.email = details.newEmail;
     await this.userRepository.save(user);
     return user;
   }
@@ -82,12 +85,12 @@ export class UserService {
     await this.emailService.sendInviteEmail(email);
   }
 
-  public async changeUserImage(userId: any, newImage: string) {
-    let user = await this.userRepository.findOne(userId);
+  public async changeUserImage(details: ChangeUserImage) {
+    let user = await this.userRepository.findOne(details.userId);
     if (user.image) {
       await this.fileService.deletePublicImageFromUrl(user.image);
     }
-    const imageUrl = await this.fileService.storePublicImageFromBase64(newImage);
+    const imageUrl = await this.fileService.storePublicImageFromBase64(details.newImage);
     user.image = imageUrl;
     user = await this.userRepository.save(user);
     return user;

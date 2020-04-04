@@ -1,11 +1,8 @@
 import { Logger, Response, UseGuards } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { InjectRepository } from '@nestjs/typeorm';
+import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { UserId } from 'src/decorators/user.decorator';
 import { AuthGuard } from 'src/guards/authguard.service';
-import { Repository } from 'typeorm';
-import { User } from '../dal/entity/user.entity';
-import { UserInput } from '../user/user.input';
+import { UserInput } from '../user/dto/user.input';
 import { AuthenticationService } from './authentication.service';
 
 @Resolver()
