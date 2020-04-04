@@ -31,8 +31,8 @@ export class UserResolver {
     @Args({ name: 'description', type: () => String }) description: string,
   ): Promise<User> {
     this.logger.log(this.editUserDetails.name);
-    const user = await this.userService.editUserDetails({
-      userId, firstName, lastName, description
+    const user = await this.userService.editUserDetails(userId, {
+      firstName, lastName, description
     });
     return user;
   }
@@ -44,7 +44,7 @@ export class UserResolver {
     @Args({ name: 'newEmail', type: () => String }) newEmail: string,
   ): Promise<User> {
     this.logger.log(this.changeEmail.name);
-    const user = await this.userService.changeEmail({userId, newEmail});
+    const user = await this.userService.changeEmail(userId, newEmail);
     return user;
   }
 
@@ -63,7 +63,7 @@ export class UserResolver {
     @Args({ name: 'newImage', type: () => String }) newImage: string,
   ): Promise<User> {
     this.logger.log(this.changeUserImage.name);
-    let user = await this.userService.changeUserImage({userId, newImage});
+    let user = await this.userService.changeUserImage(userId, newImage);
     return user;
   }
 

@@ -1,15 +1,13 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Hub } from 'src/dal/entity/hub.entity';
-import { JoinUserHub } from 'src/dal/entity/joinUserHub.entity';
-import { Repository } from 'typeorm';
-import { User } from 'src/dal/entity/user.entity';
-import { FileService } from 'src/services/file.service';
-import { EmailService } from 'src/services/email.service';
 import { Invite } from 'src/dal/entity/invite.entity';
+import { JoinUserHub } from 'src/dal/entity/joinUserHub.entity';
+import { User } from 'src/dal/entity/user.entity';
+import { EmailService } from 'src/services/email.service';
+import { FileService } from 'src/services/file.service';
+import { Repository } from 'typeorm';
 import { EditUserDetails } from './dto/editUserDetails.input';
-import { ChangeEmail } from './dto/changeEmail.input';
-import { ChangeUserImage } from './dto/changeUserImage.input';
 
 @Injectable()
 export class UserService {
@@ -60,8 +58,8 @@ export class UserService {
     return hubs;
   }
 
-  public async editUserDetails(details: EditUserDetails) {
-    const user = await this.userRepository.findOne({ where: { id: details.userId } });
+  public async editUserDetails(userId: any, details: EditUserDetails) {
+    const user = await this.userRepository.findOne({ where: { id: userId } });
     user.firstName = details.firstName;
     user.lastName = details.lastName;
     user.description = details.description;
@@ -69,9 +67,9 @@ export class UserService {
     return user;
   }
 
-  public async changeEmail(details: ChangeEmail) {
-    const user = await this.userRepository.findOne({ where: { id: details.userId } });
-    user.email = details.newEmail;
+  public async changeEmail(userId: any, newEmail: string) {
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+    user.email = newEmail;
     await this.userRepository.save(user);
     return user;
   }
@@ -85,12 +83,12 @@ export class UserService {
     await this.emailService.sendInviteEmail(email);
   }
 
-  public async changeUserImage(details: ChangeUserImage) {
-    let user = await this.userRepository.findOne(details.userId);
+  public async changeUserImage(userId: any, newImage: string) {
+    let user = await this.userRepository.findOne(userId);
     if (user.image) {
       await this.fileService.deletePublicImageFromUrl(user.image);
     }
-    const imageUrl = await this.fileService.storePublicImageFromBase64(details.newImage);
+    const imageUrl = await this.fileService.storePublicImageFromBase64(newImage);
     user.image = imageUrl;
     user = await this.userRepository.save(user);
     return user;
