@@ -2,8 +2,6 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import configuration from './config/configuration';
 import { User } from './dal/entity/user.entity';
 import { AuthGuard } from './guards/authguard.service';
@@ -47,7 +45,7 @@ import { AuthenticationModule } from './authentication/authentication.module';
     }),
     AuthenticationModule,
   ],
-  controllers: [AppController],
-  providers: [AuthGuard, AppService],
+  controllers: [],
+  providers: [AuthGuard],
 })
 export class AppModule {}
