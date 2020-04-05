@@ -18,6 +18,7 @@ describe('UserService', () => {
   let userRepo: Repository<User>;
   let inviteRepo: Repository<Invite>;
   let emailService: EmailService;
+  let fileService: FileService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -51,6 +52,7 @@ describe('UserService', () => {
     userRepo = module.get<Repository<User>>(getRepositoryToken(User));
     inviteRepo = module.get<Repository<Invite>>(getRepositoryToken(Invite));
     emailService = module.get<EmailService>(EmailService);
+    fileService = module.get<FileService>(FileService);
   });
 
   it('should be defined', async () => {
@@ -194,4 +196,29 @@ describe('UserService', () => {
     //Assert
     expect(sendInviteEmailMock).toHaveBeenCalled();
   });
+
+  it('should return for changeUserImage', async () => {
+    //Arrange
+    const userId = 1;
+    const newImage = "MockBase64String";
+    const testUser = {
+      id: userId,
+      image: 'oldIMage'
+    } as User;
+    const expectedResult = {
+      id: userId,
+      image: `https://x.com/${newImage}.png`
+    } as User;
+    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
+    const deletePublicImageMock = jest.spyOn(fileService, 'deletePublicImageFromUrl').mockImplementation(
+      () => Promise.resolve()
+    );
+    jest.spyOn(fileService, 'storePublicImageFromBase64').mockResolvedValueOnce(expectedResult.image);
+    jest.spyOn(userRepo, 'save').mockResolvedValueOnce(expectedResult);
+    //Act
+    const result = await service.changeUserImage(userId, newImage);
+    //Assert
+    expect(deletePublicImageMock).toHaveBeenCalled();
+    expect(result).toEqual(expectedResult);
+  })
 });
