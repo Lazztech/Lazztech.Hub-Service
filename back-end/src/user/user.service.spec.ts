@@ -10,10 +10,12 @@ import { EmailService } from 'src/services/email/email.service';
 import { Invite } from 'src/dal/entity/invite.entity';
 import { ConfigService } from '@nestjs/config';
 import { PasswordReset } from 'src/dal/entity/passwordReset.entity';
+import { EditUserDetails } from './dto/editUserDetails.input';
 
 describe('UserService', () => {
   let service: UserService;
   let joinUserHubRepo: Repository<JoinUserHub>;
+  let userRepo: Repository<User>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -44,10 +46,26 @@ describe('UserService', () => {
     service = module.get<UserService>(UserService);
     // Save the instance of the repository and set the correct generics
     joinUserHubRepo = module.get<Repository<JoinUserHub>>(getRepositoryToken(JoinUserHub));
+    userRepo = module.get<Repository<User>>(getRepositoryToken(User));
   });
 
   it('should be defined', async () => {
     expect(service).toBeDefined();
+  });
+
+  it('should return for getUser', async () => {
+    //Arrange
+    const userId = 1;
+    const testUser = {
+      id: userId,
+      firstName: "Test",
+      lastName: "Test",
+    } as User
+    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
+    //Act
+    const result = await service.getUser(userId);
+    //Assert
+    expect(result).toEqual(testUser);
   });
 
   it(`should return for getUsersOwnedHubs`, async () => {
@@ -102,4 +120,32 @@ describe('UserService', () => {
     jest.spyOn(joinUserHubRepo, 'find').mockResolvedValueOnce(testResults);
     expect(await service.memberOfHubs(testUserId)).toEqual(hubResults);
   });
+
+  it('should return for editUserDetails', async () => {
+    //Arrange
+    const userId = 1;
+    const testDetails = {
+      firstName: "FirstName",
+      lastName: "LastName",
+      description: "Description"
+    } as EditUserDetails;
+    const testUser = {
+      id: userId,
+      firstName: "Gian",
+      lastName: "Lazzarini",
+      description: "Desc."
+    } as User;
+    const expectedResult = {
+      id: userId,
+      firstName: testDetails.firstName,
+      lastName: testDetails.lastName,
+      description: testDetails.description
+    } as User;
+    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
+    jest.spyOn(userRepo, 'save').mockResolvedValueOnce(expectedResult);
+    //Act
+    const result = await service.editUserDetails(userId, testDetails);
+    //Assert
+    expect(result).toEqual(expectedResult);
+  })
 });

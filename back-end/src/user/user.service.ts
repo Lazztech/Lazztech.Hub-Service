@@ -59,11 +59,11 @@ export class UserService {
   }
 
   public async editUserDetails(userId: any, details: EditUserDetails) {
-    const user = await this.userRepository.findOne({ where: { id: userId } });
+    let user = await this.userRepository.findOne({ where: { id: userId } });
     user.firstName = details.firstName;
     user.lastName = details.lastName;
     user.description = details.description;
-    await this.userRepository.save(user);
+    user = await this.userRepository.save(user);
     return user;
   }
 
