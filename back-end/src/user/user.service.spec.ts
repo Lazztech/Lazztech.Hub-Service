@@ -6,7 +6,7 @@ import { User } from 'src/dal/entity/user.entity';
 import { Repository } from 'typeorm';
 import { UserService } from './user.service';
 import { FileService } from 'src/services/file.service';
-import { EmailService } from 'src/services/email.service';
+import { EmailService } from 'src/services/email/email.service';
 import { Invite } from 'src/dal/entity/invite.entity';
 import { ConfigService } from '@nestjs/config';
 import { PasswordReset } from 'src/dal/entity/passwordReset.entity';

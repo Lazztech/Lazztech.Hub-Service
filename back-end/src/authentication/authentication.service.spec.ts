@@ -4,7 +4,7 @@ import { User } from 'src/dal/entity/user.entity';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
-import { EmailService } from 'src/services/email.service';
+import { EmailService } from 'src/services/email/email.service';
 import { PasswordReset } from 'src/dal/entity/passwordReset.entity';
 import { InAppNotification } from 'src/dal/entity/inAppNotification.entity';
 import { JoinUserInAppNotifications } from 'src/dal/entity/joinUserInAppNotifications.entity';

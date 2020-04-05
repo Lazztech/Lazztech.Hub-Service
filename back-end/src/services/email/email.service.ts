@@ -2,14 +2,13 @@
 import { Injectable, Logger } from '@nestjs/common';
 import * as crypto from 'crypto';
 import * as nodemailer from 'nodemailer';
-import { PasswordReset } from '../dal/entity/passwordReset.entity';
-import { IEmailService } from './emailService.interface';
+import { PasswordReset } from '../../dal/entity/passwordReset.entity';
 import { ConfigService } from '@nestjs/config';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
-export class EmailService implements IEmailService {
+export class EmailService {
   private transporter: nodemailer.Transporter;
   private logger = new Logger(EmailService.name, true);
 

@@ -7,7 +7,7 @@ import { JoinUserInAppNotifications } from 'src/dal/entity/joinUserInAppNotifica
 import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
-import { EmailService } from 'src/services/email.service';
+import { EmailService } from 'src/services/email/email.service';
 import { PasswordReset } from 'src/dal/entity/passwordReset.entity';
 import { ResetPassword } from './dto/resetPassword.input';
 import { ChangePassword } from './dto/changePassword.input';
