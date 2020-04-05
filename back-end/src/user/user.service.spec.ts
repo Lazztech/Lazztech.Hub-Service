@@ -147,5 +147,27 @@ describe('UserService', () => {
     const result = await service.editUserDetails(userId, testDetails);
     //Assert
     expect(result).toEqual(expectedResult);
+  });
+
+  it('should return for changeEmail', async () => {
+    //Arrange
+    const userId = 1;
+    const newEmail = 'test@gmail.com';
+    const testUser = {
+      id: userId,
+      firstName: 'Gian',
+      email: 'gian@lazztech.com'
+    } as User;
+    const expectedResult = {
+      id: userId,
+      firstName: testUser.firstName,
+      email: newEmail
+    } as User;
+    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
+    jest.spyOn(userRepo, 'save').mockResolvedValueOnce(expectedResult);
+    //Act
+    const result = await service.changeEmail(userId, newEmail);
+    //Assert
+    expect(result).toEqual(expectedResult);
   })
 });
