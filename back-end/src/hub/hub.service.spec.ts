@@ -11,8 +11,8 @@ import { MicroChat } from 'src/dal/entity/microChat.entity';
 import { User } from 'src/dal/entity/user.entity';
 import { InAppNotification } from 'src/dal/entity/inAppNotification.entity';
 import { Repository } from 'typeorm';
-import { QrService } from 'src/services/qr.service';
-import { FileService } from 'src/services/file.service';
+import { QrService } from 'src/services/qr/qr.service';
+import { FileService } from 'src/services/file/file.service';
 
 describe('HubService', () => {
   let hubService: HubService;

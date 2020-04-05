@@ -5,7 +5,7 @@ import { Invite } from 'src/dal/entity/invite.entity';
 import { JoinUserHub } from 'src/dal/entity/joinUserHub.entity';
 import { User } from 'src/dal/entity/user.entity';
 import { EmailService } from 'src/services/email/email.service';
-import { FileService } from 'src/services/file.service';
+import { FileService } from 'src/services/file/file.service';
 import { Repository } from 'typeorm';
 import { EditUserDetails } from './dto/editUserDetails.input';
 

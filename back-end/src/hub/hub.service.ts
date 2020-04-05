@@ -8,8 +8,8 @@ import { Hub } from 'src/dal/entity/hub.entity';
 import { MicroChat } from 'src/dal/entity/microChat.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FileService } from 'src/services/file.service';
-import { QrService } from 'src/services/qr.service';
+import { FileService } from 'src/services/file/file.service';
+import { QrService } from 'src/services/qr/qr.service';
 
 @Injectable()
 export class HubService {
