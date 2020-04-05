@@ -18,6 +18,7 @@ export class AuthenticationService {
 
     constructor(
         private emailService: EmailService,
+        private readonly configService: ConfigService,
         @InjectRepository(PasswordReset)
         private passwordResetRepository: Repository<PasswordReset>,
         @InjectRepository(User)
@@ -26,7 +27,6 @@ export class AuthenticationService {
         private inAppNotificationRepository: Repository<InAppNotification>,
         @InjectRepository(JoinUserInAppNotifications)
         private joinUserInAppNotificationRepository: Repository<JoinUserInAppNotifications>,
-        private readonly configService: ConfigService,
     ) { }
 
     public async login(password: string, email: string) {

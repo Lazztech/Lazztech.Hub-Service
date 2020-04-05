@@ -4,6 +4,10 @@ import { User } from 'src/dal/entity/user.entity';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
+import { EmailService } from 'src/services/email.service';
+import { PasswordReset } from 'src/dal/entity/passwordReset.entity';
+import { InAppNotification } from 'src/dal/entity/inAppNotification.entity';
+import { JoinUserInAppNotifications } from 'src/dal/entity/joinUserInAppNotifications.entity';
 
 describe('AuthenticationService', () => {
   let service: AuthenticationService;
@@ -12,7 +16,27 @@ describe('AuthenticationService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [AuthenticationService],
+      providers: [
+        AuthenticationService,
+        EmailService,
+        ConfigService,
+        {
+          provide: getRepositoryToken(User),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(PasswordReset),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(InAppNotification),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(JoinUserInAppNotifications),
+          useClass: Repository,
+        },
+      ],
     }).compile();
 
     service = module.get<AuthenticationService>(AuthenticationService);

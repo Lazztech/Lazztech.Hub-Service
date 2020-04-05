@@ -11,6 +11,8 @@ import { MicroChat } from 'src/dal/entity/microChat.entity';
 import { User } from 'src/dal/entity/user.entity';
 import { InAppNotification } from 'src/dal/entity/inAppNotification.entity';
 import { Repository } from 'typeorm';
+import { QrService } from 'src/services/qr.service';
+import { FileService } from 'src/services/file.service';
 
 describe('HubService', () => {
   let hubService: HubService;
@@ -27,18 +29,26 @@ describe('HubService', () => {
       providers: [
         HubService,
         NotificationService,
+        QrService,
+        FileService,
         {
-          // how you provide the injection token in a test instance
+          provide: getRepositoryToken(User),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(Hub),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(JoinUserHub),
+          useClass: Repository,
+        },
+        {
           provide: getRepositoryToken(InAppNotification),
-          // as a class value, Repository needs no generics
           useClass: Repository,
         },
         {
           provide: getRepositoryToken(JoinUserInAppNotifications),
-          useClass: Repository,
-        },
-        {
-          provide: getRepositoryToken(User),
           useClass: Repository,
         },
       ],

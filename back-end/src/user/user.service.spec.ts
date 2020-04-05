@@ -1,11 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserService } from './user.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { JoinUserHub } from 'src/dal/entity/joinUserHub.entity';
-import { Repository } from 'typeorm';
 import { Hub } from 'src/dal/entity/hub.entity';
+import { JoinUserHub } from 'src/dal/entity/joinUserHub.entity';
 import { User } from 'src/dal/entity/user.entity';
+import { Repository } from 'typeorm';
+import { UserService } from './user.service';
+import { FileService } from 'src/services/file.service';
+import { EmailService } from 'src/services/email.service';
+import { Invite } from 'src/dal/entity/invite.entity';
 import { ConfigService } from '@nestjs/config';
+import { PasswordReset } from 'src/dal/entity/passwordReset.entity';
 
 describe('UserService', () => {
   let service: UserService;
@@ -15,13 +19,23 @@ describe('UserService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         UserService,
+        FileService,
+        EmailService,
         ConfigService,
+        {
+          provide: getRepositoryToken(PasswordReset),
+          useClass: Repository,
+        },
         {
           provide: getRepositoryToken(JoinUserHub),
           useClass: Repository,
         },
         {
           provide: getRepositoryToken(User),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(Invite),
           useClass: Repository,
         },
       ],
