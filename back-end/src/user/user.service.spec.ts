@@ -16,6 +16,8 @@ describe('UserService', () => {
   let service: UserService;
   let joinUserHubRepo: Repository<JoinUserHub>;
   let userRepo: Repository<User>;
+  let inviteRepo: Repository<Invite>;
+  let emailService: EmailService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -47,6 +49,8 @@ describe('UserService', () => {
     // Save the instance of the repository and set the correct generics
     joinUserHubRepo = module.get<Repository<JoinUserHub>>(getRepositoryToken(JoinUserHub));
     userRepo = module.get<Repository<User>>(getRepositoryToken(User));
+    inviteRepo = module.get<Repository<Invite>>(getRepositoryToken(Invite));
+    emailService = module.get<EmailService>(EmailService);
   });
 
   it('should be defined', async () => {
@@ -169,5 +173,25 @@ describe('UserService', () => {
     const result = await service.changeEmail(userId, newEmail);
     //Assert
     expect(result).toEqual(expectedResult);
-  })
+  });
+
+  it('should call sendInviteEmail for newInvite', async () => {
+    //Arrange
+    const email = "gianlazzarini@gmail.com";
+    const testInvite = {
+      email
+    } as Invite;
+    jest.spyOn(inviteRepo, 'create').mockReturnValueOnce(testInvite);
+    jest.spyOn(inviteRepo, 'save').mockResolvedValueOnce({
+      id: 1,
+      email
+    } as Invite);
+    const sendInviteEmailMock = jest.spyOn(emailService, 'sendInviteEmail').mockImplementationOnce(
+      () => Promise.resolve()
+    );
+    //Act
+    await service.newInvite(email);
+    //Assert
+    expect(sendInviteEmailMock).toHaveBeenCalled();
+  });
 });
