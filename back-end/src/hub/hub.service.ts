@@ -10,6 +10,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FileService } from 'src/services/file/file.service';
 import { QrService } from 'src/services/qr/qr.service';
+import { Notification } from 'src/notification/dto/notification.dto';
 
 @Injectable()
 export class HubService {
@@ -194,11 +195,13 @@ export class HubService {
       await this.notificationService
         .sendPushToUser(
           element.userId,
-          `"${element.hub.name}" hub became active`,
-          `Touch to go to hub.`,
-          '',
-        )
-        .catch(err => this.logger.error(err));
+          {
+            title: `"${element.hub.name}" hub became active`,
+            body: `Touch to go to hub.`,
+            click_action: '',
+            
+          } as Notification
+        );
 
       //TODO change db schema to better support this relationship but normalized.
       const inAppNotification = this.inAppNotificationRepository.create({
@@ -431,15 +434,14 @@ export class HubService {
 
     const members = await hub.usersConnection;
     for (let index = 0; index < members.length; index++) {
-      const memberConnetion = members[index];
-      await this.notificationService
-        .sendPushToUser(
-          memberConnetion.user.id,
-          `${microChat.text}`,
-          `From ${fromUser.firstName} to the ${hub.name} hub`,
-          '',
-        )
-        .catch(err => this.logger.error(err));
+      const memberConnection = members[index];
+      await this.notificationService.sendPushToUser(memberConnection.user.id,
+          {
+            title: `${microChat.text}`,
+            body: `From ${fromUser.firstName} to the ${hub.name} hub`,
+            click_action: ''
+          } as Notification
+        );
 
       const inAppNotification = this.inAppNotificationRepository.create({
         thumbnail: fromUser.image,

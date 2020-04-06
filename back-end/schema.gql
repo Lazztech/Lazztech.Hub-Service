@@ -95,7 +95,6 @@ type Query {
   getHubByQRImage(qrImageB64: String!): Hub!
   me: User
   getInAppNotifications: [InAppNotification!]!
-  sendPushNotification(userId: Float!): Boolean!
 }
 
 type User {

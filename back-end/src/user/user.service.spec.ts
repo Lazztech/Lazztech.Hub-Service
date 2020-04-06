@@ -220,5 +220,5 @@ describe('UserService', () => {
     //Assert
     expect(deletePublicImageMock).toHaveBeenCalled();
     expect(result).toEqual(expectedResult);
-  })
+  });
 });

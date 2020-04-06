@@ -79,18 +79,4 @@ export class NotificationResolver {
 
     return true;
   }
-
-  @Query(() => Boolean)
-  public async sendPushNotification(@Args('userId') userId: number) {
-    this.logger.log(this.sendPushNotification.name);
-
-    await this.notificationService.sendPushToUser(
-      userId,
-      'this is a test push message',
-      `this is a test push message`,
-      '',
-    );
-
-    return true;
-  }
 }

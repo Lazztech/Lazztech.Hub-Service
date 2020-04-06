@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Notification } from './dto/notification.dto';
 const fetch = require('node-fetch');
 
 @Service()
@@ -27,9 +28,7 @@ export class NotificationService {
 
   public async sendPushToUser(
     userId: number,
-    title: string,
-    body: string,
-    clickAction: string,
+    notification: Notification
   ) {
     this.logger.log(this.sendPushToUser.name);
 
@@ -37,36 +36,31 @@ export class NotificationService {
       where: { id: userId },
       relations: ['userDevices'],
     });
-    const fcmUserTokens = [];
-
-    for (const iterator of user.userDevices) {
-      fcmUserTokens.push(iterator.fcmPushUserToken);
-    }
+    const fcmUserTokens = user.userDevices.map(x => x.fcmPushUserToken);
 
     for (const iterator of fcmUserTokens) {
-      const notification = {
-        notification: {
-          title,
-          body,
-          click_action: clickAction,
-        },
-        to: iterator,
-      };
-
-      const result = await fetch(this.sendEndpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'key=' + this.serverKey,
-        },
-        body: JSON.stringify(notification),
-      });
+      const result = await this.sendPushNotification(notification, iterator);
 
       this.logger.log(
-        `Sent push notification to ${
-          fcmUserTokens.length
-        } devices: ${JSON.stringify(notification)}`,
+        `Sent push notification to fcmToken ${
+          iterator
+        } : ${JSON.stringify(notification)}`,
       );
     }
+  }
+
+ async sendPushNotification(notification: Notification, to: string) {
+    const result = await fetch(this.sendEndpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'key=' + this.serverKey,
+      },
+      body: JSON.stringify({
+        notification,
+        to
+      }),
+    });
+    return result;
   }
 }
