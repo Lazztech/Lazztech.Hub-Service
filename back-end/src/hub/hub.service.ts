@@ -35,11 +35,11 @@ export class HubService {
     this.logger.log('constructor');
   }
 
-  async getOneUserHub(userId: any, id: number) {
+  async getOneUserHub(userId: any, hubId: number) {
     const userHubRelationship = await this.joinUserHubRepository.findOne({
       where: {
-        hubId: id,
-        userId: userId,
+        hubId,
+        userId,
       },
       relations: [
         'hub',

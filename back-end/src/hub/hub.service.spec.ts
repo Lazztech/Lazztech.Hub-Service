@@ -16,7 +16,7 @@ import { FileService } from 'src/services/file/file.service';
 
 describe('HubService', () => {
   let hubService: HubService;
-  let notificationService: NotificationService;
+  let joinUserHubRepo: Repository<JoinUserHub>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -55,26 +55,33 @@ describe('HubService', () => {
     }).compile();
 
     hubService = module.get<HubService>(HubService);
-    notificationService = module.get<NotificationService>(NotificationService);
+    joinUserHubRepo = module.get<Repository<JoinUserHub>>(getRepositoryToken(JoinUserHub));
   });
 
   it('should be defined', () => {
     expect(hubService).toBeDefined();
   });
 
-  it(`notifyOfHubActivated() should notify all`, async () => {
-    //TODO finish this & refactor hub.service
-    let userHubRelationships: JoinUserHub[] = [
-      {
-        userId: 1,
-        hub: {
-          name: 'One',
-        },
-      } as JoinUserHub,
-    ];
-    jest.spyOn(notificationService, 'sendPushToUser').mockImplementation();
-
-    //TODO mock database before running.
-    // await hubService.notifyOfHubActivated(userHubRelationships);
+  it('should return for getOneUserHub', async () => {
+    //Arrange
+    const userId = 1;
+    const hubId = 2;
+    const userHubTestResult = {
+      userId,
+      hubId,
+      hub: {
+        usersConnection: [{
+          user: {}
+        }],
+        microChats: [
+          {}
+        ]
+      }
+    } as JoinUserHub;
+    jest.spyOn(joinUserHubRepo, 'findOne').mockResolvedValueOnce(userHubTestResult);
+    //Act
+    const result = await hubService.getOneUserHub(userId, hubId);
+    //Assert
+    expect(userHubTestResult).toEqual(userHubTestResult);
   });
 });
