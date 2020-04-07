@@ -105,4 +105,101 @@ describe('HubService', () => {
     expect(result).toEqual(testResult);
   });
 
+  it('should return for commonUserHubs', async () => {
+    //Arrange
+    const userId = 1;
+    const otherUsersId = 2;
+    const repoResult = [
+      {
+        userId: 1,
+        hubId: 1,
+        hub: {
+          name: "Expected 1",
+          usersConnection: [
+            {
+              userId: 1,
+              hubId: 1,
+            } as JoinUserHub,
+            {
+              userId: 2,
+              hubId: 1,
+            } as JoinUserHub,
+          ]
+        } as Hub,
+      } as JoinUserHub,
+      {
+        userId: 1,
+        hubId: 2,
+        hub: {
+          name: "Expected 2",
+          usersConnection: [
+            {
+              userId: 1,
+              hubId: 2,
+            } as JoinUserHub,
+            {
+              userId: 2,
+              hubId: 2,
+            } as JoinUserHub,
+          ]
+        } as Hub,
+      } as JoinUserHub,
+      {
+        userId: 1,
+        hubId: 3,
+        hub: {
+          name: "Not Expected",
+          usersConnection: [
+            {
+              userId: 1,
+              hubId: 2,
+            } as JoinUserHub,
+          ]
+        } as Hub,
+      } as JoinUserHub,
+    ];
+
+    const expectedResult = [
+      {
+        userId: 1,
+        hubId: 1,
+        hub: {
+          name: "Expected 1",
+          usersConnection: [
+            {
+              userId: 1,
+              hubId: 1,
+            } as JoinUserHub,
+            {
+              userId: 2,
+              hubId: 1,
+            } as JoinUserHub,
+          ]
+        } as Hub,
+      } as JoinUserHub,
+      {
+        userId: 1,
+        hubId: 2,
+        hub: {
+          name: "Expected 2",
+          usersConnection: [
+            {
+              userId: 1,
+              hubId: 2,
+            } as JoinUserHub,
+            {
+              userId: 2,
+              hubId: 2,
+            } as JoinUserHub,
+          ]
+        } as Hub,
+      } as JoinUserHub,
+    ]
+    jest.spyOn(joinUserHubRepo, 'find').mockResolvedValueOnce(repoResult);
+    //Act
+    const result = await hubService.commonUsersHubs(userId, otherUsersId);
+    //Assert
+    expect(result).toStrictEqual(expectedResult);
+  });
+
 });

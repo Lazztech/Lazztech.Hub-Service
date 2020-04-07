@@ -78,14 +78,15 @@ export class HubService {
 
     for (let index = 0; index < userHubRelationships.length; index++) {
       const element = userHubRelationships[index];
-      if (element.hub.usersConnection.find(x => x.userId == otherUsersId)) {
+      const result = element.hub.usersConnection.find(x => x.userId == otherUsersId);
+      if (result) {
         commonHubRelationships.push(
           element.hub.usersConnection.find(x => x.userId == otherUsersId),
         );
       }
     }
 
-    return userHubRelationships;
+    return commonHubRelationships;
   }
 
   async inviteUserToHub(userId: any, hubId: number, inviteesEmail: string) {
