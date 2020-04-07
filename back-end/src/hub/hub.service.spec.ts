@@ -84,4 +84,25 @@ describe('HubService', () => {
     //Assert
     expect(userHubTestResult).toEqual(userHubTestResult);
   });
+
+  it('should return for getUserHubs', async () => {
+    //Arrange
+    const userId = 1;
+    const testResult = [
+        {
+        userId,
+        hub: {
+          usersConnection: {
+
+          }
+        }
+      } as JoinUserHub,
+    ];
+    jest.spyOn(joinUserHubRepo, 'find').mockResolvedValueOnce(testResult);
+    //Act
+    const result = await hubService.getUserHubs(userId);
+    //Assert
+    expect(result).toEqual(testResult);
+  });
+
 });
