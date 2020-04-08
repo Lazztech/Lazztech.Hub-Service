@@ -17,6 +17,7 @@ import { FileService } from 'src/services/file/file.service';
 describe('HubService', () => {
   let hubService: HubService;
   let joinUserHubRepo: Repository<JoinUserHub>;
+  let userRepo: Repository<User>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -56,6 +57,7 @@ describe('HubService', () => {
 
     hubService = module.get<HubService>(HubService);
     joinUserHubRepo = module.get<Repository<JoinUserHub>>(getRepositoryToken(JoinUserHub));
+    userRepo = module.get<Repository<User>>(getRepositoryToken(User));
   });
 
   it('should be defined', () => {
@@ -106,6 +108,7 @@ describe('HubService', () => {
   });
 
   it('should return for commonUserHubs', async () => {
+    //FIXME
     //Arrange
     const userId = 1;
     const otherUsersId = 2;
@@ -200,6 +203,35 @@ describe('HubService', () => {
     const result = await hubService.commonUsersHubs(userId, otherUsersId);
     //Assert
     expect(result).toStrictEqual(expectedResult);
+  });
+
+  it('should create new invite for inviteUserToHub', async () => {
+    //Arrange
+    const userId = 1;
+    const hubId = 1;
+    const invitee = {
+      id: 2,
+      email: "inviteesemail@mail.com"
+    } as User;
+
+    const invite = {
+      userId: invitee.id,
+      hubId,
+      isOwner: false,
+    } as JoinUserHub;
+
+    jest.spyOn(joinUserHubRepo, 'findOne').mockResolvedValueOnce({
+      userId,
+      hubId,
+      isOwner: true,
+    } as JoinUserHub);
+    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(invitee);
+    jest.spyOn(joinUserHubRepo, 'create').mockReturnValueOnce(invite)
+    const saveCall = jest.spyOn(joinUserHubRepo, 'save').mockResolvedValueOnce(invite);
+    //Act
+    await hubService.inviteUserToHub(userId, hubId, invitee.email);
+    //Assert
+    expect(saveCall).toHaveBeenCalled();
   });
 
 });

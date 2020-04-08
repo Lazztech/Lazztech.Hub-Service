@@ -98,28 +98,14 @@ export class HubService {
       },
       relations: ['hub'],
     });
-    if (!userHubRelationship) {
-      this.logger.warn(
-        `Could not find admin relationship to hubId: ${hubId} for userId: ${userId}.`,
-      );
-      return false;
-    }
+    this.validateRelationship(userHubRelationship, hubId, userId);
 
     const invitee = await this.userRepository.findOne({
       where: {
         email: inviteesEmail,
       },
     });
-    if (!invitee) {
-      this.logger.warn(
-        `Did not find user to invite by email address: ${inviteesEmail}`,
-      );
-      return false;
-    }
-    if (invitee.id == userId) {
-      this.logger.warn(`Cannot invite self to hub.`);
-      return false;
-    }
+    this.validateInvitee(invitee, inviteesEmail, userId);
 
     let newRelationship = this.joinUserHubRepository.create({
       userId: invitee.id,
@@ -127,6 +113,21 @@ export class HubService {
       isOwner: false,
     });
     newRelationship = await this.joinUserHubRepository.save(newRelationship);
+  }
+
+  private validateInvitee(invitee: User, inviteesEmail: string, userId: any) {
+    if (!invitee) {
+      throw new Error(`Did not find user to invite by email address: ${inviteesEmail}`);
+    }
+    if (invitee.id == userId) {
+      throw new Error(`Cannot invite self to hub.`);
+    }
+  }
+
+  private validateRelationship(userHubRelationship: JoinUserHub, hubId: number, userId: any) {
+    if (!userHubRelationship) {
+      throw new Error(`Could not find admin relationship to hubId: ${hubId} for userId: ${userId}.`);
+    }
   }
 
   async usersPeople(userId: any) {
