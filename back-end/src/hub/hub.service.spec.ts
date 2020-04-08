@@ -234,4 +234,80 @@ describe('HubService', () => {
     expect(saveCall).toHaveBeenCalled();
   });
 
+  it('should return for usersPeople', async () => {
+    //TODO
+  });
+
+  it('should return for createHub', async () => {
+    //TODO
+  });
+
+  it('should resolve for notifyOfHubActivated', async () => {
+    //TODO
+  });
+
+  it('should return for getStarredHubs', async () => {
+    //TODO
+    //easy
+  });
+
+  it('should remove for deleteHub', async () => {
+    //TODO
+  });
+
+  it('should return for editHub', async () => {
+    //TODO
+    //easy
+  });
+
+  it('should return for changeHubImage', async () => {
+    //TODO
+    //moderate
+  });
+
+  it('should save for joinHub', async () => {
+    //TODO
+    //easy
+  });
+
+  it('should return for getHubByQRImage', async () => {
+    //FIXME remove?
+  });
+
+  it('should resolve for setHubStarred', async () => {
+    //TODO
+    //easy
+    //should return?
+  });
+
+  it('should resolve for setHubNotStarred', async () => {
+    //TODO
+    //easy
+    //should return?
+  });
+
+  it('should resolve for enteredHubGeofence', async () => {
+    //TODO
+    //easy
+    //should return?
+  });
+
+  it('should resolve for exitedHubGeofence', async () => {
+    //TODO
+    //easy
+    //should return?
+  });
+
+  it('should return for activateHub', async () => {
+    //TODO
+  });
+
+  it('should return for deactivateHub', async () => {
+    //TODO
+  });
+
+  it('should resolve for microChatToHub', async () => {
+    //TODO
+  });
+
 });
