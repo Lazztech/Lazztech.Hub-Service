@@ -189,43 +189,6 @@ export class HubService {
     return hub;
   }
 
-  async notifyOfHubActivated(userHubRelationships: JoinUserHub[]) {
-    this.logger.log(this.notifyOfHubActivated.name);
-
-    for (let index = 0; index < userHubRelationships.length; index++) {
-      const element = userHubRelationships[index];
-      await this.notificationService
-        .sendPushToUser(
-          element.userId,
-          {
-            title: `"${element.hub.name}" hub became active`,
-            body: `Touch to go to hub.`,
-            click_action: '',
-            
-          } as Notification
-        );
-
-      //TODO change db schema to better support this relationship but normalized.
-      const inAppNotification = this.inAppNotificationRepository.create({
-        thumbnail: element.hub.image,
-        header: `"${element.hub.name}" hub became active`,
-        text: `Touch to go to hub.`,
-        date: Date.now().toString(),
-      });
-      await this.inAppNotificationRepository.save(inAppNotification);
-
-      const joinUserInAppNotification = this.joinUserInAppNotificationsRepository.create(
-        {
-          userId: element.userId,
-          inAppNotificationId: inAppNotification.id,
-        },
-      );
-      await this.joinUserInAppNotificationsRepository.save(
-        joinUserInAppNotification,
-      );
-    }
-  }
-
   async getStarredHubs(userId: any) {
     const userHubRelationships = await this.joinUserHubRepository.find({
       where: {
@@ -379,56 +342,6 @@ export class HubService {
 
     hubRelationship.isPresent = false;
     hubRelationship = await this.joinUserHubRepository.save(hubRelationship);
-  }
-
-  async activateHub(userId: any, hubId: number) {
-    let hubRelationship = await this.joinUserHubRepository.findOne({
-      where: {
-        userId,
-        hubId,
-        isOwner: true,
-      },
-      relations: ['hub'],
-    });
-
-    if (!hubRelationship)
-      throw Error(
-        `no corresponding hub relationship found for userId: ${userId} & hubId: ${hubId}`,
-      );
-
-    let hub = hubRelationship.hub;
-    hub.active = true;
-    hub = await this.hubRepository.save(hub);
-
-    const hubRelationships = await this.joinUserHubRepository.find({
-      where: {
-        hubId,
-      },
-      relations: ['hub'],
-    });
-    await this.notifyOfHubActivated(hubRelationships);
-    return hub;
-  }
-
-  async deactivateHub(userId: any, hubId: number) {
-    let hubRelationship = await this.joinUserHubRepository.findOne({
-      where: {
-        userId,
-        hubId,
-        isOwner: true,
-      },
-      relations: ['hub'],
-    });
-
-    if (!hubRelationship)
-      throw Error(
-        `no corresponding hub relationship found for userId: ${userId} & hubId: ${hubId}`,
-      );
-
-    let hub = hubRelationship.hub;
-    hub.active = false;
-    hub = await this.hubRepository.save(hub);
-    return hub;
   }
 
   async microChatToHub(fromUser: User, hub: Hub, microChat: MicroChat) {

@@ -13,6 +13,7 @@ import { UserService } from 'src/user/user.service';
 import { JoinUserInAppNotifications } from 'src/dal/entity/joinUserInAppNotifications.entity';
 import { InAppNotification } from 'src/dal/entity/inAppNotification.entity';
 import { Invite } from 'src/dal/entity/invite.entity';
+import { HubActivityService } from './hub-activity/hub-activity.service';
 
 @Module({
   imports: [
@@ -29,6 +30,6 @@ import { Invite } from 'src/dal/entity/invite.entity';
     UserModule,
   ],
   controllers: [],
-  providers: [HubResolver, HubService, NotificationService, UserService],
+  providers: [HubResolver, HubService, NotificationService, UserService, HubActivityService],
 })
 export class HubModule {}

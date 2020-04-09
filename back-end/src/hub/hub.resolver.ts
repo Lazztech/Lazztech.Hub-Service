@@ -13,6 +13,7 @@ import { MicroChat } from 'src/dal/entity/microChat.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserService } from 'src/user/user.service';
+import { HubActivityService } from './hub-activity/hub-activity.service';
 
 @Resolver()
 export class HubResolver {
@@ -20,6 +21,7 @@ export class HubResolver {
 
   constructor(
     private hubService: HubService,
+    private hubActivityService: HubActivityService,
     private userService: UserService,
     @InjectRepository(Hub)
     private hubRepository: Repository<Hub>,
@@ -254,7 +256,7 @@ export class HubResolver {
     @Args({ name: 'hubId', type: () => Int }) hubId: number,
   ) {
     this.logger.log(this.activateHub.name);
-    const result = await this.hubService.activateHub(userId, hubId);
+    const result = await this.hubActivityService.activateHub(userId, hubId);
     return result;
   }
 
@@ -265,7 +267,7 @@ export class HubResolver {
     @Args({ name: 'hubId', type: () => Int }) hubId: number,
   ) {
     this.logger.log(this.deactivateHub.name);
-    const result = await this.hubService.deactivateHub(userId, hubId);
+    const result = await this.hubActivityService.deactivateHub(userId, hubId);
     return result;
   }
 

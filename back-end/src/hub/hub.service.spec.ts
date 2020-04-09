@@ -242,10 +242,6 @@ describe('HubService', () => {
     //TODO
   });
 
-  it('should resolve for notifyOfHubActivated', async () => {
-    //TODO
-  });
-
   it('should return for getStarredHubs', async () => {
     //TODO
     //easy
@@ -296,14 +292,6 @@ describe('HubService', () => {
     //TODO
     //easy
     //should return?
-  });
-
-  it('should return for activateHub', async () => {
-    //TODO
-  });
-
-  it('should return for deactivateHub', async () => {
-    //TODO
   });
 
   it('should resolve for microChatToHub', async () => {
