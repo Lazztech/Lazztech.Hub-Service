@@ -23,7 +23,8 @@ export class HubGeofenceService {
           );
     
         hubRelationship.isPresent = true;
-        hubRelationship = await this.joinUserHubRepository.save(hubRelationship);
+        await this.joinUserHubRepository.save(hubRelationship);
+        return hubRelationship;
       }
     
       async exitedHubGeofence(userId: any, hubId: number) {
@@ -39,5 +40,6 @@ export class HubGeofenceService {
     
         hubRelationship.isPresent = false;
         hubRelationship = await this.joinUserHubRepository.save(hubRelationship);
+        return hubRelationship;
       }
 }
