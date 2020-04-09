@@ -1,19 +1,18 @@
-import { UseGuards, Logger } from '@nestjs/common';
-import { Mutation, Query, Resolver, Args } from '@nestjs/graphql';
+import { Logger, UseGuards } from '@nestjs/common';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { InjectRepository } from '@nestjs/typeorm';
+import { MicroChat } from 'src/dal/entity/microChat.entity';
 import { UserId } from 'src/decorators/user.decorator';
 import { AuthGuard } from 'src/guards/authguard.service';
-import { QrService } from 'src/services/qr/qr.service';
+import { UserService } from 'src/user/user.service';
+import { Float, Int } from 'type-graphql';
+import { Repository } from 'typeorm';
 import { Hub } from '../dal/entity/hub.entity';
 import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
 import { User } from '../dal/entity/user.entity';
-import { Float, Int } from 'type-graphql';
-import { FileService } from 'src/services/file/file.service';
-import { HubService } from './hub.service';
-import { MicroChat } from 'src/dal/entity/microChat.entity';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
-import { UserService } from 'src/user/user.service';
 import { HubActivityService } from './hub-activity/hub-activity.service';
+import { HubGeofenceService } from './hub-geofence/hub-geofence.service';
+import { HubService } from './hub.service';
 
 @Resolver()
 export class HubResolver {
@@ -22,6 +21,7 @@ export class HubResolver {
   constructor(
     private hubService: HubService,
     private hubActivityService: HubActivityService,
+    private hubGeofenceService: HubGeofenceService,
     private userService: UserService,
     @InjectRepository(Hub)
     private hubRepository: Repository<Hub>,
@@ -234,7 +234,7 @@ export class HubResolver {
     @Args({ name: 'hubId', type: () => Int }) hubId: number,
   ): Promise<boolean> {
     this.logger.log(this.enteredHubGeofence.name);
-    await this.hubService.enteredHubGeofence(userId, hubId);
+    await this.hubGeofenceService.enteredHubGeofence(userId, hubId);
     return true;
   }
 
@@ -245,7 +245,7 @@ export class HubResolver {
     @Args({ name: 'hubId', type: () => Int }) hubId: number,
   ): Promise<boolean> {
     this.logger.log(this.exitedHubGeofence.name);
-    await this.hubService.exitedHubGeofence(userId, hubId);
+    await this.hubGeofenceService.exitedHubGeofence(userId, hubId);
     return true;
   }
 

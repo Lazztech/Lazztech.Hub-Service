@@ -314,36 +314,6 @@ export class HubService {
     await this.joinUserHubRepository.save(hubRelationship);
   }
 
-  async enteredHubGeofence(userId: any, hubId: number) {
-    let hubRelationship = await this.joinUserHubRepository.findOne({
-      userId,
-      hubId,
-    });
-
-    if (!hubRelationship)
-      throw Error(
-        `no corresponding hub relationship found for userId: ${userId} & hubId: ${hubId}`,
-      );
-
-    hubRelationship.isPresent = true;
-    hubRelationship = await this.joinUserHubRepository.save(hubRelationship);
-  }
-
-  async exitedHubGeofence(userId: any, hubId: number) {
-    let hubRelationship = await this.joinUserHubRepository.findOne({
-      userId,
-      hubId,
-    });
-
-    if (!hubRelationship)
-      throw Error(
-        `no corresponding hub relationship found for userId: ${userId} & hubId: ${hubId}`,
-      );
-
-    hubRelationship.isPresent = false;
-    hubRelationship = await this.joinUserHubRepository.save(hubRelationship);
-  }
-
   async microChatToHub(fromUser: User, hub: Hub, microChat: MicroChat) {
     this.logger.log(this.microChatToHub.name);
 

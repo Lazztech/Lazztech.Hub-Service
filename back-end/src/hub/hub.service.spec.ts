@@ -282,18 +282,6 @@ describe('HubService', () => {
     //should return?
   });
 
-  it('should resolve for enteredHubGeofence', async () => {
-    //TODO
-    //easy
-    //should return?
-  });
-
-  it('should resolve for exitedHubGeofence', async () => {
-    //TODO
-    //easy
-    //should return?
-  });
-
   it('should resolve for microChatToHub', async () => {
     //TODO
   });

@@ -14,6 +14,7 @@ import { JoinUserInAppNotifications } from 'src/dal/entity/joinUserInAppNotifica
 import { InAppNotification } from 'src/dal/entity/inAppNotification.entity';
 import { Invite } from 'src/dal/entity/invite.entity';
 import { HubActivityService } from './hub-activity/hub-activity.service';
+import { HubGeofenceService } from './hub-geofence/hub-geofence.service';
 
 @Module({
   imports: [
@@ -30,6 +31,6 @@ import { HubActivityService } from './hub-activity/hub-activity.service';
     UserModule,
   ],
   controllers: [],
-  providers: [HubResolver, HubService, NotificationService, UserService, HubActivityService],
+  providers: [HubResolver, HubService, NotificationService, UserService, HubActivityService, HubGeofenceService],
 })
 export class HubModule {}
