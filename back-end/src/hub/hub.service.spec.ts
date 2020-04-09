@@ -282,7 +282,7 @@ describe('HubService', () => {
     //should return?
   });
 
-  it('should resolve for microChatToHub', async () => {
+  it('should return for searchHubByName', async () => {
     //TODO
   });
 

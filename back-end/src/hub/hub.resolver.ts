@@ -1,17 +1,16 @@
 import { Logger, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { InjectRepository } from '@nestjs/typeorm';
 import { MicroChat } from 'src/dal/entity/microChat.entity';
 import { UserId } from 'src/decorators/user.decorator';
 import { AuthGuard } from 'src/guards/authguard.service';
 import { UserService } from 'src/user/user.service';
 import { Float, Int } from 'type-graphql';
-import { Repository } from 'typeorm';
 import { Hub } from '../dal/entity/hub.entity';
 import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
 import { User } from '../dal/entity/user.entity';
 import { HubActivityService } from './hub-activity/hub-activity.service';
 import { HubGeofenceService } from './hub-geofence/hub-geofence.service';
+import { HubMicroChatService } from './hub-micro-chat/hub-micro-chat.service';
 import { HubService } from './hub.service';
 
 @Resolver()
@@ -22,15 +21,8 @@ export class HubResolver {
     private hubService: HubService,
     private hubActivityService: HubActivityService,
     private hubGeofenceService: HubGeofenceService,
+    private hubMicroChatService: HubMicroChatService,
     private userService: UserService,
-    @InjectRepository(Hub)
-    private hubRepository: Repository<Hub>,
-    @InjectRepository(JoinUserHub)
-    private joinUserHubRepository: Repository<JoinUserHub>,
-    @InjectRepository(MicroChat)
-    private microChatRepository: Repository<MicroChat>,
-    @InjectRepository(User)
-    private userRepository: Repository<User>,
   ) {}
 
   @UseGuards(AuthGuard)
@@ -105,22 +97,7 @@ export class HubResolver {
     @Args({ name: 'search', type: () => String }) search: string,
   ): Promise<Hub[]> {
     this.logger.log(this.searchHubByName.name);
-
-    const userHubRelationship = await this.joinUserHubRepository.find({
-      where: {
-        userId: userId,
-      },
-      relations: ['hub'],
-    });
-    search = search.toLowerCase();
-    let results: Hub[] = [];
-    for (let index = 0; index < userHubRelationship.length; index++) {
-      const element = userHubRelationship[index];
-      if (element.hub.name.toLowerCase().includes(search)) {
-        results.push(element.hub);
-      }
-    }
-
+    const results = await this.hubService.searchHubByName(userId, search)
     return results;
   }
 
@@ -279,16 +256,7 @@ export class HubResolver {
     @Args({ name: 'microChatId', type: () => Int }) microChatId: number,
   ) {
     this.logger.log(this.microChatToHub.name);
-
-    const user = await this.userRepository.findOne(userId);
-    const hub = await this.hubRepository.findOne({
-      where: {
-        id: hubId,
-      },
-      relations: ['usersConnection', 'usersConnection.user', 'microChats'],
-    });
-    const microChat = hub.microChats.find(x => x.id === microChatId);
-    await this.hubService.microChatToHub(user, hub, microChat);
+    const microChat = await this.hubMicroChatService.microChatToHub(userId, hubId, microChatId);
     return microChat;
   }
 
@@ -300,30 +268,7 @@ export class HubResolver {
     @Args({ name: 'microChatText', type: () => String }) microChatText: string,
   ) {
     this.logger.log(this.createMicroChat.name);
-
-    const usersConnection = await this.joinUserHubRepository.findOne({
-      where: {
-        userId,
-        hubId,
-      },
-      relations: ['user', 'hub', 'hub.microChats'],
-    });
-
-    if (!usersConnection) {
-      this.logger.error(
-        'No valid relationship found between user and hub for that action.',
-      );
-    }
-
-    let microChat = new MicroChat();
-    microChat.hubId = hubId;
-    microChat.text = microChatText;
-    microChat = await this.microChatRepository.save(microChat);
-
-    this.logger.log(
-      `createMicroChat(userId: ${userId}, hubId: ${hubId}, microChatText: ${microChatText}) completed successfully.`,
-    );
-
+    const microChat = await this.hubMicroChatService.createMicroChat(userId, hubId, microChatText);
     return microChat;
   }
 
@@ -335,30 +280,7 @@ export class HubResolver {
     @Args({ name: 'microChatId', type: () => Int }) microChatId: number,
   ) {
     this.logger.log(this.deleteMicroChat.name);
-
-    const usersConnection = await this.joinUserHubRepository.findOne({
-      where: {
-        userId,
-        hubId,
-      },
-      relations: ['user', 'hub', 'hub.microChats'],
-    });
-
-    if (!usersConnection) {
-      this.logger.error(
-        'No valid relationship found between user and hub for that action.',
-      );
-    }
-
-    const microChat = usersConnection.hub.microChats.find(
-      x => x.id == microChatId,
-    );
-    await this.microChatRepository.remove(microChat);
-
-    this.logger.log(
-      `deleteMicroChat(userId: ${userId}, hubId: ${hubId}, microChatId ${microChatId}) completed successfully.`,
-    );
-
+    await this.hubMicroChatService.deleteMicroChat(userId, hubId, microChatId);
     return true;
   }
 }

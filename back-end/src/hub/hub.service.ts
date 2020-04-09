@@ -1,34 +1,22 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { NotificationService } from 'src/notification/notification.service';
-import { JoinUserHub } from 'src/dal/entity/joinUserHub.entity';
-import { JoinUserInAppNotifications } from 'src/dal/entity/joinUserInAppNotifications.entity';
-import { InAppNotification } from 'src/dal/entity/inAppNotification.entity';
-import { User } from 'src/dal/entity/user.entity';
-import { Hub } from 'src/dal/entity/hub.entity';
-import { MicroChat } from 'src/dal/entity/microChat.entity';
-import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Hub } from 'src/dal/entity/hub.entity';
+import { JoinUserHub } from 'src/dal/entity/joinUserHub.entity';
+import { User } from 'src/dal/entity/user.entity';
 import { FileService } from 'src/services/file/file.service';
 import { QrService } from 'src/services/qr/qr.service';
-import { Notification } from 'src/notification/dto/notification.dto';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class HubService {
   private readonly logger = new Logger(HubService.name, true);
   constructor(
     private qrService: QrService,
-    private notificationService: NotificationService,
     private fileService: FileService,
     @InjectRepository(Hub)
     private hubRepository: Repository<Hub>,
-    @InjectRepository(InAppNotification)
-    private inAppNotificationRepository: Repository<InAppNotification>,
     @InjectRepository(JoinUserHub)
     private joinUserHubRepository: Repository<JoinUserHub>,
-    @InjectRepository(JoinUserInAppNotifications)
-    private joinUserInAppNotificationsRepository: Repository<
-      JoinUserInAppNotifications
-    >,
     @InjectRepository(User)
     private userRepository: Repository<User>,
   ) {
@@ -314,42 +302,22 @@ export class HubService {
     await this.joinUserHubRepository.save(hubRelationship);
   }
 
-  async microChatToHub(fromUser: User, hub: Hub, microChat: MicroChat) {
-    this.logger.log(this.microChatToHub.name);
-
-    const members = await hub.usersConnection;
-    for (let index = 0; index < members.length; index++) {
-      const memberConnection = members[index];
-      await this.notificationService.sendPushToUser(memberConnection.user.id,
-          {
-            title: `${microChat.text}`,
-            body: `From ${fromUser.firstName} to the ${hub.name} hub`,
-            click_action: ''
-          } as Notification
-        );
-
-      const inAppNotification = this.inAppNotificationRepository.create({
-        thumbnail: fromUser.image,
-        header: `${microChat.text}`,
-        text: `From ${fromUser.firstName} to ${hub.name}`,
-        date: Date.now().toString(),
-      });
-      await this.inAppNotificationRepository.save(inAppNotification);
-
-      const joinUserInAppNotification = this.joinUserInAppNotificationsRepository.create(
-        {
-          userId: fromUser.id,
-          inAppNotificationId: inAppNotification.id,
-        },
-      );
-      await this.joinUserInAppNotificationsRepository.save(
-        joinUserInAppNotification,
-      );
-
-      this.logger.log({
-        method: this.microChatToHub.name,
-        params: [fromUser, hub, microChat],
-      });
+  async searchHubByName(userId: any, search: string) {
+    const userHubRelationship = await this.joinUserHubRepository.find({
+      where: {
+        userId: userId,
+      },
+      relations: ['hub'],
+    });
+    search = search.toLowerCase();
+    let results: Hub[] = [];
+    for (let index = 0; index < userHubRelationship.length; index++) {
+      const element = userHubRelationship[index];
+      if (element.hub.name.toLowerCase().includes(search)) {
+        results.push(element.hub);
+      }
     }
+
+    return results;
   }
 }
