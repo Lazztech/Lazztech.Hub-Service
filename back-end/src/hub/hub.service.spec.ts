@@ -8,7 +8,6 @@ import { JoinUserHub } from 'src/dal/entity/joinUserHub.entity';
 import { JoinUserInAppNotifications } from 'src/dal/entity/joinUserInAppNotifications.entity';
 import { User } from 'src/dal/entity/user.entity';
 import { FileService } from 'src/services/file/file.service';
-import { QrService } from 'src/services/qr/qr.service';
 import { Repository } from 'typeorm';
 import { NotificationService } from '../notification/notification.service';
 import { HubService } from './hub.service';
@@ -31,7 +30,6 @@ describe('HubService', () => {
       providers: [
         HubService,
         NotificationService,
-        QrService,
         FileService,
         {
           provide: getRepositoryToken(User),
