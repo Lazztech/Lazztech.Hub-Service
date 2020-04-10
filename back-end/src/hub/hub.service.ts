@@ -236,12 +236,13 @@ export class HubService {
   }
 
   async joinHub(userId: any, id: any) {
-    let joinUserHub = await this.joinUserHubRepository.create({
+    let joinUserHub = this.joinUserHubRepository.create({
       userId: userId,
       hubId: id,
       isOwner: true,
     });
     joinUserHub = await this.joinUserHubRepository.save(joinUserHub);
+    return joinUserHub;
   }
 
   async setHubStarred(userId: any, hubId: number) {
@@ -251,6 +252,7 @@ export class HubService {
     });
     hubRelationship.starred = true;
     await this.joinUserHubRepository.save(hubRelationship);
+    return hubRelationship;
   }
 
   async setHubNotStarred(userId: any, hubId: number) {
@@ -260,6 +262,7 @@ export class HubService {
     });
     hubRelationship.starred = false;
     await this.joinUserHubRepository.save(hubRelationship);
+    return hubRelationship;
   }
 
   async searchHubByName(userId: any, search: string) {
