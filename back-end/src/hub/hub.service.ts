@@ -166,25 +166,6 @@ export class HubService {
     return hub;
   }
 
-  async getStarredHubs(userId: any) {
-    const userHubRelationships = await this.joinUserHubRepository.find({
-      where: {
-        userId: userId,
-        starred: true,
-      },
-      relations: ['hub'],
-    });
-    const hubs = [];
-    for (let index = 0; index < userHubRelationships.length; index++) {
-      const element = userHubRelationships[index];
-      // element.starred = element.starred;
-      element.starred = true;
-      hubs.push(element.hub);
-    }
-
-    return hubs;
-  }
-
   async deleteHub(userId: any, hubId: number) {
     const userHubRelationship = await this.joinUserHubRepository.findOne({
       where: {

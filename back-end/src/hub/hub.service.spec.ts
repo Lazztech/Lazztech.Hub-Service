@@ -332,11 +332,6 @@ describe('HubService', () => {
     expect(saveCall).toHaveBeenCalled();
   });
 
-  it('should return for getStarredHubs', async () => {
-    //TODO
-    //easy
-  });
-
   it('should remove for deleteHub', async () => {
     //TODO
   });

@@ -120,14 +120,6 @@ export class HubResolver {
   }
 
   @UseGuards(AuthGuard)
-  @Query(() => [Hub])
-  public async starredHubs(@UserId() userId) {
-    this.logger.log(this.starredHubs.name);
-    const result = await this.hubService.getStarredHubs(userId);
-    return result;
-  }
-
-  @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
   public async deleteHub(
     @UserId() userId,
