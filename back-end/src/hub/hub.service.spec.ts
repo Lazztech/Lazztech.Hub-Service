@@ -109,7 +109,6 @@ describe('HubService', () => {
   });
 
   it('should return for commonUserHubs', async () => {
-    //FIXME
     //Arrange
     const userId = 1;
     const otherUsersId = 2;
@@ -408,6 +407,8 @@ describe('HubService', () => {
     //Assert
     expect(result).toEqual(expectedResult);
     expect(deleteCall).toHaveBeenCalled();
+    expect(storeCall).toHaveBeenCalled();
+    expect(saveCall).toHaveBeenCalled();
   });
 
   it('should save for joinHub', async () => {
