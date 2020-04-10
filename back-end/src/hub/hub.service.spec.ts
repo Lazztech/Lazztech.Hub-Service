@@ -330,7 +330,26 @@ describe('HubService', () => {
   });
 
   it('should remove for deleteHub', async () => {
-    //TODO
+    //Arrange
+    const userId = 1;
+    const hubId = 1;
+    jest.spyOn(joinUserHubRepo, 'findOne').mockResolvedValueOnce({
+      userId,
+      hubId,
+      isOwner: true,
+    } as JoinUserHub);
+    jest.spyOn(hubRepo, 'findOne').mockResolvedValueOnce({
+      image: "imageTest"
+    } as Hub);
+    const deleteImageCall = jest.spyOn(fileService, 'deletePublicImageFromUrl').mockImplementationOnce(
+      () => Promise.resolve()
+    );
+    const removeCall = jest.spyOn(hubRepo, 'remove').mockResolvedValueOnce({} as Hub);
+    //Act
+    await hubService.deleteHub(1, 1);
+    //Assert
+    expect(deleteImageCall).toHaveBeenCalled();
+    expect(removeCall).toHaveBeenCalled();
   });
 
   it('should return for editHub', async () => {

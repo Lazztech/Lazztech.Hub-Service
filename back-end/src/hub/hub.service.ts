@@ -178,14 +178,14 @@ export class HubService {
     else if (this.isNotOwner(userHubRelationship)) {
       throw new Error(`userId: ${userId} is not an owner of hubId: ${hubId}`);
     }
-
-    //TODO ensure image is deleted
-
     const hub = await this.hubRepository.findOne({
       where: {
         id: hubId,
       },
     });
+    if (hub.image) {
+      await this.fileService.deletePublicImageFromUrl(hub.image);
+    }
     await this.hubRepository.remove(hub);
   }
 
