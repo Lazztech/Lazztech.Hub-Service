@@ -4,14 +4,12 @@ import { Hub } from 'src/dal/entity/hub.entity';
 import { JoinUserHub } from 'src/dal/entity/joinUserHub.entity';
 import { User } from 'src/dal/entity/user.entity';
 import { FileService } from 'src/services/file/file.service';
-import { QrService } from 'src/services/qr/qr.service';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class HubService {
   private readonly logger = new Logger(HubService.name, true);
   constructor(
-    private qrService: QrService,
     private fileService: FileService,
     @InjectRepository(Hub)
     private hubRepository: Repository<Hub>,
@@ -181,6 +179,8 @@ export class HubService {
       throw new Error(`userId: ${userId} is not an owner of hubId: ${hubId}`);
     }
 
+    //TODO ensure image is deleted
+
     const hub = await this.hubRepository.findOne({
       where: {
         id: hubId,
@@ -242,16 +242,6 @@ export class HubService {
       isOwner: true,
     });
     joinUserHub = await this.joinUserHubRepository.save(joinUserHub);
-  }
-
-  async getHubByQRImage(qrImageB64: string) {
-    //FIXME: Finish implementing check that user is hub owner.
-    const result = await this.qrService.scanQR(qrImageB64);
-    if (result) {
-      const id = result.id;
-      const hub = await this.hubRepository.findOne({ id });
-      return hub;
-    }
   }
 
   async setHubStarred(userId: any, hubId: number) {

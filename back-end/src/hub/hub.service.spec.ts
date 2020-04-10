@@ -1,18 +1,17 @@
+import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import configuration from 'src/config/configuration';
+import { Hub } from 'src/dal/entity/hub.entity';
+import { InAppNotification } from 'src/dal/entity/inAppNotification.entity';
+import { JoinUserHub } from 'src/dal/entity/joinUserHub.entity';
+import { JoinUserInAppNotifications } from 'src/dal/entity/joinUserInAppNotifications.entity';
+import { User } from 'src/dal/entity/user.entity';
+import { FileService } from 'src/services/file/file.service';
+import { QrService } from 'src/services/qr/qr.service';
+import { Repository } from 'typeorm';
 import { NotificationService } from '../notification/notification.service';
 import { HubService } from './hub.service';
-import { ConfigModule } from '@nestjs/config';
-import configuration from 'src/config/configuration';
-import { JoinUserHub } from 'src/dal/entity/joinUserHub.entity';
-import { Hub } from 'src/dal/entity/hub.entity';
-import { TypeOrmModule, getRepositoryToken } from '@nestjs/typeorm';
-import { JoinUserInAppNotifications } from 'src/dal/entity/joinUserInAppNotifications.entity';
-import { MicroChat } from 'src/dal/entity/microChat.entity';
-import { User } from 'src/dal/entity/user.entity';
-import { InAppNotification } from 'src/dal/entity/inAppNotification.entity';
-import { Repository } from 'typeorm';
-import { QrService } from 'src/services/qr/qr.service';
-import { FileService } from 'src/services/file/file.service';
 
 describe('HubService', () => {
   let hubService: HubService;
@@ -349,10 +348,6 @@ describe('HubService', () => {
   it('should save for joinHub', async () => {
     //TODO
     //easy
-  });
-
-  it('should return for getHubByQRImage', async () => {
-    //FIXME remove?
   });
 
   it('should resolve for setHubStarred', async () => {

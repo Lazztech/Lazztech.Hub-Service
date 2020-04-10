@@ -167,16 +167,6 @@ export class HubResolver {
   }
 
   @UseGuards(AuthGuard)
-  @Query(() => Hub)
-  public async getHubByQRImage(
-    @Args({ name: 'qrImageB64', type: () => String }) qrImageB64: string,
-  ): Promise<Hub> {
-    this.logger.log(this.getHubByQRImage.name);
-    const result = await this.hubService.getHubByQRImage(qrImageB64);
-    return;
-  }
-
-  @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
   public async setHubStarred(
     @UserId() userId,
