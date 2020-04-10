@@ -152,19 +152,11 @@ export class HubService {
     return uniqueUsers;
   }
 
-  async createHub(userId: any, name: string, description: string, image: string, latitude: number, longitude: number) {
-    const imageUrl = await this.fileService.storePublicImageFromBase64(image);
-
-    const hub = this.hubRepository.create({
-      latitude,
-      longitude,
-      name,
-      description,
-      image: imageUrl,
-    });
-
+  async createHub(userId: any, hub: Hub) {
+    const imageUrl = await this.fileService.storePublicImageFromBase64(hub.image);
+    //TODO save as a transaction
     const result = await this.hubRepository.save(hub);
-    let joinUserHub = await this.joinUserHubRepository.create({
+    let joinUserHub = this.joinUserHubRepository.create({
       userId: userId,
       hubId: hub.id,
       isOwner: true,

@@ -36,7 +36,9 @@ export class HubResolver {
     @Args({ name: 'longitude', type: () => Float }) longitude: number,
   ): Promise<Hub> {
     this.logger.log(this.createHub.name);
-    const hub = await this.hubService.createHub(userId, name, description, image, latitude, longitude);
+    const hub = await this.hubService.createHub(userId, {
+      name, description, image, latitude, longitude
+    } as Hub);
     return hub;
   }
 

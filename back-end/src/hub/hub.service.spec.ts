@@ -18,6 +18,8 @@ describe('HubService', () => {
   let hubService: HubService;
   let joinUserHubRepo: Repository<JoinUserHub>;
   let userRepo: Repository<User>;
+  let hubRepo: Repository<Hub>;
+  let fileService: FileService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -58,6 +60,8 @@ describe('HubService', () => {
     hubService = module.get<HubService>(HubService);
     joinUserHubRepo = module.get<Repository<JoinUserHub>>(getRepositoryToken(JoinUserHub));
     userRepo = module.get<Repository<User>>(getRepositoryToken(User));
+    hubRepo = module.get<Repository<Hub>>(getRepositoryToken(Hub));
+    fileService = module.get<FileService>(FileService);
   });
 
   it('should be defined', () => {
@@ -302,7 +306,30 @@ describe('HubService', () => {
   });
 
   it('should return for createHub', async () => {
-    //TODO
+    //Arrange
+    const userId = 1;
+    const hub = {
+      id: 1,
+      name: "testName", 
+      description: "description", 
+      image: "image.png", 
+      latitude: 1, 
+      longitude: -1
+    } as Hub;
+    const joinUserHub = {
+      userId,
+      hubId: hub.id,
+      isOwner: true
+    } as JoinUserHub;
+    jest.spyOn(fileService, 'storePublicImageFromBase64').mockResolvedValueOnce('https://x.com/' + hub.image);
+    jest.spyOn(hubRepo, 'save').mockResolvedValueOnce(hub);
+    jest.spyOn(joinUserHubRepo, 'create').mockReturnValueOnce(joinUserHub)
+    const saveCall = jest.spyOn(joinUserHubRepo, 'save').mockResolvedValueOnce(joinUserHub);
+    //Act
+    const result = await hubService.createHub(userId, hub);
+    //Assert
+    expect(result).toEqual(hub);
+    expect(saveCall).toHaveBeenCalled();
   });
 
   it('should return for getStarredHubs', async () => {
