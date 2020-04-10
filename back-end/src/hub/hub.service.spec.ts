@@ -361,8 +361,34 @@ describe('HubService', () => {
   });
 
   it('should return for changeHubImage', async () => {
-    //TODO
-    //moderate
+    //Arrange
+    const userId = 1;
+    const hubId = 1;
+    const newImage = "newImage";
+    jest.spyOn(joinUserHubRepo, 'findOne').mockResolvedValueOnce({
+      userId,
+      hubId,
+      isOwner: true,
+      hub: {
+        image: "oldImage"
+      } as Hub
+    } as JoinUserHub);
+    const expectedResult = {
+      id: hubId,
+      image: newImage
+    } as Hub;
+    const deleteCall = jest.spyOn(fileService, 'deletePublicImageFromUrl').mockImplementationOnce(
+      () => Promise.resolve()
+    );
+    const storeCall = jest.spyOn(fileService, 'storePublicImageFromBase64').mockResolvedValueOnce(
+      expectedResult.image
+    );
+    const saveCall = jest.spyOn(hubRepo, 'save').mockResolvedValueOnce(expectedResult);
+    //Act
+    const result = await hubService.changeHubImage(userId, hubId, newImage);
+    //Assert
+    expect(result).toEqual(expectedResult);
+    expect(deleteCall).toHaveBeenCalled();
   });
 
   it('should save for joinHub', async () => {
