@@ -119,40 +119,37 @@ export class HubService {
   }
 
   async usersPeople(userId: any) {
-    //TODO optimize this
     const userHubRelationships = await this.joinUserHubRepository.find({
       where: {
         userId: userId,
       },
+      relations: [
+        'hub',
+        'hub.usersConnection',
+        'hub.usersConnection.user'
+      ]
     });
 
-    const usersHubIds: Array<number> = [];
-    for (let index = 0; index < userHubRelationships.length; index++) {
-      const element = userHubRelationships[index];
-      usersHubIds.push(element.hubId);
+    const usersHubs = userHubRelationships.map(x => x.hub);
+
+    let commonConnections: Array<JoinUserHub> = [];
+    for (const hub of usersHubs) {
+      commonConnections = commonConnections.concat(hub.usersConnection)
     }
 
-    let usersPeople: Array<User> = [];
-    for (let index = 0; index < usersHubIds.length; index++) {
-      const usersHubId = usersHubIds[index];
-      const userHubRelationships = await this.joinUserHubRepository.find({
-        where: {
-          hubId: usersHubId,
-        },
-        relations: ['user'],
-      });
+    let resultingOtherUsers: Array<User> = commonConnections
+      .filter(x => x.userId !== userId)
+      .map(x => x.user);
 
-      for (let index = 0; index < userHubRelationships.length; index++) {
-        const otherUserId = userHubRelationships[index].userId;
-
-        const user = userHubRelationships[index].user;
-        if (usersPeople.find(x => x.id == otherUserId) == undefined) {
-          usersPeople.push(user);
-        }
+    let uniqueUsers: Array<User> = [];
+    for (let index = 0; index < resultingOtherUsers.length; index++) {
+      const user = resultingOtherUsers[index];
+      if (uniqueUsers.find(x => x.id == user.id) == undefined) {
+        uniqueUsers.push(user);
       }
     }
 
-    return usersPeople;
+    return uniqueUsers;
   }
 
   async createHub(userId: any, name: string, description: string, image: string, latitude: number, longitude: number) {

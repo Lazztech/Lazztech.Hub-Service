@@ -235,7 +235,70 @@ describe('HubService', () => {
   });
 
   it('should return for usersPeople', async () => {
-    //TODO
+    //Arrange
+    const userId = 2;
+    jest.spyOn(joinUserHubRepo, 'find').mockResolvedValueOnce([
+      {
+        userId: 2,
+        hubId: 9,
+        hub: {
+          id: 9,
+          usersConnection: [
+            {
+              userId: 3,
+              user: {
+                id: 3
+              }
+            },
+            {
+              userId: 2,
+              user: {
+                id: 2
+              }
+            }
+          ]
+        }
+      } as JoinUserHub,
+      {
+        userId: 2,
+        hubId: 10,
+        hub: {
+          id: 10,
+          usersConnection: [
+            {
+              userId: 4,
+              user: {
+                id: 4
+              }
+            },
+            {
+              userId: 2,
+              user: {
+                id: 2
+              }
+            },
+            {
+              userId: 3,
+              user: {
+                id: 3
+              }
+            }
+          ]
+        }
+      } as JoinUserHub
+    ]);
+    const expectedResult = [
+      {
+        id: 3
+      },
+      {
+        id: 4
+      }
+    ] as User[];
+    //Act
+    const result = await hubService.usersPeople(userId);
+    //Assert
+    expect(result).toEqual(expectedResult);
   });
 
   it('should return for createHub', async () => {
