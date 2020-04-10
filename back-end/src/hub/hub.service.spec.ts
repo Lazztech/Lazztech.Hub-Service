@@ -334,8 +334,30 @@ describe('HubService', () => {
   });
 
   it('should return for editHub', async () => {
-    //TODO
-    //easy
+    //Arrange
+    const userId = 1;
+    const expectedResult = {
+      id: 1,
+      name: "name",
+      description: "description",
+    } as Hub;
+    jest.spyOn(joinUserHubRepo, 'findOne').mockResolvedValueOnce({
+      userId,
+      hubId: expectedResult.id,
+      isOwner: true,
+      hub: expectedResult
+    } as JoinUserHub);
+    const saveCall = jest.spyOn(hubRepo, 'save').mockResolvedValueOnce(expectedResult);
+    //Act
+    const result = await hubService.editHub(
+      userId, 
+      expectedResult.id,
+      expectedResult.name,
+      expectedResult.description
+      );
+    //Assert
+    expect(result).toEqual(expectedResult);
+    expect(saveCall).toHaveBeenCalled();
   });
 
   it('should return for changeHubImage', async () => {
