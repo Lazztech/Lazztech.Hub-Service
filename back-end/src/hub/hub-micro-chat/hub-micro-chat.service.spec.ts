@@ -66,6 +66,11 @@ describe('HubMicroChatService', () => {
 
   it('should resolve for microChatToHub', async () => {
     //TODO
+    //Arrange
+
+    //Act
+
+    //Assert
   });
 
   it('should return for createMicroChat', async () => {

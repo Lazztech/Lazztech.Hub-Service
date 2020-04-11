@@ -65,6 +65,9 @@
     "typescript": "^3.6.3"
   },
   "jest": {
+    "coveragePathIgnorePatterns": [
+      ".entity."
+    ],
     "moduleDirectories": [
       "node_modules",
       "src"
