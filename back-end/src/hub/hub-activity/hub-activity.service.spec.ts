@@ -13,6 +13,8 @@ import { User } from 'src/dal/entity/user.entity';
 
 describe('HubActivityService', () => {
   let service: HubActivityService;
+  let joinUserHubRepo: Repository<JoinUserHub>;
+  let hubRepo: Repository<Hub>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -49,6 +51,8 @@ describe('HubActivityService', () => {
     }).compile();
 
     service = module.get<HubActivityService>(HubActivityService);
+    joinUserHubRepo = module.get<Repository<JoinUserHub>>(getRepositoryToken(JoinUserHub));
+    hubRepo = module.get<Repository<Hub>>(getRepositoryToken(Hub));
   });
 
   it('should be defined', () => {
@@ -56,10 +60,46 @@ describe('HubActivityService', () => {
   });
 
   it('should return for activateHub', async () => {
-    //TODO
+    // //Arrange
+    // const userId = 1;
+    // const hubId = 1;
+    // jest.spyOn(joinUserHubRepo, 'findOne').mockResolvedValueOnce({
+    //   userId,
+    //   hubId,
+    //   isOwner: true,
+    //   hub: {
+    //     active: false
+    //   }
+    // } as JoinUserHub);
+    // const expectedResult = {
+    //   active: true
+    // } as Hub;
+    // jest.spyOn(hubRepo, 'save').mockResolvedValueOnce(expectedResult);
+    //Act
+    // const result = await service.activateHub(userId, hubId);
+    //Assert
+    // expect(result).toEqual(expectedResult);
   });
 
   it('should return for deactivateHub', async () => {
-    //TODO
+    //Arrange
+    const userId = 1;
+    const hubId = 1;
+    jest.spyOn(joinUserHubRepo, 'findOne').mockResolvedValueOnce({
+      userId,
+      hubId,
+      isOwner: true,
+      hub: {
+        active: true
+      }
+    } as JoinUserHub);
+    const expectedResult = {
+      active: false
+    } as Hub;
+    jest.spyOn(hubRepo, 'save').mockResolvedValueOnce(expectedResult);
+    //Act
+    const result = await service.deactivateHub(userId, hubId);
+    //Assert
+    expect(result).toEqual(expectedResult);
   });
 });

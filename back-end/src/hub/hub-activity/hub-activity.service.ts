@@ -45,13 +45,7 @@ export class HubActivityService {
         hub.active = true;
         hub = await this.hubRepository.save(hub);
 
-        const hubRelationships = await this.joinUserHubRepository.find({
-            where: {
-                hubId,
-            },
-            relations: ['hub'],
-        });
-        await this.notifyOfHubActivated(hubRelationships);
+        await this.notifyOfHubActivated(hubId);
         return hub;
     }
 
@@ -76,11 +70,18 @@ export class HubActivityService {
         return hub;
     }
 
-    private async notifyOfHubActivated(userHubRelationships: JoinUserHub[]) {
+    private async notifyOfHubActivated(hubId: number) {
         this.logger.log(this.notifyOfHubActivated.name);
 
-        for (let index = 0; index < userHubRelationships.length; index++) {
-            const element = userHubRelationships[index];
+        const hubRelationships = await this.joinUserHubRepository.find({
+            where: {
+                hubId,
+            },
+            relations: ['hub'],
+        });
+
+        for (let index = 0; index < hubRelationships.length; index++) {
+            const element = hubRelationships[index];
             await this.notificationService
                 .sendPushToUser(
                     element.userId,
