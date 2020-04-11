@@ -430,8 +430,24 @@ describe('HubService', () => {
   });
 
   it('should resolve for setHubStarred', async () => {
-    //TODO
-    //easy
+    //Arrange
+    const userId = 1;
+    const hubId = 1;
+    const expectedResult = {
+      userId,
+      hubId,
+      starred: true,
+    } as JoinUserHub;
+    jest.spyOn(joinUserHubRepo, 'findOne').mockResolvedValueOnce({
+      userId,
+      hubId
+    } as JoinUserHub);
+    const saveCall = jest.spyOn(joinUserHubRepo, 'save').mockResolvedValueOnce(expectedResult);
+    //Act
+    const result = await hubService.setHubStarred(userId, hubId);
+    //Assert
+    expect(result).toEqual(expectedResult);
+    expect(saveCall).toHaveBeenCalled();
   });
 
   it('should resolve for setHubNotStarred', async () => {
