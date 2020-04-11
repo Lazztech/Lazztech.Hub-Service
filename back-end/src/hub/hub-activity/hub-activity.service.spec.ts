@@ -60,25 +60,26 @@ describe('HubActivityService', () => {
   });
 
   it('should return for activateHub', async () => {
-    // //Arrange
-    // const userId = 1;
-    // const hubId = 1;
-    // jest.spyOn(joinUserHubRepo, 'findOne').mockResolvedValueOnce({
-    //   userId,
-    //   hubId,
-    //   isOwner: true,
-    //   hub: {
-    //     active: false
-    //   }
-    // } as JoinUserHub);
-    // const expectedResult = {
-    //   active: true
-    // } as Hub;
-    // jest.spyOn(hubRepo, 'save').mockResolvedValueOnce(expectedResult);
+    //TODO finish me
+    //Arrange
+    const userId = 1;
+    const hubId = 1;
+    jest.spyOn(joinUserHubRepo, 'findOne').mockResolvedValueOnce({
+      userId,
+      hubId,
+      isOwner: true,
+      hub: {
+        active: false
+      }
+    } as JoinUserHub);
+    const expectedResult = {
+      active: true
+    } as Hub;
+    jest.spyOn(hubRepo, 'save').mockResolvedValueOnce(expectedResult);
     //Act
-    // const result = await service.activateHub(userId, hubId);
+    const result = await service.activateHub(userId, hubId);
     //Assert
-    // expect(result).toEqual(expectedResult);
+    expect(result).toEqual(expectedResult);
   });
 
   it('should return for deactivateHub', async () => {

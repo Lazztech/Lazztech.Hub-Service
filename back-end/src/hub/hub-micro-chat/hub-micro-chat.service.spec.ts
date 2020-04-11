@@ -14,6 +14,8 @@ import configuration from 'src/config/configuration';
 
 describe('HubMicroChatService', () => {
   let service: HubMicroChatService;
+  let joinUserHubRepo: Repository<JoinUserHub>;
+  let microChatRepo : Repository<MicroChat>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -54,6 +56,8 @@ describe('HubMicroChatService', () => {
     }).compile();
 
     service = module.get<HubMicroChatService>(HubMicroChatService);
+    joinUserHubRepo = module.get<Repository<JoinUserHub>>(getRepositoryToken(JoinUserHub));
+    microChatRepo = module.get<Repository<MicroChat>>(getRepositoryToken(MicroChat));
   });
 
   it('should be defined', () => {
@@ -69,6 +73,29 @@ describe('HubMicroChatService', () => {
   });
 
   it('should resolve for deleteMicroChat', async () => {
-    //TODO
+    //Arrange
+    const userId = 1;
+    const hubId = 1;
+    const microChatId = 1;
+    jest.spyOn(joinUserHubRepo, 'findOne').mockResolvedValueOnce({
+      userId,
+      hubId,
+      hub: {
+        microChats: [
+          {
+            id: microChatId
+          },
+          {
+            id: 2
+          }
+        ]
+      },
+      user: {}
+    } as JoinUserHub);
+    const deleteCall = jest.spyOn(microChatRepo, 'remove').mockResolvedValueOnce({} as MicroChat)
+    //Act
+    await service.deleteMicroChat(userId, hubId, microChatId);
+    //Assert
+    expect(deleteCall).toHaveBeenCalled();
   });
 });
