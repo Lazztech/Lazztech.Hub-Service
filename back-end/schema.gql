@@ -71,7 +71,6 @@ type Mutation {
   deleteMicroChat(microChatId: Int!, hubId: Int!): Boolean!
   editUserDetails(description: String!, lastName: String!, firstName: String!): User!
   changeEmail(newEmail: String!): User!
-  newInvite(email: String!): Boolean!
   changeUserImage(newImage: String!): User!
   addUserFcmNotificationToken(token: String!): Boolean!
   login(password: String!, email: String!): String
