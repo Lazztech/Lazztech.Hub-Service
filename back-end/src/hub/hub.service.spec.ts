@@ -472,7 +472,39 @@ describe('HubService', () => {
   });
 
   it('should return for searchHubByName', async () => {
-    //TODO
+    //Arrange
+    const userId = 1;
+    const search = "Lazzarini";
+    const testHubRelationships: Array<JoinUserHub> = [
+      {
+        userId,
+        hub: {
+          name: "a"
+        }
+      } as JoinUserHub,
+      {
+        userId,
+        hub: {
+          name: "b"
+        }
+      } as JoinUserHub,
+      {
+        userId,
+        hub: {
+          name: "Lazzarini"
+        }
+      } as JoinUserHub,
+    ];
+    const expectedResult = [
+      {
+        name: "Lazzarini"
+      } as Hub
+    ];
+    jest.spyOn(joinUserHubRepo, 'find').mockResolvedValueOnce(testHubRelationships);
+    //Act
+    const result = await hubService.searchHubByName(userId, search);
+    //Assert
+    expect(result).toEqual(expectedResult);
   });
 
 });
