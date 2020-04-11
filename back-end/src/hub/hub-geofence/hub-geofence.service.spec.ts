@@ -50,8 +50,23 @@ describe('HubGeofenceService', () => {
   });
 
   it('should return for exitedHubGeofence', async () => {
-    //TODO
-    //easy
-    //should return?
+    const userId = 1;
+    const hubId = 1;
+    const hubRelationshipTest = {
+      userId,
+      hubId,
+    } as JoinUserHub;
+    jest.spyOn(joinUserHubRepository, 'findOne').mockResolvedValueOnce(hubRelationshipTest);
+    const saveCall = jest.spyOn(joinUserHubRepository, 'save').mockResolvedValueOnce(
+      {
+        userId,
+        hubId,
+        isOwner: false
+      } as JoinUserHub
+    );
+    //Act
+    const result = await service.exitedHubGeofence(userId, hubId);
+    //Assert
+    expect(saveCall).toHaveBeenCalled();
   });
 });
