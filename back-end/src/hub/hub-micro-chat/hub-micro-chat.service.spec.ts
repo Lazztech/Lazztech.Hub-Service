@@ -69,7 +69,24 @@ describe('HubMicroChatService', () => {
   });
 
   it('should return for createMicroChat', async () => {
-    //TODO
+    //Arrange
+    const userId = 1;
+    const hubId = 1;
+    const microChatText = "Hello";
+    jest.spyOn(joinUserHubRepo, 'findOne').mockResolvedValueOnce({
+      userId,
+      hubId,
+    } as JoinUserHub);
+    const expectResult = {
+      hubId,
+      text: microChatText
+    } as MicroChat;
+    const saveCall = jest.spyOn(microChatRepo, 'save').mockResolvedValueOnce(expectResult);
+    //Act
+    const result = await service.createMicroChat(userId, hubId, microChatText);
+    //Assert
+    expect(saveCall).toHaveBeenCalled();
+    expect(result).toEqual(expectResult);
   });
 
   it('should resolve for deleteMicroChat', async () => {
