@@ -49,14 +49,6 @@ export class UserResolver {
   }
 
   @UseGuards(AuthGuard)
-  @Mutation(() => Boolean)
-  public async newInvite(@Args('email') email: string): Promise<boolean> {
-    this.logger.log(this.newInvite.name);
-    await this.userService.newInvite(email);
-    return true;
-  }
-
-  @UseGuards(AuthGuard)
   @Mutation(() => User)
   public async changeUserImage(
     @UserId() userId,

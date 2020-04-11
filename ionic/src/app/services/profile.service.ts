@@ -114,25 +114,6 @@ export class ProfileService {
     }
   }
 
-  async inviteUser(emailAddress: string) {
-    const result = await this.apollo.mutate({
-      mutation: gql`
-        mutation {
-          newInvite(email: "${emailAddress}")
-        }
-      `
-    }).toPromise();
-
-    console.log(result);
-    if ((result as any).data.newInvite) {
-      console.log("Invite sent!");
-      return true;
-    } else {
-      console.log("Failed.");
-      return false;
-    }
-  }
-
   async clearStorage() {
     await this.storage.clear();
     console.log('cleared storage');

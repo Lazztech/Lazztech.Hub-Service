@@ -177,26 +177,6 @@ describe('UserService', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  it('should call sendInviteEmail for newInvite', async () => {
-    //Arrange
-    const email = "gianlazzarini@gmail.com";
-    const testInvite = {
-      email
-    } as Invite;
-    jest.spyOn(inviteRepo, 'create').mockReturnValueOnce(testInvite);
-    jest.spyOn(inviteRepo, 'save').mockResolvedValueOnce({
-      id: 1,
-      email
-    } as Invite);
-    const sendInviteEmailMock = jest.spyOn(emailService, 'sendInviteEmail').mockImplementationOnce(
-      () => Promise.resolve()
-    );
-    //Act
-    await service.newInvite(email);
-    //Assert
-    expect(sendInviteEmailMock).toHaveBeenCalled();
-  });
-
   it('should return for changeUserImage', async () => {
     //Arrange
     const userId = 1;

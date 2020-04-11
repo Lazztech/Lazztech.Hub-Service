@@ -8,6 +8,7 @@ import { EmailService } from 'src/services/email/email.service';
 import { FileService } from 'src/services/file/file.service';
 import { Repository } from 'typeorm';
 import { EditUserDetails } from './dto/editUserDetails.input';
+import { Email } from 'src/services/email/dto/email.dto';
 
 @Injectable()
 export class UserService {
@@ -72,15 +73,6 @@ export class UserService {
     user.email = newEmail;
     await this.userRepository.save(user);
     return user;
-  }
-
-  public async newInvite(email: string) {
-    let invite = this.inviteRepository.create({
-      email,
-    });
-    invite = await this.inviteRepository.save(invite);
-
-    await this.emailService.sendInviteEmail(email);
   }
 
   public async changeUserImage(userId: any, newImage: string) {
