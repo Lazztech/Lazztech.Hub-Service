@@ -9,7 +9,7 @@ import { HubModule } from './hub/hub.module';
 import { NotificationModule } from './notification/notification.module';
 import { ServicesModule } from './services/services.module';
 import { UserModule } from './user/user.module';
-import { AuthenticationModule } from './authentication/authentication.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -43,7 +43,7 @@ import { AuthenticationModule } from './authentication/authentication.module';
         origin: true,
       },
     }),
-    AuthenticationModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [AuthGuard],

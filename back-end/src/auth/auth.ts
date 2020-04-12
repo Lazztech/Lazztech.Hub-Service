@@ -14,8 +14,8 @@ import { ChangePassword } from './dto/changePassword.input';
 import * as crypto from 'crypto';
 
 @Injectable()
-export class AuthenticationService {
-    private logger = new Logger(AuthenticationService.name);
+export class AuthService {
+    private logger = new Logger(AuthService.name);
 
     constructor(
         private emailService: EmailService,

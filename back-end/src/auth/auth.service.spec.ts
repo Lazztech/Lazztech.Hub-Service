@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AuthenticationService } from './authentication.service';
+import { AuthService } from './auth';
 import { User } from 'src/dal/entity/user.entity';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
@@ -9,8 +9,8 @@ import { PasswordReset } from 'src/dal/entity/passwordReset.entity';
 import { InAppNotification } from 'src/dal/entity/inAppNotification.entity';
 import { JoinUserInAppNotifications } from 'src/dal/entity/joinUserInAppNotifications.entity';
 
-describe('AuthenticationService', () => {
-  let service: AuthenticationService;
+describe('AuthService', () => {
+  let service: AuthService;
   let userRepo: Repository<User>;
   let configService: ConfigService;
   let emailService: EmailService;
@@ -19,7 +19,7 @@ describe('AuthenticationService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        AuthenticationService,
+        AuthService,
         EmailService,
         ConfigService,
         {
@@ -41,7 +41,7 @@ describe('AuthenticationService', () => {
       ],
     }).compile();
 
-    service = module.get<AuthenticationService>(AuthenticationService);
+    service = module.get<AuthService>(AuthService);
     userRepo = module.get<Repository<User>>(getRepositoryToken(User));
     configService = module.get(ConfigService);
     emailService = module.get(EmailService);

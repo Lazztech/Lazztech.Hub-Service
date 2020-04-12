@@ -3,12 +3,12 @@ import { GraphQLSchema } from 'graphql';
 import { buildSchema } from 'type-graphql';
 import Container from 'typedi';
 import { UserResolver } from '../../../src/user/user.resolver';
-import { AuthenticationResolver } from '../../../src/authentication/authentication.resolver';
+import { AuthResolver } from '../../../src/auth/auth.resolver';
 import { HubResolver } from '../../../src/hub/hub.resolver';
 import { NotificationResolver } from '../../../src/notification/notification.resolver';
 
 const resolvers = [
-  AuthenticationResolver,
+  AuthResolver,
   UserResolver,
   NotificationResolver,
   HubResolver,

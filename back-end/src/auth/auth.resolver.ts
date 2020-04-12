@@ -3,14 +3,14 @@ import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { UserId } from 'src/decorators/user.decorator';
 import { AuthGuard } from 'src/guards/authguard.service';
 import { UserInput } from '../user/dto/user.input';
-import { AuthenticationService } from './authentication.service';
+import { AuthService } from './auth';
 
 @Resolver()
-export class AuthenticationResolver {
-  private logger = new Logger(AuthenticationResolver.name, true);
+export class AuthResolver {
+  private logger = new Logger(AuthResolver.name, true);
 
   constructor(
-    private authService: AuthenticationService,
+    private authService: AuthService,
   ) {
     this.logger.log('constructor');
   }
