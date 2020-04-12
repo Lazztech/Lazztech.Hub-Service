@@ -13,6 +13,8 @@ describe('AuthenticationService', () => {
   let service: AuthenticationService;
   let userRepo: Repository<User>;
   let configService: ConfigService;
+  let emailService: EmailService;
+  let passwordResetRepo: Repository<PasswordReset>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -42,6 +44,8 @@ describe('AuthenticationService', () => {
     service = module.get<AuthenticationService>(AuthenticationService);
     userRepo = module.get<Repository<User>>(getRepositoryToken(User));
     configService = module.get(ConfigService);
+    emailService = module.get(EmailService);
+    passwordResetRepo = module.get<Repository<PasswordReset>>(getRepositoryToken(PasswordReset));
   });
 
   it('should be defined', () => {
@@ -67,5 +71,40 @@ describe('AuthenticationService', () => {
 
     //Assert
     expect(result).toEqual(accessTokenResult);
+  });
+
+  it('should return for register', async () => {
+    //TODO
+  });
+
+  it('should return for changePassword', async () => {
+    //TODO
+  });
+
+  it('should return for deleteAccount', async () => {
+    //TODO
+  });
+
+  it('should return for resetPassword', async () => {
+    //TODO
+  });
+
+  it('should return for sendPasswordResetEmail', async () => {
+    //Arrange
+    const email = "gianlazzarini@gmail.com";
+    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce({
+      firstName: "Gian",
+      lastName: "Lazzarini",
+      email,
+      passwordReset: {},
+    } as User);
+    jest.spyOn(passwordResetRepo, 'findOne').mockResolvedValueOnce(null);
+    jest.spyOn(emailService, 'sendEmailFromPrimaryAddress').mockResolvedValueOnce('id');
+    const saveCall = jest.spyOn(userRepo, 'save').mockResolvedValueOnce({} as User);
+    //Act
+    const result = await service.sendPasswordResetEmail(email);
+    //Assert
+    expect(result).toBeTruthy();
+    expect(saveCall).toHaveBeenCalled();
   });
 });

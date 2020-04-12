@@ -149,14 +149,15 @@ export class AuthenticationService {
 
         if (user) {
             const pin = await this.generatePasswordResetPin();
-            const messageId = await this.emailService.sendEmailFromPrimaryAddress({
+            await this.emailService.sendEmailFromPrimaryAddress({
               to: user.email,
               subject: `Password reset for ${user.firstName} ${user.lastName}`,
-              text: `Hello, ${name}, please paste in the follow to reset your password: ${pin}`,
-              html: `<b>Hello, <strong>${name}</strong>, Please paste in the follow to reset your password: ${pin}</p>`,
+              text: `Hello, ${user.firstName}, please paste in the follow to reset your password: ${pin}`,
+              html: `<b>Hello, <strong>${user.firstName}</strong>, Please paste in the follow to reset your password: ${pin}</p>`,
             });
 
-            user.passwordReset = await this.passwordResetRepository.create({ pin });
+            user.passwordReset = { pin } as PasswordReset;
+            //TODO does this actually save the passwordReset?
             await this.userRepository.save(user);
 
             return true;
