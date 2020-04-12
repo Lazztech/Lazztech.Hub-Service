@@ -6,6 +6,7 @@ import { PasswordReset } from 'src/dal/entity/passwordReset.entity';
 import { User } from 'src/dal/entity/user.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
+import { ResetPassword } from '../dto/resetPassword.input';
 
 describe('AuthPasswordResetService', () => {
   let service: AuthPasswordResetService;
@@ -41,7 +42,24 @@ describe('AuthPasswordResetService', () => {
   });
 
   it('should return for resetPassword', async () => {
-    //TODO
+    //Arrange
+    const details = {
+      usersEmail: "gianlazzarini@gmail.com",
+      resetPin: "123",
+      newPassword: "NewPassword"
+    } as ResetPassword;
+    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce({
+      email: details.usersEmail,
+      passwordReset: {
+        pin: details.resetPin
+      }
+    } as User);
+    const saveCall = jest.spyOn(userRepo, 'save').mockResolvedValueOnce({} as User);
+    //Act
+    const result = await service.resetPassword(details);
+    //Assert
+    expect(result).toBeTruthy();
+    expect(saveCall).toHaveBeenCalled();
   });
 
   it('should return for sendPasswordResetEmail', async () => {
