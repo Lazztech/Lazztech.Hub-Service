@@ -1,33 +1,24 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { AuthService } from './auth';
-import { User } from 'src/dal/entity/user.entity';
-import { Repository } from 'typeorm';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
-import { EmailService } from 'src/services/email/email.service';
-import { PasswordReset } from 'src/dal/entity/passwordReset.entity';
+import { Test, TestingModule } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
 import { InAppNotification } from 'src/dal/entity/inAppNotification.entity';
 import { JoinUserInAppNotifications } from 'src/dal/entity/joinUserInAppNotifications.entity';
+import { User } from 'src/dal/entity/user.entity';
+import { Repository } from 'typeorm';
+import { AuthService } from './auth.service';
 
 describe('AuthService', () => {
   let service: AuthService;
   let userRepo: Repository<User>;
   let configService: ConfigService;
-  let emailService: EmailService;
-  let passwordResetRepo: Repository<PasswordReset>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AuthService,
-        EmailService,
         ConfigService,
         {
           provide: getRepositoryToken(User),
-          useClass: Repository,
-        },
-        {
-          provide: getRepositoryToken(PasswordReset),
           useClass: Repository,
         },
         {
@@ -44,8 +35,6 @@ describe('AuthService', () => {
     service = module.get<AuthService>(AuthService);
     userRepo = module.get<Repository<User>>(getRepositoryToken(User));
     configService = module.get(ConfigService);
-    emailService = module.get(EmailService);
-    passwordResetRepo = module.get<Repository<PasswordReset>>(getRepositoryToken(PasswordReset));
   });
 
   it('should be defined', () => {
@@ -83,28 +72,5 @@ describe('AuthService', () => {
 
   it('should return for deleteAccount', async () => {
     //TODO
-  });
-
-  it('should return for resetPassword', async () => {
-    //TODO
-  });
-
-  it('should return for sendPasswordResetEmail', async () => {
-    //Arrange
-    const email = "gianlazzarini@gmail.com";
-    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce({
-      firstName: "Gian",
-      lastName: "Lazzarini",
-      email,
-      passwordReset: {},
-    } as User);
-    jest.spyOn(passwordResetRepo, 'findOne').mockResolvedValueOnce(null);
-    jest.spyOn(emailService, 'sendEmailFromPrimaryAddress').mockResolvedValueOnce('id');
-    const saveCall = jest.spyOn(userRepo, 'save').mockResolvedValueOnce({} as User);
-    //Act
-    const result = await service.sendPasswordResetEmail(email);
-    //Assert
-    expect(result).toBeTruthy();
-    expect(saveCall).toHaveBeenCalled();
   });
 });

@@ -1,12 +1,13 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthResolver } from './auth.resolver';
-import { AuthService } from './auth';
+import { AuthService } from './auth.service';
 import { PasswordReset } from 'src/dal/entity/passwordReset.entity';
 import { User } from 'src/dal/entity/user.entity';
 import { InAppNotification } from 'src/dal/entity/inAppNotification.entity';
 import { JoinUserInAppNotifications } from 'src/dal/entity/joinUserInAppNotifications.entity';
 import { ServicesModule } from 'src/services/services.module';
+import { AuthPasswordResetService } from './auth-password-reset/auth-password-reset.service';
 
 @Module({
     imports: [
@@ -20,7 +21,8 @@ import { ServicesModule } from 'src/services/services.module';
     ],
     providers: [
         AuthResolver,
-        AuthService
+        AuthService,
+        AuthPasswordResetService
     ]
 })
 export class AuthModule {}
