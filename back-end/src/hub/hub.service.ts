@@ -22,6 +22,7 @@ export class HubService {
   }
 
   async getOneUserHub(userId: any, hubId: number) {
+    this.logger.log(this.getOneUserHub.name);
     const userHubRelationship = await this.joinUserHubRepository.findOne({
       where: {
         hubId,
@@ -38,6 +39,7 @@ export class HubService {
   }
 
   async getUserHubs(userId: any) {
+    this.logger.log(this.getUserHubs.name);
     const userHubRelationships = await this.joinUserHubRepository.find({
       where: {
         userId: userId,
@@ -48,6 +50,7 @@ export class HubService {
   }
 
   public async commonUsersHubs(userId: any, otherUsersId: any) {
+    this.logger.log(this.commonUsersHubs.name);
     const userHubRelationships = await this.joinUserHubRepository.find({
       where: {
         userId: userId,
@@ -75,6 +78,7 @@ export class HubService {
   }
 
   async inviteUserToHub(userId: any, hubId: number, inviteesEmail: string) {
+    this.logger.log(this.inviteUserToHub.name);
     const userHubRelationship = await this.joinUserHubRepository.findOne({
       where: {
         userId: userId,
@@ -101,6 +105,7 @@ export class HubService {
   }
 
   private validateInvitee(invitee: User, inviteesEmail: string, userId: any) {
+    this.logger.log(this.validateInvitee.name);
     if (!invitee) {
       throw new Error(`Did not find user to invite by email address: ${inviteesEmail}`);
     }
@@ -110,12 +115,14 @@ export class HubService {
   }
 
   private validateRelationship(userHubRelationship: JoinUserHub, hubId: number, userId: any) {
+    this.logger.log(this.validateRelationship.name);
     if (!userHubRelationship) {
       throw new Error(`Could not find admin relationship to hubId: ${hubId} for userId: ${userId}.`);
     }
   }
 
   async usersPeople(userId: any) {
+    this.logger.log(this.usersPeople.name);
     const userHubRelationships = await this.joinUserHubRepository.find({
       where: {
         userId: userId,
@@ -150,6 +157,7 @@ export class HubService {
   }
 
   async createHub(userId: any, hub: Hub) {
+    this.logger.log(this.createHub.name);
     const imageUrl = await this.fileService.storePublicImageFromBase64(hub.image);
     //TODO save as a transaction
     const result = await this.hubRepository.save(hub);
@@ -164,13 +172,14 @@ export class HubService {
   }
 
   async deleteHub(userId: any, hubId: number) {
+    this.logger.log(this.deleteHub.name);
     const userHubRelationship = await this.joinUserHubRepository.findOne({
       where: {
         userId: userId,
         hubId: hubId
       }
     });
-    
+
     if (!userHubRelationship) {
       throw new Error(`deleteHub did not find a relationship between userId: ${userId} & ${hubId}`);
     }
@@ -189,10 +198,12 @@ export class HubService {
   }
 
   private isNotOwner(userHubRelationship: JoinUserHub) {
+    this.logger.log(this.isNotOwner.name);
     return !userHubRelationship.isOwner;
   }
 
   async editHub(userId: any, hubId: number, name: string, description: string) {
+    this.logger.log(this.editHub.name);
     const joinUserHubResult = await this.joinUserHubRepository.findOne({
       where: {
         userId: userId,
@@ -210,6 +221,7 @@ export class HubService {
   }
 
   async changeHubImage(userId: any, hubId: number, newImage: string) {
+    this.logger.log(this.changeHubImage.name);
     const joinUserHubResult = await this.joinUserHubRepository.findOne({
       where: {
         userId: userId,
@@ -235,6 +247,7 @@ export class HubService {
   }
 
   async joinHub(userId: any, id: any) {
+    this.logger.log(this.joinHub.name);
     let joinUserHub = this.joinUserHubRepository.create({
       userId: userId,
       hubId: id,
@@ -245,6 +258,7 @@ export class HubService {
   }
 
   async setHubStarred(userId: any, hubId: number) {
+    this.logger.log(this.setHubStarred.name);
     const hubRelationship = await this.joinUserHubRepository.findOne({
       userId: userId,
       hubId: hubId,
@@ -255,6 +269,7 @@ export class HubService {
   }
 
   async setHubNotStarred(userId: any, hubId: number) {
+    this.logger.log(this.setHubNotStarred.name);
     const hubRelationship = await this.joinUserHubRepository.findOne({
       userId: userId,
       hubId: hubId,
@@ -265,6 +280,7 @@ export class HubService {
   }
 
   async searchHubByName(userId: any, search: string) {
+    this.logger.log(this.searchHubByName.name);
     const userHubRelationship = await this.joinUserHubRepository.find({
       where: {
         userId: userId,
