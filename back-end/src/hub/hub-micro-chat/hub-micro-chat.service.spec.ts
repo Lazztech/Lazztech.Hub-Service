@@ -11,6 +11,7 @@ import { MicroChat } from 'src/dal/entity/microChat.entity';
 import { NotificationService } from 'src/notification/notification.service';
 import { ConfigModule } from '@nestjs/config';
 import configuration from 'src/config/configuration';
+import { HttpModule } from '@nestjs/common';
 
 describe('HubMicroChatService', () => {
   let service: HubMicroChatService;
@@ -24,6 +25,7 @@ describe('HubMicroChatService', () => {
           load: [configuration],
           isGlobal: true,
         }),
+        HttpModule
       ],
       providers: [
         HubMicroChatService,

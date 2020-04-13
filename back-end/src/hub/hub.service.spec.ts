@@ -11,6 +11,7 @@ import { FileService } from 'src/services/file/file.service';
 import { Repository } from 'typeorm';
 import { NotificationService } from '../notification/notification.service';
 import { HubService } from './hub.service';
+import { HttpModule } from '@nestjs/common';
 
 describe('HubService', () => {
   let hubService: HubService;
@@ -26,6 +27,7 @@ describe('HubService', () => {
           load: [configuration],
           isGlobal: true,
         }),
+        HttpModule
       ],
       providers: [
         HubService,

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, HttpModule } from '@nestjs/common';
 import { NotificationResolver } from './notification.resolver';
 import { NotificationService } from './notification.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -14,6 +14,7 @@ import { InAppNotification } from 'src/dal/entity/inAppNotification.entity';
       InAppNotification,
       JoinUserInAppNotifications, 
       UserDevice]),
+      HttpModule
   ],
   controllers: [],
   providers: [NotificationResolver, NotificationService],

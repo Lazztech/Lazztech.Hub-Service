@@ -1,14 +1,13 @@
 import { Service } from 'typedi';
 import { User } from '../dal/entity/user.entity';
 import { ConfigService } from '@nestjs/config';
-import { Logger } from '@nestjs/common';
+import { Logger, HttpService } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PushNotificationDto } from './dto/pushNotification.dto';
 import { InAppNotificationDto } from './dto/inAppNotification.dto';
 import { InAppNotification } from 'src/dal/entity/inAppNotification.entity';
 import { JoinUserInAppNotifications } from 'src/dal/entity/joinUserInAppNotifications.entity';
-const fetch = require('node-fetch');
 
 @Service()
 export class NotificationService {
@@ -23,6 +22,7 @@ export class NotificationService {
 
   constructor(
     private configService: ConfigService,
+    private httpService: HttpService,
     @InjectRepository(User)
     private userRepository: Repository<User>,
     @InjectRepository(InAppNotification)
@@ -66,18 +66,21 @@ export class NotificationService {
     }
   }
 
-  public async sendPushNotification(notification: PushNotificationDto, to: string) {
-    const result = await fetch(this.sendEndpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'key=' + this.serverKey,
-      },
-      body: JSON.stringify({
-        notification,
-        to
-      }),
-    });
+  private async sendPushNotification(notification: PushNotificationDto, to: string) {
+    const data = {
+      notification,
+      to
+    };
+    const result = await this.httpService.post(
+      this.sendEndpoint, 
+      data,
+      {
+        headers: {
+          Authorization: 'key=' + this.serverKey,
+        },
+      })
+      .toPromise();
+    
     return result;
   }
 }

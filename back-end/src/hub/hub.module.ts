@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, HttpModule } from '@nestjs/common';
 import { HubResolver } from './hub.resolver';
 import { ServicesModule } from 'src/services/services.module';
 import { HubService } from './hub.service';
@@ -30,6 +30,7 @@ import { HubMicroChatService } from './hub-micro-chat/hub-micro-chat.service';
     ]),
     ServicesModule,
     UserModule,
+    HttpModule
   ],
   controllers: [],
   providers: [HubResolver, HubService, NotificationService, UserService, HubActivityService, HubGeofenceService, HubMicroChatService],

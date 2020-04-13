@@ -10,6 +10,7 @@ import { NotificationService } from 'src/notification/notification.service';
 import { ConfigService, ConfigModule } from '@nestjs/config';
 import configuration from 'src/config/configuration';
 import { User } from 'src/dal/entity/user.entity';
+import { HttpModule } from '@nestjs/common';
 
 describe('HubActivityService', () => {
   let service: HubActivityService;
@@ -23,6 +24,7 @@ describe('HubActivityService', () => {
           load: [configuration],
           isGlobal: true,
         }),
+        HttpModule
       ],
       providers: [
         HubActivityService,
