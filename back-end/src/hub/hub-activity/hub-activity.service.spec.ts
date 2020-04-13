@@ -16,6 +16,7 @@ describe('HubActivityService', () => {
   let service: HubActivityService;
   let joinUserHubRepo: Repository<JoinUserHub>;
   let hubRepo: Repository<Hub>;
+  let notificationService: NotificationService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -55,6 +56,7 @@ describe('HubActivityService', () => {
     service = module.get<HubActivityService>(HubActivityService);
     joinUserHubRepo = module.get<Repository<JoinUserHub>>(getRepositoryToken(JoinUserHub));
     hubRepo = module.get<Repository<Hub>>(getRepositoryToken(Hub));
+    notificationService = module.get(NotificationService);
   });
 
   it('should be defined', () => {
@@ -78,10 +80,36 @@ describe('HubActivityService', () => {
       active: true
     } as Hub;
     jest.spyOn(hubRepo, 'save').mockResolvedValueOnce(expectedResult);
+    jest.spyOn(joinUserHubRepo, 'find').mockResolvedValueOnce([
+      {
+        hubId,
+        userId,
+        hub: {
+          name: "HubName",
+          image: "HubImage"
+        }
+      },
+      {
+        hubId,
+        userId: 2,
+        hub: {
+          name: "HubName",
+          image: "HubImage"
+        }
+      },
+    ] as JoinUserHub[]);
+    const sendPushCall = jest.spyOn(notificationService, 'sendPushToUser').mockImplementation(
+      () => Promise.resolve()
+    );
+    const addInAppNotificationCall = jest.spyOn(notificationService, 'addInAppNotificationForUser').mockImplementation(
+      () => Promise.resolve()
+    );
     //Act
     const result = await service.activateHub(userId, hubId);
     //Assert
     expect(result).toEqual(expectedResult);
+    expect(sendPushCall).toHaveBeenCalledTimes(2);
+    expect(addInAppNotificationCall).toHaveBeenCalledTimes(2);
   });
 
   it('should return for deactivateHub', async () => {

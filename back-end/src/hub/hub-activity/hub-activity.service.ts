@@ -7,6 +7,7 @@ import { NotificationService } from 'src/notification/notification.service';
 import { InAppNotification } from 'src/dal/entity/inAppNotification.entity';
 import { JoinUserInAppNotifications } from 'src/dal/entity/joinUserInAppNotifications.entity';
 import { PushNotificationDto } from 'src/notification/dto/pushNotification.dto';
+import { InAppNotificationDto } from 'src/notification/dto/inAppNotification.dto';
 
 @Injectable()
 export class HubActivityService {
@@ -80,37 +81,26 @@ export class HubActivityService {
             relations: ['hub'],
         });
 
-        for (let index = 0; index < hubRelationships.length; index++) {
-            const element = hubRelationships[index];
-            await this.notificationService
-                .sendPushToUser(
-                    element.userId,
-                    {
-                        title: `"${element.hub.name}" hub became active`,
-                        body: `Touch to go to hub.`,
-                        click_action: '',
-
-                    } as PushNotificationDto
-                );
-
-            //TODO change db schema to better support this relationship but normalized.
-            const inAppNotification = this.inAppNotificationRepository.create({
-                thumbnail: element.hub.image,
-                header: `"${element.hub.name}" hub became active`,
-                text: `Touch to go to hub.`,
-                date: Date.now().toString(),
-            });
-            await this.inAppNotificationRepository.save(inAppNotification);
-
-            const joinUserInAppNotification = this.joinUserInAppNotificationsRepository.create(
+        for (const joinUserHub of hubRelationships) {
+            await this.notificationService.sendPushToUser(
+                joinUserHub.userId,
                 {
-                    userId: element.userId,
-                    inAppNotificationId: inAppNotification.id,
-                },
+                    title: `"${joinUserHub.hub.name}" hub became active`,
+                    body: `Touch to go to hub.`,
+                    click_action: '',
+
+                } as PushNotificationDto
             );
-            await this.joinUserInAppNotificationsRepository.save(
-                joinUserInAppNotification,
-            );
+
+            await this.notificationService.addInAppNotificationForUser(
+                joinUserHub.userId,
+                {
+                    thumbnail: joinUserHub.hub.image,
+                    header: `"${joinUserHub.hub.name}" hub became active`,
+                    text: `Touch to go to hub.`,
+                    date: Date.now().toString(),
+                    actionLink: undefined
+                });
         }
     }
 }
