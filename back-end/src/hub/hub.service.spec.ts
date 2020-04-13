@@ -114,93 +114,40 @@ describe('HubService', () => {
     //Arrange
     const userId = 1;
     const otherUsersId = 2;
-    const repoResult = [
+    const thirdUsersId = 3;
+    jest.spyOn(joinUserHubRepo, 'find').mockResolvedValueOnce([
       {
-        userId: 1,
-        hubId: 1,
+        userId,
         hub: {
-          name: "Expected 1",
           usersConnection: [
             {
-              userId: 1,
-              hubId: 1,
-            } as JoinUserHub,
+              userId
+            },
             {
-              userId: 2,
-              hubId: 1,
-            } as JoinUserHub,
+              userId: otherUsersId
+            }
           ]
-        } as Hub,
-      } as JoinUserHub,
+        }
+      },
       {
-        userId: 1,
-        hubId: 2,
+        userId,
         hub: {
-          name: "Expected 2",
           usersConnection: [
             {
-              userId: 1,
-              hubId: 2,
-            } as JoinUserHub,
+              userId
+            },
             {
-              userId: 2,
-              hubId: 2,
-            } as JoinUserHub,
+              userId: thirdUsersId
+            }
           ]
-        } as Hub,
-      } as JoinUserHub,
-      {
-        userId: 1,
-        hubId: 3,
-        hub: {
-          name: "Not Expected",
-          usersConnection: [
-            {
-              userId: 1,
-              hubId: 2,
-            } as JoinUserHub,
-          ]
-        } as Hub,
-      } as JoinUserHub,
-    ];
-
+        }
+      }
+    ] as JoinUserHub[]);
     const expectedResult = [
       {
-        userId: 1,
-        hubId: 1,
-        hub: {
-          name: "Expected 1",
-          usersConnection: [
-            {
-              userId: 1,
-              hubId: 1,
-            } as JoinUserHub,
-            {
-              userId: 2,
-              hubId: 1,
-            } as JoinUserHub,
-          ]
-        } as Hub,
-      } as JoinUserHub,
-      {
-        userId: 1,
-        hubId: 2,
-        hub: {
-          name: "Expected 2",
-          usersConnection: [
-            {
-              userId: 1,
-              hubId: 2,
-            } as JoinUserHub,
-            {
-              userId: 2,
-              hubId: 2,
-            } as JoinUserHub,
-          ]
-        } as Hub,
-      } as JoinUserHub,
-    ]
-    jest.spyOn(joinUserHubRepo, 'find').mockResolvedValueOnce(repoResult);
+        userId: otherUsersId
+      }
+    ] as JoinUserHub[];
     //Act
     const result = await hubService.commonUsersHubs(userId, otherUsersId);
     //Assert

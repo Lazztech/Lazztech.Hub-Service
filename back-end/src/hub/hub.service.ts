@@ -60,14 +60,13 @@ export class HubService {
       ],
     });
 
+    let hubs = userHubRelationships.map(x => x.hub);
     let commonHubRelationships = [];
-
-    for (let index = 0; index < userHubRelationships.length; index++) {
-      const element = userHubRelationships[index];
-      const result = element.hub.usersConnection.find(x => x.userId == otherUsersId);
+    for (const hub of hubs) {
+      const result = hub.usersConnection.find(x => x.userId == otherUsersId);
       if (result) {
         commonHubRelationships.push(
-          element.hub.usersConnection.find(x => x.userId == otherUsersId),
+          hub.usersConnection.find(x => x.userId == otherUsersId),
         );
       }
     }
