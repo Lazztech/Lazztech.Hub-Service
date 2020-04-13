@@ -8,6 +8,7 @@ import { InAppNotification } from 'src/dal/entity/inAppNotification.entity';
 import { JoinUserInAppNotifications } from 'src/dal/entity/joinUserInAppNotifications.entity';
 import { ServicesModule } from 'src/services/services.module';
 import { AuthPasswordResetService } from './auth-password-reset/auth-password-reset.service';
+import { NotificationModule } from 'src/notification/notification.module';
 
 @Module({
     imports: [
@@ -18,6 +19,7 @@ import { AuthPasswordResetService } from './auth-password-reset/auth-password-re
             JoinUserInAppNotifications,
         ]),
         ServicesModule,
+        NotificationModule,
     ],
     providers: [
         AuthResolver,

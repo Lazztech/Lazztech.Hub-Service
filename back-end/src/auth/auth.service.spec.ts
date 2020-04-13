@@ -6,6 +6,7 @@ import { JoinUserInAppNotifications } from 'src/dal/entity/joinUserInAppNotifica
 import { User } from 'src/dal/entity/user.entity';
 import { Repository } from 'typeorm';
 import { AuthService } from './auth.service';
+import { NotificationService } from 'src/notification/notification.service';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -16,6 +17,7 @@ describe('AuthService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AuthService,
+        NotificationService,
         ConfigService,
         {
           provide: getRepositoryToken(User),
@@ -41,6 +43,10 @@ describe('AuthService', () => {
     expect(service).toBeDefined();
   });
 
+  it('should return for register', async () => {
+    //TODO
+  });
+
   it(`should return accessToken for login`, async () => {
     //Arrange
     const password = "Password123";
@@ -60,10 +66,6 @@ describe('AuthService', () => {
 
     //Assert
     expect(result).toEqual(accessTokenResult);
-  });
-
-  it('should return for register', async () => {
-    //TODO
   });
 
   it('should return for changePassword', async () => {

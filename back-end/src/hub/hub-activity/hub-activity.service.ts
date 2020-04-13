@@ -6,7 +6,7 @@ import { Hub } from 'src/dal/entity/hub.entity';
 import { NotificationService } from 'src/notification/notification.service';
 import { InAppNotification } from 'src/dal/entity/inAppNotification.entity';
 import { JoinUserInAppNotifications } from 'src/dal/entity/joinUserInAppNotifications.entity';
-import { Notification } from 'src/notification/dto/notification.dto';
+import { PushNotificationDto } from 'src/notification/dto/pushNotification.dto';
 
 @Injectable()
 export class HubActivityService {
@@ -90,7 +90,7 @@ export class HubActivityService {
                         body: `Touch to go to hub.`,
                         click_action: '',
 
-                    } as Notification
+                    } as PushNotificationDto
                 );
 
             //TODO change db schema to better support this relationship but normalized.

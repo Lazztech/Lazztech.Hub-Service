@@ -4,7 +4,7 @@ import { User } from 'src/dal/entity/user.entity';
 import { Repository } from 'typeorm';
 import { Hub } from 'src/dal/entity/hub.entity';
 import { NotificationService } from 'src/notification/notification.service';
-import { Notification } from 'src/notification/dto/notification.dto';
+import { PushNotificationDto } from 'src/notification/dto/pushNotification.dto';
 import { InAppNotification } from 'src/dal/entity/inAppNotification.entity';
 import { JoinUserInAppNotifications } from 'src/dal/entity/joinUserInAppNotifications.entity';
 import { MicroChat } from 'src/dal/entity/microChat.entity';
@@ -50,7 +50,7 @@ export class HubMicroChatService {
                     title: `${microChat.text}`,
                     body: `From ${fromUser.firstName} to the ${hub.name} hub`,
                     click_action: ''
-                } as Notification
+                } as PushNotificationDto
             );
 
             const inAppNotification = this.inAppNotificationRepository.create({

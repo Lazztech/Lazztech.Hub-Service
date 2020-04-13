@@ -4,7 +4,10 @@ import { ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Notification } from './dto/notification.dto';
+import { PushNotificationDto } from './dto/pushNotification.dto';
+import { InAppNotificationDto } from './dto/inAppNotification.dto';
+import { InAppNotification } from 'src/dal/entity/inAppNotification.entity';
+import { JoinUserInAppNotifications } from 'src/dal/entity/joinUserInAppNotifications.entity';
 const fetch = require('node-fetch');
 
 @Service()
@@ -22,13 +25,27 @@ export class NotificationService {
     private configService: ConfigService,
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    @InjectRepository(InAppNotification)
+    private inAppNotificationRepository: Repository<InAppNotification>,
+    @InjectRepository(JoinUserInAppNotifications)
+    private joinUserInAppNotificationRepository: Repository<JoinUserInAppNotifications>,
   ) {
     this.logger.log('constructor');
   }
 
+  public async addInAppNotificationForUser(userId: number, details: InAppNotificationDto) {
+    const inAppNotification = this.inAppNotificationRepository.create(details);
+    await this.inAppNotificationRepository.save(inAppNotification);
+    const joinUserInAppNotification = this.joinUserInAppNotificationRepository.create({
+      userId: userId,
+      inAppNotificationId: inAppNotification.id,
+    });
+    await this.joinUserInAppNotificationRepository.save(joinUserInAppNotification);
+  }
+
   public async sendPushToUser(
     userId: number,
-    notification: Notification
+    notification: PushNotificationDto
   ) {
     this.logger.log(this.sendPushToUser.name);
 
@@ -43,13 +60,13 @@ export class NotificationService {
 
       this.logger.log(
         `Sent push notification to fcmToken ${
-          iterator
+        iterator
         } : ${JSON.stringify(notification)}`,
       );
     }
   }
 
- async sendPushNotification(notification: Notification, to: string) {
+  public async sendPushNotification(notification: PushNotificationDto, to: string) {
     const result = await fetch(this.sendEndpoint, {
       method: 'POST',
       headers: {
