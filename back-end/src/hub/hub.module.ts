@@ -16,6 +16,7 @@ import { Invite } from 'src/dal/entity/invite.entity';
 import { HubActivityService } from './hub-activity/hub-activity.service';
 import { HubGeofenceService } from './hub-geofence/hub-geofence.service';
 import { HubMicroChatService } from './hub-micro-chat/hub-micro-chat.service';
+import { UserDevice } from 'src/dal/entity/userDevice.entity';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { HubMicroChatService } from './hub-micro-chat/hub-micro-chat.service';
       User,
       InAppNotification,
       Invite,
+      UserDevice,
     ]),
     ServicesModule,
     UserModule,

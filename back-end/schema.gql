@@ -73,6 +73,8 @@ type Mutation {
   changeEmail(newEmail: String!): User!
   changeUserImage(newImage: String!): User!
   addUserFcmNotificationToken(token: String!): Boolean!
+  deleteInAppNotification(inAppNotificationId: Int!): Boolean!
+  deleteAllInAppNotifications: Boolean!
   login(password: String!, email: String!): String
   register(data: UserInput!): String
   logout: Boolean!
