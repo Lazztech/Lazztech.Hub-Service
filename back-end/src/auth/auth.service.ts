@@ -78,7 +78,7 @@ export class AuthService {
 
     public async changePassword(userId: any, details: ChangePassword) {
         const user = await this.userRepository.findOne({ where: { id: userId } });
-
+        //TODO Should it invalidate/blacklist the jwt?
         const valid = await bcrypt.compare(details.oldPassword, user.password);
 
         if (valid) {

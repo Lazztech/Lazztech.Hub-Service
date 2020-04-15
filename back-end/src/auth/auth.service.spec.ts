@@ -96,7 +96,25 @@ describe('AuthService', () => {
   });
 
   it('should return for changePassword', async () => {
-    //TODO
+    //Arrange
+    const password = "Password123";
+    const email = "gianlazzarini@gmail.com";
+    const testUser = {
+      id: 1,
+      email,
+      password: "$2a$12$kYPNrlyLr7z4D.V3dEHFn.kQD2nRC0x7fINzPgfoSW4D4GQhyeGTO",
+    } as User;
+    const newPassword = "NewPassword123";
+    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
+    const saveCall = jest.spyOn(userRepo, 'save').mockResolvedValueOnce({} as User);
+    //Act
+    const result = await service.changePassword(testUser.id, {
+      oldPassword: password,
+      newPassword
+    });
+    //Assert
+    expect(result).toBeTruthy();
+    expect(saveCall).toHaveBeenCalled();
   });
 
   it('should return for deleteAccount', async () => {
