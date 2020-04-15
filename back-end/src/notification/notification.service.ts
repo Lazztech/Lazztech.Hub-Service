@@ -92,6 +92,14 @@ export class NotificationService {
     await this.joinUserInAppNotificationRepository.remove(inAppRelationship);
   }
 
+  async deleteAllInAppNotifications(userId: any) {
+    this.logger.log(this.deleteAllInAppNotifications.name);
+    const inAppRelationships = await this.joinUserInAppNotificationRepository.find({
+      userId
+    });
+    await this.joinUserInAppNotificationRepository.remove(inAppRelationships);
+  }
+
   public async sendPushToUser(
     userId: number,
     notification: PushNotificationDto

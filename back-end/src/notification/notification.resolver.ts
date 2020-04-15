@@ -52,4 +52,14 @@ export class NotificationResolver {
     await this.notificationService.deleteInAppNotification(userId, inAppNotificationId);
     return true;
   }
+
+  @UseGuards(AuthGuard)
+  @Mutation(() => Boolean)
+  public async deleteAllInAppNotifications(
+    @UserId() userId,
+  ) {
+    this.logger.log(this.deleteAllInAppNotifications.name);
+    await this.notificationService.deleteAllInAppNotifications(userId);
+    return true;
+  }
 }

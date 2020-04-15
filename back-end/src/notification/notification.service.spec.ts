@@ -157,6 +157,27 @@ describe('NotificationService', () => {
     expect(removeCall).toHaveBeenCalled();
   });
 
+  it('should resolve for deleteAllInAppNotifications', async () => {
+    //Arrange
+    const userId = 1;
+    jest.spyOn(joinUserInAppNotificationRepo, 'find').mockResolvedValueOnce([
+      {
+      userId,
+      },
+      {
+        userId,
+      },
+      {
+        userId,
+      },
+    ] as JoinUserInAppNotifications[]);
+    const removeCall = jest.spyOn(joinUserInAppNotificationRepo, 'remove').mockResolvedValueOnce({} as JoinUserInAppNotifications);
+    //Act
+    await service.deleteAllInAppNotifications(userId);
+    //Assert
+    expect(removeCall).toHaveBeenCalled();
+  });
+
   it('sendPushToUser should sendPushNotification to each device fcmToken', async () => {
     //Arrange
     const userId = 1;
