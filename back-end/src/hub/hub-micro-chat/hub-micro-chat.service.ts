@@ -9,6 +9,7 @@ import { InAppNotification } from 'src/dal/entity/inAppNotification.entity';
 import { JoinUserInAppNotifications } from 'src/dal/entity/joinUserInAppNotifications.entity';
 import { MicroChat } from 'src/dal/entity/microChat.entity';
 import { JoinUserHub } from 'src/dal/entity/joinUserHub.entity';
+import { InAppNotificationDto } from 'src/notification/dto/inAppNotification.dto';
 
 @Injectable()
 export class HubMicroChatService {
@@ -38,14 +39,12 @@ export class HubMicroChatService {
             where: {
                 id: hubId,
             },
-            relations: ['usersConnection', 'usersConnection.user', 'microChats'],
+            relations: ['usersConnection', 'microChats'],
         });
         const microChat = hub.microChats.find(x => x.id === microChatId);
 
-        const members = await hub.usersConnection;
-        for (let index = 0; index < members.length; index++) {
-            const memberConnection = members[index];
-            await this.notificationService.sendPushToUser(memberConnection.user.id,
+        for (const memberConnection of hub.usersConnection) {
+            await this.notificationService.sendPushToUser(memberConnection.userId,
                 {
                     title: `${microChat.text}`,
                     body: `From ${fromUser.firstName} to the ${hub.name} hub`,
@@ -53,28 +52,12 @@ export class HubMicroChatService {
                 } as PushNotificationDto
             );
 
-            const inAppNotification = this.inAppNotificationRepository.create({
+            await this.notificationService.addInAppNotificationForUser(memberConnection.userId, {
                 thumbnail: fromUser.image,
                 header: `${microChat.text}`,
                 text: `From ${fromUser.firstName} to ${hub.name}`,
                 date: Date.now().toString(),
-            });
-            await this.inAppNotificationRepository.save(inAppNotification);
-
-            const joinUserInAppNotification = this.joinUserInAppNotificationsRepository.create(
-                {
-                    userId: fromUser.id,
-                    inAppNotificationId: inAppNotification.id,
-                },
-            );
-            await this.joinUserInAppNotificationsRepository.save(
-                joinUserInAppNotification,
-            );
-
-            this.logger.log({
-                method: this.microChatToHub.name,
-                params: [fromUser, hub, microChat],
-            });
+            } as InAppNotificationDto);
         }
     }
 

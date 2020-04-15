@@ -16,7 +16,10 @@ import { HttpModule } from '@nestjs/common';
 describe('HubMicroChatService', () => {
   let service: HubMicroChatService;
   let joinUserHubRepo: Repository<JoinUserHub>;
-  let microChatRepo : Repository<MicroChat>;
+  let microChatRepo: Repository<MicroChat>;
+  let userRepo: Repository<User>;
+  let hubRepo: Repository<Hub>;
+  let notificationService: NotificationService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -60,6 +63,9 @@ describe('HubMicroChatService', () => {
     service = module.get<HubMicroChatService>(HubMicroChatService);
     joinUserHubRepo = module.get<Repository<JoinUserHub>>(getRepositoryToken(JoinUserHub));
     microChatRepo = module.get<Repository<MicroChat>>(getRepositoryToken(MicroChat));
+    userRepo = module.get<Repository<User>>(getRepositoryToken(User));
+    hubRepo = module.get<Repository<Hub>>(getRepositoryToken(Hub));
+    notificationService = module.get(NotificationService);
   });
 
   it('should be defined', () => {
@@ -67,12 +73,46 @@ describe('HubMicroChatService', () => {
   });
 
   it('should resolve for microChatToHub', async () => {
-    //TODO
     //Arrange
-
+    const userId = 1;
+    const hubId = 1;
+    const microChatId = 1;
+    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce({
+      id: userId,
+      firstName: "Gian",
+      image: "image.png"
+    } as User);
+    jest.spyOn(hubRepo, 'findOne').mockResolvedValueOnce({
+      id: hubId,
+      name: "TestHubName",
+      usersConnection: [
+        {
+          userId,
+        },
+        {
+          userId: 2,
+        },
+        {
+          userId: 3,
+        }
+      ],
+      microChats: [
+        {
+          id: microChatId
+        }
+      ]
+    } as Hub);
+    const sendPushToUserCall = jest.spyOn(notificationService, 'sendPushToUser').mockImplementation(
+      () => Promise.resolve()
+    );
+    const addInAppNotificationForUserCall = jest.spyOn(notificationService, 'addInAppNotificationForUser').mockImplementation(
+      () => Promise.resolve()
+    );
     //Act
-
+    await service.microChatToHub(userId, hubId, microChatId);
     //Assert
+    expect(sendPushToUserCall).toHaveBeenCalledTimes(3);
+    expect(addInAppNotificationForUserCall).toHaveBeenCalledTimes(3);
   });
 
   it('should return for createMicroChat', async () => {
