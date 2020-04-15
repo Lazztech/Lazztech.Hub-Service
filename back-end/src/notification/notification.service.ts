@@ -12,6 +12,7 @@ import { UserDevice } from 'src/dal/entity/userDevice.entity';
 
 @Service()
 export class NotificationService {
+
   private serverKey: string = this.configService.get<string>(
     'FIREBASE_SERVER_KEY',
   );
@@ -80,6 +81,15 @@ export class NotificationService {
       inAppNotificationId: inAppNotification.id,
     });
     await this.joinUserInAppNotificationRepository.save(joinUserInAppNotification);
+  }
+
+  async deleteInAppNotification(userId: any, inAppNotificationId: number) {
+    this.logger.log(this.deleteInAppNotification.name);
+    const inAppRelationship = await this.joinUserInAppNotificationRepository.findOne({
+      userId,
+      inAppNotificationId
+    });
+    await this.joinUserInAppNotificationRepository.remove(inAppRelationship);
   }
 
   public async sendPushToUser(

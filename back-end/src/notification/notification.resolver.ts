@@ -9,6 +9,7 @@ import { UseGuards, Logger } from '@nestjs/common';
 import { UserId } from 'src/decorators/user.decorator';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Int } from 'type-graphql';
 
 @Resolver()
 export class NotificationResolver {
@@ -18,6 +19,17 @@ export class NotificationResolver {
     private notificationService: NotificationService,
   ) {
     this.logger.log('constructor');
+  }
+
+  @UseGuards(AuthGuard)
+  @Mutation(() => Boolean)
+  public async addUserFcmNotificationToken(
+    @UserId() userId,
+    @Args({ name: 'token', type: () => String }) token: string,
+  ): Promise<boolean> {
+    this.logger.log(this.addUserFcmNotificationToken.name);
+    await this.notificationService.addUserFcmNotificationToken(userId, token);
+    return true;
   }
 
   @UseGuards(AuthGuard)
@@ -32,12 +44,12 @@ export class NotificationResolver {
 
   @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
-  public async addUserFcmNotificationToken(
+  public async deleteInAppNotification(
     @UserId() userId,
-    @Args({ name: 'token', type: () => String }) token: string,
-  ): Promise<boolean> {
-    this.logger.log(this.addUserFcmNotificationToken.name);
-    await this.notificationService.addUserFcmNotificationToken(userId, token);
+    @Args({ name: 'inAppNotificationId', type: () => Int }) inAppNotificationId: number
+  ) {
+    this.logger.log(this.deleteInAppNotification.name);
+    await this.notificationService.deleteInAppNotification(userId, inAppNotificationId);
     return true;
   }
 }
