@@ -56,6 +56,38 @@ describe('NotificationService', () => {
     expect(service).toBeDefined();
   });
 
+  it('should return for getInAppNotifications', async () => {
+    //TODO
+    //Arrange
+    const userId = 1;
+    jest.spyOn(joinUserInAppNotificationRepo, 'find').mockResolvedValueOnce([
+      {
+        userId,
+        inAppNotification: {
+          text: "test"
+        }
+      },
+      {
+        userId,
+        inAppNotification: {
+          text: "test"
+        }
+      }
+    ] as JoinUserInAppNotifications[]);
+    const expectedResult = [
+      {
+        text: "test"
+      },
+      {
+        text: "test"
+      }
+    ] as InAppNotification[];
+    //Act
+    const result = await service.getInAppNotifications(userId);
+    //Assert
+    expect(result).toEqual(expectedResult);
+  });
+
   it('should save for addInAppNotificationForUser', async () => {
     //Arrange
     const userId = 1;

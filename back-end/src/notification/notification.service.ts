@@ -33,6 +33,22 @@ export class NotificationService {
     this.logger.log('constructor');
   }
 
+  public async getInAppNotifications(userId: any) {
+    const joinInAppNotifications = await this.joinUserInAppNotificationRepository.find(
+      {
+        where: { userId: userId },
+        relations: ['inAppNotification'],
+      },
+    );
+
+    const usersNotifications: InAppNotification[] = [];
+    joinInAppNotifications.forEach(element => {
+      usersNotifications.push(element.inAppNotification);
+    });
+
+    return usersNotifications;
+  }
+
   public async addInAppNotificationForUser(userId: number, details: InAppNotificationDto) {
     const inAppNotification = this.inAppNotificationRepository.create(details);
     await this.inAppNotificationRepository.save(inAppNotification);
