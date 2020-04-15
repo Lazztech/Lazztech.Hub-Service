@@ -118,6 +118,19 @@ describe('AuthService', () => {
   });
 
   it('should return for deleteAccount', async () => {
-    //TODO
+    //Arrange
+    const password = "Password123";
+    const testUser = {
+      id: 1,
+      email: "gianlazzarini@gmail.com",
+      password: "$2a$12$kYPNrlyLr7z4D.V3dEHFn.kQD2nRC0x7fINzPgfoSW4D4GQhyeGTO",
+    } as User;
+    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
+    const removeCall = jest.spyOn(userRepo, 'remove').mockResolvedValueOnce({} as User);
+    //Act
+    const result = await service.deleteAccount(testUser.id, testUser.email, password);
+    //Assert
+    expect(result).toBeTruthy();
+    expect(removeCall).toHaveBeenCalled();
   });
 });
