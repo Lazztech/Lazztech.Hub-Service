@@ -11,6 +11,7 @@ import { JoinUserInAppNotifications } from 'src/dal/entity/joinUserInAppNotifica
 import { HttpService, HttpModule } from '@nestjs/common';
 import { of } from 'rxjs';
 import configuration from 'src/config/configuration';
+import { UserDevice } from 'src/dal/entity/userDevice.entity';
 
 describe('NotificationService', () => {
   let service: NotificationService;
@@ -18,6 +19,7 @@ describe('NotificationService', () => {
   let inAppNotificationRepo: Repository<InAppNotification>;
   let joinUserInAppNotificationRepo: Repository<JoinUserInAppNotifications>;
   let httpService: HttpService;
+  let userDeviceRepo: Repository<UserDevice>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -42,6 +44,10 @@ describe('NotificationService', () => {
           provide: getRepositoryToken(JoinUserInAppNotifications),
           useClass: Repository,
         },
+        {
+          provide: getRepositoryToken(UserDevice),
+          useClass: Repository,
+        },
       ],
     }).compile();
 
@@ -50,10 +56,30 @@ describe('NotificationService', () => {
     inAppNotificationRepo = module.get<Repository<InAppNotification>>(getRepositoryToken(InAppNotification));
     joinUserInAppNotificationRepo = module.get<Repository<JoinUserInAppNotifications>>(getRepositoryToken(JoinUserInAppNotifications));
     httpService = module.get(HttpService);
+    userDeviceRepo = module.get<Repository<UserDevice>>(getRepositoryToken(UserDevice));
   });
 
   it('should be defined', () => {
     expect(service).toBeDefined();
+  });
+
+  it('should resolve for addUserFcmNotificationToken', async () => {
+    //Arrange
+    const userId = 1;
+    const token = "asdfasdf";
+    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce({
+      id: userId,
+      userDevices: [
+        {
+          fcmPushUserToken: "otherToken"
+        }
+      ]
+    } as User);
+    const saveCall = jest.spyOn(userDeviceRepo, 'save').mockResolvedValueOnce({} as UserDevice);
+    //Act
+    await service.addUserFcmNotificationToken(userId, token);
+    //Assert
+    expect(saveCall).toHaveBeenCalled();
   });
 
   it('should return for getInAppNotifications', async () => {

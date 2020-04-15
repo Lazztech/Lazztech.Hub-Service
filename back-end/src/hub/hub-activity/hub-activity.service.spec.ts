@@ -11,6 +11,7 @@ import { ConfigService, ConfigModule } from '@nestjs/config';
 import configuration from 'src/config/configuration';
 import { User } from 'src/dal/entity/user.entity';
 import { HttpModule } from '@nestjs/common';
+import { UserDevice } from 'src/dal/entity/userDevice.entity';
 
 describe('HubActivityService', () => {
   let service: HubActivityService;
@@ -48,6 +49,10 @@ describe('HubActivityService', () => {
         },
         {
           provide: getRepositoryToken(JoinUserInAppNotifications),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(UserDevice),
           useClass: Repository,
         },
       ],

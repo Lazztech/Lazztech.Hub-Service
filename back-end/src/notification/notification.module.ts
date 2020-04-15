@@ -13,7 +13,8 @@ import { InAppNotification } from 'src/dal/entity/inAppNotification.entity';
       User,
       InAppNotification,
       JoinUserInAppNotifications, 
-      UserDevice]),
+      UserDevice
+    ]),
       HttpModule
   ],
   controllers: [],

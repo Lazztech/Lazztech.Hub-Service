@@ -8,6 +8,7 @@ import { PushNotificationDto } from './dto/pushNotification.dto';
 import { InAppNotificationDto } from './dto/inAppNotification.dto';
 import { InAppNotification } from 'src/dal/entity/inAppNotification.entity';
 import { JoinUserInAppNotifications } from 'src/dal/entity/joinUserInAppNotifications.entity';
+import { UserDevice } from 'src/dal/entity/userDevice.entity';
 
 @Service()
 export class NotificationService {
@@ -29,11 +30,32 @@ export class NotificationService {
     private inAppNotificationRepository: Repository<InAppNotification>,
     @InjectRepository(JoinUserInAppNotifications)
     private joinUserInAppNotificationRepository: Repository<JoinUserInAppNotifications>,
+    @InjectRepository(UserDevice)
+    private userDeviceRepository: Repository<UserDevice>,
   ) {
     this.logger.log('constructor');
   }
 
+  public async addUserFcmNotificationToken(userId: any, token: string) {
+    this.logger.log(this.addUserFcmNotificationToken.name);
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['userDevices'],
+    });
+
+    if (!user.userDevices.find(x => x.fcmPushUserToken == token)) {
+      const userDevice = new UserDevice();
+      userDevice.userId = user.id;
+      userDevice.fcmPushUserToken = token;
+      const result = await this.userDeviceRepository.save(userDevice);
+      //TODO notify via email that a new device has been used on the account for security.
+    } else {
+      this.logger.warn('User device token already stored.');
+    }
+  }
+
   public async getInAppNotifications(userId: any) {
+    this.logger.log(this.getInAppNotifications.name);
     const joinInAppNotifications = await this.joinUserInAppNotificationRepository.find(
       {
         where: { userId: userId },
@@ -50,6 +72,7 @@ export class NotificationService {
   }
 
   public async addInAppNotificationForUser(userId: number, details: InAppNotificationDto) {
+    this.logger.log(this.addInAppNotificationForUser.name);
     const inAppNotification = this.inAppNotificationRepository.create(details);
     await this.inAppNotificationRepository.save(inAppNotification);
     const joinUserInAppNotification = this.joinUserInAppNotificationRepository.create({
@@ -83,6 +106,7 @@ export class NotificationService {
   }
 
   private async sendPushNotification(notification: PushNotificationDto, to: string) {
+    this.logger.log(this.sendPushNotification.name);
     const data = {
       notification,
       to

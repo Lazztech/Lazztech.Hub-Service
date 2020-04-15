@@ -12,6 +12,7 @@ import { Repository } from 'typeorm';
 import { NotificationService } from '../notification/notification.service';
 import { HubService } from './hub.service';
 import { HttpModule } from '@nestjs/common';
+import { UserDevice } from 'src/dal/entity/userDevice.entity';
 
 describe('HubService', () => {
   let hubService: HubService;
@@ -51,6 +52,10 @@ describe('HubService', () => {
         },
         {
           provide: getRepositoryToken(JoinUserInAppNotifications),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(UserDevice),
           useClass: Repository,
         },
       ],

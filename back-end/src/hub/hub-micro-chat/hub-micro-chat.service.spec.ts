@@ -12,6 +12,7 @@ import { NotificationService } from 'src/notification/notification.service';
 import { ConfigModule } from '@nestjs/config';
 import configuration from 'src/config/configuration';
 import { HttpModule } from '@nestjs/common';
+import { UserDevice } from 'src/dal/entity/userDevice.entity';
 
 describe('HubMicroChatService', () => {
   let service: HubMicroChatService;
@@ -55,6 +56,10 @@ describe('HubMicroChatService', () => {
         },
         {
           provide: getRepositoryToken(MicroChat),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(UserDevice),
           useClass: Repository,
         },
       ],

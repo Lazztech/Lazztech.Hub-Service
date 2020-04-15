@@ -9,6 +9,7 @@ import { AuthService } from './auth.service';
 import { NotificationService } from 'src/notification/notification.service';
 import { HttpModule } from '@nestjs/common';
 import configuration from 'src/config/configuration';
+import { UserDevice } from 'src/dal/entity/userDevice.entity';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -39,6 +40,10 @@ describe('AuthService', () => {
         },
         {
           provide: getRepositoryToken(JoinUserInAppNotifications),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(UserDevice),
           useClass: Repository,
         },
       ],
