@@ -48,6 +48,7 @@ export class NotificationsPage implements OnInit {
     const result = confirm("Delete all notifications?");
     if (result) {
       await this.notificationsService.deleteAllInAppNotifications();
+      this.inAppNotifications = [];
     }
   }
 

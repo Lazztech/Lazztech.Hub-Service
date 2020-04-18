@@ -39,8 +39,9 @@
                   {{notification.text}}
                 </p>
                 <p>
-                  <!-- {{notification.date | date:'yyyy-MM-dd hh:mm:ss'}} -->
+                  {{ ((notification.date / 1000) | amFromUnix) | amLocal | amDateFormat:'LL'}} | {{ ((notification.date / 1000) | amFromUnix) | amLocal | amTimeAgo}}
                 </p>
+
               </ion-label>
             </ion-item>
         
