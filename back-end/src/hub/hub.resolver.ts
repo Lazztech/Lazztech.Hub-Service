@@ -233,7 +233,7 @@ export class HubResolver {
   }
 
   @UseGuards(AuthGuard)
-  @Mutation(() => MicroChat)
+  @Mutation(() => Boolean)
   public async microChatToHub(
     @UserId() userId,
     @Args({ name: 'hubId', type: () => Int }) hubId: number,

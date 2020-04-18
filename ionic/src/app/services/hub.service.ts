@@ -408,14 +408,12 @@ export class HubService {
     const result = await this.apollo.mutate({
       mutation: gql`
       mutation {
-        microChatToHub(hubId: ${hubId}, microChatId: ${microChatId}) {
-          id
-          text
-        }
+        microChatToHub(hubId: ${hubId}, microChatId: ${microChatId})
       }
       `
     }).toPromise();
-    return result;
+    const response = (result as any).data.setHubStarred;
+    return response;
   }
 
   async createMicroChat(hubId: number, microChatText: string) {
