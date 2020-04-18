@@ -93,6 +93,40 @@ export class NotificationsService {
     return result.data['getInAppNotifications'];
   }
 
+  async deleteInAppNotification(inAppNotificationId: number) {
+    const result = await this.apollo.mutate({
+      mutation: gql`
+        mutation {
+          deleteInAppNotification(inAppNotificationId: ${inAppNotificationId})
+        }
+      `
+    }).toPromise();
+
+    if ((result as any).data.deleteInAppNotification) {
+      console.log("deleteInAppNotification successful.");
+      return true;
+    } else {
+      console.error("deleteInAppNotification failed!");
+      return false;
+    }
+  }
+
+  async deleteAllInAppNotifications() {
+    const result = await this.apollo.mutate({
+      mutation: gql`
+        mutation {
+          deleteAllInAppNotifications
+        }
+      `
+    }).toPromise();
+
+    if ((result as any).data.deleteAllInAppNotifications) {
+      console.log("deleteAllInAppNotifications successful.");
+    } else {
+      console.error("deleteAllInAppNotifications failed!");
+    }
+  }
+
   async testPushNotificationToUser() {
     const me = await this.authService.user();
     const result = await this.apollo.query({

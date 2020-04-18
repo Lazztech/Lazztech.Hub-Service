@@ -35,6 +35,7 @@ export class NotificationsPage implements OnInit {
     try {
       this.loading = true;
       this.inAppNotifications = await this.notificationsService.getInAppNotifications("network-only");
+      this.loading = false;
       event.target.complete();
     } catch (error) {
       event.target.complete();
@@ -46,7 +47,15 @@ export class NotificationsPage implements OnInit {
   async deleteNotifications() {
     const result = confirm("Delete all notifications?");
     if (result) {
-      
+      await this.notificationsService.deleteAllInAppNotifications();
+    }
+  }
+
+  async deleteNotification(id: any) {
+    const result = await this.notificationsService.deleteInAppNotification(id);
+    if (result) {
+      const notification = this.inAppNotifications.find(x => x.id == id);
+      this.inAppNotifications.splice(this.inAppNotifications.indexOf(notification));
     }
   }
 }

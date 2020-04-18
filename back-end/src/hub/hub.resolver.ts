@@ -240,8 +240,8 @@ export class HubResolver {
     @Args({ name: 'microChatId', type: () => Int }) microChatId: number,
   ) {
     this.logger.log(this.microChatToHub.name);
-    const microChat = await this.hubMicroChatService.microChatToHub(userId, hubId, microChatId);
-    return microChat;
+    await this.hubMicroChatService.microChatToHub(userId, hubId, microChatId);
+    return true;
   }
 
   @UseGuards(AuthGuard)
