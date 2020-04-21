@@ -1,15 +1,10 @@
-import { InAppNotification } from '../dal/entity/inAppNotification.entity';
-import { JoinUserInAppNotifications } from '../dal/entity/joinUserInAppNotifications.entity';
-import { User } from '../dal/entity/user.entity';
-import { UserDevice } from '../dal/entity/userDevice.entity';
-import { NotificationService } from './notification.service';
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
-import { AuthGuard } from 'src/guards/authguard.service';
-import { UseGuards, Logger } from '@nestjs/common';
+import { Logger, UseGuards } from '@nestjs/common';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserId } from 'src/decorators/user.decorator';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { AuthGuard } from 'src/guards/authguard.service';
 import { Int } from 'type-graphql';
+import { InAppNotification } from '../dal/entity/inAppNotification.entity';
+import { NotificationService } from './notification.service';
 
 @Resolver()
 export class NotificationResolver {

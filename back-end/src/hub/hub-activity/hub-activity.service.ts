@@ -1,13 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { JoinUserHub } from 'src/dal/entity/joinUserHub.entity';
-import { Repository } from 'typeorm';
 import { Hub } from 'src/dal/entity/hub.entity';
-import { NotificationService } from 'src/notification/notification.service';
 import { InAppNotification } from 'src/dal/entity/inAppNotification.entity';
+import { JoinUserHub } from 'src/dal/entity/joinUserHub.entity';
 import { JoinUserInAppNotifications } from 'src/dal/entity/joinUserInAppNotifications.entity';
 import { PushNotificationDto } from 'src/notification/dto/pushNotification.dto';
-import { InAppNotificationDto } from 'src/notification/dto/inAppNotification.dto';
+import { NotificationService } from 'src/notification/notification.service';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class HubActivityService {
@@ -28,6 +27,7 @@ export class HubActivityService {
     }
 
     async activateHub(userId: any, hubId: number) {
+        this.logger.log(this.activateHub.name);
         let hubRelationship = await this.joinUserHubRepository.findOne({
             where: {
                 userId,
@@ -51,6 +51,7 @@ export class HubActivityService {
     }
 
     async deactivateHub(userId: any, hubId: number) {
+        this.logger.log(this.deactivateHub.name);
         let hubRelationship = await this.joinUserHubRepository.findOne({
             where: {
                 userId,

@@ -23,6 +23,7 @@ export class AuthService {
     ) { }
 
     async register(firstName: string, lastName: string, email: string, password: string) {
+        this.logger.log(this.register.name);
         const existingUser = await this.userRepository.findOne({
             where: { email },
         });
@@ -54,6 +55,7 @@ export class AuthService {
     }
 
     public async login(password: string, email: string) {
+        this.logger.log(this.login);
         const user = await this.userRepository.findOne({ where: { email } });
 
         if (!user) {
@@ -77,6 +79,7 @@ export class AuthService {
     }
 
     public async changePassword(userId: any, details: ChangePassword) {
+        this.logger.log(this.changePassword.name);
         const user = await this.userRepository.findOne({ where: { id: userId } });
         //TODO Should it invalidate/blacklist the jwt?
         const valid = await bcrypt.compare(details.oldPassword, user.password);
@@ -93,6 +96,7 @@ export class AuthService {
     }
 
     public async deleteAccount(userId: number, email: string, password: string) {
+        this.logger.log(this.deleteAccount.name);
         const user = await this.userRepository.findOne({ where: { id: userId } });
 
         const valid = await bcrypt.compare(password, user.password);

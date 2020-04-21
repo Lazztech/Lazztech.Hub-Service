@@ -1,7 +1,7 @@
+import { BlobServiceClient } from '@azure/storage-blob';
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { isNullOrUndefined } from 'util';
-import { BlobServiceClient, PublicAccessType } from '@azure/storage-blob';
 import * as uuidv1 from 'uuid/v1';
 
 @Injectable()
@@ -45,6 +45,7 @@ export class FileService {
   }
 
   private async ensureContainerExists(containerClient) {
+    this.logger.log(this.ensureContainerExists.name);
     const exists = await containerClient.exists();
     if (!exists) {
       await this.createContainer(containerClient);
@@ -52,6 +53,7 @@ export class FileService {
   }
 
   private async createContainer(containerClient) {
+    this.logger.log(this.createContainer.name);
     const createContainerResponse = await containerClient.create();
     const x = await containerClient.getAccessPolicy();
     await containerClient.setAccessPolicy('container');
@@ -76,6 +78,7 @@ export class FileService {
   }
   
   async getPublicContainerClient(blobServiceClient: BlobServiceClient) {
+    this.logger.log(this.getPublicContainerClient.name);
     const containerClient = await blobServiceClient.getContainerClient(
       this.containerName,
     );
@@ -83,6 +86,7 @@ export class FileService {
   }
 
   getStorageConnectionString() {
+    this.logger.log(this.getStorageConnectionString.name);
     this.logger.log(this.getStorageConnectionString.name);
     const storageString = this.configService.get<string>('AzureWebJobsStorage');
     if (isNullOrUndefined(storageString) || storageString === '') {

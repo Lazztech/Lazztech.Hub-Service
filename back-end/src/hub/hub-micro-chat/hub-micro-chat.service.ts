@@ -1,15 +1,13 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/dal/entity/user.entity';
-import { Repository } from 'typeorm';
 import { Hub } from 'src/dal/entity/hub.entity';
-import { NotificationService } from 'src/notification/notification.service';
-import { PushNotificationDto } from 'src/notification/dto/pushNotification.dto';
-import { InAppNotification } from 'src/dal/entity/inAppNotification.entity';
-import { JoinUserInAppNotifications } from 'src/dal/entity/joinUserInAppNotifications.entity';
-import { MicroChat } from 'src/dal/entity/microChat.entity';
 import { JoinUserHub } from 'src/dal/entity/joinUserHub.entity';
+import { MicroChat } from 'src/dal/entity/microChat.entity';
+import { User } from 'src/dal/entity/user.entity';
 import { InAppNotificationDto } from 'src/notification/dto/inAppNotification.dto';
+import { PushNotificationDto } from 'src/notification/dto/pushNotification.dto';
+import { NotificationService } from 'src/notification/notification.service';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class HubMicroChatService {
@@ -21,10 +19,6 @@ export class HubMicroChatService {
         private userRepository: Repository<User>,
         @InjectRepository(Hub)
         private hubRepository: Repository<Hub>,
-        @InjectRepository(InAppNotification)
-        private inAppNotificationRepository: Repository<InAppNotification>,
-        @InjectRepository(JoinUserInAppNotifications)
-        private joinUserInAppNotificationsRepository: Repository<JoinUserInAppNotifications>,
         @InjectRepository(JoinUserHub)
         private joinUserHubRepository: Repository<JoinUserHub>,
         @InjectRepository(MicroChat)
@@ -62,6 +56,7 @@ export class HubMicroChatService {
     }
 
     async createMicroChat(userId: any, hubId: number, microChatText: string) {
+        this.logger.log(this.createMicroChat.name);
         const usersConnection = await this.joinUserHubRepository.findOne({
             where: {
                 userId,
@@ -87,28 +82,29 @@ export class HubMicroChatService {
         return microChat;
     }
 
-    async deleteMicroChat(userId: number, hubId: number, microChatId: number,) {
+    async deleteMicroChat(userId: number, hubId: number, microChatId: number, ) {
+        this.logger.log(this.deleteMicroChat.name);
         const usersConnection = await this.joinUserHubRepository.findOne({
             where: {
-              userId,
-              hubId,
+                userId,
+                hubId,
             },
             relations: ['user', 'hub', 'hub.microChats'],
-          });
-      
-          if (!usersConnection) {
+        });
+
+        if (!usersConnection) {
             this.logger.error(
-              'No valid relationship found between user and hub for that action.',
+                'No valid relationship found between user and hub for that action.',
             );
-          }
-      
-          const microChat = usersConnection.hub.microChats.find(
+        }
+
+        const microChat = usersConnection.hub.microChats.find(
             x => x.id == microChatId,
-          );
-          await this.microChatRepository.remove(microChat);
-      
-          this.logger.log(
+        );
+        await this.microChatRepository.remove(microChat);
+
+        this.logger.log(
             `deleteMicroChat(userId: ${userId}, hubId: ${hubId}, microChatId ${microChatId}) completed successfully.`,
-          );
+        );
     }
 }
