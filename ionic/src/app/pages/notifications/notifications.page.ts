@@ -22,19 +22,22 @@ export class NotificationsPage implements OnInit {
 
   async ionViewDidEnter() {
     this.loading = true;
-    this.inAppNotifications = await this.notificationsService.getInAppNotifications();
+    this.inAppNotifications = this.sortNotifications(await this.notificationsService.getInAppNotifications());
     this.loading = false;
   }
 
-  async loadNotifications() {
-
+  sortNotifications(notifications: InAppNotification[]) {
+    const sorted = notifications.sort((x, y) => {
+      return parseInt(y.date) - parseInt(x.date);
+    });
+    return sorted;
   }
 
   async doRefresh(event) {
     console.log('Begin async operation');
     try {
       this.loading = true;
-      this.inAppNotifications = await this.notificationsService.getInAppNotifications("network-only");
+      this.inAppNotifications = this.sortNotifications(await this.notificationsService.getInAppNotifications("network-only"));
       this.loading = false;
       event.target.complete();
     } catch (error) {
