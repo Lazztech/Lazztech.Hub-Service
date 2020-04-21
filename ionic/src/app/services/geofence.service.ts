@@ -75,12 +75,12 @@ export class GeofenceService {
   }
 
   async configureBackgroundGeolocation() {
-    BackgroundGeolocation.onGeofence(geofence => {
+    BackgroundGeolocation.onGeofence(async geofence => {
         console.log("[geofence] ", geofence.identifier, geofence.action);
         const hub = JSON.parse(geofence.identifier);
 
         if (geofence.action == "ENTER") {
-          this.hubService.enteredHubGeofence(hub.id).catch(err => {
+          await this.hubService.enteredHubGeofence(hub.id).catch(err => {
             LocalNotifications.schedule({
               notifications: [
                 {
@@ -114,7 +114,7 @@ export class GeofenceService {
         }
 
         if (geofence.action == "EXIT") {
-          this.hubService.exitedHubGeofence(hub.id).catch(err => {
+          await this.hubService.exitedHubGeofence(hub.id).catch(err => {
             LocalNotifications.schedule({
               notifications: [
                 {
