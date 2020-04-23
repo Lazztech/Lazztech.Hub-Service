@@ -308,7 +308,10 @@ export class HubService {
     const result = await this.apollo.mutate({
       mutation: gql`
       mutation {
-        changeHubImage(hubId: ${id}, newImage: "${image}")
+        changeHubImage(hubId: ${id}, newImage: "${image}") {
+          id
+          image
+        }
       }
       `
     }).toPromise();
