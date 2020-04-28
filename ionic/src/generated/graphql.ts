@@ -305,6 +305,19 @@ export type LoginMutation = (
   & Pick<Mutation, 'login'>
 );
 
+export type RegisterMutationVariables = {
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  email: Scalars['String'];
+  password: Scalars['String'];
+};
+
+
+export type RegisterMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'register'>
+);
+
 export const LoginDocument = gql`
     mutation login($password: String!, $email: String!) {
   login(password: $password, email: $email)
@@ -316,5 +329,18 @@ export const LoginDocument = gql`
   })
   export class LoginGQL extends Apollo.Mutation<LoginMutation, LoginMutationVariables> {
     document = LoginDocument;
+    
+  }
+export const RegisterDocument = gql`
+    mutation register($firstName: String!, $lastName: String!, $email: String!, $password: String!) {
+  register(data: {firstName: $firstName, lastName: $lastName, email: $email, password: $password})
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class RegisterGQL extends Apollo.Mutation<RegisterMutation, RegisterMutationVariables> {
+    document = RegisterDocument;
     
   }

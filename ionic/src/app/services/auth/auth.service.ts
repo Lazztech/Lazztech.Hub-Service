@@ -3,7 +3,10 @@ import { Storage } from '@ionic/storage';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { User } from '../../models/user';
-import { LoginGQL } from 'src/generated/graphql';
+import { 
+  LoginGQL,
+  RegisterGQL
+ } from 'src/generated/graphql';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +18,8 @@ export class AuthService {
   constructor(
     private apollo: Apollo,
     private storage: Storage,
-    private loginService: LoginGQL
+    private loginService: LoginGQL,
+    private registerService: RegisterGQL
   ) { }
 
   async login(email: string, password: string): Promise<boolean> {
@@ -45,17 +49,11 @@ export class AuthService {
   }
 
   async register(firstName: string, lastName: string, email: string, password: string): Promise<boolean> {
-    const result = await this.apollo.mutate({
-      mutation: gql`
-        mutation {
-          register(data: {
-            firstName: "${firstName}",
-            lastName: "${lastName}",
-            email: "${email}",
-            password: "${password}"
-          })
-        }
-      `
+    const result = await this.registerService.mutate({
+      firstName,
+      lastName,
+      email,
+      password
     }).toPromise();
 
     console.log(result);
