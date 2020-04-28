@@ -1,6 +1,7 @@
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { FileService } from './file.service';
+import { ImageFileService } from './image-file/image-file.service';
 
 describe('FileService', () => {
   let service: FileService;
@@ -9,6 +10,7 @@ describe('FileService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ConfigService,
+        ImageFileService,
         FileService
       ],
     }).compile();

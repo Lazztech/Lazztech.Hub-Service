@@ -13,6 +13,7 @@ import { NotificationService } from '../notification/notification.service';
 import { HubService } from './hub.service';
 import { HttpModule } from '@nestjs/common';
 import { UserDevice } from 'src/dal/entity/userDevice.entity';
+import { ImageFileService } from 'src/services/file/image-file/image-file.service';
 
 describe('HubService', () => {
   let hubService: HubService;
@@ -33,6 +34,7 @@ describe('HubService', () => {
       providers: [
         HubService,
         NotificationService,
+        ImageFileService,
         FileService,
         {
           provide: getRepositoryToken(User),

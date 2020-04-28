@@ -11,6 +11,7 @@ import { Invite } from 'src/dal/entity/invite.entity';
 import { ConfigService } from '@nestjs/config';
 import { PasswordReset } from 'src/dal/entity/passwordReset.entity';
 import { EditUserDetails } from './dto/editUserDetails.input';
+import { ImageFileService } from 'src/services/file/image-file/image-file.service';
 
 describe('UserService', () => {
   let service: UserService;
@@ -24,6 +25,7 @@ describe('UserService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         UserService,
+        ImageFileService,
         FileService,
         EmailService,
         ConfigService,
