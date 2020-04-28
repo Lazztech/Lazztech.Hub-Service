@@ -305,6 +305,17 @@ export type LoginMutation = (
   & Pick<Mutation, 'login'>
 );
 
+export type MeQueryVariables = {};
+
+
+export type MeQuery = (
+  { __typename?: 'Query' }
+  & { me?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'firstName' | 'lastName' | 'description' | 'image' | 'email'>
+  )> }
+);
+
 export type RegisterMutationVariables = {
   firstName: Scalars['String'];
   lastName: Scalars['String'];
@@ -351,6 +362,26 @@ export const LoginDocument = gql`
   })
   export class LoginGQL extends Apollo.Mutation<LoginMutation, LoginMutationVariables> {
     document = LoginDocument;
+    
+  }
+export const MeDocument = gql`
+    query me {
+  me {
+    id
+    firstName
+    lastName
+    description
+    image
+    email
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class MeGQL extends Apollo.Query<MeQuery, MeQueryVariables> {
+    document = MeDocument;
     
   }
 export const RegisterDocument = gql`

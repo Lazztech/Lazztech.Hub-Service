@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
-import { User } from '../../models/user';
 import { 
   LoginGQL,
   RegisterGQL,
   SendPasswordResetEmailGQL,
-  ResetPasswordGQL
+  ResetPasswordGQL,
+  MeGQL,
+  User,
  } from 'src/generated/graphql';
 
 @Injectable({
@@ -23,7 +24,8 @@ export class AuthService {
     private loginService: LoginGQL,
     private registerService: RegisterGQL,
     private sendPasswordResetEmailService: SendPasswordResetEmailGQL,
-    private resetPasswordService: ResetPasswordGQL
+    private resetPasswordService: ResetPasswordGQL,
+    private meService: MeGQL
   ) { }
 
   async login(email: string, password: string): Promise<boolean> {
@@ -85,25 +87,10 @@ export class AuthService {
     return result.data.resetPassword;
   }
 
-  async user(): Promise<User> {
-    const result = await this.apollo.query({
-      query: gql`
-      query {
-        me { 
-          id
-          firstName
-          lastName
-          description
-          image
-          email
-        }
-      }
-      `
-    }).toPromise();
-
+  async user(): Promise<User> {    
+    const result = await this.meService.fetch().toPromise();
     console.log(result);
-
-    return result.data['me'];
+    return result.data.me;
   }
 
   async verifyAccountExists(): Promise<boolean> {

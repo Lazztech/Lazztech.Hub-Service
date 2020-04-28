@@ -2,8 +2,8 @@ import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChi
 import { Plugins } from '@capacitor/core';
 import { MenuController, NavController, Platform } from '@ionic/angular';
 import { Subscription } from 'rxjs';
+import { User } from 'src/generated/graphql';
 import { GoogleMapComponent } from '../components/google-map/google-map.component';
-import { User } from '../models/user';
 import { AuthService } from '../services/auth/auth.service';
 import { HubService } from '../services/hub.service';
 import { LocationService } from '../services/location.service';

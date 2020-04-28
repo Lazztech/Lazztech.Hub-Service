@@ -1,18 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { User } from '../../models/user';
-import { MenuController, ModalController, NavController, ActionSheetController, IonContent } from '@ionic/angular';
-import { AuthService } from '../../services/auth/auth.service';
-import { UpdateService } from 'src/app/services/update.service';
+import { Component, OnInit } from '@angular/core';
+import { ActionSheetController, MenuController, NavController } from '@ionic/angular';
 import { AlertService } from 'src/app/services/alert.service';
-import { Storage } from '@ionic/storage';
-import { ProfileService } from 'src/app/services/profile.service';
-import { ChangeNamePage } from './settings/change-name/change-name.page';
-import { ChangeEmailPage } from './settings/change-email/change-email.page';
-import { ChangePasswordPage } from './settings/change-password/change-password.page';
-import { DeleteAccountPage } from './settings/delete-account/delete-account.page';
-import { ThemeService } from 'src/app/services/theme.service';
 import { CameraService } from 'src/app/services/camera.service';
 import { HubService } from 'src/app/services/hub.service';
+import { ProfileService } from 'src/app/services/profile.service';
+import { ThemeService } from 'src/app/services/theme.service';
+import { User } from 'src/generated/graphql';
+import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
   selector: 'app-profile',
