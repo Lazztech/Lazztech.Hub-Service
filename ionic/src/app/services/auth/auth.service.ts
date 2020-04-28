@@ -6,7 +6,8 @@ import { User } from '../../models/user';
 import { 
   LoginGQL,
   RegisterGQL,
-  SendPasswordResetEmailGQL
+  SendPasswordResetEmailGQL,
+  ResetPasswordGQL
  } from 'src/generated/graphql';
 
 @Injectable({
@@ -21,7 +22,8 @@ export class AuthService {
     private storage: Storage,
     private loginService: LoginGQL,
     private registerService: RegisterGQL,
-    private sendPasswordResetEmailService: SendPasswordResetEmailGQL
+    private sendPasswordResetEmailService: SendPasswordResetEmailGQL,
+    private resetPasswordService: ResetPasswordGQL
   ) { }
 
   async login(email: string, password: string): Promise<boolean> {
@@ -73,20 +75,14 @@ export class AuthService {
   }
 
   async resetPassword(email: string, newPassword: string, resetPin: string): Promise<boolean> {
-    const result = await this.apollo.mutate({
-      mutation: gql`
-        mutation {
-          resetPassword(
-            usersEmail: "${email}",
-            newPassword: "${newPassword}",
-            resetPin: "${resetPin}"
-          )
-        }
-      `
+    const result = await this.resetPasswordService.mutate({
+      email,
+      newPassword,
+      resetPin
     }).toPromise();
 
     console.log(result);
-    return (result as any).data.resetPassword;
+    return result.data.resetPassword;
   }
 
   async user(): Promise<User> {
