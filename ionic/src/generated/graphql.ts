@@ -318,6 +318,16 @@ export type RegisterMutation = (
   & Pick<Mutation, 'register'>
 );
 
+export type SendPasswordResetEmailMutationVariables = {
+  email: Scalars['String'];
+};
+
+
+export type SendPasswordResetEmailMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'sendPasswordResetEmail'>
+);
+
 export const LoginDocument = gql`
     mutation login($password: String!, $email: String!) {
   login(password: $password, email: $email)
@@ -342,5 +352,18 @@ export const RegisterDocument = gql`
   })
   export class RegisterGQL extends Apollo.Mutation<RegisterMutation, RegisterMutationVariables> {
     document = RegisterDocument;
+    
+  }
+export const SendPasswordResetEmailDocument = gql`
+    mutation sendPasswordResetEmail($email: String!) {
+  sendPasswordResetEmail(email: $email)
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class SendPasswordResetEmailGQL extends Apollo.Mutation<SendPasswordResetEmailMutation, SendPasswordResetEmailMutationVariables> {
+    document = SendPasswordResetEmailDocument;
     
   }
