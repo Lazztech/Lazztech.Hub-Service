@@ -1,8 +1,6 @@
 overwrite: true
 schema: "../back-end/schema.gql"
-# documents: "src/**/*.{ts,tsx}"
-# config:
-#   gqlImport: graphql.macro#gql
+documents: "src/app/**/*.graphql"
 generates:
   src/generated/graphql.ts:
     plugins:

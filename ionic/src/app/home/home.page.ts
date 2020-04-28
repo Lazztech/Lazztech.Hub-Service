@@ -4,7 +4,7 @@ import { MenuController, NavController, Platform } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { GoogleMapComponent } from '../components/google-map/google-map.component';
 import { User } from '../models/user';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../services/auth/auth.service';
 import { HubService } from '../services/hub.service';
 import { LocationService } from '../services/location.service';
 import { NotificationsService } from '../services/notifications.service';

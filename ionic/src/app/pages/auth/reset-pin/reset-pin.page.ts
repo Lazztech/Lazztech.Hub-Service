@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, NavController } from '@ionic/angular';
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
 import { AlertService } from 'src/app/services/alert.service';
 import { PasswordResetPage } from '../password-reset/password-reset.page';
 import { NgForm, FormGroup, FormBuilder, Validators } from '@angular/forms';

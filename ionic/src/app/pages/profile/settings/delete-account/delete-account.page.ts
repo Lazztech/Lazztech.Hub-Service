@@ -4,7 +4,7 @@ import { ProfileService } from 'src/app/services/profile.service';
 import { AlertService } from 'src/app/services/alert.service';
 import { NgForm, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Storage } from '@ionic/storage';
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-delete-account',

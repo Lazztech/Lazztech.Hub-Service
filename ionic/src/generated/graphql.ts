@@ -1,4 +1,6 @@
 import gql from 'graphql-tag';
+import { Injectable } from '@angular/core';
+import * as Apollo from 'apollo-angular';
 export type Maybe<T> = T | null;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -292,4 +294,27 @@ export type UserInput = {
   password: Scalars['String'];
 };
 
+export type LoginMutationVariables = {
+  password: Scalars['String'];
+  email: Scalars['String'];
+};
 
+
+export type LoginMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'login'>
+);
+
+export const LoginDocument = gql`
+    mutation login($password: String!, $email: String!) {
+  login(password: $password, email: $email)
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class LoginGQL extends Apollo.Mutation<LoginMutation, LoginMutationVariables> {
+    document = LoginDocument;
+    
+  }

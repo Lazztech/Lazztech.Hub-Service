@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { User } from '../../models/user';
 import { MenuController, ModalController, NavController, ActionSheetController, IonContent } from '@ionic/angular';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../services/auth/auth.service';
 import { UpdateService } from 'src/app/services/update.service';
 import { AlertService } from 'src/app/services/alert.service';
 import { Storage } from '@ionic/storage';

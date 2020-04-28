@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController, NavController } from '@ionic/angular';
 import { AlertService } from 'src/app/services/alert.service';
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
 import { RegisterPage } from '../register/register.page';
 import { ResetPinPage } from '../reset-pin/reset-pin.page';
 import { NotificationsService } from 'src/app/services/notifications.service';

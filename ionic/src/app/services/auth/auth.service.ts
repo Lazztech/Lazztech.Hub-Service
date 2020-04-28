@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
-import { User } from '../models/user';
+import { User } from '../../models/user';
+import { LoginGQL } from 'src/generated/graphql';
 
 @Injectable({
   providedIn: 'root'
@@ -13,20 +14,18 @@ export class AuthService {
 
   constructor(
     private apollo: Apollo,
-    private storage: Storage
+    private storage: Storage,
+    private loginService: LoginGQL
   ) { }
 
   async login(email: string, password: string): Promise<boolean> {
-    const result = await this.apollo.mutate({
-      mutation: gql`
-        mutation {
-          login(password: "${password}", email: "${email}")
-        }
-      `
+    const result = await this.loginService.mutate({
+      email,
+      password
     }).toPromise();
-
+  
     console.log(result);
-    this.token = (result as any).data.login;
+    this.token = result.data.login;
 
     if (this.token) {
       console.log("Login successful.");

@@ -3,7 +3,7 @@ import {firebase} from '@firebase/app';
 import '@firebase/messaging';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
-import { AuthService } from './auth.service';
+import { AuthService } from './auth/auth.service';
 import { Storage } from '@ionic/storage';
 import {
   Plugins,
