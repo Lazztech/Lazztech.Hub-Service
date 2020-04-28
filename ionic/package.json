@@ -78,6 +78,10 @@
     "@angular/compiler-cli": "~9.0.1",
     "@angular/language-service": "~9.0.1",
     "@graphql-codegen/cli": "1.13.3",
+    "@graphql-codegen/introspection": "1.13.3",
+    "@graphql-codegen/typescript": "1.13.3",
+    "@graphql-codegen/typescript-apollo-angular": "1.13.3",
+    "@graphql-codegen/typescript-operations": "1.13.3",
     "@ionic/angular-toolkit": "^2.1.2",
     "@types/google-maps": "^3.2.1",
     "@types/jasmine": "~2.8.8",
@@ -94,11 +98,7 @@
     "protractor": "~5.4.0",
     "ts-node": "~8.1.0",
     "tslint": "~5.16.0",
-    "typescript": "~3.7.5",
-    "@graphql-codegen/typescript": "1.13.3",
-    "@graphql-codegen/typescript-operations": "1.13.3",
-    "@graphql-codegen/typescript-apollo-angular": "1.13.3",
-    "@graphql-codegen/introspection": "1.13.3"
+    "typescript": "~3.7.5"
   },
   "description": "An Ionic project",
   "cordova": {

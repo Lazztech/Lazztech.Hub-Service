@@ -95,24 +95,14 @@ export class AuthService {
 
   async verifyAccountExists(): Promise<boolean> {
     try {
-      const result = await this.apollo.query({
-        query: gql`
-          query {
-            me { 
-              id
-              firstName
-              lastName
-              email
-            }
-          }
-        `,
+      const result = await this.meService.fetch(null, {
         fetchPolicy: "network-only"
       }).toPromise();
 
-      if (result.data['me'].errors) {
+      if (result.errors) {
           // code: "INTERNAL_SERVER_ERROR"
           //FIXME: this may break on a different deployment platform
-          if (result.data['me'].errors[0].code == "INTERNAL_SERVER_ERROR") {
+          if (result.errors[0].name == "INTERNAL_SERVER_ERROR") {
             for (let index = 0; index < 3; index++) {
               console.log(`verifyAccountExists returned INTERNAL_SERVER_ERROR retry ${index + 1}`)
               const result = await this.verifyAccountExists()
@@ -123,7 +113,7 @@ export class AuthService {
             console.log("verifyAccountExists failed");
             return false;
           }
-      } else if(result.data['me']) {
+      } else if(result.data.me) {
 
         return true;
       } else {
