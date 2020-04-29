@@ -351,6 +351,33 @@ export type SendPasswordResetEmailMutation = (
   & Pick<Mutation, 'sendPasswordResetEmail'>
 );
 
+export type CreateHubMutationVariables = {
+  image: Scalars['String'];
+  name: Scalars['String'];
+  description: Scalars['String'];
+  latitude: Scalars['Float'];
+  longitude: Scalars['Float'];
+};
+
+
+export type CreateHubMutation = (
+  { __typename?: 'Mutation' }
+  & { createHub: (
+    { __typename?: 'Hub' }
+    & Pick<Hub, 'id' | 'name' | 'description' | 'image' | 'latitude' | 'longitude'>
+  ) }
+);
+
+export type AddUserFcmNotificationTokenMutationVariables = {
+  token: Scalars['String'];
+};
+
+
+export type AddUserFcmNotificationTokenMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'addUserFcmNotificationToken'>
+);
+
 export type DeleteAllInAppNotificationsMutationVariables = {};
 
 
@@ -513,6 +540,39 @@ export const SendPasswordResetEmailDocument = gql`
   })
   export class SendPasswordResetEmailGQL extends Apollo.Mutation<SendPasswordResetEmailMutation, SendPasswordResetEmailMutationVariables> {
     document = SendPasswordResetEmailDocument;
+    
+  }
+export const CreateHubDocument = gql`
+    mutation createHub($image: String!, $name: String!, $description: String!, $latitude: Float!, $longitude: Float!) {
+  createHub(image: $image, name: $name, description: $description, latitude: $latitude, longitude: $longitude) {
+    id
+    name
+    description
+    image
+    latitude
+    longitude
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class CreateHubGQL extends Apollo.Mutation<CreateHubMutation, CreateHubMutationVariables> {
+    document = CreateHubDocument;
+    
+  }
+export const AddUserFcmNotificationTokenDocument = gql`
+    mutation addUserFcmNotificationToken($token: String!) {
+  addUserFcmNotificationToken(token: $token)
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class AddUserFcmNotificationTokenGQL extends Apollo.Mutation<AddUserFcmNotificationTokenMutation, AddUserFcmNotificationTokenMutationVariables> {
+    document = AddUserFcmNotificationTokenDocument;
     
   }
 export const DeleteAllInAppNotificationsDocument = gql`

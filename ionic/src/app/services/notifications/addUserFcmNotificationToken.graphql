@@ -1,0 +1,3 @@
+mutation addUserFcmNotificationToken($token: String!) {
+    addUserFcmNotificationToken(token: $token)
+}

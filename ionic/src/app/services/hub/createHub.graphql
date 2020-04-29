@@ -1,0 +1,22 @@
+mutation createHub(
+    $image: String!
+    $name: String!
+    $description: String!
+    $latitude: Float!
+    $longitude: Float!
+){
+    createHub(
+        image: $image, 
+        name: $name, 
+        description: $description,
+        latitude: $latitude,
+        longitude: $longitude
+        ) {
+            id
+            name
+            description
+            image
+            latitude
+            longitude
+    }
+}

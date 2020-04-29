@@ -4,17 +4,9 @@ import { firebase } from '@firebase/app';
 import '@firebase/messaging';
 import { Platform, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
-import { Apollo } from 'apollo-angular';
 import { FetchPolicy } from 'apollo-client';
-import gql from 'graphql-tag';
-import { AuthService } from '../auth/auth.service';
+import { AddUserFcmNotificationTokenGQL, DeleteAllInAppNotificationsGQL, DeleteInAppNotificationGQL, GetInAppNotificationsGQL, InAppNotification } from '../../../generated/graphql';
 const { LocalNotifications, PushNotifications } = Plugins;
-import { 
-  DeleteAllInAppNotificationsGQL,
-  GetInAppNotificationsGQL,
-  InAppNotification,
-  DeleteInAppNotificationGQL,
-} from '../../../generated/graphql';
 
 @Injectable({
   providedIn: 'root'
@@ -34,14 +26,13 @@ export class NotificationsService {
   };
 
   constructor(
-    private apollo: Apollo,
-    private authService: AuthService,
     private platform: Platform,
     private storage: Storage,
     private toastController: ToastController,
     private deleteAllInAppNotificationsGQLService: DeleteAllInAppNotificationsGQL,
     private getInAppNotificationsGQLService: GetInAppNotificationsGQL,
-    private deleteInAppNotificationGQLService: DeleteInAppNotificationGQL
+    private deleteInAppNotificationGQLService: DeleteInAppNotificationGQL,
+    private addUserFcmNotificationTokenGQLService: AddUserFcmNotificationTokenGQL
   ) { }
 
   async localNotification(title: string, body: string, schedule?: Date): Promise<void> {
@@ -241,12 +232,8 @@ export class NotificationsService {
   }
 
   private async submitNotificationToken(token: string) {
-    const result = await this.apollo.mutate({
-      mutation: gql`
-        mutation {
-          addUserFcmNotificationToken(token: "${token}")
-        }
-      `
+    const result = await this.addUserFcmNotificationTokenGQLService.mutate({
+      token
     }).toPromise();
 
     if ((result as any).data.addUserFcmNotificationToken) {

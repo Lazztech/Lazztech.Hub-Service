@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { FetchPolicy } from 'apollo-client';
+import { CreateHubGQL } from 'src/generated/graphql';
 
 @Injectable({
   providedIn: 'root'
@@ -10,22 +11,16 @@ export class HubService {
 
   constructor(
     private apollo: Apollo,
+    private createHubGQLService: CreateHubGQL
   ) { }
 
   async createHub(name: string, description: string, image: string, latitude: number, longitude: number) {
-    const result = await this.apollo.mutate({
-      mutation: gql`
-      mutation {
-        createHub(image: "${image}", name: "${name}", description: "${description}" latitude: ${latitude}, longitude: ${longitude}) {
-          id
-          name
-          description
-          image
-          latitude
-          longitude
-        }
-      }
-      `
+    const result = await this.createHubGQLService.mutate({
+      name,
+      description,
+      image,
+      latitude,
+      longitude
     }).toPromise();
 
     console.log(result);
