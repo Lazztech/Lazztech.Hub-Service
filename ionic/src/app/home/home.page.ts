@@ -8,7 +8,6 @@ import { AuthService } from '../services/auth/auth.service';
 import { HubService } from '../services/hub/hub.service';
 import { LocationService } from '../services/location/location.service';
 import { NotificationsService } from '../services/notifications/notifications.service';
-import { PwaInstallService } from '../services/pwa-install.service';
 import { UpdateService } from '../services/update.service';
 
 const { Geolocation } = Plugins;
@@ -34,7 +33,6 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy {
     private menu: MenuController,
     private authService: AuthService,
     private updateService: UpdateService,
-    private pwaInstallService: PwaInstallService,
     private platform: Platform,
     private notificationsService: NotificationsService,
     public navCtrl: NavController,
@@ -85,11 +83,6 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy {
     this.platform.ready().then(async () => {
        await this.notificationsService.requestWebPushPermission();
     });
-  }
-
-  //TODO remove me
-  installAppPrompt() {
-    this.pwaInstallService.showInstallBanner();
   }
 
   //TODO remove me
