@@ -3,7 +3,7 @@ import {firebase} from '@firebase/app';
 import '@firebase/messaging';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
-import { AuthService } from './auth/auth.service';
+import { AuthService } from '../auth/auth.service';
 import { Storage } from '@ionic/storage';
 import {
   Plugins,
@@ -11,9 +11,9 @@ import {
   PushNotificationToken,
   PushNotificationActionPerformed } from '@capacitor/core';
 import { Platform, ToastController } from '@ionic/angular';
-import { InAppNotification } from '../models/inAppNotification';
+import { InAppNotification } from '../../models/inAppNotification';
 import { FetchPolicy } from 'apollo-client';
-import { AlertService } from './alert/alert.service';
+import { AlertService } from '../alert/alert.service';
 const { LocalNotifications } = Plugins;
 
 const { PushNotifications } = Plugins;

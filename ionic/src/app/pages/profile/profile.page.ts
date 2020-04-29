@@ -3,7 +3,7 @@ import { ActionSheetController, MenuController, NavController } from '@ionic/ang
 import { AlertService } from 'src/app/services/alert/alert.service';
 import { CameraService } from 'src/app/services/camera/camera.service';
 import { HubService } from 'src/app/services/hub/hub.service';
-import { ProfileService } from 'src/app/services/profile.service';
+import { ProfileService } from 'src/app/services/profile/profile.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { User } from 'src/generated/graphql';
 import { AuthService } from '../../services/auth/auth.service';

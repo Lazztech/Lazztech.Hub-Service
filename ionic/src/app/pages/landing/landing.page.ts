@@ -4,7 +4,7 @@ import { LoginPage } from '../auth/login/login.page';
 import { ModalController, MenuController, NavController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
-import { NotificationsService } from 'src/app/services/notifications.service';
+import { NotificationsService } from 'src/app/services/notifications/notifications.service';
 
 
 @Component({

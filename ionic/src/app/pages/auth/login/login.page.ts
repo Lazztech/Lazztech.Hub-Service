@@ -5,7 +5,7 @@ import { AlertService } from 'src/app/services/alert/alert.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { RegisterPage } from '../register/register.page';
 import { ResetPinPage } from '../reset-pin/reset-pin.page';
-import { NotificationsService } from 'src/app/services/notifications.service';
+import { NotificationsService } from 'src/app/services/notifications/notifications.service';
 
 @Component({
   selector: 'app-login',
