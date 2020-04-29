@@ -359,6 +359,16 @@ export type DeleteAllInAppNotificationsMutation = (
   & Pick<Mutation, 'deleteAllInAppNotifications'>
 );
 
+export type DeleteInAppNotificationMutationVariables = {
+  inAppNotificationId: Scalars['Int'];
+};
+
+
+export type DeleteInAppNotificationMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteInAppNotification'>
+);
+
 export type GetInAppNotificationsQueryVariables = {};
 
 
@@ -516,6 +526,19 @@ export const DeleteAllInAppNotificationsDocument = gql`
   })
   export class DeleteAllInAppNotificationsGQL extends Apollo.Mutation<DeleteAllInAppNotificationsMutation, DeleteAllInAppNotificationsMutationVariables> {
     document = DeleteAllInAppNotificationsDocument;
+    
+  }
+export const DeleteInAppNotificationDocument = gql`
+    mutation deleteInAppNotification($inAppNotificationId: Int!) {
+  deleteInAppNotification(inAppNotificationId: $inAppNotificationId)
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DeleteInAppNotificationGQL extends Apollo.Mutation<DeleteInAppNotificationMutation, DeleteInAppNotificationMutationVariables> {
+    document = DeleteInAppNotificationDocument;
     
   }
 export const GetInAppNotificationsDocument = gql`

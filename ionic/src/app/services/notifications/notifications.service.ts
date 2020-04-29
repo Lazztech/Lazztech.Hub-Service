@@ -12,7 +12,8 @@ const { LocalNotifications, PushNotifications } = Plugins;
 import { 
   DeleteAllInAppNotificationsGQL,
   GetInAppNotificationsGQL,
-  InAppNotification
+  InAppNotification,
+  DeleteInAppNotificationGQL,
 } from '../../../generated/graphql';
 
 @Injectable({
@@ -39,7 +40,8 @@ export class NotificationsService {
     private storage: Storage,
     private toastController: ToastController,
     private deleteAllInAppNotificationsGQLService: DeleteAllInAppNotificationsGQL,
-    private getInAppNotificationsGQL: GetInAppNotificationsGQL,
+    private getInAppNotificationsGQLService: GetInAppNotificationsGQL,
+    private deleteInAppNotificationGQLService: DeleteInAppNotificationGQL
   ) { }
 
   async localNotification(title: string, body: string, schedule?: Date): Promise<void> {
@@ -70,7 +72,7 @@ export class NotificationsService {
   }
 
   async getInAppNotifications(fetchPolicy: FetchPolicy = "network-only"): Promise<InAppNotification[]> {
-    const result = await this.getInAppNotificationsGQL.fetch(
+    const result = await this.getInAppNotificationsGQLService.fetch(
       null,
       {
         fetchPolicy
@@ -82,15 +84,11 @@ export class NotificationsService {
   }
 
   async deleteInAppNotification(inAppNotificationId: number) {
-    const result = await this.apollo.mutate({
-      mutation: gql`
-        mutation {
-          deleteInAppNotification(inAppNotificationId: ${inAppNotificationId})
-        }
-      `
+    const result = await this.deleteInAppNotificationGQLService.mutate({
+      inAppNotificationId
     }).toPromise();
 
-    if ((result as any).data.deleteInAppNotification) {
+    if (result.data.deleteInAppNotification) {
       console.log("deleteInAppNotification successful.");
       return true;
     } else {
