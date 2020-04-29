@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
-import { Apollo } from 'apollo-angular';
-import gql from 'graphql-tag';
 import { 
   LoginGQL,
   RegisterGQL,
@@ -19,7 +17,6 @@ export class AuthService {
   token:any;
 
   constructor(
-    private apollo: Apollo,
     private storage: Storage,
     private loginService: LoginGQL,
     private registerService: RegisterGQL,

@@ -351,6 +351,21 @@ export type SendPasswordResetEmailMutation = (
   & Pick<Mutation, 'sendPasswordResetEmail'>
 );
 
+export type EditUserDetailsMutationVariables = {
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  description: Scalars['String'];
+};
+
+
+export type EditUserDetailsMutation = (
+  { __typename?: 'Mutation' }
+  & { editUserDetails: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'firstName' | 'lastName' | 'description'>
+  ) }
+);
+
 export const LoginDocument = gql`
     mutation login($password: String!, $email: String!) {
   login(password: $password, email: $email)
@@ -421,5 +436,23 @@ export const SendPasswordResetEmailDocument = gql`
   })
   export class SendPasswordResetEmailGQL extends Apollo.Mutation<SendPasswordResetEmailMutation, SendPasswordResetEmailMutationVariables> {
     document = SendPasswordResetEmailDocument;
+    
+  }
+export const EditUserDetailsDocument = gql`
+    mutation editUserDetails($firstName: String!, $lastName: String!, $description: String!) {
+  editUserDetails(firstName: $firstName, lastName: $lastName, description: $description) {
+    id
+    firstName
+    lastName
+    description
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class EditUserDetailsGQL extends Apollo.Mutation<EditUserDetailsMutation, EditUserDetailsMutationVariables> {
+    document = EditUserDetailsDocument;
     
   }

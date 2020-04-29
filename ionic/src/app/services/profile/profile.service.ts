@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { Storage } from '@ionic/storage';
+import { EditUserDetailsGQL } from 'src/generated/graphql';
 
 
 @Injectable({
@@ -11,25 +12,19 @@ export class ProfileService {
 
   constructor(
     private apollo: Apollo,
-    private storage: Storage
+    private storage: Storage,
+    private editUserDetailsGQLService: EditUserDetailsGQL,
   ) { }
 
   async editUserDetails(firstName: string, lastName: string, description: string): Promise<boolean> {
-    const result = await this.apollo.mutate({
-      mutation: gql`
-        mutation {
-          editUserDetails(firstName: "${firstName}", lastName: "${lastName}", description: "${description}") {
-            id
-            firstName
-            lastName
-            description
-          }
-        }
-      `
+    const result = await this.editUserDetailsGQLService.mutate({
+      firstName,
+      lastName,
+      description
     }).toPromise();
 
     console.log(result);
-    if ((result as any).data.editUserDetails) {
+    if (result.data.editUserDetails) {
       console.log("editUserDetails successfully.");
       return true;
     } else {
