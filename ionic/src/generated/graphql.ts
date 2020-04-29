@@ -351,6 +351,14 @@ export type SendPasswordResetEmailMutation = (
   & Pick<Mutation, 'sendPasswordResetEmail'>
 );
 
+export type DeleteAllInAppNotificationsMutationVariables = {};
+
+
+export type DeleteAllInAppNotificationsMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteAllInAppNotifications'>
+);
+
 export type ChangeEmailMutationVariables = {
   newEmail: Scalars['String'];
 };
@@ -484,6 +492,19 @@ export const SendPasswordResetEmailDocument = gql`
   })
   export class SendPasswordResetEmailGQL extends Apollo.Mutation<SendPasswordResetEmailMutation, SendPasswordResetEmailMutationVariables> {
     document = SendPasswordResetEmailDocument;
+    
+  }
+export const DeleteAllInAppNotificationsDocument = gql`
+    mutation deleteAllInAppNotifications {
+  deleteAllInAppNotifications
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DeleteAllInAppNotificationsGQL extends Apollo.Mutation<DeleteAllInAppNotificationsMutation, DeleteAllInAppNotificationsMutationVariables> {
+    document = DeleteAllInAppNotificationsDocument;
     
   }
 export const ChangeEmailDocument = gql`

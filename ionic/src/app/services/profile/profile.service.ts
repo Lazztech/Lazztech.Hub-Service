@@ -1,14 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Apollo } from 'apollo-angular';
-import gql from 'graphql-tag';
 import { Storage } from '@ionic/storage';
-import { 
-  EditUserDetailsGQL,
-  ChangeEmailGQL,
-  ChangePasswordGQL,
-  ChangeUserImageGQL,
-  DeleteAccountGQL,
-} from 'src/generated/graphql';
+import { ChangeEmailGQL, ChangePasswordGQL, ChangeUserImageGQL, DeleteAccountGQL, EditUserDetailsGQL } from 'src/generated/graphql';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +8,6 @@ import {
 export class ProfileService {
 
   constructor(
-    private apollo: Apollo,
     private storage: Storage,
     private editUserDetailsGQLService: EditUserDetailsGQL,
     private changeEmailGQLService: ChangeEmailGQL,

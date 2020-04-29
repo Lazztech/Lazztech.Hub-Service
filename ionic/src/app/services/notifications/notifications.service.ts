@@ -1,22 +1,18 @@
 import { Injectable } from '@angular/core';
-import {firebase} from '@firebase/app';
+import { Plugins, PushNotification, PushNotificationActionPerformed, PushNotificationToken } from '@capacitor/core';
+import { firebase } from '@firebase/app';
 import '@firebase/messaging';
-import { Apollo } from 'apollo-angular';
-import gql from 'graphql-tag';
-import { AuthService } from '../auth/auth.service';
-import { Storage } from '@ionic/storage';
-import {
-  Plugins,
-  PushNotification,
-  PushNotificationToken,
-  PushNotificationActionPerformed } from '@capacitor/core';
 import { Platform, ToastController } from '@ionic/angular';
-import { InAppNotification } from '../../models/inAppNotification';
+import { Storage } from '@ionic/storage';
+import { Apollo } from 'apollo-angular';
 import { FetchPolicy } from 'apollo-client';
-import { AlertService } from '../alert/alert.service';
-const { LocalNotifications } = Plugins;
-
-const { PushNotifications } = Plugins;
+import gql from 'graphql-tag';
+import { InAppNotification } from '../../models/inAppNotification';
+import { AuthService } from '../auth/auth.service';
+const { LocalNotifications, PushNotifications } = Plugins;
+import { 
+  DeleteAllInAppNotificationsGQL
+} from '../../../generated/graphql';
 
 @Injectable({
   providedIn: 'root'
@@ -40,8 +36,8 @@ export class NotificationsService {
     private authService: AuthService,
     private platform: Platform,
     private storage: Storage,
-    // private alertService: AlertService,
     private toastController: ToastController,
+    private deleteAllInAppNotificationsGQLService: DeleteAllInAppNotificationsGQL
   ) { }
 
   async localNotification(title: string, body: string, schedule?: Date): Promise<void> {
@@ -112,15 +108,9 @@ export class NotificationsService {
   }
 
   async deleteAllInAppNotifications() {
-    const result = await this.apollo.mutate({
-      mutation: gql`
-        mutation {
-          deleteAllInAppNotifications
-        }
-      `
-    }).toPromise();
+    const result = await this.deleteAllInAppNotificationsGQLService.mutate().toPromise();
 
-    if ((result as any).data.deleteAllInAppNotifications) {
+    if (result.data.deleteAllInAppNotifications) {
       console.log("deleteAllInAppNotifications successful.");
     } else {
       console.error("deleteAllInAppNotifications failed!");
