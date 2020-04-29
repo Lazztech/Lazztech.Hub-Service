@@ -1,0 +1,5 @@
+mutation changeUserImage($image: String!) {
+    changeUserImage(newImage: $image) {
+        image
+    }
+}

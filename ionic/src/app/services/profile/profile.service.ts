@@ -5,7 +5,8 @@ import { Storage } from '@ionic/storage';
 import { 
   EditUserDetailsGQL,
   ChangeEmailGQL,
-  ChangePasswordGQL
+  ChangePasswordGQL,
+  ChangeUserImageGQL
 } from 'src/generated/graphql';
 
 @Injectable({
@@ -18,7 +19,8 @@ export class ProfileService {
     private storage: Storage,
     private editUserDetailsGQLService: EditUserDetailsGQL,
     private changeEmailGQLService: ChangeEmailGQL,
-    private changePasswordGQLService: ChangePasswordGQL
+    private changePasswordGQLService: ChangePasswordGQL,
+    private changeUserImageGQLService: ChangeUserImageGQL
   ) { }
 
   async editUserDetails(firstName: string, lastName: string, description: string): Promise<boolean> {
@@ -70,14 +72,8 @@ export class ProfileService {
   }
 
   async changeUserImage(image: string): Promise<any> {
-    const result = await this.apollo.mutate({
-      mutation: gql`
-      mutation {
-        changeUserImage(newImage: "${image}") {
-          image
-        }
-      }
-      `
+    const result = await this.changeUserImageGQLService.mutate({
+      image
     }).toPromise();
 
     console.log(result);

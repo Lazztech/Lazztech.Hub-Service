@@ -375,6 +375,19 @@ export type ChangePasswordMutation = (
   & Pick<Mutation, 'changePassword'>
 );
 
+export type ChangeUserImageMutationVariables = {
+  image: Scalars['String'];
+};
+
+
+export type ChangeUserImageMutation = (
+  { __typename?: 'Mutation' }
+  & { changeUserImage: (
+    { __typename?: 'User' }
+    & Pick<User, 'image'>
+  ) }
+);
+
 export type EditUserDetailsMutationVariables = {
   firstName: Scalars['String'];
   lastName: Scalars['String'];
@@ -489,6 +502,21 @@ export const ChangePasswordDocument = gql`
   })
   export class ChangePasswordGQL extends Apollo.Mutation<ChangePasswordMutation, ChangePasswordMutationVariables> {
     document = ChangePasswordDocument;
+    
+  }
+export const ChangeUserImageDocument = gql`
+    mutation changeUserImage($image: String!) {
+  changeUserImage(newImage: $image) {
+    image
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class ChangeUserImageGQL extends Apollo.Mutation<ChangeUserImageMutation, ChangeUserImageMutationVariables> {
+    document = ChangeUserImageDocument;
     
   }
 export const EditUserDetailsDocument = gql`
