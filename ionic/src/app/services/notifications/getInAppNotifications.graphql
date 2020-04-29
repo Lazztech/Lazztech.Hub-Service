@@ -1,0 +1,10 @@
+query getInAppNotifications {
+    getInAppNotifications { 
+    id
+    header
+    text
+    date
+    thumbnail
+    actionLink
+    }
+}

@@ -7,11 +7,12 @@ import { Storage } from '@ionic/storage';
 import { Apollo } from 'apollo-angular';
 import { FetchPolicy } from 'apollo-client';
 import gql from 'graphql-tag';
-import { InAppNotification } from '../../models/inAppNotification';
 import { AuthService } from '../auth/auth.service';
 const { LocalNotifications, PushNotifications } = Plugins;
 import { 
-  DeleteAllInAppNotificationsGQL
+  DeleteAllInAppNotificationsGQL,
+  GetInAppNotificationsGQL,
+  InAppNotification
 } from '../../../generated/graphql';
 
 @Injectable({
@@ -37,7 +38,8 @@ export class NotificationsService {
     private platform: Platform,
     private storage: Storage,
     private toastController: ToastController,
-    private deleteAllInAppNotificationsGQLService: DeleteAllInAppNotificationsGQL
+    private deleteAllInAppNotificationsGQLService: DeleteAllInAppNotificationsGQL,
+    private getInAppNotificationsGQL: GetInAppNotificationsGQL,
   ) { }
 
   async localNotification(title: string, body: string, schedule?: Date): Promise<void> {
@@ -68,25 +70,15 @@ export class NotificationsService {
   }
 
   async getInAppNotifications(fetchPolicy: FetchPolicy = "network-only"): Promise<InAppNotification[]> {
-    const result = await this.apollo.query({
-      query: gql`
-        query {
-          getInAppNotifications { 
-            id
-            header
-            text
-            date
-            thumbnail
-            actionLink
-          }
-        }
-      `,
-      fetchPolicy
-    }).toPromise();
+    const result = await this.getInAppNotificationsGQL.fetch(
+      null,
+      {
+        fetchPolicy
+      }
+    ).toPromise();
 
     console.log(result);
-
-    return result.data['getInAppNotifications'];
+    return result.data.getInAppNotifications;
   }
 
   async deleteInAppNotification(inAppNotificationId: number) {

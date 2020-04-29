@@ -359,6 +359,17 @@ export type DeleteAllInAppNotificationsMutation = (
   & Pick<Mutation, 'deleteAllInAppNotifications'>
 );
 
+export type GetInAppNotificationsQueryVariables = {};
+
+
+export type GetInAppNotificationsQuery = (
+  { __typename?: 'Query' }
+  & { getInAppNotifications: Array<(
+    { __typename?: 'InAppNotification' }
+    & Pick<InAppNotification, 'id' | 'header' | 'text' | 'date' | 'thumbnail' | 'actionLink'>
+  )> }
+);
+
 export type ChangeEmailMutationVariables = {
   newEmail: Scalars['String'];
 };
@@ -505,6 +516,26 @@ export const DeleteAllInAppNotificationsDocument = gql`
   })
   export class DeleteAllInAppNotificationsGQL extends Apollo.Mutation<DeleteAllInAppNotificationsMutation, DeleteAllInAppNotificationsMutationVariables> {
     document = DeleteAllInAppNotificationsDocument;
+    
+  }
+export const GetInAppNotificationsDocument = gql`
+    query getInAppNotifications {
+  getInAppNotifications {
+    id
+    header
+    text
+    date
+    thumbnail
+    actionLink
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetInAppNotificationsGQL extends Apollo.Query<GetInAppNotificationsQuery, GetInAppNotificationsQueryVariables> {
+    document = GetInAppNotificationsDocument;
     
   }
 export const ChangeEmailDocument = gql`

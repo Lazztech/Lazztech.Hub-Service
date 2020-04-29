@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { InAppNotification } from 'src/app/models/inAppNotification';
 import { NotificationsService } from 'src/app/services/notifications/notifications.service';
+import { InAppNotification } from 'src/generated/graphql';
 
 @Component({
   selector: 'app-notifications',
