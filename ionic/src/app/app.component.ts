@@ -15,7 +15,7 @@ import { ThemeService } from './services/theme.service';
 import { UpdateService } from './services/update.service';
 import { NotificationsService } from './services/notifications.service';
 import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
-import { GeofenceService } from './services/geofence.service';
+import { GeofenceService } from './services/geofence/geofence.service';
 import { DebuggerService } from './services/debugger/debugger.service';
 
 @Component({

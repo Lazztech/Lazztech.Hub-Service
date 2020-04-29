@@ -6,7 +6,7 @@ import { Observable, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { AlertService } from 'src/app/services/alert/alert.service';
 import { CameraService } from 'src/app/services/camera/camera.service';
-import { GeofenceService } from 'src/app/services/geofence.service';
+import { GeofenceService } from 'src/app/services/geofence/geofence.service';
 import { HubService } from 'src/app/services/hub.service';
 import { LocationService } from 'src/app/services/location.service';
 
