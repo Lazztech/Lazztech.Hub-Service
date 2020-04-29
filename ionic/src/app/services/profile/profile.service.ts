@@ -2,8 +2,11 @@ import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { Storage } from '@ionic/storage';
-import { EditUserDetailsGQL } from 'src/generated/graphql';
-
+import { 
+  EditUserDetailsGQL,
+  ChangeEmailGQL,
+  ChangePasswordGQL
+} from 'src/generated/graphql';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +17,8 @@ export class ProfileService {
     private apollo: Apollo,
     private storage: Storage,
     private editUserDetailsGQLService: EditUserDetailsGQL,
+    private changeEmailGQLService: ChangeEmailGQL,
+    private changePasswordGQLService: ChangePasswordGQL
   ) { }
 
   async editUserDetails(firstName: string, lastName: string, description: string): Promise<boolean> {
@@ -34,15 +39,8 @@ export class ProfileService {
   }
   
   async changeEmail(newEmail: string): Promise<boolean> {
-    const result = await this.apollo.mutate({
-      mutation: gql`
-        mutation {
-          changeEmail(newEmail: "${newEmail}") {
-            id
-            email
-          }
-        }
-      `
+    const result = await this.changeEmailGQLService.mutate({
+      newEmail
     }).toPromise();
 
     console.log(result);
@@ -56,12 +54,9 @@ export class ProfileService {
   }
 
   async changePassword(oldPassword: string, newPassword: string): Promise<boolean> {
-    const result = await this.apollo.mutate({
-      mutation: gql`
-        mutation {
-          changePassword(oldPassword: "${oldPassword}", newPassword: "${newPassword}")
-        }
-      `
+    const result = await this.changePasswordGQLService.mutate({
+      oldPassword,
+      newPassword
     }).toPromise();
 
     console.log(result);

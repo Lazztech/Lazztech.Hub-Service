@@ -351,6 +351,30 @@ export type SendPasswordResetEmailMutation = (
   & Pick<Mutation, 'sendPasswordResetEmail'>
 );
 
+export type ChangeEmailMutationVariables = {
+  newEmail: Scalars['String'];
+};
+
+
+export type ChangeEmailMutation = (
+  { __typename?: 'Mutation' }
+  & { changeEmail: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'email'>
+  ) }
+);
+
+export type ChangePasswordMutationVariables = {
+  oldPassword: Scalars['String'];
+  newPassword: Scalars['String'];
+};
+
+
+export type ChangePasswordMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'changePassword'>
+);
+
 export type EditUserDetailsMutationVariables = {
   firstName: Scalars['String'];
   lastName: Scalars['String'];
@@ -436,6 +460,35 @@ export const SendPasswordResetEmailDocument = gql`
   })
   export class SendPasswordResetEmailGQL extends Apollo.Mutation<SendPasswordResetEmailMutation, SendPasswordResetEmailMutationVariables> {
     document = SendPasswordResetEmailDocument;
+    
+  }
+export const ChangeEmailDocument = gql`
+    mutation changeEmail($newEmail: String!) {
+  changeEmail(newEmail: $newEmail) {
+    id
+    email
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class ChangeEmailGQL extends Apollo.Mutation<ChangeEmailMutation, ChangeEmailMutationVariables> {
+    document = ChangeEmailDocument;
+    
+  }
+export const ChangePasswordDocument = gql`
+    mutation changePassword($oldPassword: String!, $newPassword: String!) {
+  changePassword(oldPassword: $oldPassword, newPassword: $newPassword)
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class ChangePasswordGQL extends Apollo.Mutation<ChangePasswordMutation, ChangePasswordMutationVariables> {
+    document = ChangePasswordDocument;
     
   }
 export const EditUserDetailsDocument = gql`
