@@ -13,7 +13,7 @@ import {
 import { Platform, ToastController } from '@ionic/angular';
 import { InAppNotification } from '../models/inAppNotification';
 import { FetchPolicy } from 'apollo-client';
-import { AlertService } from './alert.service';
+import { AlertService } from './alert/alert.service';
 const { LocalNotifications } = Plugins;
 
 const { PushNotifications } = Plugins;

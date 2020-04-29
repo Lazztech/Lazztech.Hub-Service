@@ -8,7 +8,7 @@ import {
 const { StatusBar } = Plugins;
 const { SplashScreen } = Plugins
 import { NavController, Platform } from '@ionic/angular';
-import { AlertService } from './services/alert.service';
+import { AlertService } from './services/alert/alert.service';
 import { AuthService } from './services/auth/auth.service';
 import { NetworkService } from './services/network.service';
 import { ThemeService } from './services/theme.service';

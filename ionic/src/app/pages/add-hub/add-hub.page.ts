@@ -4,7 +4,7 @@ import { GeolocationPosition, Plugins } from '@capacitor/core';
 import { NavController, Platform } from '@ionic/angular';
 import { Observable, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { AlertService } from 'src/app/services/alert.service';
+import { AlertService } from 'src/app/services/alert/alert.service';
 import { CameraService } from 'src/app/services/camera.service';
 import { GeofenceService } from 'src/app/services/geofence.service';
 import { HubService } from 'src/app/services/hub.service';

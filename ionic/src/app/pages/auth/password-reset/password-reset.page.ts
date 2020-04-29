@@ -4,7 +4,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 import { ResetPinPage } from '../reset-pin/reset-pin.page';
 import { Storage } from '@ionic/storage';
 import { NgForm, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { AlertService } from 'src/app/services/alert.service';
+import { AlertService } from 'src/app/services/alert/alert.service';
 import { LoginPage } from '../login/login.page';
 
 @Component({

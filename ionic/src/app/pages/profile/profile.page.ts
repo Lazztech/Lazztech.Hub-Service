@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActionSheetController, MenuController, NavController } from '@ionic/angular';
-import { AlertService } from 'src/app/services/alert.service';
+import { AlertService } from 'src/app/services/alert/alert.service';
 import { CameraService } from 'src/app/services/camera.service';
 import { HubService } from 'src/app/services/hub.service';
 import { ProfileService } from 'src/app/services/profile.service';

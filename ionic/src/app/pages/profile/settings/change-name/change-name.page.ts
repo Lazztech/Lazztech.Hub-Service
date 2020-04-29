@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { ProfileService } from 'src/app/services/profile.service';
-import { AlertService } from 'src/app/services/alert.service';
+import { AlertService } from 'src/app/services/alert/alert.service';
 import { NgForm, FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
