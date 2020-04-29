@@ -6,7 +6,7 @@ import jsQR, { QRCode } from "jsqr";
 import { BrowserQRCodeReader } from '@zxing/library';
 import { NavController } from '@ionic/angular';
 import { AlertService } from 'src/app/services/alert/alert.service';
-import { CameraService } from 'src/app/services/camera.service';
+import { CameraService } from 'src/app/services/camera/camera.service';
 
 
 @Component({
