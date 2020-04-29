@@ -1,0 +1,9 @@
+mutation deleteAccount(
+    $emailAddress: String!
+    $password: String!
+){
+    deleteAccount(
+        email: $emailAddress, 
+        password: $password
+        )
+}

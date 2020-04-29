@@ -6,7 +6,8 @@ import {
   EditUserDetailsGQL,
   ChangeEmailGQL,
   ChangePasswordGQL,
-  ChangeUserImageGQL
+  ChangeUserImageGQL,
+  DeleteAccountGQL,
 } from 'src/generated/graphql';
 
 @Injectable({
@@ -20,7 +21,8 @@ export class ProfileService {
     private editUserDetailsGQLService: EditUserDetailsGQL,
     private changeEmailGQLService: ChangeEmailGQL,
     private changePasswordGQLService: ChangePasswordGQL,
-    private changeUserImageGQLService: ChangeUserImageGQL
+    private changeUserImageGQLService: ChangeUserImageGQL,
+    private deleteAccountGQLService: DeleteAccountGQL,
   ) { }
 
   async editUserDetails(firstName: string, lastName: string, description: string): Promise<boolean> {
@@ -82,12 +84,9 @@ export class ProfileService {
   }
 
   async deleteAccount(emailAddress: string, password: string) {
-    const result = await this.apollo.mutate({
-      mutation: gql`
-        mutation {
-          deleteAccount(email: "${emailAddress}", password: "${password}")
-        }
-      `
+    const result = await this.deleteAccountGQLService.mutate({
+      emailAddress,
+      password
     }).toPromise();
 
     console.log(result);

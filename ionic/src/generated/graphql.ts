@@ -388,6 +388,17 @@ export type ChangeUserImageMutation = (
   ) }
 );
 
+export type DeleteAccountMutationVariables = {
+  emailAddress: Scalars['String'];
+  password: Scalars['String'];
+};
+
+
+export type DeleteAccountMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteAccount'>
+);
+
 export type EditUserDetailsMutationVariables = {
   firstName: Scalars['String'];
   lastName: Scalars['String'];
@@ -517,6 +528,19 @@ export const ChangeUserImageDocument = gql`
   })
   export class ChangeUserImageGQL extends Apollo.Mutation<ChangeUserImageMutation, ChangeUserImageMutationVariables> {
     document = ChangeUserImageDocument;
+    
+  }
+export const DeleteAccountDocument = gql`
+    mutation deleteAccount($emailAddress: String!, $password: String!) {
+  deleteAccount(email: $emailAddress, password: $password)
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DeleteAccountGQL extends Apollo.Mutation<DeleteAccountMutation, DeleteAccountMutationVariables> {
+    document = DeleteAccountDocument;
     
   }
 export const EditUserDetailsDocument = gql`
