@@ -107,20 +107,6 @@ export class NotificationsService {
     }
   }
 
-  async testPushNotificationToUser() {
-    const me = await this.authService.user();
-    const result = await this.apollo.query({
-      query: gql`
-      {
-        sendPushNotification(userId: ${me.id})
-      }
-      `,
-      fetchPolicy: "no-cache"
-    }).toPromise();
-
-    console.log(result);
-  }
-
   async setupPushForAllPlatforms() {
     if (this.platform.is('android') || this.platform.is('ios')) {
       await this.setupPushiOSAndAndroid();
