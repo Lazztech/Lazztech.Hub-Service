@@ -8,7 +8,7 @@ import { AuthService } from '../services/auth/auth.service';
 import { HubService } from '../services/hub/hub.service';
 import { LocationService } from '../services/location/location.service';
 import { NotificationsService } from '../services/notifications/notifications.service';
-import { UpdateService } from '../services/update.service';
+import { UpdateService } from '../services/update/update.service';
 
 const { Geolocation } = Plugins;
 

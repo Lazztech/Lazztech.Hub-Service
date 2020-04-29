@@ -12,7 +12,7 @@ import { AlertService } from './services/alert/alert.service';
 import { AuthService } from './services/auth/auth.service';
 import { NetworkService } from './services/network/network.service';
 import { ThemeService } from './services/theme/theme.service';
-import { UpdateService } from './services/update.service';
+import { UpdateService } from './services/update/update.service';
 import { NotificationsService } from './services/notifications/notifications.service';
 import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
 import { GeofenceService } from './services/geofence/geofence.service';
