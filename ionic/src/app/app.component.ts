@@ -16,7 +16,7 @@ import { UpdateService } from './services/update.service';
 import { NotificationsService } from './services/notifications.service';
 import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
 import { GeofenceService } from './services/geofence.service';
-import { DebuggerService } from './services/debugger.service';
+import { DebuggerService } from './services/debugger/debugger.service';
 
 @Component({
   selector: 'app-root',
