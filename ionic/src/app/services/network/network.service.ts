@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Plugins, NetworkStatus } from '@capacitor/core';
 import { PluginListenerHandle } from '@capacitor/core/dist/esm/web/network';
-import { AlertService } from './alert/alert.service';
+import { AlertService } from '../alert/alert.service';
 
 const { Network } = Plugins;
 // type NetworkCallback = (connected: boolean) => any;
