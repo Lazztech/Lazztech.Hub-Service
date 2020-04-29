@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
-import { HubService } from 'src/app/services/hub.service';
+import { HubService } from 'src/app/services/hub/hub.service';
 
 @Component({
   selector: 'app-micro-chat-add',

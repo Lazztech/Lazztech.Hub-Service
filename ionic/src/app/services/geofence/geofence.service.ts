@@ -15,7 +15,7 @@ import BackgroundGeolocation, {
   ConnectivityChangeEvent
 } from "cordova-background-geolocation-lt";
 import { Plugins } from '@capacitor/core';
-import { HubService } from '../hub.service';
+import { HubService } from '../hub/hub.service';
 const { LocalNotifications } = Plugins;
 
 @Injectable({

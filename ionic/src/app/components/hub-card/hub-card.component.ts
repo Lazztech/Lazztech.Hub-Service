@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, OnDestroy, OnChanges } from '@angular/core';
-import { LocationService } from 'src/app/services/location.service';
+import { LocationService } from 'src/app/services/location/location.service';
 import { Observable, Subscription, zip } from 'rxjs';
 import { ChangeDetectorRef } from '@angular/core';
-import { HubService } from 'src/app/services/hub.service';
+import { HubService } from 'src/app/services/hub/hub.service';
 
 @Component({
   selector: 'app-hub-card',

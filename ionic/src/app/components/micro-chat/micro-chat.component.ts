@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { HubService } from 'src/app/services/hub.service';
+import { HubService } from 'src/app/services/hub/hub.service';
 import { ActionSheetController, IonRouterOutlet, ModalController } from '@ionic/angular';
 import { MicroChatAddPage } from 'src/app/pages/micro-chat-add/micro-chat-add.page';
 

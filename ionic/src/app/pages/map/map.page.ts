@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { HubService } from 'src/app/services/hub.service';
+import { HubService } from 'src/app/services/hub/hub.service';
 import { GoogleMapComponent } from 'src/app/components/google-map/google-map.component';
 
 @Component({

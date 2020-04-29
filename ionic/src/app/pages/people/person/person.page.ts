@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { HubService } from 'src/app/services/hub.service';
+import { HubService } from 'src/app/services/hub/hub.service';
 
 @Component({
   selector: 'app-person',

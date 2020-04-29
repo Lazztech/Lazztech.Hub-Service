@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Plugins, CameraResultType, CameraSource } from '@capacitor/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { HubService } from 'src/app/services/hub.service';
+import { HubService } from 'src/app/services/hub/hub.service';
 import jsQR, { QRCode } from "jsqr";
 import { BrowserQRCodeReader } from '@zxing/library';
 import { NavController } from '@ionic/angular';

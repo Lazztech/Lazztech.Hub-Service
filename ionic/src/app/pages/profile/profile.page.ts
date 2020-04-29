@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActionSheetController, MenuController, NavController } from '@ionic/angular';
 import { AlertService } from 'src/app/services/alert/alert.service';
 import { CameraService } from 'src/app/services/camera/camera.service';
-import { HubService } from 'src/app/services/hub.service';
+import { HubService } from 'src/app/services/hub/hub.service';
 import { ProfileService } from 'src/app/services/profile.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { User } from 'src/generated/graphql';

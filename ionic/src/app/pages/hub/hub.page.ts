@@ -3,8 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { ActionSheetController, NavController, Platform } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { CameraService } from 'src/app/services/camera/camera.service';
-import { HubService } from 'src/app/services/hub.service';
-import { LocationService } from 'src/app/services/location.service';
+import { HubService } from 'src/app/services/hub/hub.service';
+import { LocationService } from 'src/app/services/location/location.service';
 
 @Component({
   selector: 'app-hub',
