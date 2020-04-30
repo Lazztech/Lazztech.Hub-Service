@@ -1,0 +1,33 @@
+     query hub($id: Int!) {
+        hub(id: $id) {
+          userId
+          hubId
+          isOwner
+          starred
+          isPresent
+          hub {
+            id
+            name
+            description
+            active
+            image
+            latitude
+            longitude
+            usersConnection {
+              user {
+                id
+                firstName
+                lastName
+                description
+                image
+              }
+              isOwner
+              isPresent
+            }
+            microChats {
+              id
+              text
+            }
+          }
+        }
+      }

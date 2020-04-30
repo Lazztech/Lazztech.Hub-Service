@@ -404,6 +404,34 @@ export type EditHubMutation = (
   ) }
 );
 
+export type HubQueryVariables = {
+  id: Scalars['Int'];
+};
+
+
+export type HubQuery = (
+  { __typename?: 'Query' }
+  & { hub: (
+    { __typename?: 'JoinUserHub' }
+    & Pick<JoinUserHub, 'userId' | 'hubId' | 'isOwner' | 'starred' | 'isPresent'>
+    & { hub: (
+      { __typename?: 'Hub' }
+      & Pick<Hub, 'id' | 'name' | 'description' | 'active' | 'image' | 'latitude' | 'longitude'>
+      & { usersConnection?: Maybe<Array<(
+        { __typename?: 'JoinUserHub' }
+        & Pick<JoinUserHub, 'isOwner' | 'isPresent'>
+        & { user: (
+          { __typename?: 'User' }
+          & Pick<User, 'id' | 'firstName' | 'lastName' | 'description' | 'image'>
+        ) }
+      )>>, microChats?: Maybe<Array<(
+        { __typename?: 'MicroChat' }
+        & Pick<MicroChat, 'id' | 'text'>
+      )>> }
+    ) }
+  ) }
+);
+
 export type UsersHubsQueryVariables = {};
 
 
@@ -674,6 +702,49 @@ export const EditHubDocument = gql`
   })
   export class EditHubGQL extends Apollo.Mutation<EditHubMutation, EditHubMutationVariables> {
     document = EditHubDocument;
+    
+  }
+export const HubDocument = gql`
+    query hub($id: Int!) {
+  hub(id: $id) {
+    userId
+    hubId
+    isOwner
+    starred
+    isPresent
+    hub {
+      id
+      name
+      description
+      active
+      image
+      latitude
+      longitude
+      usersConnection {
+        user {
+          id
+          firstName
+          lastName
+          description
+          image
+        }
+        isOwner
+        isPresent
+      }
+      microChats {
+        id
+        text
+      }
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class HubGQL extends Apollo.Query<HubQuery, HubQueryVariables> {
+    document = HubDocument;
     
   }
 export const UsersHubsDocument = gql`
