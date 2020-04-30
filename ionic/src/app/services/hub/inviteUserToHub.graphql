@@ -1,0 +1,9 @@
+mutation inviteUserToHub(
+    $hubId: Int!
+    $inviteesEmail: String!
+    ) {
+    inviteUserToHub(
+        hubId: $hubId, 
+        inviteesEmail: $inviteesEmail
+        )
+}

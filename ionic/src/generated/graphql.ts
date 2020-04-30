@@ -432,6 +432,17 @@ export type HubQuery = (
   ) }
 );
 
+export type InviteUserToHubMutationVariables = {
+  hubId: Scalars['Int'];
+  inviteesEmail: Scalars['String'];
+};
+
+
+export type InviteUserToHubMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'inviteUserToHub'>
+);
+
 export type UsersHubsQueryVariables = {};
 
 
@@ -745,6 +756,19 @@ export const HubDocument = gql`
   })
   export class HubGQL extends Apollo.Query<HubQuery, HubQueryVariables> {
     document = HubDocument;
+    
+  }
+export const InviteUserToHubDocument = gql`
+    mutation inviteUserToHub($hubId: Int!, $inviteesEmail: String!) {
+  inviteUserToHub(hubId: $hubId, inviteesEmail: $inviteesEmail)
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class InviteUserToHubGQL extends Apollo.Mutation<InviteUserToHubMutation, InviteUserToHubMutationVariables> {
+    document = InviteUserToHubDocument;
     
   }
 export const UsersHubsDocument = gql`

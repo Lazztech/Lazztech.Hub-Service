@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { FetchPolicy } from 'apollo-client';
-import { CreateHubGQL, UsersHubsGQL, UsersPeopleGQL, CommonUsersHubsGQL, EditHubGQL, HubGQL } from 'src/generated/graphql';
+import { CreateHubGQL, UsersHubsGQL, UsersPeopleGQL, CommonUsersHubsGQL, EditHubGQL, HubGQL, InviteUserToHubGQL } from 'src/generated/graphql';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,8 @@ export class HubService {
     private usersPeopleGQLService: UsersPeopleGQL,
     private commonUsersHubsGQLService: CommonUsersHubsGQL,
     private editHubGQLService: EditHubGQL,
-    private hubGQLService: HubGQL
+    private hubGQLService: HubGQL,
+    private inviteUserToHubGQLService: InviteUserToHubGQL
   ) { }
 
   async createHub(name: string, description: string, image: string, latitude: number, longitude: number) {
@@ -131,12 +132,9 @@ export class HubService {
   }
 
   async inviteUserToHub(hubId: number, inviteesEmail: string) {
-    const result = await this.apollo.mutate({
-      mutation: gql`
-      mutation {
-        inviteUserToHub(hubId: ${hubId}, inviteesEmail: "${inviteesEmail}")
-      }
-      `
+    const result = await this.inviteUserToHubGQLService.mutate({
+      hubId,
+      inviteesEmail
     }).toPromise();
 
     console.log(result);
