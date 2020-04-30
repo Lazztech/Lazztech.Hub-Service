@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { FetchPolicy } from 'apollo-client';
-import { CreateHubGQL, UsersHubsGQL, UsersPeopleGQL, CommonUsersHubsGQL, EditHubGQL, HubGQL, InviteUserToHubGQL } from 'src/generated/graphql';
+import { CreateHubGQL, UsersHubsGQL, UsersPeopleGQL, CommonUsersHubsGQL, EditHubGQL, HubGQL, InviteUserToHubGQL, JoinHubGQL } from 'src/generated/graphql';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,8 @@ export class HubService {
     private commonUsersHubsGQLService: CommonUsersHubsGQL,
     private editHubGQLService: EditHubGQL,
     private hubGQLService: HubGQL,
-    private inviteUserToHubGQLService: InviteUserToHubGQL
+    private inviteUserToHubGQLService: InviteUserToHubGQL,
+    private joinHubGQLService: JoinHubGQL,
   ) { }
 
   async createHub(name: string, description: string, image: string, latitude: number, longitude: number) {
@@ -143,14 +144,10 @@ export class HubService {
   }
 
   async joinHub(id: number): Promise<boolean> {
-    const result = await this.apollo.mutate({
-      mutation: gql`
-      mutation {
-        joinHub(id: ${id})
-      }
-      `
+    const result = await this.joinHubGQLService.mutate({
+      id
     }).toPromise();
-
+    
     console.log(result);
     const response = (result as any).data.joinHub;
     return response;

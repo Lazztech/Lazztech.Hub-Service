@@ -443,6 +443,16 @@ export type InviteUserToHubMutation = (
   & Pick<Mutation, 'inviteUserToHub'>
 );
 
+export type JoinHubMutationVariables = {
+  id: Scalars['Int'];
+};
+
+
+export type JoinHubMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'joinHub'>
+);
+
 export type UsersHubsQueryVariables = {};
 
 
@@ -769,6 +779,19 @@ export const InviteUserToHubDocument = gql`
   })
   export class InviteUserToHubGQL extends Apollo.Mutation<InviteUserToHubMutation, InviteUserToHubMutationVariables> {
     document = InviteUserToHubDocument;
+    
+  }
+export const JoinHubDocument = gql`
+    mutation joinHub($id: Int!) {
+  joinHub(id: $id)
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class JoinHubGQL extends Apollo.Mutation<JoinHubMutation, JoinHubMutationVariables> {
+    document = JoinHubDocument;
     
   }
 export const UsersHubsDocument = gql`

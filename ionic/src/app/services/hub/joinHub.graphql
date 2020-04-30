@@ -1,0 +1,3 @@
+mutation joinHub($id: Int!) {
+    joinHub(id: $id)
+}
