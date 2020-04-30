@@ -416,6 +416,19 @@ export type CreateHubMutation = (
   ) }
 );
 
+export type DeactivateHubMutationVariables = {
+  hubId: Scalars['Int'];
+};
+
+
+export type DeactivateHubMutation = (
+  { __typename?: 'Mutation' }
+  & { deactivateHub: (
+    { __typename?: 'Hub' }
+    & Pick<Hub, 'id' | 'active'>
+  ) }
+);
+
 export type DeleteHubMutationVariables = {
   id: Scalars['Int'];
 };
@@ -815,6 +828,22 @@ export const CreateHubDocument = gql`
   })
   export class CreateHubGQL extends Apollo.Mutation<CreateHubMutation, CreateHubMutationVariables> {
     document = CreateHubDocument;
+    
+  }
+export const DeactivateHubDocument = gql`
+    mutation deactivateHub($hubId: Int!) {
+  deactivateHub(hubId: $hubId) {
+    id
+    active
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DeactivateHubGQL extends Apollo.Mutation<DeactivateHubMutation, DeactivateHubMutationVariables> {
+    document = DeactivateHubDocument;
     
   }
 export const DeleteHubDocument = gql`

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { FetchPolicy } from 'apollo-client';
-import { CreateHubGQL, UsersHubsGQL, UsersPeopleGQL, CommonUsersHubsGQL, EditHubGQL, HubGQL, InviteUserToHubGQL, JoinHubGQL, DeleteHubGQL, ChangeHubImageGQL, SetHubStarredGQL, SetHubNotStarredGQL, EnteredHubGeofenceGQL, ExitedHubGeofenceGQL, ActivateHubGQL } from 'src/generated/graphql';
+import { CreateHubGQL, UsersHubsGQL, UsersPeopleGQL, CommonUsersHubsGQL, EditHubGQL, HubGQL, InviteUserToHubGQL, JoinHubGQL, DeleteHubGQL, ChangeHubImageGQL, SetHubStarredGQL, SetHubNotStarredGQL, EnteredHubGeofenceGQL, ExitedHubGeofenceGQL, ActivateHubGQL, DeactivateHubGQL } from 'src/generated/graphql';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +25,8 @@ export class HubService {
     private setHubNotStarredGQLService: SetHubNotStarredGQL,
     private enteredHubGeofenceGQLService: EnteredHubGeofenceGQL,
     private exitedHubGeofenceGQLService: ExitedHubGeofenceGQL,
-    private activateHubGQLService: ActivateHubGQL
+    private activateHubGQLService: ActivateHubGQL,
+    private deactivateHubGQLService: DeactivateHubGQL
   ) { }
 
   async createHub(name: string, description: string, image: string, latitude: number, longitude: number) {
@@ -229,15 +230,8 @@ export class HubService {
   }
 
   async deactivateHub(hubId: number) {
-    const result = await this.apollo.mutate({
-      mutation: gql`
-      mutation {
-        deactivateHub(hubId: ${hubId}) {
-          id
-          active
-        }
-      }
-      `
+    const result = await this.deactivateHubGQLService.mutate({
+      hubId
     }).toPromise();
     
     console.log(`exitedHubGeofence hubId ${hubId} returned ${result}`);

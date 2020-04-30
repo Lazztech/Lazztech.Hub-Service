@@ -1,0 +1,6 @@
+mutation deactivateHub($hubId: Int!) {
+    deactivateHub(hubId: $hubId) {
+        id
+        active
+    }
+}
