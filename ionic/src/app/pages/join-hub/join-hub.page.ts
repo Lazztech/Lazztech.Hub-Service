@@ -32,10 +32,7 @@ export class JoinHubPage implements OnInit {
   ngOnInit() {
   }
 
-  async getHubByQRImage(qrImageB64: string) {
-    const hub = await this.hubService.getHubByQRImage(qrImageB64);
-    return hub;
-  }
+  //TODO verify that I'm dead and remove me.
 
   async joinHub() {
     const result = await this.hubService.joinHub(this.hub.id);
@@ -43,18 +40,6 @@ export class JoinHubPage implements OnInit {
       this.navCtrl.navigateRoot('hubs');
     else 
       await this.alertService.presentRedToast("Failed to join hub.");
-  }
-
-  async takePicture() {
-    const image = await this.cameraService.takePicture();
-
-    this.photo = image;
-    console.log(this.photo);
-    const hub = await this.getHubByQRImage(image);
-    if (hub)
-      this.hub = hub;
-    else
-      alert(`Failed to scan QR code. Try again.`);
   }
 
 }
