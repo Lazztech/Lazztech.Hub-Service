@@ -1,34 +1,15 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Routes, RouterModule } from '@angular/router';
-
+import { RouterModule, Routes } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
-
-import { AddHubPage } from './add-hub.page';
-import { HomePageModule } from 'src/app/home/home.module';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { AddHubPage } from './add-hub.page';
 
 const routes: Routes = [
   {
     path: '',
     component: AddHubPage,
-    children: [
-      {
-        path: 'join-hub',
-        children: [
-          {
-            path: '',
-            loadChildren: () => import('../join-hub/join-hub.module').then(m => m.JoinHubPageModule)
-          }
-        ]
-      },
-      {
-        path: '',
-        redirectTo: '/app/add-hub/add-hub',
-        pathMatch: 'full'
-      }
-    ]
   }
 ];
 

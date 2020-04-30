@@ -92,7 +92,7 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   goToAddHubPage() {
-    this.navCtrl.navigateForward('add-hub/join-hub');
+    this.navCtrl.navigateForward('add-hub');
   }
 
   goToHubPage(id: number) {

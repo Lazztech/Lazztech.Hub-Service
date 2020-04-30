@@ -16,7 +16,6 @@ const routes: Routes = [
   { path: 'people', loadChildren: () => import('./pages/people/people.module').then(m => m.PeoplePageModule), canActivate: [AuthGuard] },
   { path: 'hub', loadChildren: () => import('./pages/hub/hub.module').then(m => m.HubPageModule), canActivate: [AuthGuard] },
   { path: 'add-hub', loadChildren: () => import('./pages/add-hub/add-hub.module').then(m => m.AddHubPageModule), canActivate: [AuthGuard] },
-  { path: 'join-hub', loadChildren: () => import('./pages/join-hub/join-hub.module').then(m => m.JoinHubPageModule), canActivate: [AuthGuard] },
   { path: 'edit-hub', loadChildren: () => import('./pages/hub/edit-hub/edit-hub.module').then(m => m.EditHubPageModule), canActivate: [AuthGuard] },
   { path: 'invite', loadChildren: () => import('./pages/hub/invite/invite.module').then(m => m.InvitePageModule), canActivate: [AuthGuard] },
   { path: 'person', loadChildren: () => import('./pages/people/person/person.module').then(m => m.PersonPageModule), canActivate: [AuthGuard] },
