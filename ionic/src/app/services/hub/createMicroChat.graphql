@@ -1,0 +1,9 @@
+mutation createMicroChat($hubId: Int! $microChatText: String!) {
+    createMicroChat(
+        hubId: $hubId, 
+        microChatText: $microChatText
+        ) {
+        id
+        text
+    }
+}

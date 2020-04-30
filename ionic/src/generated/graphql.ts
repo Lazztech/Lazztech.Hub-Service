@@ -416,6 +416,20 @@ export type CreateHubMutation = (
   ) }
 );
 
+export type CreateMicroChatMutationVariables = {
+  hubId: Scalars['Int'];
+  microChatText: Scalars['String'];
+};
+
+
+export type CreateMicroChatMutation = (
+  { __typename?: 'Mutation' }
+  & { createMicroChat: (
+    { __typename?: 'MicroChat' }
+    & Pick<MicroChat, 'id' | 'text'>
+  ) }
+);
+
 export type DeactivateHubMutationVariables = {
   hubId: Scalars['Int'];
 };
@@ -839,6 +853,22 @@ export const CreateHubDocument = gql`
   })
   export class CreateHubGQL extends Apollo.Mutation<CreateHubMutation, CreateHubMutationVariables> {
     document = CreateHubDocument;
+    
+  }
+export const CreateMicroChatDocument = gql`
+    mutation createMicroChat($hubId: Int!, $microChatText: String!) {
+  createMicroChat(hubId: $hubId, microChatText: $microChatText) {
+    id
+    text
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class CreateMicroChatGQL extends Apollo.Mutation<CreateMicroChatMutation, CreateMicroChatMutationVariables> {
+    document = CreateMicroChatDocument;
     
   }
 export const DeactivateHubDocument = gql`
