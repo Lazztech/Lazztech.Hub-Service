@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { FetchPolicy } from 'apollo-client';
-import { CreateHubGQL, UsersHubsGQL, UsersPeopleGQL, CommonUsersHubsGQL, EditHubGQL, HubGQL, InviteUserToHubGQL, JoinHubGQL, DeleteHubGQL, ChangeHubImageGQL, SetHubStarredGQL, SetHubNotStarredGQL } from 'src/generated/graphql';
+import { CreateHubGQL, UsersHubsGQL, UsersPeopleGQL, CommonUsersHubsGQL, EditHubGQL, HubGQL, InviteUserToHubGQL, JoinHubGQL, DeleteHubGQL, ChangeHubImageGQL, SetHubStarredGQL, SetHubNotStarredGQL, EnteredHubGeofenceGQL } from 'src/generated/graphql';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +22,8 @@ export class HubService {
     private deleteHubGQLService: DeleteHubGQL,
     private changeHubImageGQLService: ChangeHubImageGQL,
     private setHubStarredGQLService: SetHubStarredGQL,
-    private setHubNotStarredGQLService: SetHubNotStarredGQL
+    private setHubNotStarredGQLService: SetHubNotStarredGQL,
+    private enteredHubGeofenceGQLService: EnteredHubGeofenceGQL
   ) { }
 
   async createHub(name: string, description: string, image: string, latitude: number, longitude: number) {
@@ -199,14 +200,10 @@ export class HubService {
   }
 
   async enteredHubGeofence(hubId: number) {
-    const result = await this.apollo.mutate({
-      mutation: gql`
-      mutation {
-        enteredHubGeofence(hubId: ${hubId})
-      }
-      `
+    const result = await this.enteredHubGeofenceGQLService.mutate({
+      hubId
     }).toPromise();
-    
+
     console.log(`enteredHubGeofence hubId ${hubId} returned ${result}`);
     return result;
   }

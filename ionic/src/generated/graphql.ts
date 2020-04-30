@@ -428,6 +428,16 @@ export type EditHubMutation = (
   ) }
 );
 
+export type EnteredHubGeofenceMutationVariables = {
+  hubId: Scalars['Int'];
+};
+
+
+export type EnteredHubGeofenceMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'enteredHubGeofence'>
+);
+
 export type HubQueryVariables = {
   id: Scalars['Int'];
 };
@@ -796,6 +806,19 @@ export const EditHubDocument = gql`
   })
   export class EditHubGQL extends Apollo.Mutation<EditHubMutation, EditHubMutationVariables> {
     document = EditHubDocument;
+    
+  }
+export const EnteredHubGeofenceDocument = gql`
+    mutation enteredHubGeofence($hubId: Int!) {
+  enteredHubGeofence(hubId: $hubId)
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class EnteredHubGeofenceGQL extends Apollo.Mutation<EnteredHubGeofenceMutation, EnteredHubGeofenceMutationVariables> {
+    document = EnteredHubGeofenceDocument;
     
   }
 export const HubDocument = gql`
