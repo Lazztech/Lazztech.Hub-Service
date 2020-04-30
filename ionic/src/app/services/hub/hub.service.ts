@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { FetchPolicy } from 'apollo-client';
-import { CreateHubGQL, UsersHubsGQL, UsersPeopleGQL, CommonUsersHubsGQL, EditHubGQL, HubGQL, InviteUserToHubGQL, JoinHubGQL, DeleteHubGQL, ChangeHubImageGQL, SetHubStarredGQL } from 'src/generated/graphql';
+import { CreateHubGQL, UsersHubsGQL, UsersPeopleGQL, CommonUsersHubsGQL, EditHubGQL, HubGQL, InviteUserToHubGQL, JoinHubGQL, DeleteHubGQL, ChangeHubImageGQL, SetHubStarredGQL, SetHubNotStarredGQL } from 'src/generated/graphql';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +21,8 @@ export class HubService {
     private joinHubGQLService: JoinHubGQL,
     private deleteHubGQLService: DeleteHubGQL,
     private changeHubImageGQLService: ChangeHubImageGQL,
-    private setHubStarredGQLService: SetHubStarredGQL
+    private setHubStarredGQLService: SetHubStarredGQL,
+    private setHubNotStarredGQLService: SetHubNotStarredGQL
   ) { }
 
   async createHub(name: string, description: string, image: string, latitude: number, longitude: number) {
@@ -183,21 +184,17 @@ export class HubService {
     }).toPromise();
 
     console.log(result);
-    const response = (result as any).data.setHubStarred;
+    const response = result.data.setHubStarred;
     return response;
   }
 
   async setHubNotStarred(hubId: number) {
-    const result = await this.apollo.mutate({
-      mutation: gql`
-      mutation {
-        setHubNotStarred(hubId: ${hubId})
-      }
-      `
+    const result = await this.setHubNotStarredGQLService.mutate({
+      hubId
     }).toPromise();
 
     console.log(result);
-    const response = (result as any).data.setHubNotStarred;
+    const response = result.data.setHubNotStarred;
     return response;
   }
 

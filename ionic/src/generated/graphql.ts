@@ -477,6 +477,16 @@ export type JoinHubMutation = (
   & Pick<Mutation, 'joinHub'>
 );
 
+export type SetHubNotStarredMutationVariables = {
+  hubId: Scalars['Int'];
+};
+
+
+export type SetHubNotStarredMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'setHubNotStarred'>
+);
+
 export type SetHubStarredMutationVariables = {
   hubId: Scalars['Int'];
 };
@@ -855,6 +865,19 @@ export const JoinHubDocument = gql`
   })
   export class JoinHubGQL extends Apollo.Mutation<JoinHubMutation, JoinHubMutationVariables> {
     document = JoinHubDocument;
+    
+  }
+export const SetHubNotStarredDocument = gql`
+    mutation setHubNotStarred($hubId: Int!) {
+  setHubNotStarred(hubId: $hubId)
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class SetHubNotStarredGQL extends Apollo.Mutation<SetHubNotStarredMutation, SetHubNotStarredMutationVariables> {
+    document = SetHubNotStarredDocument;
     
   }
 export const SetHubStarredDocument = gql`

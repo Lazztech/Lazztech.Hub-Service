@@ -1,0 +1,3 @@
+mutation setHubNotStarred($hubId: Int!) {
+    setHubNotStarred(hubId: $hubId)
+}
