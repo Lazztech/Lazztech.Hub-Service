@@ -1,0 +1,6 @@
+mutation microChatToHub($hubId: Int! $microChatId: Int!) {
+    microChatToHub(
+        hubId: $hubId, 
+        microChatId: $microChatId
+        )
+}

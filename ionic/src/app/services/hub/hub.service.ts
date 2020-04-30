@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { FetchPolicy } from 'apollo-client';
-import { CreateHubGQL, UsersHubsGQL, UsersPeopleGQL, CommonUsersHubsGQL, EditHubGQL, HubGQL, InviteUserToHubGQL, JoinHubGQL, DeleteHubGQL, ChangeHubImageGQL, SetHubStarredGQL, SetHubNotStarredGQL, EnteredHubGeofenceGQL, ExitedHubGeofenceGQL, ActivateHubGQL, DeactivateHubGQL } from 'src/generated/graphql';
+import { CreateHubGQL, UsersHubsGQL, UsersPeopleGQL, CommonUsersHubsGQL, EditHubGQL, HubGQL, InviteUserToHubGQL, JoinHubGQL, DeleteHubGQL, ChangeHubImageGQL, SetHubStarredGQL, SetHubNotStarredGQL, EnteredHubGeofenceGQL, ExitedHubGeofenceGQL, ActivateHubGQL, DeactivateHubGQL, MicroChatToHubGQL } from 'src/generated/graphql';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +26,8 @@ export class HubService {
     private enteredHubGeofenceGQLService: EnteredHubGeofenceGQL,
     private exitedHubGeofenceGQLService: ExitedHubGeofenceGQL,
     private activateHubGQLService: ActivateHubGQL,
-    private deactivateHubGQLService: DeactivateHubGQL
+    private deactivateHubGQLService: DeactivateHubGQL,
+    private microChatToHubGQLService: MicroChatToHubGQL
   ) { }
 
   async createHub(name: string, description: string, image: string, latitude: number, longitude: number) {
@@ -238,15 +239,13 @@ export class HubService {
     return result;
   }
 
-  async sendMicroChat(hubId: number, microChatId) {
-    const result = await this.apollo.mutate({
-      mutation: gql`
-      mutation {
-        microChatToHub(hubId: ${hubId}, microChatId: ${microChatId})
-      }
-      `
+  async sendMicroChat(hubId: number, microChatId: number) {
+    const result = await this.microChatToHubGQLService.mutate({
+      hubId,
+      microChatId
     }).toPromise();
-    const response = (result as any).data.setHubStarred;
+
+    const response = result.data.microChatToHub;
     return response;
   }
 

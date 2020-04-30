@@ -523,6 +523,17 @@ export type JoinHubMutation = (
   & Pick<Mutation, 'joinHub'>
 );
 
+export type MicroChatToHubMutationVariables = {
+  hubId: Scalars['Int'];
+  microChatId: Scalars['Int'];
+};
+
+
+export type MicroChatToHubMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'microChatToHub'>
+);
+
 export type SetHubNotStarredMutationVariables = {
   hubId: Scalars['Int'];
 };
@@ -969,6 +980,19 @@ export const JoinHubDocument = gql`
   })
   export class JoinHubGQL extends Apollo.Mutation<JoinHubMutation, JoinHubMutationVariables> {
     document = JoinHubDocument;
+    
+  }
+export const MicroChatToHubDocument = gql`
+    mutation microChatToHub($hubId: Int!, $microChatId: Int!) {
+  microChatToHub(hubId: $hubId, microChatId: $microChatId)
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class MicroChatToHubGQL extends Apollo.Mutation<MicroChatToHubMutation, MicroChatToHubMutationVariables> {
+    document = MicroChatToHubDocument;
     
   }
 export const SetHubNotStarredDocument = gql`
