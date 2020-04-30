@@ -368,6 +368,25 @@ export type CreateHubMutation = (
   ) }
 );
 
+export type UsersHubsQueryVariables = {};
+
+
+export type UsersHubsQuery = (
+  { __typename?: 'Query' }
+  & { usersHubs: Array<(
+    { __typename?: 'JoinUserHub' }
+    & Pick<JoinUserHub, 'userId' | 'hubId' | 'isOwner' | 'starred' | 'isPresent'>
+    & { hub: (
+      { __typename?: 'Hub' }
+      & Pick<Hub, 'id' | 'name' | 'description' | 'active' | 'image' | 'latitude' | 'longitude'>
+      & { usersConnection?: Maybe<Array<(
+        { __typename?: 'JoinUserHub' }
+        & Pick<JoinUserHub, 'isPresent' | 'isOwner'>
+      )>> }
+    ) }
+  )> }
+);
+
 export type AddUserFcmNotificationTokenMutationVariables = {
   token: Scalars['String'];
 };
@@ -560,6 +579,38 @@ export const CreateHubDocument = gql`
   })
   export class CreateHubGQL extends Apollo.Mutation<CreateHubMutation, CreateHubMutationVariables> {
     document = CreateHubDocument;
+    
+  }
+export const UsersHubsDocument = gql`
+    query usersHubs {
+  usersHubs {
+    userId
+    hubId
+    isOwner
+    starred
+    isPresent
+    hub {
+      id
+      name
+      description
+      active
+      image
+      latitude
+      longitude
+      usersConnection {
+        isPresent
+        isOwner
+      }
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UsersHubsGQL extends Apollo.Query<UsersHubsQuery, UsersHubsQueryVariables> {
+    document = UsersHubsDocument;
     
   }
 export const AddUserFcmNotificationTokenDocument = gql`

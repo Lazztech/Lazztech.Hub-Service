@@ -1,0 +1,22 @@
+query usersHubs {
+    usersHubs{
+        userId
+        hubId
+        isOwner
+        starred
+        isPresent
+        hub {
+            id
+            name
+            description
+            active
+            image
+            latitude
+            longitude
+            usersConnection {
+                isPresent
+                isOwner
+            }
+        }
+    }
+}
