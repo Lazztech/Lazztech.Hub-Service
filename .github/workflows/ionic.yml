@@ -21,6 +21,7 @@ jobs:
       working-directory: ./ionic
       run: |
         npm install
+        npm run generate
         npm run build
       env:
         CI: true

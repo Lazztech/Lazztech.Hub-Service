@@ -57,7 +57,6 @@
     "firebase": "^6.3.1",
     "geolib": "^3.2.0",
     "graphql": "^14.3.0",
-    "graphql-tag": "^2.10.1",
     "ionic-native-http-connection-backend": "^7.0.3",
     "jsqr": "^1.2.0",
     "moment": "^2.24.0",
