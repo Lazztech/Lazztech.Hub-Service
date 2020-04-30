@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { FetchPolicy } from 'apollo-client';
-import { CreateHubGQL, UsersHubsGQL, UsersPeopleGQL, CommonUsersHubsGQL, EditHubGQL, HubGQL, InviteUserToHubGQL, JoinHubGQL, DeleteHubGQL } from 'src/generated/graphql';
+import { CreateHubGQL, UsersHubsGQL, UsersPeopleGQL, CommonUsersHubsGQL, EditHubGQL, HubGQL, InviteUserToHubGQL, JoinHubGQL, DeleteHubGQL, ChangeHubImageGQL } from 'src/generated/graphql';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +19,8 @@ export class HubService {
     private hubGQLService: HubGQL,
     private inviteUserToHubGQLService: InviteUserToHubGQL,
     private joinHubGQLService: JoinHubGQL,
-    private deleteHubGQLService: DeleteHubGQL
+    private deleteHubGQLService: DeleteHubGQL,
+    private changeHubImageGQLService: ChangeHubImageGQL
   ) { }
 
   async createHub(name: string, description: string, image: string, latitude: number, longitude: number) {
@@ -122,7 +123,7 @@ export class HubService {
     }).toPromise();
 
     console.log(result);
-    const response = result.data["hub"];
+    const response = result.data.hub;
 
     if (response) {
       console.log("got hub successful.");
@@ -140,7 +141,7 @@ export class HubService {
     }).toPromise();
 
     console.log(result);
-    const response = (result as any).data.inviteUserToHub;
+    const response = result.data.inviteUserToHub;
     return response;
   }
 
@@ -150,7 +151,7 @@ export class HubService {
     }).toPromise();
     
     console.log(result);
-    const response = (result as any).data.joinHub;
+    const response = result.data.joinHub;
     return response;
   }
 
@@ -160,25 +161,19 @@ export class HubService {
     }).toPromise();
 
     console.log(result);
-    const response = (result as any).data.deleteHub;
+    const response = result.data.deleteHub;
     return response;
   }
 
   async changeHubImage(id: number, image: string): Promise<boolean> {
-    const result = await this.apollo.mutate({
-      mutation: gql`
-      mutation {
-        changeHubImage(hubId: ${id}, newImage: "${image}") {
-          id
-          image
-        }
-      }
-      `
+    const result = await this.changeHubImageGQLService.mutate({
+      id,
+      image
     }).toPromise();
 
     console.log(result);
-    const response = (result as any).data.changeHubImage;
-    return response;
+    const response = result.data.changeHubImage;
+    return (response)? true : false;
   }
 
   async setHubStarred(hubId: number) {

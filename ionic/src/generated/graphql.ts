@@ -351,6 +351,20 @@ export type SendPasswordResetEmailMutation = (
   & Pick<Mutation, 'sendPasswordResetEmail'>
 );
 
+export type ChangeHubImageMutationVariables = {
+  id: Scalars['Int'];
+  image: Scalars['String'];
+};
+
+
+export type ChangeHubImageMutation = (
+  { __typename?: 'Mutation' }
+  & { changeHubImage: (
+    { __typename?: 'Hub' }
+    & Pick<Hub, 'id' | 'image'>
+  ) }
+);
+
 export type CommonUsersHubsQueryVariables = {
   otherUsersId: Scalars['Int'];
 };
@@ -665,6 +679,22 @@ export const SendPasswordResetEmailDocument = gql`
   })
   export class SendPasswordResetEmailGQL extends Apollo.Mutation<SendPasswordResetEmailMutation, SendPasswordResetEmailMutationVariables> {
     document = SendPasswordResetEmailDocument;
+    
+  }
+export const ChangeHubImageDocument = gql`
+    mutation changeHubImage($id: Int!, $image: String!) {
+  changeHubImage(hubId: $id, newImage: $image) {
+    id
+    image
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class ChangeHubImageGQL extends Apollo.Mutation<ChangeHubImageMutation, ChangeHubImageMutationVariables> {
+    document = ChangeHubImageDocument;
     
   }
 export const CommonUsersHubsDocument = gql`
