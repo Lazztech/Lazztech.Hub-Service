@@ -351,6 +351,27 @@ export type SendPasswordResetEmailMutation = (
   & Pick<Mutation, 'sendPasswordResetEmail'>
 );
 
+export type CommonUsersHubsQueryVariables = {
+  otherUsersId: Scalars['Int'];
+};
+
+
+export type CommonUsersHubsQuery = (
+  { __typename?: 'Query' }
+  & { commonUsersHubs: Array<(
+    { __typename?: 'JoinUserHub' }
+    & Pick<JoinUserHub, 'userId' | 'hubId' | 'isOwner' | 'starred' | 'isPresent'>
+    & { hub: (
+      { __typename?: 'Hub' }
+      & Pick<Hub, 'id' | 'name' | 'active' | 'image' | 'latitude' | 'longitude'>
+      & { usersConnection?: Maybe<Array<(
+        { __typename?: 'JoinUserHub' }
+        & Pick<JoinUserHub, 'isPresent' | 'isOwner'>
+      )>> }
+    ) }
+  )> }
+);
+
 export type CreateHubMutationVariables = {
   image: Scalars['String'];
   name: Scalars['String'];
@@ -570,6 +591,37 @@ export const SendPasswordResetEmailDocument = gql`
   })
   export class SendPasswordResetEmailGQL extends Apollo.Mutation<SendPasswordResetEmailMutation, SendPasswordResetEmailMutationVariables> {
     document = SendPasswordResetEmailDocument;
+    
+  }
+export const CommonUsersHubsDocument = gql`
+    query commonUsersHubs($otherUsersId: Int!) {
+  commonUsersHubs(otherUsersId: $otherUsersId) {
+    userId
+    hubId
+    isOwner
+    starred
+    isPresent
+    hub {
+      id
+      name
+      active
+      image
+      latitude
+      longitude
+      usersConnection {
+        isPresent
+        isOwner
+      }
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class CommonUsersHubsGQL extends Apollo.Query<CommonUsersHubsQuery, CommonUsersHubsQueryVariables> {
+    document = CommonUsersHubsDocument;
     
   }
 export const CreateHubDocument = gql`

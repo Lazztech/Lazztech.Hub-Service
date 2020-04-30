@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { FetchPolicy } from 'apollo-client';
-import { CreateHubGQL, UsersHubsGQL, UsersPeopleGQL } from 'src/generated/graphql';
+import { CreateHubGQL, UsersHubsGQL, UsersPeopleGQL, CommonUsersHubsGQL } from 'src/generated/graphql';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +14,7 @@ export class HubService {
     private createHubGQLService: CreateHubGQL,
     private userHubsGQLService: UsersHubsGQL,
     private usersPeopleGQLService: UsersPeopleGQL,
+    private commonUsersHubsGQLService: CommonUsersHubsGQL,
   ) { }
 
   async createHub(name: string, description: string, image: string, latitude: number, longitude: number) {
@@ -70,34 +71,14 @@ export class HubService {
   }
 
   async commonUsersHubs(otherUsersId: number, fetchPolicy: FetchPolicy = "network-only") {
-    const result = await this.apollo.query({
-      query: gql`
-      query {
-        commonUsersHubs(otherUsersId: ${otherUsersId}) {
-          userId
-          hubId
-          isOwner
-          starred
-          isPresent
-          hub {
-            id
-            name
-            active
-            image
-            latitude
-            longitude
-            usersConnection {
-              isPresent
-              isOwner
-            }
-          }
-        }
-      }
-      `,
+    const result = await this.commonUsersHubsGQLService.fetch({
+      otherUsersId
+    },
+    {
       fetchPolicy
     }).toPromise();
 
-    const response = result.data["commonUsersHubs"];
+    const response = result.data.commonUsersHubs;
 
     if (response) { 
       console.log("commonUsersHubs successful.");
