@@ -1,0 +1,6 @@
+mutation deleteMicroChat($hubId: Int! $microChatId: Int!) {
+    deleteMicroChat(
+        hubId: $hubId, 
+        microChatId: $microChatId
+        )
+}

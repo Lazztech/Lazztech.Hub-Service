@@ -453,6 +453,17 @@ export type DeleteHubMutation = (
   & Pick<Mutation, 'deleteHub'>
 );
 
+export type DeleteMicroChatMutationVariables = {
+  hubId: Scalars['Int'];
+  microChatId: Scalars['Int'];
+};
+
+
+export type DeleteMicroChatMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteMicroChat'>
+);
+
 export type EditHubMutationVariables = {
   hubId: Scalars['Int'];
   name: Scalars['String'];
@@ -898,6 +909,19 @@ export const DeleteHubDocument = gql`
   })
   export class DeleteHubGQL extends Apollo.Mutation<DeleteHubMutation, DeleteHubMutationVariables> {
     document = DeleteHubDocument;
+    
+  }
+export const DeleteMicroChatDocument = gql`
+    mutation deleteMicroChat($hubId: Int!, $microChatId: Int!) {
+  deleteMicroChat(hubId: $hubId, microChatId: $microChatId)
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DeleteMicroChatGQL extends Apollo.Mutation<DeleteMicroChatMutation, DeleteMicroChatMutationVariables> {
+    document = DeleteMicroChatDocument;
     
   }
 export const EditHubDocument = gql`

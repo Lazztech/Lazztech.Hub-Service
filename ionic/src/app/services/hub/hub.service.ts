@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { FetchPolicy } from 'apollo-client';
-import { CreateHubGQL, UsersHubsGQL, UsersPeopleGQL, CommonUsersHubsGQL, EditHubGQL, HubGQL, InviteUserToHubGQL, JoinHubGQL, DeleteHubGQL, ChangeHubImageGQL, SetHubStarredGQL, SetHubNotStarredGQL, EnteredHubGeofenceGQL, ExitedHubGeofenceGQL, ActivateHubGQL, DeactivateHubGQL, MicroChatToHubGQL, CreateMicroChatGQL } from 'src/generated/graphql';
+import { CreateHubGQL, UsersHubsGQL, UsersPeopleGQL, CommonUsersHubsGQL, EditHubGQL, HubGQL, InviteUserToHubGQL, JoinHubGQL, DeleteHubGQL, ChangeHubImageGQL, SetHubStarredGQL, SetHubNotStarredGQL, EnteredHubGeofenceGQL, ExitedHubGeofenceGQL, ActivateHubGQL, DeactivateHubGQL, MicroChatToHubGQL, CreateMicroChatGQL, DeleteMicroChatGQL } from 'src/generated/graphql';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +28,8 @@ export class HubService {
     private activateHubGQLService: ActivateHubGQL,
     private deactivateHubGQLService: DeactivateHubGQL,
     private microChatToHubGQLService: MicroChatToHubGQL,
-    private createMicroChatGQLService: CreateMicroChatGQL
+    private createMicroChatGQLService: CreateMicroChatGQL,
+    private deleteMicroChatGQLService: DeleteMicroChatGQL
   ) { }
 
   async createHub(name: string, description: string, image: string, latitude: number, longitude: number) {
@@ -259,13 +260,10 @@ export class HubService {
   }
 
   async deleteMicroChat(hubId: number, microChatId: number) {
-    const result = await this.apollo.mutate({
-      mutation: gql`
-      mutation {
-        deleteMicroChat(hubId: ${hubId}, microChatId: ${microChatId})
-      }
-      `
+    const result = await this.deleteMicroChatGQLService.mutate({
+      hubId,
+      microChatId
     }).toPromise();
-    return result;
+    return result.data.deleteMicroChat;
   }
 }
