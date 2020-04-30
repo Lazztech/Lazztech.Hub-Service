@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { FetchPolicy } from 'apollo-client';
-import { CreateHubGQL, UsersHubsGQL, UsersPeopleGQL, CommonUsersHubsGQL, EditHubGQL, HubGQL, InviteUserToHubGQL, JoinHubGQL } from 'src/generated/graphql';
+import { CreateHubGQL, UsersHubsGQL, UsersPeopleGQL, CommonUsersHubsGQL, EditHubGQL, HubGQL, InviteUserToHubGQL, JoinHubGQL, DeleteHubGQL } from 'src/generated/graphql';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +19,7 @@ export class HubService {
     private hubGQLService: HubGQL,
     private inviteUserToHubGQLService: InviteUserToHubGQL,
     private joinHubGQLService: JoinHubGQL,
+    private deleteHubGQLService: DeleteHubGQL
   ) { }
 
   async createHub(name: string, description: string, image: string, latitude: number, longitude: number) {
@@ -154,12 +155,8 @@ export class HubService {
   }
 
   async deleteHub(id: number): Promise<boolean> {
-    const result = await this.apollo.mutate({
-      mutation: gql`
-      mutation {
-        deleteHub(hubId: ${id})
-      }
-      `
+    const result = await this.deleteHubGQLService.mutate({
+      id
     }).toPromise();
 
     console.log(result);
