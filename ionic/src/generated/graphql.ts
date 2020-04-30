@@ -351,6 +351,19 @@ export type SendPasswordResetEmailMutation = (
   & Pick<Mutation, 'sendPasswordResetEmail'>
 );
 
+export type ActivateHubMutationVariables = {
+  hubId: Scalars['Int'];
+};
+
+
+export type ActivateHubMutation = (
+  { __typename?: 'Mutation' }
+  & { activateHub: (
+    { __typename?: 'Hub' }
+    & Pick<Hub, 'id' | 'active'>
+  ) }
+);
+
 export type ChangeHubImageMutationVariables = {
   id: Scalars['Int'];
   image: Scalars['String'];
@@ -719,6 +732,22 @@ export const SendPasswordResetEmailDocument = gql`
   })
   export class SendPasswordResetEmailGQL extends Apollo.Mutation<SendPasswordResetEmailMutation, SendPasswordResetEmailMutationVariables> {
     document = SendPasswordResetEmailDocument;
+    
+  }
+export const ActivateHubDocument = gql`
+    mutation activateHub($hubId: Int!) {
+  activateHub(hubId: $hubId) {
+    id
+    active
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class ActivateHubGQL extends Apollo.Mutation<ActivateHubMutation, ActivateHubMutationVariables> {
+    document = ActivateHubDocument;
     
   }
 export const ChangeHubImageDocument = gql`

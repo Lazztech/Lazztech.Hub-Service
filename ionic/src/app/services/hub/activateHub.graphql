@@ -1,0 +1,6 @@
+mutation activateHub($hubId: Int!) {
+    activateHub(hubId: $hubId) {
+        id
+        active
+    }
+}
