@@ -1,0 +1,15 @@
+mutation editHub(
+    $hubId: Int!
+    $name: String!
+    $description: String!
+    ) {
+    editHub(
+        hubId: $hubId
+        name: $name
+        description: $description
+        ) {
+        id
+        name
+        description
+    }
+}

@@ -389,6 +389,21 @@ export type CreateHubMutation = (
   ) }
 );
 
+export type EditHubMutationVariables = {
+  hubId: Scalars['Int'];
+  name: Scalars['String'];
+  description: Scalars['String'];
+};
+
+
+export type EditHubMutation = (
+  { __typename?: 'Mutation' }
+  & { editHub: (
+    { __typename?: 'Hub' }
+    & Pick<Hub, 'id' | 'name' | 'description'>
+  ) }
+);
+
 export type UsersHubsQueryVariables = {};
 
 
@@ -642,6 +657,23 @@ export const CreateHubDocument = gql`
   })
   export class CreateHubGQL extends Apollo.Mutation<CreateHubMutation, CreateHubMutationVariables> {
     document = CreateHubDocument;
+    
+  }
+export const EditHubDocument = gql`
+    mutation editHub($hubId: Int!, $name: String!, $description: String!) {
+  editHub(hubId: $hubId, name: $name, description: $description) {
+    id
+    name
+    description
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class EditHubGQL extends Apollo.Mutation<EditHubMutation, EditHubMutationVariables> {
+    document = EditHubDocument;
     
   }
 export const UsersHubsDocument = gql`

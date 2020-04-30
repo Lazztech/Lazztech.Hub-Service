@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { FetchPolicy } from 'apollo-client';
-import { CreateHubGQL, UsersHubsGQL, UsersPeopleGQL, CommonUsersHubsGQL } from 'src/generated/graphql';
+import { CreateHubGQL, UsersHubsGQL, UsersPeopleGQL, CommonUsersHubsGQL, EditHubGQL } from 'src/generated/graphql';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +15,7 @@ export class HubService {
     private userHubsGQLService: UsersHubsGQL,
     private usersPeopleGQLService: UsersPeopleGQL,
     private commonUsersHubsGQLService: CommonUsersHubsGQL,
+    private editHubGQLService: EditHubGQL,
   ) { }
 
   async createHub(name: string, description: string, image: string, latitude: number, longitude: number) {
@@ -90,21 +91,14 @@ export class HubService {
   }
 
   async editHub(hubId: number, name: string, description: string) {
-    const result = await this.apollo.mutate({
-      mutation: gql`
-      mutation {
-        editHub(hubId: ${hubId}, name: "${name}", description: "${description}") {
-          id
-          name
-          description
-        }
-      }
-      `,
-      // fetchPolicy
+    const result = await this.editHubGQLService.mutate({
+      hubId,
+      name,
+      description
     }).toPromise();
 
     console.log(result);
-    const response = (result as any).data.editHub;
+    const response = result.data.editHub;
 
     if (response) {
       console.log("editHub successful.");
