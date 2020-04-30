@@ -1,0 +1,9 @@
+query usersPeople {
+    usersPeople {
+        id
+        firstName
+        lastName
+        description
+        image
+    }
+}

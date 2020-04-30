@@ -387,6 +387,17 @@ export type UsersHubsQuery = (
   )> }
 );
 
+export type UsersPeopleQueryVariables = {};
+
+
+export type UsersPeopleQuery = (
+  { __typename?: 'Query' }
+  & { usersPeople: Array<(
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'firstName' | 'lastName' | 'description' | 'image'>
+  )> }
+);
+
 export type AddUserFcmNotificationTokenMutationVariables = {
   token: Scalars['String'];
 };
@@ -611,6 +622,25 @@ export const UsersHubsDocument = gql`
   })
   export class UsersHubsGQL extends Apollo.Query<UsersHubsQuery, UsersHubsQueryVariables> {
     document = UsersHubsDocument;
+    
+  }
+export const UsersPeopleDocument = gql`
+    query usersPeople {
+  usersPeople {
+    id
+    firstName
+    lastName
+    description
+    image
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UsersPeopleGQL extends Apollo.Query<UsersPeopleQuery, UsersPeopleQueryVariables> {
+    document = UsersPeopleDocument;
     
   }
 export const AddUserFcmNotificationTokenDocument = gql`

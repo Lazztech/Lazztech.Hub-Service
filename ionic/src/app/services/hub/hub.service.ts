@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { FetchPolicy } from 'apollo-client';
-import { CreateHubGQL, UsersHubsGQL } from 'src/generated/graphql';
+import { CreateHubGQL, UsersHubsGQL, UsersPeopleGQL } from 'src/generated/graphql';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +12,8 @@ export class HubService {
   constructor(
     private apollo: Apollo,
     private createHubGQLService: CreateHubGQL,
-    private userHubsGQLService: UsersHubsGQL
+    private userHubsGQLService: UsersHubsGQL,
+    private usersPeopleGQLService: UsersPeopleGQL,
   ) { }
 
   async createHub(name: string, description: string, image: string, latitude: number, longitude: number) {
@@ -53,22 +54,11 @@ export class HubService {
   }
 
   async usersPeople(fetchPolicy: FetchPolicy = "network-only") {
-    const result = await this.apollo.query({
-      query: gql`
-      query {
-        usersPeople {
-          id
-          firstName
-          lastName
-          description
-          image
-        }
-      }
-      `,
+    const result = await this.usersPeopleGQLService.fetch(null, {
       fetchPolicy
     }).toPromise();
 
-    const response = result.data["usersPeople"];
+    const response = result.data.usersPeople;
 
     if (response) { 
       console.log("usersPeople successful.");
