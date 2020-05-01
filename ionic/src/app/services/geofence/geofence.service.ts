@@ -16,6 +16,7 @@ import BackgroundGeolocation, {
 } from "cordova-background-geolocation-lt";
 import { Plugins } from '@capacitor/core';
 import { HubService } from '../hub/hub.service';
+import { Hub } from 'src/generated/graphql';
 const { LocalNotifications } = Plugins;
 
 @Injectable({
@@ -77,10 +78,10 @@ export class GeofenceService {
   async configureBackgroundGeolocation() {
     BackgroundGeolocation.onGeofence(async geofence => {
         console.log("[geofence] ", geofence.identifier, geofence.action);
-        const hub = JSON.parse(geofence.identifier);
+        const hub = JSON.parse(geofence.identifier) as Hub;
 
         if (geofence.action == "ENTER") {
-          await this.hubService.enteredHubGeofence(hub.id).catch(err => {
+          await this.hubService.enteredHubGeofence(parseInt(hub.id)).catch(err => {
             LocalNotifications.schedule({
               notifications: [
                 {
@@ -114,7 +115,7 @@ export class GeofenceService {
         }
 
         if (geofence.action == "EXIT") {
-          await this.hubService.exitedHubGeofence(hub.id).catch(err => {
+          await this.hubService.exitedHubGeofence(parseInt(hub.id) ).catch(err => {
             LocalNotifications.schedule({
               notifications: [
                 {
