@@ -56,7 +56,7 @@ export class NotificationsPage implements OnInit {
   }
 
   async deleteNotification(id: any) {
-    const result = await this.notificationsService.deleteInAppNotification(id);
+    const result = await this.notificationsService.deleteInAppNotification(parseInt(id));
     if (result) {
       const notification = this.inAppNotifications.find(x => x.id == id);
       this.inAppNotifications.splice(this.inAppNotifications.indexOf(notification));

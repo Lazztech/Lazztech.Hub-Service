@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Apollo } from 'apollo-angular';
-import gql from 'graphql-tag';
 import { FetchPolicy } from 'apollo-client';
 import { CreateHubGQL, UsersHubsGQL, UsersPeopleGQL, CommonUsersHubsGQL, EditHubGQL, HubGQL, InviteUserToHubGQL, JoinHubGQL, DeleteHubGQL, ChangeHubImageGQL, SetHubStarredGQL, SetHubNotStarredGQL, EnteredHubGeofenceGQL, ExitedHubGeofenceGQL, ActivateHubGQL, DeactivateHubGQL, MicroChatToHubGQL, CreateMicroChatGQL, DeleteMicroChatGQL } from 'src/generated/graphql';
 
@@ -10,7 +8,6 @@ import { CreateHubGQL, UsersHubsGQL, UsersPeopleGQL, CommonUsersHubsGQL, EditHub
 export class HubService {
 
   constructor(
-    private apollo: Apollo,
     private createHubGQLService: CreateHubGQL,
     private userHubsGQLService: UsersHubsGQL,
     private usersPeopleGQLService: UsersPeopleGQL,
@@ -60,7 +57,7 @@ export class HubService {
 
     const response = result.data.usersHubs;
 
-    if (response) { 
+    if (response) {
       console.log("usersHubs successful.");
     } else {
       console.log("usersHubs failure");
@@ -76,7 +73,7 @@ export class HubService {
 
     const response = result.data.usersPeople;
 
-    if (response) { 
+    if (response) {
       console.log("usersPeople successful.");
     } else {
       console.log("usersPeople failure");
@@ -89,13 +86,13 @@ export class HubService {
     const result = await this.commonUsersHubsGQLService.fetch({
       otherUsersId
     },
-    {
-      fetchPolicy
-    }).toPromise();
+      {
+        fetchPolicy
+      }).toPromise();
 
     const response = result.data.commonUsersHubs;
 
-    if (response) { 
+    if (response) {
       console.log("commonUsersHubs successful.");
     } else {
       console.log("commonUsersHubs failure");
@@ -127,9 +124,9 @@ export class HubService {
     const result = await this.hubGQLService.fetch({
       id
     },
-    {
-      fetchPolicy
-    }).toPromise();
+      {
+        fetchPolicy
+      }).toPromise();
 
     console.log(result);
     const response = result.data.hub;
@@ -158,7 +155,7 @@ export class HubService {
     const result = await this.joinHubGQLService.mutate({
       id
     }).toPromise();
-    
+
     console.log(result);
     const response = result.data.joinHub;
     return response;
@@ -182,7 +179,7 @@ export class HubService {
 
     console.log(result);
     const response = result.data.changeHubImage;
-    return (response)? true : false;
+    return (response) ? true : false;
   }
 
   async setHubStarred(hubId: number) {
@@ -218,7 +215,7 @@ export class HubService {
     const result = await this.exitedHubGeofenceGQLService.mutate({
       hubId
     }).toPromise();
-    
+
     console.log(`exitedHubGeofence hubId ${hubId} returned ${result}`);
     return result;
   }
@@ -227,7 +224,7 @@ export class HubService {
     const result = await this.activateHubGQLService.mutate({
       hubId
     }).toPromise();
-    
+
     console.log(`exitedHubGeofence hubId ${hubId} returned ${result}`);
     return result;
   }
@@ -236,7 +233,7 @@ export class HubService {
     const result = await this.deactivateHubGQLService.mutate({
       hubId
     }).toPromise();
-    
+
     console.log(`exitedHubGeofence hubId ${hubId} returned ${result}`);
     return result;
   }
