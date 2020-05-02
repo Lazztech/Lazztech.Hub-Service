@@ -113,78 +113,78 @@ export type MutationCreateHubArgs = {
 
 export type MutationInviteUserToHubArgs = {
   inviteesEmail: Scalars['String'];
-  hubId: Scalars['Int'];
+  hubId: Scalars['ID'];
 };
 
 
 export type MutationDeleteHubArgs = {
-  hubId: Scalars['Int'];
+  hubId: Scalars['ID'];
 };
 
 
 export type MutationEditHubArgs = {
   description: Scalars['String'];
   name: Scalars['String'];
-  hubId: Scalars['Int'];
+  hubId: Scalars['ID'];
 };
 
 
 export type MutationChangeHubImageArgs = {
   newImage: Scalars['String'];
-  hubId: Scalars['Int'];
+  hubId: Scalars['ID'];
 };
 
 
 export type MutationJoinHubArgs = {
-  id: Scalars['Int'];
+  id: Scalars['ID'];
 };
 
 
 export type MutationSetHubStarredArgs = {
-  hubId: Scalars['Int'];
+  hubId: Scalars['ID'];
 };
 
 
 export type MutationSetHubNotStarredArgs = {
-  hubId: Scalars['Int'];
+  hubId: Scalars['ID'];
 };
 
 
 export type MutationEnteredHubGeofenceArgs = {
-  hubId: Scalars['Int'];
+  hubId: Scalars['ID'];
 };
 
 
 export type MutationExitedHubGeofenceArgs = {
-  hubId: Scalars['Int'];
+  hubId: Scalars['ID'];
 };
 
 
 export type MutationActivateHubArgs = {
-  hubId: Scalars['Int'];
+  hubId: Scalars['ID'];
 };
 
 
 export type MutationDeactivateHubArgs = {
-  hubId: Scalars['Int'];
+  hubId: Scalars['ID'];
 };
 
 
 export type MutationMicroChatToHubArgs = {
-  microChatId: Scalars['Int'];
-  hubId: Scalars['Int'];
+  microChatId: Scalars['ID'];
+  hubId: Scalars['ID'];
 };
 
 
 export type MutationCreateMicroChatArgs = {
   microChatText: Scalars['String'];
-  hubId: Scalars['Int'];
+  hubId: Scalars['ID'];
 };
 
 
 export type MutationDeleteMicroChatArgs = {
-  microChatId: Scalars['Int'];
-  hubId: Scalars['Int'];
+  microChatId: Scalars['ID'];
+  hubId: Scalars['ID'];
 };
 
 
@@ -211,7 +211,7 @@ export type MutationAddUserFcmNotificationTokenArgs = {
 
 
 export type MutationDeleteInAppNotificationArgs = {
-  inAppNotificationId: Scalars['Int'];
+  inAppNotificationId: Scalars['ID'];
 };
 
 
@@ -264,12 +264,12 @@ export type Query = {
 
 
 export type QueryHubArgs = {
-  id: Scalars['Int'];
+  id: Scalars['ID'];
 };
 
 
 export type QueryCommonUsersHubsArgs = {
-  otherUsersId: Scalars['Int'];
+  otherUsersId: Scalars['ID'];
 };
 
 
@@ -352,7 +352,7 @@ export type SendPasswordResetEmailMutation = (
 );
 
 export type ActivateHubMutationVariables = {
-  hubId: Scalars['Int'];
+  hubId: Scalars['ID'];
 };
 
 
@@ -365,7 +365,7 @@ export type ActivateHubMutation = (
 );
 
 export type ChangeHubImageMutationVariables = {
-  id: Scalars['Int'];
+  id: Scalars['ID'];
   image: Scalars['String'];
 };
 
@@ -379,7 +379,7 @@ export type ChangeHubImageMutation = (
 );
 
 export type CommonUsersHubsQueryVariables = {
-  otherUsersId: Scalars['Int'];
+  otherUsersId: Scalars['ID'];
 };
 
 
@@ -417,7 +417,7 @@ export type CreateHubMutation = (
 );
 
 export type CreateMicroChatMutationVariables = {
-  hubId: Scalars['Int'];
+  hubId: Scalars['ID'];
   microChatText: Scalars['String'];
 };
 
@@ -431,7 +431,7 @@ export type CreateMicroChatMutation = (
 );
 
 export type DeactivateHubMutationVariables = {
-  hubId: Scalars['Int'];
+  hubId: Scalars['ID'];
 };
 
 
@@ -444,7 +444,7 @@ export type DeactivateHubMutation = (
 );
 
 export type DeleteHubMutationVariables = {
-  id: Scalars['Int'];
+  id: Scalars['ID'];
 };
 
 
@@ -454,8 +454,8 @@ export type DeleteHubMutation = (
 );
 
 export type DeleteMicroChatMutationVariables = {
-  hubId: Scalars['Int'];
-  microChatId: Scalars['Int'];
+  hubId: Scalars['ID'];
+  microChatId: Scalars['ID'];
 };
 
 
@@ -465,7 +465,7 @@ export type DeleteMicroChatMutation = (
 );
 
 export type EditHubMutationVariables = {
-  hubId: Scalars['Int'];
+  hubId: Scalars['ID'];
   name: Scalars['String'];
   description: Scalars['String'];
 };
@@ -480,7 +480,7 @@ export type EditHubMutation = (
 );
 
 export type EnteredHubGeofenceMutationVariables = {
-  hubId: Scalars['Int'];
+  hubId: Scalars['ID'];
 };
 
 
@@ -490,7 +490,7 @@ export type EnteredHubGeofenceMutation = (
 );
 
 export type ExitedHubGeofenceMutationVariables = {
-  hubId: Scalars['Int'];
+  hubId: Scalars['ID'];
 };
 
 
@@ -500,7 +500,7 @@ export type ExitedHubGeofenceMutation = (
 );
 
 export type HubQueryVariables = {
-  id: Scalars['Int'];
+  id: Scalars['ID'];
 };
 
 
@@ -528,7 +528,7 @@ export type HubQuery = (
 );
 
 export type InviteUserToHubMutationVariables = {
-  hubId: Scalars['Int'];
+  hubId: Scalars['ID'];
   inviteesEmail: Scalars['String'];
 };
 
@@ -539,7 +539,7 @@ export type InviteUserToHubMutation = (
 );
 
 export type JoinHubMutationVariables = {
-  id: Scalars['Int'];
+  id: Scalars['ID'];
 };
 
 
@@ -549,8 +549,8 @@ export type JoinHubMutation = (
 );
 
 export type MicroChatToHubMutationVariables = {
-  hubId: Scalars['Int'];
-  microChatId: Scalars['Int'];
+  hubId: Scalars['ID'];
+  microChatId: Scalars['ID'];
 };
 
 
@@ -560,7 +560,7 @@ export type MicroChatToHubMutation = (
 );
 
 export type SetHubNotStarredMutationVariables = {
-  hubId: Scalars['Int'];
+  hubId: Scalars['ID'];
 };
 
 
@@ -570,7 +570,7 @@ export type SetHubNotStarredMutation = (
 );
 
 export type SetHubStarredMutationVariables = {
-  hubId: Scalars['Int'];
+  hubId: Scalars['ID'];
 };
 
 
@@ -628,7 +628,7 @@ export type DeleteAllInAppNotificationsMutation = (
 );
 
 export type DeleteInAppNotificationMutationVariables = {
-  inAppNotificationId: Scalars['Int'];
+  inAppNotificationId: Scalars['ID'];
 };
 
 
@@ -784,7 +784,7 @@ export const SendPasswordResetEmailDocument = gql`
     
   }
 export const ActivateHubDocument = gql`
-    mutation activateHub($hubId: Int!) {
+    mutation activateHub($hubId: ID!) {
   activateHub(hubId: $hubId) {
     id
     active
@@ -800,7 +800,7 @@ export const ActivateHubDocument = gql`
     
   }
 export const ChangeHubImageDocument = gql`
-    mutation changeHubImage($id: Int!, $image: String!) {
+    mutation changeHubImage($id: ID!, $image: String!) {
   changeHubImage(hubId: $id, newImage: $image) {
     id
     image
@@ -816,7 +816,7 @@ export const ChangeHubImageDocument = gql`
     
   }
 export const CommonUsersHubsDocument = gql`
-    query commonUsersHubs($otherUsersId: Int!) {
+    query commonUsersHubs($otherUsersId: ID!) {
   commonUsersHubs(otherUsersId: $otherUsersId) {
     userId
     hubId
@@ -867,7 +867,7 @@ export const CreateHubDocument = gql`
     
   }
 export const CreateMicroChatDocument = gql`
-    mutation createMicroChat($hubId: Int!, $microChatText: String!) {
+    mutation createMicroChat($hubId: ID!, $microChatText: String!) {
   createMicroChat(hubId: $hubId, microChatText: $microChatText) {
     id
     text
@@ -883,7 +883,7 @@ export const CreateMicroChatDocument = gql`
     
   }
 export const DeactivateHubDocument = gql`
-    mutation deactivateHub($hubId: Int!) {
+    mutation deactivateHub($hubId: ID!) {
   deactivateHub(hubId: $hubId) {
     id
     active
@@ -899,7 +899,7 @@ export const DeactivateHubDocument = gql`
     
   }
 export const DeleteHubDocument = gql`
-    mutation deleteHub($id: Int!) {
+    mutation deleteHub($id: ID!) {
   deleteHub(hubId: $id)
 }
     `;
@@ -912,7 +912,7 @@ export const DeleteHubDocument = gql`
     
   }
 export const DeleteMicroChatDocument = gql`
-    mutation deleteMicroChat($hubId: Int!, $microChatId: Int!) {
+    mutation deleteMicroChat($hubId: ID!, $microChatId: ID!) {
   deleteMicroChat(hubId: $hubId, microChatId: $microChatId)
 }
     `;
@@ -925,7 +925,7 @@ export const DeleteMicroChatDocument = gql`
     
   }
 export const EditHubDocument = gql`
-    mutation editHub($hubId: Int!, $name: String!, $description: String!) {
+    mutation editHub($hubId: ID!, $name: String!, $description: String!) {
   editHub(hubId: $hubId, name: $name, description: $description) {
     id
     name
@@ -942,7 +942,7 @@ export const EditHubDocument = gql`
     
   }
 export const EnteredHubGeofenceDocument = gql`
-    mutation enteredHubGeofence($hubId: Int!) {
+    mutation enteredHubGeofence($hubId: ID!) {
   enteredHubGeofence(hubId: $hubId)
 }
     `;
@@ -955,7 +955,7 @@ export const EnteredHubGeofenceDocument = gql`
     
   }
 export const ExitedHubGeofenceDocument = gql`
-    mutation exitedHubGeofence($hubId: Int!) {
+    mutation exitedHubGeofence($hubId: ID!) {
   exitedHubGeofence(hubId: $hubId)
 }
     `;
@@ -968,7 +968,7 @@ export const ExitedHubGeofenceDocument = gql`
     
   }
 export const HubDocument = gql`
-    query hub($id: Int!) {
+    query hub($id: ID!) {
   hub(id: $id) {
     userId
     hubId
@@ -1011,7 +1011,7 @@ export const HubDocument = gql`
     
   }
 export const InviteUserToHubDocument = gql`
-    mutation inviteUserToHub($hubId: Int!, $inviteesEmail: String!) {
+    mutation inviteUserToHub($hubId: ID!, $inviteesEmail: String!) {
   inviteUserToHub(hubId: $hubId, inviteesEmail: $inviteesEmail)
 }
     `;
@@ -1024,7 +1024,7 @@ export const InviteUserToHubDocument = gql`
     
   }
 export const JoinHubDocument = gql`
-    mutation joinHub($id: Int!) {
+    mutation joinHub($id: ID!) {
   joinHub(id: $id)
 }
     `;
@@ -1037,7 +1037,7 @@ export const JoinHubDocument = gql`
     
   }
 export const MicroChatToHubDocument = gql`
-    mutation microChatToHub($hubId: Int!, $microChatId: Int!) {
+    mutation microChatToHub($hubId: ID!, $microChatId: ID!) {
   microChatToHub(hubId: $hubId, microChatId: $microChatId)
 }
     `;
@@ -1050,7 +1050,7 @@ export const MicroChatToHubDocument = gql`
     
   }
 export const SetHubNotStarredDocument = gql`
-    mutation setHubNotStarred($hubId: Int!) {
+    mutation setHubNotStarred($hubId: ID!) {
   setHubNotStarred(hubId: $hubId)
 }
     `;
@@ -1063,7 +1063,7 @@ export const SetHubNotStarredDocument = gql`
     
   }
 export const SetHubStarredDocument = gql`
-    mutation setHubStarred($hubId: Int!) {
+    mutation setHubStarred($hubId: ID!) {
   setHubStarred(hubId: $hubId)
 }
     `;
@@ -1153,7 +1153,7 @@ export const DeleteAllInAppNotificationsDocument = gql`
     
   }
 export const DeleteInAppNotificationDocument = gql`
-    mutation deleteInAppNotification($inAppNotificationId: Int!) {
+    mutation deleteInAppNotification($inAppNotificationId: ID!) {
   deleteInAppNotification(inAppNotificationId: $inAppNotificationId)
 }
     `;

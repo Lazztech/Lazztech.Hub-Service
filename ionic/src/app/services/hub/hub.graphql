@@ -1,4 +1,4 @@
-     query hub($id: Int!) {
+     query hub($id: ID!) {
         hub(id: $id) {
           userId
           hubId

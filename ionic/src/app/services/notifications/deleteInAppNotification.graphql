@@ -1,4 +1,4 @@
-mutation deleteInAppNotification($inAppNotificationId: Int!){
+mutation deleteInAppNotification($inAppNotificationId: ID!){
     deleteInAppNotification(
         inAppNotificationId: $inAppNotificationId
         )

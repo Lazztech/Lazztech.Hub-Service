@@ -1,4 +1,4 @@
-query commonUsersHubs($otherUsersId: Int!) {
+query commonUsersHubs($otherUsersId: ID!) {
     commonUsersHubs(otherUsersId: $otherUsersId) {
         userId
         hubId

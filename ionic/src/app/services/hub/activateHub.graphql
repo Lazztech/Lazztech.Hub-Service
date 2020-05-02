@@ -1,4 +1,4 @@
-mutation activateHub($hubId: Int!) {
+mutation activateHub($hubId: ID!) {
     activateHub(hubId: $hubId) {
         id
         active

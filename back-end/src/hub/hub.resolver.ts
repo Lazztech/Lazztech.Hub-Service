@@ -4,7 +4,7 @@ import { MicroChat } from 'src/dal/entity/microChat.entity';
 import { UserId } from 'src/decorators/user.decorator';
 import { AuthGuard } from 'src/guards/authguard.service';
 import { UserService } from 'src/user/user.service';
-import { Float, Int } from 'type-graphql';
+import { Float, ID } from 'type-graphql';
 import { Hub } from '../dal/entity/hub.entity';
 import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
 import { User } from '../dal/entity/user.entity';
@@ -46,7 +46,7 @@ export class HubResolver {
   @Query(() => JoinUserHub)
   public async hub(
     @UserId() userId,
-    @Args({ name: 'id', type: () => Int }) id: number,
+    @Args({ name: 'id', type: () => ID }) id: number,
   ): Promise<JoinUserHub> {
     this.logger.log(this.hub.name);
     const result = await this.hubService.getOneUserHub(userId, id);
@@ -65,7 +65,7 @@ export class HubResolver {
   @Query(() => [JoinUserHub])
   public async commonUsersHubs(
     @UserId() userId,
-    @Args({ name: 'otherUsersId', type: () => Int }) otherUsersId: number,
+    @Args({ name: 'otherUsersId', type: () => ID }) otherUsersId: number,
   ) {
     this.logger.log(this.commonUsersHubs.name);
     const result = await this.hubService.commonUsersHubs(userId, otherUsersId)
@@ -76,7 +76,7 @@ export class HubResolver {
   @Mutation(() => Boolean)
   public async inviteUserToHub(
     @UserId() userId,
-    @Args({ name: 'hubId', type: () => Int }) hubId: number,
+    @Args({ name: 'hubId', type: () => ID }) hubId: number,
     @Args({ name: 'inviteesEmail', type: () => String }) inviteesEmail: string,
   ): Promise<boolean> {
     this.logger.log(this.inviteUserToHub.name);
@@ -123,7 +123,7 @@ export class HubResolver {
   @Mutation(() => Boolean)
   public async deleteHub(
     @UserId() userId,
-    @Args({ name: 'hubId', type: () => Int }) hubId: number,
+    @Args({ name: 'hubId', type: () => ID }) hubId: number,
   ) {
     this.logger.log(this.deleteHub.name);
     await this.hubService.deleteHub(userId, hubId);
@@ -134,7 +134,7 @@ export class HubResolver {
   @Mutation(() => Hub)
   public async editHub(
     @UserId() userId,
-    @Args({ name: 'hubId', type: () => Int }) hubId: number,
+    @Args({ name: 'hubId', type: () => ID }) hubId: number,
     @Args({ name: 'name', type: () => String }) name: string,
     @Args({ name: 'description', type: () => String }) description: string,
   ): Promise<Hub> {
@@ -147,7 +147,7 @@ export class HubResolver {
   @Mutation(() => Hub)
   public async changeHubImage(
     @UserId() userId,
-    @Args({ name: 'hubId', type: () => Int }) hubId: number,
+    @Args({ name: 'hubId', type: () => ID }) hubId: number,
     @Args({ name: 'newImage', type: () => String }) newImage: string,
   ): Promise<Hub> {
     this.logger.log(this.changeHubImage.name);
@@ -159,7 +159,7 @@ export class HubResolver {
   @Mutation(() => Boolean)
   public async joinHub(
     @UserId() userId,
-    @Args({ name: 'id', type: () => Int }) id: number,
+    @Args({ name: 'id', type: () => ID }) id: number,
   ): Promise<boolean> {
     this.logger.log(this.joinHub.name);
     await this.hubService.joinHub(userId, id);
@@ -170,7 +170,7 @@ export class HubResolver {
   @Mutation(() => Boolean)
   public async setHubStarred(
     @UserId() userId,
-    @Args({ name: 'hubId', type: () => Int }) hubId: number,
+    @Args({ name: 'hubId', type: () => ID }) hubId: number,
   ) {
     this.logger.log(this.setHubStarred.name);
     await this.hubService.setHubStarred(userId, hubId);
@@ -181,7 +181,7 @@ export class HubResolver {
   @Mutation(() => Boolean)
   public async setHubNotStarred(
     @UserId() userId,
-    @Args({ name: 'hubId', type: () => Int }) hubId: number,
+    @Args({ name: 'hubId', type: () => ID }) hubId: number,
   ) {
     this.logger.log(this.setHubNotStarred.name);
     await this.setHubNotStarred(userId, hubId);
@@ -192,7 +192,7 @@ export class HubResolver {
   @Mutation(() => Boolean)
   public async enteredHubGeofence(
     @UserId() userId,
-    @Args({ name: 'hubId', type: () => Int }) hubId: number,
+    @Args({ name: 'hubId', type: () => ID }) hubId: number,
   ): Promise<boolean> {
     this.logger.log(this.enteredHubGeofence.name);
     await this.hubGeofenceService.enteredHubGeofence(userId, hubId);
@@ -203,7 +203,7 @@ export class HubResolver {
   @Mutation(() => Boolean)
   public async exitedHubGeofence(
     @UserId() userId,
-    @Args({ name: 'hubId', type: () => Int }) hubId: number,
+    @Args({ name: 'hubId', type: () => ID }) hubId: number,
   ): Promise<boolean> {
     this.logger.log(this.exitedHubGeofence.name);
     await this.hubGeofenceService.exitedHubGeofence(userId, hubId);
@@ -214,7 +214,7 @@ export class HubResolver {
   @Mutation(() => Hub)
   public async activateHub(
     @UserId() userId,
-    @Args({ name: 'hubId', type: () => Int }) hubId: number,
+    @Args({ name: 'hubId', type: () => ID }) hubId: number,
   ) {
     this.logger.log(this.activateHub.name);
     const result = await this.hubActivityService.activateHub(userId, hubId);
@@ -225,7 +225,7 @@ export class HubResolver {
   @Mutation(() => Hub)
   public async deactivateHub(
     @UserId() userId,
-    @Args({ name: 'hubId', type: () => Int }) hubId: number,
+    @Args({ name: 'hubId', type: () => ID }) hubId: number,
   ) {
     this.logger.log(this.deactivateHub.name);
     const result = await this.hubActivityService.deactivateHub(userId, hubId);
@@ -236,8 +236,8 @@ export class HubResolver {
   @Mutation(() => Boolean)
   public async microChatToHub(
     @UserId() userId,
-    @Args({ name: 'hubId', type: () => Int }) hubId: number,
-    @Args({ name: 'microChatId', type: () => Int }) microChatId: number,
+    @Args({ name: 'hubId', type: () => ID }) hubId: number,
+    @Args({ name: 'microChatId', type: () => ID }) microChatId: number,
   ) {
     this.logger.log(this.microChatToHub.name);
     await this.hubMicroChatService.microChatToHub(userId, hubId, microChatId);
@@ -248,7 +248,7 @@ export class HubResolver {
   @Mutation(() => MicroChat)
   public async createMicroChat(
     @UserId() userId,
-    @Args({ name: 'hubId', type: () => Int }) hubId: number,
+    @Args({ name: 'hubId', type: () => ID }) hubId: number,
     @Args({ name: 'microChatText', type: () => String }) microChatText: string,
   ) {
     this.logger.log(this.createMicroChat.name);
@@ -260,8 +260,8 @@ export class HubResolver {
   @Mutation(() => Boolean)
   public async deleteMicroChat(
     @UserId() userId,
-    @Args({ name: 'hubId', type: () => Int }) hubId: number,
-    @Args({ name: 'microChatId', type: () => Int }) microChatId: number,
+    @Args({ name: 'hubId', type: () => ID }) hubId: number,
+    @Args({ name: 'microChatId', type: () => ID }) microChatId: number,
   ) {
     this.logger.log(this.deleteMicroChat.name);
     await this.hubMicroChatService.deleteMicroChat(userId, hubId, microChatId);

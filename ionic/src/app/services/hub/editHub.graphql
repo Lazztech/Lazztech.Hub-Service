@@ -1,5 +1,5 @@
 mutation editHub(
-    $hubId: Int!
+    $hubId: ID!
     $name: String!
     $description: String!
     ) {

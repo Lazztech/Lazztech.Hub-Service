@@ -1,5 +1,5 @@
 mutation inviteUserToHub(
-    $hubId: Int!
+    $hubId: ID!
     $inviteesEmail: String!
     ) {
     inviteUserToHub(

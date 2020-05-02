@@ -1,4 +1,4 @@
-mutation microChatToHub($hubId: Int! $microChatId: Int!) {
+mutation microChatToHub($hubId: ID! $microChatId: ID!) {
     microChatToHub(
         hubId: $hubId, 
         microChatId: $microChatId

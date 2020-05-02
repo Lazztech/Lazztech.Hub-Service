@@ -55,25 +55,25 @@ type MicroChat {
 
 type Mutation {
   createHub(longitude: Float!, latitude: Float!, image: String!, description: String!, name: String!): Hub!
-  inviteUserToHub(inviteesEmail: String!, hubId: Int!): Boolean!
-  deleteHub(hubId: Int!): Boolean!
-  editHub(description: String!, name: String!, hubId: Int!): Hub!
-  changeHubImage(newImage: String!, hubId: Int!): Hub!
-  joinHub(id: Int!): Boolean!
-  setHubStarred(hubId: Int!): Boolean!
-  setHubNotStarred(hubId: Int!): Boolean!
-  enteredHubGeofence(hubId: Int!): Boolean!
-  exitedHubGeofence(hubId: Int!): Boolean!
-  activateHub(hubId: Int!): Hub!
-  deactivateHub(hubId: Int!): Hub!
-  microChatToHub(microChatId: Int!, hubId: Int!): Boolean!
-  createMicroChat(microChatText: String!, hubId: Int!): MicroChat!
-  deleteMicroChat(microChatId: Int!, hubId: Int!): Boolean!
+  inviteUserToHub(inviteesEmail: String!, hubId: ID!): Boolean!
+  deleteHub(hubId: ID!): Boolean!
+  editHub(description: String!, name: String!, hubId: ID!): Hub!
+  changeHubImage(newImage: String!, hubId: ID!): Hub!
+  joinHub(id: ID!): Boolean!
+  setHubStarred(hubId: ID!): Boolean!
+  setHubNotStarred(hubId: ID!): Boolean!
+  enteredHubGeofence(hubId: ID!): Boolean!
+  exitedHubGeofence(hubId: ID!): Boolean!
+  activateHub(hubId: ID!): Hub!
+  deactivateHub(hubId: ID!): Hub!
+  microChatToHub(microChatId: ID!, hubId: ID!): Boolean!
+  createMicroChat(microChatText: String!, hubId: ID!): MicroChat!
+  deleteMicroChat(microChatId: ID!, hubId: ID!): Boolean!
   editUserDetails(description: String!, lastName: String!, firstName: String!): User!
   changeEmail(newEmail: String!): User!
   changeUserImage(newImage: String!): User!
   addUserFcmNotificationToken(token: String!): Boolean!
-  deleteInAppNotification(inAppNotificationId: Int!): Boolean!
+  deleteInAppNotification(inAppNotificationId: ID!): Boolean!
   deleteAllInAppNotifications: Boolean!
   login(password: String!, email: String!): String
   register(data: UserInput!): String
@@ -85,9 +85,9 @@ type Mutation {
 }
 
 type Query {
-  hub(id: Int!): JoinUserHub!
+  hub(id: ID!): JoinUserHub!
   usersHubs: [JoinUserHub!]!
-  commonUsersHubs(otherUsersId: Int!): [JoinUserHub!]!
+  commonUsersHubs(otherUsersId: ID!): [JoinUserHub!]!
   usersPeople: [User!]!
   searchHubByName(search: String!): [Hub!]!
   ownedHubs: [Hub!]!

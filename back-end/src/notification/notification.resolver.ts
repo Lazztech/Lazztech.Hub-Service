@@ -2,7 +2,7 @@ import { Logger, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserId } from 'src/decorators/user.decorator';
 import { AuthGuard } from 'src/guards/authguard.service';
-import { Int } from 'type-graphql';
+import { ID } from 'type-graphql';
 import { InAppNotification } from '../dal/entity/inAppNotification.entity';
 import { NotificationService } from './notification.service';
 
@@ -41,7 +41,7 @@ export class NotificationResolver {
   @Mutation(() => Boolean)
   public async deleteInAppNotification(
     @UserId() userId,
-    @Args({ name: 'inAppNotificationId', type: () => Int }) inAppNotificationId: number
+    @Args({ name: 'inAppNotificationId', type: () => ID }) inAppNotificationId: number
   ) {
     this.logger.log(this.deleteInAppNotification.name);
     await this.notificationService.deleteInAppNotification(userId, inAppNotificationId);
