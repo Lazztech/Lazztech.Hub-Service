@@ -31,15 +31,12 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-
-    - name: Standup Postgresql for integration tests
     - uses: harmon758/postgresql-action@v1
       with:
         postgresql version: '11'  # See https://hub.docker.com/_/postgres for available versions
         postgresql db: 'postgres-test'
         postgresql user: 'test'
         postgresql password: 'Password123'
-
     - name: back-end npm install, build, and test
       working-directory: ./back-end
       run: |
@@ -49,7 +46,6 @@ jobs:
       env:
         CI: true
         ACCESS_TOKEN_SECRET: ***REMOVED***
-    
     - name: ionic npm install & build
       working-directory: ./ionic
       run: |
