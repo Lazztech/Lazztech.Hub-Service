@@ -115,10 +115,7 @@ export class NotificationService {
     for (const iterator of fcmUserTokens) {
       const result = await this.sendPushNotification(notification, iterator);
 
-      this.logger.log(
-        `Sent push notification to fcmToken ${
-        iterator
-        } : ${JSON.stringify(notification)}`,
+      this.logger.log(`Sent push notification to fcmToken ${iterator}`,
       );
     }
   }
