@@ -142,7 +142,7 @@ export class HubService {
     }
 
     let resultingOtherUsers: Array<User> = commonConnections
-      .filter(x => x.userId !== userId)
+      .filter(x => x.userId != userId)
       .map(x => x.user);
 
     let uniqueUsers: Array<User> = [];

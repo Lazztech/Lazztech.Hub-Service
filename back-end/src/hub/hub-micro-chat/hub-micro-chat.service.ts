@@ -35,7 +35,7 @@ export class HubMicroChatService {
             },
             relations: ['usersConnection', 'microChats'],
         });
-        const microChat = hub.microChats.find(x => x.id === microChatId);
+        const microChat = hub.microChats.find(x => x.id == microChatId);
 
         for (const memberConnection of hub.usersConnection) {
             await this.notificationService.sendPushToUser(memberConnection.userId,
