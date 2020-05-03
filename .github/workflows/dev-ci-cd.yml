@@ -15,22 +15,15 @@ env:
   NODE_VERSION: '12.x'                # set this to the node version to use
 
 jobs:
-  build:
-
+  build-and-deploy:
+    name: Build and Deploy
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [12.x]
-
     steps:
-    - name: Checkout code
-    - uses: actions/checkout@v1
-
-    - name: Use Node.js ${{ matrix.node-version }}
+    - uses: actions/checkout@master
+    - name: Use Node.js ${{ env.NODE_VERSION }}
       uses: actions/setup-node@v1
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: ${{ env.NODE_VERSION }}
     - uses: harmon758/postgresql-action@v1
       with:
         postgresql version: '11'  # See https://hub.docker.com/_/postgres for available versions
