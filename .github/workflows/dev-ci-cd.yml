@@ -9,10 +9,10 @@ on: [push]
 #   AZURE_WEBAPP_PUBLISH_PROFILE
 #
 # 2. Change these variables for your configuration:
-  env:
-    AZURE_WEBAPP_NAME: lazztechhubdev    # set this to your application's name
-    AZURE_WEBAPP_PACKAGE_PATH: './back-end'      # set this to the path to your web app project, defaults to the repository root
-    NODE_VERSION: '12.x'                # set this to the node version to use
+env:
+  AZURE_WEBAPP_NAME: lazztechhubdev    # set this to your application's name
+  AZURE_WEBAPP_PACKAGE_PATH: './back-end'      # set this to the path to your web app project, defaults to the repository root
+  NODE_VERSION: '12.x'                # set this to the node version to use
 
 jobs:
   build:
