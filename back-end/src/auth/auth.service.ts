@@ -55,7 +55,7 @@ export class AuthService {
     }
 
     public async login(password: string, email: string) {
-        this.logger.log(this.login);
+        this.logger.log(this.login.name);
         const user = await this.userRepository.findOne({ where: { email } });
 
         if (!user) {
