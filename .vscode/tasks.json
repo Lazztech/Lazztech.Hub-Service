@@ -4,6 +4,33 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "graphql-inspector diff",
+            "type": "shell",
+            "command": "graphql-inspector diff https://lazztechhubdev.azurewebsites.net/graphql ./schema.gql",
+            "options": {
+                "cwd": "${workspaceRoot}/back-end"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "graphql-inspector validate",
+            "type": "shell",
+            "command": "graphql-inspector validate './**/*.graphql' '../back-end/schema.gql'",
+            "options": {
+                "cwd": "${workspaceRoot}/ionic"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "graphql-inspector coverage",
+            "type": "shell",
+            "command": "graphql-inspector coverage ./**/*.graphql ../back-end/schema.gql",
+            "options": {
+                "cwd": "${workspaceRoot}/ionic"
+            },
+            "problemMatcher": []
+        },
+        {
             "label": "Export SQL Schema",
             "type": "shell",
             "command": "pg_dump -s postgres -U test -p ${input:GenericInput} | grep -v -F \"OWNER TO test;\" > export.sql",
