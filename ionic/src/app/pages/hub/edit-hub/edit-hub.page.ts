@@ -12,7 +12,7 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 export class EditHubPage implements OnInit {
 
   loading = false;
-  id: number;
+  id: any;
   userHub: any;
 
   myForm: FormGroup;

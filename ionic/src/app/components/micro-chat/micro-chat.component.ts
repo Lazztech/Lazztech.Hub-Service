@@ -11,7 +11,7 @@ import { MicroChatAddPage } from 'src/app/pages/micro-chat-add/micro-chat-add.pa
 export class MicroChatComponent implements OnInit {
 
   @Input()
-  hubId: number;
+  hubId: any;
 
   @Input()
   userHub: any;

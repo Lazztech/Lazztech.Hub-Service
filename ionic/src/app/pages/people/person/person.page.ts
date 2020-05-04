@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { HubService } from 'src/app/services/hub/hub.service';
+import { User } from 'src/generated/graphql';
 
 @Component({
   selector: 'app-person',
@@ -12,8 +13,8 @@ export class PersonPage implements OnInit, OnDestroy {
 
   loading = false;
   queryParamsSubscription: Subscription;
-  id: number;
-  user: any;
+  id: any;
+  user: User;
 
   userHubs = [];
 

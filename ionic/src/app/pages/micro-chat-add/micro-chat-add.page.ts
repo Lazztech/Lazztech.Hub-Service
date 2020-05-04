@@ -12,7 +12,7 @@ export class MicroChatAddPage implements OnInit {
 
   loading = false;
   @Input()
-  hubId: number;
+  hubId: any;
   myForm: FormGroup;
 
   get text() {

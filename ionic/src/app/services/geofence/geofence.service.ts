@@ -81,7 +81,7 @@ export class GeofenceService {
         const hub = JSON.parse(geofence.identifier) as Hub;
 
         if (geofence.action == "ENTER") {
-          await this.hubService.enteredHubGeofence(parseInt(hub.id)).catch(err => {
+          await this.hubService.enteredHubGeofence(hub.id).catch(err => {
             LocalNotifications.schedule({
               notifications: [
                 {
@@ -115,7 +115,7 @@ export class GeofenceService {
         }
 
         if (geofence.action == "EXIT") {
-          await this.hubService.exitedHubGeofence(parseInt(hub.id) ).catch(err => {
+          await this.hubService.exitedHubGeofence(hub.id).catch(err => {
             LocalNotifications.schedule({
               notifications: [
                 {

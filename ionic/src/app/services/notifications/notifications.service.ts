@@ -5,7 +5,7 @@ import '@firebase/messaging';
 import { Platform, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { FetchPolicy } from 'apollo-client';
-import { AddUserFcmNotificationTokenGQL, DeleteAllInAppNotificationsGQL, DeleteInAppNotificationGQL, GetInAppNotificationsGQL, InAppNotification } from '../../../generated/graphql';
+import { AddUserFcmNotificationTokenGQL, DeleteAllInAppNotificationsGQL, DeleteInAppNotificationGQL, GetInAppNotificationsGQL, InAppNotification, Scalars } from '../../../generated/graphql';
 const { LocalNotifications, PushNotifications } = Plugins;
 
 @Injectable({
@@ -74,7 +74,7 @@ export class NotificationsService {
     return result.data.getInAppNotifications;
   }
 
-  async deleteInAppNotification(inAppNotificationId: number) {
+  async deleteInAppNotification(inAppNotificationId: Scalars['ID']) {
     const result = await this.deleteInAppNotificationGQLService.mutate({
       inAppNotificationId
     }).toPromise();

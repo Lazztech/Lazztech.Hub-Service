@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FetchPolicy } from 'apollo-client';
-import { CreateHubGQL, UsersHubsGQL, UsersPeopleGQL, CommonUsersHubsGQL, EditHubGQL, HubGQL, InviteUserToHubGQL, JoinHubGQL, DeleteHubGQL, ChangeHubImageGQL, SetHubStarredGQL, SetHubNotStarredGQL, EnteredHubGeofenceGQL, ExitedHubGeofenceGQL, ActivateHubGQL, DeactivateHubGQL, MicroChatToHubGQL, CreateMicroChatGQL, DeleteMicroChatGQL } from 'src/generated/graphql';
+import { CreateHubGQL, UsersHubsGQL, UsersPeopleGQL, CommonUsersHubsGQL, EditHubGQL, HubGQL, InviteUserToHubGQL, JoinHubGQL, DeleteHubGQL, ChangeHubImageGQL, SetHubStarredGQL, SetHubNotStarredGQL, EnteredHubGeofenceGQL, ExitedHubGeofenceGQL, ActivateHubGQL, DeactivateHubGQL, MicroChatToHubGQL, CreateMicroChatGQL, DeleteMicroChatGQL, Scalars } from 'src/generated/graphql';
 
 @Injectable({
   providedIn: 'root'
@@ -82,7 +82,7 @@ export class HubService {
     return response;
   }
 
-  async commonUsersHubs(otherUsersId: number, fetchPolicy: FetchPolicy = "network-only") {
+  async commonUsersHubs(otherUsersId: Scalars['ID'], fetchPolicy: FetchPolicy = "network-only") {
     const result = await this.commonUsersHubsGQLService.fetch({
       otherUsersId
     },
@@ -101,7 +101,7 @@ export class HubService {
     return response;
   }
 
-  async editHub(hubId: number, name: string, description: string) {
+  async editHub(hubId: Scalars['ID'], name: string, description: string) {
     const result = await this.editHubGQLService.mutate({
       hubId,
       name,
@@ -120,7 +120,7 @@ export class HubService {
     return response;
   }
 
-  async hub(id: number, fetchPolicy: FetchPolicy = "network-only") {
+  async hub(id: Scalars['ID'], fetchPolicy: FetchPolicy = "network-only") {
     const result = await this.hubGQLService.fetch({
       id
     },
@@ -140,7 +140,7 @@ export class HubService {
     return response;
   }
 
-  async inviteUserToHub(hubId: number, inviteesEmail: string) {
+  async inviteUserToHub(hubId: Scalars['ID'], inviteesEmail: string) {
     const result = await this.inviteUserToHubGQLService.mutate({
       hubId,
       inviteesEmail
@@ -151,7 +151,7 @@ export class HubService {
     return response;
   }
 
-  async joinHub(id: number): Promise<boolean> {
+  async joinHub(id: Scalars['ID']): Promise<boolean> {
     const result = await this.joinHubGQLService.mutate({
       id
     }).toPromise();
@@ -161,7 +161,7 @@ export class HubService {
     return response;
   }
 
-  async deleteHub(id: number): Promise<boolean> {
+  async deleteHub(id: Scalars['ID']): Promise<boolean> {
     const result = await this.deleteHubGQLService.mutate({
       id
     }).toPromise();
@@ -171,7 +171,7 @@ export class HubService {
     return response;
   }
 
-  async changeHubImage(id: number, image: string): Promise<boolean> {
+  async changeHubImage(id: Scalars['ID'], image: string): Promise<boolean> {
     const result = await this.changeHubImageGQLService.mutate({
       id,
       image
@@ -182,7 +182,7 @@ export class HubService {
     return (response) ? true : false;
   }
 
-  async setHubStarred(hubId: number) {
+  async setHubStarred(hubId: Scalars['ID']) {
     const result = await this.setHubStarredGQLService.mutate({
       hubId
     }).toPromise();
@@ -192,7 +192,7 @@ export class HubService {
     return response;
   }
 
-  async setHubNotStarred(hubId: number) {
+  async setHubNotStarred(hubId: Scalars['ID']) {
     const result = await this.setHubNotStarredGQLService.mutate({
       hubId
     }).toPromise();
@@ -202,7 +202,7 @@ export class HubService {
     return response;
   }
 
-  async enteredHubGeofence(hubId: number) {
+  async enteredHubGeofence(hubId: Scalars['ID']) {
     const result = await this.enteredHubGeofenceGQLService.mutate({
       hubId
     }).toPromise();
@@ -211,7 +211,7 @@ export class HubService {
     return result;
   }
 
-  async exitedHubGeofence(hubId: number) {
+  async exitedHubGeofence(hubId: Scalars['ID']) {
     const result = await this.exitedHubGeofenceGQLService.mutate({
       hubId
     }).toPromise();
@@ -220,7 +220,7 @@ export class HubService {
     return result;
   }
 
-  async activateHub(hubId: number) {
+  async activateHub(hubId: Scalars['ID']) {
     const result = await this.activateHubGQLService.mutate({
       hubId
     }).toPromise();
@@ -229,7 +229,7 @@ export class HubService {
     return result;
   }
 
-  async deactivateHub(hubId: number) {
+  async deactivateHub(hubId: Scalars['ID']) {
     const result = await this.deactivateHubGQLService.mutate({
       hubId
     }).toPromise();
@@ -238,7 +238,7 @@ export class HubService {
     return result;
   }
 
-  async sendMicroChat(hubId: number, microChatId: number) {
+  async sendMicroChat(hubId: Scalars['ID'], microChatId: Scalars['ID']) {
     const result = await this.microChatToHubGQLService.mutate({
       hubId,
       microChatId
@@ -248,7 +248,7 @@ export class HubService {
     return response;
   }
 
-  async createMicroChat(hubId: number, microChatText: string) {
+  async createMicroChat(hubId: Scalars['ID'], microChatText: string) {
     const result = await this.createMicroChatGQLService.mutate({
       hubId,
       microChatText
@@ -256,7 +256,7 @@ export class HubService {
     return result.data.createMicroChat;
   }
 
-  async deleteMicroChat(hubId: number, microChatId: number) {
+  async deleteMicroChat(hubId: Scalars['ID'], microChatId: Scalars['ID']) {
     const result = await this.deleteMicroChatGQLService.mutate({
       hubId,
       microChatId

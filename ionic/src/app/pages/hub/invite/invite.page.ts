@@ -14,7 +14,7 @@ export class InvitePage implements OnInit {
   loading = false;
 
   myForm: FormGroup;
-  id: number;
+  id: any;
 
   get email() {
     return this.myForm.get('email');

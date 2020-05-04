@@ -15,7 +15,7 @@ export class HubPage implements OnInit, OnDestroy {
 
   loading = false;
   userHub: any;
-  id: number;
+  id: any;
   qrContent: string;
   locationSubscription: Subscription;
   hubCoords: {latitude: number, longitude: number};
