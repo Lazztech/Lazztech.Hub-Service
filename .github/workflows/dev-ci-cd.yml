@@ -43,7 +43,7 @@ jobs:
     - name: back-end npm install, build, and test
       working-directory: ./back-end
       # 'nohup npm run start:prod >> app.log 2>&1 &' runs the command as a background job: https://stackoverflow.com/a/46732894/848396
-      # 'timeout 30 bash -c 'until echo > /dev/tcp/localhost/13000; do sleep 0.5; done' wait for server to start up or timeout with error
+      # 'timeout 30 bash -c 'until echo > /dev/tcp/localhost/13000; do sleep 0.5; done' wait for server to start up or timeout with error: https://unix.stackexchange.com/a/349138
       # 'kill %1' kills background job: https://unix.stackexchange.com/a/104822
       run: |
         npm install
