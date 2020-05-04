@@ -13,6 +13,7 @@ env:
   AZURE_WEBAPP_NAME: lazztechhubdev    # set this to your application's name
   AZURE_WEBAPP_PACKAGE_PATH: './back-end'      # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '12.x'                # set this to the node version to use
+  DEPLOYMENT_URL: 'https://lazztechhubdev.azurewebsites.net/graphql'
 
 jobs:
   build-and-deploy:
@@ -20,6 +21,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
+
+    - uses: kamilkisiela/graphql-inspector@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        schema: './back-end/schema.gql' # important to define a path to schema file, without a branch
+        endpoint: ${{ env.DEPLOYMENT_URL }}
+
     - name: Use Node.js ${{ env.NODE_VERSION }}
       uses: actions/setup-node@v1
       with:
