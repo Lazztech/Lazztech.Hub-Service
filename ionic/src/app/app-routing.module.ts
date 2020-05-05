@@ -30,6 +30,10 @@ const routes: Routes = [
     path: 'micro-chat-add',
     loadChildren: () => import('./pages/micro-chat-add/micro-chat-add.module').then( m => m.MicroChatAddPageModule)
   },
+  {
+    path: 'admin-hub',
+    loadChildren: () => import('./pages/hub/admin-hub/admin-hub.module').then( m => m.AdminHubPageModule)
+  },
 ];
 
 @NgModule({

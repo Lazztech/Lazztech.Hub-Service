@@ -1,14 +1,14 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-        <ion-back-button></ion-back-button>
+      <ion-back-button></ion-back-button>
     </ion-buttons>
-          <div slot="start" href="javascript:void(0);" (click)="toggleTheme()">
-            <ion-icon size="large" name="moon"></ion-icon>
-        </div>
-        <div slot="end" href="javascript:void(0);" (click)="presentActionSheet()">
-          <ion-icon size="large" name="cog"></ion-icon>
-      </div>
+    <div slot="start" href="javascript:void(0);" (click)="toggleTheme()">
+      <ion-icon size="large" name="moon"></ion-icon>
+    </div>
+    <div slot="end" href="javascript:void(0);" (click)="presentActionSheet()">
+      <ion-icon size="large" name="cog"></ion-icon>
+    </div>
     <ion-title>Profile</ion-title>
     <ion-progress-bar *ngIf="loading" type="indeterminate"></ion-progress-bar>
   </ion-toolbar>
@@ -16,34 +16,40 @@
 
 <ion-content>
 
-  <app-profile-details href="javascript:void(0);" (click)="userActionSheet()"
-  [user]="user">
+  <app-profile-details href="javascript:void(0);" (click)="userActionSheet()" [user]="user">
   </app-profile-details>
 
-    <ion-card>
-      <ion-list lines="none">
-        <ion-item href="javascript:void(0);" (click)="logout()">
-            <ion-icon name="log-out" color="medium" slot="start"></ion-icon>
-            <ion-label>Logout</ion-label>
-          </ion-item>
-      </ion-list>
-    </ion-card>
-
-    <ion-list>
-      <ion-list-header>
-          <ion-text>Hubs You Admin</ion-text>
-      </ion-list-header>
-      <ion-item lines="none">
-        <ion-note>Toggle hub activity setting to show or hide the presence details of hub members.</ion-note>
+  <ion-card>
+    <ion-list lines="none">
+      <ion-item href="javascript:void(0);" (click)="logout()">
+        <ion-icon name="log-out" color="medium" slot="start"></ion-icon>
+        <ion-label>Logout</ion-label>
       </ion-item>
-      <div *ngFor="let userHub of userHubs">
-        <app-hub-card *ngIf="!loading"
-        [hub]="userHub.hub"
-        [adminControls]="true"
-        [starred]="userHub.starred"
-        [isOwner]="userHub.isOwner"
-        ></app-hub-card>
-      </div>
+    </ion-list>
+  </ion-card>
+
+  <ion-list>
+    <ion-list-header>
+      <ion-text>Manage Your Hubs</ion-text>
+    </ion-list-header>
+    <div *ngFor="let userHub of userHubs">
+      <app-hub-card *ngIf="!loading" [hub]="userHub.hub" [adminControls]="true" [starred]="userHub.starred"
+        [isOwner]="userHub.isOwner"></app-hub-card>
+    </div>
+
+    <ion-item *ngFor="let userHub of userHubs" href="javascript:void(0);" (click)="adminHub()">
+      <ion-avatar slot="start">
+        <ion-img width="100%" *ngIf="userHub.hub.image" src="{{userHub.hub.image}}"></ion-img>
+      </ion-avatar>
+      <ion-label>
+        <ion-text>{{userHub.hub.name}}</ion-text>
+        <app-activity-dot class="ion-float-right ion-padding-start" [active]="userHub.hub.active">
+        </app-activity-dot>
+        <ion-card-subtitle *ngIf="userHub.hub.active" class="ion-float-right" color="success">Active</ion-card-subtitle>
+        <ion-card-subtitle *ngIf="!userHub.hub.active" class="ion-float-right" color="medium">Inactive
+        </ion-card-subtitle>
+      </ion-label>
+    </ion-item>
   </ion-list>
 
 </ion-content>

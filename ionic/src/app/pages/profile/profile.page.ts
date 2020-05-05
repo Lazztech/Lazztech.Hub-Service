@@ -5,7 +5,7 @@ import { CameraService } from 'src/app/services/camera/camera.service';
 import { HubService } from 'src/app/services/hub/hub.service';
 import { ProfileService } from 'src/app/services/profile/profile.service';
 import { ThemeService } from 'src/app/services/theme/theme.service';
-import { User } from 'src/generated/graphql';
+import { User, UsersHubsQuery } from 'src/generated/graphql';
 import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
@@ -17,7 +17,7 @@ export class ProfilePage implements OnInit {
 
   loading = false;
   user: User;
-  userHubs = [];
+  userHubs: UsersHubsQuery['usersHubs'] = [];
 
   constructor(
     private menu: MenuController,
@@ -115,6 +115,10 @@ export class ProfilePage implements OnInit {
   }
   async toggleTheme() {
       await this.themeService.toggle();
+  }
+
+  adminHub() {
+    this.navCtrl.navigateForward('admin-hub');
   }
 
 }
