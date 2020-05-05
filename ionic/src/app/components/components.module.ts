@@ -9,6 +9,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MicroChatComponent } from './micro-chat/micro-chat.component';
 import { MicroChatAddPageModule } from '../pages/micro-chat-add/micro-chat-add.module';
 import { MicroChatAddPage } from '../pages/micro-chat-add/micro-chat-add.page';
+import { HubProfileComponent } from './hub-profile/hub-profile.component';
 
 @NgModule({
     declarations: [
@@ -17,7 +18,8 @@ import { MicroChatAddPage } from '../pages/micro-chat-add/micro-chat-add.page';
         ActivityDotComponent,
         ProfileComponent,
         MicroChatComponent,
-        MicroChatAddPage
+        MicroChatAddPage,
+        HubProfileComponent
     ],
     imports: [
         IonicModule, 
@@ -30,7 +32,8 @@ import { MicroChatAddPage } from '../pages/micro-chat-add/micro-chat-add.page';
         HubCardComponent,
         ActivityDotComponent,
         ProfileComponent,
-        MicroChatComponent
+        MicroChatComponent,
+        HubProfileComponent
     ]
 })
 export class ComponentsModule {

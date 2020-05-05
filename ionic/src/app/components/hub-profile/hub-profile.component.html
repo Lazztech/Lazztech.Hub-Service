@@ -1,0 +1,12 @@
+<div *ngIf="hub">
+  <ion-avatar class="ion-padding-top custom-avatar">
+    <img *ngIf="hub.image" src="{{hub.image}}">
+  </ion-avatar>
+
+  <ion-text class="ion-text-center">
+    <h1 style="font-weight: bold" >{{hub.name}}</h1>
+    <!-- <p>{{user.email}}</p> -->
+    <p *ngIf="hub.description">{{hub.description}}</p>
+  </ion-text>
+
+</div>

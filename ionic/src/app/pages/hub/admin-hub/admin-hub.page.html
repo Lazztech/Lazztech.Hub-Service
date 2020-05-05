@@ -9,7 +9,46 @@
 </ion-header>
 
 <ion-content>
-  <app-hub-card *ngIf="!loading" [hub]="userHub.hub" [adminControls]="true" [starred]="userHub.starred"
-  [isOwner]="userHub.isOwner"></app-hub-card>
+  <app-hub-profile *ngIf="!loading" [hub]="userHub.hub"></app-hub-profile>
+
+  <ion-list>
+
+    <ion-item *ngIf="!loading">
+      <ion-label>
+        <app-activity-dot class="ion-float-left ion-padding-end" [active]="userHub.hub.active">
+        </app-activity-dot>
+        <ion-text *ngIf="userHub.hub.active" color="success">Active</ion-text>
+        <ion-text *ngIf="!userHub.hub.active" color="medium">Inactive</ion-text>
+      </ion-label>
+      <ion-toggle [(ngModel)]="userHub.hub.active" (ionChange)="activeToggle($event)" class="ion-float-right" color="success"></ion-toggle>
+    </ion-item>
+
+    <form *ngIf="userHub" [formGroup]="myForm" method="post">
+
+      <ion-item>
+        <ion-label>Name</ion-label>
+        <ion-input value="{{userHub.hub.name}}" formControlName="hubName"></ion-input>
+      </ion-item>
+
+      <ion-text class="ion-padding ion-text-center" color="danger">
+        <p *ngIf="hubName.invalid && hubName.touched" color="danger">
+          Required to have 25 character max
+        </p>
+      </ion-text>
+
+      <ion-item>
+        <ion-label>Description</ion-label>
+        <ion-input value="{{userHub.hub.description}}" formControlName="hubDescription"></ion-input>
+      </ion-item>
+
+      <ion-text class="ion-padding ion-text-center" color="danger">
+        <p *ngIf="hubName.invalid && hubName.touched" color="danger">
+          Required to have 25 character max
+        </p>
+      </ion-text>
+
+    </form>
+
+  </ion-list>
 
 </ion-content>

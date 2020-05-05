@@ -224,8 +224,6 @@ export class HubService {
     const result = await this.activateHubGQLService.mutate({
       hubId
     }).toPromise();
-
-    console.log(`exitedHubGeofence hubId ${hubId} returned ${result}`);
     return result;
   }
 
@@ -234,7 +232,6 @@ export class HubService {
       hubId
     }).toPromise();
 
-    console.log(`exitedHubGeofence hubId ${hubId} returned ${result}`);
     return result;
   }
 
