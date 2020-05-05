@@ -5,7 +5,7 @@ import { CameraService } from 'src/app/services/camera/camera.service';
 import { HubService } from 'src/app/services/hub/hub.service';
 import { ProfileService } from 'src/app/services/profile/profile.service';
 import { ThemeService } from 'src/app/services/theme/theme.service';
-import { User, UsersHubsQuery } from 'src/generated/graphql';
+import { User, UsersHubsQuery, Scalars } from 'src/generated/graphql';
 import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
@@ -117,8 +117,8 @@ export class ProfilePage implements OnInit {
       await this.themeService.toggle();
   }
 
-  adminHub() {
-    this.navCtrl.navigateForward('admin-hub');
+  adminHub(id: Scalars['ID']) {
+    this.navCtrl.navigateForward('admin-hub/' + id);
   }
 
 }

@@ -9,5 +9,7 @@
 </ion-header>
 
 <ion-content>
+  <app-hub-card *ngIf="!loading" [hub]="userHub.hub" [adminControls]="true" [starred]="userHub.starred"
+  [isOwner]="userHub.isOwner"></app-hub-card>
 
 </ion-content>

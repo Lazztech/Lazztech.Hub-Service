@@ -7,6 +7,10 @@ const routes: Routes = [
   {
     path: '',
     component: AdminHubPage
+  },
+  {
+    path: ':id',
+    component: AdminHubPage
   }
 ];
 
