@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
@@ -26,6 +26,8 @@ import { NativeHttpModule, NativeHttpBackend, NativeHttpFallback } from 'ionic-n
 import { ReactiveFormsModule } from '@angular/forms';
 import BackgroundGeolocation from 'cordova-background-geolocation-lt';
 import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
+import { SentryIonicErrorHandler } from './errors/sentryIonicErrorHandler';
+import * as Sentry from "@sentry/browser";
 
 @NgModule({
   declarations: [AppComponent],
@@ -46,20 +48,25 @@ import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    {provide: HttpBackend, useClass: NativeHttpFallback, deps: [Platform, NativeHttpBackend, HttpXhrBackend]},
+    { provide: HttpBackend, useClass: NativeHttpFallback, deps: [Platform, NativeHttpBackend, HttpXhrBackend] },
+    {provide: ErrorHandler, useClass: SentryIonicErrorHandler},
     BackgroundGeolocation,
     FingerprintAIO
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { 
+export class AppModule {
   constructor(apollo: Apollo, httpLink: HttpLink, storage: Storage) {
 
-    const apolloLink = httpLink.create({ 
+    Sentry.init({
+      dsn: "https://772d0460b07a4d968cc3829a395ea446@o388920.ingest.sentry.io/5226414"
+    });
+
+    const apolloLink = httpLink.create({
       uri: SERVER_URL,
       withCredentials: true
     });
-    
+
     const auth = setContext(async (_, { headers }) => {
       const token = await storage.get('token');
       if (!token) {
@@ -74,7 +81,7 @@ export class AppModule {
         };
       }
     });
-    
+
 
     apollo.create({
       link: auth.concat(apolloLink),
