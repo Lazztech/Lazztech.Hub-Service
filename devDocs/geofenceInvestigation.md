@@ -11,6 +11,8 @@ Observations:
 - The drift in accuracy seems to happen when the app has not been used for a few days.
 - It seems to not work reliably on iOS low power mode
 - iOS user permissions being properly configured/maintained seems very important in working properly. This will likely need app UX to coach the user.
+- It seems like geofence events may not always fire in the first place
+- There seems to be multiple compounding reasons for the unreliability
 
 Errors seen:
 - First seen 02-03-2020, Last seen 02-11-2020, Total occurrences 3
@@ -76,6 +78,7 @@ Related Findings:
 Resources:
 - https://github.com/sneas/ionic-native-http-connection-backend
 - https://www.youtube.com/watch?v=IJWCpa_-MeU How to Build an Ionic HTTP Loading Interceptor & Retry Logic
+- https://github.com/getsentry/sentry-javascript/issues/1804 How can I detect client's network error through @sentry/browser ?
 
 
 Logging, Error Tracking & Analytics links:
@@ -84,3 +87,7 @@ Logging, Error Tracking & Analytics links:
     - looks like I can just get the webview logs though, which may be enough!
         - https://github.com/getsentry/sentry-cordova/issues/138
         - https://github.com/getsentry/sentry-cordova/issues/162#issuecomment-551420138
+
+Mitigation Attempts:
+- Added sentry.io remote error tracking on ionic client
+- Added http interceptor retry logic

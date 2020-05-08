@@ -12,7 +12,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { ApolloModule, Apollo } from 'apollo-angular';
 import { HttpLinkModule, HttpLink } from 'apollo-angular-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { SERVER_URL } from 'src/environments/environment';
 
 import { setContext } from "apollo-link-context";
@@ -28,6 +28,7 @@ import BackgroundGeolocation from 'cordova-background-geolocation-lt';
 import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
 import { SentryIonicErrorHandler } from './errors/sentryIonicErrorHandler';
 import * as Sentry from "@sentry/browser";
+import { HttpRequestInterceptor } from './interceptors/http.interceptor';
 
 @NgModule({
   declarations: [AppComponent],
@@ -49,7 +50,8 @@ import * as Sentry from "@sentry/browser";
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: HttpBackend, useClass: NativeHttpFallback, deps: [Platform, NativeHttpBackend, HttpXhrBackend] },
-    {provide: ErrorHandler, useClass: SentryIonicErrorHandler},
+    { provide: ErrorHandler, useClass: SentryIonicErrorHandler },
+    { provide: HTTP_INTERCEPTORS, useClass: HttpRequestInterceptor, multi: true },
     BackgroundGeolocation,
     FingerprintAIO
   ],
