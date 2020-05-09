@@ -2,6 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { HubService } from 'src/app/services/hub/hub.service';
 import { ActionSheetController, IonRouterOutlet, ModalController } from '@ionic/angular';
 import { MicroChatAddPage } from 'src/app/pages/micro-chat-add/micro-chat-add.page';
+import { NGXLogger } from 'ngx-logger';
+import { JoinUserHub } from 'src/generated/graphql';
 
 @Component({
   selector: 'app-micro-chat',
@@ -14,13 +16,14 @@ export class MicroChatComponent implements OnInit {
   hubId: any;
 
   @Input()
-  userHub: any;
+  userHub: JoinUserHub;
 
   constructor(
     private hubService: HubService,
     private actionSheetController: ActionSheetController,
     private routerOutlet: IonRouterOutlet,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private logger: NGXLogger
   ) { }
 
   ngOnInit() {}
@@ -44,7 +47,7 @@ export class MicroChatComponent implements OnInit {
         // icon: 'close',
         handler: async () => {
           await this.hubService.sendMicroChat(this.hubId, microChatId);
-          console.log('Send microChat clicked');
+          this.logger.log('Send microChat clicked');
           return true;
         }
       },
@@ -53,7 +56,7 @@ export class MicroChatComponent implements OnInit {
         // icon: 'close',
         role: 'destructive',
         handler: () => {
-          console.log('Delete clicked');
+          this.logger.log('Delete clicked');
           const result = confirm("Are you sure you want to delete the MicroChat?");
           if (result) {
             this.hubService.deleteMicroChat(this.hubId, microChatId);
@@ -65,7 +68,7 @@ export class MicroChatComponent implements OnInit {
         // icon: 'close',
         role: 'cancel',
         handler: () => {
-          console.log('Cancel clicked');
+          this.logger.log('Cancel clicked');
         }
       }
     ]

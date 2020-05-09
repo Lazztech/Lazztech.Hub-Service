@@ -3,6 +3,8 @@ import { LocationService } from 'src/app/services/location/location.service';
 import { Observable, Subscription, zip } from 'rxjs';
 import { ChangeDetectorRef } from '@angular/core';
 import { HubService } from 'src/app/services/hub/hub.service';
+import { Hub } from 'src/generated/graphql';
+import { NGXLogger } from 'ngx-logger';
 
 @Component({
   selector: 'app-hub-card',
@@ -12,7 +14,7 @@ import { HubService } from 'src/app/services/hub/hub.service';
 export class HubCardComponent implements OnDestroy, OnChanges {
 
   @Input()
-  hub: any
+  hub: Hub
 
   @Input()
   adminControls = false;
@@ -42,48 +44,33 @@ export class HubCardComponent implements OnDestroy, OnChanges {
   constructor(
     private locationService: LocationService,
     private changeRef: ChangeDetectorRef,
-    private hubService: HubService
+    private hubService: HubService,
+    private logger: NGXLogger,
   ) { }
 
-  //FIXME: this may result in a memory leak without destroying the subscription
   async ngOnInit() {
-    // this.subscription = this.locationService.coords$.subscribe(async x => {
-    //   console.log(x);
-
-    //   const coords = { latitude: x.latitude, longitude: x.longitude };
-    //   console.log(coords);
-    //   this.atHub = this.locationService.atHub(this.hub, coords);
-    //   console.log(this.atHub);
-    //   if (!this.atHub) {
-    //     this.distanceInMeters = this.locationService.getDistanceFromHub(this.hub, coords);
-    //     console.log(this.distanceInMeters);
-    //   }
-    //   this.changeRef.detectChanges();
-    // });
     this.presentCount = this.hub.usersConnection.filter(x => x.isPresent).length;
   }
 
   ngOnChanges() {
       this.atHub = this.locationService.atHub(this.hub, this.coords);
-      console.log(this.atHub);
+      this.logger.log(this.atHub);
       if (!this.atHub) {
         this.distanceInMeters = this.locationService.getDistanceFromHub(this.hub, this.coords);
-        console.log(this.distanceInMeters);
+        this.logger.log(this.distanceInMeters);
       }
       this.changeRef.detectChanges();
   }
 
   async activeToggle($event) {
-    console.log(this.hub.active);
-    console.log($event)
+    this.logger.log(this.hub.active);
+    this.logger.log($event)
 
     if ($event.detail.checked) {
       await this.hubService.activateHub(this.hub.id);
     } else {
       await this.hubService.deactivateHub(this.hub.id);
     }
-
-    // this.active = !this.active;\\
   }
 
   async ngOnDestroy() {

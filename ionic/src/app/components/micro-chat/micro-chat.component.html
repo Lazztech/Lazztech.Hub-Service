@@ -2,7 +2,7 @@
   <div *ngIf="userHub" scrollX="true">
     <div *ngFor="let microChat of userHub.hub.microChats">
       <ion-chip class="scroll-item" (click)="microChatActionSheet(microChat.id)">
-        <ion-label class="ion-text-nowrap">{{microChat.text}} {{microChat.emoji}}</ion-label>
+        <ion-label class="ion-text-nowrap">{{microChat.text}}</ion-label>
       </ion-chip>
     </div>
     <ion-chip class="scroll-item" (click)="addNewMicroChat()">
