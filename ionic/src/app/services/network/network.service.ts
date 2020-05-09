@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Plugins, NetworkStatus } from '@capacitor/core';
 import { PluginListenerHandle } from '@capacitor/core/dist/esm/web/network';
 import { AlertService } from '../alert/alert.service';
+import { NGXLogger } from 'ngx-logger';
 
 const { Network } = Plugins;
 // type NetworkCallback = (connected: boolean) => any;
@@ -15,10 +16,11 @@ export class NetworkService {
   network = Network;
 
   constructor(
-    private alertService: AlertService
+    private alertService: AlertService,
+    private logger: NGXLogger
   ) { 
     // this.handler = Network.addListener('networkStatusChange', async (status) => {
-    //   console.log("Network status changed", status);
+    //   this.logger.log("Network status changed", status);
 
     //   try {
     //     if (status.connected) {
@@ -27,7 +29,7 @@ export class NetworkService {
     //       await alertService.presentRedToast(JSON.stringify(status));
     //     }
     //   } catch (error) {
-    //     console.log(error)
+    //     this.logger.log(error)
     //   }
     // });
     // To stop listening:
@@ -36,7 +38,7 @@ export class NetworkService {
 
   // onNetworkConnectedStatusChange(callback: NetworkCallback){
   //   this.handler = Network.addListener('networkStatusChange', async (status) => {
-  //     console.log("Network status changed", status);
+  //     this.logger.log("Network status changed", status);
 
   //     try {
   //       if (status.connected) {
@@ -45,7 +47,7 @@ export class NetworkService {
           
   //       }
   //     } catch (error) {
-  //       console.log(error)
+  //       this.logger.log(error)
   //     }
   //   });
   // }

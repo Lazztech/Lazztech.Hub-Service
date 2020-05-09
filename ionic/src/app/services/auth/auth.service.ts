@@ -1,20 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
-import { 
-  LoginGQL,
-  RegisterGQL,
-  SendPasswordResetEmailGQL,
-  ResetPasswordGQL,
-  MeGQL,
-  User,
- } from 'src/generated/graphql';
+import { NGXLogger } from 'ngx-logger';
+import { LoginGQL, MeGQL, RegisterGQL, ResetPasswordGQL, SendPasswordResetEmailGQL, User } from 'src/generated/graphql';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   isLoggedIn = false;
-  token:any;
+  token: any;
 
   constructor(
     private storage: Storage,
@@ -22,7 +16,8 @@ export class AuthService {
     private registerService: RegisterGQL,
     private sendPasswordResetEmailService: SendPasswordResetEmailGQL,
     private resetPasswordService: ResetPasswordGQL,
-    private meService: MeGQL
+    private meService: MeGQL,
+    private logger: NGXLogger
   ) { }
 
   async login(email: string, password: string): Promise<boolean> {
@@ -30,16 +25,16 @@ export class AuthService {
       email,
       password
     }).toPromise();
-  
-    console.log(result);
+
+    this.logger.log(result);
     this.token = result.data.login;
 
     if (this.token) {
-      console.log("Login successful.");
+      this.logger.log("Login successful.");
       await this.storage.set('token', this.token);
       this.isLoggedIn = true;
     } else {
-      console.log("Login failure");
+      this.logger.log("Login failure");
     }
 
     return this.token;
@@ -59,7 +54,7 @@ export class AuthService {
       password
     }).toPromise();
 
-    console.log(result);
+    this.logger.log(result);
     this.token = result.data.register;
     return this.token;
   }
@@ -69,7 +64,7 @@ export class AuthService {
       email
     }).toPromise();
 
-    console.log(result);
+    this.logger.log(result);
     return result.data.sendPasswordResetEmail;
   }
 
@@ -80,13 +75,13 @@ export class AuthService {
       resetPin
     }).toPromise();
 
-    console.log(result);
+    this.logger.log(result);
     return result.data.resetPassword;
   }
 
-  async user(): Promise<User> {    
+  async user(): Promise<User> {
     const result = await this.meService.fetch().toPromise();
-    console.log(result);
+    this.logger.log(result);
     return result.data.me;
   }
 
@@ -97,20 +92,20 @@ export class AuthService {
       }).toPromise();
 
       if (result.errors) {
-          // code: "INTERNAL_SERVER_ERROR"
-          //FIXME: this may break on a different deployment platform
-          if (result.errors[0].name == "INTERNAL_SERVER_ERROR") {
-            for (let index = 0; index < 3; index++) {
-              console.log(`verifyAccountExists returned INTERNAL_SERVER_ERROR retry ${index + 1}`)
-              const result = await this.verifyAccountExists()
-              if (result) {
-                return true;
-              }
+        // code: "INTERNAL_SERVER_ERROR"
+        //FIXME: this may break on a different deployment platform
+        if (result.errors[0].name == "INTERNAL_SERVER_ERROR") {
+          for (let index = 0; index < 3; index++) {
+            this.logger.log(`verifyAccountExists returned INTERNAL_SERVER_ERROR retry ${index + 1}`)
+            const result = await this.verifyAccountExists()
+            if (result) {
+              return true;
             }
-            console.log("verifyAccountExists failed");
-            return false;
           }
-      } else if(result.data.me) {
+          this.logger.log("verifyAccountExists failed");
+          return false;
+        }
+      } else if (result.data.me) {
 
         return true;
       } else {
@@ -118,7 +113,7 @@ export class AuthService {
         return false;
       }
     } catch (error) {
-     return false; 
+      return false;
     }
   }
 
@@ -126,16 +121,16 @@ export class AuthService {
     try {
       this.token = await this.storage.get('token')
 
-      if(this.token != null) {
-        this.isLoggedIn=true;
+      if (this.token != null) {
+        this.isLoggedIn = true;
       } else {
-        this.isLoggedIn=false;
+        this.isLoggedIn = false;
       }
 
       return this.token;
     } catch (error) {
       this.token = null;
-      this.isLoggedIn=false;
+      this.isLoggedIn = false;
     }
   }
 }

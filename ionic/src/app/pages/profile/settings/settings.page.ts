@@ -3,6 +3,7 @@ import { NavController } from '@ionic/angular';
 import { UpdateService } from 'src/app/services/update/update.service';
 import { AlertService } from 'src/app/services/alert/alert.service';
 import { ProfileService } from 'src/app/services/profile/profile.service';
+import { NGXLogger } from 'ngx-logger';
 
 @Component({
   selector: 'app-settings',
@@ -16,6 +17,7 @@ export class SettingsPage implements OnInit {
     private updateService: UpdateService,
     private alertService: AlertService,
     private profileService: ProfileService,
+    private logger: NGXLogger
   ) { }
 
   ngOnInit() {
@@ -39,7 +41,7 @@ export class SettingsPage implements OnInit {
 
   async checkForUpdates() {
     this.updateService.checkForUpdate();
-    console.log('checked for updates');
+    this.logger.log('checked for updates');
     await this.alertService.presentToast('Checked for updates.');
   }
 

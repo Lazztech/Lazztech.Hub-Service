@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FetchPolicy } from 'apollo-client';
 import { CreateHubGQL, UsersHubsGQL, UsersPeopleGQL, CommonUsersHubsGQL, EditHubGQL, HubGQL, InviteUserToHubGQL, JoinHubGQL, DeleteHubGQL, ChangeHubImageGQL, SetHubStarredGQL, SetHubNotStarredGQL, EnteredHubGeofenceGQL, ExitedHubGeofenceGQL, ActivateHubGQL, DeactivateHubGQL, MicroChatToHubGQL, CreateMicroChatGQL, DeleteMicroChatGQL, Scalars } from 'src/generated/graphql';
+import { NGXLogger } from 'ngx-logger';
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +9,7 @@ import { CreateHubGQL, UsersHubsGQL, UsersPeopleGQL, CommonUsersHubsGQL, EditHub
 export class HubService {
 
   constructor(
+    private logger: NGXLogger,
     private createHubGQLService: CreateHubGQL,
     private userHubsGQLService: UsersHubsGQL,
     private usersPeopleGQLService: UsersPeopleGQL,
@@ -38,13 +40,13 @@ export class HubService {
       longitude
     }).toPromise();
 
-    console.log(result);
+    this.logger.log(result);
     const response = result.data.createHub;
 
     if (response) {
-      console.log("createHub successful.");
+      this.logger.log("createHub successful.");
     } else {
-      console.log("createHub failure");
+      this.logger.log("createHub failure");
     }
 
     return response;
@@ -58,9 +60,9 @@ export class HubService {
     const response = result.data.usersHubs;
 
     if (response) {
-      console.log("usersHubs successful.");
+      this.logger.log("usersHubs successful.");
     } else {
-      console.log("usersHubs failure");
+      this.logger.log("usersHubs failure");
     }
 
     return response;
@@ -74,9 +76,9 @@ export class HubService {
     const response = result.data.usersPeople;
 
     if (response) {
-      console.log("usersPeople successful.");
+      this.logger.log("usersPeople successful.");
     } else {
-      console.log("usersPeople failure");
+      this.logger.log("usersPeople failure");
     }
 
     return response;
@@ -93,9 +95,9 @@ export class HubService {
     const response = result.data.commonUsersHubs;
 
     if (response) {
-      console.log("commonUsersHubs successful.");
+      this.logger.log("commonUsersHubs successful.");
     } else {
-      console.log("commonUsersHubs failure");
+      this.logger.log("commonUsersHubs failure");
     }
 
     return response;
@@ -108,13 +110,13 @@ export class HubService {
       description
     }).toPromise();
 
-    console.log(result);
+    this.logger.log(result);
     const response = result.data.editHub;
 
     if (response) {
-      console.log("editHub successful.");
+      this.logger.log("editHub successful.");
     } else {
-      console.log("editHub failure");
+      this.logger.log("editHub failure");
     }
 
     return response;
@@ -128,13 +130,13 @@ export class HubService {
         fetchPolicy
       }).toPromise();
 
-    console.log(result);
+    this.logger.log(result);
     const response = result.data.hub;
 
     if (response) {
-      console.log("got hub successful.");
+      this.logger.log("got hub successful.");
     } else {
-      console.log("hub query failure");
+      this.logger.log("hub query failure");
     }
 
     return response;
@@ -146,7 +148,7 @@ export class HubService {
       inviteesEmail
     }).toPromise();
 
-    console.log(result);
+    this.logger.log(result);
     const response = result.data.inviteUserToHub;
     return response;
   }
@@ -156,7 +158,7 @@ export class HubService {
       id
     }).toPromise();
 
-    console.log(result);
+    this.logger.log(result);
     const response = result.data.joinHub;
     return response;
   }
@@ -166,7 +168,7 @@ export class HubService {
       id
     }).toPromise();
 
-    console.log(result);
+    this.logger.log(result);
     const response = result.data.deleteHub;
     return response;
   }
@@ -177,7 +179,7 @@ export class HubService {
       image
     }).toPromise();
 
-    console.log(result);
+    this.logger.log(result);
     const response = result.data.changeHubImage;
     return (response) ? true : false;
   }
@@ -187,7 +189,7 @@ export class HubService {
       hubId
     }).toPromise();
 
-    console.log(result);
+    this.logger.log(result);
     const response = result.data.setHubStarred;
     return response;
   }
@@ -197,7 +199,7 @@ export class HubService {
       hubId
     }).toPromise();
 
-    console.log(result);
+    this.logger.log(result);
     const response = result.data.setHubNotStarred;
     return response;
   }
@@ -207,7 +209,7 @@ export class HubService {
       hubId
     }).toPromise();
 
-    console.log(`enteredHubGeofence hubId ${hubId} returned ${result}`);
+    this.logger.log(`enteredHubGeofence hubId ${hubId} returned ${result}`);
     return result;
   }
 
@@ -216,7 +218,7 @@ export class HubService {
       hubId
     }).toPromise();
 
-    console.log(`exitedHubGeofence hubId ${hubId} returned ${result}`);
+    this.logger.log(`exitedHubGeofence hubId ${hubId} returned ${result}`);
     return result;
   }
 

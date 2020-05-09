@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Plugins, GeolocationPosition, GeolocationOptions } from '@capacitor/core';
+import { GeolocationOptions, GeolocationPosition, Plugins } from '@capacitor/core';
 import * as geolib from 'geolib';
+import { NGXLogger } from 'ngx-logger';
 import { Observable, Observer } from 'rxjs';
 
 const { Geolocation } = Plugins;
@@ -13,15 +14,12 @@ export class LocationService {
 
   coords$: Observable<{ latitude: number, longitude: number }>;
 
-  constructor() {
+  constructor(
+    private logger: NGXLogger
+  ) {
     this.coords$ = this.watchLocation();
    }
 
-  /**
-   * 
-   * @param hub
-   * @param distance optional param with default of 50 meters
-   */
   atHub(hub: any, coords: any, distance: number = 200) {
     const hubCoords = { latitude: hub.latitude, longitude: hub.longitude };
     const result = geolib.isPointWithinRadius(
@@ -38,21 +36,12 @@ export class LocationService {
   }
 
   private watchLocation(minuteInterval: number = 1):Observable<{ latitude: number, longitude: number}> {
-    // const geoLocationPosition = await this.getCurrentPosition();
-    // this.coords = { latitude: geoLocationPosition.coords.latitude, longitude: geoLocationPosition.coords.longitude };
-
-    // const ms = (minuteInterval * 60) * 1000;
-    // setInterval(async () => {
-    //   const geoLocationPosition = await this.getCurrentPosition();
-    //   this.coords = { latitude: geoLocationPosition.coords.latitude, longitude: geoLocationPosition.coords.longitude };
-    // }, ms);
-
     const result = Observable.create(
       (observer: Observer<{ latitude: number, longitude: number}>) => {
         const id = Geolocation.watchPosition({ enableHighAccuracy: true }, (x: GeolocationPosition, err) => {
         // Geolocation.clearWatch({id});
         if (err){
-          console.log(err);
+          this.logger.log(err);
           // observer.complete();
         }
         const coords = { latitude: x.coords.latitude, longitude: x.coords.longitude };
@@ -63,11 +52,6 @@ export class LocationService {
       return result;
   }
 
-  /**
-   * 
-   * @param hub 
-   * @returns distance in meters
-   */
   getDistanceFromHub(hub: any, coords: any) {
     const hubCoords = { latitude: hub.latitude, longitude: hub.longitude };
 

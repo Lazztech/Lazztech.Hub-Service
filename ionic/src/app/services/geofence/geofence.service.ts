@@ -17,6 +17,7 @@ import BackgroundGeolocation, {
 import { Plugins } from '@capacitor/core';
 import { HubService } from '../hub/hub.service';
 import { Hub } from 'src/generated/graphql';
+import { NGXLogger } from 'ngx-logger';
 const { LocalNotifications } = Plugins;
 
 @Injectable({
@@ -25,7 +26,8 @@ const { LocalNotifications } = Plugins;
 export class GeofenceService {
 
   constructor(
-    private hubService: HubService
+    private hubService: HubService,
+    private logger: NGXLogger
   ) { }
 
   async addGeofence(geofence: IGeofence) {
@@ -42,15 +44,15 @@ export class GeofenceService {
       //   route_id: 1234
       // }
     }).then((success) => {
-      console.log("[addGeofence] success");
+      this.logger.log("[addGeofence] success");
     }).catch((error) => {
-      console.log("[addGeofence] FAILURE: ", error);
+      this.logger.log("[addGeofence] FAILURE: ", error);
     });
   }
 
   async removeAllGeofences() {
     await BackgroundGeolocation.removeGeofences();
-    console.log("[removeGeofences] all geofences have been destroyed");
+    this.logger.log("[removeGeofences] all geofences have been destroyed");
   }
 
   async refreshHubGeofences() {
@@ -68,41 +70,59 @@ export class GeofenceService {
         longitude: element.longitude,
         notifyOnEntry: true,
         notifyOnExit: true,
-        
+
       })
 
-      console.log(`Added geofence for ${JSON.stringify(element)}`);
+      this.logger.log(`Added geofence for ${JSON.stringify(element)}`);
     }
   }
 
   async configureBackgroundGeolocation() {
     BackgroundGeolocation.onGeofence(async geofence => {
-        console.log("[geofence] ", geofence.identifier, geofence.action);
-        const hub = JSON.parse(geofence.identifier) as Hub;
+      this.logger.log("[geofence] ", geofence.identifier, geofence.action);
+      const hub = JSON.parse(geofence.identifier) as Hub;
 
-        if (geofence.action == "ENTER") {
-          await this.hubService.enteredHubGeofence(hub.id).catch(err => {
-            LocalNotifications.schedule({
-              notifications: [
-                {
-                  title: "Geofence error",
-                  body: JSON.stringify(err),
-                  id: parseInt(hub.id),
-                  schedule: { at: new Date(Date.now()) },
-                  sound: 'beep.aiff',
-                  attachments: null,
-                  actionTypeId: "",
-                  extra: null,
-                }
-              ]
-            })
-          });
-
+      if (geofence.action == "ENTER") {
+        await this.hubService.enteredHubGeofence(hub.id).catch(err => {
           LocalNotifications.schedule({
             notifications: [
               {
-                title: "Entered " + hub.name,
-                body: geofence.action + " " + hub.name,
+                title: "Geofence error",
+                body: JSON.stringify(err),
+                id: parseInt(hub.id),
+                schedule: { at: new Date(Date.now()) },
+                sound: 'beep.aiff',
+                attachments: null,
+                actionTypeId: "",
+                extra: null,
+              }
+            ]
+          })
+        });
+
+        LocalNotifications.schedule({
+          notifications: [
+            {
+              title: "Entered " + hub.name,
+              body: geofence.action + " " + hub.name,
+              id: parseInt(hub.id),
+              schedule: { at: new Date(Date.now()) },
+              sound: 'beep.aiff',
+              attachments: null,
+              actionTypeId: "",
+              extra: null
+            }
+          ]
+        });
+      }
+
+      if (geofence.action == "EXIT") {
+        await this.hubService.exitedHubGeofence(hub.id).catch(err => {
+          LocalNotifications.schedule({
+            notifications: [
+              {
+                title: "Geofence error",
+                body: JSON.stringify(err),
                 id: parseInt(hub.id),
                 schedule: { at: new Date(Date.now()) },
                 sound: 'beep.aiff',
@@ -111,77 +131,59 @@ export class GeofenceService {
                 extra: null
               }
             ]
-          });
-        }
+          })
+        });
 
-        if (geofence.action == "EXIT") {
-          await this.hubService.exitedHubGeofence(hub.id).catch(err => {
-            LocalNotifications.schedule({
-              notifications: [
-                {
-                  title: "Geofence error",
-                  body: JSON.stringify(err),
-                  id: parseInt(hub.id),
-                  schedule: { at: new Date(Date.now()) },
-                  sound: 'beep.aiff',
-                  attachments: null,
-                  actionTypeId: "",
-                  extra: null
-                }
-              ]
-            })
-          });
+        LocalNotifications.schedule({
+          notifications: [
+            {
+              title: "Exited " + hub.name,
+              body: geofence.action + " " + hub.name,
+              id: parseInt(hub.id),
+              schedule: { at: new Date(Date.now()) },
+              sound: 'beep.aiff',
+              attachments: null,
+              actionTypeId: "",
+              extra: null
+            }
+          ]
+        });
+      }
 
-          LocalNotifications.schedule({
-            notifications: [
-              {
-                title: "Exited " + hub.name,
-                body: geofence.action + " " + hub.name,
-                id: parseInt(hub.id),
-                schedule: { at: new Date(Date.now()) },
-                sound: 'beep.aiff',
-                attachments: null,
-                actionTypeId: "",
-                extra: null
-              }
-            ]
-          });
-        }
-
-        // if (geofence.action == "DWELL") {
-        //   LocalNotifications.schedule({
-        //     notifications: [
-        //       {
-        //         title: "Dwelling at " + hub.name,
-        //         body: geofence.action + " " + hub.name,
-        //         id: parseInt(hub.id),
-        //         schedule: { at: new Date(Date.now()) },
-        //         sound: 'beep.aiff',
-        //         attachments: null,
-        //         actionTypeId: "",
-        //         extra: null
-        //       }
-        //     ]
-        //   });
-        // }
+      // if (geofence.action == "DWELL") {
+      //   LocalNotifications.schedule({
+      //     notifications: [
+      //       {
+      //         title: "Dwelling at " + hub.name,
+      //         body: geofence.action + " " + hub.name,
+      //         id: parseInt(hub.id),
+      //         schedule: { at: new Date(Date.now()) },
+      //         sound: 'beep.aiff',
+      //         attachments: null,
+      //         actionTypeId: "",
+      //         extra: null
+      //       }
+      //     ]
+      //   });
+      // }
     });
 
 
     // 1.  Listen to events.
     BackgroundGeolocation.onLocation(location => {
-      console.log('[location] - ', location);
+      this.logger.log('[location] - ', location);
     });
 
     BackgroundGeolocation.onMotionChange(event => {
-      console.log('[motionchange] - ', event.isMoving, event.location);
+      this.logger.log('[motionchange] - ', event.isMoving, event.location);
     });
 
     BackgroundGeolocation.onHttp(response => {
-      console.log('[http] - ', response.success, response.status, response.responseText);
+      this.logger.log('[http] - ', response.success, response.status, response.responseText);
     });
 
     BackgroundGeolocation.onProviderChange(event => {
-      console.log('[providerchange] - ', event.enabled, event.status, event.gps);
+      this.logger.log('[providerchange] - ', event.enabled, event.status, event.gps);
     });
 
     // 2.  Configure the plugin with #ready
@@ -196,7 +198,7 @@ export class GeofenceService {
       stopOnTerminate: false,
       startOnBoot: true
     }, (state) => {
-      console.log('[ready] BackgroundGeolocation is ready to use');
+      this.logger.log('[ready] BackgroundGeolocation is ready to use');
       if (!state.enabled) {
         // 3.  Start tracking.
         BackgroundGeolocation.start();
