@@ -5,6 +5,7 @@ import { ModalController, MenuController, NavController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
 import { NotificationsService } from 'src/app/services/notifications/notifications.service';
+import { NGXLogger } from 'ngx-logger';
 
 
 @Component({
@@ -20,7 +21,8 @@ export class LandingPage implements OnInit {
     private authService: AuthService,
     private navCtrl: NavController,
     private faio: FingerprintAIO,
-    private notificationsService: NotificationsService
+    private notificationsService: NotificationsService,
+    private logger: NGXLogger
   ) { 
     this.menu.enable(false);
   }
@@ -35,7 +37,7 @@ export class LandingPage implements OnInit {
           this.notificationsService.setupPushForAllPlatforms();
 
           this.navCtrl.navigateRoot('/tabs');
-        }).catch(err => console.error(err));
+        }).catch(err => this.logger.error(err));
       }
     });
   }

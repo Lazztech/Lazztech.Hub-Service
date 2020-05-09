@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { ChangeEmailGQL, ChangePasswordGQL, ChangeUserImageGQL, DeleteAccountGQL, EditUserDetailsGQL } from 'src/generated/graphql';
+import { NGXLogger } from 'ngx-logger';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,7 @@ export class ProfileService {
     private changePasswordGQLService: ChangePasswordGQL,
     private changeUserImageGQLService: ChangeUserImageGQL,
     private deleteAccountGQLService: DeleteAccountGQL,
+    private logger: NGXLogger
   ) { }
 
   async editUserDetails(firstName: string, lastName: string, description: string): Promise<boolean> {
@@ -23,12 +25,12 @@ export class ProfileService {
       description
     }).toPromise();
 
-    console.log(result);
+    this.logger.log(result);
     if (result.data.editUserDetails) {
-      console.log("editUserDetails successfully.");
+      this.logger.log("editUserDetails successfully.");
       return true;
     } else {
-      console.log("Failed to editUserDetails.");
+      this.logger.log("Failed to editUserDetails.");
       return false;
     }
   }
@@ -38,12 +40,12 @@ export class ProfileService {
       newEmail
     }).toPromise();
 
-    console.log(result);
+    this.logger.log(result);
     if ((result as any).data.changeEmail) {
-      console.log("Changed email successfully");
+      this.logger.log("Changed email successfully");
       return true;
     } else {
-      console.log("Failed to change name.");
+      this.logger.log("Failed to change name.");
       return false;
     }
   }
@@ -54,12 +56,12 @@ export class ProfileService {
       newPassword
     }).toPromise();
 
-    console.log(result);
+    this.logger.log(result);
     if ((result as any).data.changePassword) {
-      console.log("Changed password successfully");
+      this.logger.log("Changed password successfully");
       return true;
     } else {
-      console.log("Failed to change password.");
+      this.logger.log("Failed to change password.");
       return false;
     }
   }
@@ -69,7 +71,7 @@ export class ProfileService {
       image
     }).toPromise();
 
-    console.log(result);
+    this.logger.log(result);
     const response = (result as any).data.changeUserImage;
     return response;
   }
@@ -80,21 +82,19 @@ export class ProfileService {
       password
     }).toPromise();
 
-    console.log(result);
+    this.logger.log(result);
     if ((result as any).data.deleteAccount) {
-      console.log("Deleted account successfully");
+      this.logger.log("Deleted account successfully");
       return true;
     } else {
-      console.log("Failed to delete account.");
+      this.logger.log("Failed to delete account.");
       return false;
     }
   }
 
   async clearStorage() {
     await this.storage.clear();
-    console.log('cleared storage');
+    this.logger.log('cleared storage');
     document.location.reload();
-    // IDK Which is better? But the line above works.
-    // window.location.reload();
   }
 }

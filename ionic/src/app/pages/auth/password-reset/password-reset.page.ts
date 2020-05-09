@@ -6,6 +6,7 @@ import { Storage } from '@ionic/storage';
 import { NgForm, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AlertService } from 'src/app/services/alert/alert.service';
 import { LoginPage } from '../login/login.page';
+import { NGXLogger } from 'ngx-logger';
 
 @Component({
   selector: 'app-password-reset',
@@ -31,7 +32,8 @@ export class PasswordResetPage implements OnInit {
     private authService: AuthService,
     private alertService: AlertService,
     private storage: Storage,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private logger: NGXLogger
     ) { }
 
   ngOnInit() {
@@ -78,7 +80,7 @@ export class PasswordResetPage implements OnInit {
       }
     } else {
       this.loading = false;
-      console.error("Something went wrong.");
+      this.logger.error("Something went wrong.");
     }
   }
   
