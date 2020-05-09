@@ -55,7 +55,7 @@
               <ion-text>Hubs</ion-text>
           </ion-list-header>
           <div *ngFor="let userHub of userHubs">
-            <app-hub-card *ngIf="!loading" 
+            <app-hub-card *ngIf="!loading && coords" 
             [hub]="userHub.hub"
             [coords]="coords"
             [starred]="userHub.starred"
