@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { HubService } from 'src/app/services/hub/hub.service';
+import { NGXLogger } from 'ngx-logger';
+import { UsersPeopleQuery } from 'src/generated/graphql';
 
 @Component({
   selector: 'app-people',
@@ -10,12 +12,12 @@ import { HubService } from 'src/app/services/hub/hub.service';
 export class PeoplePage implements OnInit {
 
   loading = false;
-
-  persons = [];
+  persons: UsersPeopleQuery['usersPeople'] = [];
 
   constructor(
     public navCtrl: NavController,
-    public hubService: HubService
+    public hubService: HubService,
+    private logger: NGXLogger
   ) { }
 
   ngOnInit() {
@@ -28,7 +30,7 @@ export class PeoplePage implements OnInit {
   }
 
   async doRefresh(event) {
-    console.log('Begin async operation');
+    this.logger.log('Begin async operation');
     this.loading = true;
     this.persons = await this.hubService.usersPeople();
     event.target.complete();
@@ -36,7 +38,7 @@ export class PeoplePage implements OnInit {
   }
 
   goToPersonPage(id: number, user: any) {
-    console.log(user)
+    this.logger.log(user)
     this.navCtrl.navigateForward('person/'+ id, {
       state: {
         user
@@ -50,7 +52,7 @@ export class PeoplePage implements OnInit {
     if (val && val.trim() != '') {
       this.persons = this.persons.filter(x => {
         let name = x.firstName.trim().toLowerCase() + x.lastName.trim().toLowerCase();
-        console.log(name);
+        this.logger.log(name);
         return name.includes(val.trim().toLowerCase())
       })
     }

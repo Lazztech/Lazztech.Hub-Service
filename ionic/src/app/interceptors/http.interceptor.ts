@@ -1,12 +1,15 @@
+import { HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from "@angular/core";
-import { HttpInterceptor, HttpRequest, HttpHandler } from '@angular/common/http';
-import { retryWhen, delay, map, catchError } from 'rxjs/operators';
+import { NGXLogger } from 'ngx-logger';
 import { EMPTY } from 'rxjs';
+import { catchError, delay, map, retryWhen } from 'rxjs/operators';
 
 @Injectable()
 export class HttpRequestInterceptor implements HttpInterceptor {
 
-    constructor() { }
+    constructor(
+        private logger: NGXLogger
+    ) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler) {
 
@@ -15,11 +18,8 @@ export class HttpRequestInterceptor implements HttpInterceptor {
                 let entries = 1;
                 return err.pipe(
                     delay(1000),
-                    //  tap(() => {
-
-                    //  }),
                     map(error => {
-                        if(entries++ === 3) {
+                        if (entries++ === 3) {
                             throw error;
                         }
                         return error;
@@ -27,7 +27,7 @@ export class HttpRequestInterceptor implements HttpInterceptor {
                 )
             }),
             catchError(err => {
-                console.log('failed after multiple retries', err);
+                this.logger.log('failed after multiple retries', err);
                 return EMPTY;
             })
         )

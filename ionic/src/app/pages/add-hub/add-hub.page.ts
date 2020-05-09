@@ -1,8 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { GeolocationPosition, Plugins } from '@capacitor/core';
-import { NavController, Platform } from '@ionic/angular';
-import { Observable, Subscription } from 'rxjs';
+import { Plugins } from '@capacitor/core';
+import { NavController } from '@ionic/angular';
+import { NGXLogger } from 'ngx-logger';
+import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { AlertService } from 'src/app/services/alert/alert.service';
 import { CameraService } from 'src/app/services/camera/camera.service';
@@ -26,7 +27,7 @@ export class AddHubPage implements OnInit, OnDestroy {
   myForm: FormGroup;
 
   locationSubscription: Subscription;
-  coords: {latitude: number, longitude: number};
+  coords: { latitude: number, longitude: number };
 
   get hubName() {
     return this.myForm.get('hubName');
@@ -41,10 +42,10 @@ export class AddHubPage implements OnInit, OnDestroy {
     private geofenceService: GeofenceService,
     private locationService: LocationService,
     private alertService: AlertService,
-    private platform: Platform,
     private fb: FormBuilder,
     public navCtrl: NavController,
-    private cameraService: CameraService
+    private cameraService: CameraService,
+    private logger: NGXLogger
   ) { }
 
   ngOnInit() {
@@ -61,7 +62,7 @@ export class AddHubPage implements OnInit, OnDestroy {
   }
 
   async ionViewDidEnter() {
-        //FIXME this should be refactored into the HubService to avoid repeating code
+    //FIXME this should be refactored into the HubService to avoid repeating code
     this.coords = await this.locationService.coords$.pipe(take(1)).toPromise();
     this.loading = false;
   }
@@ -91,7 +92,7 @@ export class AddHubPage implements OnInit, OnDestroy {
   async saveHub() {
     this.loading = true;
     const formValue = this.myForm.value;
-    console.log(this.coords);
+    this.logger.log(this.coords);
     const result = await this.hubService.createHub(
       formValue.hubName,
       formValue.description,

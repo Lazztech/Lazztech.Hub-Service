@@ -6,6 +6,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 import { RegisterPage } from '../register/register.page';
 import { ResetPinPage } from '../reset-pin/reset-pin.page';
 import { NotificationsService } from 'src/app/services/notifications/notifications.service';
+import { NGXLogger } from 'ngx-logger';
 
 @Component({
   selector: 'app-login',
@@ -32,7 +33,8 @@ export class LoginPage implements OnInit {
     private navCtrl: NavController,
     private alertService: AlertService,
     private fb: FormBuilder,
-    private notificationsService: NotificationsService
+    private notificationsService: NotificationsService,
+    private logger: NGXLogger
     ) { }
 
   ngOnInit() {
@@ -78,7 +80,7 @@ export class LoginPage implements OnInit {
     const formValue = this.myForm.value;
 
     const token = await this.authService.login(formValue.email, formValue.password);
-    console.log("Result: " + token);
+    this.logger.log("Result: " + token);
     if (token) {
       this.loading = false;
       this.dismissLogin();

@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NGXLogger } from 'ngx-logger';
 import { Subscription } from 'rxjs';
-import { HubService } from 'src/app/services/hub/hub.service';
 import { GoogleMapComponent } from 'src/app/components/google-map/google-map.component';
 
 @Component({
@@ -18,17 +18,17 @@ export class MapPage implements OnInit {
   hubId: number;
   loading = false;
 
-  @ViewChild(GoogleMapComponent) child:GoogleMapComponent;
+  @ViewChild(GoogleMapComponent) child: GoogleMapComponent;
 
   constructor(
-    private route : ActivatedRoute,
+    private route: ActivatedRoute,
     private router: Router,
-    private hubService: HubService,
-  ) { 
+    private logger: NGXLogger
+  ) {
     // this.queryParamsSubscription = this.route.queryParams.subscribe(params => {
     //   if (this.router.getCurrentNavigation().extras.state) {
     //     this.hubCoords = this.router.getCurrentNavigation().extras.state.hubCoords;
-    //     console.log(this.hubCoords);
+    //     this.logger.log(this.hubCoords);
     //     this.loading = false;
     //   }
     // });
@@ -40,23 +40,10 @@ export class MapPage implements OnInit {
       if (this.router.getCurrentNavigation().extras.state.hubs) {
         this.hubs = this.router.getCurrentNavigation().extras.state.hubs;
       }
-      console.log(this.hubCoords);
+      this.logger.log(this.hubCoords);
     }
-    // this.hubCoords = {latitude: 47.5421555, longitude: -122.1732493};
-    // console.log(this.hubCoords);
-    // this.loading = false;
   }
 
   async ngOnInit() {
-    // this.hubId = parseInt(this.route.snapshot.paramMap.get('id'));
-    // this.loading = true;
-    // const userHub = await this.hubService.hub(this.hubId);
-    
-    // const hubCoords = { 
-    //   latitude: userHub.hub.latitude,
-    //   longitude: userHub.hub.longitude
-    // };
-    // this.hubCoords = hubCoords;
-    // this.loading = false;
   }
 }

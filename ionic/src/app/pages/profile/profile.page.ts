@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActionSheetController, MenuController, NavController } from '@ionic/angular';
+import { NGXLogger } from 'ngx-logger';
 import { AlertService } from 'src/app/services/alert/alert.service';
 import { CameraService } from 'src/app/services/camera/camera.service';
 import { HubService } from 'src/app/services/hub/hub.service';
 import { ProfileService } from 'src/app/services/profile/profile.service';
 import { ThemeService } from 'src/app/services/theme/theme.service';
-import { User, UsersHubsQuery, Scalars } from 'src/generated/graphql';
+import { Scalars, User, UsersHubsQuery } from 'src/generated/graphql';
 import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
@@ -28,8 +29,9 @@ export class ProfilePage implements OnInit {
     public actionSheetController: ActionSheetController,
     public cameraService: CameraService,
     public profileService: ProfileService,
-    private hubService: HubService
-    ) { 
+    private hubService: HubService,
+    private logger: NGXLogger
+  ) {
     this.menu.enable(true);
   }
 
@@ -38,10 +40,10 @@ export class ProfilePage implements OnInit {
 
   async ionViewWillEnter() {
     this.loading = true;
-    this.user = await this.authService.user(); 
+    this.user = await this.authService.user();
     this.userHubs = await this.hubService.usersHubs();
     this.userHubs = this.userHubs.filter(x => x.isOwner);
-    this.loading = false;   
+    this.loading = false;
   }
 
   async userActionSheet() {
@@ -50,34 +52,34 @@ export class ProfilePage implements OnInit {
       buttons: [{
         text: 'Take Picture',
         handler: () => {
-          console.log('Take Picture clicked');
+          this.logger.log('Take Picture clicked');
           this.cameraService.takePicture().then(async image => {
             this.loading = true;
             this.profileService.changeUserImage(image).then(result => {
               this.user.image = result.image
               this.loading = false;
-            }); 
+            });
           });
         }
       },
       {
         text: 'Select Picture',
         handler: async () => {
-          console.log('Take Picture clicked');
+          this.logger.log('Take Picture clicked');
           await this.cameraService.selectPicture().then(async image => {
             this.loading = true;
             this.profileService.changeUserImage(image).then(result => {
               this.user.image = result.image
               this.loading = false;
-            }); 
+            });
           });
         }
-      }, 
+      },
       {
         text: 'Cancel',
         role: 'cancel',
         handler: () => {
-          console.log('Cancel clicked');
+          this.logger.log('Cancel clicked');
         }
       }]
     });
@@ -92,7 +94,7 @@ export class ProfilePage implements OnInit {
         handler: () => {
           this.navCtrl.navigateForward('settings');
         }
-      },{
+      }, {
         text: 'Privacy',
         handler: () => {
           this.navCtrl.navigateForward('privacy');
@@ -101,7 +103,7 @@ export class ProfilePage implements OnInit {
         text: 'Cancel',
         role: 'cancel',
         handler: () => {
-          console.log('Cancel clicked');
+          this.logger.log('Cancel clicked');
         }
       }]
     });
@@ -114,7 +116,7 @@ export class ProfilePage implements OnInit {
     this.navCtrl.navigateRoot('/landing');
   }
   async toggleTheme() {
-      await this.themeService.toggle();
+    await this.themeService.toggle();
   }
 
   adminHub(id: Scalars['ID']) {

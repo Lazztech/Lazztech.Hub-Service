@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NotificationsService } from 'src/app/services/notifications/notifications.service';
 import { InAppNotification } from 'src/generated/graphql';
+import { NGXLogger } from 'ngx-logger';
 
 @Component({
   selector: 'app-notifications',
@@ -14,7 +15,8 @@ export class NotificationsPage implements OnInit {
   inAppNotifications: InAppNotification[] = Array.of<InAppNotification>();
 
   constructor(
-    private notificationsService: NotificationsService
+    private notificationsService: NotificationsService,
+    private logger: NGXLogger
   ) { }
 
   ngOnInit() {
@@ -34,7 +36,7 @@ export class NotificationsPage implements OnInit {
   }
 
   async doRefresh(event) {
-    console.log('Begin async operation');
+    this.logger.log('Begin async operation');
     try {
       this.loading = true;
       this.inAppNotifications = this.sortNotifications(await this.notificationsService.getInAppNotifications("network-only"));
