@@ -6,24 +6,14 @@ import { Platform, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { FetchPolicy } from 'apollo-client';
 import { AddUserFcmNotificationTokenGQL, DeleteAllInAppNotificationsGQL, DeleteInAppNotificationGQL, GetInAppNotificationsGQL, InAppNotification, Scalars } from '../../../generated/graphql';
+import { NGXLogger } from 'ngx-logger';
+import { environment } from 'src/environments/environment';
 const { LocalNotifications, PushNotifications } = Plugins;
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationsService {
-
-  //FIXME move this to the Ionic environments file
-  firebaseConfig = {
-    apiKey: "AIzaSyBBglG9CZgnduympgyS4mjSwVR8apl2Ztw",
-    authDomain: "stack-push-notifications.firebaseapp.com",
-    databaseURL: "https://stack-push-notifications.firebaseio.com",
-    projectId: "stack-push-notifications",
-    storageBucket: "",
-    messagingSenderId: "770608014197",
-    appId: "1:770608014197:web:95204a00ce87de89",
-    vapidKey: 'BIt104gFwsv7X4-5R9vW9RIGV1TtMUHvRFsrMWWI5ez162UkiKbJpQL6Iq9n_ELYqG6FiTNLFQWidq-Kid6s9EE'
-  };
 
   constructor(
     private platform: Platform,
@@ -32,7 +22,8 @@ export class NotificationsService {
     private deleteAllInAppNotificationsGQLService: DeleteAllInAppNotificationsGQL,
     private getInAppNotificationsGQLService: GetInAppNotificationsGQL,
     private deleteInAppNotificationGQLService: DeleteInAppNotificationGQL,
-    private addUserFcmNotificationTokenGQLService: AddUserFcmNotificationTokenGQL
+    private addUserFcmNotificationTokenGQLService: AddUserFcmNotificationTokenGQL,
+    private logger: NGXLogger
   ) { }
 
   async localNotification(title: string, body: string, schedule?: Date): Promise<void> {
@@ -70,7 +61,7 @@ export class NotificationsService {
       }
     ).toPromise();
 
-    console.log(result);
+    this.logger.log(result);
     return result.data.getInAppNotifications;
   }
 
@@ -80,10 +71,10 @@ export class NotificationsService {
     }).toPromise();
 
     if (result.data.deleteInAppNotification) {
-      console.log("deleteInAppNotification successful.");
+      this.logger.log("deleteInAppNotification successful.");
       return true;
     } else {
-      console.error("deleteInAppNotification failed!");
+      this.logger.error("deleteInAppNotification failed!");
       return false;
     }
   }
@@ -92,9 +83,9 @@ export class NotificationsService {
     const result = await this.deleteAllInAppNotificationsGQLService.mutate().toPromise();
 
     if (result.data.deleteAllInAppNotifications) {
-      console.log("deleteAllInAppNotifications successful.");
+      this.logger.log("deleteAllInAppNotifications successful.");
     } else {
-      console.error("deleteAllInAppNotifications failed!");
+      this.logger.error("deleteAllInAppNotifications failed!");
     }
   }
 
@@ -109,7 +100,7 @@ export class NotificationsService {
 
   async setupPushiOSAndAndroid() {
     //FOR iOS & ANDROID
-    console.log("Setting up iOS/Android native push notifications.");
+    this.logger.log("Setting up iOS/Android native push notifications.");
 
     PushNotifications.register();
 
@@ -131,7 +122,7 @@ export class NotificationsService {
     PushNotifications.addListener('registrationError', 
       (error: any) => {
         alert('Error on registration: ' + JSON.stringify(error));
-        console.error('Error on registration: ' + JSON.stringify(error));
+        this.logger.error('Error on registration: ' + JSON.stringify(error));
       }
     );
 
@@ -146,7 +137,7 @@ export class NotificationsService {
           position: 'top',
           color: 'dark'
         });
-        console.log("presenting toast");
+        this.logger.log("presenting toast");
         await toast.present();
       }
     );
@@ -174,22 +165,22 @@ export class NotificationsService {
 
             // Initialize your VAPI key
             messaging.usePublicVapidKey(
-                  this.firebaseConfig.vapidKey
+                  environment.firebaseConfig.vapidKey
             );
 
             // Optional and not covered in the article
             // Listen to messages when your app is in the foreground
             messaging.onMessage((payload) => {
-                console.log(payload);
+                this.logger.log(payload);
             });
             // Optional and not covered in the article
             // Handle token refresh
             messaging.onTokenRefresh(() => {
                 messaging.getToken().then(
                 (refreshedToken: string) => {
-                    console.log(refreshedToken);
+                    this.logger.log(refreshedToken);
                 }).catch((err) => {
-                    console.error(err);
+                    this.logger.error(err);
                 });
             });
 
@@ -201,7 +192,7 @@ export class NotificationsService {
   }
 
   firebaseWebPushInitApp() {
-    firebase.initializeApp(this.firebaseConfig);
+    firebase.initializeApp(environment.firebaseConfig);
   }
 
   requestWebPushPermission(): Promise<void> {
@@ -220,7 +211,7 @@ export class NotificationsService {
 
             const token: string = await messaging.getToken();
 
-            console.log('User notifications token:', token);
+            this.logger.log('User notifications token:', token);
 
             await this.submitNotificationToken(token);
         } catch (err) {
@@ -237,9 +228,9 @@ export class NotificationsService {
     }).toPromise();
 
     if ((result as any).data.addUserFcmNotificationToken) {
-      console.log("addUserFcmNotificationToken successful.");
+      this.logger.log("addUserFcmNotificationToken successful.");
     } else {
-      console.error("addUserFcmNotificationToken failed!");
+      this.logger.error("addUserFcmNotificationToken failed!");
     }
   }
   
