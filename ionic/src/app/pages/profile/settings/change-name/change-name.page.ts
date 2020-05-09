@@ -46,8 +46,6 @@ export class ChangeNamePage implements OnInit {
         // Validators.required
       ]]
     });
-
-    this.myForm.valueChanges.subscribe();
   }
 
   dismiss() {

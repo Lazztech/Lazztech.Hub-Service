@@ -57,8 +57,6 @@ export class AddHubPage implements OnInit, OnDestroy {
         Validators.required
       ]]
     });
-
-    this.myForm.valueChanges.subscribe();
   }
 
   async ionViewDidEnter() {

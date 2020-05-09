@@ -48,8 +48,6 @@ export class LoginPage implements OnInit {
         Validators.minLength(10)
       ]]
     });
-
-    this.myForm.valueChanges.subscribe();
   }
 
   dismissLogin() {

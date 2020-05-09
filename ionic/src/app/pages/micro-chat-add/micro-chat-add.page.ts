@@ -32,8 +32,6 @@ export class MicroChatAddPage implements OnInit {
         Validators.maxLength(10)
       ]],
     });
-
-    this.myForm.valueChanges.subscribe();
   }
 
   dismissModal() {

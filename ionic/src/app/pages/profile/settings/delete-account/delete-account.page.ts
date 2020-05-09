@@ -46,8 +46,6 @@ export class DeleteAccountPage implements OnInit {
         Validators.minLength(10)
       ]]
     });
-
-    this.myForm.valueChanges.subscribe();
   }
 
   dismiss() {

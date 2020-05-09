@@ -56,8 +56,6 @@ export class RegisterPage implements OnInit {
         Validators.minLength(10)
       ]]
     });
-
-    this.myForm.valueChanges.subscribe();
   }
 
   dismissRegister() {

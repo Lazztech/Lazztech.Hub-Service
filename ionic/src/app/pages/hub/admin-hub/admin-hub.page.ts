@@ -49,8 +49,6 @@ export class AdminHubPage implements OnInit {
         Validators.maxLength(25)
       ]]
     });
-
-    this.myForm.valueChanges.subscribe();
   }
 
   async save() {

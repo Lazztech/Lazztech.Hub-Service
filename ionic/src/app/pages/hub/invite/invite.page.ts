@@ -35,8 +35,6 @@ export class InvitePage implements OnInit {
         Validators.email
       ]]
     });
-
-    this.myForm.valueChanges.subscribe();
   }
 
   async inviteUser() {

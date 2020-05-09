@@ -41,8 +41,6 @@ export class ChangePasswordPage implements OnInit {
         Validators.minLength(8)
       ]]
     });
-
-    this.myForm.valueChanges.subscribe();
   }
 
   dismiss() {

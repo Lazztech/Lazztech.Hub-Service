@@ -33,8 +33,6 @@ export class ChangeEmailPage implements OnInit {
         Validators.email
       ]]
     });
-
-    this.myForm.valueChanges.subscribe();
   }
 
   dismiss() {

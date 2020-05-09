@@ -36,8 +36,6 @@ export class ResetPinPage implements OnInit {
         Validators.email
       ]]
     });
-
-    this.myForm.valueChanges.subscribe();
   }
 
   dismissLogin() {

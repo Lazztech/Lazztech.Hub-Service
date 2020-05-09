@@ -45,8 +45,6 @@ export class EditHubPage implements OnInit {
         Validators.maxLength(25)
       ]]
     });
-
-    this.myForm.valueChanges.subscribe();
   }
 
   async ionViewDidEnter() {
