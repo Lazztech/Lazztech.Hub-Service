@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { HubService } from 'src/app/services/hub/hub.service';
 import { User } from 'src/generated/graphql';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-person',
@@ -21,7 +22,8 @@ export class PersonPage implements OnInit, OnDestroy {
   constructor(
     private route : ActivatedRoute,
     private router: Router,
-    private hubService: HubService
+    private hubService: HubService,
+    public navCtrl: NavController,
   ) { 
     this.queryParamsSubscription = this.route.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation().extras.state) {
@@ -35,6 +37,10 @@ export class PersonPage implements OnInit, OnDestroy {
     this.loading = true;
     this.userHubs = await this.hubService.commonUsersHubs(this.id);
     this.loading = false;
+  }
+
+  goToHubPage(id: number) {
+    this.navCtrl.navigateForward('hub/' + id);
   }
 
   ngOnDestroy() {
