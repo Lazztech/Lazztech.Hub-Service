@@ -1,8 +1,9 @@
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Plugins } from '@capacitor/core';
 import { MenuController, NavController, Platform } from '@ionic/angular';
+import { NGXLogger } from 'ngx-logger';
 import { Subscription } from 'rxjs';
-import { User } from 'src/generated/graphql';
+import { Hub, User, UsersHubsQuery } from 'src/generated/graphql';
 import { GoogleMapComponent } from '../components/google-map/google-map.component';
 import { AuthService } from '../services/auth/auth.service';
 import { HubService } from '../services/hub/hub.service';
@@ -20,15 +21,15 @@ const { Geolocation } = Plugins;
 export class HomePage implements OnInit, AfterViewInit, OnDestroy {
 
   loading = true;
-  userHubs = [];
-  hubs = [];
+  userHubs: UsersHubsQuery['usersHubs'] = [];
+  hubs: Hub[] = [];
   user: User;
 
   locationSubscription: Subscription;
-  coords: {latitude: number, longitude: number};
-  
-  @ViewChild(GoogleMapComponent) child:GoogleMapComponent;
-  
+  coords: { latitude: number, longitude: number };
+
+  @ViewChild(GoogleMapComponent) child: GoogleMapComponent;
+
   constructor(
     private menu: MenuController,
     private authService: AuthService,
@@ -38,13 +39,14 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy {
     public navCtrl: NavController,
     private hubService: HubService,
     private locationService: LocationService,
-    private changeRef: ChangeDetectorRef
-    ) { 
+    private changeRef: ChangeDetectorRef,
+    private logger: NGXLogger,
+  ) {
     this.menu.enable(true);
   }
 
   async doRefresh(event) {
-    console.log('Begin async operation');
+    this.logger.log('Begin async operation');
     this.loading = true;
     this.userHubs = await this.hubService.usersHubs("network-only");
     this.loading = false;
@@ -55,9 +57,9 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy {
     this.user = await this.authService.user();
     this.locationSubscription = this.locationService.coords$.subscribe(async x => {
       await this.platform.ready();
-      console.log(x);
+      this.logger.log(x);
       const coords = { latitude: x.latitude, longitude: x.longitude };
-      console.log(coords);
+      this.logger.log(coords);
       this.coords = coords;
       this.changeRef.detectChanges();
     });
@@ -70,7 +72,7 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async ngOnInit() {
-    
+
   }
 
   async ngOnDestroy() {
@@ -81,14 +83,8 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     this.platform.ready().then(async () => {
-       await this.notificationsService.requestWebPushPermission();
+      await this.notificationsService.requestWebPushPermission();
     });
-  }
-
-  //TODO remove me
-  update() {
-    console.log('updating...');
-    this.updateService.updateToLatest();
   }
 
   goToAddHubPage() {
@@ -96,15 +92,15 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   goToHubPage(id: number) {
-    this.navCtrl.navigateForward('hub/'+ id);
+    this.navCtrl.navigateForward('hub/' + id);
   }
 
-  async filterHubs(ev:any) {
+  async filterHubs(ev: any) {
     this.userHubs = await this.hubService.usersHubs("cache-only");
     const val = ev.target.value;
     if (val && val.trim() != '') {
       this.userHubs = this.userHubs.filter(x => {
-        console.log(x.hub.name.toLowerCase())
+        this.logger.log(x.hub.name.toLowerCase())
         return x.hub.name.toLowerCase().includes(val.toLowerCase())
       })
     }

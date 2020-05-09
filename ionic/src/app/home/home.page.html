@@ -1,8 +1,6 @@
-<ion-header translucent="true">
+<ion-header translucent="true"> <!-- //TODO add to all headers!-->
   <ion-toolbar>
     <ion-buttons slot="start">
-      <!-- <ion-menu-button></ion-menu-button> -->
-      <!-- <ion-icon size="large" name="navigate-circle-outline"></ion-icon> -->
       <ion-icon size="large" name="navigate-circle"></ion-icon>
     </ion-buttons>
     <ion-title>
@@ -17,22 +15,6 @@
     <!-- <div href="javascript:void(0);" (click)="goToNotifications()" lines="none" slot="end">
         <ion-badge *ngIf="inAppNotificationCount >= 1" mode="md" style="position: absolute; z-index: 2;">{{inAppNotificationCount}}</ion-badge>
         <ion-icon size="large" name="notifications"></ion-icon>
-    </div> -->
-    <!-- <div slot="end" *ngIf="updateReady == true">
-        <ion-label color="medium" slot="end" (click)="update()">
-            update ready &nbsp;
-        </ion-label>
-        <ion-label slot="end">
-            &nbsp;
-        </ion-label>
-    </div>
-    <div slot="end" *ngIf="(beforeInstall | async) == true">
-        <ion-label color="medium" slot="end" (click)="installAppPrompt()">
-            install app &nbsp;
-        </ion-label>
-        <ion-label slot="end">
-            &nbsp;
-        </ion-label>
     </div> -->
   </ion-toolbar>
 </ion-header>
@@ -81,25 +63,4 @@
             (click)="goToHubPage(userHub.hubId)"></app-hub-card>
           </div>
       </ion-list>
-
-      <!-- <ion-grid>
-          <ion-row padding *ngFor="let person of persons">
-              <ion-col>
-                  
-                  <ion-label>
-                      <h3>
-                        <ion-text>{{person.name}}</ion-text>
-                      </h3>
-                      <p>
-                        <ion-text>First Seen: {{person.images[0].savedAtTimestamp | date: 'yyy-MM-dd'}}</ion-text>
-                      </p>
-                    </ion-label>
-                    <ion-card >
-                        <ion-img width="100%" src="{{person.images[0].image}}" href="javascript:void(0);" (click)="goToImage(person.images[0].id)"></ion-img>
-                      </ion-card>
-                      
-              </ion-col>
-            </ion-row>
-      </ion-grid> -->
-
 </ion-content>
