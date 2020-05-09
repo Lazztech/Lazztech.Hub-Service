@@ -4,6 +4,7 @@
 
 import { NgxLoggerLevel, LoggerConfig } from 'ngx-logger';
 import { FirebaseOptions } from '@firebase/app-types';
+import { BrowserOptions }from "@sentry/browser";
 
 export const environment = {
   production: false,
@@ -12,6 +13,9 @@ export const environment = {
     serverLogLevel: NgxLoggerLevel.DEBUG,
     // serverLoggingUrl: ''
   } as LoggerConfig,
+  sentry: {
+    dsn: "https://772d0460b07a4d968cc3829a395ea446@o388920.ingest.sentry.io/5226414"
+  } as BrowserOptions,
   firebaseConfig: {
     apiKey: "AIzaSyBBglG9CZgnduympgyS4mjSwVR8apl2Ztw",
     authDomain: "stack-push-notifications.firebaseapp.com",

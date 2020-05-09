@@ -29,7 +29,7 @@ import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
 import { SentryIonicErrorHandler } from './errors/sentryIonicErrorHandler';
 import * as Sentry from "@sentry/browser";
 import { HttpRequestInterceptor } from './interceptors/http.interceptor';
-import { LoggerModule } from 'ngx-logger';
+import { LoggerModule, NGXLogger } from 'ngx-logger';
 
 @NgModule({
   declarations: [AppComponent],
@@ -60,11 +60,14 @@ import { LoggerModule } from 'ngx-logger';
   bootstrap: [AppComponent]
 })
 export class AppModule {
-  constructor(apollo: Apollo, httpLink: HttpLink, storage: Storage) {
+  constructor(
+    apollo: Apollo, 
+    httpLink: HttpLink, 
+    storage: Storage,
+    private logger: NGXLogger
+    ) {
 
-    Sentry.init({
-      dsn: "https://772d0460b07a4d968cc3829a395ea446@o388920.ingest.sentry.io/5226414"
-    });
+    Sentry.init(environment.sentry);
 
     const apolloLink = httpLink.create({
       uri: SERVER_URL,
@@ -74,7 +77,7 @@ export class AppModule {
     const auth = setContext(async (_, { headers }) => {
       const token = await storage.get('token');
       if (!token) {
-        console.error("Couldn't add jwt to header.");
+        this.logger.error("Couldn't add jwt to header.");
         return {};
       } else {
         return {
