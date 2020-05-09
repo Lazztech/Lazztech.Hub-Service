@@ -29,6 +29,7 @@ import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
 import { SentryIonicErrorHandler } from './errors/sentryIonicErrorHandler';
 import * as Sentry from "@sentry/browser";
 import { HttpRequestInterceptor } from './interceptors/http.interceptor';
+import { LoggerModule } from 'ngx-logger';
 
 @NgModule({
   declarations: [AppComponent],
@@ -44,6 +45,7 @@ import { HttpRequestInterceptor } from './interceptors/http.interceptor';
     IonicStorageModule.forRoot(),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     ReactiveFormsModule,
+    LoggerModule.forRoot(environment.logging),
   ],
   providers: [
     StatusBar,

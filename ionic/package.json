@@ -63,6 +63,7 @@
     "jsqr": "^1.2.0",
     "moment": "^2.24.0",
     "ngx-kjua": "^1.6.1",
+    "ngx-logger": "^4.1.9",
     "ngx-moment": "^3.5.0",
     "rxjs": "~6.5.4",
     "stripe": "^7.0.0",
