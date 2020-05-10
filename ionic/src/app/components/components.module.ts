@@ -10,6 +10,8 @@ import { MicroChatComponent } from './micro-chat/micro-chat.component';
 import { MicroChatAddPageModule } from '../pages/micro-chat-add/micro-chat-add.module';
 import { MicroChatAddPage } from '../pages/micro-chat-add/micro-chat-add.page';
 import { HubProfileComponent } from './hub-profile/hub-profile.component';
+import { BarChartComponent } from './bar-chart/bar-chart.component';
+import { ChartsModule } from 'ng2-charts';
 
 @NgModule({
     declarations: [
@@ -19,13 +21,15 @@ import { HubProfileComponent } from './hub-profile/hub-profile.component';
         ProfileComponent,
         MicroChatComponent,
         MicroChatAddPage,
-        HubProfileComponent
+        HubProfileComponent,
+        BarChartComponent
     ],
     imports: [
         IonicModule, 
         CommonModule,
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        ChartsModule
     ],
     exports: [
         GoogleMapComponent, 
@@ -33,7 +37,8 @@ import { HubProfileComponent } from './hub-profile/hub-profile.component';
         ActivityDotComponent,
         ProfileComponent,
         MicroChatComponent,
-        HubProfileComponent
+        HubProfileComponent,
+        BarChartComponent
     ]
 })
 export class ComponentsModule {

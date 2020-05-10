@@ -54,13 +54,19 @@
           formControlName="hubDescription"></ion-textarea>
       </ion-item>
 
-      <ion-text class="ion-padding ion-text-center" color="danger">
+      <ion-text class="ion-padding-start ion-padding-end ion-text-center" color="danger">
         <p *ngIf="hubName.invalid && hubName.touched" color="danger">
           Required to have 25 character max
         </p>
       </ion-text>
 
     </form>
+
+    <ion-list-header class="ion-padding-bottom">
+      <ion-label>Activity</ion-label>
+    </ion-list-header>
+
+    <app-bar-chart></app-bar-chart>
 
     <ion-list-header class="ion-padding-bottom">
       <ion-label>Members</ion-label>
