@@ -16,7 +16,6 @@ const routes: Routes = [
   { path: 'people', loadChildren: () => import('./pages/people/people.module').then(m => m.PeoplePageModule), canActivate: [AuthGuard] },
   { path: 'hub', loadChildren: () => import('./pages/hub/hub.module').then(m => m.HubPageModule), canActivate: [AuthGuard] },
   { path: 'add-hub', loadChildren: () => import('./pages/add-hub/add-hub.module').then(m => m.AddHubPageModule), canActivate: [AuthGuard] },
-  { path: 'edit-hub', loadChildren: () => import('./pages/hub/edit-hub/edit-hub.module').then(m => m.EditHubPageModule), canActivate: [AuthGuard] },
   { path: 'invite', loadChildren: () => import('./pages/hub/invite/invite.module').then(m => m.InvitePageModule), canActivate: [AuthGuard] },
   { path: 'person', loadChildren: () => import('./pages/people/person/person.module').then(m => m.PersonPageModule), canActivate: [AuthGuard] },
   { path: 'settings', loadChildren: () => import('./pages/profile/settings/settings.module').then(m => m.SettingsPageModule), canActivate: [AuthGuard] },
@@ -28,11 +27,13 @@ const routes: Routes = [
   { path: 'map', loadChildren: () => import('./pages/map/map.module').then(m => m.MapPageModule) },
   {
     path: 'micro-chat-add',
-    loadChildren: () => import('./pages/micro-chat-add/micro-chat-add.module').then( m => m.MicroChatAddPageModule)
+    loadChildren: () => import('./pages/micro-chat-add/micro-chat-add.module').then(m => m.MicroChatAddPageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'admin-hub',
-    loadChildren: () => import('./pages/hub/admin-hub/admin-hub.module').then( m => m.AdminHubPageModule)
+    loadChildren: () => import('./pages/hub/admin-hub/admin-hub.module').then(m => m.AdminHubPageModule),
+    canActivate: [AuthGuard]
   },
 ];
 
@@ -42,4 +43,4 @@ const routes: Routes = [
   ],
   exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
