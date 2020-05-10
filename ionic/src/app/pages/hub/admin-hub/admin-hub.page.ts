@@ -79,6 +79,15 @@ export class AdminHubPage implements OnInit {
     this.logger.log('Invite clicked');
   }
 
+  goToPersonPage(id: number, user: any) {
+    this.logger.log(user)
+    this.navCtrl.navigateForward('person/'+ id, {
+      state: {
+        user
+      }
+    });
+  }
+
   async deleteHub() {
     this.loading = true;
     const result = await this.hubService.deleteHub(this.id);
