@@ -16,7 +16,7 @@ import { NGXLogger } from 'ngx-logger';
 export class HubPage implements OnInit, OnDestroy {
 
   loading = false;
-  userHub: any;
+  userHub: HubQuery['hub'];
   id: Scalars['ID'];
   qrContent: string;
   locationSubscription: Subscription;
@@ -103,7 +103,7 @@ export class HubPage implements OnInit, OnDestroy {
       text: 'Settings',
       // icon: 'share',
       handler: () => {
-        this.navCtrl.navigateForward('edit-hub/'+ this.id);
+        this.navCtrl.navigateForward('admin-hub/'+ this.id);
         this.logger.log('Edit clicked');
       },
     }
@@ -123,56 +123,10 @@ export class HubPage implements OnInit, OnDestroy {
     const actionSheet = await this.actionSheetController.create({
       // header: 'Albums',
       buttons: [
-        {
-          //TODO remove this as it's too easy to delete hub
-        text: 'Delete',
-        role: 'destructive',
-        // icon: 'trash',
-        handler: async () => {
-          this.loading = true;
-          const result = await this.hubService.deleteHub(this.id);
-          this.loading = false;
-          this.navCtrl.back();
-          this.logger.log('Delete clicked');
-        }
-      }, 
         inviteButton,
         editHubButton, 
       {
-        text: 'Take Picture',
-        // icon: 'arrow-dropright-circle',
-        handler: async () => {
-          this.logger.log('Take Picture clicked');
-          const newImage = await this.cameraService.takePicture();
-          this.loading = true;
-          const oldImage = this.userHub.image;
-          this.userHub.image = newImage;
-          const result = await this.hubService.changeHubImage(this.id, newImage);
-          if (!result) {
-            this.userHub.image = oldImage;
-          }
-          this.loading = false;
-        }
-      },
-      {
-        text: 'Select Picture',
-        // icon: 'arrow-dropright-circle',
-        handler: async () => {
-          this.logger.log('Take Picture clicked');
-          const newImage = await this.cameraService.selectPicture();
-          this.loading = true;
-          const oldImage = this.userHub.image;
-          this.userHub.image = newImage;
-          const result = await this.hubService.changeHubImage(this.id, newImage);
-          if (!result) {
-            this.userHub.image = oldImage;
-          }
-          this.loading = false;
-        }
-      }, 
-      {
         text: this.userHub.starred ? 'Remove Star' : 'Add Star',
-        // icon: 'heart',
         handler: async () => {
           let result = false;
           this.loading = true;

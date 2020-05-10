@@ -4,12 +4,20 @@
       <ion-back-button></ion-back-button>
     </ion-buttons>
     <ion-title>Manage Hub</ion-title>
+    <div slot="end">
+      <ion-label color="primary" slot="end" (click)="save()">
+          save &nbsp;
+      </ion-label>
+      <ion-label slot="end">
+          &nbsp;
+      </ion-label>
+  </div>
     <ion-progress-bar *ngIf="loading" type="indeterminate"></ion-progress-bar>
   </ion-toolbar>
 </ion-header>
 
 <ion-content fullscreen="true">
-  <app-hub-profile *ngIf="!loading" [hub]="userHub.hub"></app-hub-profile>
+  <app-hub-profile *ngIf="!loading" [hub]="userHub.hub" (click)="presentActionSheet()"></app-hub-profile>
 
   <ion-list>
 
@@ -26,8 +34,8 @@
     <form *ngIf="userHub" [formGroup]="myForm" method="post">
 
       <ion-item>
-        <ion-label>Name</ion-label>
-        <ion-input value="{{userHub.hub.name}}" formControlName="hubName"></ion-input>
+        <ion-label position="stacked">Name</ion-label>
+        <ion-input value="{{userHub.hub.name}}" [(ngModel)]="userHub.hub.name" formControlName="hubName"></ion-input>
       </ion-item>
 
       <ion-text class="ion-padding ion-text-center" color="danger">
@@ -37,8 +45,8 @@
       </ion-text>
 
       <ion-item>
-        <ion-label>Description</ion-label>
-        <ion-input value="{{userHub.hub.description}}" formControlName="hubDescription"></ion-input>
+        <ion-label position="stacked">Description</ion-label>
+        <ion-textarea value="{{userHub.hub.description}}" [(ngModel)]="userHub.hub.description" formControlName="hubDescription"></ion-textarea>
       </ion-item>
 
       <ion-text class="ion-padding ion-text-center" color="danger">
@@ -50,5 +58,11 @@
     </form>
 
   </ion-list>
+
+    <ion-item *ngIf="!loading" href="javascript:void(0);">
+      <ion-icon name="warning" color="medium" slot="start"></ion-icon>
+      <ion-label>Delete Hub</ion-label>
+    </ion-item>
+
 
 </ion-content>
