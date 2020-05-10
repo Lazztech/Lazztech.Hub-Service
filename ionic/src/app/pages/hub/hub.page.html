@@ -1,9 +1,9 @@
 <ion-header translucent="true">
   <ion-toolbar>
-      <ion-buttons slot="start">
-          <ion-back-button></ion-back-button>
-        </ion-buttons>
-        <!-- <div slot="end" href="javascript:void(0);" (click)="presentActionSheet()">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <!-- <div slot="end" href="javascript:void(0);" (click)="presentActionSheet()">
             <ion-icon size="large" name="options-outline"></ion-icon>
         </div> -->
     <ion-title *ngIf="!loading && userHub">{{userHub.hub.name}}</ion-title>
@@ -14,235 +14,233 @@
 
 <ion-content fullscreen="true">
 
-    <app-hub-card *ngIf="!loading && userHub" 
-    [hub]="userHub.hub" 
-    [coords]="hubCoords"
-    [starred]="userHub.starred"
-    [isOwner]="userHub.isOwner"
-    [showDescription]="true"
-    (click)="presentActionSheet()">
+  <app-hub-card *ngIf="!loading && userHub" [hub]="userHub.hub" [coords]="hubCoords" [starred]="userHub.starred"
+    [isOwner]="userHub.isOwner" [showDescription]="true" (click)="presentActionSheet()">
   </app-hub-card>
 
-  <app-micro-chat *ngIf="!loading && userHub"
-    [hubId]="id"
-    [userHub]="userHub"
-  ></app-micro-chat>
+  <app-micro-chat *ngIf="!loading && userHub" [hubId]="id" [userHub]="userHub"></app-micro-chat>
 
   <ion-card *ngIf="!loading && userHub && hubCoords" style="height:30%" (click)="goToMap()">
-      <ion-card-content style="height:100%">
-          <app-google-map *ngIf="userHub && hubCoords" [center]="hubCoords" [hubs]="[userHub.hub]"></app-google-map>
-      </ion-card-content>
-    </ion-card>
+    <ion-card-content style="height:100%">
+      <app-google-map *ngIf="userHub && hubCoords" [center]="hubCoords" [hubs]="[userHub.hub]"></app-google-map>
+    </ion-card-content>
+  </ion-card>
 
-    <ion-grid *ngIf="!loading && userHub" class="ion-no-padding">
-      <ion-row>
+  <ion-grid *ngIf="!loading && userHub" class="ion-no-padding">
+    <ion-row>
 
-        <ion-col class="ion-padding-start">
-          <ion-button color="primary" expand="full" (click)="requestRide()">
-            Ride with
-            <ion-icon style="font-size: 64px;" src="/assets/icons/Uber_Logo_White_RGB.svg"></ion-icon>
-          </ion-button>
-        </ion-col>
+      <ion-col class="ion-padding-start">
+        <ion-button color="primary" expand="full" (click)="requestRide()">
+          Ride with
+          <ion-icon style="font-size: 64px;" src="/assets/icons/Uber_Logo_White_RGB.svg"></ion-icon>
+        </ion-button>
+      </ion-col>
 
-        <ion-col class="ion-padding-start ion-padding-end">
-          <ion-button color="primary" expand="full" color="danger" (click)="navigate()">
-            Navigate
-            <ion-icon class="ion-padding-start" size="large" name="map"></ion-icon>
-          </ion-button>
-        </ion-col>
+      <ion-col class="ion-padding-start ion-padding-end">
+        <ion-button color="primary" expand="full" color="danger" (click)="navigate()">
+          Navigate
+          <ion-icon class="ion-padding-start" size="large" name="map"></ion-icon>
+        </ion-button>
+      </ion-col>
 
-      </ion-row>
-    </ion-grid>
+    </ion-row>
+  </ion-grid>
 
-    <ion-list *ngIf="!loading && userHub && !userHub.hub.active">
-      <ion-list-header>
-        <ion-text>Hub Inactive</ion-text>
-      </ion-list-header>
+  <ion-list *ngIf="!loading && userHub && !userHub.hub.active">
+    <ion-list-header>
+      <ion-text>Hub Inactive</ion-text>
+    </ion-list-header>
 
-      <ion-item lines="none">
-        <ion-note>Hub member's presence information is only available when the hub is set to active by the admin.</ion-note>
+    <ion-item lines="none">
+      <ion-note>Hub member's presence information is only available when the hub is set to active by the admin.
+      </ion-note>
+    </ion-item>
+  </ion-list>
+
+  <ion-list *ngIf="!loading && userHub && !userHub.hub.active">
+    <ion-list-header>
+      <ion-text>Members</ion-text>
+    </ion-list-header>
+
+    <div *ngFor="let userConnection of userHub.hub.usersConnection">
+      <ion-item href="javascript:void(0);" (click)="goToPersonPage(userConnection.user.id, userConnection.user)">
+        <ion-avatar slot="start">
+          <!-- FIXME don't use this image or store a copy locally -->
+          <img width="100%" *ngIf="!userConnection.user.image"
+            src="https://ionicframework.com/docs/demos/api/avatar/avatar.svg">
+          <ion-img width="100%" *ngIf="userConnection.user.image" src="{{userConnection.user.image}}"></ion-img>
+        </ion-avatar>
+        <ion-label>
+          <h3 class="ion-float-left">
+            <ion-text>{{userConnection.user.firstName}} {{userConnection.user.lastName}}</ion-text>
+          </h3>
+          <p *ngIf="userConnection.isOwner" class="ion-float-right">
+            <ion-text>Admin</ion-text>
+          </p>
+        </ion-label>
       </ion-item>
-    </ion-list>
+    </div>
+  </ion-list>
 
-    <ion-list *ngIf="!loading && userHub && !userHub.hub.active">
-      <ion-list-header>
-        <ion-text>Members</ion-text>
-      </ion-list-header>
+  <ion-list *ngIf="!loading && userHub && userHub.hub.active">
+    <ion-list-header>
+      <ion-text>Present</ion-text>
+    </ion-list-header>
 
-      <div *ngFor="let userConnection of userHub.hub.usersConnection">
-        <ion-item href="javascript:void(0);" (click)="goToPersonPage(userConnection.user.id, userConnection.user)">
-          <ion-avatar slot="start">
-            <!-- FIXME don't use this image or store a copy locally -->
-            <img width="100%" *ngIf="!userConnection.user.image" src="https://ionicframework.com/docs/demos/api/avatar/avatar.svg">
-            <ion-img width="100%" *ngIf="userConnection.user.image" src="{{userConnection.user.image}}"></ion-img>
-          </ion-avatar>
-          <ion-label>
-            <h3 class="ion-float-left">
-              <ion-text>{{userConnection.user.firstName}} {{userConnection.user.lastName}}</ion-text>
-            </h3>
-            <p *ngIf="userConnection.isOwner" class="ion-float-right">
-              <ion-text>Admin</ion-text>
-            </p>
-          </ion-label>
-        </ion-item>
-      </div>
-    </ion-list>
+    <div *ngFor="let userConnection of userHub.hub.usersConnection">
+      <ion-item *ngIf="userConnection.isPresent" href="javascript:void(0);"
+        (click)="goToPersonPage(userConnection.user.id, userConnection.user)">
+        <ion-avatar slot="start">
+          <!-- FIXME don't use this image or store a copy locally -->
+          <img width="100%" *ngIf="!userConnection.user.image"
+            src="https://ionicframework.com/docs/demos/api/avatar/avatar.svg">
+          <ion-img width="100%" *ngIf="userConnection.user.image" src="{{userConnection.user.image}}"></ion-img>
+        </ion-avatar>
+        <ion-label>
+          <h3 class="ion-float-left">
+            <ion-text>{{userConnection.user.firstName}} {{userConnection.user.lastName}}</ion-text>
+          </h3>
+          <p *ngIf="userConnection.isOwner" class="ion-float-right">
+            <ion-text>Admin</ion-text>
+          </p>
+        </ion-label>
+      </ion-item>
+    </div>
 
-<ion-list *ngIf="!loading && userHub && userHub.hub.active">
-  <ion-list-header>
-    <ion-text>Present</ion-text>
-  </ion-list-header>
+  </ion-list>
 
-  <div *ngFor="let userConnection of userHub.hub.usersConnection">
-    <ion-item *ngIf="userConnection.isPresent" href="javascript:void(0);" (click)="goToPersonPage(userConnection.user.id, userConnection.user)">
-      <ion-avatar slot="start">
-        <!-- FIXME don't use this image or store a copy locally -->
-        <img width="100%" *ngIf="!userConnection.user.image" src="https://ionicframework.com/docs/demos/api/avatar/avatar.svg">
-        <ion-img width="100%" *ngIf="userConnection.user.image" src="{{userConnection.user.image}}"></ion-img>
-      </ion-avatar>
-      <ion-label>
-        <h3 class="ion-float-left">
-          <ion-text>{{userConnection.user.firstName}} {{userConnection.user.lastName}}</ion-text>
-        </h3>
-        <p *ngIf="userConnection.isOwner" class="ion-float-right">
-          <ion-text>Admin</ion-text>
-        </p>
-      </ion-label>
-    </ion-item>
-  </div>
+  <ion-list *ngIf="!loading && userHub && userHub.hub.active">
+    <ion-list-header>
+      <ion-text>Away</ion-text>
+    </ion-list-header>
 
-</ion-list>
+    <div *ngFor="let userConnection of userHub.hub.usersConnection">
+      <ion-item *ngIf="!userConnection.isPresent" href="javascript:void(0);"
+        (click)="goToPersonPage(userConnection.user.id, userConnection.user)">
+        <ion-avatar slot="start">
+          <!-- FIXME don't use this image or store a copy locally -->
+          <img width="100%" *ngIf="!userConnection.user.image"
+            src="https://ionicframework.com/docs/demos/api/avatar/avatar.svg">
+          <ion-img width="100%" *ngIf="userConnection.user.image" src="{{userConnection.user.image}}"></ion-img>
+        </ion-avatar>
+        <ion-label>
+          <h3 class="ion-float-left">
+            <ion-text>{{userConnection.user.firstName}} {{userConnection.user.lastName}}</ion-text>
+          </h3>
+          <p *ngIf="userConnection.isOwner" class="ion-float-right">
+            <ion-text>Admin</ion-text>
+          </p>
+        </ion-label>
+      </ion-item>
+    </div>
 
-<ion-list *ngIf="!loading && userHub && userHub.hub.active">
-  <ion-list-header>
-    <ion-text>Away</ion-text>
-  </ion-list-header>
-
-  <div *ngFor="let userConnection of userHub.hub.usersConnection">
-    <ion-item *ngIf="!userConnection.isPresent" href="javascript:void(0);" (click)="goToPersonPage(userConnection.user.id, userConnection.user)">
-      <ion-avatar slot="start">
-        <!-- FIXME don't use this image or store a copy locally -->
-        <img width="100%" *ngIf="!userConnection.user.image" src="https://ionicframework.com/docs/demos/api/avatar/avatar.svg">
-        <ion-img width="100%" *ngIf="userConnection.user.image" src="{{userConnection.user.image}}"></ion-img>
-      </ion-avatar>
-      <ion-label>
-        <h3 class="ion-float-left">
-          <ion-text>{{userConnection.user.firstName}} {{userConnection.user.lastName}}</ion-text>
-        </h3>
-        <p *ngIf="userConnection.isOwner" class="ion-float-right">
-          <ion-text>Admin</ion-text>
-        </p>
-      </ion-label>
-    </ion-item>
-  </div>
-
-</ion-list>
+  </ion-list>
 
   <div *ngIf="loading">
 
-            <ion-list *ngIf="loading">
-                <ion-list-header>
-                  <ion-text>Present</ion-text>
-                </ion-list-header>
+    <ion-list *ngIf="loading">
+      <ion-list-header>
+        <ion-text>Present</ion-text>
+      </ion-list-header>
 
-                <ion-item>
-                  <ion-avatar slot="start">
-                    <ion-skeleton-text animated></ion-skeleton-text>
-                  </ion-avatar>
-                  <ion-label>
-                    <h3>
-                      <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
-                    </h3>
-                    <p>
-                      <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
-                    </p>
-                    <p>
-                      <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
-                    </p>
-                  </ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-thumbnail slot="start">
-                    <ion-skeleton-text animated></ion-skeleton-text>
-                  </ion-thumbnail>
-                  <ion-label>
-                    <h3>
-                      <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
-                    </h3>
-                    <p>
-                      <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
-                    </p>
-                    <p>
-                      <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
-                    </p>
-                  </ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-skeleton-text animated style="width: 27px; height: 27px" slot="start"></ion-skeleton-text>
-                  <ion-label>
-                    <h3>
-                      <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
-                    </h3>
-                    <p>
-                      <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
-                    </p>
-                    <p>
-                      <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
-                    </p>
-                  </ion-label>
-                </ion-item>
+      <ion-item>
+        <ion-avatar slot="start">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-avatar>
+        <ion-label>
+          <h3>
+            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+          </h3>
+          <p>
+            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+          </p>
+          <p>
+            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+          </p>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-thumbnail slot="start">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-thumbnail>
+        <ion-label>
+          <h3>
+            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+          </h3>
+          <p>
+            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+          </p>
+          <p>
+            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+          </p>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-skeleton-text animated style="width: 27px; height: 27px" slot="start"></ion-skeleton-text>
+        <ion-label>
+          <h3>
+            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+          </h3>
+          <p>
+            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+          </p>
+          <p>
+            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+          </p>
+        </ion-label>
+      </ion-item>
 
-                <ion-list-header>
-                    <ion-text>Away</ion-text>
-                  </ion-list-header>
-        
-                <ion-item>
-                    <ion-avatar slot="start">
-                      <ion-skeleton-text animated></ion-skeleton-text>
-                    </ion-avatar>
-                    <ion-label>
-                      <h3>
-                        <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
-                      </h3>
-                      <p>
-                        <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
-                      </p>
-                      <p>
-                        <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
-                      </p>
-                    </ion-label>
-                  </ion-item>
-                  <ion-item>
-                    <ion-thumbnail slot="start">
-                      <ion-skeleton-text animated></ion-skeleton-text>
-                    </ion-thumbnail>
-                    <ion-label>
-                      <h3>
-                        <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
-                      </h3>
-                      <p>
-                        <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
-                      </p>
-                      <p>
-                        <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
-                      </p>
-                    </ion-label>
-                  </ion-item>
-                  <ion-item>
-                    <ion-skeleton-text animated style="width: 27px; height: 27px" slot="start"></ion-skeleton-text>
-                    <ion-label>
-                      <h3>
-                        <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
-                      </h3>
-                      <p>
-                        <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
-                      </p>
-                      <p>
-                        <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
-                      </p>
-                    </ion-label>
-                  </ion-item>
-              </ion-list>
+      <ion-list-header>
+        <ion-text>Away</ion-text>
+      </ion-list-header>
+
+      <ion-item>
+        <ion-avatar slot="start">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-avatar>
+        <ion-label>
+          <h3>
+            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+          </h3>
+          <p>
+            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+          </p>
+          <p>
+            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+          </p>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-thumbnail slot="start">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-thumbnail>
+        <ion-label>
+          <h3>
+            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+          </h3>
+          <p>
+            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+          </p>
+          <p>
+            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+          </p>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-skeleton-text animated style="width: 27px; height: 27px" slot="start"></ion-skeleton-text>
+        <ion-label>
+          <h3>
+            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+          </h3>
+          <p>
+            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+          </p>
+          <p>
+            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+          </p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
   </div>
 
 </ion-content>
