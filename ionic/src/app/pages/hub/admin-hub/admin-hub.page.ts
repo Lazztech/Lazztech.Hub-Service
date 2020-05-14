@@ -65,9 +65,8 @@ export class AdminHubPage implements OnInit {
     this.loading = false;
   }
 
-  async activeToggle($event) {
-    //FIXME
-    if ($event.detail.checked) {
+  async activeToggle() {
+    if (this.userHub.hub.active == false) {
       await this.hubService.activateHub(this.userHub.hub.id);
     } else {
       await this.hubService.deactivateHub(this.userHub.hub.id);

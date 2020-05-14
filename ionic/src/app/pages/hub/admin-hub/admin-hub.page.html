@@ -26,12 +26,10 @@
 
     <ion-item>
       <ion-label>
-        <app-activity-dot class="ion-float-left ion-padding-end" [active]="userHub.hub.active">
-        </app-activity-dot>
         <ion-text *ngIf="userHub.hub.active" color="success">Active</ion-text>
         <ion-text *ngIf="!userHub.hub.active" color="medium">Inactive</ion-text>
       </ion-label>
-      <ion-toggle [(ngModel)]="userHub.hub.active" (ionChange)="activeToggle($event)" class="ion-float-right"
+      <ion-toggle [(ngModel)]="userHub.hub.active" (click)="activeToggle()" class="ion-float-right"
         color="success"></ion-toggle>
     </ion-item>
 

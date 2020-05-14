@@ -38,8 +38,6 @@
       </ion-avatar>
       <ion-label>
         <ion-text>{{userHub.hub.name}}</ion-text>
-        <app-activity-dot class="ion-float-right ion-padding-start" [active]="userHub.hub.active">
-        </app-activity-dot>
         <ion-card-subtitle *ngIf="userHub.hub.active" class="ion-float-right" color="success">Active</ion-card-subtitle>
         <ion-card-subtitle *ngIf="!userHub.hub.active" class="ion-float-right" color="medium">Inactive
         </ion-card-subtitle>
