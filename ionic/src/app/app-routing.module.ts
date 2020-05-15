@@ -35,6 +35,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/hub/admin-hub/admin-hub.module').then(m => m.AdminHubPageModule),
     canActivate: [AuthGuard]
   },
+  {
+    path: 'status',
+    loadChildren: () => import('./pages/status/status.module').then( m => m.StatusPageModule)
+  },
 ];
 
 @NgModule({

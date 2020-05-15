@@ -1,0 +1,60 @@
+<ion-header translucent="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Status</ion-title>
+    <ion-progress-bar *ngIf="loading" type="indeterminate"></ion-progress-bar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen="true">
+
+  <ion-list>
+    <ion-list-header class="ion-padding-bottom">
+      Ghost Mode
+    </ion-list-header>
+    <ion-item>
+      <ion-label>
+        <ion-text *ngIf="!ghostModeIsOff">Ghost Mode Off</ion-text>
+        <ion-text *ngIf="ghostModeIsOff" color="warning">Ghost Mode On</ion-text>
+      </ion-label>
+      <ion-toggle [(ngModel)]="ghostModeIsOff" (click)="activeGhostModeToggle()" class="ion-float-right"
+        color="success"></ion-toggle>
+    </ion-item>
+
+    <ion-list-header class="ion-padding-bottom">
+      Geofence Health
+    </ion-list-header>
+
+    <ion-item>
+      <ion-label>
+        <ion-text>Location Permissions</ion-text>
+        <ion-text *ngIf="locationAlwaysPermission" class="ion-float-right">✅</ion-text>
+      </ion-label>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <ion-text>Low Power Mode</ion-text>
+        <ion-text *ngIf="lowPowerModeIsOff" class="ion-float-right">✅</ion-text>
+      </ion-label>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <ion-text>WiFi</ion-text>
+        <ion-text *ngIf="wifi" class="ion-float-right">✅</ion-text>
+      </ion-label>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <ion-text>Airplane Mode Off</ion-text>
+        <ion-text *ngIf="airplaneMode" class="ion-float-right">✅</ion-text>
+      </ion-label>
+    </ion-item>
+
+  </ion-list>
+
+</ion-content>
