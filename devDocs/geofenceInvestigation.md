@@ -67,6 +67,13 @@ networkError: {
 }
 ```
 
+- Seen during ios packaging
+```
+⠙ update ios[warn] Plugin cordova-background-geolocation-lt might require you to add 
+                $BACKGROUND_MODE_LOCATION
+             in the existing UIBackgroundModes entry of your Info.plist to work
+```
+
 Related Findings:
 - https://github.com/sneas/ionic-native-http-connection-backend/issues/15
 - https://fantashit.com/message-http-failure-response-for-unknown-url-0-unknown-error/
@@ -80,14 +87,66 @@ Resources:
 - https://www.youtube.com/watch?v=IJWCpa_-MeU How to Build an Ionic HTTP Loading Interceptor & Retry Logic
 - https://github.com/getsentry/sentry-javascript/issues/1804 How can I detect client's network error through @sentry/browser ?
 
+# Network / Cellular Related
 
-Logging, Error Tracking & Analytics links:
+### "I have no idea why.  Does it happen consistently?  Geofences can fail to fire based upon the nature of your network environment."
+- https://github.com/transistorsoft/cordova-background-geolocation-lt/issues/422#issuecomment-320364838
+
+
+### "Disabling wifi will kill geofence performance"
+- https://github.com/transistorsoft/cordova-background-geolocation-lt/issues/422#issuecomment-320367255
+
+What background location being terminated by OS looks like:
+```
+[c.t.l.BackgroundGeolocationService onDestroy]
+```
+- https://github.com/transistorsoft/cordova-background-geolocation-lt/issues/771#issuecomment-416217650
+
+### "You must not disable cellular. iOS geofences requires cellular data to work. The plugin uses a geofence exit event to determine when it's moving."
+
+- https://github.com/transistorsoft/cordova-background-geolocation-lt/issues/334#issuecomment-300614523
+
+### "Yes the plugin does accurately detect network changes."
+- https://github.com/transistorsoft/cordova-background-geolocation-lt/issues/334#issuecomment-300759490
+
+### My Geofences aren't working on iOS
+- https://simpleinout.helpscoutdocs.com/article/224-my-geofences-arent-working-ios
+
+### "Make sure that you have Background App Refresh and you don't have Low Power Mode enabled in order for Geofencing to work."
+- https://simpleinout.helpscoutdocs.com/article/224-my-geofences-arent-working-ios
+
+### Why isn't the Geofencing mode working?
+- https://kb.arlo.com/000062271/Why-isn-t-the-Geofencing-mode-working
+
+### "Geofencing relies on your mobile phone internet connection so all I can think of is a poor signal in the car perhaps?"
+- https://forums.macrumors.com/threads/geofencing-not-working-100.2124259/
+
+### Maybe this isn't the help you're looking for, but here's my opinion. In general, geofencing to determine presence is sucky. There are community apps, like Presence Governor 17, and Combined Presence 6, that make presence detection way more reliable.
+- https://community.hubitat.com/t/geofence-in-he-app-constantly-incorrectly-changing/33414
+
+### Settings → General → Reset → Reset Location & Privacy
+- https://community.hubitat.com/t/geofence-in-he-app-constantly-incorrectly-changing/33414/13
+
+- https://www.reddit.com/r/HomeKit/comments/bc13n0/problem_with_homekit_automations_geofence_issue/
+
+- https://www.reddit.com/r/HomeKit/comments/byyqiw/homekit_geofence_radius_is_too_small/
+
+### The Secret to Effective Geofencing
+- https://jwegan.com/growth-hacking/effective-geofencing/
+
+### Geocoding
+- https://en.wikipedia.org/wiki/Geocoding
+
+### Geofencing - Why you can't rely on GPS alone
+https://www.livehouseautomation.com.au/blogs/news/geofencing-why-you-cant-rely-on-gps-alone
+
+# Logging, Error Tracking & Analytics links:
 - https://ionicframework.com/integrations/category/analytics
 - Sentry.io looks excellent though it doesn't play nice with capacitor... :(
     - looks like I can just get the webview logs though, which may be enough!
         - https://github.com/getsentry/sentry-cordova/issues/138
         - https://github.com/getsentry/sentry-cordova/issues/162#issuecomment-551420138
 
-Mitigation Attempts:
+# Mitigation Attempts:
 - Added sentry.io remote error tracking on ionic client
 - Added http interceptor retry logic
