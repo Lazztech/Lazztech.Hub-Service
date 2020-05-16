@@ -140,6 +140,9 @@ What background location being terminated by OS looks like:
 ### Geofencing - Why you can't rely on GPS alone
 https://www.livehouseautomation.com.au/blogs/news/geofencing-why-you-cant-rely-on-gps-alone
 
+### "For example, if Wi-Fi is disabled, region monitoring is significantly less accurate."
+- https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/LocationAwarenessPG/RegionMonitoring/RegionMonitoring.html#//apple_ref/doc/uid/TP40009497-CH9-SW11
+
 # Logging, Error Tracking & Analytics links:
 - https://ionicframework.com/integrations/category/analytics
 - Sentry.io looks excellent though it doesn't play nice with capacitor... :(
