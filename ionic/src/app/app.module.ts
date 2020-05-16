@@ -30,6 +30,7 @@ import { SentryIonicErrorHandler } from './errors/sentryIonicErrorHandler';
 import * as Sentry from "@sentry/browser";
 import { HttpRequestInterceptor } from './interceptors/http.interceptor';
 import { LoggerModule, NGXLogger } from 'ngx-logger';
+import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -55,7 +56,8 @@ import { LoggerModule, NGXLogger } from 'ngx-logger';
     { provide: ErrorHandler, useClass: SentryIonicErrorHandler },
     { provide: HTTP_INTERCEPTORS, useClass: HttpRequestInterceptor, multi: true },
     BackgroundGeolocation,
-    FingerprintAIO
+    FingerprintAIO,
+    Diagnostic
   ],
   bootstrap: [AppComponent]
 })

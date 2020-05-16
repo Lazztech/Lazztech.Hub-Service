@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Diagnostic } from '@ionic-native/diagnostic/ngx';
+import { NGXLogger } from 'ngx-logger';
 
 @Component({
   selector: 'app-status',
@@ -8,15 +10,35 @@ import { Component, OnInit } from '@angular/core';
 export class StatusPage implements OnInit {
 
   loading = false;
+
+  //Settings
   wifi = true;
   airplaneMode = true;
-  locationAlwaysPermission = true;
   ghostModeIsOff = true;
-  lowPowerModeIsOff = true;
+  lowPowerModeIsOff = false;
+  //Permissions
+  locationAlwaysPermission = true;
 
-  constructor() { }
+  constructor(
+    private diagnostic: Diagnostic,
+    private logger: NGXLogger
+  ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.checkSettings();
+    await this.checkPermissions();
+  }
+
+  async checkSettings() {
+    this.logger.log(this.checkSettings.name);
+    this.wifi = await this.diagnostic.isWifiEnabled();
+    // this.airplaneMode = await this.diagnostic.
+  }
+
+  async checkPermissions() {
+    this.logger.log(this.checkPermissions.name);
+    const permissions = this.diagnostic.permission;
+    this.logger.log(permissions);
   }
 
   async activeGhostModeToggle() {

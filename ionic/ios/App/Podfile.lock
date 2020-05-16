@@ -82,7 +82,7 @@ SPEC CHECKSUMS:
   Capacitor: 667658ab58e5a2e8465238eef7c6c5df46738688
   CapacitorCordova: 5b03f0b903bf066a8f3187e848252227190b681a
   CocoaLumberjack: 2f44e60eb91c176d471fdba43b9e3eae6a721947
-  CordovaPlugins: 0fa0b6dd35f5b374053d3188342dfc53279bef59
+  CordovaPlugins: 73f868d951c1cb4ef666a244efdfd4b3988f4b4a
   CordovaPluginsStatic: 278a1d53afd3130a0358d7dacd9f0f4f83eba706
   Firebase: dedc9e48ea3f3649ad5f6b982f8a0c73508a14b5
   FirebaseAnalyticsInterop: efbe45c8385ec626e29f9525e5ebd38520dfb6c1
