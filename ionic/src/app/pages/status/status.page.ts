@@ -45,16 +45,25 @@ export class StatusPage implements OnInit {
 
   async checkIosPermissions() {
     this.logger.log(this.checkIosPermissions.name);
-    this.logger.log('getLocationAuthorizationStatus result: ', await this.diagnostic.getLocationAuthorizationStatus()); // returns 'authorized'
-    // this.logger.log('requestLocationAuthorization result: ', await this.diagnostic.requestLocationAuthorization());
-    // this.logger.log('requestLocationAuthorization("always") result: ', await this.diagnostic.requestLocationAuthorization("always"));
-    // this.diagnostic.requestLocationAuthorization(this.diagnostic.locationAuthorizationMode.ALWAYS).then(result => {
-    //   this.logger.log('getLocationAuthorizationStatus result: ', result);
-    //   this.locationAlwaysPermission = (result == this.diagnostic.locationAuthorizationMode.ALWAYS);
-    // });
-
+    this.checkIosLocationPermissions();
     this.checkIosMotionPermission();
     await this.checkIosBackgroundRefreshPermission();
+  }
+
+  private checkIosLocationPermissions() {
+        // this.logger.log('getLocationAuthorizationStatus result: ', await this.diagnostic.getLocationAuthorizationStatus()); // returns 'authorized'
+        this.diagnostic.getLocationAuthorizationStatus().then(result => {
+          this.logger.log('getLocationAuthorizationStatus', result);
+          // this.logger.log('this.diagnostic.locationAuthorizationMode', this.diagnostic.locationAuthorizationMode);
+          // this.locationAlwaysPermission = (result == this.diagnostic.locationAuthorizationMode.ALWAYS);
+          this.locationAlwaysPermission = (result == 'authorized');
+        })
+        // this.logger.log('requestLocationAuthorization result: ', await this.diagnostic.requestLocationAuthorization());
+        // this.logger.log('requestLocationAuthorization("always") result: ', await this.diagnostic.requestLocationAuthorization("always"));
+        // this.diagnostic.requestLocationAuthorization(this.diagnostic.locationAuthorizationMode.ALWAYS).then(result => {
+        //   this.logger.log('getLocationAuthorizationStatus result: ', result);
+        //   this.locationAlwaysPermission = (result == this.diagnostic.locationAuthorizationMode.ALWAYS);
+        // });
   }
 
   private async checkIosBackgroundRefreshPermission() {
