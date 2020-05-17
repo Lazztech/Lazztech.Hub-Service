@@ -53,10 +53,10 @@ export class StatusPage implements OnInit {
     //   this.locationAlwaysPermission = (result == this.diagnostic.locationAuthorizationMode.ALWAYS);
     // });
 
-    // this.diagnostic.getMotionAuthorizationStatus().then(result => {
-    //   this.logger.log('getMotionAuthorizationStatus result: ', result);
-    //   this.motionAndFitnessPermission = (result == this.diagnostic.motionStatus.GRANTED);
-    // });
+    this.diagnostic.getMotionAuthorizationStatus().then(result => {
+      this.logger.log('getMotionAuthorizationStatus result: ', result);
+      this.motionAndFitnessPermission = (result == this.diagnostic.motionStatus.GRANTED);
+    });
 
     this.backgroundAppRefreshPermission = await this.diagnostic.isBackgroundRefreshAuthorized();
   }

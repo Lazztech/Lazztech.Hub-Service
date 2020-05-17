@@ -18,6 +18,7 @@
       <ion-label>
         <ion-text *ngIf="!ghostModeIsOff">Ghost Mode Off</ion-text>
         <ion-text *ngIf="ghostModeIsOff" color="warning">Ghost Mode On</ion-text>
+        <p class="ion-text-wrap">Turn off all hub geofence entry/exit updates. You will me marked as being in ghost mode.</p>
       </ion-label>
       <ion-toggle [(ngModel)]="ghostModeIsOff" (click)="activeGhostModeToggle()" class="ion-float-right"
         color="success"></ion-toggle>
@@ -30,9 +31,9 @@
 
     <ion-item>
       <ion-label>
-        <ion-text>Low Power Mode is off</ion-text>
-        <ion-text *ngIf="lowPowerModeIsOff" class="ion-float-right">✅</ion-text>
-        <ion-text *ngIf="!lowPowerModeIsOff" class="ion-float-right">❌</ion-text>
+        <ion-text>Low Power Mode Should Remain Off</ion-text>
+        <!-- <ion-text *ngIf="lowPowerModeIsOff" class="ion-float-right">✅</ion-text>
+        <ion-text *ngIf="!lowPowerModeIsOff" class="ion-float-right">❌</ion-text> -->
         <p class="ion-text-wrap">Should be off to allow reliable geofence exit/entry events and hub updates.</p>
       </ion-label>
     </ion-item>
@@ -98,3 +99,7 @@
   </ion-list>
 
 </ion-content>
+<ion-footer>
+  <ion-toolbar>
+  </ion-toolbar>
+</ion-footer>
