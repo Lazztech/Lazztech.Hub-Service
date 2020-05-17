@@ -18,7 +18,7 @@ export class StatusPage implements OnInit {
   lowPowerModeIsOff = false;
   locationServices = false;
   cellular = false;
-  wifi = true;
+  wifi = false;
 
   //Permissions
   locationAlwaysPermission = false;
@@ -37,25 +37,26 @@ export class StatusPage implements OnInit {
 
   async checkIosSettings() {
     this.logger.log(this.checkIosSettings.name);
-    this.wifi = await this.diagnostic.isWifiEnabled();
+    // this.lowPowerModeIsOff = 
     this.locationServices = await this.diagnostic.isLocationEnabled();
+    // this.cellular = await this.diagnostic.cellular
+    this.wifi = await this.diagnostic.isWifiEnabled();
   }
 
   async checkIosPermissions() {
     this.logger.log(this.checkIosPermissions.name);
     this.logger.log('getLocationAuthorizationStatus result: ', await this.diagnostic.getLocationAuthorizationStatus()); // returns 'authorized'
-    this.logger.log('requestLocationAuthorization result: ', await this.diagnostic.requestLocationAuthorization());
-    this.logger.log('requestLocationAuthorization("always") result: ', await this.diagnostic.requestLocationAuthorization("always"));
+    // this.logger.log('requestLocationAuthorization result: ', await this.diagnostic.requestLocationAuthorization());
+    // this.logger.log('requestLocationAuthorization("always") result: ', await this.diagnostic.requestLocationAuthorization("always"));
+    // this.diagnostic.requestLocationAuthorization(this.diagnostic.locationAuthorizationMode.ALWAYS).then(result => {
+    //   this.logger.log('getLocationAuthorizationStatus result: ', result);
+    //   this.locationAlwaysPermission = (result == this.diagnostic.locationAuthorizationMode.ALWAYS);
+    // });
 
-    this.diagnostic.requestLocationAuthorization(this.diagnostic.locationAuthorizationMode.ALWAYS).then(result => {
-      this.logger.log('getLocationAuthorizationStatus result: ', result);
-      this.locationAlwaysPermission = (result == this.diagnostic.locationAuthorizationMode.ALWAYS);
-    });
-
-    this.diagnostic.getMotionAuthorizationStatus().then(result => {
-      this.logger.log('getMotionAuthorizationStatus result: ', result);
-      this.motionAndFitnessPermission = (result == this.diagnostic.motionStatus.GRANTED);
-    });
+    // this.diagnostic.getMotionAuthorizationStatus().then(result => {
+    //   this.logger.log('getMotionAuthorizationStatus result: ', result);
+    //   this.motionAndFitnessPermission = (result == this.diagnostic.motionStatus.GRANTED);
+    // });
 
     this.backgroundAppRefreshPermission = await this.diagnostic.isBackgroundRefreshAuthorized();
   }
