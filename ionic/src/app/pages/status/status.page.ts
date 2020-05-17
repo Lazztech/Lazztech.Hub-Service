@@ -53,12 +53,30 @@ export class StatusPage implements OnInit {
     //   this.locationAlwaysPermission = (result == this.diagnostic.locationAuthorizationMode.ALWAYS);
     // });
 
+    this.checkIosMotionPermission();
+    await this.checkIosBackgroundRefreshPermission();
+  }
+
+  private async checkIosBackgroundRefreshPermission() {
+    this.backgroundAppRefreshPermission = await this.diagnostic.isBackgroundRefreshAuthorized();
+  }
+
+  private checkIosMotionPermission() {
     this.diagnostic.getMotionAuthorizationStatus().then(result => {
       this.logger.log('getMotionAuthorizationStatus result: ', result);
+      /* this.diagnostic.motionStatus.GRANTED:
+      {
+        "UNKNOWN":"unknown",
+        "NOT_REQUESTED":"not_requested",
+        "DENIED_ALWAYS":"denied_always",
+        "RESTRICTED":"restricted",
+        "GRANTED":"authorized",
+        "NOT_AVAILABLE":"not_available",
+        "NOT_DETERMINED":"not_determined"
+      }
+      */
       this.motionAndFitnessPermission = (result == this.diagnostic.motionStatus.GRANTED);
     });
-
-    this.backgroundAppRefreshPermission = await this.diagnostic.isBackgroundRefreshAuthorized();
   }
 
   async activeGhostModeToggle() {
