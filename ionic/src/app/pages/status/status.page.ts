@@ -10,14 +10,20 @@ import { NGXLogger } from 'ngx-logger';
 export class StatusPage implements OnInit {
 
   loading = false;
-
-  //Settings
-  wifi = true;
-  airplaneMode = true;
+  
+  //Ghost Mode
   ghostModeIsOff = true;
+
+  //Device Settings
   lowPowerModeIsOff = false;
+  locationServices = false;
+  cellular = false;
+  wifi = true;
+
   //Permissions
-  locationAlwaysPermission = true;
+  locationAlwaysPermission = false;
+  motionAndFitnessPermission = false;
+  backgroundAppRefreshPermission = false;
 
   constructor(
     private diagnostic: Diagnostic,
@@ -25,20 +31,33 @@ export class StatusPage implements OnInit {
   ) { }
 
   async ngOnInit() {
-    await this.checkSettings();
-    await this.checkPermissions();
+    await this.checkIosSettings();
+    await this.checkIosPermissions();
   }
 
-  async checkSettings() {
-    this.logger.log(this.checkSettings.name);
+  async checkIosSettings() {
+    this.logger.log(this.checkIosSettings.name);
     this.wifi = await this.diagnostic.isWifiEnabled();
-    // this.airplaneMode = await this.diagnostic.
+    this.locationServices = await this.diagnostic.isLocationEnabled();
   }
 
-  async checkPermissions() {
-    this.logger.log(this.checkPermissions.name);
-    const permissions = this.diagnostic.permission;
-    this.logger.log(permissions);
+  async checkIosPermissions() {
+    this.logger.log(this.checkIosPermissions.name);
+    this.logger.log('getLocationAuthorizationStatus result: ', await this.diagnostic.getLocationAuthorizationStatus()); // returns 'authorized'
+    this.logger.log('requestLocationAuthorization result: ', await this.diagnostic.requestLocationAuthorization());
+    this.logger.log('requestLocationAuthorization("always") result: ', await this.diagnostic.requestLocationAuthorization("always"));
+
+    this.diagnostic.requestLocationAuthorization(this.diagnostic.locationAuthorizationMode.ALWAYS).then(result => {
+      this.logger.log('getLocationAuthorizationStatus result: ', result);
+      this.locationAlwaysPermission = (result == this.diagnostic.locationAuthorizationMode.ALWAYS);
+    });
+
+    this.diagnostic.getMotionAuthorizationStatus().then(result => {
+      this.logger.log('getMotionAuthorizationStatus result: ', result);
+      this.motionAndFitnessPermission = (result == this.diagnostic.motionStatus.GRANTED);
+    });
+
+    this.backgroundAppRefreshPermission = await this.diagnostic.isBackgroundRefreshAuthorized();
   }
 
   async activeGhostModeToggle() {
