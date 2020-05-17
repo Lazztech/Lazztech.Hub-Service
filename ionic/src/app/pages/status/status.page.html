@@ -47,12 +47,21 @@
       </ion-label>
     </ion-item>
 
-    <ion-item>
+    <!-- <ion-item>
       <ion-label>
         <ion-text>Cellular is on</ion-text>
         <ion-text *ngIf="cellular" class="ion-float-right">✅</ion-text>
         <ion-text *ngIf="!cellular" class="ion-float-right">❌</ion-text>
         <p class="ion-text-wrap">Used for low power method of detecting geofences.</p>
+      </ion-label>
+    </ion-item> -->
+
+    <ion-item>
+      <ion-label>
+        <ion-text>Internet Connectivity</ion-text>
+        <ion-text *ngIf="internetConnectivity" class="ion-float-right">✅</ion-text>
+        <ion-text *ngIf="!internetConnectivity" class="ion-float-right">❌</ion-text>
+        <p class="ion-text-wrap">Needed for updating hubs of geofence entry/exit events.</p>
       </ion-label>
     </ion-item>
 

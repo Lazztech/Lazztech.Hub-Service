@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { NGXLogger } from 'ngx-logger';
+import { NetworkService } from 'src/app/services/network/network.service';
 
 @Component({
   selector: 'app-status',
@@ -15,9 +16,10 @@ export class StatusPage implements OnInit {
   ghostModeIsOff = true;
 
   //Device Settings
-  lowPowerModeIsOff = false;
+  // lowPowerModeIsOff = false;
   locationServices = false;
-  cellular = false;
+  internetConnectivity = false;
+  // cellular = false;
   wifi = false;
 
   //Permissions
@@ -27,6 +29,7 @@ export class StatusPage implements OnInit {
 
   constructor(
     private diagnostic: Diagnostic,
+    private networkService: NetworkService,
     private logger: NGXLogger
   ) { }
 
@@ -40,6 +43,7 @@ export class StatusPage implements OnInit {
     // this.lowPowerModeIsOff = 
     this.locationServices = await this.diagnostic.isLocationEnabled();
     // this.cellular = await this.diagnostic.cellular
+    this.internetConnectivity = await this.networkService.isConnected();
     this.wifi = await this.diagnostic.isWifiEnabled();
   }
 
