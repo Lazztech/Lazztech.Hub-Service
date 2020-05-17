@@ -69,12 +69,21 @@
       Geofence Permissions Health
     </ion-list-header>
   
-    <ion-item>
+    <!-- <ion-item>
       <ion-label>
         <ion-text>Location Always Permissions</ion-text>
         <ion-text *ngIf="locationAlwaysPermission" class="ion-float-right">✅</ion-text>
         <ion-text *ngIf="!locationAlwaysPermission" class="ion-float-right">❌</ion-text>
         <p class="ion-text-wrap">Needed to enable geofences while the app is in the background.</p>
+      </ion-label>
+    </ion-item> -->
+
+    <ion-item>
+      <ion-label>
+        <ion-text>Location Permissions</ion-text>
+        <ion-text *ngIf="locationPermission" class="ion-float-right">✅</ion-text>
+        <ion-text *ngIf="!locationPermission" class="ion-float-right">❌</ion-text>
+        <p class="ion-text-wrap">Needed to enable geofences and map.</p>
       </ion-label>
     </ion-item>
 
@@ -83,7 +92,7 @@
         <ion-text>Motion & Fitness Permissions</ion-text>
         <ion-text *ngIf="motionAndFitnessPermission" class="ion-float-right">✅</ion-text>
         <ion-text *ngIf="!motionAndFitnessPermission" class="ion-float-right">❌</ion-text>
-        <p class="ion-text-wrap">Detects motion to trigger to trigger location sensing. This conserves power.</p>
+        <p class="ion-text-wrap">Detects motion to trigger location sensing. This conserves power by not having full location sensing on at all times.</p>
       </ion-label>
     </ion-item>
 

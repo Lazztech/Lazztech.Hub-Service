@@ -10,7 +10,7 @@ import { NGXLogger } from 'ngx-logger';
 export class StatusPage implements OnInit {
 
   loading = false;
-  
+
   //Ghost Mode
   ghostModeIsOff = true;
 
@@ -21,7 +21,7 @@ export class StatusPage implements OnInit {
   wifi = false;
 
   //Permissions
-  locationAlwaysPermission = false;
+  locationPermission = false;
   motionAndFitnessPermission = false;
   backgroundAppRefreshPermission = false;
 
@@ -51,19 +51,13 @@ export class StatusPage implements OnInit {
   }
 
   private checkIosLocationPermissions() {
-        // this.logger.log('getLocationAuthorizationStatus result: ', await this.diagnostic.getLocationAuthorizationStatus()); // returns 'authorized'
-        this.diagnostic.getLocationAuthorizationStatus().then(result => {
-          this.logger.log('getLocationAuthorizationStatus', result);
-          // this.logger.log('this.diagnostic.locationAuthorizationMode', this.diagnostic.locationAuthorizationMode);
-          // this.locationAlwaysPermission = (result == this.diagnostic.locationAuthorizationMode.ALWAYS);
-          this.locationAlwaysPermission = (result == 'authorized');
-        })
-        // this.logger.log('requestLocationAuthorization result: ', await this.diagnostic.requestLocationAuthorization());
-        // this.logger.log('requestLocationAuthorization("always") result: ', await this.diagnostic.requestLocationAuthorization("always"));
-        // this.diagnostic.requestLocationAuthorization(this.diagnostic.locationAuthorizationMode.ALWAYS).then(result => {
-        //   this.logger.log('getLocationAuthorizationStatus result: ', result);
-        //   this.locationAlwaysPermission = (result == this.diagnostic.locationAuthorizationMode.ALWAYS);
-        // });
+    //TODO: this doesn't distinguish between ios "while using app" vs "always" permission mode.
+    this.diagnostic.getLocationAuthorizationStatus().then(result => {
+      this.logger.log('getLocationAuthorizationStatus', result);
+      // this.logger.log('this.diagnostic.locationAuthorizationMode', this.diagnostic.locationAuthorizationMode);
+      // this.locationAlwaysPermission = (result == this.diagnostic.locationAuthorizationMode.ALWAYS);
+      this.locationPermission = (result == 'authorized');
+    });
   }
 
   private async checkIosBackgroundRefreshPermission() {
@@ -89,7 +83,7 @@ export class StatusPage implements OnInit {
   }
 
   async activeGhostModeToggle() {
-      const result = confirm('Hubs will no longer be updated of your presence!');
+    const result = confirm('Hubs will no longer be updated of your presence!');
   }
 
 }
