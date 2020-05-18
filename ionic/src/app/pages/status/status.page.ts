@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { NGXLogger } from 'ngx-logger';
 import { NetworkService } from 'src/app/services/network/network.service';
+import { GeofenceService } from 'src/app/services/geofence/geofence.service';
 
 @Component({
   selector: 'app-status',
@@ -16,7 +17,7 @@ export class StatusPage implements OnInit {
   ghostModeIsOff = true;
 
   //Device Settings
-  // lowPowerModeIsOff = false;
+  lowPowerMode = false;
   locationServices = false;
   internetConnectivity = false;
   // cellular = false;
@@ -30,6 +31,7 @@ export class StatusPage implements OnInit {
   constructor(
     private diagnostic: Diagnostic,
     private networkService: NetworkService,
+    private geofenceService: GeofenceService,
     private logger: NGXLogger
   ) { }
 
@@ -40,7 +42,9 @@ export class StatusPage implements OnInit {
 
   async checkIosSettings() {
     this.logger.log(this.checkIosSettings.name);
-    // this.lowPowerModeIsOff = 
+    this.logger.log('this.geofenceService.isPowerSaveMode() result: ', await this.geofenceService.isPowerSaveMode())
+    this.lowPowerMode = await this.geofenceService.isPowerSaveMode();
+    //TODO: low data mode?
     this.locationServices = await this.diagnostic.isLocationEnabled();
     // this.cellular = await this.diagnostic.cellular
     this.internetConnectivity = await this.networkService.isConnected();

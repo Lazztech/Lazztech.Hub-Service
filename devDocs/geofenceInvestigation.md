@@ -143,6 +143,9 @@ https://www.livehouseautomation.com.au/blogs/news/geofencing-why-you-cant-rely-o
 ### "For example, if Wi-Fi is disabled, region monitoring is significantly less accurate."
 - https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/LocationAwarenessPG/RegionMonitoring/RegionMonitoring.html#//apple_ref/doc/uid/TP40009497-CH9-SW11
 
+### 'Power Saving mode can throttle certain services in the background, such as HTTP requests or GPS.'
+- https://transistorsoft.github.io/cordova-background-geolocation-lt/classes/_cordova_background_geolocation_lt_.backgroundgeolocation.html#onpowersavechange
+
 # Logging, Error Tracking & Analytics links:
 - https://ionicframework.com/integrations/category/analytics
 - Sentry.io looks excellent though it doesn't play nice with capacitor... :(

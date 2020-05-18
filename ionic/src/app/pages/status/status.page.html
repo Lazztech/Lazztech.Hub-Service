@@ -32,8 +32,8 @@
     <ion-item>
       <ion-label>
         <ion-text>Low Power Mode Should Remain Off</ion-text>
-        <!-- <ion-text *ngIf="lowPowerModeIsOff" class="ion-float-right">✅</ion-text>
-        <ion-text *ngIf="!lowPowerModeIsOff" class="ion-float-right">❌</ion-text> -->
+        <ion-text *ngIf="!lowPowerMode" class="ion-float-right">✅</ion-text>
+        <ion-text *ngIf="lowPowerMode" class="ion-float-right">❌</ion-text>
         <p class="ion-text-wrap">Should be off to allow reliable geofence exit/entry events and hub updates.</p>
       </ion-label>
     </ion-item>

@@ -77,6 +77,11 @@ export class GeofenceService {
     }
   }
 
+  async isPowerSaveMode() {
+    //FIXME: seems to always return false
+    return await BackgroundGeolocation.isPowerSaveMode();
+  };
+
   async configureBackgroundGeolocation() {
     BackgroundGeolocation.onGeofence(async geofence => {
       this.logger.log("[geofence] ", geofence.identifier, geofence.action);
