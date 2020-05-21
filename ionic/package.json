@@ -46,7 +46,7 @@
     "apollo-client": "^2.5.1",
     "apollo-link-context": "^1.0.17",
     "chart.js": "^2.9.3",
-    "cordova-background-geolocation-lt": "^3.4.2",
+    "cordova-background-geolocation-lt": "^3.6.3",
     "cordova-plugin-advanced-http": "2.2.0",
     "cordova-plugin-background-fetch": "^5.6.1",
     "cordova-plugin-file": "^6.0.2",
