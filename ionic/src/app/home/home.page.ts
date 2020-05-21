@@ -46,7 +46,6 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async doRefresh(event) {
-    this.logger.log('Begin async operation');
     this.loading = true;
     this.userHubs = await this.hubService.usersHubs("network-only");
     this.loading = false;
@@ -57,10 +56,7 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy {
     this.user = await this.authService.user();
     this.locationSubscription = this.locationService.coords$.subscribe(async x => {
       await this.platform.ready();
-      this.logger.log(x);
-      const coords = { latitude: x.latitude, longitude: x.longitude };
-      this.logger.log(coords);
-      this.coords = coords;
+      this.coords = { latitude: x.latitude, longitude: x.longitude };
       this.changeRef.detectChanges();
     });
     this.userHubs = await this.hubService.usersHubs();
@@ -104,7 +100,7 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy {
     const val = ev.target.value;
     if (val && val.trim() != '') {
       this.userHubs = this.userHubs.filter(x => {
-        this.logger.log(x.hub.name.toLowerCase())
+        this.logger.log(x.hub.name.toLowerCase());
         return x.hub.name.toLowerCase().includes(val.toLowerCase())
       })
     }
