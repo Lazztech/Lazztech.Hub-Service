@@ -3,6 +3,7 @@ import { GeolocationOptions, GeolocationPosition, Plugins } from '@capacitor/cor
 import * as geolib from 'geolib';
 import { NGXLogger } from 'ngx-logger';
 import { Observable, Observer } from 'rxjs';
+import { Hub } from 'src/generated/graphql';
 
 const { Geolocation } = Plugins;
 
@@ -52,14 +53,13 @@ export class LocationService {
       return result;
   }
 
-  getDistanceFromHub(hub: any, coords: any) {
+  getDistanceFromHub(hub: Hub, coords: any) {
     const hubCoords = { latitude: hub.latitude, longitude: hub.longitude };
-
     const distance = geolib.getDistance(
       coords,
       hubCoords
     );
-
+    this.logger.log(`distanceInMeters from hubId ${hub.id}: ` + distance);
     return distance;
   }
 

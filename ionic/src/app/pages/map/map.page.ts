@@ -21,17 +21,9 @@ export class MapPage implements OnInit {
   @ViewChild(GoogleMapComponent) child: GoogleMapComponent;
 
   constructor(
-    private route: ActivatedRoute,
     private router: Router,
     private logger: NGXLogger
   ) {
-    // this.queryParamsSubscription = this.route.queryParams.subscribe(params => {
-    //   if (this.router.getCurrentNavigation().extras.state) {
-    //     this.hubCoords = this.router.getCurrentNavigation().extras.state.hubCoords;
-    //     this.logger.log(this.hubCoords);
-    //     this.loading = false;
-    //   }
-    // });
     if (this.router.getCurrentNavigation().extras.state) {
       this.hubCoords = this.router.getCurrentNavigation().extras.state.hubCoords;
       if (this.router.getCurrentNavigation().extras.state.hub) {
@@ -40,7 +32,6 @@ export class MapPage implements OnInit {
       if (this.router.getCurrentNavigation().extras.state.hubs) {
         this.hubs = this.router.getCurrentNavigation().extras.state.hubs;
       }
-      this.logger.log(this.hubCoords);
     }
   }
 
