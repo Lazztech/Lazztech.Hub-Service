@@ -57,7 +57,7 @@ export class HubCardComponent implements OnDestroy, OnChanges {
       this.logger.log(this.atHub);
       if (!this.atHub) {
         this.distanceInMeters = this.locationService.getDistanceFromHub(this.hub, this.coords);
-        this.logger.log(this.distanceInMeters);
+        this.logger.log(`distanceInMeters: ` + this.distanceInMeters);
       }
       this.changeRef.detectChanges();
   }

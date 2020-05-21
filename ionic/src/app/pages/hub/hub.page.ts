@@ -46,10 +46,7 @@ export class HubPage implements OnInit, OnDestroy {
     //FIXME this should be refactored into the HubService to avoid repeating code
     this.locationSubscription = this.locationService.coords$.subscribe(async x => {
       await this.platform.ready();
-      this.logger.log(x);
-      const coords = { latitude: x.latitude, longitude: x.longitude };
-      this.logger.log(coords);
-      this.userCoords = coords;
+      this.userCoords = { latitude: x.latitude, longitude: x.longitude };
       this.changeRef.detectChanges();
     });
     const hubCoords = { 
@@ -57,17 +54,14 @@ export class HubPage implements OnInit, OnDestroy {
       longitude: this.userHub.hub.longitude
     };
     this.hubCoords = hubCoords;
-    this.logger.log(this.hubCoords);
     this.loading = false;
   }
 
   async loadHub() {
     this.userHub = await this.hubService.hub(this.id);
-    this.logger.log(JSON.stringify(this.userHub));
   }
 
   goToPersonPage(id: number, user: any) {
-    this.logger.log(user)
     this.navCtrl.navigateForward('person/'+ id, {
       state: {
         user
@@ -104,7 +98,7 @@ export class HubPage implements OnInit, OnDestroy {
       // icon: 'share',
       handler: () => {
         this.navCtrl.navigateForward('admin-hub/'+ this.id);
-        this.logger.log('Edit clicked');
+        this.logger.log('Settings clicked');
       },
     }
     : null ;
