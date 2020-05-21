@@ -31,9 +31,6 @@ export class AppComponent {
   ];
 
   isDark = false;
-  isNotFirstToggleSet = false;
-
-  connected = true;
 
   constructor(
     private platform: Platform,
@@ -41,19 +38,14 @@ export class AppComponent {
     private navCtrl: NavController,
     private alertService: AlertService,
     private themeService: ThemeService,
-    private networkService: NetworkService,
-    private updateService: UpdateService,
     private geofenceService: GeofenceService,
     private logger: NGXLogger,
   ) {
     this.initializeApp();
-    this.logger.log(`Is DarkMode: ${this.isDark}`);
   }
 
   async initializeApp() {
-    this.logger.log(`Is DarkMode: ${this.isDark}`);
     this.isDark = await this.themeService.isDark();
-    this.logger.log(`Is DarkMode: ${this.isDark}`);
 
     StatusBar.setStyle({
       style: this.isDark ? StatusBarStyle.Dark : StatusBarStyle.Light
@@ -61,22 +53,12 @@ export class AppComponent {
     this.platform.ready().then(async () => {
       SplashScreen.hide();
 
-      this.updateService.checkForUpdate();
-
-      this.connected = await this.networkService.isConnected();
-      this.networkService.handler = this.networkService.network.addListener('networkStatusChange', async (status) => {
-        this.logger.log("Network status changed", status);
-        this.connected = status.connected;
-      });
-
       this.authService.getToken();
 
       await this.geofenceService.configureBackgroundGeolocation();
       await this.geofenceService.refreshHubGeofences();
     });
   }
-
-
 
   async logout() {
     await this.authService.logout();

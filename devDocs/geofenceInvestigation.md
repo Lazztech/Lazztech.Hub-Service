@@ -152,6 +152,7 @@ https://www.livehouseautomation.com.au/blogs/news/geofencing-why-you-cant-rely-o
     - looks like I can just get the webview logs though, which may be enough!
         - https://github.com/getsentry/sentry-cordova/issues/138
         - https://github.com/getsentry/sentry-cordova/issues/162#issuecomment-551420138
+- https://github.com/transistorsoft/cordova-background-geolocation-lt/wiki/Debugging#fetching-the-logs
 
 # Mitigation Attempts:
 - Added sentry.io remote error tracking on ionic client

@@ -138,7 +138,7 @@ export class GeofenceService {
     BackgroundGeolocation.ready({
       reset: true,
       // debug: true,
-      logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
+      logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE, //FIXME do not publish app with this set to verbose!
       desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
       distanceFilter: 10,
       // url: 'http://my.server.com/locations',

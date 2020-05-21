@@ -153,10 +153,13 @@ export class ThemeService {
   async isDark(): Promise<boolean> {
     var cssText = await this.storage.get('theme');
     if (cssText == this.darkTheme) {
+      this.logger.log(`Is DarkMode: true`);
       return true;
     } else if (cssText == this.lightTheme) {
+      this.logger.log(`Is DarkMode: false`);
       return false;
     } else {
+      this.logger.log(`Is DarkMode: false`);
       return false;
     }
   }
