@@ -32,8 +32,8 @@
     <ion-item>
       <ion-label>
         <ion-text>Low Power Mode Should Remain Off</ion-text>
-        <ion-text *ngIf="!lowPowerMode" class="ion-float-right">✅</ion-text>
-        <ion-text *ngIf="lowPowerMode" class="ion-float-right">❌</ion-text>
+        <ion-text *ngIf="!deviceSettings.lowPowerMode" class="ion-float-right">✅</ion-text>
+        <ion-text *ngIf="deviceSettings.lowPowerMode" class="ion-float-right">❌</ion-text>
         <p class="ion-text-wrap">Should be off to allow reliable geofence exit/entry events and hub updates.</p>
       </ion-label>
     </ion-item>
@@ -41,8 +41,8 @@
     <ion-item>
       <ion-label>
         <ion-text>Location Services is on</ion-text>
-        <ion-text *ngIf="locationServices" class="ion-float-right">✅</ion-text>
-        <ion-text *ngIf="!locationServices" class="ion-float-right">❌</ion-text>
+        <ion-text *ngIf="deviceSettings.locationServices" class="ion-float-right">✅</ion-text>
+        <ion-text *ngIf="!deviceSettings.locationServices" class="ion-float-right">❌</ion-text>
         <p class="ion-text-wrap">Used for detecting geofence entry/exit events</p>
       </ion-label>
     </ion-item>
@@ -59,8 +59,8 @@
     <ion-item>
       <ion-label>
         <ion-text>Internet Connectivity</ion-text>
-        <ion-text *ngIf="internetConnectivity" class="ion-float-right">✅</ion-text>
-        <ion-text *ngIf="!internetConnectivity" class="ion-float-right">❌</ion-text>
+        <ion-text *ngIf="deviceSettings.internetConnectivity" class="ion-float-right">✅</ion-text>
+        <ion-text *ngIf="!deviceSettings.internetConnectivity" class="ion-float-right">❌</ion-text>
         <p class="ion-text-wrap">Needed for updating hubs of geofence entry/exit events.</p>
       </ion-label>
     </ion-item>
@@ -68,8 +68,8 @@
     <ion-item>
       <ion-label>
         <ion-text>Wi-Fi is on</ion-text>
-        <ion-text *ngIf="wifi" class="ion-float-right">✅</ion-text>
-        <ion-text *ngIf="!wifi" class="ion-float-right">❌</ion-text>
+        <ion-text *ngIf="deviceSettings.wifi" class="ion-float-right">✅</ion-text>
+        <ion-text *ngIf="!deviceSettings.wifi" class="ion-float-right">❌</ion-text>
         <p class="ion-text-wrap">Used for low power method of detecting geofences.</p>
       </ion-label>
     </ion-item>
@@ -90,8 +90,8 @@
     <ion-item>
       <ion-label>
         <ion-text>Location Permissions</ion-text>
-        <ion-text *ngIf="locationPermission" class="ion-float-right">✅</ion-text>
-        <ion-text *ngIf="!locationPermission" class="ion-float-right">❌</ion-text>
+        <ion-text *ngIf="devicePermissions.locationPermission" class="ion-float-right">✅</ion-text>
+        <ion-text *ngIf="!devicePermissions.locationPermission" class="ion-float-right">❌</ion-text>
         <p class="ion-text-wrap">Needed to enable geofences and map.</p>
       </ion-label>
     </ion-item>
@@ -99,8 +99,8 @@
     <ion-item>
       <ion-label>
         <ion-text>Motion & Fitness Permissions</ion-text>
-        <ion-text *ngIf="motionAndFitnessPermission" class="ion-float-right">✅</ion-text>
-        <ion-text *ngIf="!motionAndFitnessPermission" class="ion-float-right">❌</ion-text>
+        <ion-text *ngIf="devicePermissions.motionAndFitnessPermission" class="ion-float-right">✅</ion-text>
+        <ion-text *ngIf="!devicePermissions.motionAndFitnessPermission" class="ion-float-right">❌</ion-text>
         <p class="ion-text-wrap">Detects motion to trigger location sensing. This conserves power by not having full location sensing on at all times.</p>
       </ion-label>
     </ion-item>
@@ -108,8 +108,8 @@
     <ion-item>
       <ion-label>
         <ion-text>Background App Refresh</ion-text>
-        <ion-text *ngIf="backgroundAppRefreshPermission" class="ion-float-right">✅</ion-text>
-        <ion-text *ngIf="!backgroundAppRefreshPermission" class="ion-float-right">❌</ion-text>
+        <ion-text *ngIf="devicePermissions.backgroundAppRefreshPermission" class="ion-float-right">✅</ion-text>
+        <ion-text *ngIf="!devicePermissions.backgroundAppRefreshPermission" class="ion-float-right">❌</ion-text>
         <p class="ion-text-wrap">Needed to update hubs while the app is in the background.</p>
       </ion-label>
     </ion-item>

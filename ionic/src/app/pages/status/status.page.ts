@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Diagnostic } from '@ionic-native/diagnostic/ngx';
-import { NGXLogger } from 'ngx-logger';
-import { NetworkService } from 'src/app/services/network/network.service';
-import { GeofenceService } from 'src/app/services/geofence/geofence.service';
+import { DiagnosticService } from 'src/app/services/diagnostic/diagnostic.service';
+import { DevicePermissions } from 'src/app/services/diagnostic/models/devicePermissions';
+import { DeviceSettings } from 'src/app/services/diagnostic/models/deviceSettings';
 
 @Component({
   selector: 'app-status',
@@ -17,77 +16,19 @@ export class StatusPage implements OnInit {
   ghostModeIsOff = true;
 
   //Device Settings
-  lowPowerMode = false;
-  locationServices = false;
-  internetConnectivity = false;
-  // cellular = false;
-  wifi = false;
-
+  deviceSettings: DeviceSettings;
   //Permissions
-  locationPermission = false;
-  motionAndFitnessPermission = false;
-  backgroundAppRefreshPermission = false;
+  devicePermissions: DevicePermissions;
 
   constructor(
-    private diagnostic: Diagnostic,
-    private networkService: NetworkService,
-    private geofenceService: GeofenceService,
-    private logger: NGXLogger
+    private diagnosticService: DiagnosticService,
   ) { }
 
   async ngOnInit() {
-    await this.checkIosSettings();
-    await this.checkIosPermissions();
-  }
-
-  async checkIosSettings() {
-    this.logger.log(this.checkIosSettings.name);
-    this.logger.log('this.geofenceService.isPowerSaveMode() result: ', await this.geofenceService.isPowerSaveMode())
-    this.lowPowerMode = await this.geofenceService.isPowerSaveMode();
-    //TODO: low data mode?
-    this.locationServices = await this.diagnostic.isLocationEnabled();
-    // this.cellular = await this.diagnostic.cellular
-    this.internetConnectivity = await this.networkService.isConnected();
-    this.wifi = await this.diagnostic.isWifiEnabled();
-  }
-
-  async checkIosPermissions() {
-    this.logger.log(this.checkIosPermissions.name);
-    this.checkIosLocationPermissions();
-    this.checkIosMotionPermission();
-    await this.checkIosBackgroundRefreshPermission();
-  }
-
-  private checkIosLocationPermissions() {
-    //TODO: this doesn't distinguish between ios "while using app" vs "always" permission mode.
-    this.diagnostic.getLocationAuthorizationStatus().then(result => {
-      this.logger.log('getLocationAuthorizationStatus', result);
-      // this.logger.log('this.diagnostic.locationAuthorizationMode', this.diagnostic.locationAuthorizationMode);
-      // this.locationAlwaysPermission = (result == this.diagnostic.locationAuthorizationMode.ALWAYS);
-      this.locationPermission = (result == 'authorized');
-    });
-  }
-
-  private async checkIosBackgroundRefreshPermission() {
-    this.backgroundAppRefreshPermission = await this.diagnostic.isBackgroundRefreshAuthorized();
-  }
-
-  private checkIosMotionPermission() {
-    this.diagnostic.getMotionAuthorizationStatus().then(result => {
-      this.logger.log('getMotionAuthorizationStatus result: ', result);
-      /* this.diagnostic.motionStatus.GRANTED:
-      {
-        "UNKNOWN":"unknown",
-        "NOT_REQUESTED":"not_requested",
-        "DENIED_ALWAYS":"denied_always",
-        "RESTRICTED":"restricted",
-        "GRANTED":"authorized",
-        "NOT_AVAILABLE":"not_available",
-        "NOT_DETERMINED":"not_determined"
-      }
-      */
-      this.motionAndFitnessPermission = (result == this.diagnostic.motionStatus.GRANTED);
-    });
+    this.loading = true;
+    this.deviceSettings = await this.diagnosticService.checkIosSettings();
+    this.devicePermissions = await this.diagnosticService.checkIosPermissions();
+    this.loading = false;
   }
 
   async activeGhostModeToggle() {
