@@ -40,7 +40,6 @@ export class HubService {
       longitude
     }).toPromise();
 
-    this.logger.log(result);
     const response = result.data.createHub;
 
     if (response) {
@@ -110,7 +109,6 @@ export class HubService {
       description
     }).toPromise();
 
-    this.logger.log(result);
     const response = result.data.editHub;
 
     if (response) {
@@ -130,7 +128,6 @@ export class HubService {
         fetchPolicy
       }).toPromise();
 
-    this.logger.log(result);
     const response = result.data.hub;
 
     if (response) {
@@ -148,7 +145,6 @@ export class HubService {
       inviteesEmail
     }).toPromise();
 
-    this.logger.log(result);
     const response = result.data.inviteUserToHub;
     return response;
   }
@@ -158,7 +154,6 @@ export class HubService {
       id
     }).toPromise();
 
-    this.logger.log(result);
     const response = result.data.joinHub;
     return response;
   }
@@ -168,7 +163,6 @@ export class HubService {
       id
     }).toPromise();
 
-    this.logger.log(result);
     const response = result.data.deleteHub;
     return response;
   }
@@ -179,7 +173,6 @@ export class HubService {
       image
     }).toPromise();
 
-    this.logger.log(result);
     const response = result.data.changeHubImage;
     return (response) ? true : false;
   }
@@ -189,7 +182,6 @@ export class HubService {
       hubId
     }).toPromise();
 
-    this.logger.log(result);
     const response = result.data.setHubStarred;
     return response;
   }
@@ -199,7 +191,6 @@ export class HubService {
       hubId
     }).toPromise();
 
-    this.logger.log(result);
     const response = result.data.setHubNotStarred;
     return response;
   }
