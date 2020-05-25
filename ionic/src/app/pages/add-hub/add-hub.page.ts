@@ -94,8 +94,8 @@ export class AddHubPage implements OnInit, OnDestroy {
     const formValue = this.myForm.value;
     this.logger.log(this.coords);
     const result = await this.hubService.createHub(
-      formValue.hubName,
-      formValue.description,
+      this.hubName.value,
+      this.hubDescription.value,
       this.hub.image,
       this.coords.latitude,
       this.coords.longitude
@@ -112,8 +112,9 @@ export class AddHubPage implements OnInit, OnDestroy {
         notifyOnEntry: true,
         notifyOnExit: true
       });
-      await this.navCtrl.navigateRoot('tabs/');
       await this.alertService.presentToast("Created Hub!");
+      await this.navCtrl.navigateRoot('/tabs');
+      await this.navCtrl.navigateForward(`/admin-hub/${result.id}`);
     } else {
       this.loading = false;
       this.alertService.presentRedToast("Failed to create Hub.");
