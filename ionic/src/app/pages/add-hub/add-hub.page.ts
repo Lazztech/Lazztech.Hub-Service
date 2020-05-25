@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Plugins } from '@capacitor/core';
-import { NavController } from '@ionic/angular';
+import { NavController, ActionSheetController } from '@ionic/angular';
 import { NGXLogger } from 'ngx-logger';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -10,6 +10,7 @@ import { CameraService } from 'src/app/services/camera/camera.service';
 import { GeofenceService } from 'src/app/services/geofence/geofence.service';
 import { HubService } from 'src/app/services/hub/hub.service';
 import { LocationService } from 'src/app/services/location/location.service';
+import { Hub } from 'src/generated/graphql';
 
 
 const { Geolocation } = Plugins;
@@ -25,6 +26,7 @@ export class AddHubPage implements OnInit, OnDestroy {
   image: any;
   paid = false;
   myForm: FormGroup;
+  hub: Hub = {} as Hub;
 
   locationSubscription: Subscription;
   coords: { latitude: number, longitude: number };
@@ -45,7 +47,8 @@ export class AddHubPage implements OnInit, OnDestroy {
     private fb: FormBuilder,
     public navCtrl: NavController,
     private cameraService: CameraService,
-    private logger: NGXLogger
+    private logger: NGXLogger,
+    private actionSheetController: ActionSheetController,
   ) { }
 
   ngOnInit() {
@@ -116,6 +119,38 @@ export class AddHubPage implements OnInit, OnDestroy {
       this.loading = false;
       this.alertService.presentRedToast("Failed to create Hub.");
     }
+  }
+
+  async presentActionSheet() {
+    const actionSheet = await this.actionSheetController.create({
+      // header: 'Albums',
+      buttons: [
+        {
+          text: 'Take Picture',
+          // icon: 'arrow-dropright-circle',
+          handler: () => {
+            this.logger.log('Take Picture clicked');
+            this.takePicture();
+          }
+        },
+        {
+          text: 'Select Picture',
+          // icon: 'arrow-dropright-circle',
+          handler: () => {
+            this.logger.log('Select Picture clicked');
+            this.selectPicture();
+          }
+        },
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            this.logger.log('Cancel clicked');
+          }
+        }
+      ]
+    });
+    await actionSheet.present();
   }
 
   async ngOnDestroy() {
