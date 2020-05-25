@@ -23,7 +23,6 @@ const { Geolocation } = Plugins;
 export class AddHubPage implements OnInit, OnDestroy {
 
   loading = true;
-  image: any;
   paid = false;
   myForm: FormGroup;
   hub: Hub = {} as Hub;
@@ -70,12 +69,12 @@ export class AddHubPage implements OnInit, OnDestroy {
 
   async takePicture() {
     const image = await this.cameraService.takePicture()
-    this.image = image;
+    this.hub.image = image;
   }
 
   async selectPicture() {
     const image = await this.cameraService.selectPicture();
-    this.image = image;
+    this.hub.image = image;
   }
 
   isFree() {
@@ -97,7 +96,7 @@ export class AddHubPage implements OnInit, OnDestroy {
     const result = await this.hubService.createHub(
       formValue.hubName,
       formValue.description,
-      this.image,
+      this.hub.image,
       this.coords.latitude,
       this.coords.longitude
     );
