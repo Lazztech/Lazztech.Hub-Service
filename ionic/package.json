@@ -70,7 +70,9 @@
     "rxjs": "~6.5.4",
     "stripe": "^7.0.0",
     "tslib": "^1.10.0",
-    "zone.js": "~0.10.2"
+    "zone.js": "~0.10.2",
+    "apollo-link": "^1.2.11",
+    "graphql-tag": "^2.10.0"
   },
   "devDependencies": {
     "@angular-devkit/architect": "^0.800.0",
