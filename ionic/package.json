@@ -40,7 +40,7 @@
     "@types/stripe-checkout": "^1.0.3",
     "@types/stripe-v3": "^3.1.0",
     "@zxing/library": "^0.15.1",
-    "apollo-angular": "^1.8.0",
+    "apollo-angular": "^1.9.1",
     "apollo-angular-link-http": "^1.9.0",
     "apollo-cache-inmemory": "^1.5.1",
     "apollo-client": "^2.5.1",
