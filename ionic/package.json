@@ -44,11 +44,12 @@
     "apollo-angular-link-http": "^1.9.0",
     "apollo-cache-inmemory": "^1.5.1",
     "apollo-client": "^2.5.1",
+    "apollo-link": "^1.2.11",
     "apollo-link-context": "^1.0.17",
     "chart.js": "^2.9.3",
     "cordova-background-geolocation-lt": "^3.6.3",
     "cordova-plugin-advanced-http": "2.2.0",
-    "cordova-plugin-background-fetch": "^5.6.1",
+    "cordova-plugin-background-fetch": "^6.0.3",
     "cordova-plugin-file": "^6.0.2",
     "cordova-plugin-fingerprint-aio": "^3.0.0",
     "cordova-plugin-ionic": "5.4.6",
@@ -60,6 +61,7 @@
     "firebase": "^6.3.1",
     "geolib": "^3.2.0",
     "graphql": "^14.3.0",
+    "graphql-tag": "^2.10.0",
     "ionic-native-http-connection-backend": "^7.0.3",
     "jsqr": "^1.2.0",
     "moment": "^2.24.0",
@@ -70,9 +72,7 @@
     "rxjs": "~6.5.4",
     "stripe": "^7.0.0",
     "tslib": "^1.10.0",
-    "zone.js": "~0.10.2",
-    "apollo-link": "^1.2.11",
-    "graphql-tag": "^2.10.0"
+    "zone.js": "~0.10.2"
   },
   "devDependencies": {
     "@angular-devkit/architect": "^0.800.0",
