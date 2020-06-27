@@ -2,14 +2,14 @@ import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChi
 import { Plugins } from '@capacitor/core';
 import { MenuController, NavController, Platform } from '@ionic/angular';
 import { NGXLogger } from 'ngx-logger';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { Hub, User, UsersHubsQuery } from 'src/generated/graphql';
 import { GoogleMapComponent } from '../components/google-map/google-map.component';
 import { AuthService } from '../services/auth/auth.service';
 import { HubService } from '../services/hub/hub.service';
 import { LocationService } from '../services/location/location.service';
 import { NotificationsService } from '../services/notifications/notifications.service';
-import { UpdateService } from '../services/update/update.service';
+import { map } from 'rxjs/operators';
 
 const { Geolocation } = Plugins;
 
@@ -21,10 +21,11 @@ const { Geolocation } = Plugins;
 export class HomePage implements OnInit, AfterViewInit, OnDestroy {
 
   loading = true;
-  userHubs: UsersHubsQuery['usersHubs'] = [];
+  userHubs: Observable<UsersHubsQuery['usersHubs']>;
   hubs: Hub[] = [];
   user: User;
 
+  subscriptions: Subscription[] = [];
   locationSubscription: Subscription;
   coords: { latitude: number, longitude: number };
 
@@ -33,7 +34,6 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private menu: MenuController,
     private authService: AuthService,
-    private updateService: UpdateService,
     private platform: Platform,
     private notificationsService: NotificationsService,
     public navCtrl: NavController,
@@ -47,34 +47,30 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy {
 
   async doRefresh(event) {
     this.loading = true;
-    this.userHubs = await this.hubService.usersHubs("network-only");
+    this.userHubs = await this.hubService.watchUserHubs("network-only").valueChanges.pipe(map(x => x.data && x.data.usersHubs));
     this.loading = false;
     event.target.complete();
   }
 
-  async ionViewDidEnter() {
+  async ngOnInit() {
     this.user = await this.authService.user();
-    this.locationSubscription = this.locationService.coords$.subscribe(async x => {
+    const locationSubscription = this.locationService.coords$.subscribe(async x => {
       await this.platform.ready();
       this.coords = { latitude: x.latitude, longitude: x.longitude };
       this.changeRef.detectChanges();
     });
-    this.userHubs = await this.hubService.usersHubs();
-    for (let index = 0; index < this.userHubs.length; index++) {
-      const userHub = this.userHubs[index];
-      this.hubs.push(userHub.hub);
-    }
+    this.subscriptions.push(locationSubscription);
+    this.userHubs = this.hubService.watchUserHubs().valueChanges.pipe(map(x => x.data && x.data.usersHubs));
+    this.userHubs.subscribe(x => {
+      x.forEach(x => this.hubs.push(x.hub));
+    });
     this.loading = false;
   }
 
-  async ngOnInit() {
-
-  }
-
   async ngOnDestroy() {
-    if (this.locationSubscription) {
-      this.locationSubscription.unsubscribe();
-    }
+    this.subscriptions.forEach(
+      x => x.unsubscribe()
+    );
   }
 
   ngAfterViewInit() {
@@ -96,13 +92,12 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async filterHubs(ev: any) {
-    this.userHubs = await this.hubService.usersHubs("cache-only");
+    this.userHubs = this.hubService.watchUserHubs("cache-only").valueChanges.pipe(map(x => x.data && x.data.usersHubs));
     const val = ev.target.value;
     if (val && val.trim() != '') {
-      this.userHubs = this.userHubs.filter(x => {
-        this.logger.log(x.hub.name.toLowerCase());
-        return x.hub.name.toLowerCase().includes(val.toLowerCase())
-      })
+      this.userHubs = this.userHubs.pipe(
+        map(x => x.filter(y => y.hub.name.toLowerCase().includes(val.toLowerCase())))
+      );
     }
   }
 
