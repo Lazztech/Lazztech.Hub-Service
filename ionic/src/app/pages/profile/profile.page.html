@@ -32,7 +32,7 @@
     <ion-list-header class="ion-padding-bottom">
       <ion-text>Manage Your Hubs</ion-text>
     </ion-list-header>
-    <ion-item *ngFor="let userHub of userHubs" href="javascript:void(0);" (click)="adminHub(userHub.hubId)">
+    <ion-item *ngFor="let userHub of userHubs | async" href="javascript:void(0);" (click)="adminHub(userHub.hubId)">
       <ion-avatar slot="start">
         <ion-img width="100%" *ngIf="userHub.hub.image" src="{{userHub.hub.image}}"></ion-img>
       </ion-avatar>

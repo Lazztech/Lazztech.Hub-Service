@@ -8,6 +8,8 @@ import { ProfileService } from 'src/app/services/profile/profile.service';
 import { ThemeService } from 'src/app/services/theme/theme.service';
 import { Scalars, User, UsersHubsQuery } from 'src/generated/graphql';
 import { AuthService } from '../../services/auth/auth.service';
+import { Observable, Subscription } from 'rxjs';
+import { map, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-profile',
@@ -16,9 +18,10 @@ import { AuthService } from '../../services/auth/auth.service';
 })
 export class ProfilePage implements OnInit {
 
-  loading = false;
+  loading = true;
   user: User;
-  userHubs: UsersHubsQuery['usersHubs'] = [];
+  userHubs: Observable<UsersHubsQuery['usersHubs']>;
+  subscriptions: Subscription[] = [];
 
   constructor(
     private menu: MenuController,
@@ -36,14 +39,20 @@ export class ProfilePage implements OnInit {
   }
 
   async ngOnInit() {
-  }
-
-  async ionViewWillEnter() {
-    this.loading = true;
     this.user = await this.authService.user();
-    this.userHubs = await this.hubService.usersHubs();
-    this.userHubs = this.userHubs.filter(x => x.isOwner);
-    this.loading = false;
+
+    this.userHubs = await this.hubService.watchUserHubs().valueChanges.pipe(
+      map(x => x.data && x.data.usersHubs)
+    ).pipe(
+      map(x => x.filter(x => x.isOwner))
+    );
+
+    this.subscriptions.push(
+      this.hubService.watchUserHubs().valueChanges.subscribe(x => {
+        this.logger.log('loading: ', x.loading);
+        this.loading = x.loading;
+      })
+    );
   }
 
   async userActionSheet() {
