@@ -46,10 +46,15 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async doRefresh(event) {
-    this.loading = true;
-    this.userHubs = await this.hubService.watchUserHubs("network-only").valueChanges.pipe(map(x => x.data && x.data.usersHubs));
-    this.loading = false;
-    event.target.complete();
+    try {
+      this.loading = true;
+      this.userHubs = this.hubService.watchUserHubs("network-only").valueChanges.pipe(map(x => x.data && x.data.usersHubs));
+      this.loading = false;
+      event.target.complete();
+    } catch (error) {
+      event.target.complete();
+      this.loading = false;
+    }
   }
 
   async ngOnInit() {

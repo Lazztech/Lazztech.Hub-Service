@@ -34,7 +34,7 @@
       </ion-card-content>
     </ion-card>
 
-      <ion-card class="welcome-card" *ngIf="!loading && (userHubs | async).length == 0">
+      <ion-card class="welcome-card" *ngIf="!loading && (userHubs | async)?.length == 0">
         <ion-card-header>
             <ion-card-subtitle>Get Started</ion-card-subtitle>
         </ion-card-header>
