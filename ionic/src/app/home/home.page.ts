@@ -54,17 +54,29 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy {
 
   async ngOnInit() {
     this.user = await this.authService.user();
-    const locationSubscription = this.locationService.coords$.subscribe(async x => {
-      await this.platform.ready();
-      this.coords = { latitude: x.latitude, longitude: x.longitude };
-      this.changeRef.detectChanges();
-    });
-    this.subscriptions.push(locationSubscription);
+
+    this.subscriptions.push(
+      this.locationService.coords$.subscribe(async x => {
+        await this.platform.ready();
+        this.coords = { latitude: x.latitude, longitude: x.longitude };
+        this.changeRef.detectChanges();
+      })
+    );
+
     this.userHubs = this.hubService.watchUserHubs().valueChanges.pipe(map(x => x.data && x.data.usersHubs));
-    this.userHubs.subscribe(x => {
-      x.forEach(x => this.hubs.push(x.hub));
-    });
-    this.loading = false;
+
+    this.subscriptions.push(
+      this.hubService.watchUserHubs().valueChanges.subscribe(x => {
+        this.logger.log('loading: ', x.loading);
+        this.loading = x.loading;
+      })
+    );
+
+    this.subscriptions.push(
+        this.userHubs.subscribe(x => {
+        x.forEach(x => this.hubs.push(x.hub));
+      })
+    );
   }
 
   async ngOnDestroy() {
