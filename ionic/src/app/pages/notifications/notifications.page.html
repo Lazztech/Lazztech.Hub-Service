@@ -20,7 +20,7 @@
     
     <ion-list *ngIf="!loading">
 
-      <div *ngFor="let notification of inAppNotifications">
+      <div *ngFor="let notification of inAppNotifications | async">
 
           <!-- Multi-line sliding item with icon options on both sides -->
           <ion-item-sliding id="item100">

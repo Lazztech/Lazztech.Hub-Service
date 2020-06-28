@@ -5,7 +5,7 @@ import '@firebase/messaging';
 import { Platform, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { FetchPolicy } from 'apollo-client';
-import { AddUserFcmNotificationTokenGQL, DeleteAllInAppNotificationsGQL, DeleteInAppNotificationGQL, GetInAppNotificationsGQL, InAppNotification, Scalars } from '../../../generated/graphql';
+import { AddUserFcmNotificationTokenGQL, DeleteAllInAppNotificationsGQL, DeleteInAppNotificationGQL, GetInAppNotificationsGQL, InAppNotification, Scalars, GetInAppNotificationsDocument, GetInAppNotificationsQuery } from '../../../generated/graphql';
 import { NGXLogger } from 'ngx-logger';
 import { environment } from 'src/environments/environment';
 const { LocalNotifications, PushNotifications } = Plugins;
@@ -53,6 +53,15 @@ export class NotificationsService {
     });
   }
 
+  watchGetInAppNotifications(fetchPolicy: FetchPolicy = "network-only") {
+    return this.getInAppNotificationsGQLService.watch(
+      null,
+      {
+        fetchPolicy
+      }
+    );
+  }
+
   async getInAppNotifications(fetchPolicy: FetchPolicy = "network-only"): Promise<InAppNotification[]> {
     const result = await this.getInAppNotificationsGQLService.fetch(
       null,
@@ -68,7 +77,21 @@ export class NotificationsService {
   async deleteInAppNotification(inAppNotificationId: Scalars['ID']) {
     const result = await this.deleteInAppNotificationGQLService.mutate({
       inAppNotificationId
-    }).toPromise();
+    },
+    {
+      update: (proxy, { data: { deleteInAppNotification } }) => {
+        // Read the data from our cache for this query.
+        const data = proxy.readQuery({ query: GetInAppNotificationsDocument }) as GetInAppNotificationsQuery;
+
+        // Find out notification by id and splice to remove it.
+        const notification = data.getInAppNotifications.find(x => x.id == inAppNotificationId);
+        data.getInAppNotifications.splice(data.getInAppNotifications.indexOf(notification), 1);
+
+        // Write our data back to the cache.
+        proxy.writeQuery({ query: GetInAppNotificationsDocument, data });
+      },
+    }
+    ).toPromise();
 
     if (result.data.deleteInAppNotification) {
       this.logger.log("deleteInAppNotification successful.");
@@ -80,7 +103,18 @@ export class NotificationsService {
   }
 
   async deleteAllInAppNotifications() {
-    const result = await this.deleteAllInAppNotificationsGQLService.mutate().toPromise();
+    const result = await this.deleteAllInAppNotificationsGQLService.mutate(null, {
+      update: (proxy, { data: { deleteAllInAppNotifications } }) => {
+        // Read the data from our cache for this query.
+        const data = proxy.readQuery({ query: GetInAppNotificationsDocument }) as GetInAppNotificationsQuery;
+
+        // Clear out notifications.
+        data.getInAppNotifications = [];
+
+        // Write our data back to the cache.
+        proxy.writeQuery({ query: GetInAppNotificationsDocument, data });
+      },
+    }).toPromise();
 
     if (result.data.deleteAllInAppNotifications) {
       this.logger.log("deleteAllInAppNotifications successful.");

@@ -1,18 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NotificationsService } from 'src/app/services/notifications/notifications.service';
-import { InAppNotification } from 'src/generated/graphql';
+import { InAppNotification, GetInAppNotificationsQuery } from 'src/generated/graphql';
 import { NGXLogger } from 'ngx-logger';
+import { Observable, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-notifications',
   templateUrl: './notifications.page.html',
   styleUrls: ['./notifications.page.scss'],
 })
-export class NotificationsPage implements OnInit {
+export class NotificationsPage implements OnInit, OnDestroy {
 
-  loading = false;
+  loading = true;
 
-  inAppNotifications: InAppNotification[] = Array.of<InAppNotification>();
+  inAppNotifications: Observable<GetInAppNotificationsQuery['getInAppNotifications']>;
+  subscriptions: Subscription[] = [];
 
   constructor(
     private notificationsService: NotificationsService,
@@ -20,12 +23,24 @@ export class NotificationsPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.inAppNotifications = this.notificationsService.watchGetInAppNotifications().valueChanges.pipe(
+      map(x => x.data && x.data.getInAppNotifications)
+    ).pipe(
+      map(x => this.sortNotifications(x))
+    );
+
+    this.subscriptions.push(
+      this.notificationsService.watchGetInAppNotifications().valueChanges.subscribe(x => {
+        this.logger.log('loading: ', x.loading);
+        this.loading = x.loading;
+      })
+    );
   }
 
-  async ionViewDidEnter() {
-    this.loading = true;
-    this.inAppNotifications = this.sortNotifications(await this.notificationsService.getInAppNotifications());
-    this.loading = false;
+  ngOnDestroy() {
+    this.subscriptions.forEach(
+      x => x.unsubscribe()
+    );
   }
 
   sortNotifications(notifications: InAppNotification[]) {
@@ -36,10 +51,13 @@ export class NotificationsPage implements OnInit {
   }
 
   async doRefresh(event) {
-    this.logger.log('Begin async operation');
     try {
       this.loading = true;
-      this.inAppNotifications = this.sortNotifications(await this.notificationsService.getInAppNotifications("network-only"));
+      this.inAppNotifications = this.notificationsService.watchGetInAppNotifications("network-only").valueChanges.pipe(
+        map(x => x.data && x.data.getInAppNotifications)
+      ).pipe(
+        map(x => this.sortNotifications(x))
+      );
       this.loading = false;
       event.target.complete();
     } catch (error) {
@@ -53,15 +71,10 @@ export class NotificationsPage implements OnInit {
     const result = confirm("Delete all notifications?");
     if (result) {
       await this.notificationsService.deleteAllInAppNotifications();
-      this.inAppNotifications = [];
     }
   }
 
   async deleteNotification(id: any) {
-    const result = await this.notificationsService.deleteInAppNotification(id);
-    if (result) {
-      const notification = this.inAppNotifications.find(x => x.id == id);
-      this.inAppNotifications.splice(this.inAppNotifications.indexOf(notification), 1);
-    }
+    await this.notificationsService.deleteInAppNotification(id);
   }
 }
