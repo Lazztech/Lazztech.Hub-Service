@@ -3,6 +3,8 @@ import { NavController } from '@ionic/angular';
 import { HubService } from 'src/app/services/hub/hub.service';
 import { NGXLogger } from 'ngx-logger';
 import { UsersPeopleQuery } from 'src/generated/graphql';
+import { map } from 'rxjs/operators';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-people',
@@ -11,8 +13,9 @@ import { UsersPeopleQuery } from 'src/generated/graphql';
 })
 export class PeoplePage implements OnInit {
 
-  loading = false;
-  persons: UsersPeopleQuery['usersPeople'] = [];
+  loading = true;
+  persons: Observable<UsersPeopleQuery['usersPeople']>;
+  subscriptions: Subscription[] = [];
 
   constructor(
     public navCtrl: NavController,
@@ -21,18 +24,20 @@ export class PeoplePage implements OnInit {
   ) { }
 
   ngOnInit() {
-  }
+    this.persons = this.hubService.watchUsersPeople().valueChanges.pipe(map(x => x.data && x.data.usersPeople));
 
-  async ionViewDidEnter() {
-    this.loading = true;
-    this.persons = await this.hubService.usersPeople();
-    this.loading = false;
+    this.subscriptions.push(
+      this.hubService.watchUserHubs().valueChanges.subscribe(x => {
+        this.logger.log('loading: ', x.loading);
+        this.loading = x.loading;
+      })
+    );
   }
 
   async doRefresh(event) {
     this.logger.log('Begin async operation');
     this.loading = true;
-    this.persons = await this.hubService.usersPeople();
+    this.persons = this.hubService.watchUsersPeople("network-only").valueChanges.pipe(map(x => x.data && x.data.usersPeople));
     event.target.complete();
     this.loading = false;
   }
@@ -47,14 +52,15 @@ export class PeoplePage implements OnInit {
   }
 
   async filterPeople(ev:any) {
-    this.persons = await this.hubService.usersPeople("cache-only");
+    this.persons = this.hubService.watchUsersPeople("cache-only").valueChanges.pipe(map(x => x.data && x.data.usersPeople));
     const val = ev.target.value;
     if (val && val.trim() != '') {
-      this.persons = this.persons.filter(x => {
-        let name = x.firstName.trim().toLowerCase() + x.lastName.trim().toLowerCase();
-        this.logger.log(name);
-        return name.includes(val.trim().toLowerCase())
-      })
+      this.persons = this.persons.pipe(
+        map(x => x.filter(y => {
+          let name = y.firstName.trim().toLowerCase() + y.lastName.trim().toLowerCase();
+          return name.includes(val.trim().toLowerCase());
+        }))
+      );
     }
   }
 

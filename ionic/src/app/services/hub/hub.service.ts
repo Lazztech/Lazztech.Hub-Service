@@ -73,6 +73,12 @@ export class HubService {
     });
   }
 
+  watchUsersPeople(fetchPolicy: FetchPolicy = "network-only") {
+    return this.usersPeopleGQLService.watch(null, {
+      fetchPolicy
+    });
+  }
+
   async usersPeople(fetchPolicy: FetchPolicy = "network-only") {
     const result = await this.usersPeopleGQLService.fetch(null, {
       fetchPolicy
