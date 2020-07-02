@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { HubService } from 'src/app/services/hub/hub.service';
 import { NGXLogger } from 'ngx-logger';
@@ -11,7 +11,7 @@ import { Observable, Subscription } from 'rxjs';
   templateUrl: './people.page.html',
   styleUrls: ['./people.page.scss'],
 })
-export class PeoplePage implements OnInit {
+export class PeoplePage implements OnInit, OnDestroy {
 
   loading = true;
   persons: Observable<UsersPeopleQuery['usersPeople']>;
@@ -31,6 +31,12 @@ export class PeoplePage implements OnInit {
         this.logger.log('loading: ', x.loading);
         this.loading = x.loading;
       })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(
+      x => x.unsubscribe()
     );
   }
 
