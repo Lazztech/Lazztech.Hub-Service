@@ -151,6 +151,15 @@ export class HubService {
     return response;
   }
 
+  watchHub(id: Scalars['ID'], fetchPolicy: FetchPolicy = "network-only") {
+    return this.hubGQLService.watch({
+      id
+    },
+    {
+      fetchPolicy
+    });
+  }
+
   async inviteUserToHub(hubId: Scalars['ID'], inviteesEmail: string) {
     const result = await this.inviteUserToHubGQLService.mutate({
       hubId,
