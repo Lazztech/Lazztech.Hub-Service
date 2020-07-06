@@ -1,12 +1,13 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ActionSheetController, NavController, Platform } from '@ionic/angular';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { CameraService } from 'src/app/services/camera/camera.service';
 import { HubService } from 'src/app/services/hub/hub.service';
 import { LocationService } from 'src/app/services/location/location.service';
 import { Scalars, HubQuery } from 'src/generated/graphql';
 import { NGXLogger } from 'ngx-logger';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-hub',
@@ -15,11 +16,11 @@ import { NGXLogger } from 'ngx-logger';
 })
 export class HubPage implements OnInit, OnDestroy {
 
-  loading = false;
-  userHub: HubQuery['hub'];
+  loading = true;
+  userHub: Observable<HubQuery['hub']>;
   id: Scalars['ID'];
   qrContent: string;
-  locationSubscription: Subscription;
+  subscriptions: Subscription[] = [];
   hubCoords: {latitude: number, longitude: number};
   userCoords: {latitude: number, longitude: number};
 
@@ -41,24 +42,41 @@ export class HubPage implements OnInit, OnDestroy {
   }
 
   async ionViewDidEnter() {
-    this.loading = true;
-    await this.loadHub();
+    this.loadHub();
+
+    this.subscriptions.push(
+      this.hubService.watchHub(this.id).valueChanges.subscribe(x => {
+        this.loading = x.loading;
+      })
+    );
+    
     //FIXME this should be refactored into the HubService to avoid repeating code
-    this.locationSubscription = this.locationService.coords$.subscribe(async x => {
-      await this.platform.ready();
-      this.userCoords = { latitude: x.latitude, longitude: x.longitude };
-      this.changeRef.detectChanges();
-    });
-    const hubCoords = { 
-      latitude: this.userHub.hub.latitude,
-      longitude: this.userHub.hub.longitude
-    };
-    this.hubCoords = hubCoords;
-    this.loading = false;
+    this.subscriptions.push(
+      this.locationService.coords$.subscribe(async x => {
+        await this.platform.ready();
+        this.userCoords = { latitude: x.latitude, longitude: x.longitude };
+        this.changeRef.detectChanges();
+      })
+    );
+
+    this.subscriptions.push(
+      this.userHub.subscribe(userHub => {
+        this.hubCoords = { 
+          latitude: userHub.hub.latitude,
+          longitude: userHub.hub.longitude
+        };
+      })
+    );
   }
 
-  async loadHub() {
-    this.userHub = await this.hubService.hub(this.id);
+  async ngOnDestroy() {
+    this.subscriptions.forEach(x => x.unsubscribe());
+  }
+
+  loadHub() {
+    this.userHub = this.hubService.watchHub(this.id).valueChanges.pipe(
+      map(x => x.data && x.data.hub)
+    );
   }
 
   goToPersonPage(id: number, user: any) {
@@ -69,17 +87,19 @@ export class HubPage implements OnInit, OnDestroy {
     });
   }
 
-  goToMap() {
+  async goToMap() {
+    const userHub = await this.userHub.toPromise();
     this.navCtrl.navigateForward('map', {
       state: {
         hubCoords: this.hubCoords,
-        hub: this.userHub.hub
+        hub: userHub.hub
       }
     });
   }
 
-  requestRide() {
-    window.open(`uber://?client_id=<CLIENT_ID>&action=setPickup&pickup[latitude]=${this.userCoords.latitude}&pickup[longitude]=${this.userCoords.longitude}&pickup[nickname]=Your%20Location&pickup[formatted_address]=1455%20Market%20St%2C%20San%20Francisco%2C%20CA%2094103&dropoff[latitude]=${this.hubCoords.latitude}&dropoff[longitude]=${this.hubCoords.longitude}&dropoff[nickname]=${this.userHub.hub.name}%20Hub&dropoff[formatted_address]=1%20Telegraph%20Hill%20Blvd%2C%20San%20Francisco%2C%20CA%2094133&product_id=a1111c8c-c720-46c3-8534-2fcdd730040d&link_text=View%20team%20roster&partner_deeplink=partner%3A%2F%2Fteam%2F9383`)
+  async requestRide() {
+    const userHub = await this.userHub.toPromise();
+    window.open(`uber://?client_id=<CLIENT_ID>&action=setPickup&pickup[latitude]=${this.userCoords.latitude}&pickup[longitude]=${this.userCoords.longitude}&pickup[nickname]=Your%20Location&pickup[formatted_address]=1455%20Market%20St%2C%20San%20Francisco%2C%20CA%2094103&dropoff[latitude]=${this.hubCoords.latitude}&dropoff[longitude]=${this.hubCoords.longitude}&dropoff[nickname]=${userHub.hub.name}%20Hub&dropoff[formatted_address]=1%20Telegraph%20Hill%20Blvd%2C%20San%20Francisco%2C%20CA%2094133&product_id=a1111c8c-c720-46c3-8534-2fcdd730040d&link_text=View%20team%20roster&partner_deeplink=partner%3A%2F%2Fteam%2F9383`)
   }
 
   navigate() {
@@ -92,7 +112,8 @@ export class HubPage implements OnInit, OnDestroy {
   }
 
   async presentActionSheet() {
-    const editHubButton = (this.userHub.isOwner)
+    const userHub = await this.userHub.toPromise();
+    const editHubButton = (userHub.isOwner)
     ? {
       text: 'Settings',
       // icon: 'share',
@@ -103,7 +124,7 @@ export class HubPage implements OnInit, OnDestroy {
     }
     : null ;
 
-    const inviteButton = (this.userHub.isOwner)
+    const inviteButton = (userHub.isOwner)
     ? {
       text: 'Invite',
       // icon: 'share',
@@ -120,20 +141,23 @@ export class HubPage implements OnInit, OnDestroy {
         inviteButton,
         editHubButton, 
       {
-        text: this.userHub.starred ? 'Remove Star' : 'Add Star',
+        text: userHub.starred ? 'Remove Star' : 'Add Star',
         handler: async () => {
           let result = false;
           this.loading = true;
-          if (this.userHub.starred) {
+          if (userHub.starred) {
             result = await this.hubService.setHubNotStarred(this.id);
-            this.userHub.starred = false;
+            //FIXME in apollo cache
+            // this.userHub.starred = false;
           } else {
             result = await this.hubService.setHubStarred(this.id);
-            this.userHub.starred = true;
+            //FIXME in apollo cache
+            // this.userHub.starred = true;
           }
 
           if (!result) {
-            this.userHub.starred = !this.userHub.starred;
+            //FIXME in apollo cache
+            // this.userHub.starred = !this.userHub.starred;
           }
 
           this.loading = false;
@@ -151,12 +175,6 @@ export class HubPage implements OnInit, OnDestroy {
     ].filter((item) => item !== null)
     });
     await actionSheet.present();
-  }
-
-  async ngOnDestroy() {
-    if (this.locationSubscription) {
-      this.locationSubscription.unsubscribe();
-    }
   }
 
 }

@@ -3,10 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <!-- <div slot="end" href="javascript:void(0);" (click)="presentActionSheet()">
-            <ion-icon size="large" name="options-outline"></ion-icon>
-        </div> -->
-    <ion-title *ngIf="!loading && userHub">{{userHub.hub.name}}</ion-title>
+    <ion-title *ngIf="!loading && userHub">{{(userHub | async)?.hub.name}}</ion-title>
     <ion-title *ngIf="loading">Hub</ion-title>
     <ion-progress-bar *ngIf="loading" type="indeterminate"></ion-progress-bar>
   </ion-toolbar>
@@ -14,15 +11,21 @@
 
 <ion-content fullscreen="true">
 
-  <app-hub-card *ngIf="!loading && userHub" [hub]="userHub.hub" [coords]="hubCoords" [starred]="userHub.starred"
-    [isOwner]="userHub.isOwner" [showDescription]="true" (click)="presentActionSheet()">
+  <app-hub-card 
+  *ngIf="!loading && (userHub | async)" 
+  [hub]="(userHub | async)?.hub" 
+  [coords]="userCoords" 
+  [starred]="(userHub | async)?.starred"
+  [isOwner]="(userHub | async)?.isOwner" 
+  [showDescription]="true" 
+  (click)="presentActionSheet()">
   </app-hub-card>
 
-  <app-micro-chat *ngIf="!loading && userHub" [hubId]="id" [userHub]="userHub"></app-micro-chat>
+  <app-micro-chat *ngIf="!loading && userHub" [hubId]="id" [userHub]="userHub | async"></app-micro-chat>
 
   <ion-card *ngIf="!loading && userHub && hubCoords" style="height:30%" (click)="goToMap()">
     <ion-card-content style="height:100%">
-      <app-google-map *ngIf="userHub && hubCoords" [center]="hubCoords" [hubs]="[userHub.hub]"></app-google-map>
+      <app-google-map *ngIf="userHub && hubCoords" [center]="hubCoords" [hubs]="[(userHub | async).hub]"></app-google-map>
     </ion-card-content>
   </ion-card>
 
@@ -46,7 +49,7 @@
     </ion-row>
   </ion-grid>
 
-  <ion-list *ngIf="!loading && userHub && !userHub.hub.active">
+  <ion-list *ngIf="!loading && userHub && !(userHub | async)?.hub.active">
     <ion-list-header>
       <ion-text>Hub Inactive</ion-text>
     </ion-list-header>
@@ -57,12 +60,12 @@
     </ion-item>
   </ion-list>
 
-  <ion-list *ngIf="!loading && userHub && !userHub.hub.active">
+  <ion-list *ngIf="!loading && userHub && !(userHub | async)?.hub.active">
     <ion-list-header>
       <ion-text>Members</ion-text>
     </ion-list-header>
 
-    <div *ngFor="let userConnection of userHub.hub.usersConnection">
+    <div *ngFor="let userConnection of (userHub | async)?.hub.usersConnection">
       <ion-item href="javascript:void(0);" (click)="goToPersonPage(userConnection.user.id, userConnection.user)">
         <ion-avatar slot="start">
           <!-- FIXME don't use this image or store a copy locally -->
@@ -82,12 +85,12 @@
     </div>
   </ion-list>
 
-  <ion-list *ngIf="!loading && userHub && userHub.hub.active">
+  <ion-list *ngIf="!loading && userHub && (userHub | async)?.hub.active">
     <ion-list-header>
       <ion-text>Present</ion-text>
     </ion-list-header>
 
-    <div *ngFor="let userConnection of userHub.hub.usersConnection">
+    <div *ngFor="let userConnection of (userHub | async)?.hub.usersConnection">
       <ion-item *ngIf="userConnection.isPresent" href="javascript:void(0);"
         (click)="goToPersonPage(userConnection.user.id, userConnection.user)">
         <ion-avatar slot="start">
@@ -109,12 +112,12 @@
 
   </ion-list>
 
-  <ion-list *ngIf="!loading && userHub && userHub.hub.active">
+  <ion-list *ngIf="!loading && userHub && (userHub | async)?.hub.active">
     <ion-list-header>
       <ion-text>Away</ion-text>
     </ion-list-header>
 
-    <div *ngFor="let userConnection of userHub.hub.usersConnection">
+    <div *ngFor="let userConnection of (userHub | async)?.hub.usersConnection">
       <ion-item *ngIf="!userConnection.isPresent" href="javascript:void(0);"
         (click)="goToPersonPage(userConnection.user.id, userConnection.user)">
         <ion-avatar slot="start">
