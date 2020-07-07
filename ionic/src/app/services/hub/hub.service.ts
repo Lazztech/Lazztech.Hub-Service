@@ -151,7 +151,7 @@ export class HubService {
     return response;
   }
 
-  watchHub(id: Scalars['ID'], fetchPolicy: FetchPolicy = "network-only") {
+  watchHub(id: Scalars['ID'], fetchPolicy: FetchPolicy = "cache-first") {
     return this.hubGQLService.watch({
       id
     },

@@ -39,17 +39,11 @@ export class HubPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id');
     this.qrContent = JSON.stringify({ id: this.id });
+
+    this.loadHub();
   }
 
   async ionViewDidEnter() {
-    this.loadHub();
-
-    this.subscriptions.push(
-      this.hubService.watchHub(this.id).valueChanges.subscribe(x => {
-        this.loading = x.loading;
-      })
-    );
-    
     //FIXME this should be refactored into the HubService to avoid repeating code
     this.subscriptions.push(
       this.locationService.coords$.subscribe(async x => {
@@ -76,6 +70,12 @@ export class HubPage implements OnInit, OnDestroy {
   loadHub() {
     this.userHub = this.hubService.watchHub(this.id).valueChanges.pipe(
       map(x => x.data && x.data.hub)
+    );
+
+    this.subscriptions.push(
+      this.hubService.watchHub(this.id).valueChanges.subscribe(x => {
+        this.loading = x.loading;
+      })
     );
   }
 
