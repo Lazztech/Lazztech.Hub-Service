@@ -53,7 +53,7 @@ export class NotificationsService {
     });
   }
 
-  watchGetInAppNotifications(fetchPolicy: FetchPolicy = "network-only") {
+  watchGetInAppNotifications(fetchPolicy: FetchPolicy = "cache-first") {
     return this.getInAppNotificationsGQLService.watch(
       null,
       {
@@ -62,7 +62,7 @@ export class NotificationsService {
     );
   }
 
-  async getInAppNotifications(fetchPolicy: FetchPolicy = "network-only"): Promise<InAppNotification[]> {
+  async getInAppNotifications(fetchPolicy: FetchPolicy = "cache-first"): Promise<InAppNotification[]> {
     const result = await this.getInAppNotificationsGQLService.fetch(
       null,
       {
