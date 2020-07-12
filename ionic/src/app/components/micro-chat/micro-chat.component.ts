@@ -38,7 +38,7 @@ export class MicroChatComponent implements OnInit {
     return await modal.present();
   }
 
-  async microChatActionSheet(microChatId) {
+  async microChatActionSheet(microChatId: any) {
     const actionSheet = await this.actionSheetController.create({
       // header: 'Albums',
       buttons: [

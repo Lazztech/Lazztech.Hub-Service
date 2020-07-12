@@ -39,8 +39,11 @@ export class MicroChatAddPage implements OnInit {
   }
 
   async save() {
+    this.loading = true;
     const formValue = this.myForm.value;
-    await this.hubService.createMicroChat(this.hubId, formValue.text)
+    await this.hubService.createMicroChat(this.hubId, formValue.text);
+    this.loading = false;
+    this.dismissModal();
   }
 
 }

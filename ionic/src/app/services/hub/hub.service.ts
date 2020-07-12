@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FetchPolicy } from 'apollo-client';
-import { CreateHubGQL, UsersHubsGQL, UsersPeopleGQL, CommonUsersHubsGQL, EditHubGQL, HubGQL, InviteUserToHubGQL, JoinHubGQL, DeleteHubGQL, ChangeHubImageGQL, SetHubStarredGQL, SetHubNotStarredGQL, EnteredHubGeofenceGQL, ExitedHubGeofenceGQL, ActivateHubGQL, DeactivateHubGQL, MicroChatToHubGQL, CreateMicroChatGQL, DeleteMicroChatGQL, Scalars } from 'src/generated/graphql';
+import { CreateHubGQL, UsersHubsGQL, UsersPeopleGQL, CommonUsersHubsGQL, EditHubGQL, HubGQL, InviteUserToHubGQL, JoinHubGQL, DeleteHubGQL, ChangeHubImageGQL, SetHubStarredGQL, SetHubNotStarredGQL, EnteredHubGeofenceGQL, ExitedHubGeofenceGQL, ActivateHubGQL, DeactivateHubGQL, MicroChatToHubGQL, CreateMicroChatGQL, DeleteMicroChatGQL, Scalars, CreateMicroChatDocument, HubDocument, HubQueryVariables, HubQuery } from 'src/generated/graphql';
 import { NGXLogger } from 'ngx-logger';
 
 @Injectable({
@@ -67,13 +67,13 @@ export class HubService {
     return response;
   }
   
-  watchUserHubs(fetchPolicy: FetchPolicy = "network-only") {
+  watchUserHubs(fetchPolicy: FetchPolicy = "cache-first") {
     return this.userHubsGQLService.watch(null, {
       fetchPolicy
     });
   }
 
-  watchUsersPeople(fetchPolicy: FetchPolicy = "network-only") {
+  watchUsersPeople(fetchPolicy: FetchPolicy = "cache-first") {
     return this.usersPeopleGQLService.watch(null, {
       fetchPolicy
     });
@@ -263,6 +263,25 @@ export class HubService {
     const result = await this.createMicroChatGQLService.mutate({
       hubId,
       microChatText
+    },
+    {
+      update: (proxy, { data: { createMicroChat }}) => {
+        // Read the data from our cache for this query.
+        const data = proxy.readQuery({ 
+          query: HubDocument,
+         variables:  { id: hubId } as HubQueryVariables
+        }) as HubQuery;
+
+        //Add new micro-chat to hub's array of micro-chats
+        data.hub.hub.microChats.push(createMicroChat);
+
+        // Write our data back to the cache.
+        proxy.writeQuery({ 
+          query: HubDocument,
+          variables: { id: hubId } as HubQueryVariables,
+          data 
+        });
+      }
     }).toPromise();
     return result.data.createMicroChat;
   }
@@ -271,6 +290,28 @@ export class HubService {
     const result = await this.deleteMicroChatGQLService.mutate({
       hubId,
       microChatId
+    },
+    {
+      update: (proxy, { data: { deleteMicroChat }}) => {
+        // Read the data from our cache for this query.
+        const data = proxy.readQuery({ 
+          query: HubDocument,
+         variables:  { id: hubId } as HubQueryVariables
+        }) as HubQuery;
+
+        //Remove micro-chat from hub's array of micro-chats
+        const microChat = data.hub.hub.microChats.find(x => x.id == microChatId);
+        data.hub.hub.microChats.splice(
+          data.hub.hub.microChats.indexOf(microChat), 1
+        );
+
+        // Write our data back to the cache.
+        proxy.writeQuery({ 
+          query: HubDocument,
+          variables: { id: hubId } as HubQueryVariables,
+          data 
+        });
+      }
     }).toPromise();
     return result.data.deleteMicroChat;
   }
