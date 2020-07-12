@@ -37,6 +37,7 @@ export function createApollo(
   return {
     link: auth.concat(apolloLink),
     cache: new InMemoryCache(),
+    connectToDevTools: true //TODO set based on environment variable, eg. dev or prod
   };
 }
 
