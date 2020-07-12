@@ -27,7 +27,7 @@ export class PeoplePage implements OnInit, OnDestroy {
     this.persons = this.hubService.watchUsersPeople().valueChanges.pipe(map(x => x.data && x.data.usersPeople));
 
     this.subscriptions.push(
-      this.hubService.watchUserHubs().valueChanges.subscribe(x => {
+      this.hubService.watchUsersPeople().valueChanges.subscribe(x => {
         this.logger.log('loading: ', x.loading);
         this.loading = x.loading;
       })
