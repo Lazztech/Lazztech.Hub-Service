@@ -167,7 +167,10 @@ export class HubService {
       isOwner: true,
     });
     joinUserHub = await this.joinUserHubRepository.save(joinUserHub);
-
+    joinUserHub = await this.joinUserHubRepository.findOne({
+      where: joinUserHub,
+      relations: ['hub', 'hub.usersConnection']
+    });
     return joinUserHub;
   }
 

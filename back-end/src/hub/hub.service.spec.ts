@@ -277,11 +277,32 @@ describe('HubService', () => {
     jest.spyOn(hubRepo, 'save').mockResolvedValueOnce(hub);
     jest.spyOn(joinUserHubRepo, 'create').mockReturnValueOnce(joinUserHub)
     const saveCall = jest.spyOn(joinUserHubRepo, 'save').mockResolvedValueOnce(joinUserHub);
+    const findOne = jest.spyOn(joinUserHubRepo, 'findOne').mockResolvedValueOnce(
+      /**
+       * NOTE: this is a personal js experiment.
+       * It is a self executing anonymous function that resolves in a new variable instance at runtime,
+       * when this file is loaded.
+       * 
+       * The result of what it resolves to can be read more clearly below in the expect(result) assertion.
+       */
+      (() => ({
+        userId,
+        hubId: hub.id,
+        isOwner: true,
+        hub
+      } as JoinUserHub))()
+    );
     //Act
     const result = await hubService.createHub(userId, hub);
     //Assert
-    expect(result).toEqual(joinUserHub);
+    expect(result).toEqual({
+      userId,
+      hubId: hub.id,
+      isOwner: true,
+      hub
+    } as JoinUserHub);
     expect(saveCall).toHaveBeenCalled();
+    expect(findOne).toHaveBeenCalled();
   });
 
   it('should remove for deleteHub', async () => {
