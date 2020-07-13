@@ -280,7 +280,7 @@ describe('HubService', () => {
     //Act
     const result = await hubService.createHub(userId, hub);
     //Assert
-    expect(result).toEqual(hub);
+    expect(result).toEqual(joinUserHub);
     expect(saveCall).toHaveBeenCalled();
   });
 

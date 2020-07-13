@@ -26,7 +26,7 @@ export class HubResolver {
   ) {}
 
   @UseGuards(AuthGuard)
-  @Mutation(() => Hub)
+  @Mutation(() => JoinUserHub)
   public async createHub(
     @UserId() userId,
     @Args({ name: 'name', type: () => String }) name: string,
@@ -34,7 +34,7 @@ export class HubResolver {
     @Args({ name: 'image', type: () => String }) image: string,
     @Args({ name: 'latitude', type: () => Float }) latitude: number,
     @Args({ name: 'longitude', type: () => Float }) longitude: number,
-  ): Promise<Hub> {
+  ): Promise<JoinUserHub> {
     this.logger.log(this.createHub.name);
     const hub = await this.hubService.createHub(userId, {
       name, description, image, latitude, longitude

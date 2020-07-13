@@ -168,7 +168,7 @@ export class HubService {
     });
     joinUserHub = await this.joinUserHubRepository.save(joinUserHub);
 
-    return hub;
+    return joinUserHub;
   }
 
   async deleteHub(userId: any, hubId: number) {
