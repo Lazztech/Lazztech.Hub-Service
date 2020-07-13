@@ -2,10 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { HubService } from 'src/app/services/hub/hub.service';
-import { HubQuery, Scalars } from 'src/generated/graphql';
+import { HubQuery, Scalars, JoinUserHub } from 'src/generated/graphql';
 import { NGXLogger } from 'ngx-logger';
 import { NavController, ActionSheetController } from '@ionic/angular';
 import { CameraService } from 'src/app/services/camera/camera.service';
+import { Observable, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-admin-hub',
@@ -15,7 +17,8 @@ import { CameraService } from 'src/app/services/camera/camera.service';
 export class AdminHubPage implements OnInit {
 
   loading = true;
-  userHub: HubQuery['hub'];
+  userHub: Observable<HubQuery['hub']>;
+  subscriptions: Subscription[] = [];
   id: Scalars['ID'];
 
   myForm: FormGroup;
@@ -38,13 +41,10 @@ export class AdminHubPage implements OnInit {
     private cameraService: CameraService
   ) { }
 
-  async ngOnInit() {
+  ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id');
 
-    this.userHub = await this.hubService.hub(this.id,
-      "network-only"
-    );
-    this.loading = false;
+    this.loadHub();
 
     this.myForm = this.fb.group({
       hubName: ['', [
@@ -58,6 +58,18 @@ export class AdminHubPage implements OnInit {
     });
   }
 
+  loadHub() {
+    this.userHub = this.hubService.watchHub(this.id).valueChanges.pipe(
+      map(x => x.data && x.data.hub)
+    );
+
+    this.subscriptions.push(
+      this.hubService.watchHub(this.id).valueChanges.subscribe(x => {
+        this.loading = x.loading;
+      })
+    );
+  }
+
   async save() {
     this.loading = true;
     const formValue = this.myForm.value;
@@ -65,12 +77,14 @@ export class AdminHubPage implements OnInit {
     this.loading = false;
   }
 
-  async activeToggle() {
-    if (this.userHub.hub.active == false) {
-      await this.hubService.activateHub(this.userHub.hub.id);
+  async activeToggle(userHub: JoinUserHub) {
+    this.loading = true;
+    if (userHub.hub.active == false) {
+      await this.hubService.activateHub(userHub.hub.id);
     } else {
-      await this.hubService.deactivateHub(this.userHub.hub.id);
+      await this.hubService.deactivateHub(userHub.hub.id);
     }
+    this.loading = false;
   }
 
   async invite() {
@@ -87,37 +101,19 @@ export class AdminHubPage implements OnInit {
     });
   }
 
-  async deleteHub() {
-    this.loading = true;
-    const result = await this.hubService.deleteHub(this.id);
-    this.loading = false;
-    this.navCtrl.back();
-    this.logger.log('Delete clicked');
-  }
-
-  takePicture() {
+  async takePicture() {
     this.cameraService.takePicture().then(newImage => {
       this.loading = true;
-      const oldImage = this.userHub.hub.image;
-      this.userHub.hub.image = newImage;
-      this.hubService.changeHubImage(this.id, newImage).then(result => {
-        if (!result) {
-          this.userHub.hub.image = oldImage;
-        }
+      this.hubService.changeHubImage(this.id, newImage).then(() => {
         this.loading = false;
       });
     });
   }
 
-  selectPicture() {
+  async selectPicture() {
     this.cameraService.selectPicture().then(newImage => {
       this.loading = true;
-      const oldImage = this.userHub.hub.image;
-      this.userHub.hub.image = newImage;
-      this.hubService.changeHubImage(this.id, newImage).then(result => {
-        if (!result) {
-          this.userHub.hub.image = oldImage;
-        }
+      this.hubService.changeHubImage(this.id, newImage).then(() => {
         this.loading = false;
       });
     });
@@ -176,6 +172,17 @@ export class AdminHubPage implements OnInit {
       ]
     });
     await actionSheet.present();
+  }
+
+  async deleteHub() {
+    this.logger.log('Delete clicked');
+    const result = confirm("Deleting a hub cannot be undone! Are you sure?");
+    if (result) {
+      this.loading = true;
+      await this.hubService.deleteHub(this.id);
+      this.loading = false;
+      this.navCtrl.back();
+    }
   }
 
 }

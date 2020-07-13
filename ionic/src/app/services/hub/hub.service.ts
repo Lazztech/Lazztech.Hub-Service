@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FetchPolicy } from 'apollo-client';
-import { CreateHubGQL, UsersHubsGQL, UsersPeopleGQL, CommonUsersHubsGQL, EditHubGQL, HubGQL, InviteUserToHubGQL, JoinHubGQL, DeleteHubGQL, ChangeHubImageGQL, SetHubStarredGQL, SetHubNotStarredGQL, EnteredHubGeofenceGQL, ExitedHubGeofenceGQL, ActivateHubGQL, DeactivateHubGQL, MicroChatToHubGQL, CreateMicroChatGQL, DeleteMicroChatGQL, Scalars, CreateMicroChatDocument, HubDocument, HubQueryVariables, HubQuery } from 'src/generated/graphql';
+import { CreateHubGQL, UsersHubsGQL, UsersPeopleGQL, CommonUsersHubsGQL, EditHubGQL, HubGQL, InviteUserToHubGQL, JoinHubGQL, DeleteHubGQL, ChangeHubImageGQL, SetHubStarredGQL, SetHubNotStarredGQL, EnteredHubGeofenceGQL, ExitedHubGeofenceGQL, ActivateHubGQL, DeactivateHubGQL, MicroChatToHubGQL, CreateMicroChatGQL, DeleteMicroChatGQL, Scalars, CreateMicroChatDocument, HubDocument, HubQueryVariables, HubQuery, UsersHubsDocument, UsersHubsQuery } from 'src/generated/graphql';
 import { NGXLogger } from 'ngx-logger';
 
 @Injectable({
@@ -132,7 +132,7 @@ export class HubService {
     return response;
   }
 
-  async hub(id: Scalars['ID'], fetchPolicy: FetchPolicy = "network-only") {
+  async hub(id: Scalars['ID'], fetchPolicy: FetchPolicy = "cache-first") {
     const result = await this.hubGQLService.fetch({
       id
     },
@@ -182,6 +182,40 @@ export class HubService {
   async deleteHub(id: Scalars['ID']): Promise<boolean> {
     const result = await this.deleteHubGQLService.mutate({
       id
+    }, {
+      update: (proxy, { data: { deleteHub }}) => {
+        // Read the data from our cache for this query.
+        const hubQueryData = proxy.readQuery({ 
+          query: HubDocument,
+         variables:  { id } as HubQueryVariables
+        }) as HubQuery;
+
+        //Delete hub
+        delete hubQueryData.hub
+
+        // Write our data back to the cache.
+        proxy.writeQuery({ 
+          query: HubDocument,
+          variables: { id: id } as HubQueryVariables,
+          data: hubQueryData 
+        });
+
+        //TODO would it be more robust to recurse through the RootQuery document tree and delete that way?
+        const userHubsData = proxy.readQuery({
+          query: UsersHubsDocument
+        }) as UsersHubsQuery;
+
+        //Delete Hub
+        const userHub = userHubsData.usersHubs.find(x => x.hubId == id);
+        userHubsData.usersHubs.splice(
+          userHubsData.usersHubs.indexOf(userHub), 1
+        );
+
+        proxy.writeQuery({
+          query: UsersHubsDocument,
+          data: userHubsData
+        });
+      }
     }).toPromise();
 
     const response = result.data.deleteHub;

@@ -17,19 +17,19 @@
 </ion-header>
 
 <ion-content fullscreen="true">
-  <app-hub-profile *ngIf="!loading" [hub]="userHub.hub" (click)="presentActionSheet()"></app-hub-profile>
+  <app-hub-profile *ngIf="(userHub | async) as userHub" [hub]="userHub?.hub" (click)="presentActionSheet()"></app-hub-profile>
 
-  <ion-list *ngIf="!loading">
+  <ion-list *ngIf="userHub">
     <ion-list-header class="ion-padding-bottom">
       <ion-label>Hub Details</ion-label>
     </ion-list-header>
 
     <ion-item>
       <ion-label>
-        <ion-text *ngIf="userHub.hub.active" color="success">Active</ion-text>
-        <ion-text *ngIf="!userHub.hub.active" color="medium">Inactive</ion-text>
+        <ion-text *ngIf="(userHub | async)?.hub.active" color="success">Active</ion-text>
+        <ion-text *ngIf="!(userHub | async)?.hub.active" color="medium">Inactive</ion-text>
       </ion-label>
-      <ion-toggle [(ngModel)]="userHub.hub.active" (click)="activeToggle()" class="ion-float-right"
+      <ion-toggle *ngIf="(userHub | async) as userHub" [(ngModel)]="userHub.hub.active" (click)="activeToggle(userHub)" class="ion-float-right"
         color="success"></ion-toggle>
     </ion-item>
 
@@ -37,7 +37,7 @@
 
       <ion-item>
         <ion-label position="stacked">Name</ion-label>
-        <ion-input value="{{userHub.hub.name}}" [(ngModel)]="userHub.hub.name" formControlName="hubName"></ion-input>
+        <ion-input *ngIf="(userHub | async) as userHub" value="{{userHub.hub.name}}" [(ngModel)]="userHub.hub.name" formControlName="hubName"></ion-input>
       </ion-item>
 
       <ion-text class="ion-padding ion-text-center" color="danger">
@@ -48,7 +48,7 @@
 
       <ion-item>
         <ion-label position="stacked">Description</ion-label>
-        <ion-textarea value="{{userHub.hub.description}}" [(ngModel)]="userHub.hub.description"
+        <ion-textarea *ngIf="(userHub | async) as userHub" value="{{userHub.hub.description}}" [(ngModel)]="userHub.hub.description"
           formControlName="hubDescription"></ion-textarea>
       </ion-item>
 
@@ -64,7 +64,7 @@
       <ion-label>Activity</ion-label>
     </ion-list-header>
 
-    <app-bar-chart></app-bar-chart>
+    <app-bar-chart *ngIf="(userHub | async) as userHub"></app-bar-chart>
 
     <ion-list-header class="ion-padding-bottom">
       <ion-label>Members</ion-label>
@@ -74,7 +74,7 @@
       </ion-button>
     </ion-list-header>
 
-    <div *ngFor="let userConnection of userHub.hub.usersConnection">
+    <div *ngFor="let userConnection of (userHub | async)?.hub?.usersConnection">
       <ion-item-sliding>
       <ion-item href="javascript:void(0);" (click)="goToPersonPage(userConnection.user.id, userConnection.user)">
         <ion-avatar slot="start">
@@ -103,7 +103,7 @@
 
   </ion-list>
 
-  <ion-item class="ion-padding-top" *ngIf="!loading" href="javascript:void(0);">
+  <ion-item class="ion-padding-top" (click)="deleteHub()" href="javascript:void(0);">
     <ion-icon name="warning" color="medium" slot="start"></ion-icon>
     <ion-label>Delete Hub</ion-label>
   </ion-item>
