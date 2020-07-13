@@ -920,7 +920,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "Hub",
+                "name": "JoinUserHub",
                 "ofType": null
               }
             },

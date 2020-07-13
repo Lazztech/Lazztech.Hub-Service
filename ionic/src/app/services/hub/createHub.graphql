@@ -12,11 +12,23 @@ mutation createHub(
         latitude: $latitude,
         longitude: $longitude
         ) {
-            id
-            name
-            description
-            image
-            latitude
-            longitude
-    }
+            userId
+            hubId
+            isOwner
+            starred
+            isPresent
+            hub {
+                id
+                name
+                description
+                active
+                image
+                latitude
+                longitude
+                usersConnection {
+                    isPresent
+                    isOwner
+                }
+            }
+        }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FetchPolicy } from 'apollo-client';
-import { CreateHubGQL, UsersHubsGQL, UsersPeopleGQL, CommonUsersHubsGQL, EditHubGQL, HubGQL, InviteUserToHubGQL, JoinHubGQL, DeleteHubGQL, ChangeHubImageGQL, SetHubStarredGQL, SetHubNotStarredGQL, EnteredHubGeofenceGQL, ExitedHubGeofenceGQL, ActivateHubGQL, DeactivateHubGQL, MicroChatToHubGQL, CreateMicroChatGQL, DeleteMicroChatGQL, Scalars, CreateMicroChatDocument, HubDocument, HubQueryVariables, HubQuery, UsersHubsDocument, UsersHubsQuery } from 'src/generated/graphql';
+import { CreateHubGQL, UsersHubsGQL, UsersPeopleGQL, CommonUsersHubsGQL, EditHubGQL, HubGQL, InviteUserToHubGQL, JoinHubGQL, DeleteHubGQL, ChangeHubImageGQL, SetHubStarredGQL, SetHubNotStarredGQL, EnteredHubGeofenceGQL, ExitedHubGeofenceGQL, ActivateHubGQL, DeactivateHubGQL, MicroChatToHubGQL, CreateMicroChatGQL, DeleteMicroChatGQL, Scalars, CreateMicroChatDocument, HubDocument, HubQueryVariables, HubQuery, UsersHubsDocument, UsersHubsQuery, UsersHubsQueryVariables } from 'src/generated/graphql';
 import { NGXLogger } from 'ngx-logger';
 
 @Injectable({
@@ -38,6 +38,22 @@ export class HubService {
       image,
       latitude,
       longitude
+    }, {
+      update: (proxy, { data: { createHub }}) => {
+        // Read the data from our cache for this query.
+        const data = proxy.readQuery({ 
+          query: UsersHubsDocument,
+        }) as UsersHubsQuery;
+
+        //Add new hub to userHubs array
+        data.usersHubs.push(createHub);
+
+        // Write our data back to the cache.
+        proxy.writeQuery({ 
+          query: UsersHubsDocument,
+          data 
+        });
+      }
     }).toPromise();
 
     const response = result.data.createHub;

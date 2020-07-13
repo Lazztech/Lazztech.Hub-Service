@@ -71,7 +71,7 @@ export type MicroChat = {
 
 export type Mutation = {
    __typename?: 'Mutation';
-  createHub: Hub;
+  createHub: JoinUserHub;
   inviteUserToHub: Scalars['Boolean'];
   deleteHub: Scalars['Boolean'];
   editHub: Hub;
@@ -411,8 +411,16 @@ export type CreateHubMutationVariables = {
 export type CreateHubMutation = (
   { __typename?: 'Mutation' }
   & { createHub: (
-    { __typename?: 'Hub' }
-    & Pick<Hub, 'id' | 'name' | 'description' | 'image' | 'latitude' | 'longitude'>
+    { __typename?: 'JoinUserHub' }
+    & Pick<JoinUserHub, 'userId' | 'hubId' | 'isOwner' | 'starred' | 'isPresent'>
+    & { hub: (
+      { __typename?: 'Hub' }
+      & Pick<Hub, 'id' | 'name' | 'description' | 'active' | 'image' | 'latitude' | 'longitude'>
+      & { usersConnection?: Maybe<Array<(
+        { __typename?: 'JoinUserHub' }
+        & Pick<JoinUserHub, 'isPresent' | 'isOwner'>
+      )>> }
+    ) }
   ) }
 );
 
@@ -849,12 +857,24 @@ export const CommonUsersHubsDocument = gql`
 export const CreateHubDocument = gql`
     mutation createHub($image: String!, $name: String!, $description: String!, $latitude: Float!, $longitude: Float!) {
   createHub(image: $image, name: $name, description: $description, latitude: $latitude, longitude: $longitude) {
-    id
-    name
-    description
-    image
-    latitude
-    longitude
+    userId
+    hubId
+    isOwner
+    starred
+    isPresent
+    hub {
+      id
+      name
+      description
+      active
+      image
+      latitude
+      longitude
+      usersConnection {
+        isPresent
+        isOwner
+      }
+    }
   }
 }
     `;

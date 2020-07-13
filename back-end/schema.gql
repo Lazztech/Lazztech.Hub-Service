@@ -54,7 +54,7 @@ type MicroChat {
 }
 
 type Mutation {
-  createHub(longitude: Float!, latitude: Float!, image: String!, description: String!, name: String!): Hub!
+  createHub(longitude: Float!, latitude: Float!, image: String!, description: String!, name: String!): JoinUserHub!
   inviteUserToHub(inviteesEmail: String!, hubId: ID!): Boolean!
   deleteHub(hubId: ID!): Boolean!
   editHub(description: String!, name: String!, hubId: ID!): Hub!

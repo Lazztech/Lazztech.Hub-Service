@@ -104,8 +104,8 @@ export class AddHubPage implements OnInit, OnDestroy {
       this.loading = false;
       await this.geofenceService.addGeofence({
         identifier: JSON.stringify({
-          id: result.id,
-          name: result.name
+          id: result.hub.id,
+          name: result.hub.name
         }),
         latitude: this.coords.latitude,
         longitude: this.coords.longitude,
@@ -114,7 +114,7 @@ export class AddHubPage implements OnInit, OnDestroy {
       });
       await this.alertService.presentToast("Created Hub!");
       await this.navCtrl.navigateRoot('/tabs');
-      await this.navCtrl.navigateForward(`/admin-hub/${result.id}`);
+      await this.navCtrl.navigateForward(`/admin-hub/${result.hub.id}`);
     } else {
       this.loading = false;
       this.alertService.presentRedToast("Failed to create Hub.");
