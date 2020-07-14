@@ -39,15 +39,8 @@ export class SettingsPage implements OnInit {
     this.navCtrl.navigateForward('delete-account');
   }
 
-  async checkForUpdates() {
-    this.updateService.checkForUpdate();
-    this.logger.log('checked for updates');
-    await this.alertService.presentToast('Checked for updates.');
-  }
-
   async clearStorage() {
     await this.profileService.clearStorage();
   }
-
 
 }
