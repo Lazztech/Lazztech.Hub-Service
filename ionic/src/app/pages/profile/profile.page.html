@@ -16,7 +16,7 @@
 
 <ion-content fullscreen="true">
 
-  <app-profile-details href="javascript:void(0);" (click)="userActionSheet()" [user]="user">
+  <app-profile-details *ngIf="(user | async) as user"href="javascript:void(0);" (click)="userActionSheet()" [user]="user">
   </app-profile-details>
 
   <ion-card>

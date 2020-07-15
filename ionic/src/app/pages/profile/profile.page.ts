@@ -6,7 +6,7 @@ import { CameraService } from 'src/app/services/camera/camera.service';
 import { HubService } from 'src/app/services/hub/hub.service';
 import { ProfileService } from 'src/app/services/profile/profile.service';
 import { ThemeService } from 'src/app/services/theme/theme.service';
-import { Scalars, User, UsersHubsQuery } from 'src/generated/graphql';
+import { Scalars, User, UsersHubsQuery, MeQuery } from 'src/generated/graphql';
 import { AuthService } from '../../services/auth/auth.service';
 import { Observable, Subscription } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
@@ -19,7 +19,7 @@ import { map, filter } from 'rxjs/operators';
 export class ProfilePage implements OnInit {
 
   loading = true;
-  user: User;
+  user: Observable<MeQuery['me']>;
   userHubs: Observable<UsersHubsQuery['usersHubs']>;
   subscriptions: Subscription[] = [];
 
@@ -39,9 +39,11 @@ export class ProfilePage implements OnInit {
   }
 
   async ngOnInit() {
-    this.user = await this.authService.user();
+    this.user = this.authService.watchUser().valueChanges.pipe(
+      map(x => x.data && x.data.me)
+    );
 
-    this.userHubs = await this.hubService.watchUserHubs().valueChanges.pipe(
+    this.userHubs = this.hubService.watchUserHubs().valueChanges.pipe(
       map(x => x.data && x.data.usersHubs)
     ).pipe(
       map(x => x.filter(x => x.isOwner))
@@ -62,10 +64,9 @@ export class ProfilePage implements OnInit {
         text: 'Take Picture',
         handler: () => {
           this.logger.log('Take Picture clicked');
-          this.cameraService.takePicture().then(async image => {
+          this.cameraService.takePicture().then(image => {
             this.loading = true;
-            this.profileService.changeUserImage(image).then(result => {
-              this.user.image = result.image
+            this.profileService.changeUserImage(image).then(() => {
               this.loading = false;
             });
           });
@@ -75,10 +76,9 @@ export class ProfilePage implements OnInit {
         text: 'Select Picture',
         handler: async () => {
           this.logger.log('Take Picture clicked');
-          await this.cameraService.selectPicture().then(async image => {
+          await this.cameraService.selectPicture().then(image => {
             this.loading = true;
-            this.profileService.changeUserImage(image).then(result => {
-              this.user.image = result.image
+            this.profileService.changeUserImage(image).then(() => {
               this.loading = false;
             });
           });

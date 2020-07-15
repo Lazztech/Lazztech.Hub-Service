@@ -85,6 +85,10 @@ export class AuthService {
     return result.data.me;
   }
 
+  watchUser() {
+    return this.meService.watch();
+  }
+
   async verifyAccountExists(): Promise<boolean> {
     try {
       const result = await this.meService.fetch(null, {

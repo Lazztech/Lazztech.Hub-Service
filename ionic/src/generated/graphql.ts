@@ -689,7 +689,7 @@ export type ChangeUserImageMutation = (
   { __typename?: 'Mutation' }
   & { changeUserImage: (
     { __typename?: 'User' }
-    & Pick<User, 'image'>
+    & Pick<User, 'id' | 'image'>
   ) }
 );
 
@@ -1237,6 +1237,7 @@ export const ChangePasswordDocument = gql`
 export const ChangeUserImageDocument = gql`
     mutation changeUserImage($image: String!) {
   changeUserImage(newImage: $image) {
+    id
     image
   }
 }
