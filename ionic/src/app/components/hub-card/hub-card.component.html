@@ -20,7 +20,8 @@
         </ion-col>
   
         <ion-col *ngIf="!adminControls">
-          <ion-card-subtitle class="ion-float-right" color="success">{{presentCount}} / {{hub.usersConnection.length}} present</ion-card-subtitle>
+          <ion-card-subtitle *ngIf="hub.active" class="ion-float-right" color="success">{{presentCount}} / {{hub.usersConnection.length}} present</ion-card-subtitle>
+          <ion-card-subtitle *ngIf="!hub.active" class="ion-float-right" color="medium">Inactive</ion-card-subtitle>
           <br>
           <ion-card-subtitle class="ion-float-right" *ngIf="!atHub && distanceInMeters">{{distanceInMeters}} meters</ion-card-subtitle>
           <ion-card-subtitle class="ion-float-right" *ngIf="atHub">you're here!</ion-card-subtitle>
