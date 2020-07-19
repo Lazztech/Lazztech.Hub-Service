@@ -9,7 +9,8 @@ import { BrowserOptions }from "@sentry/browser";
 export const environment = {
   production: false,
   featureFlags: {
-    statusPage: false
+    statusPage: false,
+    hubActivityDetails: false
   },
   logging: {
     level: NgxLoggerLevel.DEBUG,

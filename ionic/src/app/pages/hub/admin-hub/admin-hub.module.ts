@@ -8,6 +8,7 @@ import { AdminHubPageRoutingModule } from './admin-hub-routing.module';
 
 import { AdminHubPage } from './admin-hub.page';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { DirectivesModule } from 'src/app/directives/directives.module';
 
 @NgModule({
   imports: [
@@ -16,7 +17,8 @@ import { ComponentsModule } from 'src/app/components/components.module';
     IonicModule,
     AdminHubPageRoutingModule,
     ComponentsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    DirectivesModule,
   ],
   declarations: [AdminHubPage]
 })
