@@ -13,40 +13,42 @@
 
   <app-hub-profile [hub]="hub" (click)="presentActionSheet()"></app-hub-profile>
 
-  <ion-list-header>
-    <ion-text>Tier</ion-text>
-  </ion-list-header>
+  <div [appFeatureFlag]="'paidHubSubscriptionTier'">
+    <ion-list-header>
+      <ion-text>Tier</ion-text>
+    </ion-list-header>
 
-  <ion-grid>
-    <ion-row>
-      <ion-col>
-        <ion-card (click)="isFree()" [ngClass]="paid ? null : 'glowing-card'">
-          <!-- <img src="/assets/icons/house_placeholder.png" > -->
-
-          <ion-card-content>
-            <ion-card-subtitle>$1 Monthly</ion-card-subtitle>
-            <!-- <ion-card-title>Lazztech Hub</ion-card-title> -->
-            <!-- <p>Tier</p> -->
-
-            <p>8 person hub</p>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-
-      <ion-col>
-        <ion-card (click)="isPaid()" [ngClass]="paid ? 'glowing-card' : null">
-          <!-- <img src="/assets/icons/house_placeholder.png" > -->
-          <ion-card-content>
-            <ion-card-subtitle>$3 Monthly</ion-card-subtitle>
-            <!-- <ion-card-title>Lazztech Hub</ion-card-title> -->
-            <!-- <p>Tier</p> -->
-
-            <p>25 person hub</p>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-card (click)="isFree()" [ngClass]="paid ? null : 'glowing-card'">
+            <!-- <img src="/assets/icons/house_placeholder.png" > -->
+  
+            <ion-card-content>
+              <ion-card-subtitle>$1 Monthly</ion-card-subtitle>
+              <!-- <ion-card-title>Lazztech Hub</ion-card-title> -->
+              <!-- <p>Tier</p> -->
+  
+              <p>8 person hub</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+  
+        <ion-col>
+          <ion-card (click)="isPaid()" [ngClass]="paid ? 'glowing-card' : null">
+            <!-- <img src="/assets/icons/house_placeholder.png" > -->
+            <ion-card-content>
+              <ion-card-subtitle>$3 Monthly</ion-card-subtitle>
+              <!-- <ion-card-title>Lazztech Hub</ion-card-title> -->
+              <!-- <p>Tier</p> -->
+  
+              <p>25 person hub</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
 
   <form [formGroup]="myForm" (ngSubmit)="saveHub()" method="post">
 

@@ -10,7 +10,8 @@ export const environment = {
   production: false,
   featureFlags: {
     statusPage: false,
-    hubActivityDetails: false
+    hubActivityDetails: false,
+    paidHubSubscriptionTier: false,
   },
   logging: {
     level: NgxLoggerLevel.DEBUG,
