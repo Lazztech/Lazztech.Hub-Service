@@ -4,6 +4,9 @@ import { BrowserOptions } from '@sentry/browser';
 
 export const environment = {
   production: true,
+  featureFlags: {
+    statusPage: false
+  },
   logging: {
     level: NgxLoggerLevel.DEBUG,
     serverLogLevel: NgxLoggerLevel.DEBUG,
