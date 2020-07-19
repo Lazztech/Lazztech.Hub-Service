@@ -1,7 +1,6 @@
 <div *ngIf="user">
   <ion-avatar class="ion-padding-top custom-avatar">
-    <!-- FIXME don't use this image or store a copy locally -->
-    <img width="100%" *ngIf="!user.image" src="https://ionicframework.com/docs/demos/api/avatar/avatar.svg">
+    <img width="100%" [appFeatureFlag]="'adorableAvatarsUserImage'" *ngIf="!user.image" src="https://api.adorable.io/avatars/285/{{user.id}}.png">
     <img *ngIf="user.image" src="{{user.image}}">
   </ion-avatar>
 

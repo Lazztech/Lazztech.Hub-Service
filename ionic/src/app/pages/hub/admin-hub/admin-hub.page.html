@@ -80,9 +80,7 @@
       <ion-item-sliding>
       <ion-item href="javascript:void(0);" (click)="goToPersonPage(userConnection.user.id, userConnection.user)">
         <ion-avatar slot="start">
-          <!-- FIXME don't use this image or store a copy locally -->
-          <img width="100%" *ngIf="!userConnection.user.image"
-            src="https://ionicframework.com/docs/demos/api/avatar/avatar.svg">
+          <img width="100%" [appFeatureFlag]="'adorableAvatarsUserImage'" *ngIf="!userConnection.user.image" src="https://api.adorable.io/avatars/285/{{userConnection.user.id}}.png">
           <ion-img width="100%" *ngIf="userConnection.user.image" src="{{userConnection.user.image}}"></ion-img>
         </ion-avatar>
         <ion-label>

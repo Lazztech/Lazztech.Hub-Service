@@ -8,6 +8,8 @@ export const environment = {
     statusPage: false,
     hubActivityDetails: false,
     paidHubSubscriptionTier: false,
+    //https://github.com/adorableio/avatars-api-middleware
+    adorableAvatarsUserImage: true
   },
   logging: {
     level: NgxLoggerLevel.DEBUG,

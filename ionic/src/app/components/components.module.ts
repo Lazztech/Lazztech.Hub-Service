@@ -12,6 +12,7 @@ import { MicroChatAddPage } from '../pages/micro-chat-add/micro-chat-add.page';
 import { HubProfileComponent } from './hub-profile/hub-profile.component';
 import { BarChartComponent } from './bar-chart/bar-chart.component';
 import { ChartsModule } from 'ng2-charts';
+import { DirectivesModule } from '../directives/directives.module';
 
 @NgModule({
     declarations: [
@@ -29,7 +30,8 @@ import { ChartsModule } from 'ng2-charts';
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
-        ChartsModule
+        ChartsModule,
+        DirectivesModule
     ],
     exports: [
         GoogleMapComponent, 

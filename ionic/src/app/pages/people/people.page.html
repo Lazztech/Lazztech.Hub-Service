@@ -19,8 +19,7 @@
     <ion-list *ngIf="!loading">
           <ion-item *ngFor="let person of persons | async" href="javascript:void(0);" (click)="goToPersonPage(person.id, person)">
             <ion-avatar slot="start">
-                  <!-- FIXME don't use this image or store a copy locally -->
-                  <img width="100%" *ngIf="!person.image" src="https://ionicframework.com/docs/demos/api/avatar/avatar.svg">
+                  <img width="100%" [appFeatureFlag]="'adorableAvatarsUserImage'" *ngIf="!person.image" src="https://api.adorable.io/avatars/285/{{person.id}}.png">
                   <ion-img width="100%" *ngIf="person.image" src="{{person.image}}"></ion-img>
             </ion-avatar>
             <ion-label>
