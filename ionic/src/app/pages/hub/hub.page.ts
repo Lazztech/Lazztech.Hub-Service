@@ -5,7 +5,7 @@ import { Subscription, Observable } from 'rxjs';
 import { CameraService } from 'src/app/services/camera/camera.service';
 import { HubService } from 'src/app/services/hub/hub.service';
 import { LocationService } from 'src/app/services/location/location.service';
-import { Scalars, HubQuery } from 'src/generated/graphql';
+import { Scalars, HubQuery, JoinUserHub } from 'src/generated/graphql';
 import { NGXLogger } from 'ngx-logger';
 import { map } from 'rxjs/operators';
 
@@ -97,8 +97,8 @@ export class HubPage implements OnInit, OnDestroy {
     });
   }
 
-  async requestRide() {
-    const userHub = await this.userHub.toPromise();
+  async requestRide(userHub: JoinUserHub) {
+    console.log(userHub.hub.name);
     window.open(`uber://?client_id=<CLIENT_ID>&action=setPickup&pickup[latitude]=${this.userCoords.latitude}&pickup[longitude]=${this.userCoords.longitude}&pickup[nickname]=Your%20Location&pickup[formatted_address]=1455%20Market%20St%2C%20San%20Francisco%2C%20CA%2094103&dropoff[latitude]=${this.hubCoords.latitude}&dropoff[longitude]=${this.hubCoords.longitude}&dropoff[nickname]=${userHub.hub.name}%20Hub&dropoff[formatted_address]=1%20Telegraph%20Hill%20Blvd%2C%20San%20Francisco%2C%20CA%2094133&product_id=a1111c8c-c720-46c3-8534-2fcdd730040d&link_text=View%20team%20roster&partner_deeplink=partner%3A%2F%2Fteam%2F9383`)
   }
 

@@ -13,7 +13,8 @@ export const environment = {
     hubActivityDetails: false,
     paidHubSubscriptionTier: false,
     //https://github.com/adorableio/avatars-api-middleware
-    adorableAvatarsUserImage: true
+    adorableAvatarsUserImage: true,
+    uberRequestRide: true,
   },
   logging: {
     level: NgxLoggerLevel.DEBUG,
