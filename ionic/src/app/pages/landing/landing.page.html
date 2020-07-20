@@ -17,13 +17,23 @@
 </ion-content>
 <ion-footer>
   <ion-toolbar>
+    <ion-grid>
       <ion-row>
         <ion-col>
-          <ion-button color="primary" expand="full" color="primary" (click)="login()">Login</ion-button>
+          <ion-button expand="full" color="primary" (click)="login()">Login</ion-button>
         </ion-col>
         <ion-col>
-          <ion-button color="primary" expand="full" color="danger" (click)="register()">Register</ion-button>
+          <ion-button expand="full" color="danger" (click)="register()">Register</ion-button>
         </ion-col>
       </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-button expand="full" color="primary" (click)="triggerBioAuth()">
+            Trigger Biometric Unlock
+            <ion-icon name="finger-print-outline" class="ion-padding-start"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </ion-toolbar>
 </ion-footer>
