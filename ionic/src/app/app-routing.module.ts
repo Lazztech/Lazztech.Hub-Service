@@ -23,7 +23,7 @@ const routes: Routes = [
   { path: 'change-email', loadChildren: () => import('./pages/profile/settings/change-email/change-email.module').then(m => m.ChangeEmailPageModule), canActivate: [AuthGuard] },
   { path: 'change-password', loadChildren: () => import('./pages/profile/settings/change-password/change-password.module').then(m => m.ChangePasswordPageModule), canActivate: [AuthGuard] },
   { path: 'delete-account', loadChildren: () => import('./pages/profile/settings/delete-account/delete-account.module').then(m => m.DeleteAccountPageModule), canActivate: [AuthGuard] },
-  { path: 'privacy', loadChildren: () => import('./pages/profile/privacy/privacy.module').then(m => m.PrivacyPageModule), canActivate: [AuthGuard] },
+  { path: 'privacy', loadChildren: () => import('./pages/profile/privacy/privacy.module').then(m => m.PrivacyPageModule) },
   { path: 'map', loadChildren: () => import('./pages/map/map.module').then(m => m.MapPageModule) },
   {
     path: 'micro-chat-add',

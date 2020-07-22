@@ -1,8 +1,8 @@
 <ion-header translucent="true">
   <ion-toolbar>
-      <ion-buttons slot="start">
-          <ion-button (click)="dismissRegister()">Close</ion-button>
-        </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-button (click)="dismissRegister()">Close</ion-button>
+    </ion-buttons>
     <ion-title>Register</ion-title>
     <ion-progress-bar *ngIf="loading" type="indeterminate"></ion-progress-bar>
   </ion-toolbar>
@@ -10,53 +10,63 @@
 <ion-content class="ion-padding">
   <form [formGroup]="myForm" (ngSubmit)="register()" method="post">
     <ion-item>
-        <ion-label position="floating">First Name</ion-label>
-        <ion-input formControlName="firstName"></ion-input>
+      <ion-label position="floating">First Name</ion-label>
+      <ion-input formControlName="firstName"></ion-input>
     </ion-item>
 
-    <ion-text class="ion-padding ion-text-center" color="danger">
-        <p *ngIf="firstName.invalid && firstName.touched" color="danger" >
-            Required
-        </p>
+    <ion-text class="ion-text-center" color="danger">
+      <p *ngIf="firstName.invalid && firstName.touched" color="danger">
+        Required
+      </p>
     </ion-text>
-  
+
     <ion-item>
       <ion-label position="floating">Last Name</ion-label>
       <ion-input formControlName="lastName"></ion-input>
     </ion-item>
 
-    <ion-text class="ion-padding ion-text-center" color="danger">
-        <p *ngIf="lastName.invalid && lastName.touched" color="danger" >
-            Required
-        </p>
+    <ion-text class="ion-text-center" color="danger">
+      <p *ngIf="lastName.invalid && lastName.touched" color="danger">
+        Required
+      </p>
     </ion-text>
-  
+
     <ion-item>
       <ion-label position="floating">Email</ion-label>
       <ion-input type="email" formControlName="email"></ion-input>
     </ion-item>
 
-    <ion-text class="ion-padding ion-text-center" color="danger">
-        <p *ngIf="email.invalid && email.touched" color="danger" >
-            Please enter a valid email address
-        </p>
+    <ion-text class="ion-text-center" color="danger">
+      <p *ngIf="email.invalid && email.touched" color="danger">
+        Please enter a valid email address
+      </p>
     </ion-text>
-  
+
     <ion-item>
       <ion-label position="floating">Password</ion-label>
       <ion-input type="password" formControlName="password"></ion-input>
     </ion-item>
 
-    <ion-text class="ion-padding ion-text-center" color="danger">
-        <p *ngIf="password.invalid && password.touched" color="danger" >
-            Please enter a password with at least 10 characters
-        </p>
+    <ion-text class="ion-text-center" color="danger">
+      <p *ngIf="password.invalid && password.touched" color="danger">
+        Please enter a password with at least 10 characters
+      </p>
     </ion-text>
 
     <br />
+
+    <ion-text class="ion-text-center" color="medium">
+      <p>
+        By creating an account, you agree to our User Agreement and acknowledge reading our Privacy Policy.
+      </p>
+    </ion-text>
+    <ion-button expand="full" color="medium" (click)="navigateToUserAgreement()">User Agreement</ion-button>
+    <ion-button expand="full" color="medium" (click)="navigateToPrivacyPolicy()">Privacy Policy</ion-button>
+    <br />
+
 
     <ion-button [disabled]="myForm.invalid" type="submit" expand="full" color="danger">Register</ion-button>
   </form>
   <p class="ion-text-center">Already have a account?</p>
   <ion-button expand="full" color="primary" (click)="loginModal()">Login</ion-button>
-</ion-content> 
+</ion-content>

@@ -104,7 +104,7 @@ export class ProfilePage implements OnInit {
           this.navCtrl.navigateForward('settings');
         }
       }, {
-        text: 'Privacy',
+        text: 'Privacy Policy',
         handler: () => {
           this.navCtrl.navigateForward('privacy');
         }

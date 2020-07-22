@@ -89,4 +89,14 @@ export class RegisterPage implements OnInit {
     }
   }
 
+  async navigateToPrivacyPolicy() {
+    await this.navCtrl.navigateForward('/privacy');
+    this.dismissRegister();
+  }
+
+  async navigateToUserAgreement() {
+    this.alertService.presentRedToast('User Agreement not implemented yet!');
+    throw Error("navigateToUserAgreement User Agreement not implemented yet!");
+  }
+
 }
