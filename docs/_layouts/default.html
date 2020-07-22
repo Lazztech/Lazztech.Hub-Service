@@ -55,7 +55,9 @@
                                 <a class="playStoreLink" href="{{site.playstore_link}}"><img class="playStore" src="assets/playstore.png"></a>
                             {% endif %}
                             <a class="appStoreLink" href="{{site.appstore_link}}"><img class="appStore" src="assets/appstore.png"></a>
-                            <a class="playStoreLink" href="{{site.pwa_link}}"><img class="playStore" src="https://user-images.githubusercontent.com/9122190/28998409-c5bf7362-7a00-11e7-9b63-db56694522e7.png"></a>                            
+                            {% if site.pwa_link %}
+                                <a class="playStoreLink" href="{{site.pwa_link}}"><img class="playStore" src="assets/pwa.png"></a>     
+                            {% endif %}                       
                         </div>
                     </div>
                     {% include features.html %}
