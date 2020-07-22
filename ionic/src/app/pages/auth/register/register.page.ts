@@ -4,6 +4,10 @@ import { ModalController, NavController } from '@ionic/angular';
 import { AlertService } from 'src/app/services/alert/alert.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { LoginPage } from '../login/login.page';
+import { Plugins } from '@capacitor/core';
+import { environment } from 'src/environments/environment';
+
+const { Browser } = Plugins;
 
 @Component({
   selector: 'app-register',
@@ -90,8 +94,7 @@ export class RegisterPage implements OnInit {
   }
 
   async navigateToPrivacyPolicy() {
-    await this.navCtrl.navigateForward('/privacy');
-    this.dismissRegister();
+    await Browser.open({ url: environment.privacyPolicyLink });
   }
 
   async navigateToUserAgreement() {

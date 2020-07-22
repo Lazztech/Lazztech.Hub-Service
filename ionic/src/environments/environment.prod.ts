@@ -4,6 +4,7 @@ import { BrowserOptions } from '@sentry/browser';
 
 export const environment = {
   production: true,
+  privacyPolicyLink: "https://lazz.tech/Lazztech.Hub/privacy_policy.html",
   featureFlags: {
     statusPage: false,
     hubActivityDetails: false,

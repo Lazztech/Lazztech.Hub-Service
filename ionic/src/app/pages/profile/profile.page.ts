@@ -6,10 +6,14 @@ import { CameraService } from 'src/app/services/camera/camera.service';
 import { HubService } from 'src/app/services/hub/hub.service';
 import { ProfileService } from 'src/app/services/profile/profile.service';
 import { ThemeService } from 'src/app/services/theme/theme.service';
-import { Scalars, User, UsersHubsQuery, MeQuery } from 'src/generated/graphql';
+import { Scalars, UsersHubsQuery, MeQuery } from 'src/generated/graphql';
 import { AuthService } from '../../services/auth/auth.service';
 import { Observable, Subscription } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
+import { Plugins } from '@capacitor/core';
+import { environment } from 'src/environments/environment';
+
+const { Browser } = Plugins;
 
 @Component({
   selector: 'app-profile',
@@ -106,7 +110,8 @@ export class ProfilePage implements OnInit {
       }, {
         text: 'Privacy Policy',
         handler: () => {
-          this.navCtrl.navigateForward('privacy');
+          // this.navCtrl.navigateForward('privacy');
+          Browser.open({ url: environment.privacyPolicyLink });
         }
       }, {
         text: 'Cancel',
