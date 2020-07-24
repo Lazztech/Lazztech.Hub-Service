@@ -41,17 +41,20 @@
 	<p class="footerText"> 
 		{% if site.privacy_policy_link %}
 			<a href="{{ site.privacy_policy_link }}">
-		{% endif %}
 		Privacy Policy
-		{% if site.your_link %}
+
+			</a> | 
+		{% endif %}
+
+		{% if site.eula_link %}
+			<a href="{{ site.eula_link }}">
+				EULA
 			</a> | 
 		{% endif %}
 
 		{% if site.user_agreement_link %}
 			<a href="{{ site.user_agreement_link }}">
-		{% endif %}
-		User Agreement
-		{% if site.user_agreement_link %}
+				User Agreement
 			</a>
 		{% endif %}
 	</p>

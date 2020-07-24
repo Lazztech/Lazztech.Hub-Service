@@ -29,8 +29,9 @@ instagram_username                        :
 twitter_username                          : 
 github_username                           : gianlazz
 youtube_username                          :
-privacy_policy_link                       : privacy_policy.html
-user_agreement_link                       : testing
+privacy_policy_link                       : legal/privacy_policy.html
+eula_link                                 : legal/eula.html
+user_agreement_link                       : 
 
 
 # Feature List                            Edit, add or remove features to be presented.
