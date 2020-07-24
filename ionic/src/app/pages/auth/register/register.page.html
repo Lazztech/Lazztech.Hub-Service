@@ -57,13 +57,12 @@
 
     <ion-text class="ion-text-center" color="medium">
       <p>
-        By creating an account, you agree to our User Agreement and acknowledge reading our Privacy Policy.
+        By creating an account, you acknowledge reading our Privacy Policy and agree to our Terms & Conditions.
       </p>
     </ion-text>
-    <ion-button expand="full" color="medium" (click)="navigateToUserAgreement()">User Agreement</ion-button>
     <ion-button expand="full" color="medium" (click)="navigateToPrivacyPolicy()">Privacy Policy</ion-button>
+    <ion-button expand="full" color="medium" (click)="navigateToTermsAndConditions()">Terms & Conditions</ion-button>
     <br />
-
 
     <ion-button [disabled]="myForm.invalid" type="submit" expand="full" color="danger">Register</ion-button>
   </form>

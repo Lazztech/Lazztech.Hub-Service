@@ -4,7 +4,10 @@ import { BrowserOptions } from '@sentry/browser';
 
 export const environment = {
   production: true,
-  privacyPolicyLink: "https://lazz.tech/Lazztech.Hub/privacy_policy.html",
+  legal: {
+    privacyPolicyLink: "https://lazz.tech/Lazztech.Hub/legal/privacy_policy.html",
+    termsAndConditions: "https://lazz.tech/Lazztech.Hub/legal/terms_and_conditions.html"
+  },
   featureFlags: {
     statusPage: false,
     hubActivityDetails: false,

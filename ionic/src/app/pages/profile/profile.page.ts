@@ -111,7 +111,13 @@ export class ProfilePage implements OnInit {
         text: 'Privacy Policy',
         handler: () => {
           // this.navCtrl.navigateForward('privacy');
-          Browser.open({ url: environment.privacyPolicyLink });
+          Browser.open({ url: environment.legal.privacyPolicyLink });
+        }
+      }, {
+        text: 'Terms & Conditions',
+        handler: () => {
+          // this.navCtrl.navigateForward('privacy');
+          Browser.open({ url: environment.legal.termsAndConditions });
         }
       }, {
         text: 'Cancel',

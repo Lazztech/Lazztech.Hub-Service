@@ -94,12 +94,11 @@ export class RegisterPage implements OnInit {
   }
 
   async navigateToPrivacyPolicy() {
-    await Browser.open({ url: environment.privacyPolicyLink });
+    await Browser.open({ url: environment.legal.privacyPolicyLink });
   }
 
-  async navigateToUserAgreement() {
-    this.alertService.presentRedToast('User Agreement not implemented yet!');
-    throw Error("navigateToUserAgreement User Agreement not implemented yet!");
+  async navigateToTermsAndConditions() {
+    await Browser.open({ url: environment.legal.termsAndConditions });
   }
 
 }
