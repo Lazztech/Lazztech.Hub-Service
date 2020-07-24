@@ -10,6 +10,7 @@ Spokane, WA 99201
 ## Expenses:
 - northwestregisteredagent Annual Report fee
 - Termsfeed privacy policy
+- Termsfeed terms and conditions
 
 ## Washington Business Site:
 - https://ccfs.sos.wa.gov/#/BusinessSearch/BusinessInformation
@@ -33,6 +34,8 @@ Spokane, WA 99201
 
 # Terms & Conditions
 > If you run an online service that involves interaction between users, such as a SaaS app, you definitely need a T&C .
+- https://app.termsfeed.com/download/d6d71dfd-e7f1-4d61-90d8-289ac99555cf
+- https://www.google.com/search?q=is+terms+and+conditions+the+same+as+user+agreement&oq=is+terms+and+conditions+the+same+as+user+&aqs=chrome.1.69i57j33.7850j0j7&sourceid=chrome&ie=UTF-8
 
 # EAR Export Compliance
 - https://developer.apple.com/forums/thread/121183
@@ -47,4 +50,4 @@ Spokane, WA 99201
 - https://www.docracy.com/topic/1e6bi5l90z/open-source-legal-documents-for-developers?startPdfDownload=false
 - https://www.cooleygo.com/documents/index-document-generators/
 - https://github.com/Gingernaut/Robot-Lawyer
-
+- https://www.accordproject.org/
