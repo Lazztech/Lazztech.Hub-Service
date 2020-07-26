@@ -39,6 +39,10 @@ const routes: Routes = [
     path: 'status',
     loadChildren: () => import('./pages/status/status.module').then( m => m.StatusPageModule)
   },
+  {
+    path: 'preview-hub',
+    loadChildren: () => import('./pages/hub/preview-hub/preview-hub.module').then( m => m.PreviewHubPageModule)
+  },
 ];
 
 @NgModule({
