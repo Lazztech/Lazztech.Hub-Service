@@ -7,6 +7,10 @@ const routes: Routes = [
   {
     path: '',
     component: PreviewHubPage
+  },
+  {
+    path: ':id',
+    component: PreviewHubPage
   }
 ];
 

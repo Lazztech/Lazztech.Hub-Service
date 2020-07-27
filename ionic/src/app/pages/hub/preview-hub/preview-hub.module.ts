@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { PreviewHubPageRoutingModule } from './preview-hub-routing.module';
 
 import { PreviewHubPage } from './preview-hub.page';
+import { ComponentsModule } from 'src/app/components/components.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    PreviewHubPageRoutingModule
+    PreviewHubPageRoutingModule,
+    ComponentsModule
   ],
   declarations: [PreviewHubPage]
 })

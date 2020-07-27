@@ -1,9 +1,25 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>PreviewHub</ion-title>
+    <ion-title>Hub Invite</ion-title>
+    <ion-progress-bar *ngIf="loading" type="indeterminate"></ion-progress-bar>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-
+<ion-content fullscreen="true">
+  <app-hub-profile *ngIf="(userHub | async) as userHub" [hub]="userHub?.hub"></app-hub-profile>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-button expand="full" color="primary" (click)="accept()">Accept</ion-button>
+        </ion-col>
+        <ion-col>
+          <ion-button expand="full" color="danger" (click)="reject()">Reject</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-footer>
