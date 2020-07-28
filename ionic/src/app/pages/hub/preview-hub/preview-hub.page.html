@@ -1,5 +1,8 @@
-<ion-header>
+<ion-header translucent="true">
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
     <ion-title>Hub Invite</ion-title>
     <ion-progress-bar *ngIf="loading" type="indeterminate"></ion-progress-bar>
   </ion-toolbar>
@@ -7,6 +10,15 @@
 
 <ion-content fullscreen="true">
   <app-hub-profile *ngIf="(userHub | async) as userHub" [hub]="userHub?.hub"></app-hub-profile>
+
+  <ion-list-header>Hub Location</ion-list-header>
+
+  <ion-card *ngIf="!loading && userHub && hubCoords" style="height:30%" (click)="goToMap()">
+    <ion-card-content style="height:100%">
+      <app-google-map *ngIf="userHub && hubCoords" [center]="hubCoords" [hubs]="[(userHub | async).hub]">
+      </app-google-map>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
 
 <ion-footer>

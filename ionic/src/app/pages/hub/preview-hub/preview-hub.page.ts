@@ -3,7 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { HubQuery, Scalars } from 'src/generated/graphql';
 import { HubService } from 'src/app/services/hub/hub.service';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-preview-hub',
@@ -16,10 +17,12 @@ export class PreviewHubPage implements OnInit {
   userHub: Observable<HubQuery['hub']>;
   subscriptions: Subscription[] = [];
   id: Scalars['ID'];
+  hubCoords: {latitude: number, longitude: number};
 
   constructor(
     private route: ActivatedRoute,
     private hubService: HubService,
+    public navCtrl: NavController,
   ) { }
 
   ngOnInit() {
@@ -34,6 +37,30 @@ export class PreviewHubPage implements OnInit {
         this.loading = x.loading;
       })
     );
+
+    this.subscriptions.push(
+      this.userHub.subscribe(userHub => {
+        this.hubCoords = { 
+          latitude: userHub.hub.latitude,
+          longitude: userHub.hub.longitude
+        };
+      })
+    );
+  }
+
+  async ngOnDestroy() {
+    this.subscriptions.forEach(x => x.unsubscribe());
+  }
+
+  async goToMap() {
+    this.userHub.pipe(take(1)).subscribe(userHub => {
+      this.navCtrl.navigateForward('map', {
+        state: {
+          hubCoords: this.hubCoords,
+          hub: userHub.hub
+        }
+      });
+    });
   }
 
   async accept() {
@@ -41,7 +68,7 @@ export class PreviewHubPage implements OnInit {
   }
 
   async reject() {
-    
+
   }
 
 }
