@@ -24,7 +24,7 @@
 
           <!-- Multi-line sliding item with icon options on both sides -->
           <ion-item-sliding id="item100">
-            <ion-item href="#">
+            <ion-item (click)="handleNotificationActionLink(notification.actionLink)">
               <ion-avatar *ngIf="!notification.thumbnail" slot="start">
                 <ion-skeleton-text animated></ion-skeleton-text>
               </ion-avatar>

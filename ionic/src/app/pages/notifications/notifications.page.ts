@@ -4,6 +4,7 @@ import { InAppNotification, GetInAppNotificationsQuery } from 'src/generated/gra
 import { NGXLogger } from 'ngx-logger';
 import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-notifications',
@@ -19,7 +20,8 @@ export class NotificationsPage implements OnInit, OnDestroy {
 
   constructor(
     private notificationsService: NotificationsService,
-    private logger: NGXLogger
+    private logger: NGXLogger,
+    private navController: NavController
   ) { }
 
   ngOnInit() {
@@ -76,5 +78,9 @@ export class NotificationsPage implements OnInit, OnDestroy {
 
   async deleteNotification(id: any) {
     await this.notificationsService.deleteInAppNotification(id);
+  }
+
+  async handleNotificationActionLink(actionLink: string) {
+    this.navController.navigateForward(actionLink);
   }
 }
