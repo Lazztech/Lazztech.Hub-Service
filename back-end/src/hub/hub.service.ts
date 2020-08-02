@@ -47,7 +47,7 @@ export class HubService {
     this.logger.log(this.getUserHubs.name);
     const userHubRelationships = await this.joinUserHubRepository.find({
       where: {
-        userId: userId,
+        userId,
       },
       relations: ['hub', 'hub.usersConnection'],
     });
@@ -58,7 +58,7 @@ export class HubService {
     this.logger.log(this.commonUsersHubs.name);
     const userHubRelationships = await this.joinUserHubRepository.find({
       where: {
-        userId: userId,
+        userId,
       },
       relations: [
         'hub',
@@ -68,8 +68,8 @@ export class HubService {
       ],
     });
 
-    let hubs = userHubRelationships.map(x => x.hub);
-    let commonHubRelationships = [];
+    const hubs = userHubRelationships.map(x => x.hub);
+    const commonHubRelationships = [];
     for (const hub of hubs) {
       const result = hub.usersConnection.find(x => x.userId == otherUsersId);
       if (result) {
@@ -86,8 +86,8 @@ export class HubService {
     this.logger.log(this.inviteUserToHub.name);
     const userHubRelationship = await this.joinUserHubRepository.findOne({
       where: {
-        userId: userId,
-        hubId: hubId,
+        userId,
+        hubId,
         isOwner: true,
       },
       relations: ['hub'],
@@ -178,23 +178,23 @@ export class HubService {
     this.logger.log(this.usersPeople.name);
     const userHubRelationships = await this.joinUserHubRepository.find({
       where: {
-        userId: userId,
+        userId,
       },
       relations: ['hub', 'hub.usersConnection', 'hub.usersConnection.user'],
     });
 
     const usersHubs = userHubRelationships.map(x => x.hub);
 
-    let commonConnections: Array<JoinUserHub> = [];
+    let commonConnections: JoinUserHub[] = [];
     for (const hub of usersHubs) {
       commonConnections = commonConnections.concat(hub.usersConnection);
     }
 
-    let resultingOtherUsers: Array<User> = commonConnections
+    const resultingOtherUsers: User[] = commonConnections
       .filter(x => x.userId != userId)
       .map(x => x.user);
 
-    let uniqueUsers: Array<User> = [];
+    const uniqueUsers: User[] = [];
     for (let index = 0; index < resultingOtherUsers.length; index++) {
       const user = resultingOtherUsers[index];
       if (uniqueUsers.find(x => x.id == user.id) == undefined) {
@@ -210,10 +210,10 @@ export class HubService {
     const imageUrl = await this.fileService.storePublicImageFromBase64(
       hub.image,
     );
-    //TODO save as a transaction
+    // TODO save as a transaction
     const result = await this.hubRepository.save(hub);
     let joinUserHub = this.joinUserHubRepository.create({
-      userId: userId,
+      userId,
       hubId: hub.id,
       isOwner: true,
     });
@@ -229,8 +229,8 @@ export class HubService {
     this.logger.log(this.deleteHub.name);
     const userHubRelationship = await this.joinUserHubRepository.findOne({
       where: {
-        userId: userId,
-        hubId: hubId,
+        userId,
+        hubId,
       },
     });
 
@@ -261,7 +261,7 @@ export class HubService {
     this.logger.log(this.editHub.name);
     const joinUserHubResult = await this.joinUserHubRepository.findOne({
       where: {
-        userId: userId,
+        userId,
         hubId,
         isOwner: true,
       },
@@ -279,7 +279,7 @@ export class HubService {
     this.logger.log(this.changeHubImage.name);
     const joinUserHubResult = await this.joinUserHubRepository.findOne({
       where: {
-        userId: userId,
+        userId,
         hubId,
         isOwner: true,
       },
@@ -304,7 +304,7 @@ export class HubService {
   async joinHub(userId: any, id: any) {
     this.logger.log(this.joinHub.name);
     let joinUserHub = this.joinUserHubRepository.create({
-      userId: userId,
+      userId,
       hubId: id,
       isOwner: true,
     });
@@ -315,8 +315,8 @@ export class HubService {
   async setHubStarred(userId: any, hubId: number) {
     this.logger.log(this.setHubStarred.name);
     const hubRelationship = await this.joinUserHubRepository.findOne({
-      userId: userId,
-      hubId: hubId,
+      userId,
+      hubId,
     });
     hubRelationship.starred = true;
     await this.joinUserHubRepository.save(hubRelationship);
@@ -326,8 +326,8 @@ export class HubService {
   async setHubNotStarred(userId: any, hubId: number) {
     this.logger.log(this.setHubNotStarred.name);
     const hubRelationship = await this.joinUserHubRepository.findOne({
-      userId: userId,
-      hubId: hubId,
+      userId,
+      hubId,
     });
     hubRelationship.starred = false;
     await this.joinUserHubRepository.save(hubRelationship);
@@ -338,12 +338,12 @@ export class HubService {
     this.logger.log(this.searchHubByName.name);
     const userHubRelationship = await this.joinUserHubRepository.find({
       where: {
-        userId: userId,
+        userId,
       },
       relations: ['hub'],
     });
     search = search.toLowerCase();
-    let results: Hub[] = [];
+    const results: Hub[] = [];
     for (let index = 0; index < userHubRelationship.length; index++) {
       const element = userHubRelationship[index];
       if (element.hub.name.toLowerCase().includes(search)) {

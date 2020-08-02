@@ -39,7 +39,7 @@ export class AuthService {
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    //TODO THIS SECTION SHOULD BE AN ACID TRANSACTION
+    // TODO THIS SECTION SHOULD BE AN ACID TRANSACTION
     let user = await this.userRepository.create({
       firstName,
       lastName,
@@ -67,7 +67,7 @@ export class AuthService {
       this.logger.warn(
         `User not found by email address for user.id: ${user.id}`,
       );
-      //FIXME throw error instead of returning null
+      // FIXME throw error instead of returning null
       return null;
     }
 
@@ -75,7 +75,7 @@ export class AuthService {
 
     if (!valid) {
       this.logger.warn(`Password not valid for user.id: ${user.id}.`);
-      //FIXME throw error instead of returning null
+      // FIXME throw error instead of returning null
       return null;
     }
 
@@ -88,7 +88,7 @@ export class AuthService {
   public async changePassword(userId: any, details: ChangePassword) {
     this.logger.log(this.changePassword.name);
     const user = await this.userRepository.findOne({ where: { id: userId } });
-    //TODO Should it invalidate/blacklist the jwt?
+    // TODO Should it invalidate/blacklist the jwt?
     const valid = await bcrypt.compare(details.oldPassword, user.password);
 
     if (valid) {

@@ -56,7 +56,7 @@ export class AuthPasswordResetService {
       });
 
       user.passwordReset = { pin } as PasswordReset;
-      //TODO does this actually save the passwordReset?
+      // TODO does this actually save the passwordReset?
       await this.userRepository.save(user);
 
       return true;

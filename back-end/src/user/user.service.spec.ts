@@ -64,7 +64,7 @@ describe('UserService', () => {
   });
 
   it('should return for getUser', async () => {
-    //Arrange
+    // Arrange
     const userId = 1;
     const testUser = {
       id: userId,
@@ -72,9 +72,9 @@ describe('UserService', () => {
       lastName: 'Test',
     } as User;
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
-    //Act
+    // Act
     const result = await service.getUser(userId);
-    //Assert
+    // Assert
     expect(result).toEqual(testUser);
   });
 
@@ -132,7 +132,7 @@ describe('UserService', () => {
   });
 
   it('should return for editUserDetails', async () => {
-    //Arrange
+    // Arrange
     const userId = 1;
     const testDetails = {
       firstName: 'FirstName',
@@ -153,14 +153,14 @@ describe('UserService', () => {
     } as User;
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
     jest.spyOn(userRepo, 'save').mockResolvedValueOnce(expectedResult);
-    //Act
+    // Act
     const result = await service.editUserDetails(userId, testDetails);
-    //Assert
+    // Assert
     expect(result).toEqual(expectedResult);
   });
 
   it('should return for changeEmail', async () => {
-    //Arrange
+    // Arrange
     const userId = 1;
     const newEmail = 'test@gmail.com';
     const testUser = {
@@ -175,14 +175,14 @@ describe('UserService', () => {
     } as User;
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
     jest.spyOn(userRepo, 'save').mockResolvedValueOnce(expectedResult);
-    //Act
+    // Act
     const result = await service.changeEmail(userId, newEmail);
-    //Assert
+    // Assert
     expect(result).toEqual(expectedResult);
   });
 
   it('should return for changeUserImage', async () => {
-    //Arrange
+    // Arrange
     const userId = 1;
     const newImage = 'MockBase64String';
     const testUser = {
@@ -201,9 +201,9 @@ describe('UserService', () => {
       .spyOn(fileService, 'storePublicImageFromBase64')
       .mockResolvedValueOnce(expectedResult.image);
     jest.spyOn(userRepo, 'save').mockResolvedValueOnce(expectedResult);
-    //Act
+    // Act
     const result = await service.changeUserImage(userId, newImage);
-    //Assert
+    // Assert
     expect(deletePublicImageMock).toHaveBeenCalled();
     expect(result).toEqual(expectedResult);
   });

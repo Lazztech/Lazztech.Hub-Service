@@ -69,7 +69,7 @@ export class FileService {
 
   public async deletePublicImageFromUrl(url: string): Promise<void> {
     this.logger.log(this.deletePublicImageFromUrl.name);
-    //FIXME Ensure any images that are no longer needed get deleted, for a hub that's been deleted for example!
+    // FIXME Ensure any images that are no longer needed get deleted, for a hub that's been deleted for example!
     const blobServiceClient = await BlobServiceClient.fromConnectionString(
       this.getStorageConnectionString(),
     );
@@ -78,7 +78,7 @@ export class FileService {
     );
     await this.ensureContainerExists(containerClient);
 
-    //Get last string after last '/'
+    // Get last string after last '/'
     const blobName = url.split('/').length[url.split('/').length - 1];
     const blockBlobClient = containerClient.getBlockBlobClient(blobName);
     const blobExists = await blockBlobClient.exists();

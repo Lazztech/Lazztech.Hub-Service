@@ -30,7 +30,7 @@ export class HubActivityService {
 
   async activateHub(userId: any, hubId: number) {
     this.logger.log(this.activateHub.name);
-    let hubRelationship = await this.joinUserHubRepository.findOne({
+    const hubRelationship = await this.joinUserHubRepository.findOne({
       where: {
         userId,
         hubId,
@@ -39,10 +39,11 @@ export class HubActivityService {
       relations: ['hub'],
     });
 
-    if (!hubRelationship)
+    if (!hubRelationship) {
       throw Error(
         `no corresponding hub relationship found for userId: ${userId} & hubId: ${hubId}`,
       );
+    }
 
     let hub = hubRelationship.hub;
     hub.active = true;
@@ -54,7 +55,7 @@ export class HubActivityService {
 
   async deactivateHub(userId: any, hubId: number) {
     this.logger.log(this.deactivateHub.name);
-    let hubRelationship = await this.joinUserHubRepository.findOne({
+    const hubRelationship = await this.joinUserHubRepository.findOne({
       where: {
         userId,
         hubId,
@@ -63,10 +64,11 @@ export class HubActivityService {
       relations: ['hub'],
     });
 
-    if (!hubRelationship)
+    if (!hubRelationship) {
       throw Error(
         `no corresponding hub relationship found for userId: ${userId} & hubId: ${hubId}`,
       );
+    }
 
     let hub = hubRelationship.hub;
     hub.active = false;

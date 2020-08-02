@@ -44,7 +44,7 @@ export class AuthResolver {
 
   @Mutation(() => Boolean)
   public async logout(@Response() res): Promise<boolean> {
-    //FIXME: not using cookies anymore?
+    // FIXME: not using cookies anymore?
     this.logger.log(this.logout.name);
 
     res.cookie('access-token', '', { expires: new Date(Date.now()) });

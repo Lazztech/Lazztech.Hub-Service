@@ -27,11 +27,11 @@ export class AuthGuard implements CanActivate {
     this.logger.log(this.canActivate.name);
 
     const ctx = GqlExecutionContext.create(context);
-    let accessToken = ctx.getContext().req.headers['authorization'];
+    const accessToken = ctx.getContext().req.headers.authorization;
 
     if (!accessToken) {
       this.logger.error(
-        "Custom Auth Checker didn't find Authorization header access token.",
+        'Custom Auth Checker didn\'t find Authorization header access token.',
       );
       return false;
     }
@@ -43,7 +43,7 @@ export class AuthGuard implements CanActivate {
         where: { id: data.userId },
       });
       if (user) {
-        ctx.getContext().req.headers['userId'] = data.userId;
+        ctx.getContext().req.headers.userId = data.userId;
         this.logger.log('verified access token.');
         return true;
       } else {

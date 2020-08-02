@@ -15,7 +15,7 @@ export class EmailService {
 
     this.transporter = nodemailer.createTransport({
       service: 'Gmail',
-      //TODO setup env configuration validation with joi
+      // TODO setup env configuration validation with joi
       auth: {
         user: this.configService.get<string>('EMAIL_FROM_ADDRESS'),
         pass: this.configService.get<string>('EMAIL_PASSWORD'),

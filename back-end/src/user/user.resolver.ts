@@ -55,7 +55,7 @@ export class UserResolver {
     @Args({ name: 'newImage', type: () => String }) newImage: string,
   ): Promise<User> {
     this.logger.log(this.changeUserImage.name);
-    let user = await this.userService.changeUserImage(userId, newImage);
+    const user = await this.userService.changeUserImage(userId, newImage);
     return user;
   }
 }

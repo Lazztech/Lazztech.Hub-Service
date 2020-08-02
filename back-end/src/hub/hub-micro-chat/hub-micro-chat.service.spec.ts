@@ -82,7 +82,7 @@ describe('HubMicroChatService', () => {
   });
 
   it('should resolve for microChatToHub', async () => {
-    //Arrange
+    // Arrange
     const userId = 1;
     const hubId = 1;
     const microChatId = 1;
@@ -117,15 +117,15 @@ describe('HubMicroChatService', () => {
     const addInAppNotificationForUserCall = jest
       .spyOn(notificationService, 'addInAppNotificationForUser')
       .mockImplementation(() => Promise.resolve());
-    //Act
+    // Act
     await service.microChatToHub(userId, hubId, microChatId);
-    //Assert
+    // Assert
     expect(sendPushToUserCall).toHaveBeenCalledTimes(3);
     expect(addInAppNotificationForUserCall).toHaveBeenCalledTimes(3);
   });
 
   it('should return for createMicroChat', async () => {
-    //Arrange
+    // Arrange
     const userId = 1;
     const hubId = 1;
     const microChatText = 'Hello';
@@ -140,15 +140,15 @@ describe('HubMicroChatService', () => {
     const saveCall = jest
       .spyOn(microChatRepo, 'save')
       .mockResolvedValueOnce(expectResult);
-    //Act
+    // Act
     const result = await service.createMicroChat(userId, hubId, microChatText);
-    //Assert
+    // Assert
     expect(saveCall).toHaveBeenCalled();
     expect(result).toEqual(expectResult);
   });
 
   it('should resolve for deleteMicroChat', async () => {
-    //Arrange
+    // Arrange
     const userId = 1;
     const hubId = 1;
     const microChatId = 1;
@@ -170,9 +170,9 @@ describe('HubMicroChatService', () => {
     const deleteCall = jest
       .spyOn(microChatRepo, 'remove')
       .mockResolvedValueOnce({} as MicroChat);
-    //Act
+    // Act
     await service.deleteMicroChat(userId, hubId, microChatId);
-    //Assert
+    // Assert
     expect(deleteCall).toHaveBeenCalled();
   });
 });

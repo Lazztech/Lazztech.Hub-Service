@@ -14,15 +14,16 @@ export class HubGeofenceService {
 
   async enteredHubGeofence(userId: any, hubId: number) {
     this.logger.log(this.enteredHubGeofence.name);
-    let hubRelationship = await this.joinUserHubRepository.findOne({
+    const hubRelationship = await this.joinUserHubRepository.findOne({
       userId,
       hubId,
     });
 
-    if (!hubRelationship)
+    if (!hubRelationship) {
       throw Error(
         `no corresponding hub relationship found for userId: ${userId} & hubId: ${hubId}`,
       );
+    }
 
     hubRelationship.isPresent = true;
     await this.joinUserHubRepository.save(hubRelationship);
@@ -36,10 +37,11 @@ export class HubGeofenceService {
       hubId,
     });
 
-    if (!hubRelationship)
+    if (!hubRelationship) {
       throw Error(
         `no corresponding hub relationship found for userId: ${userId} & hubId: ${hubId}`,
       );
+    }
 
     hubRelationship.isPresent = false;
     hubRelationship = await this.joinUserHubRepository.save(hubRelationship);

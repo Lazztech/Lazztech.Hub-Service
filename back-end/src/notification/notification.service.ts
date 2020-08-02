@@ -50,7 +50,7 @@ export class NotificationService {
       userDevice.userId = user.id;
       userDevice.fcmPushUserToken = token;
       const result = await this.userDeviceRepository.save(userDevice);
-      //TODO notify via email that a new device has been used on the account for security.
+      // TODO notify via email that a new device has been used on the account for security.
     } else {
       this.logger.warn('User device token already stored.');
     }
@@ -60,7 +60,7 @@ export class NotificationService {
     this.logger.log(this.getInAppNotifications.name);
     const joinInAppNotifications = await this.joinUserInAppNotificationRepository.find(
       {
-        where: { userId: userId },
+        where: { userId },
         relations: ['inAppNotification'],
       },
     );
@@ -82,7 +82,7 @@ export class NotificationService {
     await this.inAppNotificationRepository.save(inAppNotification);
     const joinUserInAppNotification = this.joinUserInAppNotificationRepository.create(
       {
-        userId: userId,
+        userId,
         inAppNotificationId: inAppNotification.id,
       },
     );

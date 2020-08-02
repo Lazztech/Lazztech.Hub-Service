@@ -80,7 +80,7 @@ describe('HubService', () => {
   });
 
   it('should return for getOneUserHub', async () => {
-    //Arrange
+    // Arrange
     const userId = 1;
     const hubId = 2;
     const userHubTestResult = {
@@ -98,14 +98,14 @@ describe('HubService', () => {
     jest
       .spyOn(joinUserHubRepo, 'findOne')
       .mockResolvedValueOnce(userHubTestResult);
-    //Act
+    // Act
     const result = await hubService.getOneUserHub(userId, hubId);
-    //Assert
+    // Assert
     expect(userHubTestResult).toEqual(userHubTestResult);
   });
 
   it('should return for getUserHubs', async () => {
-    //Arrange
+    // Arrange
     const userId = 1;
     const testResult = [
       {
@@ -116,14 +116,14 @@ describe('HubService', () => {
       } as JoinUserHub,
     ];
     jest.spyOn(joinUserHubRepo, 'find').mockResolvedValueOnce(testResult);
-    //Act
+    // Act
     const result = await hubService.getUserHubs(userId);
-    //Assert
+    // Assert
     expect(result).toEqual(testResult);
   });
 
   it('should return for commonUserHubs', async () => {
-    //Arrange
+    // Arrange
     const userId = 1;
     const otherUsersId = 2;
     const thirdUsersId = 3;
@@ -160,14 +160,14 @@ describe('HubService', () => {
         userId: otherUsersId,
       },
     ] as JoinUserHub[];
-    //Act
+    // Act
     const result = await hubService.commonUsersHubs(userId, otherUsersId);
-    //Assert
+    // Assert
     expect(result).toStrictEqual(expectedResult);
   });
 
   it('should create new invite for inviteUserToHub', async () => {
-    //Arrange
+    // Arrange
     const userId = 1;
     const hubId = 1;
     const invitee = {
@@ -202,16 +202,16 @@ describe('HubService', () => {
     const saveCall = jest
       .spyOn(joinUserHubRepo, 'save')
       .mockResolvedValueOnce(invite);
-    //Act
+    // Act
     await hubService.inviteUserToHub(userId, hubId, invitee.email);
-    //Assert
+    // Assert
     expect(saveCall).toHaveBeenCalled();
     expect(addInAppNotificationForUserCall).toHaveBeenCalled();
     expect(sendPushToUser).toHaveBeenCalled();
   });
 
   it('should return for usersPeople', async () => {
-    //Arrange
+    // Arrange
     const userId = 2;
     jest.spyOn(joinUserHubRepo, 'find').mockResolvedValueOnce([
       {
@@ -271,14 +271,14 @@ describe('HubService', () => {
         id: 4,
       },
     ] as User[];
-    //Act
+    // Act
     const result = await hubService.usersPeople(userId);
-    //Assert
+    // Assert
     expect(result).toEqual(expectedResult);
   });
 
   it('should return for createHub', async () => {
-    //Arrange
+    // Arrange
     const userId = 1;
     const hub = {
       id: 1,
@@ -319,9 +319,9 @@ describe('HubService', () => {
             hub,
           } as JoinUserHub))(),
       );
-    //Act
+    // Act
     const result = await hubService.createHub(userId, hub);
-    //Assert
+    // Assert
     expect(result).toEqual({
       userId,
       hubId: hub.id,
@@ -333,7 +333,7 @@ describe('HubService', () => {
   });
 
   it('should remove for deleteHub', async () => {
-    //Arrange
+    // Arrange
     const userId = 1;
     const hubId = 1;
     jest.spyOn(joinUserHubRepo, 'findOne').mockResolvedValueOnce({
@@ -350,15 +350,15 @@ describe('HubService', () => {
     const removeCall = jest
       .spyOn(hubRepo, 'remove')
       .mockResolvedValueOnce({} as Hub);
-    //Act
+    // Act
     await hubService.deleteHub(1, 1);
-    //Assert
+    // Assert
     expect(deleteImageCall).toHaveBeenCalled();
     expect(removeCall).toHaveBeenCalled();
   });
 
   it('should return for editHub', async () => {
-    //Arrange
+    // Arrange
     const userId = 1;
     const expectedResult = {
       id: 1,
@@ -374,20 +374,20 @@ describe('HubService', () => {
     const saveCall = jest
       .spyOn(hubRepo, 'save')
       .mockResolvedValueOnce(expectedResult);
-    //Act
+    // Act
     const result = await hubService.editHub(
       userId,
       expectedResult.id,
       expectedResult.name,
       expectedResult.description,
     );
-    //Assert
+    // Assert
     expect(result).toEqual(expectedResult);
     expect(saveCall).toHaveBeenCalled();
   });
 
   it('should return for changeHubImage', async () => {
-    //Arrange
+    // Arrange
     const userId = 1;
     const hubId = 1;
     const newImage = 'newImage';
@@ -412,9 +412,9 @@ describe('HubService', () => {
     const saveCall = jest
       .spyOn(hubRepo, 'save')
       .mockResolvedValueOnce(expectedResult);
-    //Act
+    // Act
     const result = await hubService.changeHubImage(userId, hubId, newImage);
-    //Assert
+    // Assert
     expect(result).toEqual(expectedResult);
     expect(deleteCall).toHaveBeenCalled();
     expect(storeCall).toHaveBeenCalled();
@@ -422,7 +422,7 @@ describe('HubService', () => {
   });
 
   it('should save for joinHub', async () => {
-    //Arrange
+    // Arrange
     const userId = 1;
     const hubId = 1;
     const expectedResult = {
@@ -434,15 +434,15 @@ describe('HubService', () => {
     const saveCall = jest
       .spyOn(joinUserHubRepo, 'save')
       .mockResolvedValueOnce(expectedResult);
-    //Act
+    // Act
     const result = await hubService.joinHub(userId, hubId);
-    //Assert
+    // Assert
     expect(result).toEqual(expectedResult);
     expect(saveCall).toHaveBeenCalled();
   });
 
   it('should resolve for setHubStarred', async () => {
-    //Arrange
+    // Arrange
     const userId = 1;
     const hubId = 1;
     const expectedResult = {
@@ -457,15 +457,15 @@ describe('HubService', () => {
     const saveCall = jest
       .spyOn(joinUserHubRepo, 'save')
       .mockResolvedValueOnce(expectedResult);
-    //Act
+    // Act
     const result = await hubService.setHubStarred(userId, hubId);
-    //Assert
+    // Assert
     expect(result).toEqual(expectedResult);
     expect(saveCall).toHaveBeenCalled();
   });
 
   it('should resolve for setHubNotStarred', async () => {
-    //Arrange
+    // Arrange
     const userId = 1;
     const hubId = 1;
     const expectedResult = {
@@ -480,18 +480,18 @@ describe('HubService', () => {
     const saveCall = jest
       .spyOn(joinUserHubRepo, 'save')
       .mockResolvedValueOnce(expectedResult);
-    //Act
+    // Act
     const result = await hubService.setHubNotStarred(userId, hubId);
-    //Assert
+    // Assert
     expect(result).toEqual(expectedResult);
     expect(saveCall).toHaveBeenCalled();
   });
 
   it('should return for searchHubByName', async () => {
-    //Arrange
+    // Arrange
     const userId = 1;
     const search = 'Lazzarini';
-    const testHubRelationships: Array<JoinUserHub> = [
+    const testHubRelationships: JoinUserHub[] = [
       {
         userId,
         hub: {
@@ -519,9 +519,9 @@ describe('HubService', () => {
     jest
       .spyOn(joinUserHubRepo, 'find')
       .mockResolvedValueOnce(testHubRelationships);
-    //Act
+    // Act
     const result = await hubService.searchHubByName(userId, search);
-    //Assert
+    // Assert
     expect(result).toEqual(expectedResult);
   });
 });

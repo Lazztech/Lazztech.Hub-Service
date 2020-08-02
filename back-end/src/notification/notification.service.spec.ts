@@ -70,7 +70,7 @@ describe('NotificationService', () => {
   });
 
   it('should resolve for addUserFcmNotificationToken', async () => {
-    //Arrange
+    // Arrange
     const userId = 1;
     const token = 'asdfasdf';
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce({
@@ -84,15 +84,15 @@ describe('NotificationService', () => {
     const saveCall = jest
       .spyOn(userDeviceRepo, 'save')
       .mockResolvedValueOnce({} as UserDevice);
-    //Act
+    // Act
     await service.addUserFcmNotificationToken(userId, token);
-    //Assert
+    // Assert
     expect(saveCall).toHaveBeenCalled();
   });
 
   it('should return for getInAppNotifications', async () => {
-    //TODO
-    //Arrange
+    // TODO
+    // Arrange
     const userId = 1;
     jest.spyOn(joinUserInAppNotificationRepo, 'find').mockResolvedValueOnce([
       {
@@ -116,14 +116,14 @@ describe('NotificationService', () => {
         text: 'test',
       },
     ] as InAppNotification[];
-    //Act
+    // Act
     const result = await service.getInAppNotifications(userId);
-    //Assert
+    // Assert
     expect(result).toEqual(expectedResult);
   });
 
   it('should save for addInAppNotificationForUser', async () => {
-    //Arrange
+    // Arrange
     const userId = 1;
     const details = {
       text: 'text',
@@ -149,15 +149,15 @@ describe('NotificationService', () => {
         userId,
         inAppNotificationId: 1,
       } as JoinUserInAppNotifications);
-    //Act
+    // Act
     await service.addInAppNotificationForUser(userId, details);
-    //Assert
+    // Assert
     expect(saveCall1).toHaveBeenCalled();
     expect(saveCall2).toHaveBeenCalled();
   });
 
   it('should resolve for deleteInAppNotification', async () => {
-    //Arrange
+    // Arrange
     const userId = 1;
     const inAppNotificationId = 1;
     jest.spyOn(joinUserInAppNotificationRepo, 'findOne').mockResolvedValueOnce({
@@ -167,14 +167,14 @@ describe('NotificationService', () => {
     const removeCall = jest
       .spyOn(joinUserInAppNotificationRepo, 'remove')
       .mockResolvedValueOnce({} as JoinUserInAppNotifications);
-    //Act
+    // Act
     await service.deleteInAppNotification(userId, inAppNotificationId);
-    //Assert
+    // Assert
     expect(removeCall).toHaveBeenCalled();
   });
 
   it('should resolve for deleteAllInAppNotifications', async () => {
-    //Arrange
+    // Arrange
     const userId = 1;
     jest.spyOn(joinUserInAppNotificationRepo, 'find').mockResolvedValueOnce([
       {
@@ -190,14 +190,14 @@ describe('NotificationService', () => {
     const removeCall = jest
       .spyOn(joinUserInAppNotificationRepo, 'remove')
       .mockResolvedValueOnce({} as JoinUserInAppNotifications);
-    //Act
+    // Act
     await service.deleteAllInAppNotifications(userId);
-    //Assert
+    // Assert
     expect(removeCall).toHaveBeenCalled();
   });
 
   it('sendPushToUser should sendPushNotification to each device fcmToken', async () => {
-    //Arrange
+    // Arrange
     const userId = 1;
     const testNotification = {
       title: 'Test Title',
@@ -225,9 +225,9 @@ describe('NotificationService', () => {
     const sendPushNotification = jest
       .spyOn(httpService, 'post')
       .mockImplementationOnce(() => of(null));
-    //Act
+    // Act
     await service.sendPushToUser(userId, testNotification);
-    //Assert
+    // Assert
     expect(sendPushNotification).toHaveBeenCalledTimes(3);
   });
 });

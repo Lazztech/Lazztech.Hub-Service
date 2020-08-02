@@ -44,7 +44,7 @@ describe('AuthPasswordResetService', () => {
   });
 
   it('should return for resetPassword', async () => {
-    //Arrange
+    // Arrange
     const details = {
       usersEmail: 'gianlazzarini@gmail.com',
       resetPin: '123',
@@ -59,15 +59,15 @@ describe('AuthPasswordResetService', () => {
     const saveCall = jest
       .spyOn(userRepo, 'save')
       .mockResolvedValueOnce({} as User);
-    //Act
+    // Act
     const result = await service.resetPassword(details);
-    //Assert
+    // Assert
     expect(result).toBeTruthy();
     expect(saveCall).toHaveBeenCalled();
   });
 
   it('should return for sendPasswordResetEmail', async () => {
-    //Arrange
+    // Arrange
     const email = 'gianlazzarini@gmail.com';
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce({
       firstName: 'Gian',
@@ -82,9 +82,9 @@ describe('AuthPasswordResetService', () => {
     const saveCall = jest
       .spyOn(userRepo, 'save')
       .mockResolvedValueOnce({} as User);
-    //Act
+    // Act
     const result = await service.sendPasswordResetEmail(email);
-    //Assert
+    // Assert
     expect(result).toBeTruthy();
     expect(saveCall).toHaveBeenCalled();
   });

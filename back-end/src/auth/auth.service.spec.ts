@@ -60,7 +60,7 @@ describe('AuthService', () => {
   });
 
   it('should return for register', async () => {
-    //Arrange
+    // Arrange
     const firstName = 'Gian';
     const lastName = 'Lazzarini';
     const email = 'gianlazzarini@gmail.com';
@@ -75,15 +75,15 @@ describe('AuthService', () => {
     jest
       .spyOn(notificationService, 'addInAppNotificationForUser')
       .mockImplementationOnce(() => Promise.resolve());
-    //Act
+    // Act
     const result = await service.register(firstName, lastName, email, password);
-    //Assert
+    // Assert
     expect(result).toBeDefined();
     expect(saveCall).toHaveBeenCalled();
   });
 
   it('should return accessToken for login', async () => {
-    //Arrange
+    // Arrange
     const password = 'Password123';
     const email = 'gianlazzarini@gmail.com';
     const testUser = {
@@ -93,15 +93,15 @@ describe('AuthService', () => {
     } as User;
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
 
-    //Act
+    // Act
     const result = await service.login(password, email);
 
-    //Assert
+    // Assert
     expect(result).toBeDefined();
   });
 
   it('should return for changePassword', async () => {
-    //Arrange
+    // Arrange
     const password = 'Password123';
     const email = 'gianlazzarini@gmail.com';
     const testUser = {
@@ -114,18 +114,18 @@ describe('AuthService', () => {
     const saveCall = jest
       .spyOn(userRepo, 'save')
       .mockResolvedValueOnce({} as User);
-    //Act
+    // Act
     const result = await service.changePassword(testUser.id, {
       oldPassword: password,
       newPassword,
     });
-    //Assert
+    // Assert
     expect(result).toBeTruthy();
     expect(saveCall).toHaveBeenCalled();
   });
 
   it('should return for deleteAccount', async () => {
-    //Arrange
+    // Arrange
     const password = 'Password123';
     const testUser = {
       id: 1,
@@ -136,13 +136,13 @@ describe('AuthService', () => {
     const removeCall = jest
       .spyOn(userRepo, 'remove')
       .mockResolvedValueOnce({} as User);
-    //Act
+    // Act
     const result = await service.deleteAccount(
       testUser.id,
       testUser.email,
       password,
     );
-    //Assert
+    // Assert
     expect(result).toBeTruthy();
     expect(removeCall).toHaveBeenCalled();
   });

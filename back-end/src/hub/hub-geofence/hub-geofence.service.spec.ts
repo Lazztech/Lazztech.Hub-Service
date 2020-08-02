@@ -30,7 +30,7 @@ describe('HubGeofenceService', () => {
   });
 
   it('should return for enteredHubGeofence', async () => {
-    //Arrange
+    // Arrange
     const userId = 1;
     const hubId = 1;
     const hubRelationshipTest = {
@@ -47,9 +47,9 @@ describe('HubGeofenceService', () => {
         hubId,
         isOwner: true,
       } as JoinUserHub);
-    //Act
+    // Act
     const result = await service.enteredHubGeofence(userId, hubId);
-    //Assert
+    // Assert
     expect(saveCall).toHaveBeenCalled();
   });
 
@@ -70,9 +70,9 @@ describe('HubGeofenceService', () => {
         hubId,
         isOwner: false,
       } as JoinUserHub);
-    //Act
+    // Act
     const result = await service.exitedHubGeofence(userId, hubId);
-    //Assert
+    // Assert
     expect(saveCall).toHaveBeenCalled();
   });
 });
