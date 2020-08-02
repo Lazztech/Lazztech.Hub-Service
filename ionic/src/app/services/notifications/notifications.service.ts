@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Plugins, PushNotification, PushNotificationActionPerformed, PushNotificationToken } from '@capacitor/core';
 import { firebase } from '@firebase/app';
 import '@firebase/messaging';
-import { Platform, ToastController } from '@ionic/angular';
+import { Platform, ToastController, NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { FetchPolicy } from 'apollo-client';
 import { AddUserFcmNotificationTokenGQL, DeleteAllInAppNotificationsGQL, DeleteInAppNotificationGQL, GetInAppNotificationsGQL, InAppNotification, Scalars, GetInAppNotificationsDocument, GetInAppNotificationsQuery } from '../../../generated/graphql';
@@ -23,7 +23,8 @@ export class NotificationsService {
     private getInAppNotificationsGQLService: GetInAppNotificationsGQL,
     private deleteInAppNotificationGQLService: DeleteInAppNotificationGQL,
     private addUserFcmNotificationTokenGQLService: AddUserFcmNotificationTokenGQL,
-    private logger: NGXLogger
+    private logger: NGXLogger,
+    private navController: NavController
   ) { }
 
   async localNotification(title: string, body: string, schedule?: Date): Promise<void> {
@@ -162,14 +163,25 @@ export class NotificationsService {
 
     PushNotifications.addListener('pushNotificationReceived', 
       async (notification: PushNotification) => {
-        // alert('Push received: ' + JSON.stringify(notification));
+        this.logger.log('Push received: ' + JSON.stringify(notification));
         //TODO move to alertService?
         const toast = await this.toastController.create({
           header: notification.title,
           message: notification.body,
-          duration: 2000,
+          duration: 3000,
           position: 'top',
-          color: 'dark'
+          color: 'dark',
+          translucent: true,
+          buttons: [
+            {
+              side: 'start',
+              text: 'View',
+              handler: () => {
+                notification?.data?.aps?.category && this.navController.navigateForward(notification.data.aps.category);
+                this.logger.log('View clicked');
+              }
+            },
+          ]
         });
         this.logger.log("presenting toast");
         await toast.present();
@@ -177,8 +189,9 @@ export class NotificationsService {
     );
 
     PushNotifications.addListener('pushNotificationActionPerformed', 
-      (notification: PushNotificationActionPerformed) => {
-        alert('Push action performed: ' + JSON.stringify(notification));
+      (notificationActionDetails: PushNotificationActionPerformed) => {
+        this.logger.log('Push action performed: ' + JSON.stringify(notificationActionDetails));
+        notificationActionDetails.notification?.data?.aps?.category && this.navController.navigateForward(notificationActionDetails.notification.data.aps.category);
       }
     );
   }
