@@ -14,6 +14,7 @@ import { HubService } from './hub.service';
 import { HttpModule } from '@nestjs/common';
 import { UserDevice } from 'src/dal/entity/userDevice.entity';
 import { ImageFileService } from 'src/services/file/image-file/image-file.service';
+import { Invite } from 'src/dal/entity/invite.entity';
 
 describe('HubService', () => {
   let hubService: HubService;
@@ -62,6 +63,10 @@ describe('HubService', () => {
           provide: getRepositoryToken(UserDevice),
           useClass: Repository,
         },
+        {
+          provide: getRepositoryToken(Invite),
+          useClass: Repository
+        }
       ],
     }).compile();
 
