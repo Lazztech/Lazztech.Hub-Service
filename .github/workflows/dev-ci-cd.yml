@@ -48,7 +48,9 @@ jobs:
       run: |
         npm install
         npm run build
-        npm test
+        npm run format:check
+        npm run test:cov
+        # npm run lint
         nohup npm run start:prod >> app.log 2>&1 &
         timeout 30 bash -c 'until echo > /dev/tcp/localhost/8080; do sleep 0.5; done'
         kill %1
