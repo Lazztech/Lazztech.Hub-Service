@@ -49,11 +49,11 @@ jobs:
     steps:
     - uses: actions/checkout@master
 
-    #- uses: kamilkisiela/graphql-inspector@master
-    #  with:
-    #    github-token: ${{ secrets.GITHUB_TOKEN }}
-    #    schema: './back-end/schema.gql' # important to define a path to schema file, without a branch
-    #    endpoint: ${{ env.DEPLOYMENT_URL }}
+    - uses: kamilkisiela/graphql-inspector@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        schema: './back-end/schema.gql' # important to define a path to schema file, without a branch
+        endpoint: ${{ env.DEPLOYMENT_URL }}
 
     - name: Use Node.js ${{ env.NODE_VERSION }}
       uses: actions/setup-node@v1
@@ -74,7 +74,8 @@ jobs:
         npm install
         npm run build
 
-    - uses: kamilkisiela/graphql-inspector@master
+    - name: graphql-inspector
+      uses: kamilkisiela/graphql-inspector@master
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         schema: './back-end/schema.gql' # important to define a path to schema file, without a branch
