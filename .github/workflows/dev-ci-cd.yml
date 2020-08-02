@@ -16,6 +16,23 @@ env:
   DEPLOYMENT_URL: 'https://lazztechhubdev.azurewebsites.net/graphql'
 
 jobs:
+  ionic-ci:
+    name: ionic-ci
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout latest commit
+        uses: actions/checkout@master
+
+      - name: ionic npm install & build
+        working-directory: ./ionic
+        run: |
+          npm install
+          # npm run generate
+          npm run build
+        env:
+          CI: true
+          ACCESS_TOKEN_SECRET: ***REMOVED***
+
   build-and-deploy:
     name: Build and Deploy
     runs-on: ubuntu-latest
@@ -76,16 +93,6 @@ jobs:
         nohup npm run start:prod >> app.log 2>&1 &
         timeout 30 bash -c 'until echo > /dev/tcp/localhost/8080; do sleep 0.5; done'
         kill %1
-      env:
-        CI: true
-        ACCESS_TOKEN_SECRET: ***REMOVED***
-
-    - name: ionic npm install & build
-      working-directory: ./ionic
-      run: |
-        npm install
-        npm run generate
-        npm run build
       env:
         CI: true
         ACCESS_TOKEN_SECRET: ***REMOVED***
