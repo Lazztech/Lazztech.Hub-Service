@@ -31,7 +31,7 @@ export class AuthGuard implements CanActivate {
 
     if (!accessToken) {
       this.logger.error(
-        'Custom Auth Checker didn\'t find Authorization header access token.',
+        "Custom Auth Checker didn't find Authorization header access token.",
       );
       return false;
     }
