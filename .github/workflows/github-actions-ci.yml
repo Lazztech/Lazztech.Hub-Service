@@ -109,7 +109,7 @@ jobs:
     name: deploy-cd-master
     runs-on: ubuntu-latest
     needs: back-end-ci
-    # if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master'
     steps:
   
     - name: 'Run Azure webapp deploy action using publish profile credentials'
