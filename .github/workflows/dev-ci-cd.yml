@@ -28,25 +28,21 @@ jobs:
         run: |
           npm install
           npm run build
-        env:
-          CI: true
-          ACCESS_TOKEN_SECRET: ***REMOVED***
+
+      - name: npm lint
+        working-directory: ./ionic
+        run: |
+          npm run lint
+
+      - name: npm test
+        working-directory: ./ionic
+        run: |
+          npm run lint
 
       - name: npm generate
         working-directory: ./ionic
         run: |
           npm run generate
-        env:
-          CI: true
-          ACCESS_TOKEN_SECRET: ***REMOVED***
-
-      - name: npm generate
-        working-directory: ./ionic
-        run: |
-          npm run generate
-        env:
-          CI: true
-          ACCESS_TOKEN_SECRET: ***REMOVED***
 
   back-end-ci:
     name: back-end-ci
