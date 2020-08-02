@@ -40,17 +40,38 @@ jobs:
         postgresql user: 'test'
         postgresql password: 'Password123'
 
-    - name: back-end npm install, build, and test
+    - name: back-end npm install
+      working-directory: ./back-end
+      run: |
+        npm install
+      env:
+        CI: true
+        ACCESS_TOKEN_SECRET: ***REMOVED***
+  
+    - name: back-end npm format:check
+      working-directory: ./back-end
+      run: |
+        npm run format:check
+      env:
+        CI: true
+        ACCESS_TOKEN_SECRET: ***REMOVED***
+
+    - name: back-end npm test:cov
+      working-directory: ./back-end
+      run: |
+        npm run test:cov
+        # npm run lint
+        npm run build
+      env:
+        CI: true
+        ACCESS_TOKEN_SECRET: ***REMOVED***
+
+    - name: back-end start health test
       working-directory: ./back-end
       # 'nohup npm run start:prod >> app.log 2>&1 &' runs the command as a background job: https://stackoverflow.com/a/46732894/848396
       # 'timeout 30 bash -c 'until echo > /dev/tcp/localhost/13000; do sleep 0.5; done' wait for server to start up or timeout with error: https://unix.stackexchange.com/a/349138
       # 'kill %1' kills background job: https://unix.stackexchange.com/a/104822
       run: |
-        npm install
-        npm run build
-        npm run format:check
-        npm run test:cov
-        # npm run lint
         nohup npm run start:prod >> app.log 2>&1 &
         timeout 30 bash -c 'until echo > /dev/tcp/localhost/8080; do sleep 0.5; done'
         kill %1
