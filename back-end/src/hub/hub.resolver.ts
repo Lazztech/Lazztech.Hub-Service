@@ -12,6 +12,7 @@ import { HubActivityService } from './hub-activity/hub-activity.service';
 import { HubGeofenceService } from './hub-geofence/hub-geofence.service';
 import { HubMicroChatService } from './hub-micro-chat/hub-micro-chat.service';
 import { HubService } from './hub.service';
+import { Invite } from 'src/dal/entity/invite.entity';
 
 @Resolver()
 export class HubResolver {
@@ -37,7 +38,11 @@ export class HubResolver {
   ): Promise<JoinUserHub> {
     this.logger.log(this.createHub.name);
     const hub = await this.hubService.createHub(userId, {
-      name, description, image, latitude, longitude
+      name,
+      description,
+      image,
+      latitude,
+      longitude,
     } as Hub);
     return hub;
   }
@@ -68,20 +73,33 @@ export class HubResolver {
     @Args({ name: 'otherUsersId', type: () => ID }) otherUsersId: number,
   ) {
     this.logger.log(this.commonUsersHubs.name);
-    const result = await this.hubService.commonUsersHubs(userId, otherUsersId)
+    const result = await this.hubService.commonUsersHubs(userId, otherUsersId);
     return result;
   }
 
   @UseGuards(AuthGuard)
-  @Mutation(() => Boolean)
+  @Mutation(() => Invite)
   public async inviteUserToHub(
     @UserId() userId,
     @Args({ name: 'hubId', type: () => ID }) hubId: number,
     @Args({ name: 'inviteesEmail', type: () => String }) inviteesEmail: string,
-  ): Promise<boolean> {
+  ): Promise<Invite> {
     this.logger.log(this.inviteUserToHub.name);
-    await this.hubService.inviteUserToHub(userId, hubId, inviteesEmail);
-    return true;
+    const invite: Invite = await this.hubService.inviteUserToHub(userId, hubId, inviteesEmail);
+    return invite;
+  }
+
+  @UseGuards(AuthGuard)
+  @Mutation(() => JoinUserHub)
+  public async respondToHubInvite(
+    @UserId() userId,
+    @Args({ name: 'invitersId', type: () => ID }) invitersId: number,
+    @Args({ name: 'hubId', type: () => ID}) hubId: number,
+    @Args({ name: 'accepted', type: () => Boolean }) accepted: boolean,
+  ): Promise<JoinUserHub> {
+    this.logger.log(this.respondToHubInvite.name);
+    const result = await this.hubService.respondToHubInvite(userId, invitersId, hubId, accepted);
+    return result;
   }
 
   @UseGuards(AuthGuard)
@@ -99,7 +117,7 @@ export class HubResolver {
     @Args({ name: 'search', type: () => String }) search: string,
   ): Promise<Hub[]> {
     this.logger.log(this.searchHubByName.name);
-    const results = await this.hubService.searchHubByName(userId, search)
+    const results = await this.hubService.searchHubByName(userId, search);
     return results;
   }
 
@@ -139,7 +157,12 @@ export class HubResolver {
     @Args({ name: 'description', type: () => String }) description: string,
   ): Promise<Hub> {
     this.logger.log(this.editHub.name);
-    const result = await this.hubService.editHub(userId, hubId, name, description);
+    const result = await this.hubService.editHub(
+      userId,
+      hubId,
+      name,
+      description,
+    );
     return result;
   }
 
@@ -151,7 +174,11 @@ export class HubResolver {
     @Args({ name: 'newImage', type: () => String }) newImage: string,
   ): Promise<Hub> {
     this.logger.log(this.changeHubImage.name);
-    const result = await this.hubService.changeHubImage(userId, hubId, newImage);
+    const result = await this.hubService.changeHubImage(
+      userId,
+      hubId,
+      newImage,
+    );
     return result;
   }
 
@@ -252,7 +279,11 @@ export class HubResolver {
     @Args({ name: 'microChatText', type: () => String }) microChatText: string,
   ) {
     this.logger.log(this.createMicroChat.name);
-    const microChat = await this.hubMicroChatService.createMicroChat(userId, hubId, microChatText);
+    const microChat = await this.hubMicroChatService.createMicroChat(
+      userId,
+      hubId,
+      microChatText,
+    );
     return microChat;
   }
 

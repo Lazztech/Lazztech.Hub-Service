@@ -18,7 +18,7 @@ export class JoinUserHub {
   @ManyToOne(
     () => User,
     user => user.hubsConnection,
-    { primary: true, onDelete: 'CASCADE' },
+    { onDelete: 'CASCADE' },
   )
   @JoinColumn()
   public user: User;
@@ -27,9 +27,7 @@ export class JoinUserHub {
   @ManyToOne(
     () => Hub,
     hub => hub.usersConnection,
-    {
-      onDelete: 'CASCADE',
-    },
+    { onDelete: 'CASCADE' },
   )
   @JoinColumn()
   public hub: Hub;

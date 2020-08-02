@@ -12,6 +12,7 @@ import { JoinUserHub } from './joinUserHub.entity';
 import { JoinUserInAppNotifications } from './joinUserInAppNotifications.entity';
 import { PasswordReset } from './passwordReset.entity';
 import { UserDevice } from './userDevice.entity';
+import { Invite } from './invite.entity';
 
 @ObjectType()
 @Entity()
@@ -68,4 +69,16 @@ export class User {
     userDevice => userDevice.user,
   )
   public userDevices: UserDevice[];
+
+  @OneToMany(
+    () => Invite,
+    invite => invite.invitee,
+  )
+  public invitesSent: Promise<Invite[]>;
+
+  @OneToMany(
+    () => Invite,
+    invite => invite.inviter,
+  )
+  public invitesReceived: Promise<Invite[]>;
 }

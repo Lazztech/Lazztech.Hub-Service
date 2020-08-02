@@ -13,6 +13,7 @@ type Hub {
   longitude: Float
   usersConnection: [JoinUserHub!]
   microChats: [MicroChat!]
+  invites: [Invite!]
 }
 
 type InAppNotification {
@@ -26,7 +27,13 @@ type InAppNotification {
 
 type Invite {
   id: ID!
-  email: String!
+  invitersId: ID!
+  inviteesId: ID!
+  hubId: ID!
+  accepted: Boolean!
+  inviter: User!
+  invitee: User!
+  hub: Hub!
 }
 
 type JoinUserHub {
@@ -55,7 +62,8 @@ type MicroChat {
 
 type Mutation {
   createHub(longitude: Float!, latitude: Float!, image: String!, description: String!, name: String!): JoinUserHub!
-  inviteUserToHub(inviteesEmail: String!, hubId: ID!): Boolean!
+  inviteUserToHub(inviteesEmail: String!, hubId: ID!): Invite!
+  respondToHubInvite(accepted: Boolean!, hubId: ID!, invitersId: ID!): JoinUserHub!
   deleteHub(hubId: ID!): Boolean!
   editHub(description: String!, name: String!, hubId: ID!): Hub!
   changeHubImage(newImage: String!, hubId: ID!): Hub!

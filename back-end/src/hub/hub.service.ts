@@ -5,6 +5,8 @@ import { JoinUserHub } from 'src/dal/entity/joinUserHub.entity';
 import { User } from 'src/dal/entity/user.entity';
 import { FileService } from 'src/services/file/file.service';
 import { Repository } from 'typeorm';
+import { NotificationService } from 'src/notification/notification.service';
+import { Invite } from 'src/dal/entity/invite.entity';
 
 @Injectable()
 export class HubService {
@@ -17,6 +19,9 @@ export class HubService {
     private joinUserHubRepository: Repository<JoinUserHub>,
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    @InjectRepository(Invite)
+    private inviteRepository: Repository<Invite>,
+    private notificationService: NotificationService,
   ) {
     this.logger.log('constructor');
   }
@@ -96,28 +101,69 @@ export class HubService {
     });
     this.validateInvitee(invitee, inviteesEmail, userId);
 
-    let newRelationship = this.joinUserHubRepository.create({
-      userId: invitee.id,
+    let invite = this.inviteRepository.create({
       hubId,
-      isOwner: false,
+      inviteesId: invitee.id,
+      invitersId: userId,
     });
-    newRelationship = await this.joinUserHubRepository.save(newRelationship);
+    invite = await this.inviteRepository.save(invite);
+
+    await this.notificationService.addInAppNotificationForUser(userId, {
+      thumbnail: userHubRelationship.hub.image,
+      header: `You're invited to "${userHubRelationship.hub.name}" hub.`,
+      text: `View the invite.`,
+      date: Date.now().toString(),
+      actionLink: `preview-hub/${hubId}`,
+    });
+
+    await this.notificationService.sendPushToUser(userId, {
+      title: `You're invited to "${userHubRelationship.hub.name}" hub.`,
+      body: `View the invite.`,
+      click_action: `preview-hub/${hubId}`,
+    });
+
+    return invite;
+  }
+
+  public async respondToHubInvite(inviteesId: number, invitersId: number, hubId: number, accepted: boolean) {
+    this.logger.log(this.respondToHubInvite.name);
+    if (accepted) {
+      const invite = await this.inviteRepository.findOne({ inviteesId, invitersId, hubId });
+
+      let newRelationship = this.joinUserHubRepository.create({
+        userId: invite.inviteesId,
+        hubId: invite.hubId,
+        isOwner: false,
+      });
+      newRelationship = await this.joinUserHubRepository.save(newRelationship);
+      return newRelationship;
+    } else {
+      return null;
+    }
   }
 
   private validateInvitee(invitee: User, inviteesEmail: string, userId: any) {
     this.logger.log(this.validateInvitee.name);
     if (!invitee) {
-      throw new Error(`Did not find user to invite by email address: ${inviteesEmail}`);
+      throw new Error(
+        `Did not find user to invite by email address`,
+      );
     }
     if (invitee.id == userId) {
       throw new Error(`Cannot invite self to hub.`);
     }
   }
 
-  private validateRelationship(userHubRelationship: JoinUserHub, hubId: number, userId: any) {
+  private validateRelationship(
+    userHubRelationship: JoinUserHub,
+    hubId: number,
+    userId: any,
+  ) {
     this.logger.log(this.validateRelationship.name);
     if (!userHubRelationship) {
-      throw new Error(`Could not find admin relationship to hubId: ${hubId} for userId: ${userId}.`);
+      throw new Error(
+        `Could not find admin relationship to hubId: ${hubId} for userId: ${userId}.`,
+      );
     }
   }
 
@@ -127,18 +173,14 @@ export class HubService {
       where: {
         userId: userId,
       },
-      relations: [
-        'hub',
-        'hub.usersConnection',
-        'hub.usersConnection.user'
-      ]
+      relations: ['hub', 'hub.usersConnection', 'hub.usersConnection.user'],
     });
 
     const usersHubs = userHubRelationships.map(x => x.hub);
 
     let commonConnections: Array<JoinUserHub> = [];
     for (const hub of usersHubs) {
-      commonConnections = commonConnections.concat(hub.usersConnection)
+      commonConnections = commonConnections.concat(hub.usersConnection);
     }
 
     let resultingOtherUsers: Array<User> = commonConnections
@@ -158,7 +200,9 @@ export class HubService {
 
   async createHub(userId: any, hub: Hub) {
     this.logger.log(this.createHub.name);
-    const imageUrl = await this.fileService.storePublicImageFromBase64(hub.image);
+    const imageUrl = await this.fileService.storePublicImageFromBase64(
+      hub.image,
+    );
     //TODO save as a transaction
     const result = await this.hubRepository.save(hub);
     let joinUserHub = this.joinUserHubRepository.create({
@@ -169,7 +213,7 @@ export class HubService {
     joinUserHub = await this.joinUserHubRepository.save(joinUserHub);
     joinUserHub = await this.joinUserHubRepository.findOne({
       where: joinUserHub,
-      relations: ['hub', 'hub.usersConnection']
+      relations: ['hub', 'hub.usersConnection'],
     });
     return joinUserHub;
   }
@@ -179,14 +223,15 @@ export class HubService {
     const userHubRelationship = await this.joinUserHubRepository.findOne({
       where: {
         userId: userId,
-        hubId: hubId
-      }
+        hubId: hubId,
+      },
     });
 
     if (!userHubRelationship) {
-      throw new Error(`deleteHub did not find a relationship between userId: ${userId} & ${hubId}`);
-    }
-    else if (this.isNotOwner(userHubRelationship)) {
+      throw new Error(
+        `deleteHub did not find a relationship between userId: ${userId} & ${hubId}`,
+      );
+    } else if (this.isNotOwner(userHubRelationship)) {
       throw new Error(`userId: ${userId} is not an owner of hubId: ${hubId}`);
     }
     const hub = await this.hubRepository.findOne({

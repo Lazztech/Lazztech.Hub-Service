@@ -2,6 +2,7 @@ import { Field, ID, ObjectType } from 'type-graphql';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { JoinUserHub } from './joinUserHub.entity';
 import { MicroChat } from './microChat.entity';
+import { Invite } from './invite.entity';
 
 @ObjectType()
 @Entity()
@@ -47,4 +48,11 @@ export class Hub {
     microChat => microChat.hub,
   )
   public microChats: MicroChat[];
+
+  @Field(() => [Invite], { nullable: true })
+  @OneToMany(
+    () => Invite,
+    invite => invite.hub,
+  )
+  public invites: [];
 }
