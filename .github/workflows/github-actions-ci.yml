@@ -51,10 +51,9 @@ jobs:
 
     - name: graphql-inspector
       uses: kamilkisiela/graphql-inspector@master
-      working-directory: ./back-end
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        schema: 'schema.gql' # important to define a path to schema file, without a branch
+        schema: 'back-end/schema.gql' # important to define a path to schema file, without a branch
         endpoint: ${{ env.DEPLOYMENT_URL }}
 
     - name: Use Node.js ${{ env.NODE_VERSION }}
