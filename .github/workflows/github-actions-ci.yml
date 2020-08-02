@@ -50,8 +50,8 @@ jobs:
     - uses: actions/checkout@master
 
     - name: graphql-inspector
-      working-directory: ./back-end
       uses: kamilkisiela/graphql-inspector@master
+      working-directory: ./back-end
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         schema: 'schema.gql' # important to define a path to schema file, without a branch
