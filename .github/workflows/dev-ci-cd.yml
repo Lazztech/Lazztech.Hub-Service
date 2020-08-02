@@ -74,34 +74,21 @@ jobs:
       run: |
         npm install
         npm run build
-      env:
-        CI: true
-        ACCESS_TOKEN_SECRET: ***REMOVED***
   
     - name: npm format:check
       working-directory: ./back-end
       run: |
         npm run format:check
-      env:
-        CI: true
-        ACCESS_TOKEN_SECRET: ***REMOVED***
   
     - name: npm lint
       working-directory: ./back-end
       run: |
         npm run lint
-      env:
-        CI: true
-        ACCESS_TOKEN_SECRET: ***REMOVED***
 
     - name: npm test:cov
       working-directory: ./back-end
       run: |
         npm run test:cov
-        # npm run lint
-      env:
-        CI: true
-        ACCESS_TOKEN_SECRET: ***REMOVED***
 
     - name: npm start & health check
       working-directory: ./back-end
