@@ -12,7 +12,6 @@ import { UserDevice } from 'src/dal/entity/userDevice.entity';
 
 @Service()
 export class NotificationService {
-
   private serverKey: string = this.configService.get<string>(
     'FIREBASE_SERVER_KEY',
   );
@@ -30,7 +29,9 @@ export class NotificationService {
     @InjectRepository(InAppNotification)
     private inAppNotificationRepository: Repository<InAppNotification>,
     @InjectRepository(JoinUserInAppNotifications)
-    private joinUserInAppNotificationRepository: Repository<JoinUserInAppNotifications>,
+    private joinUserInAppNotificationRepository: Repository<
+      JoinUserInAppNotifications
+    >,
     @InjectRepository(UserDevice)
     private userDeviceRepository: Repository<UserDevice>,
   ) {
@@ -72,37 +73,48 @@ export class NotificationService {
     return usersNotifications;
   }
 
-  public async addInAppNotificationForUser(userId: number, details: InAppNotificationDto) {
+  public async addInAppNotificationForUser(
+    userId: number,
+    details: InAppNotificationDto,
+  ) {
     this.logger.log(this.addInAppNotificationForUser.name);
     const inAppNotification = this.inAppNotificationRepository.create(details);
     await this.inAppNotificationRepository.save(inAppNotification);
-    const joinUserInAppNotification = this.joinUserInAppNotificationRepository.create({
-      userId: userId,
-      inAppNotificationId: inAppNotification.id,
-    });
-    await this.joinUserInAppNotificationRepository.save(joinUserInAppNotification);
+    const joinUserInAppNotification = this.joinUserInAppNotificationRepository.create(
+      {
+        userId: userId,
+        inAppNotificationId: inAppNotification.id,
+      },
+    );
+    await this.joinUserInAppNotificationRepository.save(
+      joinUserInAppNotification,
+    );
   }
 
   async deleteInAppNotification(userId: any, inAppNotificationId: number) {
     this.logger.log(this.deleteInAppNotification.name);
-    const inAppRelationship = await this.joinUserInAppNotificationRepository.findOne({
-      userId,
-      inAppNotificationId
-    });
+    const inAppRelationship = await this.joinUserInAppNotificationRepository.findOne(
+      {
+        userId,
+        inAppNotificationId,
+      },
+    );
     await this.joinUserInAppNotificationRepository.remove(inAppRelationship);
   }
 
   async deleteAllInAppNotifications(userId: any) {
     this.logger.log(this.deleteAllInAppNotifications.name);
-    const inAppRelationships = await this.joinUserInAppNotificationRepository.find({
-      userId
-    });
+    const inAppRelationships = await this.joinUserInAppNotificationRepository.find(
+      {
+        userId,
+      },
+    );
     await this.joinUserInAppNotificationRepository.remove(inAppRelationships);
   }
 
   public async sendPushToUser(
     userId: number,
-    notification: PushNotificationDto
+    notification: PushNotificationDto,
   ) {
     this.logger.log(this.sendPushToUser.name);
 
@@ -115,27 +127,27 @@ export class NotificationService {
     for (const iterator of fcmUserTokens) {
       const result = await this.sendPushNotification(notification, iterator);
 
-      this.logger.log(`Sent push notification to fcmToken ${iterator}`,
-      );
+      this.logger.log(`Sent push notification to fcmToken ${iterator}`);
     }
   }
 
-  private async sendPushNotification(notification: PushNotificationDto, to: string) {
+  private async sendPushNotification(
+    notification: PushNotificationDto,
+    to: string,
+  ) {
     this.logger.log(this.sendPushNotification.name);
     const data = {
       notification,
-      to
+      to,
     };
-    const result = await this.httpService.post(
-      this.sendEndpoint, 
-      data,
-      {
+    const result = await this.httpService
+      .post(this.sendEndpoint, data, {
         headers: {
           Authorization: 'key=' + this.serverKey,
         },
       })
       .toPromise();
-    
+
     return result;
   }
 }

@@ -10,9 +10,7 @@ import { NotificationService } from './notification.service';
 export class NotificationResolver {
   private logger = new Logger(NotificationResolver.name, true);
 
-  constructor(
-    private notificationService: NotificationService,
-  ) {
+  constructor(private notificationService: NotificationService) {
     this.logger.log('constructor');
   }
 
@@ -33,7 +31,9 @@ export class NotificationResolver {
     @UserId() userId,
   ): Promise<InAppNotification[]> {
     this.logger.log(this.getInAppNotifications.name);
-    const usersNotifications = await this.notificationService.getInAppNotifications(userId);
+    const usersNotifications = await this.notificationService.getInAppNotifications(
+      userId,
+    );
     return usersNotifications;
   }
 
@@ -41,18 +41,20 @@ export class NotificationResolver {
   @Mutation(() => Boolean)
   public async deleteInAppNotification(
     @UserId() userId,
-    @Args({ name: 'inAppNotificationId', type: () => ID }) inAppNotificationId: number
+    @Args({ name: 'inAppNotificationId', type: () => ID })
+    inAppNotificationId: number,
   ) {
     this.logger.log(this.deleteInAppNotification.name);
-    await this.notificationService.deleteInAppNotification(userId, inAppNotificationId);
+    await this.notificationService.deleteInAppNotification(
+      userId,
+      inAppNotificationId,
+    );
     return true;
   }
 
   @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
-  public async deleteAllInAppNotifications(
-    @UserId() userId,
-  ) {
+  public async deleteAllInAppNotifications(@UserId() userId) {
     this.logger.log(this.deleteAllInAppNotifications.name);
     await this.notificationService.deleteAllInAppNotifications(userId);
     return true;

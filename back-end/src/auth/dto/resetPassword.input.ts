@@ -1,5 +1,5 @@
 export class ResetPassword {
-    usersEmail: string;
-    resetPin: string;
-    newPassword: string;
+  usersEmail: string;
+  resetPin: string;
+  newPassword: string;
 }

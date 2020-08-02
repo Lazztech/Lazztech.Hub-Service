@@ -9,8 +9,8 @@ export class HubGeofenceService {
 
   constructor(
     @InjectRepository(JoinUserHub)
-    private joinUserHubRepository: Repository<JoinUserHub>
-  ) { }
+    private joinUserHubRepository: Repository<JoinUserHub>,
+  ) {}
 
   async enteredHubGeofence(userId: any, hubId: number) {
     this.logger.log(this.enteredHubGeofence.name);

@@ -20,7 +20,9 @@ describe('HubGeofenceService', () => {
     }).compile();
 
     service = module.get<HubGeofenceService>(HubGeofenceService);
-    joinUserHubRepository = module.get<Repository<JoinUserHub>>(getRepositoryToken(JoinUserHub));
+    joinUserHubRepository = module.get<Repository<JoinUserHub>>(
+      getRepositoryToken(JoinUserHub),
+    );
   });
 
   it('should be defined', () => {
@@ -35,14 +37,16 @@ describe('HubGeofenceService', () => {
       userId,
       hubId,
     } as JoinUserHub;
-    jest.spyOn(joinUserHubRepository, 'findOne').mockResolvedValueOnce(hubRelationshipTest);
-    const saveCall = jest.spyOn(joinUserHubRepository, 'save').mockResolvedValueOnce(
-      {
+    jest
+      .spyOn(joinUserHubRepository, 'findOne')
+      .mockResolvedValueOnce(hubRelationshipTest);
+    const saveCall = jest
+      .spyOn(joinUserHubRepository, 'save')
+      .mockResolvedValueOnce({
         userId,
         hubId,
-        isOwner: true
-      } as JoinUserHub
-    );
+        isOwner: true,
+      } as JoinUserHub);
     //Act
     const result = await service.enteredHubGeofence(userId, hubId);
     //Assert
@@ -56,14 +60,16 @@ describe('HubGeofenceService', () => {
       userId,
       hubId,
     } as JoinUserHub;
-    jest.spyOn(joinUserHubRepository, 'findOne').mockResolvedValueOnce(hubRelationshipTest);
-    const saveCall = jest.spyOn(joinUserHubRepository, 'save').mockResolvedValueOnce(
-      {
+    jest
+      .spyOn(joinUserHubRepository, 'findOne')
+      .mockResolvedValueOnce(hubRelationshipTest);
+    const saveCall = jest
+      .spyOn(joinUserHubRepository, 'save')
+      .mockResolvedValueOnce({
         userId,
         hubId,
-        isOwner: false
-      } as JoinUserHub
-    );
+        isOwner: false,
+      } as JoinUserHub);
     //Act
     const result = await service.exitedHubGeofence(userId, hubId);
     //Assert

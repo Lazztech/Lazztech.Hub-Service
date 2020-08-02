@@ -18,7 +18,7 @@ export class AuthPasswordResetService {
     private passwordResetRepository: Repository<PasswordReset>,
     @InjectRepository(User)
     private userRepository: Repository<User>,
-  ) { }
+  ) {}
 
   public async resetPassword(details: ResetPassword) {
     this.logger.log(this.resetPassword.name);

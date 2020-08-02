@@ -12,13 +12,13 @@ import { InAppNotification } from 'src/dal/entity/inAppNotification.entity';
     TypeOrmModule.forFeature([
       User,
       InAppNotification,
-      JoinUserInAppNotifications, 
-      UserDevice
+      JoinUserInAppNotifications,
+      UserDevice,
     ]),
-      HttpModule
+    HttpModule,
   ],
   controllers: [],
   providers: [NotificationResolver, NotificationService],
-  exports: [NotificationService]
+  exports: [NotificationService],
 })
 export class NotificationModule {}

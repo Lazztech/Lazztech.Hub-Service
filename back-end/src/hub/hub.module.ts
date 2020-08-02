@@ -32,9 +32,17 @@ import { UserDevice } from 'src/dal/entity/userDevice.entity';
     ]),
     ServicesModule,
     UserModule,
-    HttpModule
+    HttpModule,
   ],
   controllers: [],
-  providers: [HubResolver, HubService, NotificationService, UserService, HubActivityService, HubGeofenceService, HubMicroChatService],
+  providers: [
+    HubResolver,
+    HubService,
+    NotificationService,
+    UserService,
+    HubActivityService,
+    HubGeofenceService,
+    HubMicroChatService,
+  ],
 })
 export class HubModule {}

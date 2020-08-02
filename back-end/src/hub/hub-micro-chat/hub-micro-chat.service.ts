@@ -11,100 +11,101 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class HubMicroChatService {
-    private readonly logger = new Logger(HubMicroChatService.name, true);
+  private readonly logger = new Logger(HubMicroChatService.name, true);
 
-    constructor(
-        private notificationService: NotificationService,
-        @InjectRepository(User)
-        private userRepository: Repository<User>,
-        @InjectRepository(Hub)
-        private hubRepository: Repository<Hub>,
-        @InjectRepository(JoinUserHub)
-        private joinUserHubRepository: Repository<JoinUserHub>,
-        @InjectRepository(MicroChat)
-        private microChatRepository: Repository<MicroChat>
-    ) { }
+  constructor(
+    private notificationService: NotificationService,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+    @InjectRepository(Hub)
+    private hubRepository: Repository<Hub>,
+    @InjectRepository(JoinUserHub)
+    private joinUserHubRepository: Repository<JoinUserHub>,
+    @InjectRepository(MicroChat)
+    private microChatRepository: Repository<MicroChat>,
+  ) {}
 
-    async microChatToHub(userId: number, hubId: number, microChatId: number) {
-        this.logger.log(this.microChatToHub.name);
+  async microChatToHub(userId: number, hubId: number, microChatId: number) {
+    this.logger.log(this.microChatToHub.name);
 
-        const fromUser = await this.userRepository.findOne(userId);
-        const hub = await this.hubRepository.findOne({
-            where: {
-                id: hubId,
-            },
-            relations: ['usersConnection', 'microChats'],
-        });
-        const microChat = hub.microChats.find(x => x.id == microChatId);
+    const fromUser = await this.userRepository.findOne(userId);
+    const hub = await this.hubRepository.findOne({
+      where: {
+        id: hubId,
+      },
+      relations: ['usersConnection', 'microChats'],
+    });
+    const microChat = hub.microChats.find(x => x.id == microChatId);
 
-        for (const memberConnection of hub.usersConnection) {
-            await this.notificationService.sendPushToUser(memberConnection.userId,
-                {
-                    title: `${microChat.text}`,
-                    body: `From ${fromUser.firstName} to the ${hub.name} hub`,
-                    click_action: ''
-                } as PushNotificationDto
-            );
+    for (const memberConnection of hub.usersConnection) {
+      await this.notificationService.sendPushToUser(memberConnection.userId, {
+        title: `${microChat.text}`,
+        body: `From ${fromUser.firstName} to the ${hub.name} hub`,
+        click_action: '',
+      } as PushNotificationDto);
 
-            await this.notificationService.addInAppNotificationForUser(memberConnection.userId, {
-                thumbnail: fromUser.image,
-                header: `${microChat.text}`,
-                text: `From ${fromUser.firstName} to ${hub.name}`,
-                date: Date.now().toString(),
-            } as InAppNotificationDto);
-        }
+      await this.notificationService.addInAppNotificationForUser(
+        memberConnection.userId,
+        {
+          thumbnail: fromUser.image,
+          header: `${microChat.text}`,
+          text: `From ${fromUser.firstName} to ${hub.name}`,
+          date: Date.now().toString(),
+        } as InAppNotificationDto,
+      );
+    }
+  }
+
+  async createMicroChat(userId: any, hubId: number, microChatText: string) {
+    this.logger.log(this.createMicroChat.name);
+    const usersConnection = await this.joinUserHubRepository.findOne({
+      where: {
+        userId,
+        hubId,
+      },
+      relations: ['user', 'hub', 'hub.microChats'],
+    });
+
+    if (!usersConnection) {
+      this.logger.error(
+        'No valid relationship found between user and hub for that action.',
+      );
     }
 
-    async createMicroChat(userId: any, hubId: number, microChatText: string) {
-        this.logger.log(this.createMicroChat.name);
-        const usersConnection = await this.joinUserHubRepository.findOne({
-            where: {
-                userId,
-                hubId,
-            },
-            relations: ['user', 'hub', 'hub.microChats'],
-        });
+    let microChat = new MicroChat();
+    microChat.hubId = hubId;
+    microChat.text = microChatText;
+    microChat = await this.microChatRepository.save(microChat);
 
-        if (!usersConnection) {
-            this.logger.error(
-                'No valid relationship found between user and hub for that action.',
-            );
-        }
+    this.logger.log(
+      `createMicroChat(userId: ${userId}, hubId: ${hubId}, microChatText: ${microChatText}) completed successfully.`,
+    );
+    return microChat;
+  }
 
-        let microChat = new MicroChat();
-        microChat.hubId = hubId;
-        microChat.text = microChatText;
-        microChat = await this.microChatRepository.save(microChat);
+  async deleteMicroChat(userId: number, hubId: number, microChatId: number) {
+    this.logger.log(this.deleteMicroChat.name);
+    const usersConnection = await this.joinUserHubRepository.findOne({
+      where: {
+        userId,
+        hubId,
+      },
+      relations: ['user', 'hub', 'hub.microChats'],
+    });
 
-        this.logger.log(
-            `createMicroChat(userId: ${userId}, hubId: ${hubId}, microChatText: ${microChatText}) completed successfully.`,
-        );
-        return microChat;
+    if (!usersConnection) {
+      this.logger.error(
+        'No valid relationship found between user and hub for that action.',
+      );
     }
 
-    async deleteMicroChat(userId: number, hubId: number, microChatId: number, ) {
-        this.logger.log(this.deleteMicroChat.name);
-        const usersConnection = await this.joinUserHubRepository.findOne({
-            where: {
-                userId,
-                hubId,
-            },
-            relations: ['user', 'hub', 'hub.microChats'],
-        });
+    const microChat = usersConnection.hub.microChats.find(
+      x => x.id == microChatId,
+    );
+    await this.microChatRepository.remove(microChat);
 
-        if (!usersConnection) {
-            this.logger.error(
-                'No valid relationship found between user and hub for that action.',
-            );
-        }
-
-        const microChat = usersConnection.hub.microChats.find(
-            x => x.id == microChatId,
-        );
-        await this.microChatRepository.remove(microChat);
-
-        this.logger.log(
-            `deleteMicroChat(userId: ${userId}, hubId: ${hubId}, microChatId ${microChatId}) completed successfully.`,
-        );
-    }
+    this.logger.log(
+      `deleteMicroChat(userId: ${userId}, hubId: ${hubId}, microChatId ${microChatId}) completed successfully.`,
+    );
+  }
 }

@@ -13,22 +13,26 @@ export class FileService {
   constructor(
     private readonly configService: ConfigService,
     private readonly imageFileService: ImageFileService,
-    ) {
+  ) {
     this.logger.log('constructor');
   }
 
-  public async storePublicImageFromBase64(base64Image: string): Promise<string> {
+  public async storePublicImageFromBase64(
+    base64Image: string,
+  ): Promise<string> {
     this.logger.log(this.storePublicImageFromBase64.name);
 
     const blobServiceClient = await BlobServiceClient.fromConnectionString(
       this.getStorageConnectionString(),
     );
-    const containerClient = await this.getPublicContainerClient(blobServiceClient);
+    const containerClient = await this.getPublicContainerClient(
+      blobServiceClient,
+    );
     await this.ensureContainerExists(containerClient);
 
     // const mimeType = base64Image.split(';')[0];
     // const extension = '.' + mimeType.split('/')[1];
-    
+
     const data = base64Image.split('base64,')[1];
     let buf = Buffer.from(data, 'base64');
     buf = await this.imageFileService.compress(buf);
@@ -69,7 +73,9 @@ export class FileService {
     const blobServiceClient = await BlobServiceClient.fromConnectionString(
       this.getStorageConnectionString(),
     );
-    const containerClient = await this.getPublicContainerClient(blobServiceClient);
+    const containerClient = await this.getPublicContainerClient(
+      blobServiceClient,
+    );
     await this.ensureContainerExists(containerClient);
 
     //Get last string after last '/'
@@ -80,7 +86,7 @@ export class FileService {
       const response = await containerClient.delete();
     }
   }
-  
+
   private async getPublicContainerClient(blobServiceClient: BlobServiceClient) {
     this.logger.log(this.getPublicContainerClient.name);
     const containerClient = await blobServiceClient.getContainerClient(
@@ -98,5 +104,4 @@ export class FileService {
     }
     return storageString;
   }
-
 }

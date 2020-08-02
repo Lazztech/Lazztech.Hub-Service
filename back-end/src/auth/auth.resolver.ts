@@ -33,7 +33,12 @@ export class AuthResolver {
   ): Promise<string> {
     this.logger.log(this.register.name);
 
-    const accessToken = await this.authService.register(firstName, lastName, email, password);
+    const accessToken = await this.authService.register(
+      firstName,
+      lastName,
+      email,
+      password,
+    );
     return accessToken;
   }
 
@@ -53,7 +58,11 @@ export class AuthResolver {
     @Args('newPassword') newPassword: string,
   ): Promise<boolean> {
     this.logger.log(this.resetPassword.name);
-    const result = await this.authPasswordResetService.resetPassword({usersEmail, resetPin, newPassword});
+    const result = await this.authPasswordResetService.resetPassword({
+      usersEmail,
+      resetPin,
+      newPassword,
+    });
     return result;
   }
 
@@ -62,7 +71,9 @@ export class AuthResolver {
     @Args('email') email: string,
   ): Promise<boolean> {
     this.logger.log(this.sendPasswordResetEmail.name);
-    const result = await this.authPasswordResetService.sendPasswordResetEmail(email);
+    const result = await this.authPasswordResetService.sendPasswordResetEmail(
+      email,
+    );
     return result;
   }
 
@@ -74,7 +85,10 @@ export class AuthResolver {
     @Args({ name: 'newPassword', type: () => String }) newPassword: string,
   ): Promise<boolean> {
     this.logger.log(this.changePassword.name);
-    const result = await this.authService.changePassword(userId, {oldPassword, newPassword});
+    const result = await this.authService.changePassword(userId, {
+      oldPassword,
+      newPassword,
+    });
     return result;
   }
 
@@ -86,7 +100,11 @@ export class AuthResolver {
     @Args({ name: 'password', type: () => String }) password: string,
   ): Promise<boolean> {
     this.logger.log(this.deleteAccount.name);
-    const result = await this.authService.deleteAccount(userId, email, password);
+    const result = await this.authService.deleteAccount(
+      userId,
+      email,
+      password,
+    );
     return result;
   }
 }

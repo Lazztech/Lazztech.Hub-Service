@@ -11,20 +11,16 @@ import { AuthPasswordResetService } from './auth-password-reset/auth-password-re
 import { NotificationModule } from 'src/notification/notification.module';
 
 @Module({
-    imports: [
-        TypeOrmModule.forFeature([
-            PasswordReset,
-            User,
-            InAppNotification,
-            JoinUserInAppNotifications,
-        ]),
-        ServicesModule,
-        NotificationModule,
-    ],
-    providers: [
-        AuthResolver,
-        AuthService,
-        AuthPasswordResetService
-    ]
+  imports: [
+    TypeOrmModule.forFeature([
+      PasswordReset,
+      User,
+      InAppNotification,
+      JoinUserInAppNotifications,
+    ]),
+    ServicesModule,
+    NotificationModule,
+  ],
+  providers: [AuthResolver, AuthService, AuthPasswordResetService],
 })
 export class AuthModule {}

@@ -26,7 +26,7 @@ describe('HubActivityService', () => {
           load: [configuration],
           isGlobal: true,
         }),
-        HttpModule
+        HttpModule,
       ],
       providers: [
         HubActivityService,
@@ -59,7 +59,9 @@ describe('HubActivityService', () => {
     }).compile();
 
     service = module.get<HubActivityService>(HubActivityService);
-    joinUserHubRepo = module.get<Repository<JoinUserHub>>(getRepositoryToken(JoinUserHub));
+    joinUserHubRepo = module.get<Repository<JoinUserHub>>(
+      getRepositoryToken(JoinUserHub),
+    );
     hubRepo = module.get<Repository<Hub>>(getRepositoryToken(Hub));
     notificationService = module.get(NotificationService);
   });
@@ -78,11 +80,11 @@ describe('HubActivityService', () => {
       hubId,
       isOwner: true,
       hub: {
-        active: false
-      }
+        active: false,
+      },
     } as JoinUserHub);
     const expectedResult = {
-      active: true
+      active: true,
     } as Hub;
     jest.spyOn(hubRepo, 'save').mockResolvedValueOnce(expectedResult);
     jest.spyOn(joinUserHubRepo, 'find').mockResolvedValueOnce([
@@ -90,25 +92,25 @@ describe('HubActivityService', () => {
         hubId,
         userId,
         hub: {
-          name: "HubName",
-          image: "HubImage"
-        }
+          name: 'HubName',
+          image: 'HubImage',
+        },
       },
       {
         hubId,
         userId: 2,
         hub: {
-          name: "HubName",
-          image: "HubImage"
-        }
+          name: 'HubName',
+          image: 'HubImage',
+        },
       },
     ] as JoinUserHub[]);
-    const sendPushCall = jest.spyOn(notificationService, 'sendPushToUser').mockImplementation(
-      () => Promise.resolve()
-    );
-    const addInAppNotificationCall = jest.spyOn(notificationService, 'addInAppNotificationForUser').mockImplementation(
-      () => Promise.resolve()
-    );
+    const sendPushCall = jest
+      .spyOn(notificationService, 'sendPushToUser')
+      .mockImplementation(() => Promise.resolve());
+    const addInAppNotificationCall = jest
+      .spyOn(notificationService, 'addInAppNotificationForUser')
+      .mockImplementation(() => Promise.resolve());
     //Act
     const result = await service.activateHub(userId, hubId);
     //Assert
@@ -126,11 +128,11 @@ describe('HubActivityService', () => {
       hubId,
       isOwner: true,
       hub: {
-        active: true
-      }
+        active: true,
+      },
     } as JoinUserHub);
     const expectedResult = {
-      active: false
+      active: false,
     } as Hub;
     jest.spyOn(hubRepo, 'save').mockResolvedValueOnce(expectedResult);
     //Act

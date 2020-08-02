@@ -85,7 +85,11 @@ export class HubResolver {
     @Args({ name: 'inviteesEmail', type: () => String }) inviteesEmail: string,
   ): Promise<Invite> {
     this.logger.log(this.inviteUserToHub.name);
-    const invite: Invite = await this.hubService.inviteUserToHub(userId, hubId, inviteesEmail);
+    const invite: Invite = await this.hubService.inviteUserToHub(
+      userId,
+      hubId,
+      inviteesEmail,
+    );
     return invite;
   }
 
@@ -94,11 +98,16 @@ export class HubResolver {
   public async respondToHubInvite(
     @UserId() userId,
     @Args({ name: 'invitersId', type: () => ID }) invitersId: number,
-    @Args({ name: 'hubId', type: () => ID}) hubId: number,
+    @Args({ name: 'hubId', type: () => ID }) hubId: number,
     @Args({ name: 'accepted', type: () => Boolean }) accepted: boolean,
   ): Promise<JoinUserHub> {
     this.logger.log(this.respondToHubInvite.name);
-    const result = await this.hubService.respondToHubInvite(userId, invitersId, hubId, accepted);
+    const result = await this.hubService.respondToHubInvite(
+      userId,
+      invitersId,
+      hubId,
+      accepted,
+    );
     return result;
   }
 

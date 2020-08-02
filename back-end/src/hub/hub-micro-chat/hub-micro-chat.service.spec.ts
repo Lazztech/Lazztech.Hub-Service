@@ -29,7 +29,7 @@ describe('HubMicroChatService', () => {
           load: [configuration],
           isGlobal: true,
         }),
-        HttpModule
+        HttpModule,
       ],
       providers: [
         HubMicroChatService,
@@ -66,8 +66,12 @@ describe('HubMicroChatService', () => {
     }).compile();
 
     service = module.get<HubMicroChatService>(HubMicroChatService);
-    joinUserHubRepo = module.get<Repository<JoinUserHub>>(getRepositoryToken(JoinUserHub));
-    microChatRepo = module.get<Repository<MicroChat>>(getRepositoryToken(MicroChat));
+    joinUserHubRepo = module.get<Repository<JoinUserHub>>(
+      getRepositoryToken(JoinUserHub),
+    );
+    microChatRepo = module.get<Repository<MicroChat>>(
+      getRepositoryToken(MicroChat),
+    );
     userRepo = module.get<Repository<User>>(getRepositoryToken(User));
     hubRepo = module.get<Repository<Hub>>(getRepositoryToken(Hub));
     notificationService = module.get(NotificationService);
@@ -84,12 +88,12 @@ describe('HubMicroChatService', () => {
     const microChatId = 1;
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce({
       id: userId,
-      firstName: "Gian",
-      image: "image.png"
+      firstName: 'Gian',
+      image: 'image.png',
     } as User);
     jest.spyOn(hubRepo, 'findOne').mockResolvedValueOnce({
       id: hubId,
-      name: "TestHubName",
+      name: 'TestHubName',
       usersConnection: [
         {
           userId,
@@ -99,20 +103,20 @@ describe('HubMicroChatService', () => {
         },
         {
           userId: 3,
-        }
+        },
       ],
       microChats: [
         {
-          id: microChatId
-        }
-      ]
+          id: microChatId,
+        },
+      ],
     } as Hub);
-    const sendPushToUserCall = jest.spyOn(notificationService, 'sendPushToUser').mockImplementation(
-      () => Promise.resolve()
-    );
-    const addInAppNotificationForUserCall = jest.spyOn(notificationService, 'addInAppNotificationForUser').mockImplementation(
-      () => Promise.resolve()
-    );
+    const sendPushToUserCall = jest
+      .spyOn(notificationService, 'sendPushToUser')
+      .mockImplementation(() => Promise.resolve());
+    const addInAppNotificationForUserCall = jest
+      .spyOn(notificationService, 'addInAppNotificationForUser')
+      .mockImplementation(() => Promise.resolve());
     //Act
     await service.microChatToHub(userId, hubId, microChatId);
     //Assert
@@ -124,16 +128,18 @@ describe('HubMicroChatService', () => {
     //Arrange
     const userId = 1;
     const hubId = 1;
-    const microChatText = "Hello";
+    const microChatText = 'Hello';
     jest.spyOn(joinUserHubRepo, 'findOne').mockResolvedValueOnce({
       userId,
       hubId,
     } as JoinUserHub);
     const expectResult = {
       hubId,
-      text: microChatText
+      text: microChatText,
     } as MicroChat;
-    const saveCall = jest.spyOn(microChatRepo, 'save').mockResolvedValueOnce(expectResult);
+    const saveCall = jest
+      .spyOn(microChatRepo, 'save')
+      .mockResolvedValueOnce(expectResult);
     //Act
     const result = await service.createMicroChat(userId, hubId, microChatText);
     //Assert
@@ -152,16 +158,18 @@ describe('HubMicroChatService', () => {
       hub: {
         microChats: [
           {
-            id: microChatId
+            id: microChatId,
           },
           {
-            id: 2
-          }
-        ]
+            id: 2,
+          },
+        ],
       },
-      user: {}
+      user: {},
     } as JoinUserHub);
-    const deleteCall = jest.spyOn(microChatRepo, 'remove').mockResolvedValueOnce({} as MicroChat)
+    const deleteCall = jest
+      .spyOn(microChatRepo, 'remove')
+      .mockResolvedValueOnce({} as MicroChat);
     //Act
     await service.deleteMicroChat(userId, hubId, microChatId);
     //Assert

@@ -24,7 +24,7 @@ describe('AuthService', () => {
           load: [configuration],
           isGlobal: true,
         }),
-        HttpModule
+        HttpModule,
       ],
       providers: [
         AuthService,
@@ -61,10 +61,10 @@ describe('AuthService', () => {
 
   it('should return for register', async () => {
     //Arrange
-    const firstName = "Gian";
-    const lastName = "Lazzarini";
-    const email = "gianlazzarini@gmail.com";
-    const password = "Password123";
+    const firstName = 'Gian';
+    const lastName = 'Lazzarini';
+    const email = 'gianlazzarini@gmail.com';
+    const password = 'Password123';
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(undefined);
     jest.spyOn(userRepo, 'create').mockReturnValueOnce(undefined);
     const saveCall = jest.spyOn(userRepo, 'save').mockResolvedValueOnce({
@@ -72,9 +72,9 @@ describe('AuthService', () => {
       lastName,
       email,
     } as User);
-    jest.spyOn(notificationService, 'addInAppNotificationForUser').mockImplementationOnce(
-      () => Promise.resolve()
-    );
+    jest
+      .spyOn(notificationService, 'addInAppNotificationForUser')
+      .mockImplementationOnce(() => Promise.resolve());
     //Act
     const result = await service.register(firstName, lastName, email, password);
     //Assert
@@ -84,12 +84,12 @@ describe('AuthService', () => {
 
   it('should return accessToken for login', async () => {
     //Arrange
-    const password = "Password123";
-    const email = "gianlazzarini@gmail.com";
+    const password = 'Password123';
+    const email = 'gianlazzarini@gmail.com';
     const testUser = {
       id: 1,
       email,
-      password: "$2a$12$kYPNrlyLr7z4D.V3dEHFn.kQD2nRC0x7fINzPgfoSW4D4GQhyeGTO",
+      password: '$2a$12$kYPNrlyLr7z4D.V3dEHFn.kQD2nRC0x7fINzPgfoSW4D4GQhyeGTO',
     } as User;
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
 
@@ -102,20 +102,22 @@ describe('AuthService', () => {
 
   it('should return for changePassword', async () => {
     //Arrange
-    const password = "Password123";
-    const email = "gianlazzarini@gmail.com";
+    const password = 'Password123';
+    const email = 'gianlazzarini@gmail.com';
     const testUser = {
       id: 1,
       email,
-      password: "$2a$12$kYPNrlyLr7z4D.V3dEHFn.kQD2nRC0x7fINzPgfoSW4D4GQhyeGTO",
+      password: '$2a$12$kYPNrlyLr7z4D.V3dEHFn.kQD2nRC0x7fINzPgfoSW4D4GQhyeGTO',
     } as User;
-    const newPassword = "NewPassword123";
+    const newPassword = 'NewPassword123';
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
-    const saveCall = jest.spyOn(userRepo, 'save').mockResolvedValueOnce({} as User);
+    const saveCall = jest
+      .spyOn(userRepo, 'save')
+      .mockResolvedValueOnce({} as User);
     //Act
     const result = await service.changePassword(testUser.id, {
       oldPassword: password,
-      newPassword
+      newPassword,
     });
     //Assert
     expect(result).toBeTruthy();
@@ -124,16 +126,22 @@ describe('AuthService', () => {
 
   it('should return for deleteAccount', async () => {
     //Arrange
-    const password = "Password123";
+    const password = 'Password123';
     const testUser = {
       id: 1,
-      email: "gianlazzarini@gmail.com",
-      password: "$2a$12$kYPNrlyLr7z4D.V3dEHFn.kQD2nRC0x7fINzPgfoSW4D4GQhyeGTO",
+      email: 'gianlazzarini@gmail.com',
+      password: '$2a$12$kYPNrlyLr7z4D.V3dEHFn.kQD2nRC0x7fINzPgfoSW4D4GQhyeGTO',
     } as User;
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
-    const removeCall = jest.spyOn(userRepo, 'remove').mockResolvedValueOnce({} as User);
+    const removeCall = jest
+      .spyOn(userRepo, 'remove')
+      .mockResolvedValueOnce({} as User);
     //Act
-    const result = await service.deleteAccount(testUser.id, testUser.email, password);
+    const result = await service.deleteAccount(
+      testUser.id,
+      testUser.email,
+      password,
+    );
     //Assert
     expect(result).toBeTruthy();
     expect(removeCall).toHaveBeenCalled();

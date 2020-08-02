@@ -9,9 +9,7 @@ import { UserService } from './user.service';
 export class UserResolver {
   private logger = new Logger(UserResolver.name, true);
 
-  constructor(
-    private userService: UserService,
-  ) {
+  constructor(private userService: UserService) {
     this.logger.log('constructor');
   }
 
@@ -32,7 +30,9 @@ export class UserResolver {
   ): Promise<User> {
     this.logger.log(this.editUserDetails.name);
     const user = await this.userService.editUserDetails(userId, {
-      firstName, lastName, description
+      firstName,
+      lastName,
+      description,
     });
     return user;
   }
@@ -58,5 +58,4 @@ export class UserResolver {
     let user = await this.userService.changeUserImage(userId, newImage);
     return user;
   }
-
 }

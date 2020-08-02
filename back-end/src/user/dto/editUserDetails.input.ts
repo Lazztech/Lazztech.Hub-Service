@@ -1,5 +1,5 @@
 export class EditUserDetails {
-    firstName: string;
-    lastName: string;
-    description: string;
+  firstName: string;
+  lastName: string;
+  description: string;
 }

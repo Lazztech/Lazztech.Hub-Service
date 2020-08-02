@@ -6,21 +6,19 @@ import * as mozjpeg from 'imagemin-mozjpeg';
 
 @Injectable()
 export class ImageFileService {
+  public isJpeg(input: Buffer) {
+    return isJpg(input);
+  }
 
-    public isJpeg(input: Buffer) {
-        return isJpg(input);
-    }
+  public convertToJpeg(input: Buffer) {
+    return sharp(input)
+      .jpeg()
+      .toBuffer();
+  }
 
-    public convertToJpeg(input: Buffer) {
-        return sharp(input)
-            .jpeg()
-            .toBuffer();
-    }
-
-    public async compress(input: Buffer) {
-        return await imagemin.buffer(input, {
-            plugins: [this.convertToJpeg, mozjpeg({ quality: 70 })]
-        })
-    }
-
+  public async compress(input: Buffer) {
+    return await imagemin.buffer(input, {
+      plugins: [this.convertToJpeg, mozjpeg({ quality: 70 })],
+    });
+  }
 }

@@ -50,7 +50,9 @@ describe('UserService', () => {
 
     service = module.get<UserService>(UserService);
     // Save the instance of the repository and set the correct generics
-    joinUserHubRepo = module.get<Repository<JoinUserHub>>(getRepositoryToken(JoinUserHub));
+    joinUserHubRepo = module.get<Repository<JoinUserHub>>(
+      getRepositoryToken(JoinUserHub),
+    );
     userRepo = module.get<Repository<User>>(getRepositoryToken(User));
     inviteRepo = module.get<Repository<Invite>>(getRepositoryToken(Invite));
     emailService = module.get<EmailService>(EmailService);
@@ -66,9 +68,9 @@ describe('UserService', () => {
     const userId = 1;
     const testUser = {
       id: userId,
-      firstName: "Test",
-      lastName: "Test",
-    } as User
+      firstName: 'Test',
+      lastName: 'Test',
+    } as User;
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
     //Act
     const result = await service.getUser(userId);
@@ -85,7 +87,7 @@ describe('UserService', () => {
         hubId: 1,
         user: {},
         hub: {
-          name: "hub1"
+          name: 'hub1',
         } as Hub,
         isOwner: true,
       } as JoinUserHub,
@@ -94,7 +96,7 @@ describe('UserService', () => {
         hubId: 2,
         user: {},
         hub: {
-          name: "hub2"
+          name: 'hub2',
         } as Hub,
         isOwner: true,
       } as JoinUserHub,
@@ -112,14 +114,14 @@ describe('UserService', () => {
         userId: testUserId,
         isOwner: false,
         hub: {
-          name: "hub1"
+          name: 'hub1',
         } as Hub,
       } as JoinUserHub,
       {
         userId: testUserId,
         isOwner: false,
         hub: {
-          name: "hub2"
+          name: 'hub2',
         } as Hub,
       } as JoinUserHub,
     ];
@@ -133,21 +135,21 @@ describe('UserService', () => {
     //Arrange
     const userId = 1;
     const testDetails = {
-      firstName: "FirstName",
-      lastName: "LastName",
-      description: "Description"
+      firstName: 'FirstName',
+      lastName: 'LastName',
+      description: 'Description',
     } as EditUserDetails;
     const testUser = {
       id: userId,
-      firstName: "Gian",
-      lastName: "Lazzarini",
-      description: "Desc."
+      firstName: 'Gian',
+      lastName: 'Lazzarini',
+      description: 'Desc.',
     } as User;
     const expectedResult = {
       id: userId,
       firstName: testDetails.firstName,
       lastName: testDetails.lastName,
-      description: testDetails.description
+      description: testDetails.description,
     } as User;
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
     jest.spyOn(userRepo, 'save').mockResolvedValueOnce(expectedResult);
@@ -164,12 +166,12 @@ describe('UserService', () => {
     const testUser = {
       id: userId,
       firstName: 'Gian',
-      email: 'gian@lazztech.com'
+      email: 'gian@lazztech.com',
     } as User;
     const expectedResult = {
       id: userId,
       firstName: testUser.firstName,
-      email: newEmail
+      email: newEmail,
     } as User;
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
     jest.spyOn(userRepo, 'save').mockResolvedValueOnce(expectedResult);
@@ -182,20 +184,22 @@ describe('UserService', () => {
   it('should return for changeUserImage', async () => {
     //Arrange
     const userId = 1;
-    const newImage = "MockBase64String";
+    const newImage = 'MockBase64String';
     const testUser = {
       id: userId,
-      image: 'oldIMage'
+      image: 'oldIMage',
     } as User;
     const expectedResult = {
       id: userId,
-      image: `https://x.com/${newImage}.png`
+      image: `https://x.com/${newImage}.png`,
     } as User;
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
-    const deletePublicImageMock = jest.spyOn(fileService, 'deletePublicImageFromUrl').mockImplementation(
-      () => Promise.resolve()
-    );
-    jest.spyOn(fileService, 'storePublicImageFromBase64').mockResolvedValueOnce(expectedResult.image);
+    const deletePublicImageMock = jest
+      .spyOn(fileService, 'deletePublicImageFromUrl')
+      .mockImplementation(() => Promise.resolve());
+    jest
+      .spyOn(fileService, 'storePublicImageFromBase64')
+      .mockResolvedValueOnce(expectedResult.image);
     jest.spyOn(userRepo, 'save').mockResolvedValueOnce(expectedResult);
     //Act
     const result = await service.changeUserImage(userId, newImage);

@@ -78,10 +78,11 @@ export class UserService {
     if (user.image) {
       await this.fileService.deletePublicImageFromUrl(user.image);
     }
-    const imageUrl = await this.fileService.storePublicImageFromBase64(newImage);
+    const imageUrl = await this.fileService.storePublicImageFromBase64(
+      newImage,
+    );
     user.image = imageUrl;
     user = await this.userRepository.save(user);
     return user;
   }
-
 }

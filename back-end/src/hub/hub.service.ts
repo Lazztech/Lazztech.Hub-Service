@@ -125,10 +125,19 @@ export class HubService {
     return invite;
   }
 
-  public async respondToHubInvite(inviteesId: number, invitersId: number, hubId: number, accepted: boolean) {
+  public async respondToHubInvite(
+    inviteesId: number,
+    invitersId: number,
+    hubId: number,
+    accepted: boolean,
+  ) {
     this.logger.log(this.respondToHubInvite.name);
     if (accepted) {
-      const invite = await this.inviteRepository.findOne({ inviteesId, invitersId, hubId });
+      const invite = await this.inviteRepository.findOne({
+        inviteesId,
+        invitersId,
+        hubId,
+      });
 
       let newRelationship = this.joinUserHubRepository.create({
         userId: invite.inviteesId,
@@ -145,9 +154,7 @@ export class HubService {
   private validateInvitee(invitee: User, inviteesEmail: string, userId: any) {
     this.logger.log(this.validateInvitee.name);
     if (!invitee) {
-      throw new Error(
-        `Did not find user to invite by email address`,
-      );
+      throw new Error(`Did not find user to invite by email address`);
     }
     if (invitee.id == userId) {
       throw new Error(`Cannot invite self to hub.`);
