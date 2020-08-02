@@ -65,8 +65,8 @@ describe('HubService', () => {
         },
         {
           provide: getRepositoryToken(Invite),
-          useClass: Repository
-        }
+          useClass: Repository,
+        },
       ],
     }).compile();
 
