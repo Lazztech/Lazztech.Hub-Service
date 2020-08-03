@@ -185,7 +185,7 @@ describe('HubService', () => {
     const invite = {
       hubId,
       invitersId: userId,
-      inviteesId: invitee.id
+      inviteesId: invitee.id,
     } as Invite;
 
     jest.spyOn(joinUserHubRepo, 'findOne').mockResolvedValueOnce({
