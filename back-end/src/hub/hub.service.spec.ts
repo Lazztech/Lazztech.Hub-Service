@@ -23,6 +23,7 @@ describe('HubService', () => {
   let hubRepo: Repository<Hub>;
   let fileService: FileService;
   let notificationService: NotificationService;
+  let inviteRepo: Repository<Invite>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -78,6 +79,7 @@ describe('HubService', () => {
     hubRepo = module.get<Repository<Hub>>(getRepositoryToken(Hub));
     fileService = module.get<FileService>(FileService);
     notificationService = module.get<NotificationService>(NotificationService);
+    inviteRepo = module.get<Repository<Invite>>(getRepositoryToken(Invite));
   });
 
   it('should be defined', () => {
@@ -181,10 +183,10 @@ describe('HubService', () => {
     } as User;
 
     const invite = {
-      userId: invitee.id,
       hubId,
-      isOwner: false,
-    } as JoinUserHub;
+      invitersId: userId,
+      inviteesId: invitee.id
+    } as Invite;
 
     jest.spyOn(joinUserHubRepo, 'findOne').mockResolvedValueOnce({
       userId,
@@ -197,7 +199,7 @@ describe('HubService', () => {
       },
     } as JoinUserHub);
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(invitee);
-    jest.spyOn(joinUserHubRepo, 'create').mockReturnValueOnce(invite);
+    jest.spyOn(inviteRepo, 'create').mockReturnValueOnce(invite);
     const addInAppNotificationForUserCall = jest
       .spyOn(notificationService, 'addInAppNotificationForUser')
       .mockImplementationOnce(() => Promise.resolve());
@@ -205,7 +207,7 @@ describe('HubService', () => {
       .spyOn(notificationService, 'sendPushToUser')
       .mockImplementationOnce(() => Promise.resolve());
     const saveCall = jest
-      .spyOn(joinUserHubRepo, 'save')
+      .spyOn(inviteRepo, 'save')
       .mockResolvedValueOnce(invite);
     // Act
     await hubService.inviteUserToHub(userId, hubId, invitee.email);
