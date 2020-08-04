@@ -42,14 +42,14 @@ export class HubService {
       userId,
     });
 
-    const hubs = userHubRelationships.map(x => x.hub);
+    const hubs = await Promise.all(userHubRelationships.map(x => x.hub));
     const commonHubRelationships = [];
     for (const hub of hubs) {
-      const result = hub.usersConnection.find(x => x.userId == otherUsersId);
+      const result = (await hub.usersConnection).find(
+        x => x.userId == otherUsersId,
+      );
       if (result) {
-        commonHubRelationships.push(
-          hub.usersConnection.find(x => x.userId == otherUsersId),
-        );
+        commonHubRelationships.push(result);
       }
     }
 
@@ -79,16 +79,17 @@ export class HubService {
     });
     invite = await this.inviteRepository.save(invite);
 
+    const hub = await userHubRelationship.hub;
     await this.notificationService.addInAppNotificationForUser(userId, {
-      thumbnail: userHubRelationship.hub.image,
-      header: `You're invited to "${userHubRelationship.hub.name}" hub.`,
+      thumbnail: hub.image,
+      header: `You're invited to "${hub.name}" hub.`,
       text: `View the invite.`,
       date: Date.now().toString(),
       actionLink: `preview-hub/${hubId}`,
     });
 
     await this.notificationService.sendPushToUser(userId, {
-      title: `You're invited to "${userHubRelationship.hub.name}" hub.`,
+      title: `You're invited to "${hub.name}" hub.`,
       body: `View the invite.`,
       click_action: `preview-hub/${hubId}`,
     });
@@ -151,16 +152,16 @@ export class HubService {
       userId,
     });
 
-    const usersHubs = userHubRelationships.map(x => x.hub);
+    const usersHubs = await Promise.all(userHubRelationships.map(x => x.hub));
 
     let commonConnections: JoinUserHub[] = [];
     for (const hub of usersHubs) {
-      commonConnections = commonConnections.concat(hub.usersConnection);
+      commonConnections = commonConnections.concat(await hub.usersConnection);
     }
 
-    const resultingOtherUsers: User[] = commonConnections
-      .filter(x => x.userId != userId)
-      .map(x => x.user);
+    const resultingOtherUsers: User[] = await Promise.all(
+      commonConnections.filter(x => x.userId != userId).map(x => x.user),
+    );
 
     const uniqueUsers: User[] = [];
     for (let index = 0; index < resultingOtherUsers.length; index++) {
@@ -228,7 +229,7 @@ export class HubService {
       isOwner: true,
     });
 
-    let hub = joinUserHubResult.hub;
+    let hub = await joinUserHubResult.hub;
     hub.name = name;
     hub.description = description;
     hub = await this.hubRepository.save(hub);
@@ -243,7 +244,7 @@ export class HubService {
       isOwner: true,
     });
 
-    let hub = joinUserHubResult.hub;
+    let hub = await joinUserHubResult.hub;
 
     if (hub.image) {
       await this.fileService.deletePublicImageFromUrl(hub.image);
@@ -300,8 +301,8 @@ export class HubService {
     const results: Hub[] = [];
     for (let index = 0; index < userHubRelationship.length; index++) {
       const element = userHubRelationship[index];
-      if (element.hub.name.toLowerCase().includes(search)) {
-        results.push(element.hub);
+      if ((await element.hub).name.toLowerCase().includes(search)) {
+        results.push(await element.hub);
       }
     }
 

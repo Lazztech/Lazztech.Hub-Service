@@ -42,7 +42,7 @@ export class HubActivityService {
       );
     }
 
-    let hub = hubRelationship.hub;
+    let hub = await hubRelationship.hub;
     hub.active = true;
     hub = await this.hubRepository.save(hub);
 
@@ -64,7 +64,7 @@ export class HubActivityService {
       );
     }
 
-    let hub = hubRelationship.hub;
+    let hub = await hubRelationship.hub;
     hub.active = false;
     hub = await this.hubRepository.save(hub);
     return hub;
@@ -78,8 +78,9 @@ export class HubActivityService {
     });
 
     for (const joinUserHub of hubRelationships) {
+      const hub = await joinUserHub.hub;
       await this.notificationService.sendPushToUser(joinUserHub.userId, {
-        title: `"${joinUserHub.hub.name}" hub became active`,
+        title: `"${hub.name}" hub became active`,
         body: `Touch to go to hub.`,
         click_action: '',
       } as PushNotificationDto);
@@ -87,8 +88,8 @@ export class HubActivityService {
       await this.notificationService.addInAppNotificationForUser(
         joinUserHub.userId,
         {
-          thumbnail: joinUserHub.hub.image,
-          header: `"${joinUserHub.hub.name}" hub became active`,
+          thumbnail: hub.image,
+          header: `"${hub.name}" hub became active`,
           text: `Touch to go to hub.`,
           date: Date.now().toString(),
           actionLink: undefined,

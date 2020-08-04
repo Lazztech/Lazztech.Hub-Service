@@ -26,7 +26,7 @@ export class AuthPasswordResetService {
       email: details.usersEmail,
     });
 
-    const pinMatches = user.passwordReset.pin === details.resetPin;
+    const pinMatches = (await user.passwordReset).pin === details.resetPin;
 
     if (pinMatches) {
       const hashedPassword = await bcrypt.hash(details.newPassword, 12);
@@ -51,7 +51,8 @@ export class AuthPasswordResetService {
         html: `<b>Hello, <strong>${user.firstName}</strong>, Please paste in the follow to reset your password: ${pin}</p>`,
       });
 
-      user.passwordReset = { pin } as PasswordReset;
+      //This is ugly but needed for assignment of lazy relation
+      user.passwordReset = Promise.resolve({ pin } as PasswordReset);
       // TODO does this actually save the passwordReset?
       await this.userRepository.save(user);
 

@@ -31,10 +31,7 @@ export class NotificationResolver {
     @UserId() userId,
   ): Promise<InAppNotification[]> {
     this.logger.log(this.getInAppNotifications.name);
-    const usersNotifications = await this.notificationService.getInAppNotifications(
-      userId,
-    );
-    return usersNotifications;
+    return await this.notificationService.getInAppNotifications(userId);
   }
 
   @UseGuards(AuthGuard)

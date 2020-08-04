@@ -33,7 +33,9 @@ export class UserService {
       userId,
       isOwner: true,
     });
-    const hubs: Hub[] = joinUserHubResults.map(result => result.hub);
+    const hubs: Hub[] = await Promise.all(
+      joinUserHubResults.map(result => result.hub),
+    );
     return hubs;
   }
 
@@ -44,7 +46,9 @@ export class UserService {
       userId,
       isOwner: false,
     });
-    const hubs: Hub[] = joinUserHubResults.map(result => result.hub);
+    const hubs: Hub[] = await Promise.all(
+      joinUserHubResults.map(result => result.hub),
+    );
     return hubs;
   }
 
