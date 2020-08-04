@@ -40,10 +40,7 @@ export class NotificationService {
 
   public async addUserFcmNotificationToken(userId: any, token: string) {
     this.logger.log(this.addUserFcmNotificationToken.name);
-    const user = await this.userRepository.findOne({
-      where: { id: userId },
-      relations: ['userDevices'],
-    });
+    const user = await this.userRepository.findOne({ id: userId });
 
     if (!user.userDevices.find(x => x.fcmPushUserToken == token)) {
       const userDevice = new UserDevice();
@@ -59,10 +56,7 @@ export class NotificationService {
   public async getInAppNotifications(userId: any) {
     this.logger.log(this.getInAppNotifications.name);
     const joinInAppNotifications = await this.joinUserInAppNotificationRepository.find(
-      {
-        where: { userId },
-        relations: ['inAppNotification'],
-      },
+      { userId },
     );
 
     const usersNotifications: InAppNotification[] = [];
@@ -118,10 +112,7 @@ export class NotificationService {
   ) {
     this.logger.log(this.sendPushToUser.name);
 
-    const user = await this.userRepository.findOne({
-      where: { id: userId },
-      relations: ['userDevices'],
-    });
+    const user = await this.userRepository.findOne({ id: userId });
     const fcmUserTokens = user.userDevices.map(x => x.fcmPushUserToken);
 
     for (const iterator of fcmUserTokens) {

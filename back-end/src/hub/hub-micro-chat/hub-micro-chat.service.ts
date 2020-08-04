@@ -30,10 +30,7 @@ export class HubMicroChatService {
 
     const fromUser = await this.userRepository.findOne(userId);
     const hub = await this.hubRepository.findOne({
-      where: {
-        id: hubId,
-      },
-      relations: ['usersConnection', 'microChats'],
+      id: hubId,
     });
     const microChat = hub.microChats.find(x => x.id == microChatId);
 
@@ -59,11 +56,8 @@ export class HubMicroChatService {
   async createMicroChat(userId: any, hubId: number, microChatText: string) {
     this.logger.log(this.createMicroChat.name);
     const usersConnection = await this.joinUserHubRepository.findOne({
-      where: {
-        userId,
-        hubId,
-      },
-      relations: ['user', 'hub', 'hub.microChats'],
+      userId,
+      hubId,
     });
 
     if (!usersConnection) {
@@ -86,11 +80,8 @@ export class HubMicroChatService {
   async deleteMicroChat(userId: number, hubId: number, microChatId: number) {
     this.logger.log(this.deleteMicroChat.name);
     const usersConnection = await this.joinUserHubRepository.findOne({
-      where: {
-        userId,
-        hubId,
-      },
-      relations: ['user', 'hub', 'hub.microChats'],
+      userId,
+      hubId,
     });
 
     if (!usersConnection) {

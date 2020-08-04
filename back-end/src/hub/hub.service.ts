@@ -28,44 +28,18 @@ export class HubService {
 
   async getOneUserHub(userId: any, hubId: number) {
     this.logger.log(this.getOneUserHub.name);
-    const userHubRelationship = await this.joinUserHubRepository.findOne({
-      where: {
-        hubId,
-        userId,
-      },
-      relations: [
-        'hub',
-        'hub.usersConnection',
-        'hub.usersConnection.user',
-        'hub.microChats',
-      ],
-    });
-    return userHubRelationship;
+    return await this.joinUserHubRepository.findOne({ hubId, userId });
   }
 
   async getUserHubs(userId: any) {
     this.logger.log(this.getUserHubs.name);
-    const userHubRelationships = await this.joinUserHubRepository.find({
-      where: {
-        userId,
-      },
-      relations: ['hub', 'hub.usersConnection'],
-    });
-    return userHubRelationships;
+    return await this.joinUserHubRepository.find({ userId });
   }
 
   public async commonUsersHubs(userId: any, otherUsersId: any) {
     this.logger.log(this.commonUsersHubs.name);
     const userHubRelationships = await this.joinUserHubRepository.find({
-      where: {
-        userId,
-      },
-      relations: [
-        'hub',
-        'hub.usersConnection',
-        'hub.usersConnection.hub',
-        'hub.usersConnection.hub.usersConnection',
-      ],
+      userId,
     });
 
     const hubs = userHubRelationships.map(x => x.hub);
@@ -85,12 +59,9 @@ export class HubService {
   async inviteUserToHub(userId: any, hubId: number, inviteesEmail: string) {
     this.logger.log(this.inviteUserToHub.name);
     const userHubRelationship = await this.joinUserHubRepository.findOne({
-      where: {
-        userId,
-        hubId,
-        isOwner: true,
-      },
-      relations: ['hub'],
+      userId,
+      hubId,
+      isOwner: true,
     });
     this.validateRelationship(userHubRelationship, hubId, userId);
 
@@ -177,10 +148,7 @@ export class HubService {
   async usersPeople(userId: any) {
     this.logger.log(this.usersPeople.name);
     const userHubRelationships = await this.joinUserHubRepository.find({
-      where: {
-        userId,
-      },
-      relations: ['hub', 'hub.usersConnection', 'hub.usersConnection.user'],
+      userId,
     });
 
     const usersHubs = userHubRelationships.map(x => x.hub);
@@ -217,12 +185,7 @@ export class HubService {
       hubId: hub.id,
       isOwner: true,
     });
-    joinUserHub = await this.joinUserHubRepository.save(joinUserHub);
-    joinUserHub = await this.joinUserHubRepository.findOne({
-      where: joinUserHub,
-      relations: ['hub', 'hub.usersConnection'],
-    });
-    return joinUserHub;
+    return await this.joinUserHubRepository.save(joinUserHub);
   }
 
   async deleteHub(userId: any, hubId: number) {
@@ -260,12 +223,9 @@ export class HubService {
   async editHub(userId: any, hubId: number, name: string, description: string) {
     this.logger.log(this.editHub.name);
     const joinUserHubResult = await this.joinUserHubRepository.findOne({
-      where: {
-        userId,
-        hubId,
-        isOwner: true,
-      },
-      relations: ['hub'],
+      userId,
+      hubId,
+      isOwner: true,
     });
 
     let hub = joinUserHubResult.hub;
@@ -278,12 +238,9 @@ export class HubService {
   async changeHubImage(userId: any, hubId: number, newImage: string) {
     this.logger.log(this.changeHubImage.name);
     const joinUserHubResult = await this.joinUserHubRepository.findOne({
-      where: {
-        userId,
-        hubId,
-        isOwner: true,
-      },
-      relations: ['hub'],
+      userId,
+      hubId,
+      isOwner: true,
     });
 
     let hub = joinUserHubResult.hub;
@@ -337,10 +294,7 @@ export class HubService {
   async searchHubByName(userId: any, search: string) {
     this.logger.log(this.searchHubByName.name);
     const userHubRelationship = await this.joinUserHubRepository.find({
-      where: {
-        userId,
-      },
-      relations: ['hub'],
+      userId,
     });
     search = search.toLowerCase();
     const results: Hub[] = [];

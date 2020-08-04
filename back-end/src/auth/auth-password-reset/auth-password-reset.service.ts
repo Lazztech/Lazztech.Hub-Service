@@ -23,8 +23,7 @@ export class AuthPasswordResetService {
   public async resetPassword(details: ResetPassword) {
     this.logger.log(this.resetPassword.name);
     const user = await this.userRepository.findOne({
-      where: { email: details.usersEmail },
-      relations: ['passwordReset'],
+      email: details.usersEmail,
     });
 
     const pinMatches = user.passwordReset.pin === details.resetPin;
@@ -41,10 +40,7 @@ export class AuthPasswordResetService {
 
   async sendPasswordResetEmail(email: string) {
     this.logger.log(this.sendPasswordResetEmail.name);
-    const user = await this.userRepository.findOne({
-      where: { email },
-      relations: ['passwordReset'],
-    });
+    const user = await this.userRepository.findOne({ email });
 
     if (user) {
       const pin = await this.generatePasswordResetPin();

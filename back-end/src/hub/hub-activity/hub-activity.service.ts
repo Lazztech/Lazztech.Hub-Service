@@ -31,12 +31,9 @@ export class HubActivityService {
   async activateHub(userId: any, hubId: number) {
     this.logger.log(this.activateHub.name);
     const hubRelationship = await this.joinUserHubRepository.findOne({
-      where: {
-        userId,
-        hubId,
-        isOwner: true,
-      },
-      relations: ['hub'],
+      userId,
+      hubId,
+      isOwner: true,
     });
 
     if (!hubRelationship) {
@@ -56,12 +53,9 @@ export class HubActivityService {
   async deactivateHub(userId: any, hubId: number) {
     this.logger.log(this.deactivateHub.name);
     const hubRelationship = await this.joinUserHubRepository.findOne({
-      where: {
-        userId,
-        hubId,
-        isOwner: true,
-      },
-      relations: ['hub'],
+      userId,
+      hubId,
+      isOwner: true,
     });
 
     if (!hubRelationship) {
@@ -80,10 +74,7 @@ export class HubActivityService {
     this.logger.log(this.notifyOfHubActivated.name);
 
     const hubRelationships = await this.joinUserHubRepository.find({
-      where: {
-        hubId,
-      },
-      relations: ['hub'],
+      hubId,
     });
 
     for (const joinUserHub of hubRelationships) {

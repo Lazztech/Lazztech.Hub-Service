@@ -30,11 +30,8 @@ export class UserService {
     this.logger.log(this.getUsersOwnedHubs.name);
 
     const joinUserHubResults = await this.joinUserHubRepository.find({
-      where: {
-        userId,
-        isOwner: true,
-      },
-      relations: ['hub'],
+      userId,
+      isOwner: true,
     });
     const hubs: Hub[] = joinUserHubResults.map(result => result.hub);
     return hubs;
@@ -44,11 +41,8 @@ export class UserService {
     this.logger.log(this.memberOfHubs.name);
 
     const joinUserHubResults = await this.joinUserHubRepository.find({
-      where: {
-        userId,
-        isOwner: false,
-      },
-      relations: ['hub'],
+      userId,
+      isOwner: false,
     });
     const hubs: Hub[] = joinUserHubResults.map(result => result.hub);
     return hubs;
