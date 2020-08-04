@@ -20,5 +20,5 @@ export class UserDevice {
     user => user.userDevices,
     { primary: true, onDelete: 'CASCADE' },
   )
-  public user: User;
+  public user: Promise<User>;
 }

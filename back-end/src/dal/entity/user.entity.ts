@@ -50,25 +50,25 @@ export class User {
     () => JoinUserInAppNotifications,
     userInAppNotificationsJoin => userInAppNotificationsJoin.user,
   )
-  public inAppNotificationsConnection: JoinUserInAppNotifications[];
+  public inAppNotificationsConnection: Promise<JoinUserInAppNotifications[]>;
 
   @OneToMany(
     type => JoinUserHub,
     joinUserHub => joinUserHub.user,
   )
-  public hubsConnection: JoinUserHub[];
+  public hubsConnection: Promise<JoinUserHub[]>;
 
   @OneToOne(() => PasswordReset, {
     cascade: true,
   })
   @JoinColumn()
-  public passwordReset: PasswordReset;
+  public passwordReset: Promise<PasswordReset>;
 
   @OneToMany(
     () => UserDevice,
     userDevice => userDevice.user,
   )
-  public userDevices: UserDevice[];
+  public userDevices: Promise<UserDevice[]>;
 
   @OneToMany(
     () => Invite,

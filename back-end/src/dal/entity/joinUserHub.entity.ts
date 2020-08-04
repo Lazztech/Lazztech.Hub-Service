@@ -21,7 +21,7 @@ export class JoinUserHub {
     { onDelete: 'CASCADE' },
   )
   @JoinColumn()
-  public user: User;
+  public user: Promise<User>;
 
   @Field(type => Hub)
   @ManyToOne(
@@ -30,7 +30,7 @@ export class JoinUserHub {
     { onDelete: 'CASCADE' },
   )
   @JoinColumn()
-  public hub: Hub;
+  public hub: Promise<Hub>;
 
   @Field()
   @Column()

@@ -33,5 +33,5 @@ export class InAppNotification {
     () => JoinUserInAppNotifications,
     joinUserInAppNotifications => joinUserInAppNotifications.user,
   )
-  public usersConnection: JoinUserInAppNotifications[];
+  public usersConnection: Promise<JoinUserInAppNotifications[]>;
 }

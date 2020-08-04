@@ -40,19 +40,19 @@ export class Hub {
     type => JoinUserHub,
     joinUserHub => joinUserHub.hub,
   )
-  public usersConnection: JoinUserHub[];
+  public usersConnection: Promise<JoinUserHub[]>;
 
   @Field(() => [MicroChat], { nullable: true })
   @OneToMany(
     type => MicroChat,
     microChat => microChat.hub,
   )
-  public microChats: MicroChat[];
+  public microChats: Promise<MicroChat[]>;
 
   @Field(() => [Invite], { nullable: true })
   @OneToMany(
     () => Invite,
     invite => invite.hub,
   )
-  public invites: [];
+  public invites: Promise<Invite[]>;
 }

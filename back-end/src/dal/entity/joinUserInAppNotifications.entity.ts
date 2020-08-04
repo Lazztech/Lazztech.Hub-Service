@@ -21,7 +21,7 @@ export class JoinUserInAppNotifications {
     { primary: true, onDelete: 'CASCADE' },
   )
   @JoinColumn()
-  public user: User;
+  public user: Promise<User>;
 
   @Field(type => InAppNotification)
   @ManyToOne(
@@ -29,5 +29,5 @@ export class JoinUserInAppNotifications {
     inAppNotification => inAppNotification.usersConnection,
   )
   @JoinColumn()
-  public inAppNotification: InAppNotification;
+  public inAppNotification: Promise<InAppNotification>;
 }
