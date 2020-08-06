@@ -79,9 +79,9 @@ describe('HubActivityService', () => {
       userId,
       hubId,
       isOwner: true,
-      hub: {
+      hub: Promise.resolve({
         active: false,
-      },
+      }),
     } as JoinUserHub);
     const expectedResult = {
       active: true,
@@ -91,18 +91,18 @@ describe('HubActivityService', () => {
       {
         hubId,
         userId,
-        hub: {
+        hub: Promise.resolve({
           name: 'HubName',
           image: 'HubImage',
-        },
+        }),
       },
       {
         hubId,
         userId: 2,
-        hub: {
+        hub: Promise.resolve({
           name: 'HubName',
           image: 'HubImage',
-        },
+        }),
       },
     ] as JoinUserHub[]);
     const sendPushCall = jest
@@ -127,9 +127,9 @@ describe('HubActivityService', () => {
       userId,
       hubId,
       isOwner: true,
-      hub: {
+      hub: Promise.resolve({
         active: true,
-      },
+      }),
     } as JoinUserHub);
     const expectedResult = {
       active: false,
