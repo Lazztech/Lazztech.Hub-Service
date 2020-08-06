@@ -52,9 +52,9 @@ describe('AuthPasswordResetService', () => {
     } as ResetPassword;
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce({
       email: details.usersEmail,
-      passwordReset: {
+      passwordReset: Promise.resolve({
         pin: details.resetPin,
-      },
+      }),
     } as User);
     const saveCall = jest
       .spyOn(userRepo, 'save')
@@ -73,7 +73,7 @@ describe('AuthPasswordResetService', () => {
       firstName: 'Gian',
       lastName: 'Lazzarini',
       email,
-      passwordReset: {},
+      passwordReset: Promise.resolve({}),
     } as User);
     jest.spyOn(passwordResetRepo, 'findOne').mockResolvedValueOnce(null);
     jest
