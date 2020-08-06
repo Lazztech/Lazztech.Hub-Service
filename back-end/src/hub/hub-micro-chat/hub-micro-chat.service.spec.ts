@@ -94,7 +94,7 @@ describe('HubMicroChatService', () => {
     jest.spyOn(hubRepo, 'findOne').mockResolvedValueOnce({
       id: hubId,
       name: 'TestHubName',
-      usersConnection: [
+      usersConnection: Promise.resolve([
         {
           userId,
         },
@@ -104,12 +104,12 @@ describe('HubMicroChatService', () => {
         {
           userId: 3,
         },
-      ],
-      microChats: [
+      ]),
+      microChats: Promise.resolve([
         {
           id: microChatId,
         },
-      ],
+      ]),
     } as Hub);
     const sendPushToUserCall = jest
       .spyOn(notificationService, 'sendPushToUser')
@@ -155,17 +155,17 @@ describe('HubMicroChatService', () => {
     jest.spyOn(joinUserHubRepo, 'findOne').mockResolvedValueOnce({
       userId,
       hubId,
-      hub: {
-        microChats: [
+      hub: Promise.resolve({
+        microChats: Promise.resolve([
           {
             id: microChatId,
           },
           {
             id: 2,
           },
-        ],
-      },
-      user: {},
+        ]),
+      }),
+      user: Promise.resolve({}),
     } as JoinUserHub);
     const deleteCall = jest
       .spyOn(microChatRepo, 'remove')
