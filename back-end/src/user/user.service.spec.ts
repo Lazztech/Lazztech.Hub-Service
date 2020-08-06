@@ -85,23 +85,23 @@ describe('UserService', () => {
       {
         userId: testUserId,
         hubId: 1,
-        user: {},
-        hub: {
+        user: Promise.resolve({}),
+        hub: Promise.resolve({
           name: 'hub1',
-        } as Hub,
+        } as Hub),
         isOwner: true,
       } as JoinUserHub,
       {
         userId: testUserId,
         hubId: 2,
-        user: {},
-        hub: {
+        user: Promise.resolve({}),
+        hub: Promise.resolve({
           name: 'hub2',
-        } as Hub,
+        } as Hub),
         isOwner: true,
       } as JoinUserHub,
     ];
-    const hubResults: Hub[] = testResults.map(x => x.hub);
+    const hubResults: Hub[] = await Promise.all(testResults.map(x => x.hub));
     // notice we are pulling the repo variable and using jest.spyOn with no issues
     jest.spyOn(joinUserHubRepo, 'find').mockResolvedValueOnce(testResults);
     expect(await service.getUsersOwnedHubs(testUserId)).toEqual(hubResults);
@@ -113,19 +113,19 @@ describe('UserService', () => {
       {
         userId: testUserId,
         isOwner: false,
-        hub: {
+        hub: Promise.resolve({
           name: 'hub1',
-        } as Hub,
+        } as Hub),
       } as JoinUserHub,
       {
         userId: testUserId,
         isOwner: false,
-        hub: {
+        hub: Promise.resolve({
           name: 'hub2',
-        } as Hub,
+        } as Hub),
       } as JoinUserHub,
     ];
-    const hubResults: Hub[] = testResults.map(x => x.hub);
+    const hubResults: Hub[] = await Promise.all(testResults.map(x => x.hub));
     // notice we are pulling the repo variable and using jest.spyOn with no issues
     jest.spyOn(joinUserHubRepo, 'find').mockResolvedValueOnce(testResults);
     expect(await service.memberOfHubs(testUserId)).toEqual(hubResults);
