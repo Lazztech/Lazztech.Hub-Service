@@ -75,11 +75,11 @@ describe('NotificationService', () => {
     const token = 'asdfasdf';
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce({
       id: userId,
-      userDevices: [
+      userDevices: Promise.resolve([
         {
           fcmPushUserToken: 'otherToken',
         },
-      ],
+      ]),
     } as User);
     const saveCall = jest
       .spyOn(userDeviceRepo, 'save')
@@ -97,15 +97,15 @@ describe('NotificationService', () => {
     jest.spyOn(joinUserInAppNotificationRepo, 'find').mockResolvedValueOnce([
       {
         userId,
-        inAppNotification: {
+        inAppNotification: Promise.resolve({
           text: 'test',
-        },
+        }),
       },
       {
         userId,
-        inAppNotification: {
+        inAppNotification: Promise.resolve({
           text: 'test',
-        },
+        }),
       },
     ] as JoinUserInAppNotifications[]);
     const expectedResult = [
@@ -206,7 +206,7 @@ describe('NotificationService', () => {
     } as PushNotificationDto;
     const testUser = {
       id: userId,
-      userDevices: [
+      userDevices: Promise.resolve([
         {
           id: 1,
           fcmPushUserToken: 'token1',
@@ -219,7 +219,7 @@ describe('NotificationService', () => {
           id: 3,
           fcmPushUserToken: 'token3',
         },
-      ],
+      ]),
     } as User;
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
     const sendPushNotification = jest
