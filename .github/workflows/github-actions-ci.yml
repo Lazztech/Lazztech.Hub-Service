@@ -111,6 +111,19 @@ jobs:
     needs: back-end-ci
     if: github.ref == 'refs/heads/master'
     steps:
+
+    - uses: actions/checkout@master
+
+    - name: Use Node.js ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+
+    - name: npm install & build
+      working-directory: ./back-end
+      run: |
+        npm install
+        npm run build
   
     - name: 'Run Azure webapp deploy action using publish profile credentials'
       uses: azure/webapps-deploy@v2
