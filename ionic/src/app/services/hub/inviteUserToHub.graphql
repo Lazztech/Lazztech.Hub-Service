@@ -5,5 +5,25 @@ mutation inviteUserToHub(
     inviteUserToHub(
         hubId: $hubId, 
         inviteesEmail: $inviteesEmail
-        )
+        ) {
+            id
+            invitersId
+            inviteesId
+            hubId
+            accepted
+            inviter {
+                id
+                firstName
+                lastName
+            }
+            invitee {
+                id
+                firstName
+                lastName
+            }
+            hub {
+                id
+                name
+            }
+        }
 }

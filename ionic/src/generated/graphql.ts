@@ -24,6 +24,7 @@ export type Hub = {
   longitude?: Maybe<Scalars['Float']>;
   usersConnection?: Maybe<Array<JoinUserHub>>;
   microChats?: Maybe<Array<MicroChat>>;
+  invites?: Maybe<Array<Invite>>;
 };
 
 export type InAppNotification = {
@@ -39,7 +40,13 @@ export type InAppNotification = {
 export type Invite = {
    __typename?: 'Invite';
   id: Scalars['ID'];
-  email: Scalars['String'];
+  invitersId: Scalars['ID'];
+  inviteesId: Scalars['ID'];
+  hubId: Scalars['ID'];
+  accepted: Scalars['Boolean'];
+  inviter: User;
+  invitee: User;
+  hub: Hub;
 };
 
 export type JoinUserHub = {
@@ -72,7 +79,8 @@ export type MicroChat = {
 export type Mutation = {
    __typename?: 'Mutation';
   createHub: JoinUserHub;
-  inviteUserToHub: Scalars['Boolean'];
+  inviteUserToHub: Invite;
+  respondToHubInvite: JoinUserHub;
   deleteHub: Scalars['Boolean'];
   editHub: Hub;
   changeHubImage: Hub;
@@ -114,6 +122,13 @@ export type MutationCreateHubArgs = {
 export type MutationInviteUserToHubArgs = {
   inviteesEmail: Scalars['String'];
   hubId: Scalars['ID'];
+};
+
+
+export type MutationRespondToHubInviteArgs = {
+  accepted: Scalars['Boolean'];
+  hubId: Scalars['ID'];
+  invitersId: Scalars['ID'];
 };
 
 
@@ -543,7 +558,20 @@ export type InviteUserToHubMutationVariables = {
 
 export type InviteUserToHubMutation = (
   { __typename?: 'Mutation' }
-  & Pick<Mutation, 'inviteUserToHub'>
+  & { inviteUserToHub: (
+    { __typename?: 'Invite' }
+    & Pick<Invite, 'id' | 'invitersId' | 'inviteesId' | 'hubId' | 'accepted'>
+    & { inviter: (
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'firstName' | 'lastName'>
+    ), invitee: (
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'firstName' | 'lastName'>
+    ), hub: (
+      { __typename?: 'Hub' }
+      & Pick<Hub, 'id' | 'name'>
+    ) }
+  ) }
 );
 
 export type JoinHubMutationVariables = {
@@ -1032,7 +1060,27 @@ export const HubDocument = gql`
   }
 export const InviteUserToHubDocument = gql`
     mutation inviteUserToHub($hubId: ID!, $inviteesEmail: String!) {
-  inviteUserToHub(hubId: $hubId, inviteesEmail: $inviteesEmail)
+  inviteUserToHub(hubId: $hubId, inviteesEmail: $inviteesEmail) {
+    id
+    invitersId
+    inviteesId
+    hubId
+    accepted
+    inviter {
+      id
+      firstName
+      lastName
+    }
+    invitee {
+      id
+      firstName
+      lastName
+    }
+    hub {
+      id
+      name
+    }
+  }
 }
     `;
 
