@@ -1,0 +1,28 @@
+query invitesByHub(
+    $hubId: ID!
+    ) {
+    invitesByHub(
+        hubId: $hubId, 
+        ) {
+            id
+            invitersId
+            inviteesId
+            hubId
+            accepted
+            inviter {
+                id
+                firstName
+                lastName
+                image
+            }
+            invitee {
+                id
+                firstName
+                lastName
+                image
+            }
+            hub {
+                id
+            }
+        }
+}

@@ -20,6 +20,10 @@
     
     <ion-list *ngIf="!loading">
 
+      <ion-text *ngIf="(inAppNotifications | async).length <= 0" class="ion-text-center">
+        <p>No notifications.</p>
+      </ion-text>
+
       <div *ngFor="let notification of inAppNotifications | async">
 
           <!-- Multi-line sliding item with icon options on both sides -->

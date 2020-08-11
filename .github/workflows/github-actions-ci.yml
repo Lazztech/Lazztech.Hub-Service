@@ -39,6 +39,11 @@ jobs:
       #   run: |
       #     npm run test
 
+      # - name: npm e2e
+      #   working-directory: ./ionic
+      #   run: |
+      #     npm run e2e
+
       - name: npm generate
         working-directory: ./ionic
         run: |
@@ -63,13 +68,13 @@ jobs:
       with:
         node-version: ${{ env.NODE_VERSION }}
 
-    - name: start postgresql db
-      uses: harmon758/postgresql-action@v1
-      with:
-        postgresql version: '11'  # See https://hub.docker.com/_/postgres for available versions
-        postgresql db: 'postgres-test'
-        postgresql user: 'test'
-        postgresql password: 'Password123'
+    # - name: start postgresql db
+    #   uses: harmon758/postgresql-action@v1
+    #   with:
+    #     postgresql version: '11'  # See https://hub.docker.com/_/postgres for available versions
+    #     postgresql db: 'postgres-test'
+    #     postgresql user: 'test'
+    #     postgresql password: 'Password123'
 
     - name: npm install & build
       working-directory: ./back-end
@@ -91,6 +96,11 @@ jobs:
       working-directory: ./back-end
       run: |
         npm run test:cov
+
+    # - name: npm test:e2e
+    #   working-directory: ./back-end
+    #   run: |
+    #     npm run test:e2e
 
     - name: npm start & health check
       working-directory: ./back-end

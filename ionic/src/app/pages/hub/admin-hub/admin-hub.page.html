@@ -70,10 +70,6 @@
 
     <ion-list-header class="ion-padding-bottom">
       <ion-label>Members</ion-label>
-      <ion-button (click)="invite()">
-        <ion-icon size="large" name="add"></ion-icon>
-        Invite
-      </ion-button>
     </ion-list-header>
 
     <div *ngFor="let userConnection of (userHub | async)?.hub?.usersConnection">
@@ -101,12 +97,41 @@
     </ion-item-sliding>
     </div>
 
+    <ion-list-header class="ion-padding-bottom">
+      <ion-label>Pending Invites</ion-label>
+      <ion-button (click)="invite()">
+        <ion-icon size="large" name="add"></ion-icon>
+        Invite
+      </ion-button>
+    </ion-list-header>
+
+    <div *ngFor="let invite of (invites | async)">
+      <ion-item-sliding>
+      <ion-item href="javascript:void(0);" (click)="goToPersonPage(invite.inviteesId, invite.invitee)">
+        <ion-avatar slot="start">
+          <img width="100%" [appFeatureFlag]="'adorableAvatarsUserImage'" *ngIf="!invite.invitee.image" src="https://api.adorable.io/avatars/285/{{invite.invitee.id}}.png">
+          <ion-img width="100%" *ngIf="invite.invitee.image" src="{{invite.invitee.image}}"></ion-img>
+        </ion-avatar>
+        <ion-label>
+          <h3 class="ion-float-left">
+            <ion-text>{{invite.invitee.firstName}} {{invite.invitee.lastName}}</ion-text>
+          </h3>
+        </ion-label>
+      </ion-item>
+      <ion-item-options side="end">
+        <ion-item-option color="danger">
+          remove
+          <!-- //TODO implement me! -->
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+    </div>
+
   </ion-list>
 
   <ion-item class="ion-padding-top" (click)="deleteHub()" href="javascript:void(0);">
     <ion-icon name="warning" color="medium" slot="start"></ion-icon>
     <ion-label>Delete Hub</ion-label>
   </ion-item>
-
 
 </ion-content>

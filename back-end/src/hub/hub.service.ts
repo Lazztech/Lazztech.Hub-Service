@@ -56,6 +56,18 @@ export class HubService {
     return commonHubRelationships;
   }
 
+  async getInvitesByHub(userId: any, hubId: any) {
+    this.logger.log(this.getInvitesByHub.name);
+    const userHubRelationship = await this.joinUserHubRepository.findOne({
+      userId,
+      hubId,
+      isOwner: true,
+    });
+    this.validateRelationship(userHubRelationship, hubId, userId);
+
+    return await this.inviteRepository.find({ hubId });
+  }
+
   async inviteUserToHub(userId: any, hubId: number, inviteesEmail: string) {
     this.logger.log(this.inviteUserToHub.name);
     const userHubRelationship = await this.joinUserHubRepository.findOne({

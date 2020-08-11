@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FetchPolicy } from 'apollo-client';
-import { CreateHubGQL, UsersHubsGQL, UsersPeopleGQL, CommonUsersHubsGQL, EditHubGQL, HubGQL, InviteUserToHubGQL, JoinHubGQL, DeleteHubGQL, ChangeHubImageGQL, SetHubStarredGQL, SetHubNotStarredGQL, EnteredHubGeofenceGQL, ExitedHubGeofenceGQL, ActivateHubGQL, DeactivateHubGQL, MicroChatToHubGQL, CreateMicroChatGQL, DeleteMicroChatGQL, Scalars, CreateMicroChatDocument, HubDocument, HubQueryVariables, HubQuery, UsersHubsDocument, UsersHubsQuery, UsersHubsQueryVariables } from 'src/generated/graphql';
+import { CreateHubGQL, UsersHubsGQL, UsersPeopleGQL, CommonUsersHubsGQL, EditHubGQL, HubGQL, InviteUserToHubGQL, JoinHubGQL, DeleteHubGQL, ChangeHubImageGQL, SetHubStarredGQL, SetHubNotStarredGQL, EnteredHubGeofenceGQL, ExitedHubGeofenceGQL, ActivateHubGQL, DeactivateHubGQL, MicroChatToHubGQL, CreateMicroChatGQL, DeleteMicroChatGQL, Scalars, CreateMicroChatDocument, HubDocument, HubQueryVariables, HubQuery, UsersHubsDocument, UsersHubsQuery, UsersHubsQueryVariables, InvitesByHubGQL } from 'src/generated/graphql';
 import { NGXLogger } from 'ngx-logger';
 
 @Injectable({
@@ -28,7 +28,8 @@ export class HubService {
     private deactivateHubGQLService: DeactivateHubGQL,
     private microChatToHubGQLService: MicroChatToHubGQL,
     private createMicroChatGQLService: CreateMicroChatGQL,
-    private deleteMicroChatGQLService: DeleteMicroChatGQL
+    private deleteMicroChatGQLService: DeleteMicroChatGQL,
+    private invitesByHubGQLService: InvitesByHubGQL,
   ) { }
 
   async createHub(name: string, description: string, image: string, latitude: number, longitude: number) {
@@ -170,6 +171,15 @@ export class HubService {
   watchHub(id: Scalars['ID'], fetchPolicy: FetchPolicy = "cache-first") {
     return this.hubGQLService.watch({
       id
+    },
+    {
+      fetchPolicy
+    });
+  }
+
+  watchInvitesByHub(hubId: Scalars['ID'], fetchPolicy: FetchPolicy = 'cache-first') {
+    return this.invitesByHubGQLService.watch({
+      hubId
     },
     {
       fetchPolicy
