@@ -39,7 +39,7 @@ export class Invite {
     user => user.invitesSent,
     { onDelete: 'CASCADE' },
   )
-  @JoinColumn()
+  @JoinColumn({ name: 'invitersId' })
   public inviter: Promise<User>;
 
   @Field(() => User)
@@ -48,6 +48,7 @@ export class Invite {
     user => user.invitesReceived,
     { onDelete: 'CASCADE' },
   )
+  @JoinColumn({ name: 'inviteesId' })
   public invitee: Promise<User>;
 
   @Field(() => Hub)
