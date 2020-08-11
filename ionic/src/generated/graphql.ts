@@ -269,6 +269,7 @@ export type Query = {
   hub: JoinUserHub;
   usersHubs: Array<JoinUserHub>;
   commonUsersHubs: Array<JoinUserHub>;
+  invitesByHub: Array<Invite>;
   usersPeople: Array<User>;
   searchHubByName: Array<Hub>;
   ownedHubs: Array<Hub>;
@@ -285,6 +286,11 @@ export type QueryHubArgs = {
 
 export type QueryCommonUsersHubsArgs = {
   otherUsersId: Scalars['ID'];
+};
+
+
+export type QueryInvitesByHubArgs = {
+  hubId: Scalars['ID'];
 };
 
 
@@ -572,6 +578,29 @@ export type InviteUserToHubMutation = (
       & Pick<Hub, 'id' | 'name'>
     ) }
   ) }
+);
+
+export type InvitesByHubQueryVariables = {
+  hubId: Scalars['ID'];
+};
+
+
+export type InvitesByHubQuery = (
+  { __typename?: 'Query' }
+  & { invitesByHub: Array<(
+    { __typename?: 'Invite' }
+    & Pick<Invite, 'id' | 'invitersId' | 'inviteesId' | 'hubId' | 'accepted'>
+    & { inviter: (
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'firstName' | 'lastName' | 'image'>
+    ), invitee: (
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'firstName' | 'lastName' | 'image'>
+    ), hub: (
+      { __typename?: 'Hub' }
+      & Pick<Hub, 'id'>
+    ) }
+  )> }
 );
 
 export type JoinHubMutationVariables = {
@@ -1089,6 +1118,40 @@ export const InviteUserToHubDocument = gql`
   })
   export class InviteUserToHubGQL extends Apollo.Mutation<InviteUserToHubMutation, InviteUserToHubMutationVariables> {
     document = InviteUserToHubDocument;
+    
+  }
+export const InvitesByHubDocument = gql`
+    query invitesByHub($hubId: ID!) {
+  invitesByHub(hubId: $hubId) {
+    id
+    invitersId
+    inviteesId
+    hubId
+    accepted
+    inviter {
+      id
+      firstName
+      lastName
+      image
+    }
+    invitee {
+      id
+      firstName
+      lastName
+      image
+    }
+    hub {
+      id
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class InvitesByHubGQL extends Apollo.Query<InvitesByHubQuery, InvitesByHubQueryVariables> {
+    document = InvitesByHubDocument;
     
   }
 export const JoinHubDocument = gql`

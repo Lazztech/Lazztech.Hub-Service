@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { HubService } from 'src/app/services/hub/hub.service';
-import { HubQuery, Scalars, JoinUserHub } from 'src/generated/graphql';
+import { HubQuery, Scalars, JoinUserHub, InvitesByHubQuery } from 'src/generated/graphql';
 import { NGXLogger } from 'ngx-logger';
 import { NavController, ActionSheetController } from '@ionic/angular';
 import { CameraService } from 'src/app/services/camera/camera.service';
@@ -18,6 +18,7 @@ export class AdminHubPage implements OnInit {
 
   loading = true;
   userHub: Observable<HubQuery['hub']>;
+  invites: Observable<InvitesByHubQuery['invitesByHub']>;
   subscriptions: Subscription[] = [];
   id: Scalars['ID'];
 
@@ -67,6 +68,10 @@ export class AdminHubPage implements OnInit {
       this.hubService.watchHub(this.id).valueChanges.subscribe(x => {
         this.loading = x.loading;
       })
+    );
+
+    this.invites = this.hubService.watchInvitesByHub(this.id).valueChanges.pipe(
+      map(x => x.data && x.data.invitesByHub)
     );
   }
 
