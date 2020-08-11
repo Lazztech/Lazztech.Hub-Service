@@ -188,7 +188,7 @@ describe('HubService', () => {
       inviteesId: invitee.id,
     } as Invite;
 
-    jest.spyOn(joinUserHubRepo, 'findOne').mockResolvedValueOnce({
+    const mockedFindOneJoinUserHub = {
       userId,
       hubId,
       isOwner: true,
@@ -197,15 +197,20 @@ describe('HubService', () => {
         name: 'testHub',
         image: 'testImage.png',
       }),
-    } as JoinUserHub);
+    } as JoinUserHub;
+    jest
+      .spyOn(joinUserHubRepo, 'findOne')
+      .mockResolvedValueOnce(mockedFindOneJoinUserHub);
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(invitee);
     jest.spyOn(inviteRepo, 'create').mockReturnValueOnce(invite);
+
     const addInAppNotificationForUserCall = jest
       .spyOn(notificationService, 'addInAppNotificationForUser')
       .mockImplementationOnce(() => Promise.resolve());
     const sendPushToUser = jest
       .spyOn(notificationService, 'sendPushToUser')
       .mockImplementationOnce(() => Promise.resolve());
+
     const saveCall = jest
       .spyOn(inviteRepo, 'save')
       .mockResolvedValueOnce(invite);
@@ -213,8 +218,28 @@ describe('HubService', () => {
     await hubService.inviteUserToHub(userId, hubId, invitee.email);
     // Assert
     expect(saveCall).toHaveBeenCalled();
-    expect(addInAppNotificationForUserCall).toHaveBeenCalled();
-    expect(sendPushToUser).toHaveBeenCalled();
+    expect(addInAppNotificationForUserCall).toHaveBeenCalledWith(
+      invitee.id,
+      expect.objectContaining({
+        thumbnail: (await mockedFindOneJoinUserHub.hub).image,
+        header: `You're invited to "${
+          (await mockedFindOneJoinUserHub.hub).name
+        }" hub.`,
+        text: `View the invite.`,
+        // date: Date.now().toString(),
+        actionLink: `preview-hub/${mockedFindOneJoinUserHub.hubId}`,
+      }),
+    );
+    expect(sendPushToUser).toHaveBeenCalledWith(
+      invitee.id,
+      expect.objectContaining({
+        title: `You're invited to "${
+          (await mockedFindOneJoinUserHub.hub).name
+        }" hub.`,
+        body: `View the invite.`,
+        click_action: `preview-hub/${(await mockedFindOneJoinUserHub.hub).id}`,
+      }),
+    );
   });
 
   it('should return for usersPeople', async () => {

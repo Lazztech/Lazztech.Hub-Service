@@ -92,7 +92,7 @@ export class HubService {
     invite = await this.inviteRepository.save(invite);
 
     const hub = await userHubRelationship.hub;
-    await this.notificationService.addInAppNotificationForUser(userId, {
+    await this.notificationService.addInAppNotificationForUser(invitee.id, {
       thumbnail: hub.image,
       header: `You're invited to "${hub.name}" hub.`,
       text: `View the invite.`,
@@ -100,7 +100,7 @@ export class HubService {
       actionLink: `preview-hub/${hubId}`,
     });
 
-    await this.notificationService.sendPushToUser(userId, {
+    await this.notificationService.sendPushToUser(invitee.id, {
       title: `You're invited to "${hub.name}" hub.`,
       body: `View the invite.`,
       click_action: `preview-hub/${hubId}`,
