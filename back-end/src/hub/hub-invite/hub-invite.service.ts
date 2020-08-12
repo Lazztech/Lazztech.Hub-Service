@@ -99,6 +99,19 @@ export class HubInviteService {
     }
   }
 
+  async deleteInvite(userId: any, hubId: any, inviteId: any) {
+    this.logger.log(this.deleteInvite.name);
+    const userHubRelationship = await this.joinUserHubRepository.findOne({
+      userId,
+      hubId,
+      isOwner: true,
+    });
+    this.validateRelationship(userHubRelationship, hubId, userId);
+
+    const invite = await this.inviteRepository.findOneOrFail({ id: inviteId });
+    await this.inviteRepository.remove(invite);
+  }
+
   private validateInvitee(invitee: User, inviteesEmail: string, userId: any) {
     this.logger.log(this.validateInvitee.name);
     if (!invitee) {

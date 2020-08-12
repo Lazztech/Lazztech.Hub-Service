@@ -124,6 +124,17 @@ export class HubResolver {
   }
 
   @UseGuards(AuthGuard)
+  @Mutation(() => Boolean)
+  public async deleteInvite(
+    @UserId() userId,
+    @Args({ name: 'hubId', type: () => ID }) hubId: number,
+    @Args({ name: 'inviteId', type: () => ID }) inviteId: number,
+  ): Promise<boolean> {
+    await this.hubInviteService.deleteInvite(userId, hubId, inviteId);
+    return true;
+  }
+
+  @UseGuards(AuthGuard)
   @Query(() => [User])
   public async usersPeople(@UserId() userId): Promise<User[]> {
     this.logger.log(this.usersPeople.name);
