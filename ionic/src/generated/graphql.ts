@@ -81,6 +81,7 @@ export type Mutation = {
   createHub: JoinUserHub;
   inviteUserToHub: Invite;
   respondToHubInvite: JoinUserHub;
+  deleteInvite: Scalars['Boolean'];
   deleteHub: Scalars['Boolean'];
   editHub: Hub;
   changeHubImage: Hub;
@@ -129,6 +130,12 @@ export type MutationRespondToHubInviteArgs = {
   accepted: Scalars['Boolean'];
   hubId: Scalars['ID'];
   invitersId: Scalars['ID'];
+};
+
+
+export type MutationDeleteInviteArgs = {
+  inviteId: Scalars['ID'];
+  hubId: Scalars['ID'];
 };
 
 
@@ -480,6 +487,17 @@ export type DeleteHubMutationVariables = {
 export type DeleteHubMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'deleteHub'>
+);
+
+export type DeleteInviteMutationVariables = {
+  hubId: Scalars['ID'];
+  inviteId: Scalars['ID'];
+};
+
+
+export type DeleteInviteMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteInvite'>
 );
 
 export type DeleteMicroChatMutationVariables = {
@@ -986,6 +1004,19 @@ export const DeleteHubDocument = gql`
   })
   export class DeleteHubGQL extends Apollo.Mutation<DeleteHubMutation, DeleteHubMutationVariables> {
     document = DeleteHubDocument;
+    
+  }
+export const DeleteInviteDocument = gql`
+    mutation deleteInvite($hubId: ID!, $inviteId: ID!) {
+  deleteInvite(hubId: $hubId, inviteId: $inviteId)
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DeleteInviteGQL extends Apollo.Mutation<DeleteInviteMutation, DeleteInviteMutationVariables> {
+    document = DeleteInviteDocument;
     
   }
 export const DeleteMicroChatDocument = gql`

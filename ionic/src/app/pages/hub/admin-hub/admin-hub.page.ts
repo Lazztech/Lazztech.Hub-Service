@@ -73,6 +73,12 @@ export class AdminHubPage implements OnInit {
     this.invites = this.hubService.watchInvitesByHub(this.id).valueChanges.pipe(
       map(x => x.data && x.data.invitesByHub)
     );
+
+    this.subscriptions.push(
+      this.hubService.watchInvitesByHub(this.id).valueChanges.subscribe(x => {
+        this.loading = x.loading;
+      })
+    );
   }
 
   async save() {
@@ -177,6 +183,10 @@ export class AdminHubPage implements OnInit {
       ]
     });
     await actionSheet.present();
+  }
+
+  async deleteInvite(hubId: any, inviteId: any) {
+    this.hubService.deleteInvite(hubId, inviteId)
   }
 
   async deleteHub() {

@@ -1,0 +1,9 @@
+mutation deleteInvite(
+    $hubId: ID!
+    $inviteId: ID!
+    ) {
+        deleteInvite(
+            hubId: $hubId
+            inviteId: $inviteId
+            )
+    }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FetchPolicy } from 'apollo-client';
-import { CreateHubGQL, UsersHubsGQL, UsersPeopleGQL, CommonUsersHubsGQL, EditHubGQL, HubGQL, InviteUserToHubGQL, JoinHubGQL, DeleteHubGQL, ChangeHubImageGQL, SetHubStarredGQL, SetHubNotStarredGQL, EnteredHubGeofenceGQL, ExitedHubGeofenceGQL, ActivateHubGQL, DeactivateHubGQL, MicroChatToHubGQL, CreateMicroChatGQL, DeleteMicroChatGQL, Scalars, CreateMicroChatDocument, HubDocument, HubQueryVariables, HubQuery, UsersHubsDocument, UsersHubsQuery, UsersHubsQueryVariables, InvitesByHubGQL } from 'src/generated/graphql';
 import { NGXLogger } from 'ngx-logger';
+import { ActivateHubGQL, ChangeHubImageGQL, CommonUsersHubsGQL, CreateHubGQL, CreateMicroChatGQL, DeactivateHubGQL, DeleteHubGQL, DeleteMicroChatGQL, EditHubGQL, EnteredHubGeofenceGQL, ExitedHubGeofenceGQL, HubDocument, HubGQL, HubQuery, HubQueryVariables, InvitesByHubGQL, InviteUserToHubGQL, JoinHubGQL, MicroChatToHubGQL, Scalars, SetHubNotStarredGQL, SetHubStarredGQL, UsersHubsDocument, UsersHubsGQL, UsersHubsQuery, UsersPeopleGQL, DeleteInviteGQL, InvitesByHubDocument, InvitesByHubQueryVariables, InvitesByHubQuery } from 'src/generated/graphql';
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +30,7 @@ export class HubService {
     private createMicroChatGQLService: CreateMicroChatGQL,
     private deleteMicroChatGQLService: DeleteMicroChatGQL,
     private invitesByHubGQLService: InvitesByHubGQL,
+    private deleteInviteGQLService: DeleteInviteGQL,
   ) { }
 
   async createHub(name: string, description: string, image: string, latitude: number, longitude: number) {
@@ -40,9 +41,9 @@ export class HubService {
       latitude,
       longitude
     }, {
-      update: (proxy, { data: { createHub }}) => {
+      update: (proxy, { data: { createHub } }) => {
         // Read the data from our cache for this query.
-        const data = proxy.readQuery({ 
+        const data = proxy.readQuery({
           query: UsersHubsDocument,
         }) as UsersHubsQuery;
 
@@ -50,9 +51,9 @@ export class HubService {
         data.usersHubs.push(createHub);
 
         // Write our data back to the cache.
-        proxy.writeQuery({ 
+        proxy.writeQuery({
           query: UsersHubsDocument,
-          data 
+          data
         });
       }
     }).toPromise();
@@ -83,7 +84,7 @@ export class HubService {
 
     return response;
   }
-  
+
   watchUserHubs(fetchPolicy: FetchPolicy = "cache-first") {
     return this.userHubsGQLService.watch(null, {
       fetchPolicy
@@ -172,18 +173,18 @@ export class HubService {
     return this.hubGQLService.watch({
       id
     },
-    {
-      fetchPolicy
-    });
+      {
+        fetchPolicy
+      });
   }
 
   watchInvitesByHub(hubId: Scalars['ID'], fetchPolicy: FetchPolicy = 'cache-first') {
     return this.invitesByHubGQLService.watch({
       hubId
     },
-    {
-      fetchPolicy
-    });
+      {
+        fetchPolicy
+      });
   }
 
   async inviteUserToHub(hubId: Scalars['ID'], inviteesEmail: string) {
@@ -205,25 +206,53 @@ export class HubService {
     return response;
   }
 
+  async deleteInvite(hubId: any, inviteId: any) {
+    const result = await this.deleteInviteGQLService.mutate({
+      hubId,
+      inviteId
+    }, {
+      update: (proxy, { data: { deleteInvite } }) => {
+        const invitesByHubQueryData = proxy.readQuery({
+          query: InvitesByHubDocument,
+          variables: { hubId } as InvitesByHubQueryVariables
+        }) as InvitesByHubQuery;
+
+        //Delete invite
+        const invite = invitesByHubQueryData.invitesByHub.find(x => x.id == inviteId);
+        invitesByHubQueryData.invitesByHub.splice(
+          invitesByHubQueryData.invitesByHub.indexOf(invite), 1
+        );
+
+
+        proxy.writeQuery({
+          query: InvitesByHubDocument,
+          data: invitesByHubQueryData
+        });
+      }
+    }).toPromise();
+
+    return result.data.deleteInvite;
+  }
+
   async deleteHub(id: Scalars['ID']): Promise<boolean> {
     const result = await this.deleteHubGQLService.mutate({
       id
     }, {
-      update: (proxy, { data: { deleteHub }}) => {
+      update: (proxy, { data: { deleteHub } }) => {
         // Read the data from our cache for this query.
-        const hubQueryData = proxy.readQuery({ 
+        const hubQueryData = proxy.readQuery({
           query: HubDocument,
-         variables:  { id } as HubQueryVariables
+          variables: { id } as HubQueryVariables
         }) as HubQuery;
 
         //Delete hub
         delete hubQueryData.hub
 
         // Write our data back to the cache.
-        proxy.writeQuery({ 
+        proxy.writeQuery({
           query: HubDocument,
           variables: { id: id } as HubQueryVariables,
-          data: hubQueryData 
+          data: hubQueryData
         });
 
         //TODO would it be more robust to recurse through the RootQuery document tree and delete that way?
@@ -324,25 +353,25 @@ export class HubService {
       hubId,
       microChatText
     },
-    {
-      update: (proxy, { data: { createMicroChat }}) => {
-        // Read the data from our cache for this query.
-        const data = proxy.readQuery({ 
-          query: HubDocument,
-         variables:  { id: hubId } as HubQueryVariables
-        }) as HubQuery;
+      {
+        update: (proxy, { data: { createMicroChat } }) => {
+          // Read the data from our cache for this query.
+          const data = proxy.readQuery({
+            query: HubDocument,
+            variables: { id: hubId } as HubQueryVariables
+          }) as HubQuery;
 
-        //Add new micro-chat to hub's array of micro-chats
-        data.hub.hub.microChats.push(createMicroChat);
+          //Add new micro-chat to hub's array of micro-chats
+          data.hub.hub.microChats.push(createMicroChat);
 
-        // Write our data back to the cache.
-        proxy.writeQuery({ 
-          query: HubDocument,
-          variables: { id: hubId } as HubQueryVariables,
-          data 
-        });
-      }
-    }).toPromise();
+          // Write our data back to the cache.
+          proxy.writeQuery({
+            query: HubDocument,
+            variables: { id: hubId } as HubQueryVariables,
+            data
+          });
+        }
+      }).toPromise();
     return result.data.createMicroChat;
   }
 
@@ -351,28 +380,28 @@ export class HubService {
       hubId,
       microChatId
     },
-    {
-      update: (proxy, { data: { deleteMicroChat }}) => {
-        // Read the data from our cache for this query.
-        const data = proxy.readQuery({ 
-          query: HubDocument,
-         variables:  { id: hubId } as HubQueryVariables
-        }) as HubQuery;
+      {
+        update: (proxy, { data: { deleteMicroChat } }) => {
+          // Read the data from our cache for this query.
+          const data = proxy.readQuery({
+            query: HubDocument,
+            variables: { id: hubId } as HubQueryVariables
+          }) as HubQuery;
 
-        //Remove micro-chat from hub's array of micro-chats
-        const microChat = data.hub.hub.microChats.find(x => x.id == microChatId);
-        data.hub.hub.microChats.splice(
-          data.hub.hub.microChats.indexOf(microChat), 1
-        );
+          //Remove micro-chat from hub's array of micro-chats
+          const microChat = data.hub.hub.microChats.find(x => x.id == microChatId);
+          data.hub.hub.microChats.splice(
+            data.hub.hub.microChats.indexOf(microChat), 1
+          );
 
-        // Write our data back to the cache.
-        proxy.writeQuery({ 
-          query: HubDocument,
-          variables: { id: hubId } as HubQueryVariables,
-          data 
-        });
-      }
-    }).toPromise();
+          // Write our data back to the cache.
+          proxy.writeQuery({
+            query: HubDocument,
+            variables: { id: hubId } as HubQueryVariables,
+            data
+          });
+        }
+      }).toPromise();
     return result.data.deleteMicroChat;
   }
 }
