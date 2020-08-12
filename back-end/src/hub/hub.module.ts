@@ -17,6 +17,7 @@ import { HubActivityService } from './hub-activity/hub-activity.service';
 import { HubGeofenceService } from './hub-geofence/hub-geofence.service';
 import { HubMicroChatService } from './hub-micro-chat/hub-micro-chat.service';
 import { UserDevice } from 'src/dal/entity/userDevice.entity';
+import { HubInviteService } from './hub-invite/hub-invite.service';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { UserDevice } from 'src/dal/entity/userDevice.entity';
     HubActivityService,
     HubGeofenceService,
     HubMicroChatService,
+    HubInviteService,
   ],
 })
 export class HubModule {}

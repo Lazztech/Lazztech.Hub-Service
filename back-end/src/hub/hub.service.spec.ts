@@ -1,3 +1,4 @@
+import { HttpModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
@@ -7,14 +8,12 @@ import { InAppNotification } from 'src/dal/entity/inAppNotification.entity';
 import { JoinUserHub } from 'src/dal/entity/joinUserHub.entity';
 import { JoinUserInAppNotifications } from 'src/dal/entity/joinUserInAppNotifications.entity';
 import { User } from 'src/dal/entity/user.entity';
+import { UserDevice } from 'src/dal/entity/userDevice.entity';
 import { FileService } from 'src/services/file/file.service';
+import { ImageFileService } from 'src/services/file/image-file/image-file.service';
 import { Repository } from 'typeorm';
 import { NotificationService } from '../notification/notification.service';
 import { HubService } from './hub.service';
-import { HttpModule } from '@nestjs/common';
-import { UserDevice } from 'src/dal/entity/userDevice.entity';
-import { ImageFileService } from 'src/services/file/image-file/image-file.service';
-import { Invite } from 'src/dal/entity/invite.entity';
 
 describe('HubService', () => {
   let hubService: HubService;
@@ -23,7 +22,6 @@ describe('HubService', () => {
   let hubRepo: Repository<Hub>;
   let fileService: FileService;
   let notificationService: NotificationService;
-  let inviteRepo: Repository<Invite>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -64,10 +62,6 @@ describe('HubService', () => {
           provide: getRepositoryToken(UserDevice),
           useClass: Repository,
         },
-        {
-          provide: getRepositoryToken(Invite),
-          useClass: Repository,
-        },
       ],
     }).compile();
 
@@ -79,7 +73,6 @@ describe('HubService', () => {
     hubRepo = module.get<Repository<Hub>>(getRepositoryToken(Hub));
     fileService = module.get<FileService>(FileService);
     notificationService = module.get<NotificationService>(NotificationService);
-    inviteRepo = module.get<Repository<Invite>>(getRepositoryToken(Invite));
   });
 
   it('should be defined', () => {
@@ -171,75 +164,6 @@ describe('HubService', () => {
     const result = await hubService.commonUsersHubs(userId, otherUsersId);
     // Assert
     expect(result).toStrictEqual(expectedResult);
-  });
-
-  it('should create new invite for inviteUserToHub', async () => {
-    // Arrange
-    const userId = 1;
-    const hubId = 1;
-    const invitee = {
-      id: 2,
-      email: 'inviteesemail@mail.com',
-    } as User;
-
-    const invite = {
-      hubId,
-      invitersId: userId,
-      inviteesId: invitee.id,
-    } as Invite;
-
-    const mockedFindOneJoinUserHub = {
-      userId,
-      hubId,
-      isOwner: true,
-      hub: Promise.resolve({
-        id: hubId,
-        name: 'testHub',
-        image: 'testImage.png',
-      }),
-    } as JoinUserHub;
-    jest
-      .spyOn(joinUserHubRepo, 'findOne')
-      .mockResolvedValueOnce(mockedFindOneJoinUserHub);
-    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(invitee);
-    jest.spyOn(inviteRepo, 'create').mockReturnValueOnce(invite);
-
-    const addInAppNotificationForUserCall = jest
-      .spyOn(notificationService, 'addInAppNotificationForUser')
-      .mockImplementationOnce(() => Promise.resolve());
-    const sendPushToUser = jest
-      .spyOn(notificationService, 'sendPushToUser')
-      .mockImplementationOnce(() => Promise.resolve());
-
-    const saveCall = jest
-      .spyOn(inviteRepo, 'save')
-      .mockResolvedValueOnce(invite);
-    // Act
-    await hubService.inviteUserToHub(userId, hubId, invitee.email);
-    // Assert
-    expect(saveCall).toHaveBeenCalled();
-    expect(addInAppNotificationForUserCall).toHaveBeenCalledWith(
-      invitee.id,
-      expect.objectContaining({
-        thumbnail: (await mockedFindOneJoinUserHub.hub).image,
-        header: `You're invited to "${
-          (await mockedFindOneJoinUserHub.hub).name
-        }" hub.`,
-        text: `View the invite.`,
-        // date: Date.now().toString(),
-        actionLink: `preview-hub/${mockedFindOneJoinUserHub.hubId}`,
-      }),
-    );
-    expect(sendPushToUser).toHaveBeenCalledWith(
-      invitee.id,
-      expect.objectContaining({
-        title: `You're invited to "${
-          (await mockedFindOneJoinUserHub.hub).name
-        }" hub.`,
-        body: `View the invite.`,
-        click_action: `preview-hub/${(await mockedFindOneJoinUserHub.hub).id}`,
-      }),
-    );
   });
 
   it('should return for usersPeople', async () => {

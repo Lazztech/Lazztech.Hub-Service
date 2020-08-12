@@ -1,5 +1,6 @@
 import { Logger, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Invite } from 'src/dal/entity/invite.entity';
 import { MicroChat } from 'src/dal/entity/microChat.entity';
 import { UserId } from 'src/decorators/user.decorator';
 import { AuthGuard } from 'src/guards/authguard.service';
@@ -10,9 +11,9 @@ import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
 import { User } from '../dal/entity/user.entity';
 import { HubActivityService } from './hub-activity/hub-activity.service';
 import { HubGeofenceService } from './hub-geofence/hub-geofence.service';
+import { HubInviteService } from './hub-invite/hub-invite.service';
 import { HubMicroChatService } from './hub-micro-chat/hub-micro-chat.service';
 import { HubService } from './hub.service';
-import { Invite } from 'src/dal/entity/invite.entity';
 
 @Resolver()
 export class HubResolver {
@@ -23,6 +24,7 @@ export class HubResolver {
     private hubActivityService: HubActivityService,
     private hubGeofenceService: HubGeofenceService,
     private hubMicroChatService: HubMicroChatService,
+    private hubInviteService: HubInviteService,
     private userService: UserService,
   ) {}
 
@@ -84,7 +86,7 @@ export class HubResolver {
     @Args({ name: 'hubId', type: () => ID }) hubId: number,
   ): Promise<Invite[]> {
     this.logger.log(this.invitesByHub.name);
-    return await this.hubService.getInvitesByHub(userId, hubId);
+    return await this.hubInviteService.getInvitesByHub(userId, hubId);
   }
 
   @UseGuards(AuthGuard)
@@ -95,7 +97,7 @@ export class HubResolver {
     @Args({ name: 'inviteesEmail', type: () => String }) inviteesEmail: string,
   ): Promise<Invite> {
     this.logger.log(this.inviteUserToHub.name);
-    const invite: Invite = await this.hubService.inviteUserToHub(
+    const invite: Invite = await this.hubInviteService.inviteUserToHub(
       userId,
       hubId,
       inviteesEmail,
@@ -112,7 +114,7 @@ export class HubResolver {
     @Args({ name: 'accepted', type: () => Boolean }) accepted: boolean,
   ): Promise<JoinUserHub> {
     this.logger.log(this.respondToHubInvite.name);
-    const result = await this.hubService.respondToHubInvite(
+    const result = await this.hubInviteService.respondToHubInvite(
       userId,
       invitersId,
       hubId,
