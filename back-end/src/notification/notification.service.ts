@@ -60,7 +60,7 @@ export class NotificationService {
     );
 
     const usersNotifications = Promise.all(
-      joinInAppNotifications.map(x => x.inAppNotification)
+      joinInAppNotifications.map(x => x.inAppNotification),
     );
 
     return usersNotifications;
