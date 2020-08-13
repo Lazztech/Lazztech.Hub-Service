@@ -59,10 +59,9 @@ export class NotificationService {
       { userId },
     );
 
-    const usersNotifications: InAppNotification[] = [];
-    joinInAppNotifications.forEach(async element => {
-      usersNotifications.push(await element.inAppNotification);
-    });
+    const usersNotifications = Promise.all(
+      joinInAppNotifications.map(x => x.inAppNotification)
+    );
 
     return usersNotifications;
   }
