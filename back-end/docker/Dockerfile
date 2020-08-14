@@ -1,16 +1,22 @@
 FROM node:12-alpine
 
-# Create app directory
-WORKDIR /usr/src/app
+WORKDIR /app
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
-COPY package*.json ./
+COPY package.json /app/package.json
 
+# --- Uncomment lines to have container just copy built server
+# COPY node_modules node_modules
+# COPY dist dist
+# ---
+
+# --- Uncomment lines to have container build server itself
+COPY package-lock.json /app/package-lock.json
+COPY src /app/src
+COPY tsconfig.build.json /app/tsconfig.build.json
 RUN npm install
 RUN npm run build
-COPY . .
+COPY dist /app/dist
+# ---
 
 EXPOSE 8080
-CMD [ "npm", "run start:prod" ]
+CMD [ "npm", "run", "start:prod" ]
