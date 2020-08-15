@@ -1,9 +1,0 @@
-{
-  "name": "ionic",
-  "integrations": {
-    "cordova": {},
-    "capacitor": {}
-  },
-  "type": "angular",
-  "id": "7fb4a007"
-}

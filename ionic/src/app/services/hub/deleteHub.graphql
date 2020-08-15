@@ -1,3 +1,0 @@
-mutation deleteHub($id: ID!) {
-    deleteHub(hubId: $id)
-}

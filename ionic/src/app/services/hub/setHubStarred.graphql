@@ -1,3 +1,0 @@
-mutation setHubStarred($hubId: ID!) {
-    setHubStarred(hubId: $hubId)
-}

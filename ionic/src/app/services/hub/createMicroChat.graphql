@@ -1,9 +1,0 @@
-mutation createMicroChat($hubId: ID! $microChatText: String!) {
-    createMicroChat(
-        hubId: $hubId, 
-        microChatText: $microChatText
-        ) {
-        id
-        text
-    }
-}

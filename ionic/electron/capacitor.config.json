@@ -1,7 +1,0 @@
-{
-  "appId": "tech.lazz.app",
-  "appName": "Lazztech Hub",
-  "bundledWebRuntime": false,
-  "npmClient": "npm",
-  "webDir": "www"
-}

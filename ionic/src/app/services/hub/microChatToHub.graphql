@@ -1,6 +1,0 @@
-mutation microChatToHub($hubId: ID! $microChatId: ID!) {
-    microChatToHub(
-        hubId: $hubId, 
-        microChatId: $microChatId
-        )
-}

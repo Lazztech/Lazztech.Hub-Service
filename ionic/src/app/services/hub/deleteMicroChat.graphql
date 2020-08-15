@@ -1,6 +1,0 @@
-mutation deleteMicroChat($hubId: ID! $microChatId: ID!) {
-    deleteMicroChat(
-        hubId: $hubId, 
-        microChatId: $microChatId
-        )
-}

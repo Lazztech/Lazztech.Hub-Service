@@ -1,9 +1,0 @@
-mutation changeHubImage($id: ID! $image: String!){
-    changeHubImage(
-        hubId: $id 
-        newImage: $image
-        ) {
-        id
-        image
-    }
-}

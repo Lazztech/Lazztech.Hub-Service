@@ -1,3 +1,0 @@
-mutation enteredHubGeofence($hubId: ID!) {
-    enteredHubGeofence(hubId: $hubId)
-}
