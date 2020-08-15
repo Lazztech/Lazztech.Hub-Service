@@ -15,40 +15,6 @@ env:
   DEPLOYMENT_URL: 'https://lazztechhubdev.azurewebsites.net/graphql'
 
 jobs:
-  ionic-ci:
-    name: ionic-ci
-    runs-on: ubuntu-latest
-    steps:
-
-      - name: checkout latest commit
-        uses: actions/checkout@master
-
-      - name: npm install & build
-        working-directory: ./ionic
-        run: |
-          npm install
-          npm run build
-
-      # - name: npm lint
-      #   working-directory: ./ionic
-      #   run: |
-      #     npm run lint
-
-      # - name: npm test
-      #   working-directory: ./ionic
-      #   run: |
-      #     npm run test
-
-      # - name: npm e2e
-      #   working-directory: ./ionic
-      #   run: |
-      #     npm run e2e
-
-      - name: npm generate
-        working-directory: ./ionic
-        run: |
-          npm run generate
-
   back-end-ci:
     name: back-end-ci
     runs-on: ubuntu-latest
