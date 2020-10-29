@@ -1,2 +1,2 @@
 #!/bin/sh
-docker build -f docker/Dockerfile . -t gianlazzarini/lazztechhubbackend
+docker build --no-cache -f docker/Dockerfile . -t registry.lazz.tech/dev-lazztechhub-service

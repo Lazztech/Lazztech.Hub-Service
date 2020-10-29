@@ -13,6 +13,7 @@ COPY package.json /app/package.json
 COPY package-lock.json /app/package-lock.json
 COPY src /app/src
 COPY tsconfig.build.json /app/tsconfig.build.json
+COPY tsconfig.json /app/tsconfig.json
 RUN npm install
 RUN npm run build
 COPY dist /app/dist

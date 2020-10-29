@@ -11,14 +11,13 @@ job "lazztechhub-service" {
       size = 300
     }
 
-    task "lazztechhub-service" {
+    task "stage-lazztechhub-service" {
       driver = "docker"
 
       config {
-        image = "gianlazzarini/lazztechhubbackend"
+        image = "registry.lazz.tech/stage-lazztechhub-service"
         port_map {
-          http = 80
-          https = 443
+          http = 8080
         }
       }
       resources {
@@ -28,7 +27,6 @@ job "lazztechhub-service" {
         network {
           mbits = 10
           port "http" {}
-          port "https" {}
         }
       }
 
@@ -38,12 +36,13 @@ job "lazztechhub-service" {
 
         tags = [
           "traefik.enable=true",
-          "traefik.http.routers.stage-lazztechhub.rule=HostRegexp(`stage-lazztechhub.lazz.tech`)"
+          "traefik.http.routers.stage-lazztechhub.rule=Host(`stage-lazztechhub.lazz.tech`)",
+          "traefik.http.routers.stage-lazztechhub.tls.certresolver=cloudflare"
         ]
 
         check {
           type     = "http"
-          path     = "/"
+          path     = "/health"
           interval = "2s"
           timeout  = "2s"
         }

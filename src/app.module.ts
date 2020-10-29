@@ -10,6 +10,7 @@ import { NotificationModule } from './notification/notification.module';
 import { ServicesModule } from './services/services.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { HealthController } from './health/health.controller';
 
 @Module({
   imports: [
@@ -45,7 +46,7 @@ import { AuthModule } from './auth/auth.module';
     }),
     AuthModule,
   ],
-  controllers: [],
+  controllers: [HealthController],
   providers: [AuthGuard],
 })
 export class AppModule {}
