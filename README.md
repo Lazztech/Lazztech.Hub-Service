@@ -37,3 +37,6 @@ $ npm run test:cov
 ```
 
 ## License
+Copyright Lazztech LLC
+
+***REMOVED***
