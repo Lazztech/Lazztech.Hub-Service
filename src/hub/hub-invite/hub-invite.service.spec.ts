@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { HubInviteService } from './hub-invite.service';
 import { ConfigModule } from '@nestjs/config';
-import configuration from 'src/config/configuration';
 import { HttpModule } from '@nestjs/common';
 import { Invite } from 'src/dal/entity/invite.entity';
 import { Repository } from 'typeorm';
@@ -24,7 +23,7 @@ describe('HubInviteService', () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         ConfigModule.forRoot({
-          load: [configuration],
+          envFilePath: ['.env.local', '.env'],
           isGlobal: true,
         }),
         HttpModule,

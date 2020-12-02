@@ -10,7 +10,6 @@ import { JoinUserHub } from 'src/dal/entity/joinUserHub.entity';
 import { MicroChat } from 'src/dal/entity/microChat.entity';
 import { NotificationService } from 'src/notification/notification.service';
 import { ConfigModule } from '@nestjs/config';
-import configuration from 'src/config/configuration';
 import { HttpModule } from '@nestjs/common';
 import { UserDevice } from 'src/dal/entity/userDevice.entity';
 
@@ -26,7 +25,7 @@ describe('HubMicroChatService', () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         ConfigModule.forRoot({
-          load: [configuration],
+          envFilePath: ['.env.local', '.env'],
           isGlobal: true,
         }),
         HttpModule,

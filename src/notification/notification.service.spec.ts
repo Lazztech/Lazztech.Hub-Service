@@ -10,7 +10,6 @@ import { InAppNotification } from 'src/dal/entity/inAppNotification.entity';
 import { JoinUserInAppNotifications } from 'src/dal/entity/joinUserInAppNotifications.entity';
 import { HttpService, HttpModule } from '@nestjs/common';
 import { of } from 'rxjs';
-import configuration from 'src/config/configuration';
 import { UserDevice } from 'src/dal/entity/userDevice.entity';
 
 describe('NotificationService', () => {
@@ -25,7 +24,7 @@ describe('NotificationService', () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         ConfigModule.forRoot({
-          load: [configuration],
+          envFilePath: ['.env.local', '.env'],
           isGlobal: true,
         }),
         HttpModule,

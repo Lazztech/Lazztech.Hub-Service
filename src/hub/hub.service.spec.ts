@@ -2,7 +2,6 @@ import { HttpModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import configuration from 'src/config/configuration';
 import { Hub } from 'src/dal/entity/hub.entity';
 import { InAppNotification } from 'src/dal/entity/inAppNotification.entity';
 import { JoinUserHub } from 'src/dal/entity/joinUserHub.entity';
@@ -27,7 +26,7 @@ describe('HubService', () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         ConfigModule.forRoot({
-          load: [configuration],
+          envFilePath: ['.env.local', '.env'],
           isGlobal: true,
         }),
         HttpModule,

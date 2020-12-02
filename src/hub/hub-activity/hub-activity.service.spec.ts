@@ -8,7 +8,6 @@ import { InAppNotification } from 'src/dal/entity/inAppNotification.entity';
 import { JoinUserInAppNotifications } from 'src/dal/entity/joinUserInAppNotifications.entity';
 import { NotificationService } from 'src/notification/notification.service';
 import { ConfigService, ConfigModule } from '@nestjs/config';
-import configuration from 'src/config/configuration';
 import { User } from 'src/dal/entity/user.entity';
 import { HttpModule } from '@nestjs/common';
 import { UserDevice } from 'src/dal/entity/userDevice.entity';
@@ -23,7 +22,7 @@ describe('HubActivityService', () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         ConfigModule.forRoot({
-          load: [configuration],
+          envFilePath: ['.env.local', '.env'],
           isGlobal: true,
         }),
         HttpModule,

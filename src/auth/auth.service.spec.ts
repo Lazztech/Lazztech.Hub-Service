@@ -8,7 +8,6 @@ import { Repository } from 'typeorm';
 import { AuthService } from './auth.service';
 import { NotificationService } from 'src/notification/notification.service';
 import { HttpModule } from '@nestjs/common';
-import configuration from 'src/config/configuration';
 import { UserDevice } from 'src/dal/entity/userDevice.entity';
 
 describe('AuthService', () => {
@@ -21,7 +20,7 @@ describe('AuthService', () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         ConfigModule.forRoot({
-          load: [configuration],
+          envFilePath: ['.env.local', '.env'],
           isGlobal: true,
         }),
         HttpModule,
