@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import configuration from './config/configuration';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { User } from './dal/entity/user.entity';
 import { AuthGuard } from './guards/authguard.service';
 import { HubModule } from './hub/hub.module';
@@ -15,22 +14,27 @@ import { HealthController } from './health/health.controller';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [configuration],
+      envFilePath: ['.env.local', '.env'],
       isGlobal: true,
     }),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: '***REMOVED***',
-      username: '***REMOVED***',
-      password: 'Password123',
-      database: 'postgres',
-      logging: true,
-      // migrationsRun: true,
-      synchronize: true,
-      entities: [__dirname + '/dal/entity/**/*.*.*'],
-      migrations: [__dirname + '/dal/migrations/**/*.*'],
-      subscribers: [__dirname + '/dal/migrations/**/*.*'],
-    }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        type: 'postgres' as 'postgres',
+        host: configService.get('DATABASE_HOST', 'localhost'),
+        port: configService.get<number>('DATABASE_PORT', 5432),
+        username: configService.get('DATABASE_USER', 'postgres'),
+        password: configService.get('DATABASE_PASS', 'postgres'),
+        database: configService.get('DATABASE_SCHEMA', 'postgres'),
+        logging: true,
+        // migrationsRun: true,
+        synchronize: true,
+        entities: [__dirname + '/dal/entity/**/*.*.*'],
+        migrations: [__dirname + '/dal/migrations/**/*.*'],
+        subscribers: [__dirname + '/dal/migrations/**/*.*'],
+      }),
+    } as TypeOrmModuleOptions),
     TypeOrmModule.forFeature([User]),
     ServicesModule,
     NotificationModule,

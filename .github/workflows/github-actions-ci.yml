@@ -79,7 +79,7 @@ jobs:
         kill %1
       env:
         CI: true
-        ACCESS_TOKEN_SECRET: ***REMOVED***
+        ACCESS_TOKEN_SECRET: SecretKey
 
   deploy:
     name: deploy-cd-master
