@@ -10,9 +10,10 @@
 ***REMOVED***
 </p>
 
-<!-- ## Description
+## Companion Mobile App
+For the companion mobile app client see the repo linked below.
 
-[Lazztech.Hub-Service](https://github.com/nestjs/nest) -->
+[Lazztech.Hub-App](https://github.com/Lazztech/Lazztech.Hub-App)
 
 ## Installation Dependencies
 
