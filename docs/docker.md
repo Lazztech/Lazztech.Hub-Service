@@ -8,7 +8,7 @@
 
 ## Usage
 
-### docker cli
+### Docker CLI
 
 ```bash
 docker run -d \
@@ -29,7 +29,7 @@ docker run -d \
   registry.lazz.tech/lazztechhub-service
 ```
 
-## Parameters
+### Parameters
 
 | Parameter | Function |
 | ----------- | ----------- |
@@ -45,3 +45,9 @@ docker run -d \
 | DATABASE_USER | Used for connecting to database |
 | DATABASE_PASS | Used for connecting to database |
 | DATABASE_SCHEMA | Used for connecting to database |
+
+## Building container
+
+```bash
+Lazztech.Hub-Service me$ docker build -f docker/Dockerfile . -t registry.lazz.tech/dev-lazztechhub-service
+```
