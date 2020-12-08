@@ -37,3 +37,4 @@ cert.pem
 key.pem
 key.key
 .env.local
+docs/_book/**.**

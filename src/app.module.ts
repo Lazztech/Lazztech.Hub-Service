@@ -10,6 +10,7 @@ import { ServicesModule } from './services/services.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { HealthController } from './health/health.controller';
+import { S3Module, S3ModuleOptions } from 'nestjs-s3';
 
 @Module({
   imports: [
@@ -40,6 +41,20 @@ import { HealthController } from './health/health.controller';
       }),
     } as TypeOrmModuleOptions),
     TypeOrmModule.forFeature([User]),
+    S3Module.forRootAsync({
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => {
+        return {
+          config: {
+            accessKeyId: configService.get('OBJECT_STORAGE_ACCESS_KEY_ID', 'minio'),
+            secretAccessKey: configService.get('OBJECT_STORAGE_SECRET_ACCESS_KEY', 'password'),
+            endpoint: configService.get('OBJECT_STORAGE_ENDPOINT', 'http://127.0.0.1:9000'),
+            s3ForcePathStyle: true,
+            signatureVersion: 'v4',
+          },
+        } as S3ModuleOptions
+      }
+    }),
     ServicesModule,
     NotificationModule,
     HubModule,

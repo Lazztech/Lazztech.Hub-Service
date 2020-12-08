@@ -34,7 +34,7 @@ docker run -d \
 
 | Parameter | Function |
 | ----------- | ----------- |
-| APP_NAME      | Used when sending emails to call out the name of the service |
+| APP_NAME | Used when sending emails to call out the name of the service |
 | ACCESS_TOKEN_SECRET | Used for jwt tokens |
 | FIREBASE_SERVER_KEY | Used for push notifications |
 | AzureWebJobsStorage | Used for file storage |
@@ -47,6 +47,9 @@ docker run -d \
 | DATABASE_PASS | Used for connecting to database |
 | DATABASE_SCHEMA | Used for connecting to database |
 | DATABASE_SSL | To configure whether to use SSL for database |
+| OBJECT_STORAGE_ACCESS_KEY_ID | Used for S3 compatible object file storage |
+| OBJECT_STORAGE_SECRET_ACCESS_KEY | Used for S3 compatible object file storage |
+| OBJECT_STORAGE_ENDPOINT | Used for S3 compatible object file storage |
 
 ## Building container
 
