@@ -25,6 +25,7 @@ docker run -d \
   -e DATABASE_USER= \
   -e DATABASE_PASS= \
   -e DATABASE_SCHEMA= \
+  -e DATABASE_SSL= \
   --restart unless-stopped \
   registry.lazz.tech/lazztechhub-service
 ```
@@ -45,6 +46,7 @@ docker run -d \
 | DATABASE_USER | Used for connecting to database |
 | DATABASE_PASS | Used for connecting to database |
 | DATABASE_SCHEMA | Used for connecting to database |
+| DATABASE_SSL | To configure whether to use SSL for database |
 
 ## Building container
 

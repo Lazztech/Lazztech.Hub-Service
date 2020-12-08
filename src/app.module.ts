@@ -27,7 +27,11 @@ import { HealthController } from './health/health.controller';
         username: configService.get('DATABASE_USER', 'postgres'),
         password: configService.get('DATABASE_PASS', 'postgres'),
         database: configService.get('DATABASE_SCHEMA', 'postgres'),
+        extra: {
+          ssl: configService.get('DATABASE_SSL', true), 
+        },
         logging: true,
+        
         // migrationsRun: true,
         synchronize: true,
         entities: [__dirname + '/dal/entity/**/*.*.*'],
