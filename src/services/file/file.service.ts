@@ -3,10 +3,11 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { isNullOrUndefined } from 'util';
 import * as uuidv1 from 'uuid/v1';
+import { IFileService } from './file.interface';
 import { ImageFileService } from './image-file/image-file.service';
 
 @Injectable()
-export class FileService {
+export class FileService implements IFileService {
   private logger = new Logger(FileService.name, true);
   containerName = 'publicimages';
 
