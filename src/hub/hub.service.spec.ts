@@ -8,8 +8,10 @@ import { JoinUserHub } from 'src/dal/entity/joinUserHub.entity';
 import { JoinUserInAppNotifications } from 'src/dal/entity/joinUserInAppNotifications.entity';
 import { User } from 'src/dal/entity/user.entity';
 import { UserDevice } from 'src/dal/entity/userDevice.entity';
-import { FileService } from 'src/services/file/file.service';
+import { AzureFileService } from 'src/services/file/azure-file/azure-file.service';
+import { FileServiceInterface } from 'src/services/file/file-service.interface';
 import { ImageFileService } from 'src/services/file/image-file/image-file.service';
+import { fileServiceFactory, fileServiceToken } from 'src/services/services.module';
 import { Repository } from 'typeorm';
 import { NotificationService } from '../notification/notification.service';
 import { HubService } from './hub.service';
@@ -19,7 +21,7 @@ describe('HubService', () => {
   let joinUserHubRepo: Repository<JoinUserHub>;
   let userRepo: Repository<User>;
   let hubRepo: Repository<Hub>;
-  let fileService: FileService;
+  let fileService: FileServiceInterface;
   let notificationService: NotificationService;
 
   beforeEach(async () => {
@@ -35,7 +37,10 @@ describe('HubService', () => {
         HubService,
         NotificationService,
         ImageFileService,
-        FileService,
+        {
+          provide: fileServiceToken,
+          useClass: AzureFileService
+        },
         NotificationService,
         {
           provide: getRepositoryToken(User),
@@ -70,7 +75,7 @@ describe('HubService', () => {
     );
     userRepo = module.get<Repository<User>>(getRepositoryToken(User));
     hubRepo = module.get<Repository<Hub>>(getRepositoryToken(Hub));
-    fileService = module.get<FileService>(FileService);
+    fileService = module.get<FileServiceInterface>(fileServiceToken);
     notificationService = module.get<NotificationService>(NotificationService);
   });
 

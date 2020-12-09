@@ -5,13 +5,15 @@ import { JoinUserHub } from 'src/dal/entity/joinUserHub.entity';
 import { User } from 'src/dal/entity/user.entity';
 import { Repository } from 'typeorm';
 import { UserService } from './user.service';
-import { FileService } from 'src/services/file/file.service';
 import { EmailService } from 'src/services/email/email.service';
 import { Invite } from 'src/dal/entity/invite.entity';
 import { ConfigService } from '@nestjs/config';
 import { PasswordReset } from 'src/dal/entity/passwordReset.entity';
 import { EditUserDetails } from './dto/editUserDetails.input';
 import { ImageFileService } from 'src/services/file/image-file/image-file.service';
+import { fileServiceFactory, fileServiceToken } from 'src/services/services.module';
+import { FileServiceInterface } from 'src/services/file/file-service.interface';
+import { AzureFileService } from 'src/services/file/azure-file/azure-file.service';
 
 describe('UserService', () => {
   let service: UserService;
@@ -19,14 +21,17 @@ describe('UserService', () => {
   let userRepo: Repository<User>;
   let inviteRepo: Repository<Invite>;
   let emailService: EmailService;
-  let fileService: FileService;
+  let fileService: FileServiceInterface;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         UserService,
         ImageFileService,
-        FileService,
+        {
+          provide: fileServiceToken,
+          useClass: AzureFileService
+        },
         EmailService,
         ConfigService,
         {
@@ -56,7 +61,7 @@ describe('UserService', () => {
     userRepo = module.get<Repository<User>>(getRepositoryToken(User));
     inviteRepo = module.get<Repository<Invite>>(getRepositoryToken(Invite));
     emailService = module.get<EmailService>(EmailService);
-    fileService = module.get<FileService>(FileService);
+    fileService = module.get<FileServiceInterface>(fileServiceToken);
   });
 
   it('should be defined', async () => {

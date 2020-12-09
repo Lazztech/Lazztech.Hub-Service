@@ -30,7 +30,7 @@ job "lazztechhub-service" {
 // ACCESS_TOKEN_SECRET={{ .Data.data.access_token_secret }}
 // FIREBASE_SERVER_KEY={{ .Data.data.firebase_server_key }}
 
-// AzureWebJobsStorage={{ .Data.data.azure_web_jobs_storage }}
+// BLOB_STORAGE_CONNECTION_STRING={{ .Data.data.azure_web_jobs_storage }}
 // EMAIL_FROM_ADDRESS={{ .Data.data.email_from_address }}
 // EMAIL_PASSWORD={{ .Data.data.email_password }}
 // PUSH_NOTIFICATION_ENDPOINT=https://fcm.googleapis.com/fcm/send

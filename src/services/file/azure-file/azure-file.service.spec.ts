@@ -1,17 +1,17 @@
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
-import { FileService } from './file.service';
-import { ImageFileService } from './image-file/image-file.service';
+import { AzureFileService } from './azure-file.service';
+import { ImageFileService } from '../image-file/image-file.service';
 
 describe('FileService', () => {
-  let service: FileService;
+  let service: AzureFileService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [ConfigService, ImageFileService, FileService],
+      providers: [ConfigService, ImageFileService, AzureFileService],
     }).compile();
 
-    service = module.get<FileService>(FileService);
+    service = module.get<AzureFileService>(AzureFileService);
   });
 
   it('should be defined', () => {

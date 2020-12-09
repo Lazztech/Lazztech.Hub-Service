@@ -1,9 +1,10 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Hub } from 'src/dal/entity/hub.entity';
 import { JoinUserHub } from 'src/dal/entity/joinUserHub.entity';
 import { User } from 'src/dal/entity/user.entity';
-import { FileService } from 'src/services/file/file.service';
+import { FileServiceInterface } from 'src/services/file/file-service.interface';
+import { fileServiceToken } from 'src/services/services.module';
 import { Repository } from 'typeorm';
 import { EditUserDetails } from './dto/editUserDetails.input';
 
@@ -12,7 +13,7 @@ export class UserService {
   private logger = new Logger(UserService.name);
 
   constructor(
-    private fileService: FileService,
+    @Inject(fileServiceToken) private readonly fileService: FileServiceInterface,
     @InjectRepository(JoinUserHub)
     private joinUserHubRepository: Repository<JoinUserHub>,
     @InjectRepository(User)

@@ -29,10 +29,9 @@ import { S3Module, S3ModuleOptions } from 'nestjs-s3';
         password: configService.get('DATABASE_PASS', 'postgres'),
         database: configService.get('DATABASE_SCHEMA', 'postgres'),
         extra: {
-          ssl: configService.get('DATABASE_SSL', true), 
+          ssl: configService.get('DATABASE_SSL', true),
         },
         logging: true,
-        
         // migrationsRun: true,
         synchronize: true,
         entities: [__dirname + '/dal/entity/**/*.*.*'],
@@ -52,8 +51,8 @@ import { S3Module, S3ModuleOptions } from 'nestjs-s3';
             s3ForcePathStyle: true,
             signatureVersion: 'v4',
           },
-        } as S3ModuleOptions
-      }
+        } as S3ModuleOptions;
+      },
     }),
     ServicesModule,
     NotificationModule,

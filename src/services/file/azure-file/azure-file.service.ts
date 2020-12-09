@@ -3,12 +3,12 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { isNullOrUndefined } from 'util';
 import * as uuidv1 from 'uuid/v1';
-import { IFileService } from './file.interface';
-import { ImageFileService } from './image-file/image-file.service';
+import { FileServiceInterface } from '../file-service.interface';
+import { ImageFileService } from '../image-file/image-file.service';
 
 @Injectable()
-export class FileService implements IFileService {
-  private logger = new Logger(FileService.name, true);
+export class AzureFileService implements FileServiceInterface {
+  private logger = new Logger(AzureFileService.name, true);
   containerName = 'publicimages';
 
   constructor(
@@ -99,9 +99,9 @@ export class FileService implements IFileService {
   private getStorageConnectionString() {
     this.logger.log(this.getStorageConnectionString.name);
     this.logger.log(this.getStorageConnectionString.name);
-    const storageString = this.configService.get<string>('AzureWebJobsStorage');
+    const storageString = this.configService.get<string>('BLOB_STORAGE_CONNECTION_STRING');
     if (isNullOrUndefined(storageString) || storageString === '') {
-      throw Error('Missing process.env.AzureWebJobsStorage');
+      throw Error('Missing process.env.BLOB_STORAGE_CONNECTION_STRING');
     }
     return storageString;
   }
