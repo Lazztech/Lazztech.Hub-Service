@@ -47,6 +47,7 @@
     "is-jpg": "^2.0.0",
     "jpeg-js": "^0.3.6",
     "jsonwebtoken": "^8.5.1",
+    "nestjs-admin": "^0.4.1",
     "nestjs-s3": "^1.0.1",
     "node-datetime": "^2.1.2",
     "nodemailer": "^6.4.2",
