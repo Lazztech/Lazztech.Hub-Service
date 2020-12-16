@@ -1,10 +1,13 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { ExpressAdapter } from '@nestjs/platform-express';
 import * as bodyParser from 'body-parser';
-import { checkEnvVariables } from './config/envChecker';
+import { AppModule } from './app.module';
+import express = require('express');
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const instance = express();
+  instance.use('/avatars', require('adorable-avatars/dist/index'));
+  const app = await NestFactory.create(AppModule, new ExpressAdapter(instance));
   app.use(bodyParser.json({ limit: '50mb' }));
   app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
   app.enableCors({
@@ -12,7 +15,6 @@ async function bootstrap() {
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
-  // checkEnvVariables()
   await app.listen(process.env.PORT || 8080);
 }
 bootstrap();
