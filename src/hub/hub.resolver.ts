@@ -90,6 +90,16 @@ export class HubResolver {
   }
 
   @UseGuards(AuthGuard)
+  @Query(() => Invite)
+  public async invite(
+    @UserId() userId,
+    @Args({ name: 'hubId', type: () => ID }) hubId: number,
+  ): Promise<Invite> {
+    this.logger.log(this.invite.name);
+    return await this.hubInviteService.getInvite(userId, hubId);
+  }
+
+  @UseGuards(AuthGuard)
   @Mutation(() => Invite)
   public async inviteUserToHub(
     @UserId() userId,
