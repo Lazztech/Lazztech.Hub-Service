@@ -40,6 +40,13 @@ export class HubInviteService {
     } as Invite);
   }
 
+  async getInvitesByUser(userId: any) {
+    this.logger.log(this.getInvitesByUser.name);
+    return await this.inviteRepository.find({
+      inviteesId: userId
+    } as Invite);
+  }
+
   async inviteUserToHub(userId: any, hubId: number, inviteesEmail: string) {
     this.logger.log(this.inviteUserToHub.name);
     const userHubRelationship = await this.joinUserHubRepository.findOne({

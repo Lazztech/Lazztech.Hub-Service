@@ -99,6 +99,7 @@ type Query {
   commonUsersHubs(otherUsersId: ID!): [JoinUserHub!]!
   invitesByHub(hubId: ID!): [Invite!]!
   invite(hubId: ID!): Invite!
+  invitesByUser: [Invite!]!
   usersPeople: [User!]!
   searchHubByName(search: String!): [Hub!]!
   ownedHubs: [Hub!]!

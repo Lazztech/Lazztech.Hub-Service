@@ -100,6 +100,15 @@ export class HubResolver {
   }
 
   @UseGuards(AuthGuard)
+  @Query(() => [Invite])
+  public async invitesByUser(
+    @UserId() userId,
+  ): Promise<Invite[]> {
+    this.logger.log(this.invitesByUser.name);
+    return await this.hubInviteService.getInvitesByUser(userId);
+  }
+
+  @UseGuards(AuthGuard)
   @Mutation(() => Invite)
   public async inviteUserToHub(
     @UserId() userId,
