@@ -40,11 +40,18 @@ export class HubInviteService {
     } as Invite);
   }
 
-  async getInvitesByUser(userId: any) {
+  async getInvitesByUser(userId: any, includeAccepted: boolean) {
     this.logger.log(this.getInvitesByUser.name);
-    return await this.inviteRepository.find({
-      inviteesId: userId
-    } as Invite);
+    if (includeAccepted) {
+      return await this.inviteRepository.find({
+        inviteesId: userId,
+      } as Invite);
+    } else {
+      return await this.inviteRepository.find({
+        inviteesId: userId,
+        accepted: false
+      });
+    }
   }
 
   async inviteUserToHub(userId: any, hubId: number, inviteesEmail: string) {

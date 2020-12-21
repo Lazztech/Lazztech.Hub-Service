@@ -103,9 +103,10 @@ export class HubResolver {
   @Query(() => [Invite])
   public async invitesByUser(
     @UserId() userId,
+    @Args({ name: 'includeAccepted', type: () => Boolean, nullable: true }) includeAccepted: boolean = false
   ): Promise<Invite[]> {
     this.logger.log(this.invitesByUser.name);
-    return await this.hubInviteService.getInvitesByUser(userId);
+    return await this.hubInviteService.getInvitesByUser(userId, includeAccepted);
   }
 
   @UseGuards(AuthGuard)
