@@ -65,6 +65,7 @@ type Mutation {
   inviteUserToHub(inviteesEmail: String!, hubId: ID!): Invite!
   acceptHubInvite(inviteId: ID!): JoinUserHub!
   deleteInvite(inviteId: ID!, hubId: ID!): Boolean!
+  leaveHub(hubId: ID!): Boolean!
   deleteHub(hubId: ID!): Boolean!
   editHub(description: String!, name: String!, hubId: ID!): Hub!
   changeHubImage(newImage: String!, hubId: ID!): Hub!

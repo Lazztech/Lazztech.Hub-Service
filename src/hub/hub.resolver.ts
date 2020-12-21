@@ -141,6 +141,15 @@ export class HubResolver {
     return true;
   }
 
+  @Mutation(() => Boolean)
+  public async leaveHub(
+    @UserId() userId,
+    @Args({ name: 'hubId', type: () => ID }) hubId: number,
+  ) {
+    await this.hubService.leaveHub(userId, hubId);
+    return true;
+  }
+
   @Query(() => [User])
   public async usersPeople(@UserId() userId): Promise<User[]> {
     this.logger.log(this.usersPeople.name);

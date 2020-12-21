@@ -1,6 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Hub } from 'src/dal/entity/hub.entity';
+import { Invite } from 'src/dal/entity/invite.entity';
 import { JoinUserHub } from 'src/dal/entity/joinUserHub.entity';
 import { User } from 'src/dal/entity/user.entity';
 import { FileServiceInterface } from 'src/services/file/file-service.interface';
@@ -16,6 +17,8 @@ export class HubService {
     private hubRepository: Repository<Hub>,
     @InjectRepository(JoinUserHub)
     private joinUserHubRepository: Repository<JoinUserHub>,
+    @InjectRepository(Invite)
+    private inviteRepository: Repository<Invite>,
   ) {
     this.logger.log('constructor');
   }
@@ -161,6 +164,15 @@ export class HubService {
     hub = await this.hubRepository.save(hub);
 
     return hub;
+  }
+
+  async leaveHub(userId: any, hubId: number) {
+    this.logger.log(this.leaveHub.name);
+    const joinUserHub = await this.joinUserHubRepository.findOneOrFail({ userId, hubId });
+    await this.joinUserHubRepository.remove(joinUserHub);
+
+    const invite = await this.inviteRepository.findOne({ inviteesId: userId, hubId });
+    await this.inviteRepository.remove(invite);
   }
 
   async setHubStarred(userId: any, hubId: number) {
