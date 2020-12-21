@@ -126,18 +126,14 @@ export class HubResolver {
 
   @UseGuards(AuthGuard)
   @Mutation(() => JoinUserHub)
-  public async respondToHubInvite(
+  public async acceptHubInvite(
     @UserId() userId,
-    @Args({ name: 'invitersId', type: () => ID }) invitersId: number,
-    @Args({ name: 'hubId', type: () => ID }) hubId: number,
-    @Args({ name: 'accepted', type: () => Boolean }) accepted: boolean,
+    @Args({ name: 'inviteId', type: () => ID }) inviteId: number,
   ): Promise<JoinUserHub> {
-    this.logger.log(this.respondToHubInvite.name);
-    const result = await this.hubInviteService.respondToHubInvite(
+    this.logger.log(this.acceptHubInvite.name);
+    const result = await this.hubInviteService.acceptHubInvite(
       userId,
-      invitersId,
-      hubId,
-      accepted,
+      inviteId,
     );
     return result;
   }
@@ -231,17 +227,6 @@ export class HubResolver {
       newImage,
     );
     return result;
-  }
-
-  @UseGuards(AuthGuard)
-  @Mutation(() => Boolean)
-  public async joinHub(
-    @UserId() userId,
-    @Args({ name: 'id', type: () => ID }) id: number,
-  ): Promise<boolean> {
-    this.logger.log(this.joinHub.name);
-    await this.hubService.joinHub(userId, id);
-    return true;
   }
 
   @UseGuards(AuthGuard)

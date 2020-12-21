@@ -88,30 +88,23 @@ export class HubInviteService {
     return invite;
   }
 
-  public async respondToHubInvite(
+  public async acceptHubInvite(
     inviteesId: number,
-    invitersId: number,
-    hubId: number,
-    accepted: boolean,
+    inviteId: number
   ) {
-    this.logger.log(this.respondToHubInvite.name);
-    if (accepted) {
-      const invite = await this.inviteRepository.findOne({
-        inviteesId,
-        invitersId,
-        hubId,
-      });
+    this.logger.log(this.acceptHubInvite.name);
+    let invite = await this.inviteRepository.findOneOrFail({ id: inviteId });
+    invite.accepted = true;
 
-      let newRelationship = this.joinUserHubRepository.create({
-        userId: invite.inviteesId,
-        hubId: invite.hubId,
-        isOwner: false,
-      });
-      newRelationship = await this.joinUserHubRepository.save(newRelationship);
-      return newRelationship;
-    } else {
-      return null;
-    }
+    let newRelationship = this.joinUserHubRepository.create({
+      userId: invite.inviteesId,
+      hubId: invite.hubId,
+      isOwner: false,
+    });
+    newRelationship = await this.joinUserHubRepository.save(newRelationship);
+
+    invite = await this.inviteRepository.save(invite);
+    return newRelationship;
   }
 
   async deleteInvite(userId: any, hubId: any, inviteId: any) {
