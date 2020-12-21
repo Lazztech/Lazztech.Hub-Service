@@ -15,6 +15,7 @@ import { HubInviteService } from './hub-invite/hub-invite.service';
 import { HubMicroChatService } from './hub-micro-chat/hub-micro-chat.service';
 import { HubService } from './hub.service';
 
+@UseGuards(AuthGuard)
 @Resolver()
 export class HubResolver {
   private logger = new Logger(HubResolver.name, true);
@@ -28,7 +29,6 @@ export class HubResolver {
     private userService: UserService,
   ) {}
 
-  @UseGuards(AuthGuard)
   @Mutation(() => JoinUserHub)
   public async createHub(
     @UserId() userId,
@@ -49,7 +49,6 @@ export class HubResolver {
     return hub;
   }
 
-  @UseGuards(AuthGuard)
   @Query(() => JoinUserHub)
   public async hub(
     @UserId() userId,
@@ -60,7 +59,6 @@ export class HubResolver {
     return result;
   }
 
-  @UseGuards(AuthGuard)
   @Query(() => [JoinUserHub])
   public async usersHubs(@UserId() userId): Promise<JoinUserHub[]> {
     this.logger.log(this.usersHubs.name);
@@ -68,7 +66,6 @@ export class HubResolver {
     return result;
   }
 
-  @UseGuards(AuthGuard)
   @Query(() => [JoinUserHub])
   public async commonUsersHubs(
     @UserId() userId,
@@ -79,7 +76,6 @@ export class HubResolver {
     return result;
   }
 
-  @UseGuards(AuthGuard)
   @Query(() => [Invite])
   public async invitesByHub(
     @UserId() userId,
@@ -89,7 +85,6 @@ export class HubResolver {
     return await this.hubInviteService.getInvitesByHub(userId, hubId);
   }
 
-  @UseGuards(AuthGuard)
   @Query(() => Invite)
   public async invite(
     @UserId() userId,
@@ -99,7 +94,6 @@ export class HubResolver {
     return await this.hubInviteService.getInvite(userId, hubId);
   }
 
-  @UseGuards(AuthGuard)
   @Query(() => [Invite])
   public async invitesByUser(
     @UserId() userId,
@@ -109,7 +103,6 @@ export class HubResolver {
     return await this.hubInviteService.getInvitesByUser(userId, includeAccepted);
   }
 
-  @UseGuards(AuthGuard)
   @Mutation(() => Invite)
   public async inviteUserToHub(
     @UserId() userId,
@@ -125,7 +118,6 @@ export class HubResolver {
     return invite;
   }
 
-  @UseGuards(AuthGuard)
   @Mutation(() => JoinUserHub)
   public async acceptHubInvite(
     @UserId() userId,
@@ -139,7 +131,6 @@ export class HubResolver {
     return result;
   }
 
-  @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
   public async deleteInvite(
     @UserId() userId,
@@ -150,7 +141,6 @@ export class HubResolver {
     return true;
   }
 
-  @UseGuards(AuthGuard)
   @Query(() => [User])
   public async usersPeople(@UserId() userId): Promise<User[]> {
     this.logger.log(this.usersPeople.name);
@@ -158,7 +148,6 @@ export class HubResolver {
     return result;
   }
 
-  @UseGuards(AuthGuard)
   @Query(() => [Hub])
   public async searchHubByName(
     @UserId() userId,
@@ -169,7 +158,6 @@ export class HubResolver {
     return results;
   }
 
-  @UseGuards(AuthGuard)
   @Query(() => [Hub])
   public async ownedHubs(@UserId() userId): Promise<Hub[]> {
     this.logger.log(this.ownedHubs.name);
@@ -177,7 +165,6 @@ export class HubResolver {
     return ownedHubs;
   }
 
-  @UseGuards(AuthGuard)
   @Query(() => [Hub])
   public async memberOfHubs(@UserId() userId): Promise<Hub[]> {
     this.logger.log(this.memberOfHubs.name);
@@ -185,7 +172,6 @@ export class HubResolver {
     return memberOfHubs;
   }
 
-  @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
   public async deleteHub(
     @UserId() userId,
@@ -196,7 +182,6 @@ export class HubResolver {
     return true;
   }
 
-  @UseGuards(AuthGuard)
   @Mutation(() => Hub)
   public async editHub(
     @UserId() userId,
@@ -214,7 +199,6 @@ export class HubResolver {
     return result;
   }
 
-  @UseGuards(AuthGuard)
   @Mutation(() => Hub)
   public async changeHubImage(
     @UserId() userId,
@@ -230,7 +214,6 @@ export class HubResolver {
     return result;
   }
 
-  @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
   public async setHubStarred(
     @UserId() userId,
@@ -241,7 +224,6 @@ export class HubResolver {
     return true;
   }
 
-  @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
   public async setHubNotStarred(
     @UserId() userId,
@@ -252,7 +234,6 @@ export class HubResolver {
     return true;
   }
 
-  @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
   public async enteredHubGeofence(
     @UserId() userId,
@@ -263,7 +244,6 @@ export class HubResolver {
     return true;
   }
 
-  @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
   public async exitedHubGeofence(
     @UserId() userId,
@@ -274,7 +254,6 @@ export class HubResolver {
     return true;
   }
 
-  @UseGuards(AuthGuard)
   @Mutation(() => Hub)
   public async activateHub(
     @UserId() userId,
@@ -285,7 +264,6 @@ export class HubResolver {
     return result;
   }
 
-  @UseGuards(AuthGuard)
   @Mutation(() => Hub)
   public async deactivateHub(
     @UserId() userId,
@@ -296,7 +274,6 @@ export class HubResolver {
     return result;
   }
 
-  @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
   public async microChatToHub(
     @UserId() userId,
@@ -308,7 +285,6 @@ export class HubResolver {
     return true;
   }
 
-  @UseGuards(AuthGuard)
   @Mutation(() => MicroChat)
   public async createMicroChat(
     @UserId() userId,
@@ -324,7 +300,6 @@ export class HubResolver {
     return microChat;
   }
 
-  @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
   public async deleteMicroChat(
     @UserId() userId,
