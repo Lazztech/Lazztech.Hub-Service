@@ -63,12 +63,11 @@ type MicroChat {
 type Mutation {
   createHub(longitude: Float!, latitude: Float!, image: String!, description: String!, name: String!): JoinUserHub!
   inviteUserToHub(inviteesEmail: String!, hubId: ID!): Invite!
-  respondToHubInvite(accepted: Boolean!, hubId: ID!, invitersId: ID!): JoinUserHub!
+  acceptHubInvite(inviteId: ID!): JoinUserHub!
   deleteInvite(inviteId: ID!, hubId: ID!): Boolean!
   deleteHub(hubId: ID!): Boolean!
   editHub(description: String!, name: String!, hubId: ID!): Hub!
   changeHubImage(newImage: String!, hubId: ID!): Hub!
-  joinHub(id: ID!): Boolean!
   setHubStarred(hubId: ID!): Boolean!
   setHubNotStarred(hubId: ID!): Boolean!
   enteredHubGeofence(hubId: ID!): Boolean!

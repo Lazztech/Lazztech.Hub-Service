@@ -163,17 +163,6 @@ export class HubService {
     return hub;
   }
 
-  async joinHub(userId: any, id: any) {
-    this.logger.log(this.joinHub.name);
-    let joinUserHub = this.joinUserHubRepository.create({
-      userId,
-      hubId: id,
-      isOwner: true,
-    });
-    joinUserHub = await this.joinUserHubRepository.save(joinUserHub);
-    return joinUserHub;
-  }
-
   async setHubStarred(userId: any, hubId: number) {
     this.logger.log(this.setHubStarred.name);
     const hubRelationship = await this.joinUserHubRepository.findOne({

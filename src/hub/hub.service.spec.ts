@@ -368,26 +368,6 @@ describe('HubService', () => {
     expect(saveCall).toHaveBeenCalled();
   });
 
-  it('should save for joinHub', async () => {
-    // Arrange
-    const userId = 1;
-    const hubId = 1;
-    const expectedResult = {
-      userId,
-      hubId,
-      isOwner: true,
-    } as JoinUserHub;
-    jest.spyOn(joinUserHubRepo, 'create').mockReturnValueOnce(expectedResult);
-    const saveCall = jest
-      .spyOn(joinUserHubRepo, 'save')
-      .mockResolvedValueOnce(expectedResult);
-    // Act
-    const result = await hubService.joinHub(userId, hubId);
-    // Assert
-    expect(result).toEqual(expectedResult);
-    expect(saveCall).toHaveBeenCalled();
-  });
-
   it('should resolve for setHubStarred', async () => {
     // Arrange
     const userId = 1;
