@@ -86,7 +86,7 @@ export class HubService {
     const imageUrl = await this.fileService.storePublicImageFromBase64(
       hub.image,
     );
-    // TODO save as a transaction
+    hub.image = imageUrl;
     const result = await this.hubRepository.save(hub);
     const joinUserHub = this.joinUserHubRepository.create({
       userId,
