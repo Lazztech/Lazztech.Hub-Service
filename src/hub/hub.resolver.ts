@@ -80,9 +80,10 @@ export class HubResolver {
   public async invitesByHub(
     @UserId() userId,
     @Args({ name: 'hubId', type: () => ID }) hubId: number,
+    @Args({ name: 'includeAccepted', type: () => Boolean, nullable: true }) includeAccepted: boolean = false
   ): Promise<Invite[]> {
     this.logger.log(this.invitesByHub.name);
-    return await this.hubInviteService.getInvitesByHub(userId, hubId);
+    return await this.hubInviteService.getInvitesByHub(userId, hubId, includeAccepted);
   }
 
   @Query(() => Invite)

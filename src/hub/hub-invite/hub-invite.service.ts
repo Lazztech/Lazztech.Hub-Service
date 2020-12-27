@@ -20,7 +20,7 @@ export class HubInviteService {
     private notificationService: NotificationService,
   ) {}
 
-  async getInvitesByHub(userId: any, hubId: any) {
+  async getInvitesByHub(userId: any, hubId: any, includeAccepted: boolean) {
     this.logger.log(this.getInvitesByHub.name);
     const userHubRelationship = await this.joinUserHubRepository.findOne({
       userId,
@@ -29,7 +29,7 @@ export class HubInviteService {
     });
     this.validateRelationship(userHubRelationship, hubId, userId);
 
-    return await this.inviteRepository.find({ hubId });
+    return await this.inviteRepository.find({ hubId, accepted: includeAccepted });
   }
 
   async getInvite(userId: any, hubId: any) {
@@ -42,16 +42,10 @@ export class HubInviteService {
 
   async getInvitesByUser(userId: any, includeAccepted: boolean) {
     this.logger.log(this.getInvitesByUser.name);
-    if (includeAccepted) {
-      return await this.inviteRepository.find({
-        inviteesId: userId,
-      } as Invite);
-    } else {
-      return await this.inviteRepository.find({
-        inviteesId: userId,
-        accepted: false
-      });
-    }
+    return await this.inviteRepository.find({
+      inviteesId: userId,
+      accepted: includeAccepted
+    } as Invite);
   }
 
   async inviteUserToHub(userId: any, hubId: number, inviteesEmail: string) {
