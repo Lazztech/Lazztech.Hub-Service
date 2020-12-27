@@ -98,13 +98,33 @@ export class HubInviteService {
     invite.accepted = true;
 
     let newRelationship = this.joinUserHubRepository.create({
-      userId: invite.inviteesId,
+      userId: inviteesId,
       hubId: invite.hubId,
       isOwner: false,
     });
     newRelationship = await this.joinUserHubRepository.save(newRelationship);
+    newRelationship = await this.joinUserHubRepository.findOneOrFail({ 
+      userId: newRelationship.userId, 
+      hubId: newRelationship.hubId
+    });
+    const invitee = await newRelationship.user;
+    const hub = await newRelationship.hub;
 
     invite = await this.inviteRepository.save(invite);
+    await this.notificationService.addInAppNotificationForUser(invitee.id, {
+      thumbnail: hub.image,
+      header: `${invitee.firstName} accepted invite`,
+      text: `to "${hub.name}" hub.`,
+      date: Date.now().toString(),
+      actionLink: null,
+    });
+
+    await this.notificationService.sendPushToUser(invitee.id, {
+      title: `${invitee.firstName} accepted invite`,
+      body: `to "${hub.name}" hub.`,
+      click_action: null,
+    });
+
     return newRelationship;
   }
 
