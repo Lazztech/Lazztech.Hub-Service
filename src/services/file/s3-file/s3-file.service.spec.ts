@@ -18,13 +18,9 @@ describe('S3FileService', () => {
             s3ForcePathStyle: true,
             signatureVersion: 'v4',
           },
-        }),
+        } as S3ModuleOptions),
       ],
-      providers: [
-        S3FileService,
-        ImageFileService,
-        ConfigService
-      ],
+      providers: [S3FileService, ImageFileService, ConfigService],
     }).compile();
 
     service = module.get<S3FileService>(S3FileService);

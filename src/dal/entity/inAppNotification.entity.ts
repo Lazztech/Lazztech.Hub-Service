@@ -5,7 +5,7 @@ import { JoinUserInAppNotifications } from './joinUserInAppNotifications.entity'
 @ObjectType()
 @Entity()
 export class InAppNotification {
-  @Field(type => ID)
+  @Field(() => ID)
   @PrimaryGeneratedColumn()
   public id: number;
 
@@ -31,7 +31,7 @@ export class InAppNotification {
 
   @OneToMany(
     () => JoinUserInAppNotifications,
-    joinUserInAppNotifications => joinUserInAppNotifications.user,
+    (joinUserInAppNotifications) => joinUserInAppNotifications.user,
   )
   public usersConnection: Promise<JoinUserInAppNotifications[]>;
 }

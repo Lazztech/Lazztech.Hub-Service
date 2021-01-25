@@ -13,7 +13,8 @@ export class UserService {
   private logger = new Logger(UserService.name);
 
   constructor(
-    @Inject(fileServiceToken) private readonly fileService: FileServiceInterface,
+    @Inject(fileServiceToken)
+    private readonly fileService: FileServiceInterface,
     @InjectRepository(JoinUserHub)
     private joinUserHubRepository: Repository<JoinUserHub>,
     @InjectRepository(User)
@@ -35,7 +36,7 @@ export class UserService {
       isOwner: true,
     });
     const hubs: Hub[] = await Promise.all(
-      joinUserHubResults.map(result => result.hub),
+      joinUserHubResults.map((result) => result.hub),
     );
     return hubs;
   }
@@ -48,7 +49,7 @@ export class UserService {
       isOwner: false,
     });
     const hubs: Hub[] = await Promise.all(
-      joinUserHubResults.map(result => result.hub),
+      joinUserHubResults.map((result) => result.hub),
     );
     return hubs;
   }

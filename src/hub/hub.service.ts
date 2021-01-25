@@ -12,7 +12,8 @@ import { Repository } from 'typeorm';
 export class HubService {
   private readonly logger = new Logger(HubService.name, true);
   constructor(
-    @Inject(fileServiceToken) private readonly fileService: FileServiceInterface,
+    @Inject(fileServiceToken)
+    private readonly fileService: FileServiceInterface,
     @InjectRepository(Hub)
     private hubRepository: Repository<Hub>,
     @InjectRepository(JoinUserHub)
@@ -39,11 +40,11 @@ export class HubService {
       userId,
     });
 
-    const hubs = await Promise.all(userHubRelationships.map(x => x.hub));
+    const hubs = await Promise.all(userHubRelationships.map((x) => x.hub));
     const commonHubRelationships = [];
     for (const hub of hubs) {
       const result = (await hub.usersConnection).find(
-        x => x.userId == otherUsersId,
+        (x) => x.userId == otherUsersId,
       );
       if (result) {
         commonHubRelationships.push(result);
@@ -59,7 +60,7 @@ export class HubService {
       userId,
     });
 
-    const usersHubs = await Promise.all(userHubRelationships.map(x => x.hub));
+    const usersHubs = await Promise.all(userHubRelationships.map((x) => x.hub));
 
     let commonConnections: JoinUserHub[] = [];
     for (const hub of usersHubs) {
@@ -67,13 +68,13 @@ export class HubService {
     }
 
     const resultingOtherUsers: User[] = await Promise.all(
-      commonConnections.filter(x => x.userId != userId).map(x => x.user),
+      commonConnections.filter((x) => x.userId != userId).map((x) => x.user),
     );
 
     const uniqueUsers: User[] = [];
     for (let index = 0; index < resultingOtherUsers.length; index++) {
       const user = resultingOtherUsers[index];
-      if (uniqueUsers.find(x => x.id == user.id) == undefined) {
+      if (uniqueUsers.find((x) => x.id == user.id) == undefined) {
         uniqueUsers.push(user);
       }
     }
@@ -87,7 +88,7 @@ export class HubService {
       hub.image,
     );
     hub.image = imageUrl;
-    const result = await this.hubRepository.save(hub);
+    await this.hubRepository.save(hub);
     const joinUserHub = this.joinUserHubRepository.create({
       userId,
       hubId: hub.id,
@@ -168,10 +169,16 @@ export class HubService {
 
   async leaveHub(userId: any, hubId: number) {
     this.logger.log(this.leaveHub.name);
-    const joinUserHub = await this.joinUserHubRepository.findOneOrFail({ userId, hubId });
+    const joinUserHub = await this.joinUserHubRepository.findOneOrFail({
+      userId,
+      hubId,
+    });
     await this.joinUserHubRepository.remove(joinUserHub);
 
-    const invite = await this.inviteRepository.findOne({ inviteesId: userId, hubId });
+    const invite = await this.inviteRepository.findOne({
+      inviteesId: userId,
+      hubId,
+    });
     await this.inviteRepository.remove(invite);
   }
 

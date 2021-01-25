@@ -7,7 +7,7 @@ import { Invite } from './invite.entity';
 @ObjectType()
 @Entity()
 export class Hub {
-  @Field(type => ID)
+  @Field(() => ID)
   @PrimaryGeneratedColumn()
   public id: number;
 
@@ -36,23 +36,14 @@ export class Hub {
   public longitude: number;
 
   @Field(() => [JoinUserHub], { nullable: true })
-  @OneToMany(
-    type => JoinUserHub,
-    joinUserHub => joinUserHub.hub,
-  )
+  @OneToMany(() => JoinUserHub, (joinUserHub) => joinUserHub.hub)
   public usersConnection: Promise<JoinUserHub[]>;
 
   @Field(() => [MicroChat], { nullable: true })
-  @OneToMany(
-    type => MicroChat,
-    microChat => microChat.hub,
-  )
+  @OneToMany(() => MicroChat, (microChat) => microChat.hub)
   public microChats: Promise<MicroChat[]>;
 
   @Field(() => [Invite], { nullable: true })
-  @OneToMany(
-    () => Invite,
-    invite => invite.hub,
-  )
+  @OneToMany(() => Invite, (invite) => invite.hub)
   public invites: Promise<Invite[]>;
 }

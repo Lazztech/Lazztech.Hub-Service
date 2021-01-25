@@ -3,8 +3,6 @@ import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
-import { InAppNotification } from '../dal/entity/inAppNotification.entity';
-import { JoinUserInAppNotifications } from '../dal/entity/joinUserInAppNotifications.entity';
 import { User } from '../dal/entity/user.entity';
 import { Repository } from 'typeorm';
 import { ChangePassword } from './dto/changePassword.input';

@@ -4,7 +4,7 @@ import { User } from './user.entity';
 
 @Entity()
 export class UserDevice {
-  @Field(type => ID)
+  @Field(() => ID)
   @PrimaryGeneratedColumn()
   public id: number;
 
@@ -15,10 +15,9 @@ export class UserDevice {
   @Column()
   public userId: number;
 
-  @ManyToOne(
-    () => User,
-    user => user.userDevices,
-    { primary: true, onDelete: 'CASCADE' },
-  )
+  @ManyToOne(() => User, (user) => user.userDevices, {
+    primary: true,
+    onDelete: 'CASCADE',
+  })
   public user: Promise<User>;
 }

@@ -6,7 +6,6 @@ import { PasswordReset } from '../dal/entity/passwordReset.entity';
 import { ImageFileService } from './file/image-file/image-file.service';
 import { S3FileService } from './file/s3-file/s3-file.service';
 import { ConfigService } from '@nestjs/config';
-import { FileServiceInterface } from './file/file-service.interface';
 
 export const fileServiceToken = 'FileService';
 export const fileServiceFactory = {
@@ -42,4 +41,4 @@ export const fileServiceFactory = {
   ],
   exports: [fileServiceToken, EmailService],
 })
-export class ServicesModule { }
+export class ServicesModule {}

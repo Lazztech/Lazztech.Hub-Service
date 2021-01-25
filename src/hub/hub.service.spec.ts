@@ -11,7 +11,7 @@ import { UserDevice } from '../dal/entity/userDevice.entity';
 import { AzureFileService } from '../services/file/azure-file/azure-file.service';
 import { FileServiceInterface } from '../services/file/file-service.interface';
 import { ImageFileService } from '../services/file/image-file/image-file.service';
-import { fileServiceFactory, fileServiceToken } from '../services/services.module';
+import { fileServiceToken } from '../services/services.module';
 import { Repository } from 'typeorm';
 import { NotificationService } from '../notification/notification.service';
 import { HubService } from './hub.service';
@@ -19,10 +19,8 @@ import { HubService } from './hub.service';
 describe('HubService', () => {
   let hubService: HubService;
   let joinUserHubRepo: Repository<JoinUserHub>;
-  let userRepo: Repository<User>;
   let hubRepo: Repository<Hub>;
   let fileService: FileServiceInterface;
-  let notificationService: NotificationService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -39,7 +37,7 @@ describe('HubService', () => {
         ImageFileService,
         {
           provide: fileServiceToken,
-          useClass: AzureFileService
+          useClass: AzureFileService,
         },
         NotificationService,
         {
@@ -73,10 +71,8 @@ describe('HubService', () => {
     joinUserHubRepo = module.get<Repository<JoinUserHub>>(
       getRepositoryToken(JoinUserHub),
     );
-    userRepo = module.get<Repository<User>>(getRepositoryToken(User));
     hubRepo = module.get<Repository<Hub>>(getRepositoryToken(Hub));
     fileService = module.get<FileServiceInterface>(fileServiceToken);
-    notificationService = module.get<NotificationService>(NotificationService);
   });
 
   it('should be defined', () => {
@@ -103,7 +99,7 @@ describe('HubService', () => {
       .spyOn(joinUserHubRepo, 'findOne')
       .mockResolvedValueOnce(userHubTestResult);
     // Act
-    const result = await hubService.getOneUserHub(userId, hubId);
+    await hubService.getOneUserHub(userId, hubId);
     // Assert
     expect(userHubTestResult).toEqual(userHubTestResult);
   });

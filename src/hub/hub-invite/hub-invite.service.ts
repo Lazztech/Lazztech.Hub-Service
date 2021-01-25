@@ -29,14 +29,17 @@ export class HubInviteService {
     });
     this.validateRelationship(userHubRelationship, hubId, userId);
 
-    return await this.inviteRepository.find({ hubId, accepted: includeAccepted });
+    return await this.inviteRepository.find({
+      hubId,
+      accepted: includeAccepted,
+    });
   }
 
   async getInvite(userId: any, hubId: any) {
     this.logger.log(this.getInvite.name);
     return await this.inviteRepository.findOne({
       hubId,
-      inviteesId: userId
+      inviteesId: userId,
     } as Invite);
   }
 
@@ -44,7 +47,7 @@ export class HubInviteService {
     this.logger.log(this.getInvitesByUser.name);
     return await this.inviteRepository.find({
       inviteesId: userId,
-      accepted: includeAccepted
+      accepted: includeAccepted,
     } as Invite);
   }
 
@@ -89,10 +92,7 @@ export class HubInviteService {
     return invite;
   }
 
-  public async acceptHubInvite(
-    inviteesId: number,
-    inviteId: number
-  ) {
+  public async acceptHubInvite(inviteesId: number, inviteId: number) {
     this.logger.log(this.acceptHubInvite.name);
     let invite = await this.inviteRepository.findOneOrFail({ id: inviteId });
     invite.accepted = true;
@@ -103,9 +103,9 @@ export class HubInviteService {
       isOwner: false,
     });
     newRelationship = await this.joinUserHubRepository.save(newRelationship);
-    newRelationship = await this.joinUserHubRepository.findOneOrFail({ 
-      userId: newRelationship.userId, 
-      hubId: newRelationship.hubId
+    newRelationship = await this.joinUserHubRepository.findOneOrFail({
+      userId: newRelationship.userId,
+      hubId: newRelationship.hubId,
     });
     const invitee = await newRelationship.user;
     const hub = await newRelationship.hub;
@@ -133,15 +133,14 @@ export class HubInviteService {
     const invite = await this.inviteRepository.findOneOrFail({ id: inviteId });
     if (invite.inviteesId == userId && invite.hubId == hubId) {
       return await this.inviteRepository.remove(invite);
-    } 
-    else {
+    } else {
       const userHubRelationship = await this.joinUserHubRepository.findOne({
         userId,
         hubId,
         isOwner: true,
       });
       this.validateRelationship(userHubRelationship, hubId, userId);
-  
+
       return await this.inviteRepository.remove(invite);
     }
   }

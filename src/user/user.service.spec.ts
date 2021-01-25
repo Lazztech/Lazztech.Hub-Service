@@ -11,7 +11,7 @@ import { ConfigService } from '@nestjs/config';
 import { PasswordReset } from '../dal/entity/passwordReset.entity';
 import { EditUserDetails } from './dto/editUserDetails.input';
 import { ImageFileService } from '../services/file/image-file/image-file.service';
-import { fileServiceFactory, fileServiceToken } from '../services/services.module';
+import { fileServiceToken } from '../services/services.module';
 import { FileServiceInterface } from '../services/file/file-service.interface';
 import { AzureFileService } from '../services/file/azure-file/azure-file.service';
 
@@ -19,8 +19,6 @@ describe('UserService', () => {
   let service: UserService;
   let joinUserHubRepo: Repository<JoinUserHub>;
   let userRepo: Repository<User>;
-  let inviteRepo: Repository<Invite>;
-  let emailService: EmailService;
   let fileService: FileServiceInterface;
 
   beforeEach(async () => {
@@ -30,7 +28,7 @@ describe('UserService', () => {
         ImageFileService,
         {
           provide: fileServiceToken,
-          useClass: AzureFileService
+          useClass: AzureFileService,
         },
         EmailService,
         ConfigService,
@@ -59,8 +57,6 @@ describe('UserService', () => {
       getRepositoryToken(JoinUserHub),
     );
     userRepo = module.get<Repository<User>>(getRepositoryToken(User));
-    inviteRepo = module.get<Repository<Invite>>(getRepositoryToken(Invite));
-    emailService = module.get<EmailService>(EmailService);
     fileService = module.get<FileServiceInterface>(fileServiceToken);
   });
 
@@ -106,7 +102,7 @@ describe('UserService', () => {
         isOwner: true,
       } as JoinUserHub,
     ];
-    const hubResults: Hub[] = await Promise.all(testResults.map(x => x.hub));
+    const hubResults: Hub[] = await Promise.all(testResults.map((x) => x.hub));
     // notice we are pulling the repo variable and using jest.spyOn with no issues
     jest.spyOn(joinUserHubRepo, 'find').mockResolvedValueOnce(testResults);
     expect(await service.getUsersOwnedHubs(testUserId)).toEqual(hubResults);
@@ -130,7 +126,7 @@ describe('UserService', () => {
         } as Hub),
       } as JoinUserHub,
     ];
-    const hubResults: Hub[] = await Promise.all(testResults.map(x => x.hub));
+    const hubResults: Hub[] = await Promise.all(testResults.map((x) => x.hub));
     // notice we are pulling the repo variable and using jest.spyOn with no issues
     jest.spyOn(joinUserHubRepo, 'find').mockResolvedValueOnce(testResults);
     expect(await service.memberOfHubs(testUserId)).toEqual(hubResults);

@@ -6,27 +6,26 @@ import { User } from './user.entity';
 @ObjectType()
 @Entity()
 export class JoinUserInAppNotifications {
-  @Field(type => ID)
+  @Field(() => ID)
   @PrimaryColumn()
   public userId: number;
 
-  @Field(type => ID)
+  @Field(() => ID)
   @PrimaryColumn({})
   public inAppNotificationId: number;
 
-  @Field(type => User)
-  @ManyToOne(
-    () => User,
-    user => user.inAppNotificationsConnection,
-    { primary: true, onDelete: 'CASCADE' },
-  )
+  @Field(() => User)
+  @ManyToOne(() => User, (user) => user.inAppNotificationsConnection, {
+    primary: true,
+    onDelete: 'CASCADE',
+  })
   @JoinColumn()
   public user: Promise<User>;
 
-  @Field(type => InAppNotification)
+  @Field(() => InAppNotification)
   @ManyToOne(
     () => InAppNotification,
-    inAppNotification => inAppNotification.usersConnection,
+    (inAppNotification) => inAppNotification.usersConnection,
   )
   @JoinColumn()
   public inAppNotification: Promise<InAppNotification>;

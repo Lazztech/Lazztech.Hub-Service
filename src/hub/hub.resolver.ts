@@ -79,10 +79,15 @@ export class HubResolver {
   public async invitesByHub(
     @UserId() userId,
     @Args({ name: 'hubId', type: () => ID }) hubId: number,
-    @Args({ name: 'includeAccepted', type: () => Boolean, nullable: true }) includeAccepted: boolean = false
+    @Args({ name: 'includeAccepted', type: () => Boolean, nullable: true })
+    includeAccepted = false,
   ): Promise<Invite[]> {
     this.logger.log(this.invitesByHub.name);
-    return await this.hubInviteService.getInvitesByHub(userId, hubId, includeAccepted);
+    return await this.hubInviteService.getInvitesByHub(
+      userId,
+      hubId,
+      includeAccepted,
+    );
   }
 
   @Query(() => Invite)
@@ -97,10 +102,14 @@ export class HubResolver {
   @Query(() => [Invite])
   public async invitesByUser(
     @UserId() userId,
-    @Args({ name: 'includeAccepted', type: () => Boolean, nullable: true }) includeAccepted: boolean = false
+    @Args({ name: 'includeAccepted', type: () => Boolean, nullable: true })
+    includeAccepted = false,
   ): Promise<Invite[]> {
     this.logger.log(this.invitesByUser.name);
-    return await this.hubInviteService.getInvitesByUser(userId, includeAccepted);
+    return await this.hubInviteService.getInvitesByUser(
+      userId,
+      includeAccepted,
+    );
   }
 
   @Mutation(() => Invite)

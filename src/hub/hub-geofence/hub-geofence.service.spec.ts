@@ -48,7 +48,7 @@ describe('HubGeofenceService', () => {
         isOwner: true,
       } as JoinUserHub);
     // Act
-    const result = await service.enteredHubGeofence(userId, hubId);
+    await service.enteredHubGeofence(userId, hubId);
     // Assert
     expect(saveCall).toHaveBeenCalled();
   });
@@ -71,7 +71,7 @@ describe('HubGeofenceService', () => {
         isOwner: false,
       } as JoinUserHub);
     // Act
-    const result = await service.exitedHubGeofence(userId, hubId);
+    await service.exitedHubGeofence(userId, hubId);
     // Assert
     expect(saveCall).toHaveBeenCalled();
   });

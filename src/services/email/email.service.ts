@@ -44,7 +44,7 @@ export class EmailService {
 
     const messageId = await this.transporter
       .sendMail(email as nodemailer.SendMailOptions)
-      .then(info => info.messageId);
+      .then((info) => info.messageId);
 
     return messageId;
   }

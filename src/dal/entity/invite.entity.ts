@@ -13,7 +13,7 @@ import { Hub } from './hub.entity';
 @ObjectType()
 @Entity()
 export class Invite {
-  @Field(type => ID)
+  @Field(() => ID)
   @PrimaryGeneratedColumn()
   public id: number;
 
@@ -34,28 +34,18 @@ export class Invite {
   public accepted: boolean;
 
   @Field(() => User)
-  @ManyToOne(
-    () => User,
-    user => user.invitesSent,
-    { onDelete: 'CASCADE' },
-  )
+  @ManyToOne(() => User, (user) => user.invitesSent, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'invitersId' })
   public inviter: Promise<User>;
 
   @Field(() => User)
-  @ManyToOne(
-    () => User,
-    user => user.invitesReceived,
-    { onDelete: 'CASCADE' },
-  )
+  @ManyToOne(() => User, (user) => user.invitesReceived, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'inviteesId' })
   public invitee: Promise<User>;
 
   @Field(() => Hub)
-  @ManyToOne(
-    () => Hub,
-    hub => hub.invites,
-    { onDelete: 'CASCADE' },
-  )
+  @ManyToOne(() => Hub, (hub) => hub.invites, { onDelete: 'CASCADE' })
   public hub: Promise<Hub>;
 }

@@ -32,7 +32,7 @@ import { UserDevice } from './dal/entity/userDevice.entity';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
-        type: 'postgres' as 'postgres',
+        type: 'postgres' as const,
         host: configService.get('DATABASE_HOST', 'localhost'),
         port: configService.get<number>('DATABASE_PORT', 5432),
         username: configService.get('DATABASE_USER', 'postgres'),
@@ -46,7 +46,7 @@ import { UserDevice } from './dal/entity/userDevice.entity';
         synchronize: true,
         entities: [
           __dirname + '/dal/entity/**/*.*.*',
-          'node_modules/nestjs-admin/**/*.entity.js'
+          'node_modules/nestjs-admin/**/*.entity.js',
         ],
         migrations: [__dirname + '/dal/migrations/**/*.*'],
         subscribers: [__dirname + '/dal/migrations/**/*.*'],
@@ -58,9 +58,18 @@ import { UserDevice } from './dal/entity/userDevice.entity';
       useFactory: async (configService: ConfigService) => {
         return {
           config: {
-            accessKeyId: configService.get('OBJECT_STORAGE_ACCESS_KEY_ID', 'minio'),
-            secretAccessKey: configService.get('OBJECT_STORAGE_SECRET_ACCESS_KEY', 'password'),
-            endpoint: configService.get('OBJECT_STORAGE_ENDPOINT', 'http://127.0.0.1:9000'),
+            accessKeyId: configService.get(
+              'OBJECT_STORAGE_ACCESS_KEY_ID',
+              'minio',
+            ),
+            secretAccessKey: configService.get(
+              'OBJECT_STORAGE_SECRET_ACCESS_KEY',
+              'password',
+            ),
+            endpoint: configService.get(
+              'OBJECT_STORAGE_ENDPOINT',
+              'http://127.0.0.1:9000',
+            ),
             s3ForcePathStyle: true,
             signatureVersion: 'v4',
           },
@@ -89,7 +98,7 @@ export class AppModule {
     // Register the User entity under the "User" section
     adminSite.register('Lazztech Hub', Hub);
     adminSite.register('Lazztech Hub', InAppNotification);
-    adminSite.register('Lazztech Hub', Invite); 
+    adminSite.register('Lazztech Hub', Invite);
     adminSite.register('Lazztech Hub', JoinUserHub);
     adminSite.register('Lazztech Hub', JoinUserInAppNotifications);
     adminSite.register('Lazztech Hub', MicroChat);

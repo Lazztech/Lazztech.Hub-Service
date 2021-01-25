@@ -63,8 +63,6 @@ export class AzureFileService implements FileServiceInterface {
 
   private async createContainer(containerClient) {
     this.logger.log(this.createContainer.name);
-    const createContainerResponse = await containerClient.create();
-    const x = await containerClient.getAccessPolicy();
     await containerClient.setAccessPolicy('container');
   }
 
@@ -84,7 +82,7 @@ export class AzureFileService implements FileServiceInterface {
     const blockBlobClient = containerClient.getBlockBlobClient(blobName);
     const blobExists = await blockBlobClient.exists();
     if (blobExists) {
-      const response = await containerClient.delete();
+      await containerClient.delete();
     }
   }
 
@@ -99,7 +97,9 @@ export class AzureFileService implements FileServiceInterface {
   private getStorageConnectionString() {
     this.logger.log(this.getStorageConnectionString.name);
     this.logger.log(this.getStorageConnectionString.name);
-    const storageString = this.configService.get<string>('BLOB_STORAGE_CONNECTION_STRING');
+    const storageString = this.configService.get<string>(
+      'BLOB_STORAGE_CONNECTION_STRING',
+    );
     if (isNullOrUndefined(storageString) || storageString === '') {
       throw Error('Missing process.env.BLOB_STORAGE_CONNECTION_STRING');
     }

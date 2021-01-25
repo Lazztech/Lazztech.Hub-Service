@@ -14,7 +14,6 @@ describe('AuthService', () => {
   let service: AuthService;
   let userRepo: Repository<User>;
   let notificationService: NotificationService;
-  let configService: ConfigService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -51,7 +50,6 @@ describe('AuthService', () => {
     service = module.get<AuthService>(AuthService);
     userRepo = module.get<Repository<User>>(getRepositoryToken(User));
     notificationService = module.get(NotificationService);
-    configService = module.get(ConfigService);
   });
 
   it('should be defined', () => {

@@ -7,7 +7,7 @@ import { Hub } from '../../dal/entity/hub.entity';
 import { InAppNotification } from '../../dal/entity/inAppNotification.entity';
 import { JoinUserInAppNotifications } from '../../dal/entity/joinUserInAppNotifications.entity';
 import { NotificationService } from '../../notification/notification.service';
-import { ConfigService, ConfigModule } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { User } from '../../dal/entity/user.entity';
 import { HttpModule } from '@nestjs/common';
 import { UserDevice } from '../../dal/entity/userDevice.entity';

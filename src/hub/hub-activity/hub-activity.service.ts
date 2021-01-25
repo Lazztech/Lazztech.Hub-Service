@@ -20,9 +20,7 @@ export class HubActivityService {
     @InjectRepository(InAppNotification)
     private inAppNotificationRepository: Repository<InAppNotification>,
     @InjectRepository(JoinUserInAppNotifications)
-    private joinUserInAppNotificationsRepository: Repository<
-      JoinUserInAppNotifications
-    >,
+    private joinUserInAppNotificationsRepository: Repository<JoinUserInAppNotifications>,
     private notificationService: NotificationService,
   ) {
     this.logger.log('constructor');

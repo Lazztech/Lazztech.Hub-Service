@@ -19,7 +19,7 @@ import { Invite } from './invite.entity';
 export class User {
   private logger = new Logger(User.name, true);
 
-  @Field(type => ID)
+  @Field(() => ID)
   @PrimaryGeneratedColumn()
   public id: number;
 
@@ -48,14 +48,11 @@ export class User {
 
   @OneToMany(
     () => JoinUserInAppNotifications,
-    userInAppNotificationsJoin => userInAppNotificationsJoin.user,
+    (userInAppNotificationsJoin) => userInAppNotificationsJoin.user,
   )
   public inAppNotificationsConnection: Promise<JoinUserInAppNotifications[]>;
 
-  @OneToMany(
-    type => JoinUserHub,
-    joinUserHub => joinUserHub.user,
-  )
+  @OneToMany(() => JoinUserHub, (joinUserHub) => joinUserHub.user)
   public hubsConnection: Promise<JoinUserHub[]>;
 
   @OneToOne(() => PasswordReset, {
@@ -64,21 +61,12 @@ export class User {
   @JoinColumn()
   public passwordReset: Promise<PasswordReset>;
 
-  @OneToMany(
-    () => UserDevice,
-    userDevice => userDevice.user,
-  )
+  @OneToMany(() => UserDevice, (userDevice) => userDevice.user)
   public userDevices: Promise<UserDevice[]>;
 
-  @OneToMany(
-    () => Invite,
-    invite => invite.invitee,
-  )
+  @OneToMany(() => Invite, (invite) => invite.invitee)
   public invitesSent: Promise<Invite[]>;
 
-  @OneToMany(
-    () => Invite,
-    invite => invite.inviter,
-  )
+  @OneToMany(() => Invite, (invite) => invite.inviter)
   public invitesReceived: Promise<Invite[]>;
 }

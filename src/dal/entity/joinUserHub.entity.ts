@@ -6,29 +6,21 @@ import { User } from './user.entity';
 @ObjectType()
 @Entity()
 export class JoinUserHub {
-  @Field(type => ID)
+  @Field(() => ID)
   @PrimaryColumn()
   public userId: number;
 
-  @Field(type => ID)
+  @Field(() => ID)
   @PrimaryColumn()
   public hubId: number;
 
-  @Field(type => User)
-  @ManyToOne(
-    () => User,
-    user => user.hubsConnection,
-    { onDelete: 'CASCADE' },
-  )
+  @Field(() => User)
+  @ManyToOne(() => User, (user) => user.hubsConnection, { onDelete: 'CASCADE' })
   @JoinColumn()
   public user: Promise<User>;
 
-  @Field(type => Hub)
-  @ManyToOne(
-    () => Hub,
-    hub => hub.usersConnection,
-    { onDelete: 'CASCADE' },
-  )
+  @Field(() => Hub)
+  @ManyToOne(() => Hub, (hub) => hub.usersConnection, { onDelete: 'CASCADE' })
   @JoinColumn()
   public hub: Promise<Hub>;
 

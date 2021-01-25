@@ -29,9 +29,7 @@ export class NotificationService {
     @InjectRepository(InAppNotification)
     private inAppNotificationRepository: Repository<InAppNotification>,
     @InjectRepository(JoinUserInAppNotifications)
-    private joinUserInAppNotificationRepository: Repository<
-      JoinUserInAppNotifications
-    >,
+    private joinUserInAppNotificationRepository: Repository<JoinUserInAppNotifications>,
     @InjectRepository(UserDevice)
     private userDeviceRepository: Repository<UserDevice>,
   ) {
@@ -42,11 +40,11 @@ export class NotificationService {
     this.logger.log(this.addUserFcmNotificationToken.name);
     const user = await this.userRepository.findOne({ id: userId });
 
-    if (!(await user.userDevices).find(x => x.fcmPushUserToken == token)) {
+    if (!(await user.userDevices).find((x) => x.fcmPushUserToken == token)) {
       const userDevice = new UserDevice();
       userDevice.userId = user.id;
       userDevice.fcmPushUserToken = token;
-      const result = await this.userDeviceRepository.save(userDevice);
+      await this.userDeviceRepository.save(userDevice);
       // TODO notify via email that a new device has been used on the account for security.
     } else {
       this.logger.warn('User device token already stored.');
@@ -60,7 +58,7 @@ export class NotificationService {
     );
 
     const usersNotifications = Promise.all(
-      joinInAppNotifications.map(x => x.inAppNotification),
+      joinInAppNotifications.map((x) => x.inAppNotification),
     );
 
     return usersNotifications;
@@ -112,10 +110,12 @@ export class NotificationService {
     this.logger.log(this.sendPushToUser.name);
 
     const user = await this.userRepository.findOne({ id: userId });
-    const fcmUserTokens = (await user.userDevices).map(x => x.fcmPushUserToken);
+    const fcmUserTokens = (await user.userDevices).map(
+      (x) => x.fcmPushUserToken,
+    );
 
     for (const iterator of fcmUserTokens) {
-      const result = await this.sendPushNotification(notification, iterator);
+      await this.sendPushNotification(notification, iterator);
 
       this.logger.log(`Sent push notification to fcmToken ${iterator}`);
     }

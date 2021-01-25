@@ -11,9 +11,7 @@ export class ImageFileService {
   }
 
   public convertToJpeg(input: Buffer) {
-    return sharp(input)
-      .jpeg()
-      .toBuffer();
+    return sharp(input).jpeg().toBuffer();
   }
 
   public async compress(input: Buffer) {

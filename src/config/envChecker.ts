@@ -1,4 +1,4 @@
-import { isNull, isNullOrUndefined } from 'util';
+import { isNullOrUndefined } from 'util';
 import { Logger } from '@nestjs/common';
 // TODO setup nestjs joi env validation
 export function checkEnvVariables() {

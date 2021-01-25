@@ -12,7 +12,7 @@ import { Hub } from './hub.entity';
 @ObjectType()
 @Entity()
 export class MicroChat {
-  @Field(type => ID)
+  @Field(() => ID)
   @PrimaryGeneratedColumn()
   public id: number;
 
@@ -20,14 +20,10 @@ export class MicroChat {
   @PrimaryColumn()
   public hubId: number;
 
-  @Field(type => ID)
-  @ManyToOne(
-    () => Hub,
-    x => x.microChats,
-    {
-      onDelete: 'CASCADE',
-    },
-  )
+  @Field(() => ID)
+  @ManyToOne(() => Hub, (x) => x.microChats, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn()
   public hub: Hub;
 

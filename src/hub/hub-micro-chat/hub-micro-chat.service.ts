@@ -32,7 +32,7 @@ export class HubMicroChatService {
     const hub = await this.hubRepository.findOne({
       id: hubId,
     });
-    const microChat = (await hub.microChats).find(x => x.id == microChatId);
+    const microChat = (await hub.microChats).find((x) => x.id == microChatId);
 
     for (const memberConnection of await hub.usersConnection) {
       await this.notificationService.sendPushToUser(memberConnection.userId, {
@@ -91,7 +91,7 @@ export class HubMicroChatService {
     }
 
     const microChat = (await (await usersConnection.hub).microChats).find(
-      x => x.id == microChatId,
+      (x) => x.id == microChatId,
     );
     await this.microChatRepository.remove(microChat);
 
