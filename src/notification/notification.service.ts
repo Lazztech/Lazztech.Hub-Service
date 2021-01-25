@@ -6,9 +6,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PushNotificationDto } from './dto/pushNotification.dto';
 import { InAppNotificationDto } from './dto/inAppNotification.dto';
-import { InAppNotification } from 'src/dal/entity/inAppNotification.entity';
-import { JoinUserInAppNotifications } from 'src/dal/entity/joinUserInAppNotifications.entity';
-import { UserDevice } from 'src/dal/entity/userDevice.entity';
+import { UserDevice } from '../dal/entity/userDevice.entity';
+import { InAppNotification } from '../dal/entity/inAppNotification.entity';
+import { JoinUserInAppNotifications } from '../dal/entity/joinUserInAppNotifications.entity';
 
 @Service()
 export class NotificationService {

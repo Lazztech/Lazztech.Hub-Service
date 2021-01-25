@@ -2,7 +2,7 @@ import { FactoryProvider, Module } from '@nestjs/common';
 import { EmailService } from './email/email.service';
 import { AzureFileService } from './file/azure-file/azure-file.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PasswordReset } from 'src/dal/entity/passwordReset.entity';
+import { PasswordReset } from '../dal/entity/passwordReset.entity';
 import { ImageFileService } from './file/image-file/image-file.service';
 import { S3FileService } from './file/s3-file/s3-file.service';
 import { ConfigService } from '@nestjs/config';

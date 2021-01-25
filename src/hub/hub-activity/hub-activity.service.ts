@@ -1,11 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Hub } from 'src/dal/entity/hub.entity';
-import { InAppNotification } from 'src/dal/entity/inAppNotification.entity';
-import { JoinUserHub } from 'src/dal/entity/joinUserHub.entity';
-import { JoinUserInAppNotifications } from 'src/dal/entity/joinUserInAppNotifications.entity';
-import { PushNotificationDto } from 'src/notification/dto/pushNotification.dto';
-import { NotificationService } from 'src/notification/notification.service';
+import { Hub } from '../../dal/entity/hub.entity';
+import { InAppNotification } from '../../dal/entity/inAppNotification.entity';
+import { JoinUserHub } from '../../dal/entity/joinUserHub.entity';
+import { JoinUserInAppNotifications } from '../../dal/entity/joinUserInAppNotifications.entity';
+import { PushNotificationDto } from '../../notification/dto/pushNotification.dto';
+import { NotificationService } from '../../notification/notification.service';
 import { Repository } from 'typeorm';
 
 @Injectable()

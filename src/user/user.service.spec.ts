@@ -1,19 +1,19 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Hub } from 'src/dal/entity/hub.entity';
-import { JoinUserHub } from 'src/dal/entity/joinUserHub.entity';
-import { User } from 'src/dal/entity/user.entity';
+import { Hub } from '../dal/entity/hub.entity';
+import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
+import { User } from '../dal/entity/user.entity';
 import { Repository } from 'typeorm';
 import { UserService } from './user.service';
-import { EmailService } from 'src/services/email/email.service';
-import { Invite } from 'src/dal/entity/invite.entity';
+import { EmailService } from '../services/email/email.service';
+import { Invite } from '../dal/entity/invite.entity';
 import { ConfigService } from '@nestjs/config';
-import { PasswordReset } from 'src/dal/entity/passwordReset.entity';
+import { PasswordReset } from '../dal/entity/passwordReset.entity';
 import { EditUserDetails } from './dto/editUserDetails.input';
-import { ImageFileService } from 'src/services/file/image-file/image-file.service';
-import { fileServiceFactory, fileServiceToken } from 'src/services/services.module';
-import { FileServiceInterface } from 'src/services/file/file-service.interface';
-import { AzureFileService } from 'src/services/file/azure-file/azure-file.service';
+import { ImageFileService } from '../services/file/image-file/image-file.service';
+import { fileServiceFactory, fileServiceToken } from '../services/services.module';
+import { FileServiceInterface } from '../services/file/file-service.interface';
+import { AzureFileService } from '../services/file/azure-file/azure-file.service';
 
 describe('UserService', () => {
   let service: UserService;

@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { HubGeofenceService } from './hub-geofence.service';
 import { Repository } from 'typeorm';
-import { JoinUserHub } from 'src/dal/entity/joinUserHub.entity';
+import { JoinUserHub } from '../../dal/entity/joinUserHub.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
 describe('HubGeofenceService', () => {

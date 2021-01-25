@@ -2,15 +2,15 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { NotificationService } from './notification.service';
 import { ConfigService, ConfigModule } from '@nestjs/config';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { User } from 'src/dal/entity/user.entity';
+import { User } from '../dal/entity/user.entity';
 import { Repository } from 'typeorm';
 import { PushNotificationDto } from './dto/pushNotification.dto';
 import { InAppNotificationDto } from './dto/inAppNotification.dto';
-import { InAppNotification } from 'src/dal/entity/inAppNotification.entity';
-import { JoinUserInAppNotifications } from 'src/dal/entity/joinUserInAppNotifications.entity';
+import { InAppNotification } from '../dal/entity/inAppNotification.entity';
+import { JoinUserInAppNotifications } from '../dal/entity/joinUserInAppNotifications.entity';
 import { HttpService, HttpModule } from '@nestjs/common';
 import { of } from 'rxjs';
-import { UserDevice } from 'src/dal/entity/userDevice.entity';
+import { UserDevice } from '../dal/entity/userDevice.entity';
 
 describe('NotificationService', () => {
   let service: NotificationService;

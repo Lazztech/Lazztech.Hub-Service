@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthPasswordResetService } from './auth-password-reset.service';
-import { EmailService } from 'src/services/email/email.service';
+import { EmailService } from '../../services/email/email.service';
 import { Repository } from 'typeorm';
-import { PasswordReset } from 'src/dal/entity/passwordReset.entity';
-import { User } from 'src/dal/entity/user.entity';
+import { PasswordReset } from '../../dal/entity/passwordReset.entity';
+import { User } from '../../dal/entity/user.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { ResetPassword } from '../dto/resetPassword.input';

@@ -1,10 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { JoinUserHub } from 'src/dal/entity/joinUserHub.entity';
+import { JoinUserHub } from '../../dal/entity/joinUserHub.entity';
 import { Repository } from 'typeorm';
-import { Invite } from 'src/dal/entity/invite.entity';
-import { User } from 'src/dal/entity/user.entity';
-import { NotificationService } from 'src/notification/notification.service';
+import { Invite } from '../../dal/entity/invite.entity';
+import { User } from '../../dal/entity/user.entity';
+import { NotificationService } from '../../notification/notification.service';
 
 @Injectable()
 export class HubInviteService {

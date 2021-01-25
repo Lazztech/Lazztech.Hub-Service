@@ -1,14 +1,14 @@
 import { ConfigService, ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { InAppNotification } from 'src/dal/entity/inAppNotification.entity';
-import { JoinUserInAppNotifications } from 'src/dal/entity/joinUserInAppNotifications.entity';
-import { User } from 'src/dal/entity/user.entity';
+import { InAppNotification } from '../dal/entity/inAppNotification.entity';
+import { JoinUserInAppNotifications } from '../dal/entity/joinUserInAppNotifications.entity';
+import { User } from '../dal/entity/user.entity';
 import { Repository } from 'typeorm';
 import { AuthService } from './auth.service';
-import { NotificationService } from 'src/notification/notification.service';
+import { NotificationService } from '../notification/notification.service';
 import { HttpModule } from '@nestjs/common';
-import { UserDevice } from 'src/dal/entity/userDevice.entity';
+import { UserDevice } from '../dal/entity/userDevice.entity';
 
 describe('AuthService', () => {
   let service: AuthService;

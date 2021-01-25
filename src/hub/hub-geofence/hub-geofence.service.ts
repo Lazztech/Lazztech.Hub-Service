@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { JoinUserHub } from 'src/dal/entity/joinUserHub.entity';
 import { Repository } from 'typeorm';
+import { JoinUserHub } from '../../dal/entity/joinUserHub.entity';
 
 @Injectable()
 export class HubGeofenceService {

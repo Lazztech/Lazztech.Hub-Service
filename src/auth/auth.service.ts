@@ -3,13 +3,13 @@ import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
-import { InAppNotification } from 'src/dal/entity/inAppNotification.entity';
-import { JoinUserInAppNotifications } from 'src/dal/entity/joinUserInAppNotifications.entity';
-import { User } from 'src/dal/entity/user.entity';
+import { InAppNotification } from '../dal/entity/inAppNotification.entity';
+import { JoinUserInAppNotifications } from '../dal/entity/joinUserInAppNotifications.entity';
+import { User } from '../dal/entity/user.entity';
 import { Repository } from 'typeorm';
 import { ChangePassword } from './dto/changePassword.input';
-import { NotificationService } from 'src/notification/notification.service';
-import { InAppNotificationDto } from 'src/notification/dto/inAppNotification.dto';
+import { NotificationService } from '../notification/notification.service';
+import { InAppNotificationDto } from '../notification/dto/inAppNotification.dto';
 
 @Injectable()
 export class AuthService {

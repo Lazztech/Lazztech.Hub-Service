@@ -1,17 +1,17 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { HubMicroChatService } from './hub-micro-chat.service';
-import { User } from 'src/dal/entity/user.entity';
+import { User } from '../../dal/entity/user.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Hub } from 'src/dal/entity/hub.entity';
-import { InAppNotification } from 'src/dal/entity/inAppNotification.entity';
-import { JoinUserInAppNotifications } from 'src/dal/entity/joinUserInAppNotifications.entity';
-import { JoinUserHub } from 'src/dal/entity/joinUserHub.entity';
-import { MicroChat } from 'src/dal/entity/microChat.entity';
-import { NotificationService } from 'src/notification/notification.service';
+import { Hub } from '../../dal/entity/hub.entity';
+import { InAppNotification } from '../../dal/entity/inAppNotification.entity';
+import { JoinUserInAppNotifications } from '../../dal/entity/joinUserInAppNotifications.entity';
+import { JoinUserHub } from '../../dal/entity/joinUserHub.entity';
+import { MicroChat } from '../../dal/entity/microChat.entity';
+import { NotificationService } from '../../notification/notification.service';
 import { ConfigModule } from '@nestjs/config';
 import { HttpModule } from '@nestjs/common';
-import { UserDevice } from 'src/dal/entity/userDevice.entity';
+import { UserDevice } from '../../dal/entity/userDevice.entity';
 
 describe('HubMicroChatService', () => {
   let service: HubMicroChatService;

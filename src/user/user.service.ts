@@ -1,10 +1,10 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Hub } from 'src/dal/entity/hub.entity';
-import { JoinUserHub } from 'src/dal/entity/joinUserHub.entity';
-import { User } from 'src/dal/entity/user.entity';
+import { Hub } from '../dal/entity/hub.entity';
+import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
+import { User } from '../dal/entity/user.entity';
 import { FileServiceInterface } from 'src/services/file/file-service.interface';
-import { fileServiceToken } from 'src/services/services.module';
+import { fileServiceToken } from '../services/services.module';
 import { Repository } from 'typeorm';
 import { EditUserDetails } from './dto/editUserDetails.input';
 

@@ -1,8 +1,7 @@
 import { Logger, UseGuards } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver, ID } from '@nestjs/graphql';
 import { UserId } from 'src/decorators/user.decorator';
 import { AuthGuard } from 'src/guards/authguard.service';
-import { ID } from 'type-graphql';
 import { InAppNotification } from '../dal/entity/inAppNotification.entity';
 import { NotificationService } from './notification.service';
 
