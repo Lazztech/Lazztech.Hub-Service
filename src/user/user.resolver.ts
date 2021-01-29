@@ -1,10 +1,11 @@
 import { Logger, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserId } from 'src/decorators/user.decorator';
-import { AuthGuard } from 'src/guards/authguard.service';
+import { GqlJwtAuthGuard } from '../auth/guards/gql-jwt-auth.guard';
 import { User } from '../dal/entity/user.entity';
 import { UserService } from './user.service';
 
+@UseGuards(GqlJwtAuthGuard)
 @Resolver()
 export class UserResolver {
   private logger = new Logger(UserResolver.name, true);
@@ -13,14 +14,12 @@ export class UserResolver {
     this.logger.log('constructor');
   }
 
-  @UseGuards(AuthGuard)
   @Query(() => User, { nullable: true })
   public async me(@UserId() userId): Promise<User> {
     this.logger.log(this.me.name);
     return await this.userService.getUser(userId);
   }
 
-  @UseGuards(AuthGuard)
   @Mutation(() => User)
   public async editUserDetails(
     @UserId() userId,
@@ -37,7 +36,6 @@ export class UserResolver {
     return user;
   }
 
-  @UseGuards(AuthGuard)
   @Mutation(() => User)
   public async changeEmail(
     @UserId() userId,
@@ -48,7 +46,6 @@ export class UserResolver {
     return user;
   }
 
-  @UseGuards(AuthGuard)
   @Mutation(() => User)
   public async changeUserImage(
     @UserId() userId,

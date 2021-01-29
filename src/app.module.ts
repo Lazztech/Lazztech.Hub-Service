@@ -3,7 +3,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { User } from './dal/entity/user.entity';
-import { AuthGuard } from './guards/authguard.service';
 import { HubModule } from './hub/hub.module';
 import { NotificationModule } from './notification/notification.module';
 import { ServicesModule } from './services/services.module';
@@ -91,7 +90,6 @@ import { UserDevice } from './dal/entity/userDevice.entity';
     AuthModule,
   ],
   controllers: [HealthController],
-  providers: [AuthGuard],
 })
 export class AppModule {
   constructor(private readonly adminSite: DefaultAdminSite) {

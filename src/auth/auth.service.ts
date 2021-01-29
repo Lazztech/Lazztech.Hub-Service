@@ -2,12 +2,14 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcryptjs';
-import { sign } from 'jsonwebtoken';
 import { User } from '../dal/entity/user.entity';
 import { Repository } from 'typeorm';
 import { ChangePassword } from './dto/changePassword.input';
 import { NotificationService } from '../notification/notification.service';
 import { InAppNotificationDto } from '../notification/dto/inAppNotification.dto';
+import { UserService } from '../user/user.service';
+import { JwtService } from '@nestjs/jwt';
+import { Payload } from './dto/payload.dto';
 
 @Injectable()
 export class AuthService {
@@ -18,6 +20,8 @@ export class AuthService {
     private notificationService: NotificationService,
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    private userService: UserService,
+    private jwtService: JwtService,
   ) {}
 
   async register(
@@ -27,9 +31,7 @@ export class AuthService {
     password: string,
   ) {
     this.logger.log(this.register.name);
-    const existingUser = await this.userRepository.findOne({
-      where: { email },
-    });
+    const existingUser = await this.userService.findOne(email);
     if (existingUser) {
       this.logger.log(`User already exists with email address: ${email}`);
       return null;
@@ -52,14 +54,12 @@ export class AuthService {
       date: Date.now().toString(),
     } as InAppNotificationDto);
 
-    const tokenSecret = this.configService.get<string>('ACCESS_TOKEN_SECRET');
-    const accessToken = sign({ userId: user.id }, tokenSecret);
-    return accessToken;
+    return this.jwtService.sign({ userId: user.id } as Payload);
   }
 
   public async login(password: string, email: string) {
     this.logger.log(this.login.name);
-    const user = await this.userRepository.findOne({ where: { email } });
+    const user = await this.userService.findOne(email);
 
     if (!user) {
       this.logger.warn(
@@ -77,10 +77,7 @@ export class AuthService {
       return null;
     }
 
-    const tokenSecret = this.configService.get<string>('ACCESS_TOKEN_SECRET');
-    const accessToken = sign({ userId: user.id }, tokenSecret);
-
-    return accessToken;
+    return this.jwtService.sign({ userId: user.id } as Payload);
   }
 
   public async changePassword(userId: any, details: ChangePassword) {

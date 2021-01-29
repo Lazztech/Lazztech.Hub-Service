@@ -23,6 +23,10 @@ export class UserService {
     this.logger.log('constructor');
   }
 
+  public async findOne(email: string) {
+    return await this.userRepository.findOne({ email });
+  }
+
   public async getUser(userId: any) {
     this.logger.log(this.getUser.name);
     return await this.userRepository.findOne({ where: { id: userId } });

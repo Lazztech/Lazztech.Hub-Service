@@ -3,8 +3,8 @@ import { Args, Mutation, Query, Resolver, Float, ID } from '@nestjs/graphql';
 import { Invite } from 'src/dal/entity/invite.entity';
 import { MicroChat } from 'src/dal/entity/microChat.entity';
 import { UserId } from 'src/decorators/user.decorator';
-import { AuthGuard } from 'src/guards/authguard.service';
 import { UserService } from 'src/user/user.service';
+import { GqlJwtAuthGuard } from '../auth/guards/gql-jwt-auth.guard';
 import { Hub } from '../dal/entity/hub.entity';
 import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
 import { User } from '../dal/entity/user.entity';
@@ -14,7 +14,7 @@ import { HubInviteService } from './hub-invite/hub-invite.service';
 import { HubMicroChatService } from './hub-micro-chat/hub-micro-chat.service';
 import { HubService } from './hub.service';
 
-@UseGuards(AuthGuard)
+@UseGuards(GqlJwtAuthGuard)
 @Resolver()
 export class HubResolver {
   private logger = new Logger(HubResolver.name, true);

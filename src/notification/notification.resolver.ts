@@ -1,10 +1,11 @@
 import { Logger, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver, ID } from '@nestjs/graphql';
 import { UserId } from 'src/decorators/user.decorator';
-import { AuthGuard } from 'src/guards/authguard.service';
+import { GqlJwtAuthGuard } from '../auth/guards/gql-jwt-auth.guard';
 import { InAppNotification } from '../dal/entity/inAppNotification.entity';
 import { NotificationService } from './notification.service';
 
+@UseGuards(GqlJwtAuthGuard)
 @Resolver()
 export class NotificationResolver {
   private logger = new Logger(NotificationResolver.name, true);
@@ -13,7 +14,6 @@ export class NotificationResolver {
     this.logger.log('constructor');
   }
 
-  @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
   public async addUserFcmNotificationToken(
     @UserId() userId,
@@ -24,7 +24,6 @@ export class NotificationResolver {
     return true;
   }
 
-  @UseGuards(AuthGuard)
   @Query(() => [InAppNotification])
   public async getInAppNotifications(
     @UserId() userId,
@@ -33,7 +32,6 @@ export class NotificationResolver {
     return await this.notificationService.getInAppNotifications(userId);
   }
 
-  @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
   public async deleteInAppNotification(
     @UserId() userId,
@@ -48,7 +46,6 @@ export class NotificationResolver {
     return true;
   }
 
-  @UseGuards(AuthGuard)
   @Mutation(() => Boolean)
   public async deleteAllInAppNotifications(@UserId() userId) {
     this.logger.log(this.deleteAllInAppNotifications.name);

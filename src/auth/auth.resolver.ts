@@ -1,10 +1,10 @@
 import { Logger, Response, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { UserId } from 'src/decorators/user.decorator';
-import { AuthGuard } from 'src/guards/authguard.service';
 import { UserInput } from '../user/dto/user.input';
 import { AuthService } from './auth.service';
 import { AuthPasswordResetService } from './auth-password-reset/auth-password-reset.service';
+import { GqlJwtAuthGuard } from './guards/gql-jwt-auth.guard';
 
 @Resolver()
 export class AuthResolver {
@@ -77,7 +77,7 @@ export class AuthResolver {
     return result;
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(GqlJwtAuthGuard)
   @Mutation(() => Boolean)
   public async changePassword(
     @UserId() userId,
@@ -92,7 +92,7 @@ export class AuthResolver {
     return result;
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(GqlJwtAuthGuard)
   @Mutation(() => Boolean)
   public async deleteAccount(
     @UserId() userId,

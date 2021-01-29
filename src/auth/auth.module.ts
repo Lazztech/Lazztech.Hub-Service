@@ -9,9 +9,21 @@ import { JoinUserInAppNotifications } from 'src/dal/entity/joinUserInAppNotifica
 import { ServicesModule } from 'src/services/services.module';
 import { AuthPasswordResetService } from './auth-password-reset/auth-password-reset.service';
 import { NotificationModule } from 'src/notification/notification.module';
+import { UserModule } from '../user/user.module';
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import { JwtStrategy } from './strategy/jwt.strategy';
+import { GqlJwtAuthGuard } from './guards/gql-jwt-auth.guard';
 
 @Module({
   imports: [
+    JwtModule.registerAsync({
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string>('ACCESS_TOKEN_SECRET'),
+        signOptions: { expiresIn: '60s' },
+      }),
+    }),
     TypeOrmModule.forFeature([
       PasswordReset,
       User,
@@ -20,7 +32,8 @@ import { NotificationModule } from 'src/notification/notification.module';
     ]),
     ServicesModule,
     NotificationModule,
+    UserModule,
   ],
-  providers: [AuthResolver, AuthService, AuthPasswordResetService],
+  providers: [AuthResolver, AuthService, AuthPasswordResetService, JwtStrategy],
 })
 export class AuthModule {}
