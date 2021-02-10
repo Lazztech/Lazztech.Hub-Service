@@ -19,6 +19,7 @@ import { JoinUserInAppNotifications } from './dal/entity/joinUserInAppNotificati
 import { MicroChat } from './dal/entity/microChat.entity';
 import { PasswordReset } from './dal/entity/passwordReset.entity';
 import { UserDevice } from './dal/entity/userDevice.entity';
+import { FieldResolversModule } from './dal/field-resolvers/field-resolvers.module';
 
 @Module({
   imports: [
@@ -80,7 +81,7 @@ import { UserDevice } from './dal/entity/userDevice.entity';
     HubModule,
     UserModule,
     GraphQLModule.forRoot({
-      autoSchemaFile: 'schema.gql',
+      autoSchemaFile: true,
       context: ({ req }) => ({ req }),
       cors: {
         credentials: true,
@@ -88,6 +89,7 @@ import { UserDevice } from './dal/entity/userDevice.entity';
       },
     }),
     AuthModule,
+    FieldResolversModule,
   ],
   controllers: [HealthController],
 })
