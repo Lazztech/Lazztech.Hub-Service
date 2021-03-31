@@ -10,7 +10,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   private logger = new Logger(JwtStrategy.name, true);
 
   constructor(
-    private configService: ConfigService,
+    configService: ConfigService,
     private userService: UserService,
   ) {
     super({

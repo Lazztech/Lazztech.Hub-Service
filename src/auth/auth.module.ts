@@ -11,12 +11,16 @@ import { AuthPasswordResetService } from './auth-password-reset/auth-password-re
 import { NotificationModule } from 'src/notification/notification.module';
 import { UserModule } from '../user/user.module';
 import { JwtModule } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './strategy/jwt.strategy';
-import { GqlJwtAuthGuard } from './guards/gql-jwt-auth.guard';
-
+import { GoogleController } from './controller/google.controller';
+import { GoogleStrategy } from './strategy/google.strategy';
 @Module({
+  controllers: [GoogleController],
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: ['.env.local', '.env'],
+    }),
     JwtModule.registerAsync({
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
@@ -34,6 +38,6 @@ import { GqlJwtAuthGuard } from './guards/gql-jwt-auth.guard';
     NotificationModule,
     UserModule,
   ],
-  providers: [AuthResolver, AuthService, AuthPasswordResetService, JwtStrategy],
+  providers: [AuthResolver, AuthService, AuthPasswordResetService, JwtStrategy, GoogleStrategy],
 })
 export class AuthModule {}
