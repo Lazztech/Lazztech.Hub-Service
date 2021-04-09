@@ -1,0 +1,126 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dev-lazztechhub-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dev-lazztechhub
+  template:
+    metadata:
+      labels:
+        app: dev-lazztechhub
+    spec:
+      containers:
+        - name: dev-lazztechhub
+          image: registry.internal.lazz.tech/dev-lazztechhub-service
+          env:
+            - name: APP_NAME
+              value: "Lazztech Hub"
+            - name: ACCESS_TOKEN_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: dev-lazztechhub
+                  key: access-token-secret
+            - name: FIREBASE_SERVER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: dev-lazztechhub
+                  key: firebase-server-key
+            - name: PUSH_NOTIFICATION_ENDPOINT
+              value: https://fcm.googleapis.com/fcm/send
+            - name: GOOGLE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: dev-lazztechhub
+                  key: google-client-id
+            - name: GOOGLE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: dev-lazztechhub
+                  key: google-secret
+            - name: EMAIL_FROM_ADDRESS
+              valueFrom:
+                secretKeyRef:
+                  name: dev-lazztechhub
+                  key: email-from-address
+            - name: EMAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: dev-lazztechhub
+                  key: email-password
+            - name: DATABASE_HOST
+              value: app-7e84ea5d-7724-41fb-9b1b-c831b958ad6d-do-user-6048416-0.b.db.ondigitalocean.com
+            - name: DATABASE_PORT
+              value: "25060"
+            - name: DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: dev-lazztechhub
+                  key: database-user
+            - name: DATABASE_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: dev-lazztechhub
+                  key: database-pass
+            - name: DATABASE_SCHEMA
+              value: db
+            - name: DATABASE_SSL
+              value: "true"
+            - name: FILE_STORAGE_TYPE
+              value: object
+            - name: OBJECT_STORAGE_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: dev-lazztechhub
+                  key: object-storage-access-key-id
+            - name: OBJECT_STORAGE_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: dev-lazztechhub
+                  key: object-storage-secret-access-key
+            - name: OBJECT_STORAGE_SECRET_ACCESS_KEY
+              value: nyc3.digitaloceanspaces.com
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+          - containerPort: 8080
+          imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dev-lazztechhub-service
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+    name: tcp
+  selector:
+    app: dev-lazztechhub
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: dev-lazztechhub-ingress
+  annotations:
+    kubernetes.io/ingress.class: "traefik"
+spec:
+  tls:
+    - secretName: internal-acme-crt-secret
+      hosts:
+        - '*.internal.lazz.tech'
+  rules:
+  - host: dev-lazztechhub.internal.lazz.tech
+    http:
+      paths:
+      - backend:
+          serviceName: dev-lazztechhub-service
+          servicePort: 80

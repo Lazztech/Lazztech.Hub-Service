@@ -1,23 +1,24 @@
 FROM node:12-alpine
 
+# Create app directory
 WORKDIR /app
 
-COPY package.json /app/package.json
+# Install app dependencies
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+# where available (npm@5+)
+#
+# Note when using COPY with more than one source file, 
+# the destination must be a directory and end with a /
+COPY package*.json ./
+RUN npm ci
 
-# --- Uncomment lines to have container just copy built server
-# COPY node_modules node_modules
-# COPY dist dist
-# ---
+# Bundle app source
+COPY src ./src
+COPY tsconfig*.json ./
+COPY nest-cli.json .
 
-# --- Uncomment lines to have container build server itself
-COPY package-lock.json /app/package-lock.json
-COPY src /app/src
-COPY tsconfig.build.json /app/tsconfig.build.json
-COPY tsconfig.json /app/tsconfig.json
-RUN npm install
+# Build app from source
 RUN npm run build
-COPY dist /app/dist
-# ---
 
 EXPOSE 8080
 CMD [ "npm", "run", "start:prod" ]
