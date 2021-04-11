@@ -109,7 +109,7 @@ spec:
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: dev-lazztechhub-ingress
+  name: dev-lazztechhub-internal-ingress
   annotations:
     kubernetes.io/ingress.class: "traefik"
 spec:
@@ -119,6 +119,25 @@ spec:
         - '*.internal.lazz.tech'
   rules:
   - host: dev-lazztechhub.internal.lazz.tech
+    http:
+      paths:
+      - backend:
+          serviceName: dev-lazztechhub-service
+          servicePort: 80
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: dev-lazztechhub-public-ingress
+  annotations:
+    kubernetes.io/ingress.class: "traefik"
+spec:
+  tls:
+    - secretName: public-acme-crt-secret
+      hosts:
+        - '*.public.lazz.tech'
+  rules:
+  - host: dev-lazztechhub.public.lazz.tech
     http:
       paths:
       - backend:
