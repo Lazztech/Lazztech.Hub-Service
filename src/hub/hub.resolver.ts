@@ -1,9 +1,9 @@
 import { Logger, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver, Float, ID } from '@nestjs/graphql';
-import { Invite } from 'src/dal/entity/invite.entity';
-import { MicroChat } from 'src/dal/entity/microChat.entity';
-import { UserId } from 'src/decorators/user.decorator';
-import { UserService } from 'src/user/user.service';
+import { Invite } from '../dal/entity/invite.entity';
+import { MicroChat } from '../dal/entity/microChat.entity';
+import { UserId } from '../decorators/user.decorator';
+import { UserService } from '../user/user.service';
 import { GqlJwtAuthGuard } from '../auth/guards/gql-jwt-auth.guard';
 import { Hub } from '../dal/entity/hub.entity';
 import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
