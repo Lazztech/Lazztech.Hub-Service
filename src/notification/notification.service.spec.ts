@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { NotificationService } from './notification.service';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { User } from '../dal/entity/user.entity';
 import { Repository } from 'typeorm';
@@ -11,6 +11,7 @@ import { JoinUserInAppNotifications } from '../dal/entity/joinUserInAppNotificat
 import { HttpService, HttpModule } from '@nestjs/common';
 import { of } from 'rxjs';
 import { UserDevice } from '../dal/entity/userDevice.entity';
+import { AxiosResponse } from 'axios';
 
 describe('NotificationService', () => {
   let service: NotificationService;
@@ -22,14 +23,23 @@ describe('NotificationService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [
-        ConfigModule.forRoot({
-          envFilePath: ['.env.local', '.env'],
-          isGlobal: true,
-        }),
-        HttpModule,
-      ],
+      imports: [HttpModule],
       providers: [
+        {
+          provide: ConfigService,
+          useValue: {
+            get: jest.fn((key: string) => {
+              switch (key) {
+                case 'FIREBASE_SERVER_KEY':
+                  return 'mockFirebaseServerKey';
+                case 'PUSH_NOTIFICATION_ENDPOINT':
+                  return 'http://localhost/mockUrl';
+                default:
+                  return '';
+              }
+            }),
+          },
+        },
         NotificationService,
         {
           provide: getRepositoryToken(User),
@@ -223,7 +233,7 @@ describe('NotificationService', () => {
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
     const sendPushNotification = jest
       .spyOn(httpService, 'post')
-      .mockImplementationOnce(() => of(null));
+      .mockImplementation(() => of({} as AxiosResponse<any>));
     // Act
     await service.sendPushToUser(userId, testNotification);
     // Assert
