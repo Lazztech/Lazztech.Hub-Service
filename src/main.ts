@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import * as bodyParser from 'body-parser';
 import { AppModule } from './app.module';
+/* eslint-disable */
 import express = require('express');
 
 async function bootstrap() {

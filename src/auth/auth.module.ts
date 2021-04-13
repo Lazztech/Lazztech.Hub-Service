@@ -13,7 +13,6 @@ import { UserModule } from '../user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './strategy/jwt.strategy';
-import { GqlJwtAuthGuard } from './guards/gql-jwt-auth.guard';
 
 @Module({
   imports: [
