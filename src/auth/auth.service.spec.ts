@@ -30,12 +30,9 @@ describe('AuthService', () => {
           isGlobal: true,
         }),
         HttpModule,
-        JwtModule.registerAsync({
-          inject: [ConfigService],
-          useFactory: async (configService: ConfigService) => ({
-            secret: configService.get<string>('ACCESS_TOKEN_SECRET'),
-            signOptions: { expiresIn: '60s' },
-          }),
+        JwtModule.register({
+          secret: 'dummyaccesstoken',
+          signOptions: { expiresIn: '60s' },
         }),
         S3Module.forRoot({
           config: {
