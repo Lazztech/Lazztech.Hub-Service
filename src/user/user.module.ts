@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Invite } from 'src/dal/entity/invite.entity';
-import { JoinUserHub } from 'src/dal/entity/joinUserHub.entity';
-import { User } from 'src/dal/entity/user.entity';
-import { ServicesModule } from 'src/services/services.module';
+import { Invite } from '../dal/entity/invite.entity';
+import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
+import { User } from '../dal/entity/user.entity';
+import { ServicesModule } from '../services/services.module';
 import { UserResolver } from './user.resolver';
 import { UserService } from './user.service';
 

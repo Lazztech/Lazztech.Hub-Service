@@ -9,6 +9,13 @@ import { AuthService } from './auth.service';
 import { NotificationService } from '../notification/notification.service';
 import { HttpModule } from '@nestjs/common';
 import { UserDevice } from '../dal/entity/userDevice.entity';
+import { UserService } from '../user/user.service';
+import { fileServiceToken } from '../services/services.module';
+import { S3FileService } from '../services/file/s3-file/s3-file.service';
+import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
+import { JwtModule } from '@nestjs/jwt';
+import { S3Module, S3ModuleOptions } from 'nestjs-s3';
+import { ImageFileService } from '../services/file/image-file/image-file.service';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -23,11 +30,33 @@ describe('AuthService', () => {
           isGlobal: true,
         }),
         HttpModule,
+        JwtModule.registerAsync({
+          inject: [ConfigService],
+          useFactory: async (configService: ConfigService) => ({
+            secret: configService.get<string>('ACCESS_TOKEN_SECRET'),
+            signOptions: { expiresIn: '60s' },
+          }),
+        }),
+        S3Module.forRoot({
+          config: {
+            accessKeyId: 'minio',
+            secretAccessKey: 'password',
+            endpoint: 'http://127.0.0.1:9000',
+            s3ForcePathStyle: true,
+            signatureVersion: 'v4',
+          },
+        } as S3ModuleOptions),
       ],
       providers: [
         AuthService,
         NotificationService,
         ConfigService,
+        UserService,
+        ImageFileService,
+        {
+          provide: fileServiceToken,
+          useClass: S3FileService,
+        },
         {
           provide: getRepositoryToken(User),
           useClass: Repository,
@@ -42,6 +71,10 @@ describe('AuthService', () => {
         },
         {
           provide: getRepositoryToken(UserDevice),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(JoinUserHub),
           useClass: Repository,
         },
       ],

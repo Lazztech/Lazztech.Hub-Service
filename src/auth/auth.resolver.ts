@@ -1,6 +1,6 @@
 import { Logger, Response, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
-import { UserId } from 'src/decorators/user.decorator';
+import { UserId } from '../decorators/user.decorator';
 import { UserInput } from '../user/dto/user.input';
 import { AuthService } from './auth.service';
 import { AuthPasswordResetService } from './auth-password-reset/auth-password-reset.service';

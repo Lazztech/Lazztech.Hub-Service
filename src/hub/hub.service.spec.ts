@@ -15,6 +15,7 @@ import { fileServiceToken } from '../services/services.module';
 import { Repository } from 'typeorm';
 import { NotificationService } from '../notification/notification.service';
 import { HubService } from './hub.service';
+import { Invite } from '../dal/entity/invite.entity';
 
 describe('HubService', () => {
   let hubService: HubService;
@@ -62,6 +63,10 @@ describe('HubService', () => {
         },
         {
           provide: getRepositoryToken(UserDevice),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(Invite),
           useClass: Repository,
         },
       ],
