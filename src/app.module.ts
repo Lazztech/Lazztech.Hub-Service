@@ -10,15 +10,6 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { HealthController } from './health/health.controller';
 import { S3Module, S3ModuleOptions } from 'nestjs-s3';
-import { DefaultAdminModule, DefaultAdminSite } from 'nestjs-admin';
-import { Hub } from './dal/entity/hub.entity';
-import { InAppNotification } from './dal/entity/inAppNotification.entity';
-import { Invite } from './dal/entity/invite.entity';
-import { JoinUserHub } from './dal/entity/joinUserHub.entity';
-import { JoinUserInAppNotifications } from './dal/entity/joinUserInAppNotifications.entity';
-import { MicroChat } from './dal/entity/microChat.entity';
-import { PasswordReset } from './dal/entity/passwordReset.entity';
-import { UserDevice } from './dal/entity/userDevice.entity';
 import { FieldResolversModule } from './dal/field-resolvers/field-resolvers.module';
 
 @Module({
@@ -27,7 +18,6 @@ import { FieldResolversModule } from './dal/field-resolvers/field-resolvers.modu
       envFilePath: ['.env.local', '.env'],
       isGlobal: true,
     }),
-    DefaultAdminModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -44,10 +34,7 @@ import { FieldResolversModule } from './dal/field-resolvers/field-resolvers.modu
         logging: true,
         // migrationsRun: true,
         synchronize: true,
-        entities: [
-          __dirname + '/dal/entity/**/*.*.*',
-          'node_modules/nestjs-admin/**/*.entity.js',
-        ],
+        entities: [__dirname + '/dal/entity/**/*.*.*'],
         migrations: [__dirname + '/dal/migrations/**/*.*'],
         subscribers: [__dirname + '/dal/migrations/**/*.*'],
       }),
@@ -93,17 +80,4 @@ import { FieldResolversModule } from './dal/field-resolvers/field-resolvers.modu
   ],
   controllers: [HealthController],
 })
-export class AppModule {
-  constructor(private readonly adminSite: DefaultAdminSite) {
-    // Register the User entity under the "User" section
-    adminSite.register('Lazztech Hub', Hub);
-    adminSite.register('Lazztech Hub', InAppNotification);
-    adminSite.register('Lazztech Hub', Invite);
-    adminSite.register('Lazztech Hub', JoinUserHub);
-    adminSite.register('Lazztech Hub', JoinUserInAppNotifications);
-    adminSite.register('Lazztech Hub', MicroChat);
-    adminSite.register('Lazztech Hub', PasswordReset);
-    adminSite.register('Lazztech Hub', User);
-    adminSite.register('Lazztech Hub', UserDevice);
-  }
-}
+export class AppModule {}
