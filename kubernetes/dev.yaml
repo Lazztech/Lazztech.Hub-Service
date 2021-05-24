@@ -52,23 +52,20 @@ spec:
                   name: dev-lazztechhub
                   key: email-password
             - name: DATABASE_HOST
-              value: app-7e84ea5d-7724-41fb-9b1b-c831b958ad6d-do-user-6048416-0.b.db.ondigitalocean.com
+              value: localhost
             - name: DATABASE_PORT
-              value: "25060"
+              value: "5432"
             - name: DATABASE_USER
-              valueFrom:
-                secretKeyRef:
-                  name: dev-lazztechhub
-                  key: database-user
+              value: postgres
             - name: DATABASE_PASS
               valueFrom:
                 secretKeyRef:
                   name: dev-lazztechhub
                   key: database-pass
             - name: DATABASE_SCHEMA
-              value: db
+              value: postgres
             - name: DATABASE_SSL
-              value: "true"
+              value: "false"
             - name: FILE_STORAGE_TYPE
               value: object
             - name: OBJECT_STORAGE_ACCESS_KEY_ID
@@ -85,14 +82,54 @@ spec:
               value: nyc3.digitaloceanspaces.com
           resources:
             requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "1024Mi"
+              cpu: "750m"
+          ports:
+          - containerPort: 8080
+          imagePullPolicy: Always
+        - name: dev-lazztechhub-db
+          image: postgres
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: dev-lazztechhub
+                  key: database-pass
+          resources:
+            requests:
               memory: "64Mi"
               cpu: "100m"
             limits:
               memory: "128Mi"
               cpu: "500m"
           ports:
-          - containerPort: 8080
-          imagePullPolicy: Always
+          - containerPort: 5432
+          volumeMounts:
+          - mountPath: /var/lib/postgresql
+            name: postgres-data
+          imagePullPolicy: IfNotPresent
+      volumes:
+      - name: postgres-data
+        persistentVolumeClaim:
+          claimName: dev-lazztechhub-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: dev-lazztechhub-pvc
+  namespace: default
+  labels:
+    app: dev-lazztechhub
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn
+  resources:
+    requests:
+      storage: 2Gi
 ---
 apiVersion: v1
 kind: Service
@@ -106,38 +143,33 @@ spec:
   selector:
     app: dev-lazztechhub
 ---
-apiVersion: networking.k8s.io/v1beta1
-kind: Ingress
+apiVersion: v1
+kind: Service
 metadata:
-  name: dev-lazztechhub-internal-ingress
-  annotations:
-    kubernetes.io/ingress.class: "traefik"
+  name: dev-lazztechhub-db-service
+  labels:
+    app: dev-lazztechhub
 spec:
-  tls:
-    - secretName: internal-acme-crt-secret
-      hosts:
-        - '*.internal.lazz.tech'
-  rules:
-  - host: dev-lazztechhub.internal.lazz.tech
-    http:
-      paths:
-      - backend:
-          serviceName: dev-lazztechhub-service
-          servicePort: 80
+  ports:
+  - port: 5432
+    targetPort: 5432
+    name: tcp
+  selector:
+    app: dev-lazztechhub-db
 ---
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: dev-lazztechhub-public-ingress
+  name: dev-lazztechhub-lazztech-ingress
   annotations:
     kubernetes.io/ingress.class: "traefik"
 spec:
   tls:
-    - secretName: public-acme-crt-secret
+    - secretName: lazztech-acme-crt-secret
       hosts:
-        - '*.public.lazz.tech'
+        - '*.lazz.tech'
   rules:
-  - host: dev-lazztechhub.public.lazz.tech
+  - host: dev-lazztechhub.lazz.tech
     http:
       paths:
       - backend:
