@@ -29,7 +29,8 @@ import { FieldResolversModule } from './dal/field-resolvers/field-resolvers.modu
         password: configService.get('DATABASE_PASS', 'postgres'),
         database: configService.get('DATABASE_SCHEMA', 'postgres'),
         extra: {
-          ssl: configService.get('DATABASE_SSL', false) === 'true' ? true : false,
+          ssl:
+            configService.get('DATABASE_SSL', false) === 'true' ? true : false,
         },
         logging: true,
         // migrationsRun: true,
