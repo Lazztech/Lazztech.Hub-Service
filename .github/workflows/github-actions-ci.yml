@@ -43,6 +43,9 @@ jobs:
       working-directory: ./
       run: |
         npm run test:e2e
+      env:
+        CI: true
+        ACCESS_TOKEN_SECRET: SecretKey
 
     - name: npm start & health check
       working-directory: ./
