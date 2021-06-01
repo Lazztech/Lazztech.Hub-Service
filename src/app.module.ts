@@ -37,17 +37,18 @@ import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConne
         const sqliteConfig = {
           ...commonSettings,
           type: 'sqlite',
-          database: configService.get(
-            'DATABASE_SCHEMA',
-            `sqlite3.db`,
-          ),
+          database: configService.get('DATABASE_SCHEMA', `sqlite3.db`),
         } as SqliteConnectionOptions;
         switch (configService.get('DATABASE_TYPE', 'sqlite')) {
-          case '': 
-            AppModule.logger.log(`Using sqlite db: ${process.cwd()}/${sqliteConfig.database}`);
+          case '':
+            AppModule.logger.log(
+              `Using sqlite db: ${process.cwd()}/${sqliteConfig.database}`,
+            );
             return sqliteConfig;
           case 'sqlite':
-            AppModule.logger.log(`Using sqlite db: ${process.cwd()}/${sqliteConfig.database}`);
+            AppModule.logger.log(
+              `Using sqlite db: ${process.cwd()}/${sqliteConfig.database}`,
+            );
             return sqliteConfig;
           case 'postgres':
             return {
