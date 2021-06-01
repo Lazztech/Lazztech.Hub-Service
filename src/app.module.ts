@@ -23,7 +23,9 @@ import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConne
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: async (configService: ConfigService): Promise<TypeOrmModuleOptions> => {
+      useFactory: async (
+        configService: ConfigService,
+      ): Promise<TypeOrmModuleOptions> => {
         const commonSettings = {
           logging: true,
           // migrationsRun: true,
@@ -32,14 +34,27 @@ import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConne
           migrations: [__dirname + '/dal/migrations/**/*.*'],
           subscribers: [__dirname + '/dal/migrations/**/*.*'],
         };
-        AppModule.logger.log(`DATABASE_TYPE: ${configService.get<string>('DATABASE_TYPE', 'sqlite')}`);
-        AppModule.logger.log(`DATABASE_SCHEMA: ${configService.get<string>('DATABASE_SCHEMA', `${__dirname}/../hub-service.db`)}`);
+        AppModule.logger.log(
+          `DATABASE_TYPE: ${configService.get<string>(
+            'DATABASE_TYPE',
+            'sqlite',
+          )}`,
+        );
+        AppModule.logger.log(
+          `DATABASE_SCHEMA: ${configService.get<string>(
+            'DATABASE_SCHEMA',
+            `${__dirname}/../hub-service.db`,
+          )}`,
+        );
         switch (configService.get('DATABASE_TYPE', 'sqlite')) {
           case 'sqlite':
             return {
               ...commonSettings,
               type: 'sqlite',
-              database: configService.get('DATABASE_SCHEMA', `${__dirname}/../hub-service.db`),
+              database: configService.get(
+                'DATABASE_SCHEMA',
+                `${__dirname}/../hub-service.db`,
+              ),
             } as SqliteConnectionOptions;
           case 'postgres':
             return {
