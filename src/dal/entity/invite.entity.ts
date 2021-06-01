@@ -12,7 +12,7 @@ import { Hub } from './hub.entity';
 
 @ObjectType()
 @Entity()
-@Index(["invitersId", "inviteesId", "hubId"], { unique: true })
+@Index(['invitersId', 'inviteesId', 'hubId'], { unique: true })
 export class Invite {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
