@@ -47,10 +47,10 @@ jobs:
         npm run test:cov
 
     # Failing currently
-    # - name: npm test:e2e
-    #   working-directory: ./
-    #   run: |
-    #     npm run test:e2e
+    - name: npm test:e2e
+      working-directory: ./
+      run: |
+        npm run test:e2e
 
     # Failing currently
     # - name: npm start & health check
