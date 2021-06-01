@@ -34,28 +34,21 @@ import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConne
           migrations: [__dirname + '/dal/migrations/**/*.*'],
           subscribers: [__dirname + '/dal/migrations/**/*.*'],
         };
-        AppModule.logger.log(
-          `DATABASE_TYPE: ${configService.get<string>(
-            'DATABASE_TYPE',
-            'sqlite',
-          )}`,
-        );
-        AppModule.logger.log(
-          `DATABASE_SCHEMA: ${configService.get<string>(
+        const sqliteConfig = {
+          ...commonSettings,
+          type: 'sqlite',
+          database: configService.get(
             'DATABASE_SCHEMA',
-            `${__dirname}/../hub-service.db`,
-          )}`,
-        );
+            `sqlite3.db`,
+          ),
+        } as SqliteConnectionOptions;
         switch (configService.get('DATABASE_TYPE', 'sqlite')) {
+          case '': 
+            AppModule.logger.log(`Using sqlite db: ${process.cwd()}/${sqliteConfig.database}`);
+            return sqliteConfig;
           case 'sqlite':
-            return {
-              ...commonSettings,
-              type: 'sqlite',
-              database: configService.get(
-                'DATABASE_SCHEMA',
-                `${__dirname}/../hub-service.db`,
-              ),
-            } as SqliteConnectionOptions;
+            AppModule.logger.log(`Using sqlite db: ${process.cwd()}/${sqliteConfig.database}`);
+            return sqliteConfig;
           case 'postgres':
             return {
               ...commonSettings,
