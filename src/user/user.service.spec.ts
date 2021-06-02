@@ -13,7 +13,7 @@ import { EditUserDetails } from './dto/editUserDetails.input';
 import { ImageFileService } from '../services/file/image-file/image-file.service';
 import { fileServiceToken } from '../services/services.module';
 import { FileServiceInterface } from '../services/file/file-service.interface';
-import { AzureFileService } from '../services/file/azure-file/azure-file.service';
+import { LocalFileService } from '../services/file/local-file/local-file.service';
 
 describe('UserService', () => {
   let service: UserService;
@@ -28,7 +28,7 @@ describe('UserService', () => {
         ImageFileService,
         {
           provide: fileServiceToken,
-          useClass: AzureFileService,
+          useClass: LocalFileService,
         },
         EmailService,
         ConfigService,

@@ -8,7 +8,6 @@ import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
 import { JoinUserInAppNotifications } from '../dal/entity/joinUserInAppNotifications.entity';
 import { User } from '../dal/entity/user.entity';
 import { UserDevice } from '../dal/entity/userDevice.entity';
-import { AzureFileService } from '../services/file/azure-file/azure-file.service';
 import { FileServiceInterface } from '../services/file/file-service.interface';
 import { ImageFileService } from '../services/file/image-file/image-file.service';
 import { fileServiceToken } from '../services/services.module';
@@ -16,6 +15,7 @@ import { Repository } from 'typeorm';
 import { NotificationService } from '../notification/notification.service';
 import { HubService } from './hub.service';
 import { Invite } from '../dal/entity/invite.entity';
+import { LocalFileService } from '../services/file/local-file/local-file.service';
 
 describe('HubService', () => {
   let hubService: HubService;
@@ -38,7 +38,7 @@ describe('HubService', () => {
         ImageFileService,
         {
           provide: fileServiceToken,
-          useClass: AzureFileService,
+          useClass: LocalFileService,
         },
         NotificationService,
         {
