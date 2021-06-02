@@ -5,28 +5,29 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   JoinColumn,
-  PrimaryColumn,
+  Index,
 } from 'typeorm';
 import { User } from './user.entity';
 import { Hub } from './hub.entity';
 
 @ObjectType()
 @Entity()
+@Index(['invitersId', 'inviteesId', 'hubId'], { unique: true })
 export class Invite {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
   public id: number;
 
   @Field(() => ID)
-  @PrimaryColumn()
+  @Column()
   public invitersId: number;
 
   @Field(() => ID)
-  @PrimaryColumn()
+  @Column()
   public inviteesId: number;
 
   @Field(() => ID)
-  @PrimaryColumn()
+  @Column()
   public hubId: number;
 
   @Field(() => Boolean)

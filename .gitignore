@@ -39,3 +39,6 @@ key.key
 .env.local
 docs/_book/**.**
 .env.local.*
+**/*.db
+**/*.sqlite
+**/*.sqlite3

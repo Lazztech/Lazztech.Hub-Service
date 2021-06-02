@@ -4,7 +4,6 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  PrimaryColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Hub } from './hub.entity';
@@ -17,7 +16,7 @@ export class MicroChat {
   public id: number;
 
   @Field()
-  @PrimaryColumn()
+  @Column()
   public hubId: number;
 
   @Field(() => ID)
