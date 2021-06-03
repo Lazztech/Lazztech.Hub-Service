@@ -13,6 +13,7 @@ import { S3Module, S3ModuleOptions } from 'nestjs-s3';
 import { FieldResolversModule } from './dal/field-resolvers/field-resolvers.module';
 import { SqliteConnectionOptions } from 'typeorm/driver/sqlite/SqliteConnectionOptions';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
+import { FileModule } from './file/file.module';
 
 @Module({
   imports: [
@@ -111,6 +112,7 @@ import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConne
     }),
     AuthModule,
     FieldResolversModule,
+    FileModule,
   ],
   controllers: [HealthController],
 })

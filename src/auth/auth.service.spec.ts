@@ -10,12 +10,12 @@ import { NotificationService } from '../notification/notification.service';
 import { HttpModule } from '@nestjs/common';
 import { UserDevice } from '../dal/entity/userDevice.entity';
 import { UserService } from '../user/user.service';
-import { fileServiceToken } from '../services/services.module';
-import { S3FileService } from '../services/file/s3-file/s3-file.service';
+import { S3FileService } from '../file/s3-file/s3-file.service';
 import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { S3Module, S3ModuleOptions } from 'nestjs-s3';
-import { ImageFileService } from '../services/file/image-file/image-file.service';
+import { ImageFileService } from '../file/image-file/image-file.service';
+import { fileServiceToken } from '../file/file.module';
 
 describe('AuthService', () => {
   let service: AuthService;

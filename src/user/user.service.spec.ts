@@ -10,10 +10,10 @@ import { Invite } from '../dal/entity/invite.entity';
 import { ConfigService } from '@nestjs/config';
 import { PasswordReset } from '../dal/entity/passwordReset.entity';
 import { EditUserDetails } from './dto/editUserDetails.input';
-import { ImageFileService } from '../services/file/image-file/image-file.service';
-import { fileServiceToken } from '../services/services.module';
-import { FileServiceInterface } from '../services/file/file-service.interface';
-import { LocalFileService } from '../services/file/local-file/local-file.service';
+import { ImageFileService } from '../file/image-file/image-file.service';
+import { FileServiceInterface } from '../file/file-service.interface';
+import { LocalFileService } from '../file/local-file/local-file.service';
+import { fileServiceToken } from '../file/file.module';
 
 describe('UserService', () => {
   let service: UserService;
@@ -196,10 +196,10 @@ describe('UserService', () => {
     } as User;
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
     const deletePublicImageMock = jest
-      .spyOn(fileService, 'deletePublicImageFromUrl')
+      .spyOn(fileService, 'deleteImageFromUrl')
       .mockImplementation(() => Promise.resolve());
     jest
-      .spyOn(fileService, 'storePublicImageFromBase64')
+      .spyOn(fileService, 'storeImageFromBase64')
       .mockResolvedValueOnce(expectedResult.image);
     jest.spyOn(userRepo, 'save').mockResolvedValueOnce(expectedResult);
     // Act

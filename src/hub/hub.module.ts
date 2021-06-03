@@ -18,6 +18,7 @@ import { HubGeofenceService } from './hub-geofence/hub-geofence.service';
 import { HubMicroChatService } from './hub-micro-chat/hub-micro-chat.service';
 import { UserDevice } from '../dal/entity/userDevice.entity';
 import { HubInviteService } from './hub-invite/hub-invite.service';
+import { FileModule } from '../file/file.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { HubInviteService } from './hub-invite/hub-invite.service';
       Invite,
       UserDevice,
     ]),
+    FileModule,
     ServicesModule,
     UserModule,
     HttpModule,

@@ -16,10 +16,8 @@ export class S3FileService implements FileServiceInterface {
     private readonly configService: ConfigService,
   ) {}
 
-  public async storePublicImageFromBase64(
-    base64Image: string,
-  ): Promise<string> {
-    this.logger.log(this.storePublicImageFromBase64.name);
+  public async storeImageFromBase64(base64Image: string): Promise<string> {
+    this.logger.log(this.storeImageFromBase64.name);
 
     await this.ensureBucketExists();
 
@@ -47,8 +45,8 @@ export class S3FileService implements FileServiceInterface {
     return url;
   }
 
-  public async deletePublicImageFromUrl(url: string): Promise<void> {
-    this.logger.log(this.deletePublicImageFromUrl.name);
+  public async deleteImageFromUrl(url: string): Promise<void> {
+    this.logger.log(this.deleteImageFromUrl.name);
     const splitUrl = url.split('/');
     const objectName = splitUrl[splitUrl.length - 1];
     const result = await this.s3

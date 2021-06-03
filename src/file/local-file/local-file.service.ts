@@ -1,7 +1,5 @@
-import { BlobServiceClient } from '@azure/storage-blob';
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { isNullOrUndefined } from 'util';
 import * as uuidv1 from 'uuid/v1';
 import { FileServiceInterface } from '../file-service.interface';
 import { ImageFileService } from '../image-file/image-file.service';
@@ -16,10 +14,24 @@ export class LocalFileService implements FileServiceInterface {
   ) {
     this.logger.log('constructor');
   }
-  storePublicImageFromBase64(base64Image: string): Promise<string> {
+  async storeImageFromBase64(base64Image: string): Promise<string> {
+    const data = base64Image.split('base64,')[1];
+    let buf = Buffer.from(data, 'base64');
+    buf = await this.imageFileService.compress(buf);
+    const objectName = uuidv1() + '.jpg';
+
     throw new Error('Method not implemented.');
   }
-  deletePublicImageFromUrl(url: string): Promise<void> {
+
+  deleteImageFromUrl(url: string): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+
+  private saveFile(fileName: string) {
+    throw new Error('Method not implemented.');
+  }
+
+  private deleteFile(fileName: string) {
     throw new Error('Method not implemented.');
   }
 }
