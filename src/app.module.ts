@@ -2,18 +2,18 @@ import { Logger, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { S3Module, S3ModuleOptions } from 'nestjs-s3';
+import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
+import { SqliteConnectionOptions } from 'typeorm/driver/sqlite/SqliteConnectionOptions';
+import { AuthModule } from './auth/auth.module';
 import { User } from './dal/entity/user.entity';
+import { FieldResolversModule } from './dal/field-resolvers/field-resolvers.module';
+import { EmailModule } from './email/email.module';
+import { FileModule } from './file/file.module';
+import { HealthModule } from './health/health.module';
 import { HubModule } from './hub/hub.module';
 import { NotificationModule } from './notification/notification.module';
-import { ServicesModule } from './services/services.module';
 import { UserModule } from './user/user.module';
-import { AuthModule } from './auth/auth.module';
-import { HealthController } from './health/health.controller';
-import { S3Module, S3ModuleOptions } from 'nestjs-s3';
-import { FieldResolversModule } from './dal/field-resolvers/field-resolvers.module';
-import { SqliteConnectionOptions } from 'typeorm/driver/sqlite/SqliteConnectionOptions';
-import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
-import { FileModule } from './file/file.module';
 
 @Module({
   imports: [
@@ -98,7 +98,6 @@ import { FileModule } from './file/file.module';
         } as S3ModuleOptions;
       },
     }),
-    ServicesModule,
     NotificationModule,
     HubModule,
     UserModule,
@@ -113,8 +112,9 @@ import { FileModule } from './file/file.module';
     AuthModule,
     FieldResolversModule,
     FileModule,
+    HealthModule,
+    EmailModule,
   ],
-  controllers: [HealthController],
 })
 export class AppModule {
   public static logger = new Logger(AppModule.name, true);

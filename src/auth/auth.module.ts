@@ -6,13 +6,13 @@ import { PasswordReset } from '../dal/entity/passwordReset.entity';
 import { User } from '../dal/entity/user.entity';
 import { InAppNotification } from '../dal/entity/inAppNotification.entity';
 import { JoinUserInAppNotifications } from '../dal/entity/joinUserInAppNotifications.entity';
-import { ServicesModule } from '../services/services.module';
 import { AuthPasswordResetService } from './auth-password-reset/auth-password-reset.service';
 import { NotificationModule } from '../notification/notification.module';
 import { UserModule } from '../user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './strategy/jwt.strategy';
+import { EmailModule } from '../email/email.module';
 
 @Module({
   imports: [
@@ -29,7 +29,7 @@ import { JwtStrategy } from './strategy/jwt.strategy';
       InAppNotification,
       JoinUserInAppNotifications,
     ]),
-    ServicesModule,
+    EmailModule,
     NotificationModule,
     UserModule,
   ],

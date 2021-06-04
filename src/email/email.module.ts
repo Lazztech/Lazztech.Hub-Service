@@ -1,7 +1,7 @@
-import { Logger, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PasswordReset } from '../dal/entity/passwordReset.entity';
-import { EmailService } from './email/email.service';
+import { EmailService } from './email.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([PasswordReset])],
@@ -9,6 +9,4 @@ import { EmailService } from './email/email.service';
   providers: [EmailService],
   exports: [EmailService],
 })
-export class ServicesModule {
-  public static logger = new Logger(ServicesModule.name, true);
-}
+export class EmailModule {}

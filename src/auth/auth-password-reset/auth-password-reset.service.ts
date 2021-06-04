@@ -4,7 +4,7 @@ import { PasswordReset } from '../../dal/entity/passwordReset.entity';
 import { Repository } from 'typeorm';
 import { User } from '../../dal/entity/user.entity';
 import { ResetPassword } from '../dto/resetPassword.input';
-import { EmailService } from '../../services/email/email.service';
+import { EmailService } from '../../email/email.service';
 import * as crypto from 'crypto';
 import * as bcrypt from 'bcryptjs';
 

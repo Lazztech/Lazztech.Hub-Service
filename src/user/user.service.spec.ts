@@ -5,7 +5,7 @@ import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
 import { User } from '../dal/entity/user.entity';
 import { Repository } from 'typeorm';
 import { UserService } from './user.service';
-import { EmailService } from '../services/email/email.service';
+import { EmailService } from '../email/email.service';
 import { Invite } from '../dal/entity/invite.entity';
 import { ConfigService } from '@nestjs/config';
 import { PasswordReset } from '../dal/entity/passwordReset.entity';

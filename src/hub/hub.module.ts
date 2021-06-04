@@ -1,6 +1,5 @@
 import { Module, HttpModule } from '@nestjs/common';
 import { HubResolver } from './hub.resolver';
-import { ServicesModule } from '../services/services.module';
 import { HubService } from './hub.service';
 import { NotificationService } from '../notification/notification.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -19,6 +18,7 @@ import { HubMicroChatService } from './hub-micro-chat/hub-micro-chat.service';
 import { UserDevice } from '../dal/entity/userDevice.entity';
 import { HubInviteService } from './hub-invite/hub-invite.service';
 import { FileModule } from '../file/file.module';
+import { EmailModule } from '../email/email.module';
 
 @Module({
   imports: [
@@ -33,7 +33,7 @@ import { FileModule } from '../file/file.module';
       UserDevice,
     ]),
     FileModule,
-    ServicesModule,
+    EmailModule,
     UserModule,
     HttpModule,
   ],
