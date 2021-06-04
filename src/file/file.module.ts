@@ -1,13 +1,13 @@
 import { FactoryProvider, Logger, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { FILE_SERVICE } from './file-service.token';
 import { FileController } from './file.controller';
 import { ImageFileService } from './image-file/image-file.service';
 import { LocalFileService } from './local-file/local-file.service';
 import { S3FileService } from './s3-file/s3-file.service';
 
-export const fileServiceToken = 'FileService';
 export const fileServiceFactory = {
-  provide: fileServiceToken,
+  provide: FILE_SERVICE,
   useFactory: (
     configService: ConfigService,
     localFileService: LocalFileService,
@@ -42,7 +42,7 @@ export const fileServiceFactory = {
     LocalFileService,
     ImageFileService,
   ],
-  exports: [fileServiceToken],
+  exports: [FILE_SERVICE],
 })
 export class FileModule {
   public static logger = new Logger(FileModule.name, true);

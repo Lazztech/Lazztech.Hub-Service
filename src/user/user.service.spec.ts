@@ -13,7 +13,7 @@ import { EditUserDetails } from './dto/editUserDetails.input';
 import { ImageFileService } from '../file/image-file/image-file.service';
 import { FileServiceInterface } from '../file/file-service.interface';
 import { LocalFileService } from '../file/local-file/local-file.service';
-import { fileServiceToken } from '../file/file.module';
+import { FILE_SERVICE } from '../file/file-service.token';
 
 describe('UserService', () => {
   let service: UserService;
@@ -27,7 +27,7 @@ describe('UserService', () => {
         UserService,
         ImageFileService,
         {
-          provide: fileServiceToken,
+          provide: FILE_SERVICE,
           useClass: LocalFileService,
         },
         EmailService,
@@ -57,7 +57,7 @@ describe('UserService', () => {
       getRepositoryToken(JoinUserHub),
     );
     userRepo = module.get<Repository<User>>(getRepositoryToken(User));
-    fileService = module.get<FileServiceInterface>(fileServiceToken);
+    fileService = module.get<FileServiceInterface>(FILE_SERVICE);
   });
 
   it('should be defined', async () => {
@@ -196,7 +196,7 @@ describe('UserService', () => {
     } as User;
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
     const deletePublicImageMock = jest
-      .spyOn(fileService, 'deleteImageFromUrl')
+      .spyOn(fileService, 'delete')
       .mockImplementation(() => Promise.resolve());
     jest
       .spyOn(fileService, 'storeImageFromBase64')

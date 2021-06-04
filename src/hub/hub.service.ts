@@ -6,13 +6,13 @@ import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
 import { User } from '../dal/entity/user.entity';
 import { FileServiceInterface } from '../file/file-service.interface';
 import { Repository } from 'typeorm';
-import { fileServiceToken } from '../file/file.module';
+import { FILE_SERVICE } from '../file/file-service.token';
 
 @Injectable()
 export class HubService {
   private readonly logger = new Logger(HubService.name, true);
   constructor(
-    @Inject(fileServiceToken)
+    @Inject(FILE_SERVICE)
     private readonly fileService: FileServiceInterface,
     @InjectRepository(Hub)
     private hubRepository: Repository<Hub>,
@@ -117,7 +117,7 @@ export class HubService {
       },
     });
     if (hub.image) {
-      await this.fileService.deleteImageFromUrl(hub.image);
+      await this.fileService.delete(hub.image);
     }
     await this.hubRepository.remove(hub);
   }
@@ -153,7 +153,7 @@ export class HubService {
     let hub = await joinUserHubResult.hub;
 
     if (hub.image) {
-      await this.fileService.deleteImageFromUrl(hub.image);
+      await this.fileService.delete(hub.image);
     }
     const imageUrl = await this.fileService.storeImageFromBase64(newImage);
 

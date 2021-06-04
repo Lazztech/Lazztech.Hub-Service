@@ -45,8 +45,8 @@ export class S3FileService implements FileServiceInterface {
     return url;
   }
 
-  public async deleteImageFromUrl(url: string): Promise<void> {
-    this.logger.log(this.deleteImageFromUrl.name);
+  public async delete(url: string): Promise<void> {
+    this.logger.log(this.delete.name);
     const splitUrl = url.split('/');
     const objectName = splitUrl[splitUrl.length - 1];
     const result = await this.s3
@@ -56,6 +56,10 @@ export class S3FileService implements FileServiceInterface {
       })
       .promise();
     this.logger.log(`Deleted image with result: ${result.$response}`);
+  }
+
+  get(fileIdentifier: string): Promise<any> {
+    throw new Error('Method not implemented.');
   }
 
   private async ensureBucketExists() {

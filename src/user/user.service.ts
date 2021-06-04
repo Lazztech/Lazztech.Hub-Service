@@ -6,14 +6,14 @@ import { User } from '../dal/entity/user.entity';
 import { FileServiceInterface } from 'src/file/file-service.interface';
 import { Repository } from 'typeorm';
 import { EditUserDetails } from './dto/editUserDetails.input';
-import { fileServiceToken } from '../file/file.module';
+import { FILE_SERVICE } from '../file/file-service.token';
 
 @Injectable()
 export class UserService {
   private logger = new Logger(UserService.name);
 
   constructor(
-    @Inject(fileServiceToken)
+    @Inject(FILE_SERVICE)
     private readonly fileService: FileServiceInterface,
     @InjectRepository(JoinUserHub)
     private joinUserHubRepository: Repository<JoinUserHub>,
@@ -80,7 +80,7 @@ export class UserService {
     this.logger.log(this.changeUserImage.name);
     let user = await this.userRepository.findOne(userId);
     if (user.image) {
-      await this.fileService.deleteImageFromUrl(user.image);
+      await this.fileService.delete(user.image);
     }
     const imageUrl = await this.fileService.storeImageFromBase64(newImage);
     user.image = imageUrl;

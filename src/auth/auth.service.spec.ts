@@ -15,7 +15,7 @@ import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { S3Module, S3ModuleOptions } from 'nestjs-s3';
 import { ImageFileService } from '../file/image-file/image-file.service';
-import { fileServiceToken } from '../file/file.module';
+import { FILE_SERVICE } from '../file/file-service.token';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -51,7 +51,7 @@ describe('AuthService', () => {
         UserService,
         ImageFileService,
         {
-          provide: fileServiceToken,
+          provide: FILE_SERVICE,
           useClass: S3FileService,
         },
         {

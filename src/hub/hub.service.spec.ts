@@ -15,7 +15,7 @@ import { NotificationService } from '../notification/notification.service';
 import { HubService } from './hub.service';
 import { Invite } from '../dal/entity/invite.entity';
 import { LocalFileService } from '../file/local-file/local-file.service';
-import { fileServiceToken } from '../file/file.module';
+import { FILE_SERVICE } from '../file/file-service.token';
 
 describe('HubService', () => {
   let hubService: HubService;
@@ -37,7 +37,7 @@ describe('HubService', () => {
         NotificationService,
         ImageFileService,
         {
-          provide: fileServiceToken,
+          provide: FILE_SERVICE,
           useClass: LocalFileService,
         },
         NotificationService,
@@ -77,7 +77,7 @@ describe('HubService', () => {
       getRepositoryToken(JoinUserHub),
     );
     hubRepo = module.get<Repository<Hub>>(getRepositoryToken(Hub));
-    fileService = module.get<FileServiceInterface>(fileServiceToken);
+    fileService = module.get<FileServiceInterface>(FILE_SERVICE);
   });
 
   it('should be defined', () => {
@@ -293,7 +293,7 @@ describe('HubService', () => {
       image: 'imageTest',
     } as Hub);
     const deleteImageCall = jest
-      .spyOn(fileService, 'deleteImageFromUrl')
+      .spyOn(fileService, 'delete')
       .mockImplementationOnce(() => Promise.resolve());
     const removeCall = jest
       .spyOn(hubRepo, 'remove')
@@ -352,7 +352,7 @@ describe('HubService', () => {
       image: newImage,
     } as Hub;
     const deleteCall = jest
-      .spyOn(fileService, 'deleteImageFromUrl')
+      .spyOn(fileService, 'delete')
       .mockImplementationOnce(() => Promise.resolve());
     const storeCall = jest
       .spyOn(fileService, 'storeImageFromBase64')

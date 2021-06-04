@@ -14,6 +14,7 @@ export class LocalFileService implements FileServiceInterface {
   ) {
     this.logger.log('constructor');
   }
+
   async storeImageFromBase64(base64Image: string): Promise<string> {
     const data = base64Image.split('base64,')[1];
     let buf = Buffer.from(data, 'base64');
@@ -23,7 +24,11 @@ export class LocalFileService implements FileServiceInterface {
     throw new Error('Method not implemented.');
   }
 
-  deleteImageFromUrl(url: string): Promise<void> {
+  get(fileIdentifier: string): Promise<any> {
+    throw new Error('Method not implemented.');
+  }
+
+  delete(url: string): Promise<void> {
     throw new Error('Method not implemented.');
   }
 
