@@ -4,6 +4,7 @@ import { FileServiceInterface } from '../file-service.interface';
 import { ImageFileService } from '../image-file/image-file.service';
 import * as uuidv1 from 'uuid/v1';
 import { ConfigService } from '@nestjs/config';
+import { ReadStream } from 'fs';
 
 @Injectable()
 export class S3FileService implements FileServiceInterface {
@@ -58,7 +59,7 @@ export class S3FileService implements FileServiceInterface {
     this.logger.log(`Deleted image with result: ${result.$response}`);
   }
 
-  get(fileIdentifier: string): Promise<any> {
+  get(fileIdentifier: string): ReadStream {
     throw new Error('Method not implemented.');
   }
 

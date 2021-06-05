@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: dev-lazztechhub
-          image: registry.internal.lazz.tech/lazztechhub-service
+          image: registry.internal.lazz.tech/lazztechhub-service:latest
           env:
             - name: APP_NAME
               value: "Dev Lazztech Hub"
@@ -60,6 +60,9 @@ spec:
               cpu: "750m"
           ports:
           - containerPort: 8080
+          volumeMounts:
+          - mountPath: /app/data
+            name: lazztech-data
           imagePullPolicy: Always
       volumes:
       - name: lazztech-data

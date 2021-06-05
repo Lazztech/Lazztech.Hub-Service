@@ -38,7 +38,7 @@ import { UserModule } from './user/user.module';
         const sqliteConfig = {
           ...commonSettings,
           type: 'sqlite',
-          database: configService.get('DATABASE_SCHEMA', `sqlite3.db`),
+          database: configService.get('DATABASE_SCHEMA', `data/sqlite3.db`),
         } as SqliteConnectionOptions;
         switch (configService.get('DATABASE_TYPE', 'sqlite')) {
           case '':

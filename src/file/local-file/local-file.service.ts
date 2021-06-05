@@ -3,10 +3,15 @@ import { ConfigService } from '@nestjs/config';
 import * as uuidv1 from 'uuid/v1';
 import { FileServiceInterface } from '../file-service.interface';
 import { ImageFileService } from '../image-file/image-file.service';
+import fs, { ReadStream } from 'fs';
 
 @Injectable()
 export class LocalFileService implements FileServiceInterface {
   private logger = new Logger(LocalFileService.name, true);
+  private directory: string = this.configService.get(
+    'FILE_STORAGE_DIR',
+    'data',
+  );
 
   constructor(
     private readonly configService: ConfigService,
@@ -24,19 +29,19 @@ export class LocalFileService implements FileServiceInterface {
     throw new Error('Method not implemented.');
   }
 
-  get(fileIdentifier: string): Promise<any> {
-    throw new Error('Method not implemented.');
+  get(fileIdentifier: string): ReadStream {
+    return fs.createReadStream(`${this.directory}/${fileIdentifier}`);
   }
 
-  delete(url: string): Promise<void> {
-    throw new Error('Method not implemented.');
+  delete(fileIdentifier: string): Promise<void> {
+    return fs.promises.unlink(`${this.directory}/${fileIdentifier}`);
   }
 
   private saveFile(fileName: string) {
     throw new Error('Method not implemented.');
   }
 
-  private deleteFile(fileName: string) {
-    throw new Error('Method not implemented.');
+  private deleteFile(fileName: string): Promise<void> {
+    return fs.promises.unlink(`${this.directory}/${fileName}`);
   }
 }

@@ -10,7 +10,7 @@ export class FileController {
   ) {}
 
   @Get()
-  async file(fileIdentifier: string): Promise<any> {
-    return await this.fileService.get(fileIdentifier);
+  async get(fileIdentifier: string) {
+    return this.fileService.get(fileIdentifier);
   }
 }

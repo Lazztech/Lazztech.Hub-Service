@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: stage-lazztechhub
-          image: registry.internal.lazz.tech/lazztechhub-service
+          image: registry.internal.lazz.tech/lazztechhub-service:latest
           env:
             - name: APP_NAME
               value: "Stage Lazztech Hub"

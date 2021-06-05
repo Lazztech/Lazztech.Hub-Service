@@ -13,7 +13,7 @@ export const fileServiceFactory = {
     localFileService: LocalFileService,
     s3FileService: S3FileService,
   ) => {
-    const fileServiceType = configService.get('FILE_STORAGE_TYPE');
+    const fileServiceType = configService.get('FILE_STORAGE_TYPE', 'local');
     switch (fileServiceType) {
       case '':
         FileModule.logger.log(
