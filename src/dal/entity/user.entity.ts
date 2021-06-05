@@ -35,7 +35,9 @@ export class User {
   @Column({ nullable: true })
   public description: string;
 
-  @Field({ nullable: true })
+  /**
+   * Exposed as a field resolver
+   */
   @Column({ nullable: true })
   public image: string;
 

@@ -11,7 +11,7 @@ import { ConfigService } from '@nestjs/config';
 import { PasswordReset } from '../dal/entity/passwordReset.entity';
 import { EditUserDetails } from './dto/editUserDetails.input';
 import { ImageFileService } from '../file/image-file/image-file.service';
-import { FileServiceInterface } from '../file/file-service.interface';
+import { FileServiceInterface } from '../file/interfaces/file-service.interface';
 import { LocalFileService } from '../file/local-file/local-file.service';
 import { FILE_SERVICE } from '../file/file-service.token';
 

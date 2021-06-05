@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Hub } from '../dal/entity/hub.entity';
 import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
 import { User } from '../dal/entity/user.entity';
-import { FileServiceInterface } from 'src/file/file-service.interface';
+import { FileServiceInterface } from 'src/file/interfaces/file-service.interface';
 import { Repository } from 'typeorm';
 import { EditUserDetails } from './dto/editUserDetails.input';
 import { FILE_SERVICE } from '../file/file-service.token';

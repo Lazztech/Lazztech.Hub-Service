@@ -23,7 +23,9 @@ export class Hub {
   @Column({ default: false })
   public active: boolean;
 
-  @Field({ nullable: true })
+  /**
+   * Handled with a field resolver
+   */
   @Column({ nullable: true })
   public image: string;
 

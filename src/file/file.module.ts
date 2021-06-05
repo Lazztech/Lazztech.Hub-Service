@@ -1,10 +1,11 @@
 import { FactoryProvider, Logger, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { FILE_SERVICE } from './file-service.token';
-import { FileController } from './file.controller';
+import { FileController } from './controller/file.controller';
 import { ImageFileService } from './image-file/image-file.service';
 import { LocalFileService } from './local-file/local-file.service';
 import { S3FileService } from './s3-file/s3-file.service';
+import { FileUrlService } from './file-url/file-url.service';
 
 export const fileServiceFactory = {
   provide: FILE_SERVICE,
@@ -17,12 +18,18 @@ export const fileServiceFactory = {
     switch (fileServiceType) {
       case '':
         FileModule.logger.log(
-          `Using local file storage: ${process.cwd()}/data`,
+          `Using local file storage: ${process.cwd()}/${configService.get(
+            'FILE_STORAGE_DIR',
+            'data/uploads',
+          )}`,
         );
         return localFileService;
       case 'local':
         FileModule.logger.log(
-          `Using local file storage: ${process.cwd()}/data`,
+          `Using local file storage: ${process.cwd()}/${configService.get(
+            'FILE_STORAGE_DIR',
+            'data/uploads',
+          )}`,
         );
         return localFileService;
       case 'object':
@@ -41,8 +48,9 @@ export const fileServiceFactory = {
     S3FileService,
     LocalFileService,
     ImageFileService,
+    FileUrlService,
   ],
-  exports: [FILE_SERVICE],
+  exports: [FILE_SERVICE, FileUrlService],
 })
 export class FileModule {
   public static logger = new Logger(FileModule.name, true);

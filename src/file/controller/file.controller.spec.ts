@@ -1,9 +1,9 @@
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
-import { FILE_SERVICE } from './file-service.token';
+import { FILE_SERVICE } from '../file-service.token';
 import { FileController } from './file.controller';
-import { ImageFileService } from './image-file/image-file.service';
-import { LocalFileService } from './local-file/local-file.service';
+import { ImageFileService } from '../image-file/image-file.service';
+import { LocalFileService } from '../local-file/local-file.service';
 
 describe('FileController', () => {
   let controller: FileController;

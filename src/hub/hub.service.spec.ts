@@ -8,7 +8,7 @@ import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
 import { JoinUserInAppNotifications } from '../dal/entity/joinUserInAppNotifications.entity';
 import { User } from '../dal/entity/user.entity';
 import { UserDevice } from '../dal/entity/userDevice.entity';
-import { FileServiceInterface } from '../file/file-service.interface';
+import { FileServiceInterface } from '../file/interfaces/file-service.interface';
 import { ImageFileService } from '../file/image-file/image-file.service';
 import { Repository } from 'typeorm';
 import { NotificationService } from '../notification/notification.service';

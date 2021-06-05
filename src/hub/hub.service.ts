@@ -4,7 +4,7 @@ import { Hub } from '../dal/entity/hub.entity';
 import { Invite } from '../dal/entity/invite.entity';
 import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
 import { User } from '../dal/entity/user.entity';
-import { FileServiceInterface } from '../file/file-service.interface';
+import { FileServiceInterface } from '../file/interfaces/file-service.interface';
 import { Repository } from 'typeorm';
 import { FILE_SERVICE } from '../file/file-service.token';
 
