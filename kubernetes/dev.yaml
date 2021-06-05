@@ -15,10 +15,10 @@ spec:
     spec:
       containers:
         - name: dev-lazztechhub
-          image: registry.internal.lazz.tech/dev-lazztechhub-service
+          image: registry.internal.lazz.tech/lazztechhub-service
           env:
             - name: APP_NAME
-              value: "Lazztech Hub"
+              value: "Dev Lazztech Hub"
             - name: ACCESS_TOKEN_SECRET
               valueFrom:
                 secretKeyRef:
@@ -51,35 +51,6 @@ spec:
                 secretKeyRef:
                   name: dev-lazztechhub
                   key: email-password
-            - name: DATABASE_HOST
-              value: localhost
-            - name: DATABASE_PORT
-              value: "5432"
-            - name: DATABASE_USER
-              value: postgres
-            - name: DATABASE_PASS
-              valueFrom:
-                secretKeyRef:
-                  name: dev-lazztechhub
-                  key: database-pass
-            - name: DATABASE_SCHEMA
-              value: postgres
-            - name: DATABASE_SSL
-              value: "false"
-            - name: FILE_STORAGE_TYPE
-              value: object
-            - name: OBJECT_STORAGE_ACCESS_KEY_ID
-              valueFrom:
-                secretKeyRef:
-                  name: dev-lazztechhub
-                  key: object-storage-access-key-id
-            - name: OBJECT_STORAGE_SECRET_ACCESS_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: dev-lazztechhub
-                  key: object-storage-secret-access-key
-            - name: OBJECT_STORAGE_SECRET_ACCESS_KEY
-              value: nyc3.digitaloceanspaces.com
           resources:
             requests:
               memory: "512Mi"
@@ -90,29 +61,8 @@ spec:
           ports:
           - containerPort: 8080
           imagePullPolicy: Always
-        - name: dev-lazztechhub-db
-          image: postgres
-          env:
-            - name: POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: dev-lazztechhub
-                  key: database-pass
-          resources:
-            requests:
-              memory: "64Mi"
-              cpu: "100m"
-            limits:
-              memory: "128Mi"
-              cpu: "500m"
-          ports:
-          - containerPort: 5432
-          volumeMounts:
-          - mountPath: /var/lib/postgresql
-            name: postgres-data
-          imagePullPolicy: IfNotPresent
       volumes:
-      - name: postgres-data
+      - name: lazztech-data
         persistentVolumeClaim:
           claimName: dev-lazztechhub-pvc
 ---

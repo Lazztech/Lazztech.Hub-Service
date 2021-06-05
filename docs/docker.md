@@ -55,5 +55,5 @@ docker run -d \
 ## Building container
 
 ```bash
-Lazztech.Hub-Service me$ docker build -f docker/Dockerfile . -t registry.lazz.tech/dev-lazztechhub-service
+Lazztech.Hub-Service me$ docker build -f docker/Dockerfile . -t registry.lazz.tech/lazztechhub-service
 ```
