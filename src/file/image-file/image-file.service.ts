@@ -14,7 +14,6 @@ export class ImageFileService {
   }
 
   public convertToJpeg(input: Buffer) {
-    this.logger.log(this.convertToJpeg.name);
     return sharp(input).jpeg().toBuffer();
   }
 
