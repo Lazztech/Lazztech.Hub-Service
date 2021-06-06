@@ -23,6 +23,7 @@ export class LocalFileService implements FileServiceInterface {
   }
 
   async storeImageFromBase64(base64Image: string): Promise<string> {
+    this.logger.log(this.storeImageFromBase64.name);
     const data = base64Image.split('base64,')[1];
     let buf = Buffer.from(data, 'base64');
     buf = await this.imageFileService.compress(buf);
