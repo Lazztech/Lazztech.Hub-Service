@@ -14,6 +14,7 @@ import { HealthModule } from './health/health.module';
 import { HubModule } from './hub/hub.module';
 import { NotificationModule } from './notification/notification.module';
 import { UserModule } from './user/user.module';
+import * as path from 'path';
 
 @Module({
   imports: [
@@ -38,17 +39,26 @@ import { UserModule } from './user/user.module';
         const sqliteConfig = {
           ...commonSettings,
           type: 'sqlite',
-          database: configService.get('DATABASE_SCHEMA', `data/sqlite3.db`),
+          database: configService.get(
+            'DATABASE_SCHEMA',
+            path.join('data', 'sqlite3.db'),
+          ),
         } as SqliteConnectionOptions;
         switch (configService.get('DATABASE_TYPE', 'sqlite')) {
           case '':
             AppModule.logger.log(
-              `Using sqlite db: ${process.cwd()}/${sqliteConfig.database}`,
+              `Using sqlite db: ${path.join(
+                process.cwd(),
+                sqliteConfig.database,
+              )}`,
             );
             return sqliteConfig;
           case 'sqlite':
             AppModule.logger.log(
-              `Using sqlite db: ${process.cwd()}/${sqliteConfig.database}`,
+              `Using sqlite db: ${path.join(
+                process.cwd(),
+                sqliteConfig.database,
+              )}`,
             );
             return sqliteConfig;
           case 'postgres':

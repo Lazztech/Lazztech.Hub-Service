@@ -6,6 +6,7 @@ import { ImageFileService } from './image-file/image-file.service';
 import { LocalFileService } from './local-file/local-file.service';
 import { S3FileService } from './s3-file/s3-file.service';
 import { FileUrlService } from './file-url/file-url.service';
+import * as path from 'path';
 
 export const fileServiceFactory = {
   provide: FILE_SERVICE,
@@ -20,7 +21,7 @@ export const fileServiceFactory = {
         FileModule.logger.log(
           `Using local file storage: ${process.cwd()}/${configService.get(
             'FILE_STORAGE_DIR',
-            'data/uploads',
+            path.join('data', 'uploads'),
           )}`,
         );
         return localFileService;
@@ -28,7 +29,7 @@ export const fileServiceFactory = {
         FileModule.logger.log(
           `Using local file storage: ${process.cwd()}/${configService.get(
             'FILE_STORAGE_DIR',
-            'data/uploads',
+            path.join('data', 'uploads'),
           )}`,
         );
         return localFileService;

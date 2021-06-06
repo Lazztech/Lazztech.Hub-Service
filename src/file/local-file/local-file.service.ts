@@ -4,13 +4,14 @@ import * as uuidv1 from 'uuid/v1';
 import { FileServiceInterface } from '../interfaces/file-service.interface';
 import { ImageFileService } from '../image-file/image-file.service';
 import * as fs from 'fs';
+import * as path from 'path';
 
 @Injectable()
 export class LocalFileService implements FileServiceInterface {
   private logger = new Logger(LocalFileService.name, true);
   private directory: string = this.configService.get(
     'FILE_STORAGE_DIR',
-    'data/uploads',
+    path.join('data', 'uploads'),
   );
 
   constructor(
