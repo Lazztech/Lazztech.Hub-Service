@@ -51,6 +51,8 @@ spec:
                 secretKeyRef:
                   name: stage-lazztechhub
                   key: email-password
+            - name: DATABASE_TYPE
+              value: postgres
             - name: DATABASE_HOST
               value: localhost
             - name: DATABASE_PORT

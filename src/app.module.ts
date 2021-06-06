@@ -62,6 +62,12 @@ import * as path from 'path';
             );
             return sqliteConfig;
           case 'postgres':
+            AppModule.logger.log(
+              `Using postgres db: ${configService.get(
+                'DATABASE_SCHEMA',
+                'postgres',
+              )}, host: ${configService.get('DATABASE_HOST', 'localhost')}`,
+            );
             return {
               ...commonSettings,
               type: 'postgres' as const,
