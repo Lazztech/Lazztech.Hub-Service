@@ -1,9 +1,5 @@
 FROM node:12
 
-# used by mozjpeg dependency
-# RUN apk update
-# RUN apk add --upgrade libpng-dev
-
 # Create app directory
 WORKDIR /app
 
