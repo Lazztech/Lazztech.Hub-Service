@@ -66,12 +66,20 @@ $ kubectl delete -f kubernetes/dev.yaml
 $ kubectl delete secret dev-lazztechhub
 ```
 
+```bash
+# deploy stage secrets
+$ kubectl create secret generic stage-lazztechhub --from-env-file=.env.stage
+# deploy stage
+$ kubectl apply -f kubernetes/stage.yaml
+
+# delete stage
+$ kubectl delete -f kubernetes/stage.yaml
+# delete stage secrets
+$ kubectl delete secret stage-lazztechhub
+```
+
 ## Documentation
 [Lazztech.Hub-Service Docs](https://lazztech-hub-service.netlify.app/)
-
-<!-- ## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support). -->
 
 ## Stay in touch
 

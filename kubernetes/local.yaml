@@ -18,10 +18,7 @@ spec:
           image: registry.internal.lazz.tech/lazztechhub-service:latest
           env:
             - name: APP_NAME
-              valueFrom:
-                secretKeyRef:
-                  name: local-lazztechhub
-                  key: APP_NAME
+              value: "Local Lazztech Hub"
             - name: ACCESS_TOKEN_SECRET
               valueFrom:
                 secretKeyRef:

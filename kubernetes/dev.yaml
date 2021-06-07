@@ -30,7 +30,10 @@ spec:
                   name: dev-lazztechhub
                   key: FIREBASE_SERVER_KEY
             - name: PUSH_NOTIFICATION_ENDPOINT
-              value: https://fcm.googleapis.com/fcm/send
+              valueFrom:
+                secretKeyRef:
+                  name: dev-lazztechhub
+                  key: PUSH_NOTIFICATION_ENDPOINT
             - name: GOOGLE_CLIENT_ID
               valueFrom:
                 secretKeyRef:

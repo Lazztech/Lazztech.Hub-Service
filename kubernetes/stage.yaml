@@ -23,34 +23,37 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: stage-lazztechhub
-                  key: access-token-secret
+                  key: ACCESS_TOKEN_SECRET
             - name: FIREBASE_SERVER_KEY
               valueFrom:
                 secretKeyRef:
                   name: stage-lazztechhub
-                  key: firebase-server-key
+                  key: FIREBASE_SERVER_KEY
             - name: PUSH_NOTIFICATION_ENDPOINT
-              value: https://fcm.googleapis.com/fcm/send
+              valueFrom:
+                secretKeyRef:
+                  name: stage-lazztechhub
+                  key: PUSH_NOTIFICATION_ENDPOINT
             - name: GOOGLE_CLIENT_ID
               valueFrom:
                 secretKeyRef:
                   name: stage-lazztechhub
-                  key: google-client-id
+                  key: GOOGLE_CLIENT_ID
             - name: GOOGLE_SECRET
               valueFrom:
                 secretKeyRef:
                   name: stage-lazztechhub
-                  key: google-secret
+                  key: GOOGLE_SECRET
             - name: EMAIL_FROM_ADDRESS
               valueFrom:
                 secretKeyRef:
                   name: stage-lazztechhub
-                  key: email-from-address
+                  key: EMAIL_FROM_ADDRESS
             - name: EMAIL_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: stage-lazztechhub
-                  key: email-password
+                  key: EMAIL_PASSWORD
             - name: DATABASE_TYPE
               value: postgres
             - name: DATABASE_HOST
@@ -63,7 +66,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: stage-lazztechhub
-                  key: database-pass
+                  key: DATABASE_PASS
             - name: DATABASE_SCHEMA
               value: postgres
             - name: DATABASE_SSL
@@ -74,14 +77,17 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: stage-lazztechhub
-                  key: object-storage-access-key-id
+                  key: OBJECT_STORAGE_ACCESS_KEY_ID
             - name: OBJECT_STORAGE_SECRET_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
                   name: stage-lazztechhub
-                  key: object-storage-secret-access-key
+                  key: OBJECT_STORAGE_SECRET_ACCESS_KEY
             - name: OBJECT_STORAGE_SECRET_ACCESS_KEY
-              value: nyc3.digitaloceanspaces.com
+              valueFrom:
+                secretKeyRef:
+                  name: stage-lazztechhub
+                  key: OBJECT_STORAGE_SECRET_ACCESS_KEY
           resources:
             requests:
               memory: "512Mi"
@@ -99,7 +105,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: stage-lazztechhub
-                  key: database-pass
+                  key: DATABASE_PASS
           resources:
             requests:
               memory: "64Mi"
