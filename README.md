@@ -54,6 +54,18 @@ $ kubectl delete -f kubernetes/local.yaml
 $ kubectl delete secret local-lazztechhub
 ```
 
+```bash
+# deploy dev secrets
+$ kubectl create secret generic dev-lazztechhub --from-env-file=.env.dev
+# deploy dev
+$ kubectl apply -f kubernetes/dev.yaml
+
+# delete dev
+$ kubectl delete -f kubernetes/dev.yaml
+# delete dev secrets
+$ kubectl delete secret dev-lazztechhub
+```
+
 ## Documentation
 [Lazztech.Hub-Service Docs](https://lazztech-hub-service.netlify.app/)
 
