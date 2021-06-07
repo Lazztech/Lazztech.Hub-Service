@@ -36,9 +36,8 @@ lerna-debug.log*
 cert.pem
 key.pem
 key.key
-.env.local
 docs/_book/**.**
-.env.local.*
+.env.*
 **/*.db
 **/*.sqlite
 **/*.sqlite3

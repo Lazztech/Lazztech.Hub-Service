@@ -1,14 +1,5 @@
 # Lazztech.Hub-Service
 
-
-<p align="center">
-  <a href="https://lazz.tech/software/" target="blank"><img src="https://lazz.tech/images/lazztech_icon.png" width="320"/></a>
-</p>
-  
-  <p align="center">The back-end web service for the Lazztech Hub Mobile App. Written in <a href="https://www.typescriptlang.org/" target="blank">TypeScript</a> with <a href="https://graphql.org/" target="blank">GraphQL</a> & the <a href="https://nestjs.com/" target="blank">NestJS</a> framework.</p>
-    <p align="center">
-</p>
-
 ## Companion Mobile App
 For the companion mobile app client see the repo linked below.
 
@@ -44,6 +35,23 @@ $ npm run test:e2e
 
 # test coverage
 $ npm run test:cov
+```
+
+## Kubernetes
+
+```bash
+# deploy local secrets
+$ kubectl create secret generic local-lazztechhub --from-env-file=.env.local
+# deploy local
+$ kubectl apply -f kubernetes/local.yaml
+
+# open graphql-playground
+$ open http://localhost:30000/graphql
+
+# delete local
+$ kubectl delete -f kubernetes/local.yaml
+# delete local secrets
+$ kubectl delete secret local-lazztechhub
 ```
 
 ## Documentation

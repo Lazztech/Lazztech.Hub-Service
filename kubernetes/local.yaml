@@ -1,0 +1,90 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: local-lazztechhub-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: local-lazztechhub
+  template:
+    metadata:
+      labels:
+        app: local-lazztechhub
+    spec:
+      containers:
+        - name: local-lazztechhub
+          image: registry.internal.lazz.tech/lazztechhub-service:latest
+          env:
+            - name: APP_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: local-lazztechhub
+                  key: APP_NAME
+            - name: ACCESS_TOKEN_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: local-lazztechhub
+                  key: ACCESS_TOKEN_SECRET
+            - name: FIREBASE_SERVER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: local-lazztechhub
+                  key: FIREBASE_SERVER_KEY
+            - name: PUSH_NOTIFICATION_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: local-lazztechhub
+                  key: PUSH_NOTIFICATION_ENDPOINT
+            - name: GOOGLE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: local-lazztechhub
+                  key: GOOGLE_CLIENT_ID
+            - name: GOOGLE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: local-lazztechhub
+                  key: GOOGLE_SECRET
+            - name: EMAIL_FROM_ADDRESS
+              valueFrom:
+                secretKeyRef:
+                  name: local-lazztechhub
+                  key: EMAIL_FROM_ADDRESS
+            - name: EMAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: local-lazztechhub
+                  key: EMAIL_PASSWORD
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "1024Mi"
+              cpu: "750m"
+          ports:
+          - containerPort: 8080
+          volumeMounts:
+          - mountPath: /app/data
+            name: lazztech-data
+          imagePullPolicy: Always
+      volumes:
+      - name: lazztech-data
+        hostPath:
+          path: data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: local-lazztechhub-service
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+    targetPort: 8080
+    nodePort: 30000
+    name: tcp
+  selector:
+    app: local-lazztechhub
