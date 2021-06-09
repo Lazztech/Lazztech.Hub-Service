@@ -34,7 +34,11 @@ export const fileServiceFactory = {
         );
         return localFileService;
       case 'object':
-        FileModule.logger.log(`Using s3 file storage.`);
+        FileModule.logger.log(
+          `Using s3 file storage endpoint: ${configService.get(
+            'OBJECT_STORAGE_ENDPOINT',
+          )}, bucket: ${configService.get('OBJECT_STORAGE_BUCKET_NAME')}`,
+        );
         return s3FileService;
       default:
         throw new Error('File storage type must be either local, or object.');

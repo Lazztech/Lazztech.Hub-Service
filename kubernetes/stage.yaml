@@ -73,6 +73,8 @@ spec:
               value: "false"
             - name: FILE_STORAGE_TYPE
               value: object
+            - name: OBJECT_STORAGE_BUCKET_NAME
+              value: stage-lazztech-hub
             - name: OBJECT_STORAGE_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
@@ -83,11 +85,11 @@ spec:
                 secretKeyRef:
                   name: stage-lazztechhub
                   key: OBJECT_STORAGE_SECRET_ACCESS_KEY
-            - name: OBJECT_STORAGE_SECRET_ACCESS_KEY
+            - name: OBJECT_STORAGE_ENDPOINT
               valueFrom:
                 secretKeyRef:
                   name: stage-lazztechhub
-                  key: OBJECT_STORAGE_SECRET_ACCESS_KEY
+                  key: OBJECT_STORAGE_ENDPOINT
           resources:
             requests:
               memory: "512Mi"

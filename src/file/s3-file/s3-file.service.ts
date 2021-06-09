@@ -9,7 +9,7 @@ import { ReadStream } from 'fs';
 @Injectable()
 export class S3FileService implements FileServiceInterface {
   private logger = new Logger(S3FileService.name, true);
-  bucketName = 'publicimages';
+  private bucketName = this.configService.get('OBJECT_STORAGE_BUCKET_NAME');
 
   constructor(
     @InjectS3() private readonly s3: S3,
@@ -33,17 +33,12 @@ export class S3FileService implements FileServiceInterface {
         Bucket: this.bucketName,
         Key: objectName,
         Body: buf,
-        ACL: 'public-read',
       })
       .promise();
     this.logger.log(
       'Object was uploaded successfully. ' + uploadObjectResponse.VersionId,
     );
-
-    const url = `https://${this.bucketName}.${this.configService.get(
-      'OBJECT_STORAGE_ENDPOINT',
-    )}/${objectName}`;
-    return url;
+    return objectName;
   }
 
   public async delete(url: string): Promise<void> {
@@ -60,7 +55,12 @@ export class S3FileService implements FileServiceInterface {
   }
 
   get(fileName: string): ReadStream {
-    throw new Error('Method not implemented.');
+    return this.s3
+      .getObject({
+        Bucket: this.bucketName,
+        Key: fileName,
+      })
+      .createReadStream() as ReadStream;
   }
 
   private async ensureBucketExists() {
