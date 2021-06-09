@@ -39,6 +39,11 @@ jobs:
       run: |
         npm run test:cov
 
+    - name: test coverage
+      uses: romeovs/lcov-reporter-action@v0.2.16
+      with:
+        lcov-file: ./coverage/lcov.info
+
     - name: npm test:e2e
       working-directory: ./
       run: |
