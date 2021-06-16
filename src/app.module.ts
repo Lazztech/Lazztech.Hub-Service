@@ -15,6 +15,7 @@ import { HubModule } from './hub/hub.module';
 import { NotificationModule } from './notification/notification.module';
 import { UserModule } from './user/user.module';
 import * as path from 'path';
+import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import * as path from 'path';
       envFilePath: ['.env.local', '.env'],
       isGlobal: true,
     }),
+    PrometheusModule.register(),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
