@@ -1,7 +1,11 @@
 import { Module } from '@nestjs/common';
-import { JoinUserHubsResolver } from './joinUserHub.resolver';
+import { FileModule } from '../../file/file.module';
+import { HubFieldResolver } from './hub-field.resolver';
+import { JoinUserHubsResolver as JoinUserHubsFieldResolver } from './joinUserHub-field.resolver';
+import { UserFieldResolver } from './user-field.resolver';
 
 @Module({
-  providers: [JoinUserHubsResolver],
+  imports: [FileModule],
+  providers: [JoinUserHubsFieldResolver, HubFieldResolver, UserFieldResolver],
 })
 export class FieldResolversModule {}

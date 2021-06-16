@@ -2,17 +2,19 @@ import { Logger, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { S3Module, S3ModuleOptions } from 'nestjs-s3';
+import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
+import { SqliteConnectionOptions } from 'typeorm/driver/sqlite/SqliteConnectionOptions';
+import { AuthModule } from './auth/auth.module';
 import { User } from './dal/entity/user.entity';
+import { FieldResolversModule } from './dal/field-resolvers/field-resolvers.module';
+import { EmailModule } from './email/email.module';
+import { FileModule } from './file/file.module';
+import { HealthModule } from './health/health.module';
 import { HubModule } from './hub/hub.module';
 import { NotificationModule } from './notification/notification.module';
-import { ServicesModule } from './services/services.module';
 import { UserModule } from './user/user.module';
-import { AuthModule } from './auth/auth.module';
-import { HealthController } from './health/health.controller';
-import { S3Module, S3ModuleOptions } from 'nestjs-s3';
-import { FieldResolversModule } from './dal/field-resolvers/field-resolvers.module';
-import { SqliteConnectionOptions } from 'typeorm/driver/sqlite/SqliteConnectionOptions';
-import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
+import * as path from 'path';
 
 @Module({
   imports: [
@@ -37,20 +39,35 @@ import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConne
         const sqliteConfig = {
           ...commonSettings,
           type: 'sqlite',
-          database: configService.get('DATABASE_SCHEMA', `sqlite3.db`),
+          database: configService.get(
+            'DATABASE_SCHEMA',
+            path.join('data', 'sqlite3.db'),
+          ),
         } as SqliteConnectionOptions;
         switch (configService.get('DATABASE_TYPE', 'sqlite')) {
           case '':
             AppModule.logger.log(
-              `Using sqlite db: ${process.cwd()}/${sqliteConfig.database}`,
+              `Using sqlite db: ${path.join(
+                process.cwd(),
+                sqliteConfig.database,
+              )}`,
             );
             return sqliteConfig;
           case 'sqlite':
             AppModule.logger.log(
-              `Using sqlite db: ${process.cwd()}/${sqliteConfig.database}`,
+              `Using sqlite db: ${path.join(
+                process.cwd(),
+                sqliteConfig.database,
+              )}`,
             );
             return sqliteConfig;
           case 'postgres':
+            AppModule.logger.log(
+              `Using postgres db: ${configService.get(
+                'DATABASE_SCHEMA',
+                'postgres',
+              )}, host: ${configService.get('DATABASE_HOST', 'localhost')}`,
+            );
             return {
               ...commonSettings,
               type: 'postgres' as const,
@@ -97,7 +114,6 @@ import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConne
         } as S3ModuleOptions;
       },
     }),
-    ServicesModule,
     NotificationModule,
     HubModule,
     UserModule,
@@ -111,8 +127,10 @@ import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConne
     }),
     AuthModule,
     FieldResolversModule,
+    FileModule,
+    HealthModule,
+    EmailModule,
   ],
-  controllers: [HealthController],
 })
 export class AppModule {
   public static logger = new Logger(AppModule.name, true);

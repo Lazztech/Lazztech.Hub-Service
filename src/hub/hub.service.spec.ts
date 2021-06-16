@@ -8,14 +8,14 @@ import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
 import { JoinUserInAppNotifications } from '../dal/entity/joinUserInAppNotifications.entity';
 import { User } from '../dal/entity/user.entity';
 import { UserDevice } from '../dal/entity/userDevice.entity';
-import { AzureFileService } from '../services/file/azure-file/azure-file.service';
-import { FileServiceInterface } from '../services/file/file-service.interface';
-import { ImageFileService } from '../services/file/image-file/image-file.service';
-import { fileServiceToken } from '../services/services.module';
+import { FileServiceInterface } from '../file/interfaces/file-service.interface';
+import { ImageFileService } from '../file/image-file/image-file.service';
 import { Repository } from 'typeorm';
 import { NotificationService } from '../notification/notification.service';
 import { HubService } from './hub.service';
 import { Invite } from '../dal/entity/invite.entity';
+import { LocalFileService } from '../file/local-file/local-file.service';
+import { FILE_SERVICE } from '../file/file-service.token';
 
 describe('HubService', () => {
   let hubService: HubService;
@@ -37,8 +37,8 @@ describe('HubService', () => {
         NotificationService,
         ImageFileService,
         {
-          provide: fileServiceToken,
-          useClass: AzureFileService,
+          provide: FILE_SERVICE,
+          useClass: LocalFileService,
         },
         NotificationService,
         {
@@ -77,7 +77,7 @@ describe('HubService', () => {
       getRepositoryToken(JoinUserHub),
     );
     hubRepo = module.get<Repository<Hub>>(getRepositoryToken(Hub));
-    fileService = module.get<FileServiceInterface>(fileServiceToken);
+    fileService = module.get<FileServiceInterface>(FILE_SERVICE);
   });
 
   it('should be defined', () => {
@@ -262,7 +262,7 @@ describe('HubService', () => {
     } as JoinUserHub;
 
     jest
-      .spyOn(fileService, 'storePublicImageFromBase64')
+      .spyOn(fileService, 'storeImageFromBase64')
       .mockResolvedValueOnce('https://x.com/' + hub.image);
 
     jest.spyOn(hubRepo, 'save').mockResolvedValueOnce(hub);
@@ -293,7 +293,7 @@ describe('HubService', () => {
       image: 'imageTest',
     } as Hub);
     const deleteImageCall = jest
-      .spyOn(fileService, 'deletePublicImageFromUrl')
+      .spyOn(fileService, 'delete')
       .mockImplementationOnce(() => Promise.resolve());
     const removeCall = jest
       .spyOn(hubRepo, 'remove')
@@ -352,10 +352,10 @@ describe('HubService', () => {
       image: newImage,
     } as Hub;
     const deleteCall = jest
-      .spyOn(fileService, 'deletePublicImageFromUrl')
+      .spyOn(fileService, 'delete')
       .mockImplementationOnce(() => Promise.resolve());
     const storeCall = jest
-      .spyOn(fileService, 'storePublicImageFromBase64')
+      .spyOn(fileService, 'storeImageFromBase64')
       .mockResolvedValueOnce(expectedResult.image);
     const saveCall = jest
       .spyOn(hubRepo, 'save')

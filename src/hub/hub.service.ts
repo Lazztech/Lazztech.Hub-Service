@@ -4,15 +4,15 @@ import { Hub } from '../dal/entity/hub.entity';
 import { Invite } from '../dal/entity/invite.entity';
 import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
 import { User } from '../dal/entity/user.entity';
-import { FileServiceInterface } from '../services/file/file-service.interface';
-import { fileServiceToken } from '../services/services.module';
+import { FileServiceInterface } from '../file/interfaces/file-service.interface';
 import { Repository } from 'typeorm';
+import { FILE_SERVICE } from '../file/file-service.token';
 
 @Injectable()
 export class HubService {
   private readonly logger = new Logger(HubService.name, true);
   constructor(
-    @Inject(fileServiceToken)
+    @Inject(FILE_SERVICE)
     private readonly fileService: FileServiceInterface,
     @InjectRepository(Hub)
     private hubRepository: Repository<Hub>,
@@ -84,9 +84,7 @@ export class HubService {
 
   async createHub(userId: any, hub: Hub) {
     this.logger.log(this.createHub.name);
-    const imageUrl = await this.fileService.storePublicImageFromBase64(
-      hub.image,
-    );
+    const imageUrl = await this.fileService.storeImageFromBase64(hub.image);
     hub.image = imageUrl;
     await this.hubRepository.save(hub);
     const joinUserHub = this.joinUserHubRepository.create({
@@ -119,7 +117,7 @@ export class HubService {
       },
     });
     if (hub.image) {
-      await this.fileService.deletePublicImageFromUrl(hub.image);
+      await this.fileService.delete(hub.image);
     }
     await this.hubRepository.remove(hub);
   }
@@ -155,11 +153,9 @@ export class HubService {
     let hub = await joinUserHubResult.hub;
 
     if (hub.image) {
-      await this.fileService.deletePublicImageFromUrl(hub.image);
+      await this.fileService.delete(hub.image);
     }
-    const imageUrl = await this.fileService.storePublicImageFromBase64(
-      newImage,
-    );
+    const imageUrl = await this.fileService.storeImageFromBase64(newImage);
 
     hub.image = imageUrl;
     hub = await this.hubRepository.save(hub);

@@ -1,14 +1,5 @@
 # Lazztech.Hub-Service
 
-
-<p align="center">
-  <a href="https://lazz.tech/software/" target="blank"><img src="https://lazz.tech/images/lazztech_icon.png" width="320"/></a>
-</p>
-  
-  <p align="center">The back-end web service for the Lazztech Hub Mobile App. Written in <a href="https://www.typescriptlang.org/" target="blank">TypeScript</a> with <a href="https://graphql.org/" target="blank">GraphQL</a> & the <a href="https://nestjs.com/" target="blank">NestJS</a> framework.</p>
-    <p align="center">
-</p>
-
 ## Companion Mobile App
 For the companion mobile app client see the repo linked below.
 
@@ -46,12 +37,49 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
+## Kubernetes
+
+```bash
+# deploy local secrets
+$ kubectl create secret generic local-lazztechhub --from-env-file=.env.local
+# deploy local
+$ kubectl apply -f kubernetes/local.yaml
+
+# open graphql-playground
+$ open http://localhost:30000/graphql
+
+# delete local
+$ kubectl delete -f kubernetes/local.yaml
+# delete local secrets
+$ kubectl delete secret local-lazztechhub
+```
+
+```bash
+# deploy dev secrets
+$ kubectl create secret generic dev-lazztechhub --from-env-file=.env.dev
+# deploy dev
+$ kubectl apply -f kubernetes/dev.yaml
+
+# delete dev
+$ kubectl delete -f kubernetes/dev.yaml
+# delete dev secrets
+$ kubectl delete secret dev-lazztechhub
+```
+
+```bash
+# deploy stage secrets
+$ kubectl create secret generic stage-lazztechhub --from-env-file=.env.stage
+# deploy stage
+$ kubectl apply -f kubernetes/stage.yaml
+
+# delete stage
+$ kubectl delete -f kubernetes/stage.yaml
+# delete stage secrets
+$ kubectl delete secret stage-lazztechhub
+```
+
 ## Documentation
 [Lazztech.Hub-Service Docs](https://lazztech-hub-service.netlify.app/)
-
-<!-- ## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support). -->
 
 ## Stay in touch
 

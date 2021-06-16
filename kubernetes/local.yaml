@@ -2,57 +2,57 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: dev-lazztechhub-deployment
+  name: local-lazztechhub-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: dev-lazztechhub
+      app: local-lazztechhub
   template:
     metadata:
       labels:
-        app: dev-lazztechhub
+        app: local-lazztechhub
     spec:
       containers:
-        - name: dev-lazztechhub
+        - name: local-lazztechhub
           image: registry.internal.lazz.tech/lazztechhub-service:latest
           env:
             - name: APP_NAME
-              value: "Dev Lazztech Hub"
+              value: "Local Lazztech Hub"
             - name: ACCESS_TOKEN_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: dev-lazztechhub
+                  name: local-lazztechhub
                   key: ACCESS_TOKEN_SECRET
             - name: FIREBASE_SERVER_KEY
               valueFrom:
                 secretKeyRef:
-                  name: dev-lazztechhub
+                  name: local-lazztechhub
                   key: FIREBASE_SERVER_KEY
             - name: PUSH_NOTIFICATION_ENDPOINT
               valueFrom:
                 secretKeyRef:
-                  name: dev-lazztechhub
+                  name: local-lazztechhub
                   key: PUSH_NOTIFICATION_ENDPOINT
             - name: GOOGLE_CLIENT_ID
               valueFrom:
                 secretKeyRef:
-                  name: dev-lazztechhub
+                  name: local-lazztechhub
                   key: GOOGLE_CLIENT_ID
             - name: GOOGLE_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: dev-lazztechhub
+                  name: local-lazztechhub
                   key: GOOGLE_SECRET
             - name: EMAIL_FROM_ADDRESS
               valueFrom:
                 secretKeyRef:
-                  name: dev-lazztechhub
+                  name: local-lazztechhub
                   key: EMAIL_FROM_ADDRESS
             - name: EMAIL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: dev-lazztechhub
+                  name: local-lazztechhub
                   key: EMAIL_PASSWORD
           resources:
             requests:
@@ -69,65 +69,19 @@ spec:
           imagePullPolicy: Always
       volumes:
       - name: lazztech-data
-        persistentVolumeClaim:
-          claimName: dev-lazztechhub-pvc
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: dev-lazztechhub-pvc
-  namespace: default
-  labels:
-    app: dev-lazztechhub
-spec:
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: longhorn
-  resources:
-    requests:
-      storage: 2Gi
+        hostPath:
+          path: data
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: dev-lazztechhub-service
+  name: local-lazztechhub-service
 spec:
+  type: NodePort
   ports:
   - port: 80
     targetPort: 8080
+    nodePort: 30000
     name: tcp
   selector:
-    app: dev-lazztechhub
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: dev-lazztechhub-db-service
-  labels:
-    app: dev-lazztechhub
-spec:
-  ports:
-  - port: 5432
-    targetPort: 5432
-    name: tcp
-  selector:
-    app: dev-lazztechhub-db
----
-apiVersion: networking.k8s.io/v1beta1
-kind: Ingress
-metadata:
-  name: dev-lazztechhub-lazztech-ingress
-  annotations:
-    kubernetes.io/ingress.class: "traefik"
-spec:
-  tls:
-    - secretName: lazztech-acme-crt-secret
-      hosts:
-        - '*.lazz.tech'
-  rules:
-  - host: dev-lazztechhub.lazz.tech
-    http:
-      paths:
-      - backend:
-          serviceName: dev-lazztechhub-service
-          servicePort: 80
+    app: local-lazztechhub

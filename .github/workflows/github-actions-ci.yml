@@ -3,7 +3,6 @@ on: [push]
 
 env:
   NODE_VERSION: '12.x'                # set this to the node version to use
-  DEPLOYMENT_URL: 'https://lazztechhubdev.azurewebsites.net/graphql'
 
 jobs:
   back-end-ci:
@@ -19,28 +18,23 @@ jobs:
         node-version: ${{ env.NODE_VERSION }}
 
     - name: npm install & build
-      working-directory: ./
       run: |
         npm install
         npm run build
   
     - name: npm format:check
-      working-directory: ./
       run: |
         npm run format:check
   
     - name: npm lint
-      working-directory: ./
       run: |
         npm run lint
 
     - name: npm test:cov
-      working-directory: ./
       run: |
         npm run test:cov
 
     - name: npm test:e2e
-      working-directory: ./
       run: |
         npm run test:e2e
       env:
@@ -48,7 +42,6 @@ jobs:
         ACCESS_TOKEN_SECRET: SecretKey
 
     - name: npm start & health check
-      working-directory: ./
       # 'nohup npm run start:prod >> app.log 2>&1 &' runs the command as a background job: https://stackoverflow.com/a/46732894/848396
       # 'timeout 30 bash -c 'until echo > /dev/tcp/localhost/13000; do sleep 0.5; done' wait for server to start up or timeout with error: https://unix.stackexchange.com/a/349138
       # 'kill %1' kills background job: https://unix.stackexchange.com/a/104822
@@ -75,7 +68,6 @@ jobs:
   #       node-version: ${{ env.NODE_VERSION }}
 
   #   - name: npm install & build
-  #     working-directory: ./
   #     run: |
   #       npm install
   #       npm run build

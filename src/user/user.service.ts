@@ -3,17 +3,17 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Hub } from '../dal/entity/hub.entity';
 import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
 import { User } from '../dal/entity/user.entity';
-import { FileServiceInterface } from 'src/services/file/file-service.interface';
-import { fileServiceToken } from '../services/services.module';
+import { FileServiceInterface } from 'src/file/interfaces/file-service.interface';
 import { Repository } from 'typeorm';
 import { EditUserDetails } from './dto/editUserDetails.input';
+import { FILE_SERVICE } from '../file/file-service.token';
 
 @Injectable()
 export class UserService {
   private logger = new Logger(UserService.name);
 
   constructor(
-    @Inject(fileServiceToken)
+    @Inject(FILE_SERVICE)
     private readonly fileService: FileServiceInterface,
     @InjectRepository(JoinUserHub)
     private joinUserHubRepository: Repository<JoinUserHub>,
@@ -80,11 +80,9 @@ export class UserService {
     this.logger.log(this.changeUserImage.name);
     let user = await this.userRepository.findOne(userId);
     if (user.image) {
-      await this.fileService.deletePublicImageFromUrl(user.image);
+      await this.fileService.delete(user.image);
     }
-    const imageUrl = await this.fileService.storePublicImageFromBase64(
-      newImage,
-    );
+    const imageUrl = await this.fileService.storeImageFromBase64(newImage);
     user.image = imageUrl;
     user = await this.userRepository.save(user);
     return user;

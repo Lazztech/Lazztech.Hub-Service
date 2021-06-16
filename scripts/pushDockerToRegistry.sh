@@ -1,2 +1,2 @@
 #!/bin/sh
-docker push registry.internal.lazz.tech/dev-lazztechhub-service
+docker push registry.internal.lazz.tech/lazztechhub-service

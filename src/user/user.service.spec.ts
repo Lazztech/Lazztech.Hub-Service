@@ -5,15 +5,15 @@ import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
 import { User } from '../dal/entity/user.entity';
 import { Repository } from 'typeorm';
 import { UserService } from './user.service';
-import { EmailService } from '../services/email/email.service';
+import { EmailService } from '../email/email.service';
 import { Invite } from '../dal/entity/invite.entity';
 import { ConfigService } from '@nestjs/config';
 import { PasswordReset } from '../dal/entity/passwordReset.entity';
 import { EditUserDetails } from './dto/editUserDetails.input';
-import { ImageFileService } from '../services/file/image-file/image-file.service';
-import { fileServiceToken } from '../services/services.module';
-import { FileServiceInterface } from '../services/file/file-service.interface';
-import { AzureFileService } from '../services/file/azure-file/azure-file.service';
+import { ImageFileService } from '../file/image-file/image-file.service';
+import { FileServiceInterface } from '../file/interfaces/file-service.interface';
+import { LocalFileService } from '../file/local-file/local-file.service';
+import { FILE_SERVICE } from '../file/file-service.token';
 
 describe('UserService', () => {
   let service: UserService;
@@ -27,8 +27,8 @@ describe('UserService', () => {
         UserService,
         ImageFileService,
         {
-          provide: fileServiceToken,
-          useClass: AzureFileService,
+          provide: FILE_SERVICE,
+          useClass: LocalFileService,
         },
         EmailService,
         ConfigService,
@@ -57,7 +57,7 @@ describe('UserService', () => {
       getRepositoryToken(JoinUserHub),
     );
     userRepo = module.get<Repository<User>>(getRepositoryToken(User));
-    fileService = module.get<FileServiceInterface>(fileServiceToken);
+    fileService = module.get<FileServiceInterface>(FILE_SERVICE);
   });
 
   it('should be defined', async () => {
@@ -196,10 +196,10 @@ describe('UserService', () => {
     } as User;
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
     const deletePublicImageMock = jest
-      .spyOn(fileService, 'deletePublicImageFromUrl')
+      .spyOn(fileService, 'delete')
       .mockImplementation(() => Promise.resolve());
     jest
-      .spyOn(fileService, 'storePublicImageFromBase64')
+      .spyOn(fileService, 'storeImageFromBase64')
       .mockResolvedValueOnce(expectedResult.image);
     jest.spyOn(userRepo, 'save').mockResolvedValueOnce(expectedResult);
     // Act

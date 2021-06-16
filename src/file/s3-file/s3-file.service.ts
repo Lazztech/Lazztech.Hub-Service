@@ -1,14 +1,15 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectS3, S3 } from 'nestjs-s3';
-import { FileServiceInterface } from '../file-service.interface';
+import { FileServiceInterface } from '../interfaces/file-service.interface';
 import { ImageFileService } from '../image-file/image-file.service';
 import * as uuidv1 from 'uuid/v1';
 import { ConfigService } from '@nestjs/config';
+import { ReadStream } from 'fs';
 
 @Injectable()
 export class S3FileService implements FileServiceInterface {
   private logger = new Logger(S3FileService.name, true);
-  bucketName = 'publicimages';
+  private bucketName = this.configService.get('OBJECT_STORAGE_BUCKET_NAME');
 
   constructor(
     @InjectS3() private readonly s3: S3,
@@ -16,10 +17,8 @@ export class S3FileService implements FileServiceInterface {
     private readonly configService: ConfigService,
   ) {}
 
-  public async storePublicImageFromBase64(
-    base64Image: string,
-  ): Promise<string> {
-    this.logger.log(this.storePublicImageFromBase64.name);
+  public async storeImageFromBase64(base64Image: string): Promise<string> {
+    this.logger.log(this.storeImageFromBase64.name);
 
     await this.ensureBucketExists();
 
@@ -34,21 +33,16 @@ export class S3FileService implements FileServiceInterface {
         Bucket: this.bucketName,
         Key: objectName,
         Body: buf,
-        ACL: 'public-read',
       })
       .promise();
     this.logger.log(
       'Object was uploaded successfully. ' + uploadObjectResponse.VersionId,
     );
-
-    const url = `https://${this.bucketName}.${this.configService.get(
-      'OBJECT_STORAGE_ENDPOINT',
-    )}/${objectName}`;
-    return url;
+    return objectName;
   }
 
-  public async deletePublicImageFromUrl(url: string): Promise<void> {
-    this.logger.log(this.deletePublicImageFromUrl.name);
+  public async delete(url: string): Promise<void> {
+    this.logger.log(this.delete.name);
     const splitUrl = url.split('/');
     const objectName = splitUrl[splitUrl.length - 1];
     const result = await this.s3
@@ -58,6 +52,15 @@ export class S3FileService implements FileServiceInterface {
       })
       .promise();
     this.logger.log(`Deleted image with result: ${result.$response}`);
+  }
+
+  get(fileName: string): ReadStream {
+    return this.s3
+      .getObject({
+        Bucket: this.bucketName,
+        Key: fileName,
+      })
+      .createReadStream() as ReadStream;
   }
 
   private async ensureBucketExists() {
