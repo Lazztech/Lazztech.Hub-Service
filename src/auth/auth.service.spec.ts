@@ -2,7 +2,6 @@ import { ConfigService, ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { InAppNotification } from '../dal/entity/inAppNotification.entity';
-import { JoinUserInAppNotifications } from '../dal/entity/joinUserInAppNotifications.entity';
 import { User } from '../dal/entity/user.entity';
 import { Repository } from 'typeorm';
 import { AuthService } from './auth.service';
@@ -60,10 +59,6 @@ describe('AuthService', () => {
         },
         {
           provide: getRepositoryToken(InAppNotification),
-          useClass: Repository,
-        },
-        {
-          provide: getRepositoryToken(JoinUserInAppNotifications),
           useClass: Repository,
         },
         {

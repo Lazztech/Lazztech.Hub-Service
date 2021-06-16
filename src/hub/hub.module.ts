@@ -9,7 +9,6 @@ import { MicroChat } from '../dal/entity/microChat.entity';
 import { User } from '../dal/entity/user.entity';
 import { UserModule } from '../user/user.module';
 import { UserService } from '../user/user.service';
-import { JoinUserInAppNotifications } from '../dal/entity/joinUserInAppNotifications.entity';
 import { InAppNotification } from '../dal/entity/inAppNotification.entity';
 import { Invite } from '../dal/entity/invite.entity';
 import { HubActivityService } from './hub-activity/hub-activity.service';
@@ -25,7 +24,6 @@ import { EmailModule } from '../email/email.module';
     TypeOrmModule.forFeature([
       Hub,
       JoinUserHub,
-      JoinUserInAppNotifications,
       MicroChat,
       User,
       InAppNotification,

@@ -5,7 +5,6 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Hub } from '../../dal/entity/hub.entity';
 import { InAppNotification } from '../../dal/entity/inAppNotification.entity';
-import { JoinUserInAppNotifications } from '../../dal/entity/joinUserInAppNotifications.entity';
 import { JoinUserHub } from '../../dal/entity/joinUserHub.entity';
 import { MicroChat } from '../../dal/entity/microChat.entity';
 import { NotificationService } from '../../notification/notification.service';
@@ -43,10 +42,6 @@ describe('HubMicroChatService', () => {
         },
         {
           provide: getRepositoryToken(InAppNotification),
-          useClass: Repository,
-        },
-        {
-          provide: getRepositoryToken(JoinUserInAppNotifications),
           useClass: Repository,
         },
         {

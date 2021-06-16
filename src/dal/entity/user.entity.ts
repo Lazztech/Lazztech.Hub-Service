@@ -9,10 +9,10 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { JoinUserHub } from './joinUserHub.entity';
-import { JoinUserInAppNotifications } from './joinUserInAppNotifications.entity';
 import { PasswordReset } from './passwordReset.entity';
 import { UserDevice } from './userDevice.entity';
 import { Invite } from './invite.entity';
+import { InAppNotification } from './inAppNotification.entity';
 
 @ObjectType()
 @Entity()
@@ -49,10 +49,10 @@ export class User {
   public password: string;
 
   @OneToMany(
-    () => JoinUserInAppNotifications,
-    (userInAppNotificationsJoin) => userInAppNotificationsJoin.user,
+    () => InAppNotification,
+    (inAppNotifications) => inAppNotifications.user,
   )
-  public inAppNotificationsConnection: Promise<JoinUserInAppNotifications[]>;
+  public inAppNotifications: Promise<InAppNotification[]>;
 
   @OneToMany(() => JoinUserHub, (joinUserHub) => joinUserHub.user)
   public hubsConnection: Promise<JoinUserHub[]>;

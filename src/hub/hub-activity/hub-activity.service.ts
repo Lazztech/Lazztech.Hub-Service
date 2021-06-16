@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Hub } from '../../dal/entity/hub.entity';
 import { InAppNotification } from '../../dal/entity/inAppNotification.entity';
 import { JoinUserHub } from '../../dal/entity/joinUserHub.entity';
-import { JoinUserInAppNotifications } from '../../dal/entity/joinUserInAppNotifications.entity';
 import { PushNotificationDto } from '../../notification/dto/pushNotification.dto';
 import { NotificationService } from '../../notification/notification.service';
 import { Repository } from 'typeorm';
@@ -19,8 +18,6 @@ export class HubActivityService {
     private hubRepository: Repository<Hub>,
     @InjectRepository(InAppNotification)
     private inAppNotificationRepository: Repository<InAppNotification>,
-    @InjectRepository(JoinUserInAppNotifications)
-    private joinUserInAppNotificationsRepository: Repository<JoinUserInAppNotifications>,
     private notificationService: NotificationService,
   ) {
     this.logger.log('constructor');

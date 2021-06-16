@@ -9,7 +9,6 @@ import { User } from '../../dal/entity/user.entity';
 import { JoinUserHub } from '../../dal/entity/joinUserHub.entity';
 import { NotificationService } from '../../notification/notification.service';
 import { InAppNotification } from '../../dal/entity/inAppNotification.entity';
-import { JoinUserInAppNotifications } from '../../dal/entity/joinUserInAppNotifications.entity';
 import { UserDevice } from '../../dal/entity/userDevice.entity';
 
 describe('HubInviteService', () => {
@@ -45,10 +44,6 @@ describe('HubInviteService', () => {
         },
         {
           provide: getRepositoryToken(InAppNotification),
-          useClass: Repository,
-        },
-        {
-          provide: getRepositoryToken(JoinUserInAppNotifications),
           useClass: Repository,
         },
         {

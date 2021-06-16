@@ -5,7 +5,6 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Hub } from '../dal/entity/hub.entity';
 import { InAppNotification } from '../dal/entity/inAppNotification.entity';
 import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
-import { JoinUserInAppNotifications } from '../dal/entity/joinUserInAppNotifications.entity';
 import { User } from '../dal/entity/user.entity';
 import { UserDevice } from '../dal/entity/userDevice.entity';
 import { FileServiceInterface } from '../file/interfaces/file-service.interface';
@@ -55,10 +54,6 @@ describe('HubService', () => {
         },
         {
           provide: getRepositoryToken(InAppNotification),
-          useClass: Repository,
-        },
-        {
-          provide: getRepositoryToken(JoinUserInAppNotifications),
           useClass: Repository,
         },
         {

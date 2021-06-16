@@ -7,7 +7,6 @@ import { Repository } from 'typeorm';
 import { PushNotificationDto } from './dto/pushNotification.dto';
 import { InAppNotificationDto } from './dto/inAppNotification.dto';
 import { InAppNotification } from '../dal/entity/inAppNotification.entity';
-import { JoinUserInAppNotifications } from '../dal/entity/joinUserInAppNotifications.entity';
 import { HttpService, HttpModule } from '@nestjs/common';
 import { of } from 'rxjs';
 import { UserDevice } from '../dal/entity/userDevice.entity';
@@ -17,7 +16,6 @@ describe('NotificationService', () => {
   let service: NotificationService;
   let userRepo: Repository<User>;
   let inAppNotificationRepo: Repository<InAppNotification>;
-  let joinUserInAppNotificationRepo: Repository<JoinUserInAppNotifications>;
   let httpService: HttpService;
   let userDeviceRepo: Repository<UserDevice>;
 
@@ -50,10 +48,6 @@ describe('NotificationService', () => {
           useClass: Repository,
         },
         {
-          provide: getRepositoryToken(JoinUserInAppNotifications),
-          useClass: Repository,
-        },
-        {
           provide: getRepositoryToken(UserDevice),
           useClass: Repository,
         },
@@ -65,9 +59,6 @@ describe('NotificationService', () => {
     inAppNotificationRepo = module.get<Repository<InAppNotification>>(
       getRepositoryToken(InAppNotification),
     );
-    joinUserInAppNotificationRepo = module.get<
-      Repository<JoinUserInAppNotifications>
-    >(getRepositoryToken(JoinUserInAppNotifications));
     httpService = module.get(HttpService);
     userDeviceRepo = module.get<Repository<UserDevice>>(
       getRepositoryToken(UserDevice),
@@ -103,28 +94,19 @@ describe('NotificationService', () => {
     // TODO
     // Arrange
     const userId = 1;
-    jest.spyOn(joinUserInAppNotificationRepo, 'find').mockResolvedValueOnce([
-      {
-        userId,
-        inAppNotification: Promise.resolve({
-          text: 'test',
-        }),
-      },
-      {
-        userId,
-        inAppNotification: Promise.resolve({
-          text: 'test',
-        }),
-      },
-    ] as JoinUserInAppNotifications[]);
     const expectedResult = [
       {
+        userId,
         text: 'test',
       },
       {
+        userId,
         text: 'test',
       },
     ] as InAppNotification[];
+    jest
+      .spyOn(inAppNotificationRepo, 'find')
+      .mockResolvedValueOnce(expectedResult);
     // Act
     const result = await service.getInAppNotifications(userId);
     // Assert
@@ -140,7 +122,7 @@ describe('NotificationService', () => {
     } as InAppNotificationDto;
     jest
       .spyOn(inAppNotificationRepo, 'create')
-      .mockReturnValueOnce(details as InAppNotification);
+      .mockReturnValueOnce({ ...details, userId } as InAppNotification);
     const saveCall1 = jest
       .spyOn(inAppNotificationRepo, 'save')
       .mockResolvedValueOnce({
@@ -148,34 +130,22 @@ describe('NotificationService', () => {
         text: details.text,
         date: details.date,
       } as InAppNotification);
-    jest.spyOn(joinUserInAppNotificationRepo, 'create').mockReturnValueOnce({
-      userId,
-      inAppNotificationId: 1,
-    } as JoinUserInAppNotifications);
-    const saveCall2 = jest
-      .spyOn(joinUserInAppNotificationRepo, 'save')
-      .mockResolvedValueOnce({
-        userId,
-        inAppNotificationId: 1,
-      } as JoinUserInAppNotifications);
     // Act
     await service.addInAppNotificationForUser(userId, details);
     // Assert
     expect(saveCall1).toHaveBeenCalled();
-    expect(saveCall2).toHaveBeenCalled();
   });
 
   it('should resolve for deleteInAppNotification', async () => {
     // Arrange
     const userId = 1;
     const inAppNotificationId = 1;
-    jest.spyOn(joinUserInAppNotificationRepo, 'findOne').mockResolvedValueOnce({
+    jest.spyOn(inAppNotificationRepo, 'findOne').mockResolvedValueOnce({
       userId,
-      inAppNotificationId,
-    } as JoinUserInAppNotifications);
+    } as InAppNotification);
     const removeCall = jest
-      .spyOn(joinUserInAppNotificationRepo, 'remove')
-      .mockResolvedValueOnce({} as JoinUserInAppNotifications);
+      .spyOn(inAppNotificationRepo, 'remove')
+      .mockResolvedValueOnce({} as InAppNotification);
     // Act
     await service.deleteInAppNotification(userId, inAppNotificationId);
     // Assert
@@ -185,7 +155,7 @@ describe('NotificationService', () => {
   it('should resolve for deleteAllInAppNotifications', async () => {
     // Arrange
     const userId = 1;
-    jest.spyOn(joinUserInAppNotificationRepo, 'find').mockResolvedValueOnce([
+    jest.spyOn(inAppNotificationRepo, 'find').mockResolvedValueOnce([
       {
         userId,
       },
@@ -195,10 +165,10 @@ describe('NotificationService', () => {
       {
         userId,
       },
-    ] as JoinUserInAppNotifications[]);
+    ] as InAppNotification[]);
     const removeCall = jest
-      .spyOn(joinUserInAppNotificationRepo, 'remove')
-      .mockResolvedValueOnce({} as JoinUserInAppNotifications);
+      .spyOn(inAppNotificationRepo, 'remove')
+      .mockResolvedValueOnce({} as InAppNotification);
     // Act
     await service.deleteAllInAppNotifications(userId);
     // Assert
