@@ -5,7 +5,6 @@ import { AuthService } from './auth.service';
 import { PasswordReset } from '../dal/entity/passwordReset.entity';
 import { User } from '../dal/entity/user.entity';
 import { InAppNotification } from '../dal/entity/inAppNotification.entity';
-import { JoinUserInAppNotifications } from '../dal/entity/joinUserInAppNotifications.entity';
 import { AuthPasswordResetService } from './auth-password-reset/auth-password-reset.service';
 import { NotificationModule } from '../notification/notification.module';
 import { UserModule } from '../user/user.module';
@@ -23,12 +22,7 @@ import { EmailModule } from '../email/email.module';
         signOptions: { expiresIn: '60s' },
       }),
     }),
-    TypeOrmModule.forFeature([
-      PasswordReset,
-      User,
-      InAppNotification,
-      JoinUserInAppNotifications,
-    ]),
+    TypeOrmModule.forFeature([PasswordReset, User, InAppNotification]),
     EmailModule,
     NotificationModule,
     UserModule,

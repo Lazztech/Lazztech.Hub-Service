@@ -1,6 +1,12 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { JoinUserInAppNotifications } from './joinUserInAppNotifications.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { User } from './user.entity';
 
 @ObjectType()
 @Entity()
@@ -8,6 +14,10 @@ export class InAppNotification {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
   public id: number;
+
+  @Field(() => ID)
+  @Column()
+  public userId: number;
 
   @Field({ nullable: true })
   @Column({ nullable: true })
@@ -29,9 +39,9 @@ export class InAppNotification {
   @Column({ nullable: true })
   public actionLink: string;
 
-  @OneToMany(
-    () => JoinUserInAppNotifications,
-    (joinUserInAppNotifications) => joinUserInAppNotifications.user,
-  )
-  public usersConnection: Promise<JoinUserInAppNotifications[]>;
+  @ManyToOne(() => User, (user) => user.inAppNotifications, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'userId' })
+  public user: Promise<User>;
 }

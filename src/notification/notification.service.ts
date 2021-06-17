@@ -8,7 +8,6 @@ import { PushNotificationDto } from './dto/pushNotification.dto';
 import { InAppNotificationDto } from './dto/inAppNotification.dto';
 import { UserDevice } from '../dal/entity/userDevice.entity';
 import { InAppNotification } from '../dal/entity/inAppNotification.entity';
-import { JoinUserInAppNotifications } from '../dal/entity/joinUserInAppNotifications.entity';
 
 @Service()
 export class NotificationService {
@@ -28,15 +27,16 @@ export class NotificationService {
     private userRepository: Repository<User>,
     @InjectRepository(InAppNotification)
     private inAppNotificationRepository: Repository<InAppNotification>,
-    @InjectRepository(JoinUserInAppNotifications)
-    private joinUserInAppNotificationRepository: Repository<JoinUserInAppNotifications>,
     @InjectRepository(UserDevice)
     private userDeviceRepository: Repository<UserDevice>,
   ) {
     this.logger.log('constructor');
   }
 
-  public async addUserFcmNotificationToken(userId: any, token: string) {
+  public async addUserFcmNotificationToken(
+    userId: any,
+    token: string,
+  ): Promise<void> {
     this.logger.log(this.addUserFcmNotificationToken.name);
     const user = await this.userRepository.findOne({ id: userId });
 
@@ -51,62 +51,51 @@ export class NotificationService {
     }
   }
 
-  public async getInAppNotifications(userId: any) {
+  public async getInAppNotifications(
+    userId: any,
+  ): Promise<InAppNotification[]> {
     this.logger.log(this.getInAppNotifications.name);
-    const joinInAppNotifications = await this.joinUserInAppNotificationRepository.find(
-      { userId },
-    );
-
-    const usersNotifications = Promise.all(
-      joinInAppNotifications.map((x) => x.inAppNotification),
-    );
-
-    return usersNotifications;
+    return await this.inAppNotificationRepository.find({
+      userId,
+    });
   }
 
   public async addInAppNotificationForUser(
     userId: number,
     details: InAppNotificationDto,
-  ) {
+  ): Promise<void> {
     this.logger.log(this.addInAppNotificationForUser.name);
-    const inAppNotification = this.inAppNotificationRepository.create(details);
+    const inAppNotification = this.inAppNotificationRepository.create({
+      ...details,
+      userId,
+    });
     await this.inAppNotificationRepository.save(inAppNotification);
-    const joinUserInAppNotification = this.joinUserInAppNotificationRepository.create(
-      {
-        userId,
-        inAppNotificationId: inAppNotification.id,
-      },
-    );
-    await this.joinUserInAppNotificationRepository.save(
-      joinUserInAppNotification,
-    );
   }
 
-  async deleteInAppNotification(userId: any, inAppNotificationId: number) {
+  async deleteInAppNotification(
+    userId: any,
+    inAppNotificationId: number,
+  ): Promise<void> {
     this.logger.log(this.deleteInAppNotification.name);
-    const inAppRelationship = await this.joinUserInAppNotificationRepository.findOne(
-      {
-        userId,
-        inAppNotificationId,
-      },
-    );
-    await this.joinUserInAppNotificationRepository.remove(inAppRelationship);
+    const inAppNotification = await this.inAppNotificationRepository.findOne({
+      id: inAppNotificationId,
+      userId,
+    });
+    await this.inAppNotificationRepository.remove(inAppNotification);
   }
 
-  async deleteAllInAppNotifications(userId: any) {
+  async deleteAllInAppNotifications(userId: any): Promise<void> {
     this.logger.log(this.deleteAllInAppNotifications.name);
-    const inAppRelationships = await this.joinUserInAppNotificationRepository.find(
-      {
-        userId,
-      },
-    );
-    await this.joinUserInAppNotificationRepository.remove(inAppRelationships);
+    const inAppNotifications = await this.inAppNotificationRepository.find({
+      userId,
+    });
+    await this.inAppNotificationRepository.remove(inAppNotifications);
   }
 
   public async sendPushToUser(
     userId: number,
     notification: PushNotificationDto,
-  ) {
+  ): Promise<void> {
     this.logger.log(this.sendPushToUser.name);
 
     const user = await this.userRepository.findOne({ id: userId });
