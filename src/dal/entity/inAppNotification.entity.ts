@@ -31,7 +31,9 @@ export class InAppNotification {
   @Column()
   public date: string;
 
-  @Field({ nullable: true })
+  /**
+   * Handled by a field resolver
+   */
   @Column({ nullable: true })
   public thumbnail: string;
 
