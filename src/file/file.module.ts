@@ -7,6 +7,7 @@ import { LocalFileService } from './local-file/local-file.service';
 import { S3FileService } from './s3-file/s3-file.service';
 import { FileUrlService } from './file-url/file-url.service';
 import * as path from 'path';
+import { FileResolver } from './resolver/file.resolver';
 
 export const fileServiceFactory = {
   provide: FILE_SERVICE,
@@ -54,6 +55,7 @@ export const fileServiceFactory = {
     LocalFileService,
     ImageFileService,
     FileUrlService,
+    FileResolver,
   ],
   exports: [FILE_SERVICE, FileUrlService],
 })

@@ -22,6 +22,16 @@ export class LocalFileService implements FileServiceInterface {
     this.setupDir();
   }
 
+  upload(readStream: fs.ReadStream) {
+    const fileName = uuidv1() + '.jpg';
+    return new Promise(async (resolve, reject) =>
+      readStream
+        .pipe(fs.createWriteStream(`${this.directory}/${fileName}`))
+        .on('finish', () => resolve(true))
+        .on('error', () => reject(false)),
+    );
+  }
+
   async storeImageFromBase64(base64Image: string): Promise<string> {
     this.logger.log(this.storeImageFromBase64.name);
     const data = base64Image.split('base64,')[1];

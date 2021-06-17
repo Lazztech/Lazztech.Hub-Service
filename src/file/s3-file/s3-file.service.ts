@@ -41,6 +41,22 @@ export class S3FileService implements FileServiceInterface {
     return objectName;
   }
 
+  async upload(readStream: ReadStream) {
+    this.logger.log(this.storeImageFromBase64.name);
+    await this.ensureBucketExists();
+    const objectName = uuidv1() + '.jpg';
+    const uploadObjectResponse = await this.s3
+      .putObject({
+        Bucket: this.bucketName,
+        Key: objectName,
+        Body: readStream,
+      })
+      .promise();
+    this.logger.log(
+      'Object was uploaded successfully. ' + uploadObjectResponse.VersionId,
+    );
+  }
+
   public async delete(url: string): Promise<void> {
     this.logger.log(this.delete.name);
     const splitUrl = url.split('/');

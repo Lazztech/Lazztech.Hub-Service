@@ -45,6 +45,7 @@
     "express": "^4.17.1",
     "graphql": "^14.5.8",
     "graphql-tools": "^4.0.6",
+    "graphql-upload": "^12.0.0",
     "imagemin": "^7.0.1",
     "imagemin-mozjpeg": "^8.0.0",
     "is-jpg": "^2.0.0",
