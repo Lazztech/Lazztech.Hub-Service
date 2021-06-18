@@ -34,16 +34,6 @@ spec:
                 secretKeyRef:
                   name: stage-lazztechhub
                   key: PUSH_NOTIFICATION_ENDPOINT
-            - name: GOOGLE_CLIENT_ID
-              valueFrom:
-                secretKeyRef:
-                  name: stage-lazztechhub
-                  key: GOOGLE_CLIENT_ID
-            - name: GOOGLE_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: stage-lazztechhub
-                  key: GOOGLE_SECRET
             - name: EMAIL_FROM_ADDRESS
               valueFrom:
                 secretKeyRef:

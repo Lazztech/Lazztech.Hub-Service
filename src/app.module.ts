@@ -16,11 +16,46 @@ import { NotificationModule } from './notification/notification.module';
 import { UserModule } from './user/user.module';
 import * as path from 'path';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
+import * as Joi from 'joi';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: ['.env.local', '.env'],
+      validationSchema: Joi.object({
+        APP_NAME: Joi.string(),
+        ACCESS_TOKEN_SECRET: Joi.string(),
+        FIREBASE_SERVER_KEY: Joi.string(),
+        PUSH_NOTIFICATION_ENDPOINT: Joi.string(),
+        EMAIL_FROM_ADDRESS: Joi.string(),
+        EMAIL_PASSWORD: Joi.string(),
+        FILE_STORAGE_TYPE: Joi.string()
+          .valid('local', 'object')
+          .default('local'),
+        OBJECT_STORAGE_BUCKET_NAME: Joi.string()
+          .when('FILE_STORAGE_TYPE', {
+            is: 'object',
+            then: Joi.string().required()
+          }),
+        OBJECT_STORAGE_ACCESS_KEY_ID: Joi.string()
+          .when('FILE_STORAGE_TYPE', {
+            is: 'object',
+            then: Joi.string().required()
+          }),
+        OBJECT_STORAGE_SECRET_ACCESS_KEY: Joi.string()
+          .when('FILE_STORAGE_TYPE', {
+            is: 'object',
+            then: Joi.string().required()
+          }),
+        OBJECT_STORAGE_ENDPOINT: Joi.string()
+          .when('FILE_STORAGE_TYPE', {
+            is: 'object',
+            then: Joi.string().required()
+          }),
+      }),
+      validationOptions: {
+        abortEarly: true,
+      },
       isGlobal: true,
     }),
     PrometheusModule.register(),
