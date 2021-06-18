@@ -122,14 +122,6 @@ import * as Joi from 'joi';
           ),
         } as SqliteConnectionOptions;
         switch (configService.get('DATABASE_TYPE', 'sqlite')) {
-          case '':
-            AppModule.logger.log(
-              `Using sqlite db: ${path.join(
-                process.cwd(),
-                sqliteConfig.database,
-              )}`,
-            );
-            return sqliteConfig;
           case 'sqlite':
             AppModule.logger.log(
               `Using sqlite db: ${path.join(

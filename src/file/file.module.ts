@@ -17,14 +17,6 @@ export const fileServiceFactory = {
   ) => {
     const fileServiceType = configService.get('FILE_STORAGE_TYPE', 'local');
     switch (fileServiceType) {
-      case '':
-        FileModule.logger.log(
-          `Using local file storage: ${process.cwd()}/${configService.get(
-            'FILE_STORAGE_DIR',
-            path.join('data', 'uploads'),
-          )}`,
-        );
-        return localFileService;
       case 'local':
         FileModule.logger.log(
           `Using local file storage: ${process.cwd()}/${configService.get(
