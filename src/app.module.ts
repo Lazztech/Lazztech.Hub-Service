@@ -16,11 +16,86 @@ import { NotificationModule } from './notification/notification.module';
 import { UserModule } from './user/user.module';
 import * as path from 'path';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
+import * as Joi from 'joi';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: ['.env.local', '.env'],
+      validationSchema: Joi.object({
+        APP_NAME: Joi.string().required(),
+        ACCESS_TOKEN_SECRET: Joi.string().required(),
+        FIREBASE_SERVER_KEY: Joi.string().required(),
+        PUSH_NOTIFICATION_ENDPOINT: Joi.string().required(),
+        EMAIL_FROM_ADDRESS: Joi.string().required(),
+        EMAIL_PASSWORD: Joi.string().required(),
+        DATABASE_TYPE: Joi.string()
+          .valid('sqlite', 'postgres')
+          .default('sqlite'),
+        DATABASE_SCHEMA: Joi.string()
+          .when('DATABASE_TYPE', {
+            is: 'sqlite',
+            then: Joi.string().default(path.join('data', 'sqlite3.db')),
+          })
+          .when('DATABASE_TYPE', {
+            is: 'postgres',
+            then: Joi.string().required(),
+          }),
+        DATABASE_HOST: Joi.string().when('DATABASE_TYPE', {
+          is: 'postgres',
+          then: Joi.string().required(),
+          otherwise: Joi.optional(),
+        }),
+        DATABASE_PORT: Joi.number().when('DATABASE_TYPE', {
+          is: 'postgres',
+          then: Joi.number().required(),
+          otherwise: Joi.optional(),
+        }),
+        DATABASE_USER: Joi.string().when('DATABASE_TYPE', {
+          is: 'postgres',
+          then: Joi.string().required(),
+          otherwise: Joi.optional(),
+        }),
+        DATABASE_PASS: Joi.string().when('DATABASE_TYPE', {
+          is: 'postgres',
+          then: Joi.string().required(),
+          otherwise: Joi.optional(),
+        }),
+        DATABASE_SSL: Joi.boolean().when('DATABASE_TYPE', {
+          is: 'postgres',
+          then: Joi.boolean().default(false),
+          otherwise: Joi.optional(),
+        }),
+        FILE_STORAGE_TYPE: Joi.string()
+          .valid('local', 'object')
+          .default('local'),
+        OBJECT_STORAGE_BUCKET_NAME: Joi.string().when('FILE_STORAGE_TYPE', {
+          is: 'object',
+          then: Joi.string().required(),
+          otherwise: Joi.optional(),
+        }),
+        OBJECT_STORAGE_ACCESS_KEY_ID: Joi.string().when('FILE_STORAGE_TYPE', {
+          is: 'object',
+          then: Joi.string().required(),
+          otherwise: Joi.optional(),
+        }),
+        OBJECT_STORAGE_SECRET_ACCESS_KEY: Joi.string().when(
+          'FILE_STORAGE_TYPE',
+          {
+            is: 'object',
+            then: Joi.string().required(),
+            otherwise: Joi.optional(),
+          },
+        ),
+        OBJECT_STORAGE_ENDPOINT: Joi.string().when('FILE_STORAGE_TYPE', {
+          is: 'object',
+          then: Joi.string().required(),
+          otherwise: Joi.optional(),
+        }),
+      }),
+      validationOptions: {
+        abortEarly: true,
+      },
       isGlobal: true,
     }),
     PrometheusModule.register(),
@@ -47,14 +122,6 @@ import { PrometheusModule } from '@willsoto/nestjs-prometheus';
           ),
         } as SqliteConnectionOptions;
         switch (configService.get('DATABASE_TYPE', 'sqlite')) {
-          case '':
-            AppModule.logger.log(
-              `Using sqlite db: ${path.join(
-                process.cwd(),
-                sqliteConfig.database,
-              )}`,
-            );
-            return sqliteConfig;
           case 'sqlite':
             AppModule.logger.log(
               `Using sqlite db: ${path.join(

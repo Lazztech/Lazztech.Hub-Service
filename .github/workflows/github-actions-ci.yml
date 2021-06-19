@@ -39,7 +39,14 @@ jobs:
         npm run test:e2e
       env:
         CI: true
+        APP_NAME: Test Lazztech Hub
         ACCESS_TOKEN_SECRET: SecretKey
+        FIREBASE_SERVER_KEY: test
+        PUSH_NOTIFICATION_ENDPOINT: test
+        EMAIL_FROM_ADDRESS: test
+        EMAIL_PASSWORD: test
+        DATABASE_TYPE: sqlite
+        FILE_STORAGE_TYPE: local
 
     - name: npm start & health check
       # 'nohup npm run start:prod >> app.log 2>&1 &' runs the command as a background job: https://stackoverflow.com/a/46732894/848396
@@ -51,7 +58,14 @@ jobs:
         kill %1
       env:
         CI: true
+        APP_NAME: Test Lazztech Hub
         ACCESS_TOKEN_SECRET: SecretKey
+        FIREBASE_SERVER_KEY: test
+        PUSH_NOTIFICATION_ENDPOINT: test
+        EMAIL_FROM_ADDRESS: test
+        EMAIL_PASSWORD: test
+        DATABASE_TYPE: sqlite
+        FILE_STORAGE_TYPE: local
 
   # deploy:
   #   name: deploy-cd-master
