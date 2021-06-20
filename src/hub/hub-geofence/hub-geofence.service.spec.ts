@@ -3,6 +3,9 @@ import { HubGeofenceService } from './hub-geofence.service';
 import { Repository } from 'typeorm';
 import { JoinUserHub } from '../../dal/entity/joinUserHub.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { User } from '../../dal/entity/user.entity';
+import { Hub } from '../../dal/entity/hub.entity';
+import { NotificationService } from '../../notification/notification.service';
 
 describe('HubGeofenceService', () => {
   let service: HubGeofenceService;
@@ -16,6 +19,15 @@ describe('HubGeofenceService', () => {
           provide: getRepositoryToken(JoinUserHub),
           useClass: Repository,
         },
+        {
+          provide: getRepositoryToken(User),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(Hub),
+          useClass: Repository,
+        },
+        NotificationService,
       ],
     }).compile();
 
