@@ -125,7 +125,8 @@ export class NotificationService {
           Authorization: 'key=' + this.serverKey,
         },
       })
-      .toPromise();
+      .toPromise()
+      .catch((e) => this.logger.log(e));
 
     return result;
   }
