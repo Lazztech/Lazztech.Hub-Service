@@ -103,6 +103,8 @@ export class NotificationService {
       (x) => x.fcmPushUserToken,
     );
 
+    this.logger.log(`${fcmUserTokens.length} push notification tokens found for userId: ${userId}`);
+
     for (const iterator of fcmUserTokens) {
       await this.sendPushNotification(notification, iterator);
 
