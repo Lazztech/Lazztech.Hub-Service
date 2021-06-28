@@ -218,6 +218,22 @@ export class HubResolver {
   }
 
   @Mutation(() => Hub)
+  public async changeHubLocation(
+    @UserId() userId,
+    @Args({ name: 'hubId', type: () => ID }) hubId: number,
+    @Args({ name: 'latitude', type: () => Float }) latitude: number,
+    @Args({ name: 'longitude', type: () => Float }) longitude: number,
+  ) {
+    this.logger.log(this.changeHubLocation.name);
+    return await this.hubService.changeHubLocation(
+      userId,
+      hubId,
+      latitude,
+      longitude,
+    );
+  }
+
+  @Mutation(() => Hub)
   public async changeHubImage(
     @UserId() userId,
     @Args({ name: 'hubId', type: () => ID }) hubId: number,

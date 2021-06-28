@@ -7,6 +7,7 @@ import { User } from '../dal/entity/user.entity';
 import { FileServiceInterface } from '../file/interfaces/file-service.interface';
 import { Repository } from 'typeorm';
 import { FILE_SERVICE } from '../file/file-service.token';
+import { NotificationService } from '../notification/notification.service';
 
 @Injectable()
 export class HubService {
@@ -20,6 +21,7 @@ export class HubService {
     private joinUserHubRepository: Repository<JoinUserHub>,
     @InjectRepository(Invite)
     private inviteRepository: Repository<Invite>,
+    private notificationService: NotificationService,
   ) {
     this.logger.log('constructor');
   }
@@ -139,6 +141,50 @@ export class HubService {
     hub.name = name;
     hub.description = description;
     hub = await this.hubRepository.save(hub);
+    return hub;
+  }
+
+  async changeHubLocation(
+    userId: any,
+    hubId: number,
+    latitude: number,
+    longitude: number,
+  ) {
+    this.logger.log(this.changeHubLocation.name);
+    const joinUserHubResult = await this.joinUserHubRepository.findOne({
+      userId,
+      hubId,
+      isOwner: true,
+    });
+
+    let hub = await joinUserHubResult.hub;
+    hub.latitude = latitude;
+    hub.longitude = longitude;
+    hub = await this.hubRepository.save(hub);
+
+    const relationships = await this.joinUserHubRepository.find({
+      hubId,
+    });
+    const user = await joinUserHubResult.user;
+    for (const relationship of relationships) {
+      await this.notificationService.addInAppNotificationForUser(
+        relationship.userId,
+        {
+          header: `${hub.name} had its location changed.`,
+          text: `By ${user.firstName} ${user.lastName}`,
+          date: Date.now().toString(),
+          thumbnail: hub.image,
+          actionLink: undefined,
+        },
+      );
+
+      await this.notificationService.sendPushToUser(relationship.userId, {
+        title: `${hub.name} had its location changed.`,
+        body: `By ${user.firstName} ${user.lastName}`,
+        click_action: undefined,
+      });
+    }
+
     return hub;
   }
 
