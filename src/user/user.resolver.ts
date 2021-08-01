@@ -8,7 +8,7 @@ import { UserService } from './user.service';
 @UseGuards(GqlJwtAuthGuard)
 @Resolver()
 export class UserResolver {
-  private logger = new Logger(UserResolver.name, true);
+  private logger = new Logger(UserResolver.name);
 
   constructor(private userService: UserService) {
     this.logger.log('constructor');

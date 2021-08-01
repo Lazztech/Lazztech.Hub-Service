@@ -17,7 +17,7 @@ import { InAppNotification } from './inAppNotification.entity';
 @ObjectType()
 @Entity()
 export class User {
-  private logger = new Logger(User.name, true);
+  private logger = new Logger(User.name);
 
   @Field(() => ID)
   @PrimaryGeneratedColumn()

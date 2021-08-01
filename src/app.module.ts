@@ -202,5 +202,5 @@ import * as Joi from 'joi';
   ],
 })
 export class AppModule {
-  public static logger = new Logger(AppModule.name, true);
+  public static logger = new Logger(AppModule.name);
 }

@@ -8,7 +8,7 @@ import { NotificationService } from '../../notification/notification.service';
 
 @Injectable()
 export class HubGeofenceService {
-  private readonly logger = new Logger(HubGeofenceService.name, true);
+  private readonly logger = new Logger(HubGeofenceService.name);
 
   constructor(
     @InjectRepository(JoinUserHub)

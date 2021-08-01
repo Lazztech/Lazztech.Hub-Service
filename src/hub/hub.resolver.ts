@@ -17,7 +17,7 @@ import { HubService } from './hub.service';
 @UseGuards(GqlJwtAuthGuard)
 @Resolver()
 export class HubResolver {
-  private logger = new Logger(HubResolver.name, true);
+  private logger = new Logger(HubResolver.name);
 
   constructor(
     private hubService: HubService,

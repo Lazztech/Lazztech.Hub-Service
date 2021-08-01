@@ -18,7 +18,7 @@ export class NotificationService {
     'PUSH_NOTIFICATION_ENDPOINT',
   );
 
-  private logger = new Logger(NotificationService.name, true);
+  private logger = new Logger(NotificationService.name);
 
   constructor(
     private configService: ConfigService,

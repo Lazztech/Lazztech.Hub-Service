@@ -8,7 +8,7 @@ import { ReadStream } from 'fs';
 
 @Injectable()
 export class S3FileService implements FileServiceInterface {
-  private logger = new Logger(S3FileService.name, true);
+  private logger = new Logger(S3FileService.name);
   private bucketName = this.configService.get('OBJECT_STORAGE_BUCKET_NAME');
 
   constructor(

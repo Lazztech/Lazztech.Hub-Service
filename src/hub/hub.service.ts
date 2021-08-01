@@ -11,7 +11,7 @@ import { NotificationService } from '../notification/notification.service';
 
 @Injectable()
 export class HubService {
-  private readonly logger = new Logger(HubService.name, true);
+  private readonly logger = new Logger(HubService.name);
   constructor(
     @Inject(FILE_SERVICE)
     private readonly fileService: FileServiceInterface,
