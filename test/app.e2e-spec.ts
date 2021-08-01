@@ -5,8 +5,9 @@ import { AppModule } from './../src/app.module';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
+  let token: string;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
@@ -15,7 +16,29 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  it('/ (GET)', () => {
+  afterAll(async () => {
+    await app.close();
+  })
+
+  it('/health (GET)', () => {
     return request(app.getHttpServer()).get('/health').expect(200);
+  });
+
+  it('/graphql (POST)', () => {
+    return request(app.getHttpServer())
+      .post('/graphql')
+      .send({
+        operationName: null,
+        query: `mutation {
+          register(data: {
+            firstName: "gian",
+            lastName: "lazzarini",
+            email: "gianlazzarini@gmail.com",
+            password: "Password123"
+          })
+        }`,
+        variables: {},
+      })
+      .expect(200);
   });
 });
