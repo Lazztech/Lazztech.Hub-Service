@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
+import { base64_encoded_1x1px_jpeg_for_testing } from './e2e-helpers';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -98,6 +99,52 @@ describe('AppController (e2e)', () => {
       email: 'gianlazzarini@gmail.com',
       userDevices: [],
     });
+    return result;
+  });
+
+  it('/graphql createHub', async () => {
+    const result = await request(app.getHttpServer())
+      .post('/graphql')
+      .set({ authorization: `Bearer ${token}` })
+      .send({
+        operationName: null,
+        query: `mutation createHub($image: String!, $name: String!, $description: String!, $latitude: Float!, $longitude: Float!) {
+          createHub(image: $image, name: $name, description: $description, latitude: $latitude, longitude: $longitude) {
+            userId
+            hubId
+            isOwner
+            starred
+            isPresent
+            hub {
+              id
+              name
+              description
+              active
+              image
+              latitude
+              longitude
+              usersConnection {
+                isPresent
+                isOwner
+                __typename
+              }
+              __typename
+            }
+            __typename
+          }
+        }
+        `,
+        variables: {
+          description: 'test',
+          image: base64_encoded_1x1px_jpeg_for_testing,
+          latitude: 0,
+          longitude: 0,
+          name: 'test',
+        },
+      })
+      .expect(200);
+
+    expect(result.body?.data?.createHub?.hub).toBeDefined();
     return result;
   });
 });
