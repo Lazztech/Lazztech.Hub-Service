@@ -1,7 +1,9 @@
 import { Logger } from '@nestjs/common';
 import { Context, Parent, ResolveField, Resolver } from '@nestjs/graphql';
+import { UserId } from '../../decorators/user.decorator';
 import { FileUrlService } from '../../file/file-url/file-url.service';
 import { User } from '../entity/user.entity';
+import { UserDevice } from '../entity/userDevice.entity';
 
 @Resolver((of) => User)
 export class UserFieldResolver {
@@ -12,5 +14,18 @@ export class UserFieldResolver {
   @ResolveField(() => String, { nullable: true })
   image(@Parent() user: User, @Context() ctx: any): string {
     return this.fileUrlService.getFileUrl(user.image, ctx.req);
+  }
+
+  @ResolveField(() => [UserDevice], { nullable: true })
+  async userDevices(
+    @UserId() userId,
+    @Parent() user: User,
+  ): Promise<UserDevice[]> {
+    this.logger.log(this.userDevices.name);
+    if (userId === user.id) {
+      return await user.userDevices;
+    } else {
+      throw new Error('Not allowed to access other users device information');
+    }
   }
 }
