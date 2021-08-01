@@ -18,27 +18,50 @@ describe('AppController (e2e)', () => {
 
   afterAll(async () => {
     await app.close();
-  })
+  });
 
   it('/health (GET)', () => {
     return request(app.getHttpServer()).get('/health').expect(200);
   });
 
-  it('/graphql (POST)', () => {
-    return request(app.getHttpServer())
+  it('/graphql register', async () => {
+    const result = await request(app.getHttpServer())
       .post('/graphql')
       .send({
         operationName: null,
         query: `mutation {
-          register(data: {
-            firstName: "gian",
-            lastName: "lazzarini",
-            email: "gianlazzarini@gmail.com",
-            password: "Password123"
-          })
-        }`,
+        register(data: {
+          firstName: "gian",
+          lastName: "lazzarini",
+          email: "gianlazzarini@gmail.com",
+          password: "Password123"
+        })
+      }`,
         variables: {},
       })
       .expect(200);
+
+    return result;
+  });
+
+  it('/graphql login', async () => {
+    const result = await request(app.getHttpServer())
+      .post('/graphql')
+      .send({
+        operationName: null,
+        query: `mutation {
+        login(
+          email: "gianlazzarini@gmail.com",
+          password: "Password123"
+        )
+      }`,
+        variables: {},
+      })
+      .expect(200);
+
+    expect(result.body?.data?.login).toBeDefined();
+    token = result.body?.data?.login;
+
+    return result;
   });
 });
