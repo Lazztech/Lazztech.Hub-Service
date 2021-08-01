@@ -74,24 +74,24 @@ export class HubGeofenceService {
     });
     const user = await this.userRepository.findOne({ id: userId });
     const hub = await this.hubRepository.findOne({ id: hubId });
-    const message = `${user.firstName} arrived at ${hub.name}`;
+    const message = `${user.firstName} arrived`;
 
     for (const relation of membersHubRelations) {
       await this.notificationService.addInAppNotificationForUser(
         relation.userId,
         {
           header: message,
-          thumbnail: user.image,
+          thumbnail: hub.image,
           date: Date.now().toString(),
           actionLink: undefined,
-          text: undefined,
+          text: `at the "${hub.name}" hub.`,
         },
       );
 
       await this.notificationService.sendPushToUser(relation.userId, {
         title: message,
         click_action: undefined,
-        body: undefined,
+        body: `at the "${hub.name}" hub.`,
       });
     }
   }
@@ -102,24 +102,24 @@ export class HubGeofenceService {
     });
     const user = await this.userRepository.findOne({ id: userId });
     const hub = await this.hubRepository.findOne({ id: hubId });
-    const message = `${user.firstName} exited ${hub.name}`;
+    const message = `${user.firstName} exited`;
 
     for (const relation of membersHubRelations) {
       await this.notificationService.addInAppNotificationForUser(
         relation.userId,
         {
           header: message,
-          thumbnail: user.image,
+          thumbnail: hub.image,
           date: Date.now().toString(),
           actionLink: undefined,
-          text: undefined,
+          text: `the "${hub.name}" hub`,
         },
       );
 
       await this.notificationService.sendPushToUser(relation.userId, {
         title: message,
         click_action: undefined,
-        body: undefined,
+        body: `the "${hub.name}" hub`,
       });
     }
   }
