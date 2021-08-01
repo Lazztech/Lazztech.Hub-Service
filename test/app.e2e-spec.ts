@@ -64,4 +64,40 @@ describe('AppController (e2e)', () => {
 
     return result;
   });
+
+  it('/graphql me', async () => {
+    const result = await request(app.getHttpServer())
+      .post('/graphql')
+      .set({ authorization: `Bearer ${token}` })
+      .send({
+        operationName: null,
+        query: `query {
+          me {
+            id
+            firstName
+            lastName
+            description
+            image
+            email
+            userDevices {
+              id
+              fcmPushUserToken
+            }
+          }
+        }`,
+        variables: {},
+      })
+      .expect(200);
+
+    expect(result.body?.data?.me).toEqual({
+      id: '1',
+      firstName: 'gian',
+      lastName: 'lazzarini',
+      description: null,
+      image: null,
+      email: 'gianlazzarini@gmail.com',
+      userDevices: [],
+    });
+    return result;
+  });
 });
