@@ -176,4 +176,38 @@ describe('AppController (e2e)', () => {
     return result;
   });
 
+  it('/graphql enteredHubGeofence', async () => {
+    const result = await request(app.getHttpServer())
+      .post('/graphql')
+      .set({ authorization: `Bearer ${token}` })
+      .send({
+        operationName: null,
+        query: `mutation enter_test {
+          enteredHubGeofence(hubId: 1)
+        }`,
+        variables: {},
+      })
+      .expect(200);
+
+    expect(result.body?.data?.enteredHubGeofence).toBeDefined();
+    return result;
+  });
+
+  it('/graphql exitedHubGeofence', async () => {
+    const result = await request(app.getHttpServer())
+      .post('/graphql')
+      .set({ authorization: `Bearer ${token}` })
+      .send({
+        operationName: null,
+        query: `mutation exit_test {
+          exitedHubGeofence(hubId: 1)
+        }`,
+        variables: {},
+      })
+      .expect(200);
+
+    expect(result.body?.data?.exitedHubGeofence).toBeDefined();
+    return result;
+  });
+
 });
