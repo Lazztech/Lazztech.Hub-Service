@@ -147,4 +147,33 @@ describe('AppController (e2e)', () => {
     expect(result.body?.data?.createHub?.hub).toBeDefined();
     return result;
   });
+
+  it('/graphql usersHubs', async () => {
+    const result = await request(app.getHttpServer())
+      .post('/graphql')
+      .set({ authorization: `Bearer ${token}` })
+      .send({
+        operationName: null,
+        query: `query {
+          usersHubs{
+            userId
+            hubId
+            isOwner
+            starred
+            isPresent
+            hub {
+              id
+              name
+            }
+          }
+        }`,
+        variables: {},
+      })
+      .expect(200);
+
+    expect(result.body?.data?.usersHubs).toBeDefined();
+    expect((result.body?.data?.usersHubs as []).length).toBeTruthy();
+    return result;
+  });
+
 });
