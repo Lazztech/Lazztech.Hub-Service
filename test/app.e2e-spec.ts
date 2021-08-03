@@ -32,9 +32,9 @@ describe('AppController (e2e)', () => {
         operationName: null,
         query: `mutation {
         register(data: {
-          firstName: "test",
-          lastName: "test",
-          email: "test@test.com",
+          firstName: "gian",
+          lastName: "lazzarini",
+          email: "gianlazzarini@gmail.com",
           password: "Password123"
         })
       }`,
