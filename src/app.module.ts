@@ -146,10 +146,7 @@ import * as Joi from 'joi';
               username: configService.get('DATABASE_USER', 'postgres'),
               password: configService.get('DATABASE_PASS', 'postgres'),
               extra: {
-                ssl:
-                  configService.get('DATABASE_SSL', false) === 'true'
-                    ? true
-                    : false,
+                ssl: configService.get('DATABASE_SSL'),
               },
             } as PostgresConnectionOptions;
           default:
