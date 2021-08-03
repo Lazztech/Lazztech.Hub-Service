@@ -183,13 +183,16 @@ describe('AppController (e2e)', () => {
       .send({
         operationName: null,
         query: `mutation enter_test {
-          enteredHubGeofence(hubId: 1)
+          enteredHubGeofence(hubId: 1) {
+            isPresent
+          }
         }`,
         variables: {},
       })
       .expect(200);
 
     expect(result.body?.data?.enteredHubGeofence).toBeDefined();
+    expect(result.body?.data?.enteredHubGeofence?.isPresent).toBe(true);
     return result;
   });
 
@@ -200,13 +203,16 @@ describe('AppController (e2e)', () => {
       .send({
         operationName: null,
         query: `mutation exit_test {
-          exitedHubGeofence(hubId: 1)
+          exitedHubGeofence(hubId: 1) {
+            isPresent
+          }
         }`,
         variables: {},
       })
       .expect(200);
 
     expect(result.body?.data?.exitedHubGeofence).toBeDefined();
+    expect(result.body?.data?.exitedHubGeofence?.isPresent).toBe(false);
     return result;
   });
 });
