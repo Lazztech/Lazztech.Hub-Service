@@ -78,6 +78,12 @@ $ kubectl delete -f kubernetes/stage.yaml
 $ kubectl delete secret stage-lazztechhub
 ```
 
+## Scripts
+
+```bash
+# test, build & push container, deploy dev and deploy stage
+$ ./scripts/preCommit.sh && ./scripts/buildTagAndPushDocker.sh && ./scripts/deployToDev.sh && ./scripts/deployToStage.sh
+```
 ## Configuration
 
 | Parameter | Function | Optional | Example |

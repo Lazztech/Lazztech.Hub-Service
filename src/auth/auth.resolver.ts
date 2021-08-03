@@ -8,7 +8,7 @@ import { GqlJwtAuthGuard } from './guards/gql-jwt-auth.guard';
 
 @Resolver()
 export class AuthResolver {
-  private logger = new Logger(AuthResolver.name, true);
+  private logger = new Logger(AuthResolver.name);
 
   constructor(
     private authService: AuthService,

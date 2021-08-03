@@ -8,7 +8,7 @@ import * as path from 'path';
 
 @Injectable()
 export class LocalFileService implements FileServiceInterface {
-  private logger = new Logger(LocalFileService.name, true);
+  private logger = new Logger(LocalFileService.name);
   private directory: string = this.configService.get(
     'FILE_STORAGE_DIR',
     path.join('data', 'uploads'),

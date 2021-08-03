@@ -7,7 +7,7 @@ import { UserService } from '../../user/user.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  private logger = new Logger(JwtStrategy.name, true);
+  private logger = new Logger(JwtStrategy.name);
 
   constructor(
     private configService: ConfigService,

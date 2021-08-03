@@ -1,15 +1,16 @@
-import { Field, ID } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from './user.entity';
 
+@ObjectType()
 @Entity()
 export class UserDevice {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
   public id: number;
 
+  @Field()
   @Column('text', { unique: true })
-  @Column()
   public fcmPushUserToken: string;
 
   @Column()

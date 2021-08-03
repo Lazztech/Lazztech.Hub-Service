@@ -9,7 +9,7 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class HubActivityService {
-  private readonly logger = new Logger(HubActivityService.name, true);
+  private readonly logger = new Logger(HubActivityService.name);
 
   constructor(
     @InjectRepository(JoinUserHub)

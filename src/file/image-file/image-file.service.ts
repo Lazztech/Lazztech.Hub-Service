@@ -6,7 +6,7 @@ import * as mozjpeg from 'imagemin-mozjpeg';
 
 @Injectable()
 export class ImageFileService {
-  private logger = new Logger(ImageFileService.name, true);
+  private logger = new Logger(ImageFileService.name);
 
   public isJpeg(input: Buffer) {
     this.logger.log(this.isJpeg.name);

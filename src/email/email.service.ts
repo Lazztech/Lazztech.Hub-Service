@@ -6,7 +6,7 @@ import { EmailOptions } from './dto/emailOptions.dto';
 
 @Injectable()
 export class EmailService {
-  private logger = new Logger(EmailService.name, true);
+  private logger = new Logger(EmailService.name);
   private transporter: nodemailer.Transporter;
   public readonly primaryEmailAddress: string;
 

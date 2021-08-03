@@ -17,7 +17,7 @@ import { InAppNotification } from './inAppNotification.entity';
 @ObjectType()
 @Entity()
 export class User {
-  private logger = new Logger(User.name, true);
+  private logger = new Logger(User.name);
 
   @Field(() => ID)
   @PrimaryGeneratedColumn()
@@ -63,6 +63,9 @@ export class User {
   @JoinColumn()
   public passwordReset: Promise<PasswordReset>;
 
+  /**
+   * Exposed as a field resolver
+   */
   @OneToMany(() => UserDevice, (userDevice) => userDevice.user)
   public userDevices: Promise<UserDevice[]>;
 

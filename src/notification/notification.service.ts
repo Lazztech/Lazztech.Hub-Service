@@ -18,7 +18,7 @@ export class NotificationService {
     'PUSH_NOTIFICATION_ENDPOINT',
   );
 
-  private logger = new Logger(NotificationService.name, true);
+  private logger = new Logger(NotificationService.name);
 
   constructor(
     private configService: ConfigService,
@@ -103,6 +103,10 @@ export class NotificationService {
       (x) => x.fcmPushUserToken,
     );
 
+    this.logger.log(
+      `${fcmUserTokens.length} push notification tokens found for userId: ${userId}`,
+    );
+
     for (const iterator of fcmUserTokens) {
       await this.sendPushNotification(notification, iterator);
 
@@ -125,7 +129,8 @@ export class NotificationService {
           Authorization: 'key=' + this.serverKey,
         },
       })
-      .toPromise();
+      .toPromise()
+      .catch((e) => this.logger.log(e));
 
     return result;
   }

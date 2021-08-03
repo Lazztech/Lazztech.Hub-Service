@@ -50,5 +50,5 @@ export const fileServiceFactory = {
   exports: [FILE_SERVICE, FileUrlService],
 })
 export class FileModule {
-  public static logger = new Logger(FileModule.name, true);
+  public static logger = new Logger(FileModule.name);
 }

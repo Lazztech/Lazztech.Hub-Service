@@ -8,7 +8,7 @@ import { NotificationService } from './notification.service';
 @UseGuards(GqlJwtAuthGuard)
 @Resolver()
 export class NotificationResolver {
-  private logger = new Logger(NotificationResolver.name, true);
+  private logger = new Logger(NotificationResolver.name);
 
   constructor(private notificationService: NotificationService) {
     this.logger.log('constructor');

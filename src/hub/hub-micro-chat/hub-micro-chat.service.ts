@@ -11,7 +11,7 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class HubMicroChatService {
-  private readonly logger = new Logger(HubMicroChatService.name, true);
+  private readonly logger = new Logger(HubMicroChatService.name);
 
   constructor(
     private notificationService: NotificationService,
