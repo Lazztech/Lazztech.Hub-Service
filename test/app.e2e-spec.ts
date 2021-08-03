@@ -209,5 +209,4 @@ describe('AppController (e2e)', () => {
     expect(result.body?.data?.exitedHubGeofence).toBeDefined();
     return result;
   });
-
 });
