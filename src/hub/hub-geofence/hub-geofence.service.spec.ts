@@ -14,7 +14,6 @@ import { UserDevice } from '../../dal/entity/userDevice.entity';
 describe('HubGeofenceService', () => {
   let service: HubGeofenceService;
   let joinUserHubRepository: Repository<JoinUserHub>;
-  let hubRepository: Repository<Hub>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -64,7 +63,6 @@ describe('HubGeofenceService', () => {
     joinUserHubRepository = module.get<Repository<JoinUserHub>>(
       getRepositoryToken(JoinUserHub),
     );
-    hubRepository = module.get<Repository<Hub>>(getRepositoryToken(Hub));
   });
 
   it('should be defined', () => {
@@ -90,17 +88,13 @@ describe('HubGeofenceService', () => {
       .spyOn(service, 'notifyMembersOfArrival')
       .mockResolvedValue();
 
-    const saveCall = jest
-      .spyOn(joinUserHubRepository, 'save')
-      .mockResolvedValueOnce({
-        userId,
-        hubId,
-        isOwner: true,
-      } as JoinUserHub);
+    const updateCall = jest
+      .spyOn(joinUserHubRepository, 'update')
+      .mockResolvedValueOnce(null);
     // Act
     await service.enteredHubGeofence(userId, hubId);
     // Assert
-    expect(saveCall).toHaveBeenCalled();
+    expect(updateCall).toHaveBeenCalled();
     expect(notifyMembersSpy).toHaveBeenCalled();
   });
 
@@ -110,6 +104,9 @@ describe('HubGeofenceService', () => {
     const hubRelationshipTest = {
       userId,
       hubId,
+      hub: Promise.resolve({
+        active: true,
+      } as Hub),
     } as JoinUserHub;
     jest
       .spyOn(joinUserHubRepository, 'findOne')
@@ -119,20 +116,13 @@ describe('HubGeofenceService', () => {
       .spyOn(service, 'notifyMembersOfExit')
       .mockResolvedValue();
 
-    const saveCall = jest
-      .spyOn(joinUserHubRepository, 'save')
-      .mockResolvedValueOnce({
-        userId,
-        hubId,
-        isOwner: false,
-        hub: Promise.resolve({
-          active: true,
-        } as Hub),
-      } as JoinUserHub);
+    const updateCall = jest
+      .spyOn(joinUserHubRepository, 'update')
+      .mockResolvedValueOnce(null);
     // Act
     await service.exitedHubGeofence(userId, hubId);
     // Assert
-    expect(saveCall).toHaveBeenCalled();
+    expect(updateCall).toHaveBeenCalled();
     expect(notifyMembersSpy).toHaveBeenCalled();
   });
 });

@@ -61,7 +61,7 @@ export class HubGeofenceService {
 
   async exitedHubGeofence(userId: any, hubId: number) {
     this.logger.log(this.exitedHubGeofence.name);
-    let hubRelationship = await this.joinUserHubRepository.findOne({
+    const hubRelationship = await this.joinUserHubRepository.findOne({
       userId,
       hubId,
     });

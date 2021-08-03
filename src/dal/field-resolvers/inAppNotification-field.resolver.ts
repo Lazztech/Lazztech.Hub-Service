@@ -1,4 +1,3 @@
-import { Logger } from '@nestjs/common';
 import { Context, Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { FileUrlService } from '../../file/file-url/file-url.service';
 import { InAppNotification } from '../entity/inAppNotification.entity';
