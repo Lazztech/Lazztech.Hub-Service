@@ -56,6 +56,21 @@ jobs:
         postgresql user: 'test'
         postgresql password: 'Password123'
 
+    - name: start minio s3 object storage
+      run: |
+        docker run -d -p 9000:9000 --name minio \
+                    -e "MINIO_ACCESS_KEY=minioadmin" \
+                    -e "MINIO_SECRET_KEY=minioadmin" \
+                    -v /tmp/data:/data \
+                    -v /tmp/config:/root/.minio \
+                    minio/minio server /data
+
+        export AWS_ACCESS_KEY_ID=minioadmin
+        export AWS_SECRET_ACCESS_KEY=minioadmin
+        export AWS_EC2_METADATA_DISABLED=true
+
+        aws --endpoint-url http://127.0.0.1:9000/ s3 mb s3://testbucket
+
     - name: npm test:e2e remote
       run: |
         npm run test:e2e
@@ -74,7 +89,11 @@ jobs:
         DATABASE_PASS: 'Password123'
         DATABASE_SCHEMA: 'postgres-test'
         DATABASE_SSL: "false"
-        FILE_STORAGE_TYPE: local
+        FILE_STORAGE_TYPE: object
+        OBJECT_STORAGE_BUCKET_NAME: test-lazztech-hub
+        OBJECT_STORAGE_ACCESS_KEY_ID: minioadmin
+        OBJECT_STORAGE_SECRET_ACCESS_KEY: minioadmin
+        OBJECT_STORAGE_ENDPOINT: http://127.0.0.1:9000
 
     - name: npm start & health check
       # 'nohup npm run start:prod >> app.log 2>&1 &' runs the command as a background job: https://stackoverflow.com/a/46732894/848396
