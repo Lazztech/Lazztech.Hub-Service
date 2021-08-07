@@ -34,7 +34,7 @@ jobs:
       run: |
         npm run test:cov
 
-    - name: npm test:e2e
+    - name: npm test:e2e local
       run: |
         npm run test:e2e
       env:
@@ -46,6 +46,32 @@ jobs:
         EMAIL_FROM_ADDRESS: test
         EMAIL_PASSWORD: test
         DATABASE_TYPE: sqlite
+        FILE_STORAGE_TYPE: local
+
+    - name: start postgresql db
+      uses: harmon758/postgresql-action@v1
+      with:
+        postgresql version: '11'  # See https://hub.docker.com/_/postgres for available versions
+        postgresql db: 'postgres-test'
+        postgresql user: 'test'
+        postgresql password: 'Password123'
+
+    - name: npm test:e2e remote
+      run: |
+        npm run test:e2e
+      env:
+        CI: true
+        APP_NAME: Test Lazztech Hub
+        ACCESS_TOKEN_SECRET: SecretKey
+        FIREBASE_SERVER_KEY: test
+        PUSH_NOTIFICATION_ENDPOINT: test
+        EMAIL_FROM_ADDRESS: test
+        EMAIL_PASSWORD: test
+        DATABASE_TYPE: postgres
+        DATABASE_HOST: localhost
+        DATABASE_PORT: "5432"
+        DATABASE_USER: "test"
+        DATABASE_PASS: 'Password123'
         FILE_STORAGE_TYPE: local
 
     - name: npm start & health check
