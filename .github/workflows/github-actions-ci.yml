@@ -72,6 +72,8 @@ jobs:
         DATABASE_PORT: "5432"
         DATABASE_USER: "test"
         DATABASE_PASS: 'Password123'
+        DATABASE_SCHEMA: 'postgres-test'
+        DATABASE_SSL: "false"
         FILE_STORAGE_TYPE: local
 
     - name: npm start & health check
