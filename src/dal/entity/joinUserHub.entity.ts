@@ -36,7 +36,7 @@ export class JoinUserHub {
   public starred: boolean;
 
   /**
-   * Boolean value for if user is presently at the hub.
+   * Exposed as a field resolver
    */
   @Column({ default: false })
   public isPresent: boolean;

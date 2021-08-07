@@ -268,24 +268,22 @@ export class HubResolver {
     return true;
   }
 
-  @Mutation(() => Boolean)
+  @Mutation(() => JoinUserHub)
   public async enteredHubGeofence(
     @UserId() userId,
     @Args({ name: 'hubId', type: () => ID }) hubId: number,
-  ): Promise<boolean> {
+  ): Promise<JoinUserHub> {
     this.logger.log(this.enteredHubGeofence.name);
-    await this.hubGeofenceService.enteredHubGeofence(userId, hubId);
-    return true;
+    return await this.hubGeofenceService.enteredHubGeofence(userId, hubId);
   }
 
-  @Mutation(() => Boolean)
+  @Mutation(() => JoinUserHub)
   public async exitedHubGeofence(
     @UserId() userId,
     @Args({ name: 'hubId', type: () => ID }) hubId: number,
-  ): Promise<boolean> {
+  ): Promise<JoinUserHub> {
     this.logger.log(this.exitedHubGeofence.name);
-    await this.hubGeofenceService.exitedHubGeofence(userId, hubId);
-    return true;
+    return await this.hubGeofenceService.exitedHubGeofence(userId, hubId);
   }
 
   @Mutation(() => Hub)

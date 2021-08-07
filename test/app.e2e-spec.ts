@@ -1,5 +1,5 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 import { base64_encoded_1x1px_jpeg_for_testing } from './e2e-helpers';
@@ -164,6 +164,7 @@ describe('AppController (e2e)', () => {
             hub {
               id
               name
+              active
             }
           }
         }`,
@@ -173,6 +174,30 @@ describe('AppController (e2e)', () => {
 
     expect(result.body?.data?.usersHubs).toBeDefined();
     expect((result.body?.data?.usersHubs as []).length).toBeTruthy();
+    // hub should be not active when first created
+    expect(result.body?.data?.usersHubs[0]?.hub?.active).toBe(false);
+    // isPresent should be null when hub is not active
+    expect(result.body?.data?.usersHubs[0]?.isPresent).toBeNull();
+    return result;
+  });
+
+  it('/graphql activateHub', async () => {
+    const result = await request(app.getHttpServer())
+      .post('/graphql')
+      .set({ authorization: `Bearer ${token}` })
+      .send({
+        operationName: null,
+        query: `mutation enter_test {
+          activateHub(hubId: 1) {
+            active
+          }
+        }`,
+        variables: {},
+      })
+      .expect(200);
+
+    expect(result.body?.data?.activateHub).toBeDefined();
+    expect(result.body?.data?.activateHub?.active).toBe(true);
     return result;
   });
 
@@ -183,13 +208,16 @@ describe('AppController (e2e)', () => {
       .send({
         operationName: null,
         query: `mutation enter_test {
-          enteredHubGeofence(hubId: 1)
+          enteredHubGeofence(hubId: 1) {
+            isPresent
+          }
         }`,
         variables: {},
       })
       .expect(200);
 
     expect(result.body?.data?.enteredHubGeofence).toBeDefined();
+    expect(result.body?.data?.enteredHubGeofence?.isPresent).toBe(true);
     return result;
   });
 
@@ -200,13 +228,16 @@ describe('AppController (e2e)', () => {
       .send({
         operationName: null,
         query: `mutation exit_test {
-          exitedHubGeofence(hubId: 1)
+          exitedHubGeofence(hubId: 1) {
+            isPresent
+          }
         }`,
         variables: {},
       })
       .expect(200);
 
     expect(result.body?.data?.exitedHubGeofence).toBeDefined();
+    expect(result.body?.data?.exitedHubGeofence?.isPresent).toBe(false);
     return result;
   });
 });
