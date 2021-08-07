@@ -33,8 +33,23 @@ export class HubGeofenceService {
       );
     }
 
-    hubRelationship.isPresent = true;
-    await this.joinUserHubRepository.save(hubRelationship);
+    /**
+     * Update is used here as apposed to save as there seems to be a bug with typeorm.
+     * It fails to find the existing row in the DB and seems to be related to the compound primary key.
+     * Using the update method explicitly seems to work around this.
+     *
+     * Issue:
+     * https://github.com/typeorm/typeorm/issues/4122
+     */
+    await this.joinUserHubRepository.update(
+      {
+        userId,
+        hubId,
+      },
+      {
+        isPresent: true,
+      },
+    );
 
     const hub = await hubRelationship.hub;
     if (hub.active) {
@@ -57,8 +72,23 @@ export class HubGeofenceService {
       );
     }
 
-    hubRelationship.isPresent = false;
-    hubRelationship = await this.joinUserHubRepository.save(hubRelationship);
+    /**
+     * Update is used here as apposed to save as there seems to be a bug with typeorm.
+     * It fails to find the existing row in the DB and seems to be related to the compound primary key.
+     * Using the update method explicitly seems to work around this.
+     *
+     * Issue:
+     * https://github.com/typeorm/typeorm/issues/4122
+     */
+    await this.joinUserHubRepository.update(
+      {
+        userId,
+        hubId,
+      },
+      {
+        isPresent: false,
+      },
+    );
 
     const hub = await hubRelationship.hub;
     if (hub.active) {
