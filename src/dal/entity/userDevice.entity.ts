@@ -10,7 +10,7 @@ export class UserDevice {
   public id: number;
 
   @Field()
-  @Column('text', { unique: true })
+  @Column({ unique: true })
   public fcmPushUserToken: string;
 
   @Column()
