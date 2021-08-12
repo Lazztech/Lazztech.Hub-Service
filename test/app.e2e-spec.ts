@@ -34,6 +34,7 @@ describe('AppController (e2e)', () => {
         register(data: {
           firstName: "gian",
           lastName: "lazzarini",
+          birthdate: "759398400",
           email: "gianlazzarini@gmail.com",
           password: "Password123"
         })
@@ -80,6 +81,7 @@ describe('AppController (e2e)', () => {
             description
             image
             email
+            birthdate
             userDevices {
               id
               fcmPushUserToken
@@ -97,6 +99,7 @@ describe('AppController (e2e)', () => {
       description: null,
       image: null,
       email: 'gianlazzarini@gmail.com',
+      birthdate: '759398400',
       userDevices: [],
     });
     return result;

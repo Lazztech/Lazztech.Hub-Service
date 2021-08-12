@@ -29,13 +29,15 @@ export class AuthResolver {
 
   @Mutation(() => String, { nullable: true })
   public async register(
-    @Args('data') { firstName, lastName, email, password }: UserInput,
+    @Args('data')
+    { firstName, lastName, birthdate, email, password }: UserInput,
   ): Promise<string> {
     this.logger.log(this.register.name);
 
     const accessToken = await this.authService.register(
       firstName,
       lastName,
+      birthdate,
       email,
       password,
     );

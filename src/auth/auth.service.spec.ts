@@ -85,6 +85,7 @@ describe('AuthService', () => {
     // Arrange
     const firstName = 'Gian';
     const lastName = 'Lazzarini';
+    const birthdate = '759398400';
     const email = 'gianlazzarini@gmail.com';
     const password = 'Password123';
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(undefined);
@@ -98,7 +99,13 @@ describe('AuthService', () => {
       .spyOn(notificationService, 'addInAppNotificationForUser')
       .mockImplementationOnce(() => Promise.resolve());
     // Act
-    const result = await service.register(firstName, lastName, email, password);
+    const result = await service.register(
+      firstName,
+      lastName,
+      birthdate,
+      email,
+      password,
+    );
     // Assert
     expect(result).toBeDefined();
     expect(saveCall).toHaveBeenCalled();
