@@ -1,4 +1,3 @@
-import { Logger } from '@nestjs/common';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import {
   Column,
@@ -8,17 +7,15 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { InAppNotification } from './inAppNotification.entity';
+import { Invite } from './invite.entity';
 import { JoinUserHub } from './joinUserHub.entity';
 import { PasswordReset } from './passwordReset.entity';
 import { UserDevice } from './userDevice.entity';
-import { Invite } from './invite.entity';
-import { InAppNotification } from './inAppNotification.entity';
 
 @ObjectType()
 @Entity()
 export class User {
-  private logger = new Logger(User.name);
-
   @Field(() => ID)
   @PrimaryGeneratedColumn()
   public id: number;
@@ -30,6 +27,13 @@ export class User {
   @Field()
   @Column()
   public lastName: string;
+
+  @Field({
+    nullable: true,
+    description: 'string representation of unix timestamp',
+  })
+  @Column({ nullable: true })
+  public birthdate: string;
 
   @Field({ nullable: true })
   @Column({ nullable: true })

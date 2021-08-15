@@ -27,6 +27,7 @@ export class AuthService {
   async register(
     firstName: string,
     lastName: string,
+    birthdate: string,
     email: string,
     password: string,
   ) {
@@ -43,6 +44,7 @@ export class AuthService {
     let user = await this.userRepository.create({
       firstName,
       lastName,
+      birthdate,
       email,
       password: hashedPassword,
     });
