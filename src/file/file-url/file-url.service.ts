@@ -5,7 +5,7 @@ import { Request } from 'express';
 export class FileUrlService {
   getFileUrl(fileName: string, req: Request): string {
     if (fileName) {
-      return `${req.protocol}://${req.get('host')}/file/${fileName}`;
+      return `https://${req.get('host')}/file/${fileName}`;
     } else {
       return fileName;
     }
