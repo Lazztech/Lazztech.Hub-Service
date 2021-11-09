@@ -1,5 +1,5 @@
 import { Logger, UseGuards } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver, ID } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver, ID, Int } from '@nestjs/graphql';
 import { UserId } from '../decorators/user.decorator';
 import { GqlJwtAuthGuard } from '../auth/guards/gql-jwt-auth.guard';
 import { InAppNotification } from '../dal/entity/inAppNotification.entity';
@@ -27,9 +27,15 @@ export class NotificationResolver {
   @Query(() => [InAppNotification])
   public async getInAppNotifications(
     @UserId() userId,
+    @Args({ name: 'limit', type: () => Int, nullable: true }) limit: number,
+    @Args({ name: 'offset', type: () => Int, nullable: true }) offset: number,
   ): Promise<InAppNotification[]> {
     this.logger.log(this.getInAppNotifications.name);
-    return await this.notificationService.getInAppNotifications(userId);
+    return await this.notificationService.getInAppNotifications(
+      userId,
+      limit,
+      offset,
+    );
   }
 
   @Mutation(() => Boolean)

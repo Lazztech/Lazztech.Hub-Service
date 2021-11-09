@@ -51,12 +51,23 @@ export class NotificationService {
     }
   }
 
+  /**
+   * Fetch a users in app notifications, with optional pagination
+   * @param userId users id
+   * @param limit max limit of how many items to fetch
+   * @param offset items from zero to start from
+   * @returns promise of array of in app notifications
+   */
   public async getInAppNotifications(
     userId: any,
+    limit?: number,
+    offset?: number,
   ): Promise<InAppNotification[]> {
     this.logger.log(this.getInAppNotifications.name);
     return await this.inAppNotificationRepository.find({
-      userId,
+      where: { userId },
+      take: limit,
+      skip: offset,
     });
   }
 
