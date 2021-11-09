@@ -1,5 +1,8 @@
 import { NestFactory } from '@nestjs/core';
-import { ExpressAdapter, NestExpressApplication } from '@nestjs/platform-express';
+import {
+  ExpressAdapter,
+  NestExpressApplication,
+} from '@nestjs/platform-express';
 import * as bodyParser from 'body-parser';
 import { AppModule } from './app.module';
 /* eslint-disable */
@@ -8,7 +11,10 @@ import express = require('express');
 async function bootstrap() {
   const instance = express();
   instance.use('/avatars', require('adorable-avatars/dist/index'));
-  const app: NestExpressApplication = await NestFactory.create(AppModule, new ExpressAdapter(instance));
+  const app: NestExpressApplication = await NestFactory.create(
+    AppModule,
+    new ExpressAdapter(instance),
+  );
   app.enable('trust proxy');
   app.use(bodyParser.json({ limit: '50mb' }));
   app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
