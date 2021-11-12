@@ -5,7 +5,6 @@ import {
   Query,
   Resolver,
   ID,
-  Int,
   Directive,
 } from '@nestjs/graphql';
 import { UserId } from '../decorators/user.decorator';
@@ -53,12 +52,13 @@ export class NotificationResolver {
   @Query(() => PaginatedInAppNotificationsResponse)
   public async paginatedInAppNotifications(
     @UserId() userId,
-    @Args('pageableOptions', { nullable: true }) pageableOptions?: PageableOptions,
+    @Args('pageableOptions', { nullable: true })
+    pageableOptions?: PageableOptions,
   ): Promise<PaginatedInAppNotificationsResponse> {
     this.logger.log(this.getInAppNotifications.name);
     const [items, total] = await this.notificationService.getInAppNotifications(
       userId,
-      pageableOptions
+      pageableOptions,
     );
     return {
       items,

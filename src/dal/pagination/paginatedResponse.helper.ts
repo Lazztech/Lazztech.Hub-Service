@@ -10,11 +10,11 @@ export default function PaginatedResponse<TItem>(TItemClass: ClassType<TItem>) {
   @ObjectType({ isAbstract: true })
   abstract class PaginatedResponseClass {
     // here we use the runtime argument
-    @Field((type) => [TItemClass])
+    @Field(() => [TItemClass])
     // and here the generic type
     items: TItem[];
 
-    @Field((type) => Int)
+    @Field(() => Int)
     total: number;
   }
   return PaginatedResponseClass;
@@ -47,14 +47,18 @@ export class PageableOptions {
 }
 
 /**
- * 
- * @param sortOptions 
+ *
+ * @param sortOptions
  * @returns typeorm order param compatible result
  */
-export function generateTypeOrmOrderOptions(sortOptions?: SortOptions): {
-  [field: string]: "ASC" | "DESC";
+export function generateTypeOrmOrderOptions(
+  sortOptions?: SortOptions,
+): {
+  [field: string]: 'ASC' | 'DESC';
 } {
-  return sortOptions ? {
-    [`${sortOptions?.field}`]: (sortOptions?.ascending) ? "ASC" : "DESC"
-  } : undefined;
+  return sortOptions
+    ? {
+        [`${sortOptions?.field}`]: sortOptions?.ascending ? 'ASC' : 'DESC',
+      }
+    : undefined;
 }
