@@ -105,12 +105,13 @@ describe('NotificationService', () => {
       },
     ] as InAppNotification[];
     jest
-      .spyOn(inAppNotificationRepo, 'find')
-      .mockResolvedValueOnce(expectedResult);
+      .spyOn(inAppNotificationRepo, 'findAndCount')
+      .mockResolvedValueOnce([expectedResult, expectedResult.length]);
     // Act
-    const result = await service.getInAppNotifications(userId);
+    const [items, total] = await service.getInAppNotifications(userId);
     // Assert
-    expect(result).toEqual(expectedResult);
+    expect(items).toEqual(expectedResult);
+    expect(total).toEqual(expectedResult.length);
   });
 
   it('should save for addInAppNotificationForUser', async () => {

@@ -62,9 +62,9 @@ export class NotificationService {
     userId: any,
     limit?: number,
     offset?: number,
-  ): Promise<InAppNotification[]> {
+  ): Promise<[InAppNotification[], number]> {
     this.logger.log(this.getInAppNotifications.name);
-    return await this.inAppNotificationRepository.find({
+    return await this.inAppNotificationRepository.findAndCount({
       where: { userId },
       take: limit,
       skip: offset,
