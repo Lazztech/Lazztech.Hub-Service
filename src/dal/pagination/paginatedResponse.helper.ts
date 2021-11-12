@@ -26,6 +26,15 @@ export class PaginatedInAppNotificationsResponse extends PaginatedResponse(
 ) {}
 
 @InputType()
+export class SortOptions {
+  @Field()
+  public field: string;
+
+  @Field()
+  public ascending: boolean;
+}
+
+@InputType()
 export class PageableOptions {
   @Field(() => Int, { nullable: true })
   public limit?: number;
@@ -34,5 +43,18 @@ export class PageableOptions {
   public offset?: number;
 
   @Field({ nullable: true })
-  descending?: boolean = true;
+  public sortOptions?: SortOptions;
+}
+
+/**
+ * 
+ * @param sortOptions 
+ * @returns typeorm order param compatible result
+ */
+export function generateTypeOrmOrderOptions(sortOptions?: SortOptions): {
+  [field: string]: "ASC" | "DESC";
+} {
+  return sortOptions ? {
+    [`${sortOptions?.field}`]: (sortOptions?.ascending) ? "ASC" : "DESC"
+  } : undefined;
 }

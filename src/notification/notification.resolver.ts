@@ -42,14 +42,10 @@ export class NotificationResolver {
   @Query(() => [InAppNotification])
   public async getInAppNotifications(
     @UserId() userId,
-    @Args({ name: 'limit', type: () => Int, nullable: true }) limit: number,
-    @Args({ name: 'offset', type: () => Int, nullable: true }) offset: number,
   ): Promise<InAppNotification[]> {
     this.logger.log(this.getInAppNotifications.name);
     const [result] = await this.notificationService.getInAppNotifications(
       userId,
-      limit,
-      offset,
     );
     return result;
   }
@@ -62,8 +58,7 @@ export class NotificationResolver {
     this.logger.log(this.getInAppNotifications.name);
     const [items, total] = await this.notificationService.getInAppNotifications(
       userId,
-      pageableOptions?.limit,
-      pageableOptions?.offset,
+      pageableOptions
     );
     return {
       items,

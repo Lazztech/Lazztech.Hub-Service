@@ -8,6 +8,7 @@ import { PushNotificationDto } from './dto/pushNotification.dto';
 import { InAppNotificationDto } from './dto/inAppNotification.dto';
 import { UserDevice } from '../dal/entity/userDevice.entity';
 import { InAppNotification } from '../dal/entity/inAppNotification.entity';
+import { generateTypeOrmOrderOptions, PageableOptions, SortOptions } from '../dal/pagination/paginatedResponse.helper';
 
 @Service()
 export class NotificationService {
@@ -60,14 +61,14 @@ export class NotificationService {
    */
   public async getInAppNotifications(
     userId: any,
-    limit?: number,
-    offset?: number,
+    pageableOptions?: PageableOptions
   ): Promise<[InAppNotification[], number]> {
     this.logger.log(this.getInAppNotifications.name);
     return await this.inAppNotificationRepository.findAndCount({
       where: { userId },
-      take: limit,
-      skip: offset,
+      take: pageableOptions?.limit,
+      skip: pageableOptions?.offset,
+      order: generateTypeOrmOrderOptions(pageableOptions?.sortOptions)
     });
   }
 
