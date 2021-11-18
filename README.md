@@ -120,6 +120,7 @@ $ kubectl delete secret stage-lazztechhub
 
 ```bash
 # test, build & push container, deploy dev and deploy stage
+# note: the buildTagAndPushDocker.sh uses docker buildx for m1 support to cross compile to x86
 $ ./scripts/preCommit.sh && ./scripts/buildTagAndPushDocker.sh && ./scripts/deployToDev.sh && ./scripts/deployToStage.sh
 ```
 ## Configuration
