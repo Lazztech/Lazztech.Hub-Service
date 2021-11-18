@@ -7,7 +7,45 @@ For the companion mobile app client see the repo linked below.
 
 ## Installation Dependencies
 
+Development tools:
+- brew
+  - https://brew.sh/
+- docker
+- node version manager
+  - https://github.com/nvm-sh/nvm
+
 ```bash
+# use nvm to install node from the .nvmrc file
+$ nvm install
+# set the in use node version from the .nvmrc file's verision
+$ nvm use
+# install node dependencies
+$ npm install
+```
+
+```bash
+# Apple M1 support & troubleshooting resources: 
+# https://github.com/nvm-sh/nvm#macos-troubleshooting
+# https://www.reddit.com/r/node/comments/lp9xlk/mac_mini_m1_issues_with_node_js_15/
+
+# open x86 shell with rosetta
+$ $ arch -x86_64 zsh
+# install node version manager & use the version from the .nvmrc file
+$ nvm install
+# Now check that the architecture is correct:
+$ node -p process.arch
+x64
+# It is now safe to return to the arm64 zsh process:
+$ exit
+# We're back to a native shell:
+$ arch
+arm64
+# set the in use node version from the .nvmrc file's verision
+$ nvm use
+# verify that the despite running in an arm shell node architecture returns x86
+$ node -p process.arch
+x64
+# install node dependencies
 $ npm install
 ```
 
