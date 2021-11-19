@@ -1,9 +1,20 @@
 import { Logger, UseGuards } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver, ID, Int } from '@nestjs/graphql';
+import {
+  Args,
+  Mutation,
+  Query,
+  Resolver,
+  ID,
+  Directive,
+} from '@nestjs/graphql';
 import { UserId } from '../decorators/user.decorator';
 import { GqlJwtAuthGuard } from '../auth/guards/gql-jwt-auth.guard';
 import { InAppNotification } from '../dal/entity/inAppNotification.entity';
 import { NotificationService } from './notification.service';
+import {
+  PageableOptions,
+  PaginatedInAppNotificationsResponse,
+} from '../dal/pagination/paginatedResponse.helper';
 
 @UseGuards(GqlJwtAuthGuard)
 @Resolver()
@@ -24,18 +35,35 @@ export class NotificationResolver {
     return true;
   }
 
+  @Directive(
+    '@deprecated(reason: "This query has been replaced with a new paginated version")',
+  )
   @Query(() => [InAppNotification])
   public async getInAppNotifications(
     @UserId() userId,
-    @Args({ name: 'limit', type: () => Int, nullable: true }) limit: number,
-    @Args({ name: 'offset', type: () => Int, nullable: true }) offset: number,
   ): Promise<InAppNotification[]> {
     this.logger.log(this.getInAppNotifications.name);
-    return await this.notificationService.getInAppNotifications(
+    const [result] = await this.notificationService.getInAppNotifications(
       userId,
-      limit,
-      offset,
     );
+    return result;
+  }
+
+  @Query(() => PaginatedInAppNotificationsResponse)
+  public async paginatedInAppNotifications(
+    @UserId() userId,
+    @Args('pageableOptions', { nullable: true })
+    pageableOptions?: PageableOptions,
+  ): Promise<PaginatedInAppNotificationsResponse> {
+    this.logger.log(this.getInAppNotifications.name);
+    const [items, total] = await this.notificationService.getInAppNotifications(
+      userId,
+      pageableOptions,
+    );
+    return {
+      items,
+      total,
+    };
   }
 
   @Mutation(() => Boolean)
