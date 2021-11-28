@@ -2,7 +2,7 @@ pipeline {
   environment {
     REGISTRY = "registry.internal.lazz.tech/lazztechhub-service"
     dockerImage = ''
-    NODE_VERSION: '12'
+    NODE_VERSION = '12'
   }
   agent {
     docker { image 'node:12' }
