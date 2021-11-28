@@ -1,44 +1,76 @@
 pipeline {
   environment {
-    registry = "gianlazzarini/ts_stack_server"
+    registry = "registry.internal.lazz.tech/lazztechhub-service"
     registryCredential = 'dockerhub'
     dockerImage = ''
-    ACCESS_TOKEN_SECRET = credentials('ACCESS_TOKEN_SECRET')
-    EMAIL_FROM_ADDRESS = credentials('EMAIL_FROM_ADDRESS')
-    EMAIL_PASSWORD = credentials('EMAIL_PASSWORD')
-    FIREBASE_SERVER_KEY = credentials('FIREBASE_SERVER_KEY')
+
+    NODE_VERSION: '12'
+    CI = true
+    APP_NAME = 'Test Lazztech Hub'
+    ACCESS_TOKEN_SECRET = 'SecretKey'
+    FIREBASE_SERVER_KEY = 'test'
+    PUSH_NOTIFICATION_ENDPOINT = 'test'
+    EMAIL_FROM_ADDRESS = 'test'
+    EMAIL_PASSWORD = 'test'
+    DATABASE_TYPE = 'sqlite'
+    FILE_STORAGE_TYPE = 'local'
   }
   agent {
-    dockerfile true
+    docker { image 'node:12' }
   }
   stages {
+    stage('Initialize') {
+      steps {
+        //enable remote triggers
+        script {
+            properties([pipelineTriggers([pollSCM('')])])
+        }
+        //define scm connection for polling
+        git branch: master, credentialsId: 'my-credentials', url: 'ssh://git@github.com:Lazztech/Lazztech.Hub-Service.git'
+      }
+    }
     stage('Cloning Git') {
       steps {
-        git 'https://github.com/gianlazz/Gian-TS-Stack.git'
+        git 'ssh://git@github.com:Lazztech/Lazztech.Hub-Service.git'
       }
     }
-    stage('Build') {
+    stage('npm install & build') {
       steps {
-        sh 'cd server/ && npm install'
+        sh 'npm install'
+        sh 'npm run build'
       }
     }
-    stage('Test') {
+    stage('npm format:check') {
       steps {
-        sh 'service postgresql start'
-        sh 'cd server/ && npm test'
+        sh 'npm run format:check'
+      }
+    }
+    stage('npm lint') {
+      steps {
+        sh 'npm run format:check'
+      }
+    }
+    stage('npm test:cov') {
+      steps {
+        sh 'npm run test:cov'
+      }
+    }
+    stage('npm test:e2e local') {
+      steps {
+        sh 'npm run test:cov'
       }
     }
     stage('Building image') {
       steps{
         script {
-          dockerImage = docker.build(registry + ":$BUILD_NUMBER", "./server/")
+          dockerImage = docker.build(registry + ":$BUILD_NUMBER", "./")
         }
       }
     }
     stage('Deploy Image') {
       steps{
         script {
-          docker.withRegistry( '', registryCredential ) {
+          docker.withRegistry(registry) {
             dockerImage.push("latest")
           }
         }
@@ -47,30 +79,6 @@ pipeline {
     stage('Remove Unused docker image') {
       steps{
         sh "docker rmi $registry:$BUILD_NUMBER"
-      }
-    }
-    stage('Deploy for production') {
-      when {
-        branch 'master'
-      }
-      steps{
-        sshagent(credentials : ['fb01b444-0666-4510-a47a-99fa4df46948']){
-          sh "# This line below is required to get ssh to work."
-          sh "ssh -o StrictHostKeyChecking=no -l root 104.248.70.206 uname -a"
-          sh """ssh root@104.248.70.206 << EOF
-            docker ps
-            rm -r -f Gian-TS-Stack/
-            git clone https://github.com/gianlazz/Gian-TS-Stack.git
-            ls
-            pwd
-            cd Gian-TS-Stack
-            pwd
-            docker-compose down
-            ACCESS_TOKEN_SECRET=$ACCESS_TOKEN_SECRET EMAIL_FROM_ADDRESS=$EMAIL_FROM_ADDRESS EMAIL_PASSWORD=$EMAIL_PASSWORD FIREBASE_SERVER_KEY=$FIREBASE_SERVER_KEY docker-compose pull
-            ACCESS_TOKEN_SECRET=$ACCESS_TOKEN_SECRET EMAIL_FROM_ADDRESS=$EMAIL_FROM_ADDRESS EMAIL_PASSWORD=$EMAIL_PASSWORD FIREBASE_SERVER_KEY=$FIREBASE_SERVER_KEY docker-compose up -d
-EOF
-          """
-        }
       }
     }
   }
