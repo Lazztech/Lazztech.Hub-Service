@@ -1,19 +1,8 @@
 pipeline {
   environment {
-    registry = "registry.internal.lazz.tech/lazztechhub-service"
-    registryCredential = 'dockerhub'
+    REGISTRY = "registry.internal.lazz.tech/lazztechhub-service"
     dockerImage = ''
-
     NODE_VERSION: '12'
-    CI = true
-    APP_NAME = 'Test Lazztech Hub'
-    ACCESS_TOKEN_SECRET = 'SecretKey'
-    FIREBASE_SERVER_KEY = 'test'
-    PUSH_NOTIFICATION_ENDPOINT = 'test'
-    EMAIL_FROM_ADDRESS = 'test'
-    EMAIL_PASSWORD = 'test'
-    DATABASE_TYPE = 'sqlite'
-    FILE_STORAGE_TYPE = 'local'
   }
   agent {
     docker { image 'node:12' }
@@ -59,18 +48,29 @@ pipeline {
       steps {
         sh 'npm run test:cov'
       }
+      environment {
+        CI = true
+        APP_NAME = 'Test Lazztech Hub'
+        ACCESS_TOKEN_SECRET = 'SecretKey'
+        FIREBASE_SERVER_KEY = 'test'
+        PUSH_NOTIFICATION_ENDPOINT = 'test'
+        EMAIL_FROM_ADDRESS = 'test'
+        EMAIL_PASSWORD = 'test'
+        DATABASE_TYPE = 'sqlite'
+        FILE_STORAGE_TYPE = 'local'
+      }
     }
     stage('Building image') {
       steps{
         script {
-          dockerImage = docker.build(registry + ":$BUILD_NUMBER", "./")
+          dockerImage = docker.build(REGISTRY + ":$BUILD_NUMBER", "./")
         }
       }
     }
     stage('Deploy Image') {
       steps{
         script {
-          docker.withRegistry(registry) {
+          docker.withRegistry(REGISTRY) {
             dockerImage.push("latest")
           }
         }
@@ -78,7 +78,7 @@ pipeline {
     }
     stage('Remove Unused docker image') {
       steps{
-        sh "docker rmi $registry:$BUILD_NUMBER"
+        sh "docker rmi $REGISTRY:$BUILD_NUMBER"
       }
     }
   }
