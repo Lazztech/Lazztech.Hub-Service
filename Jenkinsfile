@@ -8,16 +8,16 @@ pipeline {
     docker { image 'node:12' }
   }
   stages {
-    stage('Initialize') {
-      steps {
-        //enable remote triggers
-        script {
-            properties([pipelineTriggers([pollSCM('')])])
-        }
-        //define scm connection for polling
-        git branch: master, credentialsId: 'my-credentials', url: 'ssh://git@github.com:Lazztech/Lazztech.Hub-Service.git'
-      }
-    }
+    // stage('Initialize') {
+    //   steps {
+    //     //enable remote triggers
+    //     script {
+    //         properties([pipelineTriggers([pollSCM('')])])
+    //     }
+    //     //define scm connection for polling
+    //     git branch: master, credentialsId: 'my-credentials', url: 'ssh://git@github.com:Lazztech/Lazztech.Hub-Service.git'
+    //   }
+    // }
     stage('Cloning Git') {
       steps {
         git 'ssh://git@github.com:Lazztech/Lazztech.Hub-Service.git'
