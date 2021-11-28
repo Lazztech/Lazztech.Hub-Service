@@ -18,11 +18,11 @@ pipeline {
     //     git branch: master, credentialsId: 'my-credentials', url: 'ssh://git@github.com:Lazztech/Lazztech.Hub-Service.git'
     //   }
     // }
-    stage('Cloning Git') {
-      steps {
-        git 'ssh://git@github.com:Lazztech/Lazztech.Hub-Service.git'
-      }
-    }
+    // stage('Cloning Git') {
+    //   steps {
+    //     git 'ssh://git@github.com:Lazztech/Lazztech.Hub-Service.git'
+    //   }
+    // }
     stage('npm install & build') {
       steps {
         sh 'npm install'
