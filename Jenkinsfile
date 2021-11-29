@@ -8,6 +8,7 @@ pipeline {
     docker { 
       image 'node:12'
       args "-u root"
+      alwaysPull true
     }
   }
   stages {
