@@ -50,6 +50,7 @@ pipeline {
       }
     }
     stage('Building image') {
+      agent any
       steps{
         script {
           dockerImage = docker.build(REGISTRY + ":$BUILD_NUMBER", "./")
@@ -57,6 +58,7 @@ pipeline {
       }
     }
     stage('Deploy Image') {
+      agent any
       steps{
         script {
           docker.withRegistry(REGISTRY) {
@@ -66,6 +68,7 @@ pipeline {
       }
     }
     stage('Remove Unused docker image') {
+      agent any
       steps{
         sh "docker rmi $REGISTRY:$BUILD_NUMBER"
       }
