@@ -35,7 +35,7 @@ pipeline {
     }
     stage('npm test:e2e local') {
       steps {
-        sh 'npm run test:cov'
+        sh 'npm run test:e2e'
       }
       environment {
         CI = true
