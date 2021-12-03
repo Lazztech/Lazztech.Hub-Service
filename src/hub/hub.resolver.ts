@@ -112,7 +112,7 @@ export class HubResolver {
     );
   }
 
-  @Mutation(() => Invite ,{nullable: true})
+  @Mutation(() => Invite )
   public async inviteUserToHub(
     @UserId() userId,
     @Args({ name: 'hubId', type: () => ID }) hubId: number,
