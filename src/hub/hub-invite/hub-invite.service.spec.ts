@@ -95,6 +95,7 @@ describe('HubInviteService', () => {
       .spyOn(joinUserHubRepo, 'findOne')
       .mockResolvedValueOnce(mockedFindOneJoinUserHub);
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(invitee);
+    jest.spyOn(inviteRepo, 'findOne').mockResolvedValueOnce(undefined);
     jest.spyOn(inviteRepo, 'create').mockReturnValueOnce(invite);
 
     const addInAppNotificationForUserCall = jest
