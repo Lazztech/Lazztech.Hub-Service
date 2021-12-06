@@ -66,10 +66,7 @@ export class HubInviteService {
         email: inviteesEmail,
       },
     });
-
-    /**
-     * check if there is a pending invite.
-     */
+    
     if(invitee){
       const alreadyInvited = await this.inviteRepository.findOne({where: {inviteesId: invitee.id, invitersId: userId, hubId }})
       if (alreadyInvited) {
