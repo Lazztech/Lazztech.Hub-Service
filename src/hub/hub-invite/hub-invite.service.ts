@@ -59,12 +59,19 @@ export class HubInviteService {
       isOwner: true,
     });
     this.validateRelationship(userHubRelationship, hubId, userId);
-
+    
     const invitee = await this.userRepository.findOne({
       where: {
         email: inviteesEmail,
       },
     });
+
+    if(invitee){
+      const alreadyInvited = await this.inviteRepository.findOne({where: {inviteesId: invitee.id, invitersId: userId, hubId }})
+      if (alreadyInvited) {
+        throw new Error(`${invitee.firstName} has already been invited to ${(await alreadyInvited.hub).name}`);
+      }
+    }
     this.validateInvitee(invitee, inviteesEmail, userId);
 
     let invite = this.inviteRepository.create({
@@ -147,8 +154,9 @@ export class HubInviteService {
 
   private validateInvitee(invitee: User, inviteesEmail: string, userId: any) {
     this.logger.log(this.validateInvitee.name);
+
     if (!invitee) {
-      throw new Error(`Did not find user to invite by email address`);
+      throw new Error(`Did not find user to invite by email address ${inviteesEmail}. Check Spelling`);
     }
     if (invitee.id == userId) {
       throw new Error(`Cannot invite self to hub.`);
