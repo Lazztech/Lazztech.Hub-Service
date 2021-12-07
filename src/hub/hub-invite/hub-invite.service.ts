@@ -59,14 +59,13 @@ export class HubInviteService {
       isOwner: true,
     });
     this.validateRelationship(userHubRelationship, hubId, userId);
-
     
     const invitee = await this.userRepository.findOne({
       where: {
         email: inviteesEmail,
       },
     });
-    
+
     if(invitee){
       const alreadyInvited = await this.inviteRepository.findOne({where: {inviteesId: invitee.id, invitersId: userId, hubId }})
       if (alreadyInvited) {
