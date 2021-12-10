@@ -108,10 +108,13 @@ import * as Joi from 'joi';
         const commonSettings = {
           logging: true,
           // migrationsRun: true,
-          synchronize: true,
+          synchronize: false,
           entities: [__dirname + '/dal/entity/**/*.*.*'],
           migrations: [__dirname + '/dal/migrations/**/*.*'],
           subscribers: [__dirname + '/dal/migrations/**/*.*'],
+          cli: {
+            migrationsDir: 'src/dal/migrations',
+          }
         };
         const sqliteConfig = {
           ...commonSettings,
