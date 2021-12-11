@@ -23,8 +23,10 @@
     "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js --config ./ormconfig.ts",
     "migration:generate:local": "npm run build && typeorm migration:generate -n",
     "migration:generate:prod": "npm run build && typeorm -c prod migration:generate -n",
-    "migration:run:local": "npm run typeorm migration:run",  
-    "migration:run:prod": "typeorm -c prod migration:run"
+    "migration:apply:local": "npm run typeorm migration:run",  
+    "migration:apply:prod": "typeorm -c prod migration:run",
+    "migration:generate:all": "npm run build && typeorm -c prod migration:generate -n $name && typeorm migration:generate -n $name",
+    "migration:apply:all": "npm run typeorm migration:run && typeorm -c prod migration:run"  
   },
   "dependencies": {
     "@nestjs/common": "^8.0.5",
