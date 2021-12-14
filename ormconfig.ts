@@ -14,16 +14,16 @@ const config = [{
   username: 'postgres',
   password: 'Password123',
   ssl: false,
-  migrations: ['dist/src/dal/migrations/postgres/*.js'],
+  migrations: ['src/dal/migrations/postgres/*.ts'],
   cli: {
-    migrationsDir: 'src/dal/migrations/postgres/',
+    migrationsDir: 'src/dal/migrations/postgres',
   },
   ...commonSettings
 },{
   name: 'default',
   type: 'sqlite',
   database: 'data/sqlite3.db',
-  migrations: ['dist/src/dal/migrations/sqlite/*.js'],
+  migrations: ['src/dal/migrations/sqlite/*.ts'],
   cli: {
     migrationsDir: 'src/dal/migrations/sqlite',
   },
