@@ -12,10 +12,10 @@ import { Invite } from './invite.entity';
 import { JoinUserHub } from './joinUserHub.entity';
 import { PasswordReset } from './passwordReset.entity';
 import { UserDevice } from './userDevice.entity';
-
+import { ShareableId } from './shareableId'
 @ObjectType()
 @Entity()
-export class User {
+export class User extends ShareableId{
   @Field(() => ID)
   @PrimaryGeneratedColumn()
   public id: number;
