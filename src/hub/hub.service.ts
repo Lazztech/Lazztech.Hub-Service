@@ -88,10 +88,10 @@ export class HubService {
     this.logger.log(this.createHub.name);
     const imageUrl = await this.fileService.storeImageFromBase64(hub.image);
     hub.image = imageUrl;
-    await this.hubRepository.save(hub);
+    const persistedHub = await this.hubRepository.save(this.hubRepository.create(hub));
     const joinUserHub = this.joinUserHubRepository.create({
       userId,
-      hubId: hub.id,
+      hubId: persistedHub.id,
       isOwner: true,
     });
     return await this.joinUserHubRepository.save(joinUserHub);

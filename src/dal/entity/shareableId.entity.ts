@@ -1,10 +1,16 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Column } from 'typeorm';
+import { BeforeInsert, Column, Entity } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 
 @ObjectType({ isAbstract: true })
-export class ShareableId {
+export abstract class ShareableId {
   @Column()
-  @Field()
-  shareableId?:string = uuid()
+  @Field({nullable: true})
+  shareableId!:string;
+
+  @BeforeInsert()
+  private addId(){
+    this.shareableId = uuid();
+  }
+  
 }
