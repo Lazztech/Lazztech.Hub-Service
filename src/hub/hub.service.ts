@@ -88,7 +88,10 @@ export class HubService {
     this.logger.log(this.createHub.name);
     const imageUrl = await this.fileService.storeImageFromBase64(hub.image);
     hub.image = imageUrl;
+    // repository.create => save pattern used to so that the @BeforeInsert decorated method
+    // will fire generating a uuid for the shareableId
     const persistedHub = await this.hubRepository.save(this.hubRepository.create(hub));
+    
     const joinUserHub = this.joinUserHubRepository.create({
       userId,
       hubId: persistedHub.id,
