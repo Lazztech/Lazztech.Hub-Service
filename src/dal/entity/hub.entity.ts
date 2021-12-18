@@ -3,7 +3,7 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { JoinUserHub } from './joinUserHub.entity';
 import { MicroChat } from './microChat.entity';
 import { Invite } from './invite.entity';
-import { ShareableId } from './shareableId'
+import { ShareableId } from './shareableId.entity'
 
 @ObjectType()
 @Entity()

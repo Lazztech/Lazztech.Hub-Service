@@ -26,6 +26,7 @@
     "migration:apply:local": "npm run typeorm migration:run",
     "migration:apply:prod": "npm run typeorm -- prod migration:run -c pord",
     "migration:generate:all": "npm run build && npm run typeorm -- migration:generate -c prod -n $name && npm run typeorm -- migration:generate -n $name",
+    "migration:create:all": "npm run typeorm -- migration:create -c prod -n $name && npm run typeorm -- migration:create -n $name",
     "migration:apply:all": "npm run typeorm migration:run && npm run typeorm -- migration:run -c prod"
   },
   "dependencies": {

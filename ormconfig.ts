@@ -1,7 +1,7 @@
 const commonSettings = {
   migrationsRun: false,
   synchronize: false,
-  entities: ['dist/src/dal/entity/**/*.*.*'],
+  entities: ['src/dal/entity/**/*.*.*'],
   subscribers: [__dirname + '/dal/migrations/**/*.*'],
 };
 
