@@ -41,6 +41,7 @@ export class JoinUserHub {
   @Column({ default: false })
   public isPresent: boolean;
   
+  @Field({ description: 'unix timestamp for the last time the presence state was updated'})
   @Column({ nullable: true })
   public lastUpdated: number;
 }
