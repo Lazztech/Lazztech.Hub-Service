@@ -2,7 +2,6 @@ const commonSettings = {
   migrationsRun: false,
   synchronize: false,
   entities: ['src/dal/entity/**/*.*.*'],
-  subscribers: [__dirname + '/dal/migrations/**/*.*'],
 };
 
 const config = [{

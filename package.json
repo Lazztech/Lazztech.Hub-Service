@@ -24,10 +24,13 @@
     "migration:generate:local": "npm run build && npm run typeorm -- migration:generate -n",
     "migration:generate:prod": "npm run build && npm run typeorm -- prod migration:generate -c prod -n",
     "migration:apply:local": "npm run typeorm migration:run",
-    "migration:apply:prod": "npm run typeorm -- prod migration:run -c pord",
+    "migration:apply:prod": "npm run typeorm -- migration:run -c prod",
     "migration:generate:all": "npm run build && npm run typeorm -- migration:generate -c prod -n $name && npm run typeorm -- migration:generate -n $name",
     "migration:create:all": "npm run typeorm -- migration:create -c prod -n $name && npm run typeorm -- migration:create -n $name",
-    "migration:apply:all": "npm run typeorm migration:run && npm run typeorm -- migration:run -c prod"
+    "migration:apply:all": "npm run typeorm migration:run && npm run typeorm -- migration:run -c prod",
+    "migration:log:all": "npm run typeorm schema:log && npm run typeorm -- schema:log -c prod",
+    "migration:show:all": "npm run typeorm migration:show && npm run typeorm -- migration:show -c prod"
+    
   },
   "dependencies": {
     "@nestjs/common": "^8.0.5",

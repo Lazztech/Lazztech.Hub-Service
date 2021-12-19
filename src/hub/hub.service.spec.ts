@@ -243,6 +243,7 @@ describe('HubService', () => {
       image: 'image.png',
       latitude: 1,
       longitude: -1,
+      shareableId: "b33d028f-c423-4137-a9e4-88be6976a7d3"
     } as Hub;
     const joinUserHub = {
       userId,
@@ -259,7 +260,7 @@ describe('HubService', () => {
     jest
       .spyOn(fileService, 'storeImageFromBase64')
       .mockResolvedValueOnce('https://x.com/' + hub.image);
-
+    jest.spyOn(hubRepo, 'create').mockReturnValueOnce(hub);
     jest.spyOn(hubRepo, 'save').mockResolvedValueOnce(hub);
 
     jest.spyOn(joinUserHubRepo, 'create').mockReturnValueOnce(joinUserHub);
