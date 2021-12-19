@@ -15,7 +15,7 @@ export class HubTasksService {
         private hubGeofenceService: HubGeofenceService,
     ) {}
 
-    @Cron(CronExpression.EVERY_10_SECONDS)
+    @Cron(CronExpression.EVERY_2_HOURS)
     async checkoutStalePresentUsers() {
         this.logger.log(this.checkoutStalePresentUsers.name);
         const userHubs = await this.joinUserHubRepository.find({ isPresent: true });
