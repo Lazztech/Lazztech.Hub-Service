@@ -48,6 +48,7 @@ export class HubGeofenceService {
       },
       {
         isPresent: true,
+        lastUpdated: Date.now()
       },
     );
 
@@ -87,6 +88,7 @@ export class HubGeofenceService {
       },
       {
         isPresent: false,
+        lastUpdated: Date.now()
       },
     );
 

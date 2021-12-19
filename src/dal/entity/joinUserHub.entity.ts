@@ -42,5 +42,5 @@ export class JoinUserHub {
   public isPresent: boolean;
   
   @Column({ nullable: true })
-  public lastUpdated: string;
+  public lastUpdated: number;
 }
