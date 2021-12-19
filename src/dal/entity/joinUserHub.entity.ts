@@ -40,4 +40,7 @@ export class JoinUserHub {
    */
   @Column({ default: false })
   public isPresent: boolean;
+  
+  @Column({ nullable: true })
+  public lastUpdated: string;
 }
