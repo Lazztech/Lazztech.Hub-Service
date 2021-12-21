@@ -21,7 +21,7 @@ const config = [{
 },{
   name: 'default',
   type: 'sqlite',
-  database: 'data/sqlite3.db',
+  database: __dirname + '/data/sqlite3.db',
   migrations: ['src/dal/migrations/sqlite/*.ts'],
   cli: {
     migrationsDir: 'src/dal/migrations/sqlite',
