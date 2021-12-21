@@ -23,6 +23,9 @@ export class AddShareableID1639771889979 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.commitTransaction();
+        await queryRunner.query('PRAGMA foreign_keys=off');
+        await queryRunner.startTransaction();
         await queryRunner.query(`ALTER TABLE "hub" RENAME TO "temporary_hub"`);
         await queryRunner.query(`CREATE TABLE "hub" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar NOT NULL, "description" varchar, "active" boolean NOT NULL DEFAULT (0), "image" varchar, "latitude" float, "longitude" float, "shareableId" varchar NOT NULL)`);
         await queryRunner.query(`INSERT INTO "hub"("id", "name", "description", "active", "image", "latitude", "longitude", "shareableId") SELECT "id", "name", "description", "active", "image", "latitude", "longitude", "shareableId" FROM "temporary_hub"`);

@@ -42,6 +42,9 @@ export class initialMigration1639451182481 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.commitTransaction();
+        await queryRunner.query('PRAGMA foreign_keys=off');
+        await queryRunner.startTransaction();
         await queryRunner.query(`ALTER TABLE "micro_chat" RENAME TO "temporary_micro_chat"`);
         await queryRunner.query(`CREATE TABLE "micro_chat" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "hubId" integer NOT NULL, "text" varchar NOT NULL)`);
         await queryRunner.query(`INSERT INTO "micro_chat"("id", "hubId", "text") SELECT "id", "hubId", "text" FROM "temporary_micro_chat"`);
