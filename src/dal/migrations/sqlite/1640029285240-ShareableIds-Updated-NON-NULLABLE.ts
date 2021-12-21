@@ -42,6 +42,8 @@ export class ShareableIdsUpdatedNONNULLABLE1640029285240 implements MigrationInt
         await queryRunner.query(`CREATE TABLE "user" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "firstName" varchar NOT NULL, "lastName" varchar NOT NULL, "birthdate" varchar, "description" varchar, "image" varchar, "email" varchar NOT NULL, "password" varchar NOT NULL, "passwordResetId" integer, "shareableId" varchar, CONSTRAINT "REL_5d250ff0a3f3eba15ff2db819d" UNIQUE ("passwordResetId"), CONSTRAINT "FK_5d250ff0a3f3eba15ff2db819dd" FOREIGN KEY ("passwordResetId") REFERENCES "password_reset" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION)`);
         await queryRunner.query(`INSERT INTO "user"("id", "firstName", "lastName", "birthdate", "description", "image", "email", "password", "passwordResetId", "shareableId") SELECT "id", "firstName", "lastName", "birthdate", "description", "image", "email", "password", "passwordResetId", "shareableId" FROM "temporary_user"`);
         await queryRunner.query(`DROP TABLE "temporary_user"`);
+        await queryRunner.query('PRAGMA main.foreign_key_check')
+        await queryRunner.query('PRAGMA foreign_keys=on');
     }
 
 }

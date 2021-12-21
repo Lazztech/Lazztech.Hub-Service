@@ -80,6 +80,8 @@ export class initialMigration1639451182481 implements MigrationInterface {
         await queryRunner.query(`DROP INDEX "IDX_c8772f9bcb1e9f4faaa9c8873d"`);
         await queryRunner.query(`DROP TABLE "invite"`);
         await queryRunner.query(`DROP TABLE "in_app_notification"`);
+        await queryRunner.query('PRAGMA main.foreign_key_check')
+        await queryRunner.query('PRAGMA foreign_keys=on');
     }
 
 }
