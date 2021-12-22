@@ -30,7 +30,6 @@
     "migration:apply:all": "npm run typeorm -- migration:run -t each && npm run typeorm -- migration:run -t each -c prod",
     "migration:log:all": "npm run typeorm schema:log && npm run typeorm -- schema:log -c prod",
     "migration:show:all": "npm run typeorm migration:show && npm run typeorm -- migration:show -c prod"
-    
   },
   "dependencies": {
     "@nestjs/common": "^8.0.5",

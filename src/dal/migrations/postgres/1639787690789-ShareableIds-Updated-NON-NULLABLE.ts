@@ -1,7 +1,4 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
-import { v4 as uuid } from 'uuid';
-import { Hub } from "../../entity/hub.entity";
-import { User } from "../../entity/user.entity";
 
 export class ShareableIdsUpdatedNONNULLABLE1639787690789 implements MigrationInterface {
     name = 'ShareableIdsUpdatedNONNULLABLE1639787690789'
