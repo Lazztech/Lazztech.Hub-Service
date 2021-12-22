@@ -109,15 +109,7 @@ import * as Joi from 'joi';
           logging: true,
           migrationsRun: true,
           synchronize: false,
-          /**
-           * migratitons directories need to be changed to each db
-           * cli portion is not needed?
-           */
           entities: [__dirname + '/dal/entity/**/*.*.*'],
-          
-          cli: {
-            migrationsDir: 'src/dal/migrations',
-          }
         };
         const sqliteConfig = {
           ...commonSettings,
