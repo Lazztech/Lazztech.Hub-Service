@@ -113,7 +113,7 @@ import * as Joi from 'joi';
         };
         const sqliteConfig = {
           ...commonSettings,
-          migrations: [__dirname + '/dal/migrations/postgres/*.*'],
+          migrations: [__dirname + '/dal/migrations/sqlite/*.*'],
           type: 'sqlite',
           database: configService.get(
             'DATABASE_SCHEMA',
