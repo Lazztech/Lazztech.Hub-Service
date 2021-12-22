@@ -107,7 +107,7 @@ import * as Joi from 'joi';
       ): Promise<TypeOrmModuleOptions> => {
         const commonSettings = {
           logging: true,
-          // migrationsRun: true,
+          migrationsRun: true,
           synchronize: false,
           /**
            * migratitons directories need to be changed to each db
