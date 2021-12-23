@@ -101,7 +101,7 @@ jobs:
       # 'kill %1' kills background job: https://unix.stackexchange.com/a/104822
       run: |
         nohup npm run start:prod >> app.log 2>&1 &
-        timeout 60 bash -c 'until echo > /dev/tcp/localhost/8080; do sleep 1; done'
+        timeout 30 bash -c 'until echo > /dev/tcp/localhost/8080; do sleep 0.5; done'
         kill %1
       env:
         CI: true
