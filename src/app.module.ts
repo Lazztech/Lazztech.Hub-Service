@@ -108,6 +108,7 @@ import * as Joi from 'joi';
         const commonSettings = {
           logging: true,
           migrationsRun: true,
+          migrationsTransactionMode: 'each',
           synchronize: false,
           entities: [__dirname + '/dal/entity/**/*.*.*'],
         };
