@@ -107,14 +107,14 @@ import * as Joi from 'joi';
       ): Promise<TypeOrmModuleOptions> => {
         const commonSettings = {
           logging: true,
-          // migrationsRun: true,
-          synchronize: true,
+          migrationsRun: true,
+          migrationsTransactionMode: 'each',
+          synchronize: false,
           entities: [__dirname + '/dal/entity/**/*.*.*'],
-          migrations: [__dirname + '/dal/migrations/**/*.*'],
-          subscribers: [__dirname + '/dal/migrations/**/*.*'],
         };
         const sqliteConfig = {
           ...commonSettings,
+          migrations: [__dirname + '/dal/migrations/sqlite/*.*'],
           type: 'sqlite',
           database: configService.get(
             'DATABASE_SCHEMA',
@@ -139,6 +139,7 @@ import * as Joi from 'joi';
             );
             return {
               ...commonSettings,
+              migrations: [__dirname + '/dal/migrations/postgres/*.*'],
               type: 'postgres' as const,
               database: configService.get('DATABASE_SCHEMA', 'postgres'),
               host: configService.get('DATABASE_HOST', 'localhost'),

@@ -3,10 +3,11 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { JoinUserHub } from './joinUserHub.entity';
 import { MicroChat } from './microChat.entity';
 import { Invite } from './invite.entity';
+import { ShareableId } from './shareableId.entity'
 
 @ObjectType()
 @Entity()
-export class Hub {
+export class Hub extends ShareableId {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
   public id: number;

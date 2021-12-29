@@ -10,6 +10,7 @@ For the companion mobile app client see the repo linked below.
 Development tools:
 - brew
   - https://brew.sh/
+  - postgres
 - docker
 - node version manager
   - https://github.com/nvm-sh/nvm
@@ -115,6 +116,89 @@ $ kubectl delete -f kubernetes/stage.yaml
 # delete stage secrets
 $ kubectl delete secret stage-lazztechhub
 ```
+
+## Migrations
+Custom scripts have been added to streamline and simplify handling migrations with two database contexts.
+```bash
+# local = sqlite | prod = postgres
+# scripts ending with "all" perform the action on both databases
+# name=<migration_name_here> name will be applied to a migration specific to each database
+
+# create a migration generated from the entity schema
+$ name=<migration_name_here> npm run migration:generate:all
+
+# create a blank migration
+$ name=<migration_name_here> npm run migration:create:all
+
+# applies the migrations to both databases
+$ npm run migration:apply:all
+
+# applies migration to an individual database context
+$ npm run migration:apply:<local/prod>
+
+# lists pending queries to executed based on the entity schema
+$ npm run migration:log:all
+
+# displays what migrations have been applied to the databases
+$ npm run migration:show:all
+
+```
+
+## Postgres
+A local instance of postgres running in a docker container for testing against a prod DB replica.
+Pgadmin is not required, but recommend for ease of use.
+
+```bash
+# docker-compose.yml
+version: '3.8'
+services:
+  db:
+    container_name: lazztech_postgres
+    image: postgres
+    restart: always
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=Password123
+      - POSTGRES_DB=postgres
+    volumes:
+      - /<Your_Volume_Directory>
+  pgadmin:
+    container_name: pgadmin4
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=root
+    ports:
+      - '5050:80'
+```
+In your .env or .env.local file configure these enviroment varaibles for postgres
+
+```bash
+# Postgres
+DATABASE_TYPE=postgres
+DATABASE_SCHEMA=postgres
+DATABASE_HOST=localhost
+DATABASE_PORT=5432
+DATABASE_USER=postgres
+DATABASE_PASS=Password123
+DATABASE_SSL=false
+```
+
+Importing a database dump
+```bash
+# copy dump file to the docker container
+docker cp /path/to/db.dump CONTAINER_ID:/db.dump
+
+# shell into container
+docker exec -it CONTAINER_ID bash
+
+# restore it from within
+pg_restore -U postgres -d DB_NAME --no-owner -1 /db.dump
+```
+
 
 ## Scripts
 
