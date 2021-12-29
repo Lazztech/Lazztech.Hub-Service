@@ -5,7 +5,7 @@ For the companion mobile app client see the repo linked below.
 
 [Lazztech.Hub-App](https://github.com/Lazztech/Lazztech.Hub-App)
 
-## Installation Dependencies
+## Development Dependencies
 
 Development tools:
 - brew
@@ -216,17 +216,17 @@ $ ./scripts/preCommit.sh && ./scripts/buildTagAndPushDocker.sh && ./scripts/depl
 | PUSH_NOTIFICATION_ENDPOINT | Used for triggering push notifications via http | ❌ |
 | EMAIL_FROM_ADDRESS | Used for emailing users | ❌ |
 | EMAIL_PASSWORD | Used for emailing users | ❌ |
-| DATABASE_HOST | Used for connecting to database | ❌ |
-| DATABASE_PORT | Used for connecting to database | ❌ |
-| DATABASE_USER | Used for connecting to database | ❌ |
-| DATABASE_PASS | Used for connecting to database | ❌ |
-| DATABASE_SCHEMA | Used for connecting to database | ❌ |
-| DATABASE_SSL | To configure whether to use SSL for database | ❌ |
-| FILE_STORAGE_TYPE | For selecting azure blob or S3 compatible storage configuration | Optional depending on file storage type ✅ | Select 'azure' or 'object' |
+| DATABASE_TYPE | Used for selecting sqlite or postgres | Defaults to sqlite ✅ | 'sqlite' or 'postgres' |
+| DATABASE_HOST | Used for connecting to database | Optional depending on database type ✅ |
+| DATABASE_PORT | Used for connecting to database | Optional depending on database type ✅ |
+| DATABASE_USER | Used for connecting to database | Optional depending on database type ✅ |
+| DATABASE_PASS | Used for connecting to database | Optional depending on database type ✅ |
+| DATABASE_SCHEMA | Used for connecting to database | Optional depending on database type ✅ |
+| DATABASE_SSL | To configure whether to use SSL for database | Optional depending on database type ✅ |
+| FILE_STORAGE_TYPE | For selecting local or S3 compatible storage configuration | Defaults to local ✅ | Select 'local' or 'object' |
 | OBJECT_STORAGE_ACCESS_KEY_ID | Used for S3 compatible object file storage | Optional depending on file storage type ✅ |
 | OBJECT_STORAGE_SECRET_ACCESS_KEY | Used for S3 compatible object file storage | Optional depending on file storage type ✅ |
 | OBJECT_STORAGE_ENDPOINT | Used for S3 compatible object file storage | Optional depending on file storage type ✅ |
-| BLOB_STORAGE_CONNECTION_STRING | Used when using Azure Blob for file storage | Optional depending on file storage type ✅  |
 
 ## Stay in touch
 
