@@ -120,28 +120,24 @@ $ kubectl delete secret stage-lazztechhub
 ## Migrations
 Custom scripts have been added to streamline and simplify handling migrations with two database contexts.
 ```bash
-# local = sqlite | prod = postgres
+# each script comes in sqlite | postgres | all variations
 # scripts ending with "all" perform the action on both databases
-# name=<migration_name_here> name will be applied to a migration specific to each database
+# <migration_name_here> name will be applied to a migration specific to each database
 
 # create a migration generated from the entity schema
-$ name=<migration_name_here> npm run migration:generate:all
+$ npm run migration:generate:<sqlite|postgres|all> <migration_name_here>
 
 # create a blank migration
-$ name=<migration_name_here> npm run migration:create:all
+$ npm run migration:create:<sqlite|postgres|all> <migration_name_here>
 
-# applies the migrations to both databases
-$ npm run migration:apply:all
-
-# applies migration to an individual database context
-$ npm run migration:apply:<local/prod>
+# apply migrations
+$ npm run migration:apply:<sqlite|postgres|all>
 
 # lists pending queries to executed based on the entity schema
 $ npm run migration:log:all
 
 # displays what migrations have been applied to the databases
 $ npm run migration:show:all
-
 ```
 
 ## Postgres
@@ -187,8 +183,11 @@ DATABASE_PASS=Password123
 DATABASE_SSL=false
 ```
 
-Importing a database dump
+Create database dump and import to local database
 ```bash
+# dump database
+$ pg_dump -h <host> -p <port> -U <username> -Fc <database> > db.dump
+
 # copy dump file to the docker container
 docker cp /path/to/db.dump CONTAINER_ID:/db.dump
 

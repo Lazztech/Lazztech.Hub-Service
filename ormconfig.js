@@ -5,7 +5,7 @@ const commonSettings = {
 };
 
 const config = [{
-  name: 'prod',
+  name: 'postgres',
   type: 'postgres',
   host: 'localhost',
   database: 'postgres',
