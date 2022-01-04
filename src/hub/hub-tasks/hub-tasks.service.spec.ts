@@ -72,7 +72,7 @@ describe('HubTasksService', () => {
     const expiredPresence = {
       lastUpdated: '00000'
     } as JoinUserHub;
-    const nullLastUpdated = {
+    const undefinedLastUpdated = {
       lastUpdated: undefined
     } as JoinUserHub;
     const findSpy = jest
@@ -80,7 +80,7 @@ describe('HubTasksService', () => {
       .mockResolvedValueOnce([
         validPresence,
         expiredPresence,
-        nullLastUpdated
+        undefinedLastUpdated
       ]);
 
     const exitHubGeofenceSpy = jest
