@@ -25,6 +25,8 @@
     "migration:generate:postgres": "npm run build && npm run typeorm -- migration:generate -c postgres -n $name",
     "migration:apply:sqlite": "npm run typeorm -- migration:run -t each",
     "migration:apply:postgres": "npm run typeorm -- migration:run -c postgres -t each",
+    "migration:revert:sqlite": "npm run typeorm -- migration:revert",
+    "migration:revert:postgres": "npm run typeorm -- migration:revert -c postgres",
     "migration:generate:all": "npm run build && npm run typeorm -- migration:generate -c postgres -n $name && npm run typeorm -- migration:generate -n $name",
     "migration:create:all": "npm run typeorm -- migration:create -c postgres -n $name && npm run typeorm -- migration:create -n $name",
     "migration:apply:all": "npm run typeorm -- migration:run -t each && npm run typeorm -- migration:run -t each -c postgres",
