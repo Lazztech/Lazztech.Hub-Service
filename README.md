@@ -117,34 +117,46 @@ $ kubectl delete -f kubernetes/stage.yaml
 $ kubectl delete secret stage-lazztechhub
 ```
 
-## Migrations
-Custom scripts have been added to streamline and simplify handling migrations with two database contexts.
-```bash
-# each script comes in sqlite | postgres | all variations
-# scripts ending with "all" perform the action on both databases
-# <migration_name_here> name will be applied to a migration specific to each database
-
-# create a migration generated from the entity schema
-$ npm run migration:generate:<sqlite|postgres|all> <migration_name_here>
-
-# create a blank migration
-$ npm run migration:create:<sqlite|postgres|all> <migration_name_here>
-
-# apply migrations
-$ npm run migration:apply:<sqlite|postgres|all>
-
-# lists pending queries to executed based on the entity schema
-$ npm run migration:log:all
-
-# displays what migrations have been applied to the databases
-$ npm run migration:show:all
-```
-
 ## Postgres
 A local instance of postgres running in a docker container for testing against a prod DB replica.
-Pgadmin is not required, but recommend for ease of use.
+Pgadmin is not required, but recommend for ease of use. Alternatively the database-client VSCode extension may be used.
+- https://marketplace.visualstudio.com/items?itemName=cweijan.vscode-database-client2
+
+Create database dump and import to local database
+```bash
+# prepare gitignored data folder if it's not already present
+$ mkdir ./data
+
+# dump database
+$ pg_dump -h <host> -p <port> -U <username> -Fc <database> > ./data/db.dump
+
+# start postgres
+$ docker run --name lazztech_postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=Password123 -e POSTGRES_DB=postgres -p 5432:5432 postgres
+
+# copy dump file to the docker container
+docker cp ./data/db.dump lazztech_postgres:/var/lib/postgresql/data/db.dump
+
+# shell into container
+docker exec -it lazztech_postgres bash
+
+# restore it from within
+pg_restore -U postgres -d postgres --no-owner -1 /var/lib/postgresql/data/db.dump
+```
+
+In your .env or .env.local file configure these enviroment varaibles for postgres
 
 ```bash
+# Postgres
+DATABASE_TYPE=postgres
+DATABASE_SCHEMA=postgres
+DATABASE_HOST=localhost
+DATABASE_PORT=5432
+DATABASE_USER=postgres
+DATABASE_PASS=Password123
+DATABASE_SSL=false
+```
+
+```yml
 # docker-compose.yml
 version: '3.8'
 services:
@@ -170,32 +182,28 @@ services:
     ports:
       - '5050:80'
 ```
-In your .env or .env.local file configure these enviroment varaibles for postgres
 
+## Migrations
+Custom scripts have been added to streamline and simplify handling migrations with two database contexts.
 ```bash
-# Postgres
-DATABASE_TYPE=postgres
-DATABASE_SCHEMA=postgres
-DATABASE_HOST=localhost
-DATABASE_PORT=5432
-DATABASE_USER=postgres
-DATABASE_PASS=Password123
-DATABASE_SSL=false
-```
+# each script comes in sqlite | postgres | all variations
+# scripts ending with "all" perform the action on both databases
+# <migration_name_here> name will be applied to a migration specific to each database
 
-Create database dump and import to local database
-```bash
-# dump database
-$ pg_dump -h <host> -p <port> -U <username> -Fc <database> > db.dump
+# create a migration generated from the entity schema
+$ name=<migration_name_here> npm run migration:generate:<sqlite|postgres|all>
 
-# copy dump file to the docker container
-docker cp /path/to/db.dump CONTAINER_ID:/db.dump
+# create a blank migration
+$ name=<migration_name_here> npm run migration:create:<sqlite|postgres|all>
 
-# shell into container
-docker exec -it CONTAINER_ID bash
+# apply migrations
+$ npm run migration:apply:<sqlite|postgres|all>
 
-# restore it from within
-pg_restore -U postgres -d DB_NAME --no-owner -1 /db.dump
+# lists pending queries to executed based on the entity schema
+$ npm run migration:log:all
+
+# displays what migrations have been applied to the databases
+$ npm run migration:show:all
 ```
 
 
