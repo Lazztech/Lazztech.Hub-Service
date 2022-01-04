@@ -20,22 +20,16 @@ export class HubTasksService {
         this.logger.log(this.checkoutStalePresentUsers.name);
         const userHubs = await this.joinUserHubRepository.find({ isPresent: true });
         for (const userHub of userHubs) {
-            // if for whatever reason lastUpdated is null
-            if (!userHub.lastUpdated) {
-                await this.hubGeofenceService.exitedHubGeofence(userHub.userId, userHub.hubId);
-                this.logger.log(`checked out user ${userHub.userId} from hub ${userHub.hubId} due to null lastUpdated`);
-            } else {
-                // get hours diff
-                const date1 = new Date(userHub.lastUpdated);
-                const date2 = new Date(Date.now());
-                const diff = Math.abs(date1.getTime() - date2.getTime()) / 3600000;
+            // get hours diff
+            const date1 = new Date(userHub?.lastUpdated || null);
+            const date2 = new Date();
+            const diff = Math.abs(date1.getTime() - date2.getTime()) / 3600000;
 
-                // check if last update was over 2 hours ago
-                if (diff > 2) {
-                    // check out user if there's been no from within 2 hours
-                    await this.hubGeofenceService.exitedHubGeofence(userHub.userId, userHub.hubId);
-                    this.logger.log(`checked out user ${userHub.userId} from hub ${userHub.hubId}`);
-                }
+            // check if last update was over 2 hours ago
+            if (diff > 2) {
+                // check out user if there's been no from within 2 hours
+                await this.hubGeofenceService.exitedHubGeofence(userHub.userId, userHub.hubId);
+                this.logger.log(`checked out user ${userHub.userId} from hub ${userHub.hubId}`);
             }
         }   
     }

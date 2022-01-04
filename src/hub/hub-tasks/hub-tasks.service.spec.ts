@@ -14,6 +14,8 @@ import { UserDevice } from '../../dal/entity/userDevice.entity';
 
 describe('HubTasksService', () => {
   let service: HubTasksService;
+  let joinUserHubRepo: Repository<JoinUserHub>;
+  let hubGeofenceService: HubGeofenceService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -52,9 +54,44 @@ describe('HubTasksService', () => {
     }).compile();
 
     service = module.get<HubTasksService>(HubTasksService);
+    joinUserHubRepo = module.get<Repository<JoinUserHub>>(
+      getRepositoryToken(JoinUserHub),
+    );
+    hubGeofenceService = module.get<HubGeofenceService>(HubGeofenceService);
   });
 
   it('should be defined', () => {
     expect(service).toBeDefined();
+  });
+
+  it('should exit expired presence', async () => {
+    // arrange
+    const validPresence = {
+      lastUpdated: Date.now().toString()
+    } as JoinUserHub;
+    const expiredPresence = {
+      lastUpdated: '00000'
+    } as JoinUserHub;
+    const nullLastUpdated = {
+      lastUpdated: undefined
+    } as JoinUserHub;
+    const findSpy = jest
+      .spyOn(joinUserHubRepo, 'find')
+      .mockResolvedValueOnce([
+        validPresence,
+        expiredPresence,
+        nullLastUpdated
+      ]);
+
+    const exitHubGeofenceSpy = jest
+      .spyOn(hubGeofenceService, 'exitedHubGeofence')
+      .mockResolvedValue(null);
+
+    // act
+    await service.checkoutStalePresentUsers();
+
+    // assert
+    expect(findSpy).toHaveBeenCalled();
+    expect(exitHubGeofenceSpy).toHaveBeenCalledTimes(2);
   });
 });
