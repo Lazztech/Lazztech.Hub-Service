@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
-import { JoinUserHub } from 'src/dal/entity/joinUserHub.entity';
+import { JoinUserHub } from '../../dal/entity/joinUserHub.entity';
 import { Repository } from 'typeorm';
 import { HubGeofenceService } from '../hub-geofence/hub-geofence.service';
 
