@@ -41,4 +41,4 @@ docs/_book/**.**
 **/*.db
 **/*.sqlite
 **/*.sqlite3
-data/uploads/**
+data/**
