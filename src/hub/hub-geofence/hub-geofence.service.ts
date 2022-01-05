@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Hub } from '../../dal/entity/hub.entity';
-import { JoinUserHub } from '../../dal/entity/joinUserHub.entity';
+import { GeofenceEvent, JoinUserHub } from '../../dal/entity/joinUserHub.entity';
 import { User } from '../../dal/entity/user.entity';
 import { NotificationService } from '../../notification/notification.service';
 
@@ -48,7 +48,8 @@ export class HubGeofenceService {
       },
       {
         isPresent: true,
-        lastUpdated: Date.now().toString()
+        lastUpdated: Date.now().toString(),
+        lastGeofenceEvent: GeofenceEvent.ENTERED
       },
     );
 
@@ -56,6 +57,42 @@ export class HubGeofenceService {
     if (hub.active) {
       await this.notifyMembersOfArrival(userId, hubId);
     }
+
+    return hubRelationship;
+  }
+
+  async dwellHubGeofence(userId: any, hubId: number) {
+    this.logger.log(this.dwellHubGeofence.name);
+    const hubRelationship = await this.joinUserHubRepository.findOne({
+      userId,
+      hubId,
+    });
+
+    if (!hubRelationship) {
+      throw Error(
+        `no corresponding hub relationship found for userId: ${userId} & hubId: ${hubId}`,
+      );
+    }
+
+    /**
+     * Update is used here as apposed to save as there seems to be a bug with typeorm.
+     * It fails to find the existing row in the DB and seems to be related to the compound primary key.
+     * Using the update method explicitly seems to work around this.
+     *
+     * Issue:
+     * https://github.com/typeorm/typeorm/issues/4122
+     */
+    await this.joinUserHubRepository.update(
+      {
+        userId,
+        hubId,
+      },
+      {
+        isPresent: true,
+        lastUpdated: Date.now().toString(),
+        lastGeofenceEvent: GeofenceEvent.DWELL
+      },
+    );
 
     return hubRelationship;
   }
@@ -88,7 +125,8 @@ export class HubGeofenceService {
       },
       {
         isPresent: false,
-        lastUpdated: Date.now().toString()
+        lastUpdated: Date.now().toString(),
+        lastGeofenceEvent: GeofenceEvent.EXITED
       },
     );
 

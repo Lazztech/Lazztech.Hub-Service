@@ -278,6 +278,15 @@ export class HubResolver {
   }
 
   @Mutation(() => JoinUserHub)
+  public async dwellHubGeofence(
+    @UserId() userId,
+    @Args({ name: 'hubId', type: () => ID }) hubId: number,
+  ): Promise<JoinUserHub> {
+    this.logger.log(this.dwellHubGeofence.name);
+    return await this.hubGeofenceService.dwellHubGeofence(userId, hubId);
+  }
+
+  @Mutation(() => JoinUserHub)
   public async exitedHubGeofence(
     @UserId() userId,
     @Args({ name: 'hubId', type: () => ID }) hubId: number,
