@@ -18,6 +18,8 @@ import { UserDevice } from '../dal/entity/userDevice.entity';
 import { HubInviteService } from './hub-invite/hub-invite.service';
 import { FileModule } from '../file/file.module';
 import { EmailModule } from '../email/email.module';
+import { HubTasksService } from './hub-tasks/hub-tasks.service';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -34,6 +36,7 @@ import { EmailModule } from '../email/email.module';
     EmailModule,
     UserModule,
     HttpModule,
+    ScheduleModule.forRoot(),
   ],
   controllers: [],
   providers: [
@@ -45,6 +48,7 @@ import { EmailModule } from '../email/email.module';
     HubGeofenceService,
     HubMicroChatService,
     HubInviteService,
+    HubTasksService,
   ],
 })
 export class HubModule {}

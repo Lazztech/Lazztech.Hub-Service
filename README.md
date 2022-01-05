@@ -5,7 +5,7 @@ For the companion mobile app client see the repo linked below.
 
 [Lazztech.Hub-App](https://github.com/Lazztech/Lazztech.Hub-App)
 
-## Installation Dependencies
+## Development Dependencies
 
 Development tools:
 - brew
@@ -117,38 +117,46 @@ $ kubectl delete -f kubernetes/stage.yaml
 $ kubectl delete secret stage-lazztechhub
 ```
 
-## Migrations
-Custom scripts have been added to streamline and simplify handling migrations with two database contexts.
-```bash
-# local = sqlite | prod = postgres
-# scripts ending with "all" perform the action on both databases
-# name=<migration_name_here> name will be applied to a migration specific to each database
-
-# create a migration generated from the entity schema
-$ name=<migration_name_here> npm run migration:generate:all
-
-# create a blank migration
-$ name=<migration_name_here> npm run migration:create:all
-
-# applies the migrations to both databases
-$ npm run migration:apply:all
-
-# applies migration to an individual database context
-$ npm run migration:apply:<local/prod>
-
-# lists pending queries to executed based on the entity schema
-$ npm run migration:log:all
-
-# displays what migrations have been applied to the databases
-$ npm run migration:show:all
-
-```
-
 ## Postgres
 A local instance of postgres running in a docker container for testing against a prod DB replica.
-Pgadmin is not required, but recommend for ease of use.
+Pgadmin is not required, but recommend for ease of use. Alternatively the database-client VSCode extension may be used.
+- https://marketplace.visualstudio.com/items?itemName=cweijan.vscode-database-client2
+
+Create database dump and import to local database
+```bash
+# prepare gitignored data folder if it's not already present
+$ mkdir ./data
+
+# dump database
+$ pg_dump -h <host> -p <port> -U <username> -Fc <database> > ./data/db.dump
+
+# start postgres
+$ docker run --name lazztech_postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=Password123 -e POSTGRES_DB=postgres -p 5432:5432 postgres
+
+# copy dump file to the docker container
+docker cp ./data/db.dump lazztech_postgres:/var/lib/postgresql/data/db.dump
+
+# shell into container
+docker exec -it lazztech_postgres bash
+
+# restore it from within
+pg_restore -U postgres -d postgres --no-owner -1 /var/lib/postgresql/data/db.dump
+```
+
+In your .env or .env.local file configure these enviroment varaibles for postgres
 
 ```bash
+# Postgres
+DATABASE_TYPE=postgres
+DATABASE_SCHEMA=postgres
+DATABASE_HOST=localhost
+DATABASE_PORT=5432
+DATABASE_USER=postgres
+DATABASE_PASS=Password123
+DATABASE_SSL=false
+```
+
+```yml
 # docker-compose.yml
 version: '3.8'
 services:
@@ -174,29 +182,31 @@ services:
     ports:
       - '5050:80'
 ```
-In your .env or .env.local file configure these enviroment varaibles for postgres
 
+## Migrations
+Custom scripts have been added to streamline and simplify handling migrations with two database contexts.
 ```bash
-# Postgres
-DATABASE_TYPE=postgres
-DATABASE_SCHEMA=postgres
-DATABASE_HOST=localhost
-DATABASE_PORT=5432
-DATABASE_USER=postgres
-DATABASE_PASS=Password123
-DATABASE_SSL=false
-```
+# each script comes in sqlite | postgres | all variations
+# scripts ending with "all" perform the action on both databases
+# <migration_name_here> name will be applied to a migration specific to each database
 
-Importing a database dump
-```bash
-# copy dump file to the docker container
-docker cp /path/to/db.dump CONTAINER_ID:/db.dump
+# create a migration generated from the entity schema
+$ name=<migration_name_here> npm run migration:generate:<sqlite|postgres|all>
 
-# shell into container
-docker exec -it CONTAINER_ID bash
+# create a blank migration
+$ name=<migration_name_here> npm run migration:create:<sqlite|postgres|all>
 
-# restore it from within
-pg_restore -U postgres -d DB_NAME --no-owner -1 /db.dump
+# apply migrations
+$ npm run migration:apply:<sqlite|postgres|all>
+
+# revert most recently applied migration
+$ npm run migration:revert:<sqlite|postgres|all>
+
+# lists pending queries to executed based on the entity schema
+$ npm run migration:log:all
+
+# displays what migrations have been applied to the databases
+$ npm run migration:show:all
 ```
 
 
@@ -217,17 +227,17 @@ $ ./scripts/preCommit.sh && ./scripts/buildTagAndPushDocker.sh && ./scripts/depl
 | PUSH_NOTIFICATION_ENDPOINT | Used for triggering push notifications via http | ❌ |
 | EMAIL_FROM_ADDRESS | Used for emailing users | ❌ |
 | EMAIL_PASSWORD | Used for emailing users | ❌ |
-| DATABASE_HOST | Used for connecting to database | ❌ |
-| DATABASE_PORT | Used for connecting to database | ❌ |
-| DATABASE_USER | Used for connecting to database | ❌ |
-| DATABASE_PASS | Used for connecting to database | ❌ |
-| DATABASE_SCHEMA | Used for connecting to database | ❌ |
-| DATABASE_SSL | To configure whether to use SSL for database | ❌ |
-| FILE_STORAGE_TYPE | For selecting azure blob or S3 compatible storage configuration | Optional depending on file storage type ✅ | Select 'azure' or 'object' |
+| DATABASE_TYPE | Used for selecting sqlite or postgres | Defaults to sqlite ✅ | 'sqlite' or 'postgres' |
+| DATABASE_HOST | Used for connecting to database | Optional depending on database type ✅ |
+| DATABASE_PORT | Used for connecting to database | Optional depending on database type ✅ |
+| DATABASE_USER | Used for connecting to database | Optional depending on database type ✅ |
+| DATABASE_PASS | Used for connecting to database | Optional depending on database type ✅ |
+| DATABASE_SCHEMA | Used for connecting to database | Optional depending on database type ✅ |
+| DATABASE_SSL | To configure whether to use SSL for database | Optional depending on database type ✅ |
+| FILE_STORAGE_TYPE | For selecting local or S3 compatible storage configuration | Defaults to local ✅ | Select 'local' or 'object' |
 | OBJECT_STORAGE_ACCESS_KEY_ID | Used for S3 compatible object file storage | Optional depending on file storage type ✅ |
 | OBJECT_STORAGE_SECRET_ACCESS_KEY | Used for S3 compatible object file storage | Optional depending on file storage type ✅ |
 | OBJECT_STORAGE_ENDPOINT | Used for S3 compatible object file storage | Optional depending on file storage type ✅ |
-| BLOB_STORAGE_CONNECTION_STRING | Used when using Azure Blob for file storage | Optional depending on file storage type ✅  |
 
 ## Stay in touch
 
