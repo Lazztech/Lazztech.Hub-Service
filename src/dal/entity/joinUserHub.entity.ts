@@ -3,6 +3,12 @@ import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { Hub } from './hub.entity';
 import { User } from './user.entity';
 
+export enum GeofenceEvent {
+  ENTERED = "entered",
+  DWELL = "dwell",
+  EXITED = "exited"
+}
+
 @ObjectType()
 @Entity()
 export class JoinUserHub {
@@ -40,8 +46,12 @@ export class JoinUserHub {
    */
   @Column({ default: false })
   public isPresent: boolean;
+
+  @Field({ nullable: true, description: 'last update event for presence' })
+  @Column({ nullable: true })
+  public lastGeofenceEvent: string;
   
-  @Field({ description: 'unix timestamp for the last time the presence state was updated'})
+  @Field({ nullable: true, description: 'unix timestamp for the last time the presence state was updated' })
   @Column({ nullable: true })
   public lastUpdated: string;
 }
