@@ -1,15 +1,15 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcryptjs';
 import { User } from '../dal/entity/user.entity';
-import { Repository } from 'typeorm';
 import { ChangePassword } from './dto/changePassword.input';
 import { NotificationService } from '../notification/notification.service';
 import { InAppNotificationDto } from '../notification/dto/inAppNotification.dto';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { Payload } from './dto/payload.dto';
+import { InjectRepository } from '@mikro-orm/nestjs';
+import { EntityRepository } from '@mikro-orm/core';
 
 @Injectable()
 export class AuthService {
@@ -19,7 +19,7 @@ export class AuthService {
     private readonly configService: ConfigService,
     private notificationService: NotificationService,
     @InjectRepository(User)
-    private userRepository: Repository<User>,
+    private userRepository: EntityRepository<User>,
     private userService: UserService,
     private jwtService: JwtService,
   ) {}
@@ -48,7 +48,7 @@ export class AuthService {
       email,
       password: hashedPassword,
     });
-    user = await this.userRepository.save(user);
+    await this.userRepository.persist(user);
 
     await this.notificationService.addInAppNotificationForUser(user.id, {
       text: `You'll find your notifications here.
@@ -84,14 +84,14 @@ export class AuthService {
 
   public async changePassword(userId: any, details: ChangePassword) {
     this.logger.log(this.changePassword.name);
-    const user = await this.userRepository.findOne({ where: { id: userId } });
+    const user = await this.userRepository.findOne({ id: userId });
     // TODO Should it invalidate/blacklist the jwt?
     const valid = await bcrypt.compare(details.oldPassword, user.password);
 
     if (valid) {
       const newHashedPassword = await bcrypt.hash(details.newPassword, 12);
       user.password = newHashedPassword;
-      await this.userRepository.save(user);
+      await this.userRepository.persist(user);
 
       return true;
     } else {
@@ -101,7 +101,7 @@ export class AuthService {
 
   public async deleteAccount(userId: number, email: string, password: string) {
     this.logger.log(this.deleteAccount.name);
-    const user = await this.userRepository.findOne({ where: { id: userId } });
+    const user = await this.userRepository.findOne({ id: userId });
 
     const valid = await bcrypt.compare(password, user.password);
 
