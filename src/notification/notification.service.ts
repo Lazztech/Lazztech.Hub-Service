@@ -7,7 +7,7 @@ import { InAppNotificationDto } from './dto/inAppNotification.dto';
 import { UserDevice } from '../dal/entity/userDevice.entity';
 import { InAppNotification } from '../dal/entity/inAppNotification.entity';
 import {
-  generateTypeOrmOrderOptions,
+  generateOrderOptions,
   PageableOptions,
 } from '../dal/pagination/paginatedResponse.helper';
 import { InjectRepository } from '@mikro-orm/nestjs';
@@ -70,7 +70,7 @@ export class NotificationService {
     return await this.inAppNotificationRepository.findAndCount({ userId }, {
       limit: pageableOptions?.limit,
       offset: pageableOptions?.offset,
-      orderBy: generateTypeOrmOrderOptions(pageableOptions?.sortOptions),
+      orderBy: generateOrderOptions(pageableOptions?.sortOptions),
     })
   }
 
