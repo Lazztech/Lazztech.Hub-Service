@@ -1,5 +1,6 @@
+import { EntityRepository } from '@mikro-orm/core';
+import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable, Logger } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Hub } from '../../dal/entity/hub.entity';
 import { JoinUserHub } from '../../dal/entity/joinUserHub.entity';
 import { MicroChat } from '../../dal/entity/microChat.entity';
@@ -7,7 +8,6 @@ import { User } from '../../dal/entity/user.entity';
 import { InAppNotificationDto } from '../../notification/dto/inAppNotification.dto';
 import { PushNotificationDto } from '../../notification/dto/pushNotification.dto';
 import { NotificationService } from '../../notification/notification.service';
-import { Repository } from 'typeorm';
 
 @Injectable()
 export class HubMicroChatService {
@@ -16,13 +16,13 @@ export class HubMicroChatService {
   constructor(
     private notificationService: NotificationService,
     @InjectRepository(User)
-    private userRepository: Repository<User>,
+    private userRepository: EntityRepository<User>,
     @InjectRepository(Hub)
-    private hubRepository: Repository<Hub>,
+    private hubRepository: EntityRepository<Hub>,
     @InjectRepository(JoinUserHub)
-    private joinUserHubRepository: Repository<JoinUserHub>,
+    private joinUserHubRepository: EntityRepository<JoinUserHub>,
     @InjectRepository(MicroChat)
-    private microChatRepository: Repository<MicroChat>,
+    private microChatRepository: EntityRepository<MicroChat>,
   ) {}
 
   async microChatToHub(userId: number, hubId: number, microChatId: number) {
@@ -69,7 +69,7 @@ export class HubMicroChatService {
     let microChat = new MicroChat();
     microChat.hubId = hubId;
     microChat.text = microChatText;
-    microChat = await this.microChatRepository.save(microChat);
+    await this.microChatRepository.persist(microChat);
 
     this.logger.log(
       `createMicroChat(userId: ${userId}, hubId: ${hubId}, microChatText: ${microChatText}) completed successfully.`,
