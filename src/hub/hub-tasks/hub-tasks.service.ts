@@ -1,8 +1,8 @@
+import { EntityRepository } from '@mikro-orm/core';
+import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { InjectRepository } from '@nestjs/typeorm';
 import { JoinUserHub } from '../../dal/entity/joinUserHub.entity';
-import { Repository } from 'typeorm';
 import { HubGeofenceService } from '../hub-geofence/hub-geofence.service';
 
 @Injectable()
@@ -11,7 +11,7 @@ export class HubTasksService {
 
     constructor(
         @InjectRepository(JoinUserHub)
-        private joinUserHubRepository: Repository<JoinUserHub>,
+        private joinUserHubRepository: EntityRepository<JoinUserHub>,
         private hubGeofenceService: HubGeofenceService,
     ) {}
 
