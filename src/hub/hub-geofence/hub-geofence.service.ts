@@ -1,6 +1,6 @@
+import { EntityRepository } from '@mikro-orm/core';
+import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable, Logger } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { Hub } from '../../dal/entity/hub.entity';
 import { GeofenceEvent, JoinUserHub } from '../../dal/entity/joinUserHub.entity';
 import { User } from '../../dal/entity/user.entity';
@@ -12,11 +12,11 @@ export class HubGeofenceService {
 
   constructor(
     @InjectRepository(JoinUserHub)
-    private joinUserHubRepository: Repository<JoinUserHub>,
+    private joinUserHubRepository: EntityRepository<JoinUserHub>,
     @InjectRepository(User)
-    private userRepository: Repository<User>,
+    private userRepository: EntityRepository<User>,
     @InjectRepository(Hub)
-    private hubRepository: Repository<Hub>,
+    private hubRepository: EntityRepository<Hub>,
     private notificationService: NotificationService,
   ) {}
 
@@ -33,25 +33,12 @@ export class HubGeofenceService {
       );
     }
 
-    /**
-     * Update is used here as apposed to save as there seems to be a bug with typeorm.
-     * It fails to find the existing row in the DB and seems to be related to the compound primary key.
-     * Using the update method explicitly seems to work around this.
-     *
-     * Issue:
-     * https://github.com/typeorm/typeorm/issues/4122
-     */
-    await this.joinUserHubRepository.update(
-      {
-        userId,
-        hubId,
-      },
-      {
-        isPresent: true,
-        lastUpdated: Date.now().toString(),
-        lastGeofenceEvent: GeofenceEvent.ENTERED
-      },
-    );
+    this.joinUserHubRepository.persist({
+      ...hubRelationship,
+      isPresent: true,
+      lastUpdated: Date.now().toString(),
+      lastGeofenceEvent: GeofenceEvent.ENTERED
+    })
 
     const hub = await hubRelationship.hub;
     if (hub.active) {
@@ -74,25 +61,12 @@ export class HubGeofenceService {
       );
     }
 
-    /**
-     * Update is used here as apposed to save as there seems to be a bug with typeorm.
-     * It fails to find the existing row in the DB and seems to be related to the compound primary key.
-     * Using the update method explicitly seems to work around this.
-     *
-     * Issue:
-     * https://github.com/typeorm/typeorm/issues/4122
-     */
-    await this.joinUserHubRepository.update(
-      {
-        userId,
-        hubId,
-      },
-      {
-        isPresent: true,
-        lastUpdated: Date.now().toString(),
-        lastGeofenceEvent: GeofenceEvent.DWELL
-      },
-    );
+    await this.joinUserHubRepository.persist({
+      ...hubRelationship,
+      isPresent: true,
+      lastUpdated: Date.now().toString(),
+      lastGeofenceEvent: GeofenceEvent.DWELL
+    })
 
     return hubRelationship;
   }
@@ -110,25 +84,12 @@ export class HubGeofenceService {
       );
     }
 
-    /**
-     * Update is used here as apposed to save as there seems to be a bug with typeorm.
-     * It fails to find the existing row in the DB and seems to be related to the compound primary key.
-     * Using the update method explicitly seems to work around this.
-     *
-     * Issue:
-     * https://github.com/typeorm/typeorm/issues/4122
-     */
-    await this.joinUserHubRepository.update(
-      {
-        userId,
-        hubId,
-      },
-      {
-        isPresent: false,
-        lastUpdated: Date.now().toString(),
-        lastGeofenceEvent: GeofenceEvent.EXITED
-      },
-    );
+    await this.joinUserHubRepository.persist({
+      ...hubRelationship,
+      isPresent: false,
+      lastUpdated: Date.now().toString(),
+      lastGeofenceEvent: GeofenceEvent.EXITED
+    })
 
     const hub = await hubRelationship.hub;
     if (hub.active) {
