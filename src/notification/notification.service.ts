@@ -2,8 +2,6 @@ import { Service } from 'typedi';
 import { User } from '../dal/entity/user.entity';
 import { ConfigService } from '@nestjs/config';
 import { Logger, HttpService } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { PushNotificationDto } from './dto/pushNotification.dto';
 import { InAppNotificationDto } from './dto/inAppNotification.dto';
 import { UserDevice } from '../dal/entity/userDevice.entity';
@@ -12,6 +10,8 @@ import {
   generateTypeOrmOrderOptions,
   PageableOptions,
 } from '../dal/pagination/paginatedResponse.helper';
+import { InjectRepository } from '@mikro-orm/nestjs';
+import { EntityRepository } from '@mikro-orm/core';
 
 @Service()
 export class NotificationService {
@@ -28,11 +28,11 @@ export class NotificationService {
     private configService: ConfigService,
     private httpService: HttpService,
     @InjectRepository(User)
-    private userRepository: Repository<User>,
+    private userRepository: EntityRepository<User>,
     @InjectRepository(InAppNotification)
-    private inAppNotificationRepository: Repository<InAppNotification>,
+    private inAppNotificationRepository: EntityRepository<InAppNotification>,
     @InjectRepository(UserDevice)
-    private userDeviceRepository: Repository<UserDevice>,
+    private userDeviceRepository: EntityRepository<UserDevice>,
   ) {
     this.logger.log('constructor');
   }
@@ -48,7 +48,7 @@ export class NotificationService {
       const userDevice = new UserDevice();
       userDevice.userId = user.id;
       userDevice.fcmPushUserToken = token;
-      await this.userDeviceRepository.save(userDevice);
+      await this.userDeviceRepository.persist(userDevice);
       // TODO notify via email that a new device has been used on the account for security.
     } else {
       this.logger.warn('User device token already stored.');
@@ -67,12 +67,11 @@ export class NotificationService {
     pageableOptions?: PageableOptions,
   ): Promise<[InAppNotification[], number]> {
     this.logger.log(this.getInAppNotifications.name);
-    return await this.inAppNotificationRepository.findAndCount({
-      where: { userId },
-      take: pageableOptions?.limit,
-      skip: pageableOptions?.offset,
-      order: generateTypeOrmOrderOptions(pageableOptions?.sortOptions),
-    });
+    return await this.inAppNotificationRepository.findAndCount({ userId }, {
+      limit: pageableOptions?.limit,
+      offset: pageableOptions?.offset,
+      orderBy: generateTypeOrmOrderOptions(pageableOptions?.sortOptions),
+    })
   }
 
   public async addInAppNotificationForUser(
@@ -84,7 +83,7 @@ export class NotificationService {
       ...details,
       userId,
     });
-    await this.inAppNotificationRepository.save(inAppNotification);
+    await this.inAppNotificationRepository.persist(inAppNotification);
   }
 
   async deleteInAppNotification(
