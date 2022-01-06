@@ -1,12 +1,12 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Hub } from '../dal/entity/hub.entity';
 import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
 import { User } from '../dal/entity/user.entity';
 import { FileServiceInterface } from 'src/file/interfaces/file-service.interface';
-import { Repository } from 'typeorm';
 import { EditUserDetails } from './dto/editUserDetails.input';
 import { FILE_SERVICE } from '../file/file-service.token';
+import { InjectRepository } from '@mikro-orm/nestjs';
+import { EntityRepository } from '@mikro-orm/core';
 
 @Injectable()
 export class UserService {
@@ -16,9 +16,9 @@ export class UserService {
     @Inject(FILE_SERVICE)
     private readonly fileService: FileServiceInterface,
     @InjectRepository(JoinUserHub)
-    private joinUserHubRepository: Repository<JoinUserHub>,
+    private joinUserHubRepository: EntityRepository<JoinUserHub>,
     @InjectRepository(User)
-    private userRepository: Repository<User>,
+    private userRepository: EntityRepository<User>,
   ) {
     this.logger.log('constructor');
   }
@@ -29,7 +29,7 @@ export class UserService {
 
   public async getUser(userId: any) {
     this.logger.log(this.getUser.name);
-    return await this.userRepository.findOne({ where: { id: userId } });
+    return await this.userRepository.findOne({ id: userId });
   }
 
   public async getUsersOwnedHubs(userId: number): Promise<Hub[]> {
@@ -60,19 +60,19 @@ export class UserService {
 
   public async editUserDetails(userId: any, details: EditUserDetails) {
     this.logger.log(this.editUserDetails.name);
-    let user = await this.userRepository.findOne({ where: { id: userId } });
+    let user = await this.userRepository.findOne({ id: userId });
     user.firstName = details.firstName;
     user.lastName = details.lastName;
     user.description = details.description;
-    user = await this.userRepository.save(user);
+    await this.userRepository.persist(user);
     return user;
   }
 
   public async changeEmail(userId: any, newEmail: string) {
     this.logger.log(this.changeEmail.name);
-    const user = await this.userRepository.findOne({ where: { id: userId } });
+    const user = await this.userRepository.findOne({ id: userId });
     user.email = newEmail;
-    await this.userRepository.save(user);
+    await this.userRepository.persist(user);
     return user;
   }
 
@@ -84,7 +84,7 @@ export class UserService {
     }
     const imageUrl = await this.fileService.storeImageFromBase64(newImage);
     user.image = imageUrl;
-    user = await this.userRepository.save(user);
+    await this.userRepository.persist(user);
     return user;
   }
 }
