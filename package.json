@@ -35,6 +35,10 @@
     "migration:show:all": "npm run typeorm migration:show && npm run typeorm -- migration:show -c postgres"
   },
   "dependencies": {
+    "@mikro-orm/core": "^4.5.10",
+    "@mikro-orm/nestjs": "^4.3.1",
+    "@mikro-orm/postgresql": "^4.5.10",
+    "@mikro-orm/sqlite": "^4.5.10",
     "@nestjs/common": "^8.0.5",
     "@nestjs/config": "^1.0.1",
     "@nestjs/core": "^8.0.5",
