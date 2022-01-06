@@ -1,11 +1,11 @@
+import { EntityRepository } from '@mikro-orm/core';
+import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable, Logger } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Hub } from '../../dal/entity/hub.entity';
 import { InAppNotification } from '../../dal/entity/inAppNotification.entity';
 import { JoinUserHub } from '../../dal/entity/joinUserHub.entity';
 import { PushNotificationDto } from '../../notification/dto/pushNotification.dto';
 import { NotificationService } from '../../notification/notification.service';
-import { Repository } from 'typeorm';
 
 @Injectable()
 export class HubActivityService {
@@ -13,11 +13,11 @@ export class HubActivityService {
 
   constructor(
     @InjectRepository(JoinUserHub)
-    private joinUserHubRepository: Repository<JoinUserHub>,
+    private joinUserHubRepository: EntityRepository<JoinUserHub>,
     @InjectRepository(Hub)
-    private hubRepository: Repository<Hub>,
+    private hubRepository: EntityRepository<Hub>,
     @InjectRepository(InAppNotification)
-    private inAppNotificationRepository: Repository<InAppNotification>,
+    private inAppNotificationRepository: EntityRepository<InAppNotification>,
     private notificationService: NotificationService,
   ) {
     this.logger.log('constructor');
@@ -39,7 +39,7 @@ export class HubActivityService {
 
     let hub = await hubRelationship.hub;
     hub.active = true;
-    hub = await this.hubRepository.save(hub);
+    await this.hubRepository.persist(hub);
 
     await this.notifyOfHubActivated(hubId);
     return hub;
@@ -61,7 +61,7 @@ export class HubActivityService {
 
     let hub = await hubRelationship.hub;
     hub.active = false;
-    hub = await this.hubRepository.save(hub);
+    await this.hubRepository.persist(hub);
     return hub;
   }
 
