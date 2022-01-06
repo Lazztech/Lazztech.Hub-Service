@@ -1,10 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { JoinUserHub } from '../../dal/entity/joinUserHub.entity';
-import { Repository } from 'typeorm';
 import { Invite } from '../../dal/entity/invite.entity';
 import { User } from '../../dal/entity/user.entity';
 import { NotificationService } from '../../notification/notification.service';
+import { InjectRepository } from '@mikro-orm/nestjs';
+import { EntityRepository } from '@mikro-orm/core';
 
 @Injectable()
 export class HubInviteService {
@@ -12,11 +12,11 @@ export class HubInviteService {
 
   constructor(
     @InjectRepository(JoinUserHub)
-    private joinUserHubRepository: Repository<JoinUserHub>,
+    private joinUserHubRepository: EntityRepository<JoinUserHub>,
     @InjectRepository(User)
-    private userRepository: Repository<User>,
+    private userRepository: EntityRepository<User>,
     @InjectRepository(Invite)
-    private inviteRepository: Repository<Invite>,
+    private inviteRepository: EntityRepository<Invite>,
     private notificationService: NotificationService,
   ) {}
 
@@ -61,13 +61,11 @@ export class HubInviteService {
     this.validateRelationship(userHubRelationship, hubId, userId);
     
     const invitee = await this.userRepository.findOne({
-      where: {
         email: inviteesEmail,
-      },
     });
 
     if(invitee){
-      const alreadyInvited = await this.inviteRepository.findOne({where: {inviteesId: invitee.id, invitersId: userId, hubId }})
+      const alreadyInvited = await this.inviteRepository.findOne({inviteesId: invitee.id, invitersId: userId, hubId });
       if (alreadyInvited) {
         throw new Error(`${invitee.firstName} has already been invited to ${(await alreadyInvited.hub).name}`);
       }
@@ -79,7 +77,7 @@ export class HubInviteService {
       inviteesId: invitee.id,
       invitersId: userId,
     });
-    invite = await this.inviteRepository.save(invite);
+    await this.inviteRepository.persist(invite);
 
     const hub = await userHubRelationship.hub;
     await this.notificationService.addInAppNotificationForUser(invitee.id, {
@@ -109,7 +107,7 @@ export class HubInviteService {
       hubId: invite.hubId,
       isOwner: false,
     });
-    newRelationship = await this.joinUserHubRepository.save(newRelationship);
+    await this.joinUserHubRepository.persist(newRelationship);
     newRelationship = await this.joinUserHubRepository.findOneOrFail({
       userId: newRelationship.userId,
       hubId: newRelationship.hubId,
@@ -117,7 +115,7 @@ export class HubInviteService {
     const invitee = await newRelationship.user;
     const hub = await newRelationship.hub;
 
-    invite = await this.inviteRepository.save(invite);
+    await this.inviteRepository.persist(invite);
     await this.notificationService.addInAppNotificationForUser(invitee.id, {
       thumbnail: hub.image,
       header: `${invitee.firstName} accepted invite`,
