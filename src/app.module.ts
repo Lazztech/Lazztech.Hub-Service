@@ -17,6 +17,7 @@ import { UserModule } from './user/user.module';
 import * as path from 'path';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import * as Joi from 'joi';
+import { MikroOrmModule } from '@mikro-orm/nestjs';
 
 @Module({
   imports: [
@@ -161,7 +162,7 @@ import * as Joi from 'joi';
         }
       },
     } as TypeOrmModuleOptions),
-    TypeOrmModule.forFeature([User]),
+    MikroOrmModule.forFeature([User]),
     S3Module.forRootAsync({
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {

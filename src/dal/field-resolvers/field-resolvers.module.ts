@@ -1,5 +1,5 @@
+import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { FileModule } from '../../file/file.module';
 import { JoinUserHub } from '../entity/joinUserHub.entity';
 import { HubFieldResolver } from './hub-field.resolver';
@@ -8,7 +8,7 @@ import { JoinUserHubsResolver as JoinUserHubsFieldResolver } from './joinUserHub
 import { UserFieldResolver } from './user-field.resolver';
 
 @Module({
-  imports: [FileModule, TypeOrmModule.forFeature([JoinUserHub])],
+  imports: [FileModule, MikroOrmModule.forFeature([JoinUserHub])],
   providers: [
     JoinUserHubsFieldResolver,
     HubFieldResolver,
