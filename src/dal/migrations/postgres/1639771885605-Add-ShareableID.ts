@@ -1,16 +1,16 @@
-import {MigrationInterface, QueryRunner} from "typeorm";
+import { Migration } from '@mikro-orm/migrations';
 
-export class AddShareableID1639771885605 implements MigrationInterface {
+export class AddShareableID1639771885605 extends Migration {
     name = 'AddShareableID1639771885605'
 
-    public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`ALTER TABLE "user" ADD "shareableId" character varying`);
-        await queryRunner.query(`ALTER TABLE "hub" ADD "shareableId" character varying`);
+    public async up(): Promise<void> {
+        this.addSql(`ALTER TABLE "user" ADD "shareableId" character varying`);
+        this.addSql(`ALTER TABLE "hub" ADD "shareableId" character varying`);
     }
 
-    public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`ALTER TABLE "hub" DROP COLUMN "shareableId"`);
-        await queryRunner.query(`ALTER TABLE "user" DROP COLUMN "shareableId"`);
+    public async down(): Promise<void> {
+        this.addSql(`ALTER TABLE "hub" DROP COLUMN "shareableId"`);
+        this.addSql(`ALTER TABLE "user" DROP COLUMN "shareableId"`);
     }
 
 }

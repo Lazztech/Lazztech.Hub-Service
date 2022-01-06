@@ -1,49 +1,49 @@
-import {MigrationInterface, QueryRunner} from "typeorm";
+import { Migration } from '@mikro-orm/migrations';
 
-export class AddShareableID1639771889979 implements MigrationInterface {
+export class AddShareableID1639771889979 extends Migration {
     name = 'AddShareableID1639771889979'
 
-    public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`CREATE TABLE "temporary_user" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "firstName" varchar NOT NULL, "lastName" varchar NOT NULL, "birthdate" varchar, "description" varchar, "image" varchar, "email" varchar NOT NULL, "password" varchar NOT NULL, "passwordResetId" integer, "shareableId" varchar NOT NULL, CONSTRAINT "REL_5d250ff0a3f3eba15ff2db819d" UNIQUE ("passwordResetId"), CONSTRAINT "FK_5d250ff0a3f3eba15ff2db819dd" FOREIGN KEY ("passwordResetId") REFERENCES "password_reset" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION)`);
-        await queryRunner.query(`INSERT INTO "temporary_user"("id", "firstName", "lastName", "birthdate", "description", "image", "email", "password", "passwordResetId", "shareableId") SELECT "id", "firstName", "lastName", "birthdate", "description", "image", "email", "password", "passwordResetId", "shareableId" FROM "user"`);
-        await queryRunner.query(`DROP TABLE "user"`);
-        await queryRunner.query(`ALTER TABLE "temporary_user" RENAME TO "user"`);
-        await queryRunner.query(`CREATE TABLE "temporary_hub" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar NOT NULL, "description" varchar, "active" boolean NOT NULL DEFAULT (0), "image" varchar, "latitude" float, "longitude" float, "shareableId" varchar NOT NULL)`);
-        await queryRunner.query(`INSERT INTO "temporary_hub"("id", "name", "description", "active", "image", "latitude", "longitude", "shareableId") SELECT "id", "name", "description", "active", "image", "latitude", "longitude", "shareableId" FROM "hub"`);
-        await queryRunner.query(`DROP TABLE "hub"`);
-        await queryRunner.query(`ALTER TABLE "temporary_hub" RENAME TO "hub"`);
-        await queryRunner.query(`CREATE TABLE "temporary_user" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "firstName" varchar NOT NULL, "lastName" varchar NOT NULL, "birthdate" varchar, "description" varchar, "image" varchar, "email" varchar NOT NULL, "password" varchar NOT NULL, "passwordResetId" integer, "shareableId" varchar, CONSTRAINT "REL_5d250ff0a3f3eba15ff2db819d" UNIQUE ("passwordResetId"), CONSTRAINT "FK_5d250ff0a3f3eba15ff2db819dd" FOREIGN KEY ("passwordResetId") REFERENCES "password_reset" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION)`);
-        await queryRunner.query(`INSERT INTO "temporary_user"("id", "firstName", "lastName", "birthdate", "description", "image", "email", "password", "passwordResetId", "shareableId") SELECT "id", "firstName", "lastName", "birthdate", "description", "image", "email", "password", "passwordResetId", "shareableId" FROM "user"`);
-        await queryRunner.query(`DROP TABLE "user"`);
-        await queryRunner.query(`ALTER TABLE "temporary_user" RENAME TO "user"`);
-        await queryRunner.query(`CREATE TABLE "temporary_hub" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar NOT NULL, "description" varchar, "active" boolean NOT NULL DEFAULT (0), "image" varchar, "latitude" float, "longitude" float, "shareableId" varchar)`);
-        await queryRunner.query(`INSERT INTO "temporary_hub"("id", "name", "description", "active", "image", "latitude", "longitude", "shareableId") SELECT "id", "name", "description", "active", "image", "latitude", "longitude", "shareableId" FROM "hub"`);
-        await queryRunner.query(`DROP TABLE "hub"`);
-        await queryRunner.query(`ALTER TABLE "temporary_hub" RENAME TO "hub"`);
+    public async up(): Promise<void> {
+        this.addSql(`CREATE TABLE "temporary_user" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "firstName" varchar NOT NULL, "lastName" varchar NOT NULL, "birthdate" varchar, "description" varchar, "image" varchar, "email" varchar NOT NULL, "password" varchar NOT NULL, "passwordResetId" integer, "shareableId" varchar NOT NULL, CONSTRAINT "REL_5d250ff0a3f3eba15ff2db819d" UNIQUE ("passwordResetId"), CONSTRAINT "FK_5d250ff0a3f3eba15ff2db819dd" FOREIGN KEY ("passwordResetId") REFERENCES "password_reset" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION)`);
+        this.addSql(`INSERT INTO "temporary_user"("id", "firstName", "lastName", "birthdate", "description", "image", "email", "password", "passwordResetId", "shareableId") SELECT "id", "firstName", "lastName", "birthdate", "description", "image", "email", "password", "passwordResetId", "shareableId" FROM "user"`);
+        this.addSql(`DROP TABLE "user"`);
+        this.addSql(`ALTER TABLE "temporary_user" RENAME TO "user"`);
+        this.addSql(`CREATE TABLE "temporary_hub" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar NOT NULL, "description" varchar, "active" boolean NOT NULL DEFAULT (0), "image" varchar, "latitude" float, "longitude" float, "shareableId" varchar NOT NULL)`);
+        this.addSql(`INSERT INTO "temporary_hub"("id", "name", "description", "active", "image", "latitude", "longitude", "shareableId") SELECT "id", "name", "description", "active", "image", "latitude", "longitude", "shareableId" FROM "hub"`);
+        this.addSql(`DROP TABLE "hub"`);
+        this.addSql(`ALTER TABLE "temporary_hub" RENAME TO "hub"`);
+        this.addSql(`CREATE TABLE "temporary_user" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "firstName" varchar NOT NULL, "lastName" varchar NOT NULL, "birthdate" varchar, "description" varchar, "image" varchar, "email" varchar NOT NULL, "password" varchar NOT NULL, "passwordResetId" integer, "shareableId" varchar, CONSTRAINT "REL_5d250ff0a3f3eba15ff2db819d" UNIQUE ("passwordResetId"), CONSTRAINT "FK_5d250ff0a3f3eba15ff2db819dd" FOREIGN KEY ("passwordResetId") REFERENCES "password_reset" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION)`);
+        this.addSql(`INSERT INTO "temporary_user"("id", "firstName", "lastName", "birthdate", "description", "image", "email", "password", "passwordResetId", "shareableId") SELECT "id", "firstName", "lastName", "birthdate", "description", "image", "email", "password", "passwordResetId", "shareableId" FROM "user"`);
+        this.addSql(`DROP TABLE "user"`);
+        this.addSql(`ALTER TABLE "temporary_user" RENAME TO "user"`);
+        this.addSql(`CREATE TABLE "temporary_hub" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar NOT NULL, "description" varchar, "active" boolean NOT NULL DEFAULT (0), "image" varchar, "latitude" float, "longitude" float, "shareableId" varchar)`);
+        this.addSql(`INSERT INTO "temporary_hub"("id", "name", "description", "active", "image", "latitude", "longitude", "shareableId") SELECT "id", "name", "description", "active", "image", "latitude", "longitude", "shareableId" FROM "hub"`);
+        this.addSql(`DROP TABLE "hub"`);
+        this.addSql(`ALTER TABLE "temporary_hub" RENAME TO "hub"`);
     }
 
-    public async down(queryRunner: QueryRunner): Promise<void> {
+    public async down(): Promise<void> {
         await queryRunner.commitTransaction();
-        await queryRunner.query('PRAGMA foreign_keys=off');
+        this.addSql('PRAGMA foreign_keys=off');
         await queryRunner.startTransaction();
-        await queryRunner.query(`ALTER TABLE "hub" RENAME TO "temporary_hub"`);
-        await queryRunner.query(`CREATE TABLE "hub" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar NOT NULL, "description" varchar, "active" boolean NOT NULL DEFAULT (0), "image" varchar, "latitude" float, "longitude" float, "shareableId" varchar NOT NULL)`);
-        await queryRunner.query(`INSERT INTO "hub"("id", "name", "description", "active", "image", "latitude", "longitude", "shareableId") SELECT "id", "name", "description", "active", "image", "latitude", "longitude", "shareableId" FROM "temporary_hub"`);
-        await queryRunner.query(`DROP TABLE "temporary_hub"`);
-        await queryRunner.query(`ALTER TABLE "user" RENAME TO "temporary_user"`);
-        await queryRunner.query(`CREATE TABLE "user" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "firstName" varchar NOT NULL, "lastName" varchar NOT NULL, "birthdate" varchar, "description" varchar, "image" varchar, "email" varchar NOT NULL, "password" varchar NOT NULL, "passwordResetId" integer, "shareableId" varchar NOT NULL, CONSTRAINT "REL_5d250ff0a3f3eba15ff2db819d" UNIQUE ("passwordResetId"), CONSTRAINT "FK_5d250ff0a3f3eba15ff2db819dd" FOREIGN KEY ("passwordResetId") REFERENCES "password_reset" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION)`);
-        await queryRunner.query(`INSERT INTO "user"("id", "firstName", "lastName", "birthdate", "description", "image", "email", "password", "passwordResetId", "shareableId") SELECT "id", "firstName", "lastName", "birthdate", "description", "image", "email", "password", "passwordResetId", "shareableId" FROM "temporary_user"`);
-        await queryRunner.query(`DROP TABLE "temporary_user"`);
-        await queryRunner.query(`ALTER TABLE "hub" RENAME TO "temporary_hub"`);
-        await queryRunner.query(`CREATE TABLE "hub" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar NOT NULL, "description" varchar, "active" boolean NOT NULL DEFAULT (0), "image" varchar, "latitude" float, "longitude" float, "shareableId" varchar NOT NULL)`);
-        await queryRunner.query(`INSERT INTO "hub"("id", "name", "description", "active", "image", "latitude", "longitude", "shareableId") SELECT "id", "name", "description", "active", "image", "latitude", "longitude", "shareableId" FROM "temporary_hub"`);
-        await queryRunner.query(`DROP TABLE "temporary_hub"`);
-        await queryRunner.query(`ALTER TABLE "user" RENAME TO "temporary_user"`);
-        await queryRunner.query(`CREATE TABLE "user" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "firstName" varchar NOT NULL, "lastName" varchar NOT NULL, "birthdate" varchar, "description" varchar, "image" varchar, "email" varchar NOT NULL, "password" varchar NOT NULL, "passwordResetId" integer, "shareableId" varchar NOT NULL, CONSTRAINT "REL_5d250ff0a3f3eba15ff2db819d" UNIQUE ("passwordResetId"), CONSTRAINT "FK_5d250ff0a3f3eba15ff2db819dd" FOREIGN KEY ("passwordResetId") REFERENCES "password_reset" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION)`);
-        await queryRunner.query(`INSERT INTO "user"("id", "firstName", "lastName", "birthdate", "description", "image", "email", "password", "passwordResetId", "shareableId") SELECT "id", "firstName", "lastName", "birthdate", "description", "image", "email", "password", "passwordResetId", "shareableId" FROM "temporary_user"`);
-        await queryRunner.query(`DROP TABLE "temporary_user"`);
-        await queryRunner.query('PRAGMA main.foreign_key_check')
-        await queryRunner.query('PRAGMA foreign_keys=on');
+        this.addSql(`ALTER TABLE "hub" RENAME TO "temporary_hub"`);
+        this.addSql(`CREATE TABLE "hub" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar NOT NULL, "description" varchar, "active" boolean NOT NULL DEFAULT (0), "image" varchar, "latitude" float, "longitude" float, "shareableId" varchar NOT NULL)`);
+        this.addSql(`INSERT INTO "hub"("id", "name", "description", "active", "image", "latitude", "longitude", "shareableId") SELECT "id", "name", "description", "active", "image", "latitude", "longitude", "shareableId" FROM "temporary_hub"`);
+        this.addSql(`DROP TABLE "temporary_hub"`);
+        this.addSql(`ALTER TABLE "user" RENAME TO "temporary_user"`);
+        this.addSql(`CREATE TABLE "user" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "firstName" varchar NOT NULL, "lastName" varchar NOT NULL, "birthdate" varchar, "description" varchar, "image" varchar, "email" varchar NOT NULL, "password" varchar NOT NULL, "passwordResetId" integer, "shareableId" varchar NOT NULL, CONSTRAINT "REL_5d250ff0a3f3eba15ff2db819d" UNIQUE ("passwordResetId"), CONSTRAINT "FK_5d250ff0a3f3eba15ff2db819dd" FOREIGN KEY ("passwordResetId") REFERENCES "password_reset" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION)`);
+        this.addSql(`INSERT INTO "user"("id", "firstName", "lastName", "birthdate", "description", "image", "email", "password", "passwordResetId", "shareableId") SELECT "id", "firstName", "lastName", "birthdate", "description", "image", "email", "password", "passwordResetId", "shareableId" FROM "temporary_user"`);
+        this.addSql(`DROP TABLE "temporary_user"`);
+        this.addSql(`ALTER TABLE "hub" RENAME TO "temporary_hub"`);
+        this.addSql(`CREATE TABLE "hub" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar NOT NULL, "description" varchar, "active" boolean NOT NULL DEFAULT (0), "image" varchar, "latitude" float, "longitude" float, "shareableId" varchar NOT NULL)`);
+        this.addSql(`INSERT INTO "hub"("id", "name", "description", "active", "image", "latitude", "longitude", "shareableId") SELECT "id", "name", "description", "active", "image", "latitude", "longitude", "shareableId" FROM "temporary_hub"`);
+        this.addSql(`DROP TABLE "temporary_hub"`);
+        this.addSql(`ALTER TABLE "user" RENAME TO "temporary_user"`);
+        this.addSql(`CREATE TABLE "user" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "firstName" varchar NOT NULL, "lastName" varchar NOT NULL, "birthdate" varchar, "description" varchar, "image" varchar, "email" varchar NOT NULL, "password" varchar NOT NULL, "passwordResetId" integer, "shareableId" varchar NOT NULL, CONSTRAINT "REL_5d250ff0a3f3eba15ff2db819d" UNIQUE ("passwordResetId"), CONSTRAINT "FK_5d250ff0a3f3eba15ff2db819dd" FOREIGN KEY ("passwordResetId") REFERENCES "password_reset" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION)`);
+        this.addSql(`INSERT INTO "user"("id", "firstName", "lastName", "birthdate", "description", "image", "email", "password", "passwordResetId", "shareableId") SELECT "id", "firstName", "lastName", "birthdate", "description", "image", "email", "password", "passwordResetId", "shareableId" FROM "temporary_user"`);
+        this.addSql(`DROP TABLE "temporary_user"`);
+        this.addSql('PRAGMA main.foreign_key_check')
+        this.addSql('PRAGMA foreign_keys=on');
 
     }
 

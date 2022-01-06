@@ -36,6 +36,7 @@
   },
   "dependencies": {
     "@mikro-orm/core": "^4.5.10",
+    "@mikro-orm/migrations": "^4.5.10",
     "@mikro-orm/nestjs": "^4.3.1",
     "@mikro-orm/postgresql": "^4.5.10",
     "@mikro-orm/sqlite": "^4.5.10",

@@ -1,14 +1,14 @@
-import {MigrationInterface, QueryRunner} from "typeorm";
+import { Migration } from '@mikro-orm/migrations';
 
-export class lastGeofenceEvent1641361224532 implements MigrationInterface {
+export class lastGeofenceEvent1641361224532 extends Migration {
     name = 'lastGeofenceEvent1641361224532'
 
-    public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`ALTER TABLE "join_user_hub" ADD "lastGeofenceEvent" character varying`);
+    public async up(): Promise<void> {
+        this.addSql(`ALTER TABLE "join_user_hub" ADD "lastGeofenceEvent" character varying`);
     }
 
-    public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`ALTER TABLE "join_user_hub" DROP COLUMN "lastGeofenceEvent"`);
+    public async down(): Promise<void> {
+        this.addSql(`ALTER TABLE "join_user_hub" DROP COLUMN "lastGeofenceEvent"`);
     }
 
 }

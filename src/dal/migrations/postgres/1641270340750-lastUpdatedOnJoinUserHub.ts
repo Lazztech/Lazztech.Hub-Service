@@ -1,14 +1,14 @@
-import {MigrationInterface, QueryRunner} from "typeorm";
+import { Migration } from '@mikro-orm/migrations';
 
-export class lastUpdatedOnJoinUserHub1641270340750 implements MigrationInterface {
+export class lastUpdatedOnJoinUserHub1641270340750 extends Migration {
     name = 'lastUpdatedOnJoinUserHub1641270340750'
 
-    public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`ALTER TABLE "join_user_hub" ADD "lastUpdated" character varying`);
+    public async up(): Promise<void> {
+        this.addSql(`ALTER TABLE "join_user_hub" ADD "lastUpdated" character varying`);
     }
 
-    public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`ALTER TABLE "join_user_hub" DROP COLUMN "lastUpdated"`);
+    public async down(): Promise<void> {
+        this.addSql(`ALTER TABLE "join_user_hub" DROP COLUMN "lastUpdated"`);
     }
 
 }

@@ -1,12 +1,12 @@
-import {IsNull, MigrationInterface, Not, QueryRunner} from "typeorm";
+import { Migration } from '@mikro-orm/migrations';
 import { v4 as uuid } from 'uuid';
 import { Hub } from "../../entity/hub.entity";
 import { User } from "../../entity/user.entity";
 
-export class InsertShareableIds1639774350366 implements MigrationInterface {
+export class InsertShareableIds1639774350366 extends Migration {
 
 
-  public async up(queryRunner: QueryRunner): Promise<void> {
+  public async up(): Promise<void> {
     const hubRepo = queryRunner.connection.getRepository(Hub)
     const userRepo = queryRunner.connection.getRepository(User)
     const hubs = await hubRepo.find({where:{shareableId: null}})
