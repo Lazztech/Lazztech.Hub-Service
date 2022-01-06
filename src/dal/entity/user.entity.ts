@@ -1,55 +1,49 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  OneToMany,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
 import { InAppNotification } from './inAppNotification.entity';
 import { Invite } from './invite.entity';
 import { JoinUserHub } from './joinUserHub.entity';
 import { PasswordReset } from './passwordReset.entity';
 import { UserDevice } from './userDevice.entity';
 import { ShareableId } from './shareableId.entity'
+import { Cascade, Entity, OneToMany, OneToOne, PrimaryKey, Property } from '@mikro-orm/core';
+
 @ObjectType()
 @Entity()
 export class User extends ShareableId{
   @Field(() => ID)
-  @PrimaryGeneratedColumn()
+  @PrimaryKey()
   public id: number;
 
   @Field()
-  @Column()
+  @Property()
   public firstName: string;
 
   @Field()
-  @Column()
+  @Property()
   public lastName: string;
 
   @Field({
     nullable: true,
     description: 'string representation of unix timestamp',
   })
-  @Column({ nullable: true })
+  @Property({ nullable: true })
   public birthdate: string;
 
   @Field({ nullable: true })
-  @Column({ nullable: true })
+  @Property({ nullable: true })
   public description: string;
 
   /**
    * Exposed as a field resolver
    */
-  @Column({ nullable: true })
+  @Property({ nullable: true })
   public image: string;
 
   @Field()
-  @Column()
+  @Property()
   public email: string;
 
-  @Column()
+  @Property()
   public password: string;
 
   @OneToMany(
@@ -61,10 +55,9 @@ export class User extends ShareableId{
   @OneToMany(() => JoinUserHub, (joinUserHub) => joinUserHub.user)
   public hubsConnection: Promise<JoinUserHub[]>;
 
-  @OneToOne(() => PasswordReset, {
-    cascade: true,
+  @OneToOne({
+    cascade: [Cascade.ALL],
   })
-  @JoinColumn()
   public passwordReset: Promise<PasswordReset>;
 
   /**

@@ -1,41 +1,41 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { JoinUserHub } from './joinUserHub.entity';
 import { MicroChat } from './microChat.entity';
 import { Invite } from './invite.entity';
 import { ShareableId } from './shareableId.entity'
+import { Entity, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';
 
 @ObjectType()
 @Entity()
 export class Hub extends ShareableId {
   @Field(() => ID)
-  @PrimaryGeneratedColumn()
+  @PrimaryKey()
   public id: number;
 
   @Field()
-  @Column()
+  @Property()
   public name: string;
 
   @Field({ nullable: true })
-  @Column({ nullable: true })
+  @Property({ nullable: true })
   public description: string;
 
   @Field({ nullable: true })
-  @Column({ default: false })
+  @Property({ default: false })
   public active: boolean;
 
   /**
    * Handled with a field resolver
    */
-  @Column({ nullable: true })
+  @Property({ nullable: true })
   public image: string;
 
   @Field({ nullable: true })
-  @Column({ type: 'float', nullable: true })
+  @Property({ type: 'float', nullable: true })
   public latitude: number;
 
   @Field({ nullable: true })
-  @Column({ type: 'float', nullable: true })
+  @Property({ type: 'float', nullable: true })
   public longitude: number;
 
   @Field(() => [JoinUserHub], { nullable: true })

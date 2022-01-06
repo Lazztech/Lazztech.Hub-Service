@@ -1,5 +1,5 @@
+import { Cascade, Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { Hub } from './hub.entity';
 import { User } from './user.entity';
 
@@ -13,45 +13,42 @@ export enum GeofenceEvent {
 @Entity()
 export class JoinUserHub {
   @Field(() => ID)
-  @PrimaryColumn()
+  @PrimaryKey()
   public userId: number;
 
   @Field(() => ID)
-  @PrimaryColumn()
+  @PrimaryKey()
   public hubId: number;
 
   @Field(() => User)
-  @ManyToOne(() => User, (user) => user.hubsConnection, { onDelete: 'CASCADE' })
-  @JoinColumn()
+  @ManyToOne({ onDelete: 'CASCADE' })
   public user: Promise<User>;
 
   @Field(() => Hub)
-  @ManyToOne(() => Hub, (hub) => hub.usersConnection, {
+  @ManyToOne({ 
     onDelete: 'CASCADE',
-    orphanedRowAction: 'delete',
   })
-  @JoinColumn()
   public hub: Promise<Hub>;
 
   @Field()
-  @Column()
+  @Property()
   public isOwner: boolean;
 
   @Field()
-  @Column({ default: false })
+  @Property({ default: false })
   public starred: boolean;
 
   /**
    * Exposed as a field resolver
    */
-  @Column({ default: false })
+  @Property({ default: false })
   public isPresent: boolean;
 
   @Field({ nullable: true, description: 'last update event for presence' })
-  @Column({ nullable: true })
+  @Property({ nullable: true })
   public lastGeofenceEvent: string;
   
   @Field({ nullable: true, description: 'unix timestamp for the last time the presence state was updated' })
-  @Column({ nullable: true })
+  @Property({ nullable: true })
   public lastUpdated: string;
 }

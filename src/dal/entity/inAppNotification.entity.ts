@@ -1,49 +1,43 @@
+import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
 import { User } from './user.entity';
 
 @ObjectType()
 @Entity()
 export class InAppNotification {
   @Field(() => ID)
-  @PrimaryGeneratedColumn()
+  @PrimaryKey()
   public id: number;
 
   @Field(() => ID)
-  @Column()
+  @Property()
   public userId: number;
 
   @Field({ nullable: true })
-  @Column({ nullable: true })
+  @Property({ nullable: true })
   public header: string;
 
   @Field()
-  @Column()
+  @Property()
   public text: string;
 
   @Field()
-  @Column()
+  @Property()
   public date: string;
 
   /**
    * Handled by a field resolver
    */
-  @Column({ nullable: true })
+  @Property({ nullable: true })
   public thumbnail: string;
 
   @Field({ nullable: true })
-  @Column({ nullable: true })
+  @Property({ nullable: true })
   public actionLink: string;
 
-  @ManyToOne(() => User, (user) => user.inAppNotifications, {
+  @ManyToOne({
     onDelete: 'CASCADE',
+    joinColumn: 'userId'
   })
-  @JoinColumn({ name: 'userId' })
   public user: Promise<User>;
 }

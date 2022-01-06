@@ -1,32 +1,25 @@
+import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
 import { Hub } from './hub.entity';
 
 @ObjectType()
 @Entity()
 export class MicroChat {
   @Field(() => ID)
-  @PrimaryGeneratedColumn()
+  @PrimaryKey()
   public id: number;
 
   @Field()
-  @Column()
+  @Property()
   public hubId: number;
 
   @Field(() => ID)
-  @ManyToOne(() => Hub, (x) => x.microChats, {
+  @ManyToOne({
     onDelete: 'CASCADE',
   })
-  @JoinColumn()
   public hub: Hub;
 
   @Field()
-  @Column()
+  @Property()
   public text: string;
 }

@@ -1,22 +1,22 @@
+import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from './user.entity';
 
 @ObjectType()
 @Entity()
 export class UserDevice {
   @Field(() => ID)
-  @PrimaryGeneratedColumn()
+  @PrimaryKey()
   public id: number;
 
   @Field()
-  @Column({ unique: true })
+  @Property({ unique: true })
   public fcmPushUserToken: string;
 
-  @Column()
+  @Property()
   public userId: number;
 
-  @ManyToOne(() => User, (user) => user.userDevices, {
+  @ManyToOne({
     primary: true,
     onDelete: 'CASCADE',
   })
