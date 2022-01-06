@@ -47,7 +47,6 @@
     "@nestjs/passport": "^8.0.0",
     "@nestjs/platform-express": "^8.0.5",
     "@nestjs/schedule": "^1.0.2",
-    "@nestjs/typeorm": "^8.0.1",
     "@types/aws-sdk": "^2.7.0",
     "@types/imagemin": "^7.0.0",
     "@types/imagemin-mozjpeg": "^8.0.0",
@@ -83,8 +82,7 @@
     "sharp": "^0.22.1",
     "sqlite3": "^5.0.2",
     "ts-morph": "^11.0.3",
-    "typedi": "^0.8.0",
-    "typeorm": "^0.2.34"
+    "typedi": "^0.8.0"
   },
   "devDependencies": {
     "@apollo/gateway": "^0.35.1",
