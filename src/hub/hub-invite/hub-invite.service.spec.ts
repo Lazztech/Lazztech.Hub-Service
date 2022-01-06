@@ -4,12 +4,12 @@ import { ConfigModule } from '@nestjs/config';
 import { HttpModule } from '@nestjs/common';
 import { Invite } from '../../dal/entity/invite.entity';
 import { Repository } from 'typeorm';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { User } from '../../dal/entity/user.entity';
 import { JoinUserHub } from '../../dal/entity/joinUserHub.entity';
 import { NotificationService } from '../../notification/notification.service';
 import { InAppNotification } from '../../dal/entity/inAppNotification.entity';
 import { UserDevice } from '../../dal/entity/userDevice.entity';
+import { getRepositoryToken } from '@mikro-orm/nestjs';
 
 describe('HubInviteService', () => {
   let service: HubInviteService;

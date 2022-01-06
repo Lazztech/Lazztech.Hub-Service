@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { HubGeofenceService } from './hub-geofence.service';
 import { Repository } from 'typeorm';
 import { GeofenceEvent, JoinUserHub } from '../../dal/entity/joinUserHub.entity';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { User } from '../../dal/entity/user.entity';
 import { Hub } from '../../dal/entity/hub.entity';
 import { NotificationService } from '../../notification/notification.service';
@@ -10,6 +9,7 @@ import { ConfigService } from '@nestjs/config';
 import { HttpModule } from '@nestjs/common';
 import { InAppNotification } from '../../dal/entity/inAppNotification.entity';
 import { UserDevice } from '../../dal/entity/userDevice.entity';
+import { getRepositoryToken } from '@mikro-orm/nestjs';
 
 describe('HubGeofenceService', () => {
   let service: HubGeofenceService;

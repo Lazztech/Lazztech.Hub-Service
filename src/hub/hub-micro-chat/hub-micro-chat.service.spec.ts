@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { HubMicroChatService } from './hub-micro-chat.service';
 import { User } from '../../dal/entity/user.entity';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Hub } from '../../dal/entity/hub.entity';
 import { InAppNotification } from '../../dal/entity/inAppNotification.entity';
@@ -11,6 +10,7 @@ import { NotificationService } from '../../notification/notification.service';
 import { ConfigModule } from '@nestjs/config';
 import { HttpModule } from '@nestjs/common';
 import { UserDevice } from '../../dal/entity/userDevice.entity';
+import { getRepositoryToken } from '@mikro-orm/nestjs';
 
 describe('HubMicroChatService', () => {
   let service: HubMicroChatService;

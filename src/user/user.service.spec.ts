@@ -1,5 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { Hub } from '../dal/entity/hub.entity';
 import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
 import { User } from '../dal/entity/user.entity';
@@ -14,6 +13,7 @@ import { ImageFileService } from '../file/image-file/image-file.service';
 import { FileServiceInterface } from '../file/interfaces/file-service.interface';
 import { LocalFileService } from '../file/local-file/local-file.service';
 import { FILE_SERVICE } from '../file/file-service.token';
+import { getRepositoryToken } from '@mikro-orm/nestjs';
 
 describe('UserService', () => {
   let service: UserService;

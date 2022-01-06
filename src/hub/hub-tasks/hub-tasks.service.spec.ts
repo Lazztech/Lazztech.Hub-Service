@@ -1,5 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { JoinUserHub } from '../../dal/entity/joinUserHub.entity';
 import { Repository } from 'typeorm';
 import { HubTasksService } from './hub-tasks.service';
@@ -11,6 +10,7 @@ import { ConfigModule } from '@nestjs/config';
 import { HttpModule } from '@nestjs/common';
 import { InAppNotification } from '../../dal/entity/inAppNotification.entity';
 import { UserDevice } from '../../dal/entity/userDevice.entity';
+import { getRepositoryToken } from '@mikro-orm/nestjs';
 
 describe('HubTasksService', () => {
   let service: HubTasksService;

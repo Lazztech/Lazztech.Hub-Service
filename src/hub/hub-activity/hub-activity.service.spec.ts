@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { HubActivityService } from './hub-activity.service';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JoinUserHub } from '../../dal/entity/joinUserHub.entity';
 import { Hub } from '../../dal/entity/hub.entity';
@@ -10,6 +9,7 @@ import { ConfigModule } from '@nestjs/config';
 import { User } from '../../dal/entity/user.entity';
 import { HttpModule } from '@nestjs/common';
 import { UserDevice } from '../../dal/entity/userDevice.entity';
+import { getRepositoryToken } from '@mikro-orm/nestjs';
 
 describe('HubActivityService', () => {
   let service: HubActivityService;

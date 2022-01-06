@@ -4,9 +4,9 @@ import { EmailService } from '../../email/email.service';
 import { Repository } from 'typeorm';
 import { PasswordReset } from '../../dal/entity/passwordReset.entity';
 import { User } from '../../dal/entity/user.entity';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { ResetPassword } from '../dto/resetPassword.input';
+import { getRepositoryToken } from '@mikro-orm/nestjs';
 
 describe('AuthPasswordResetService', () => {
   let service: AuthPasswordResetService;

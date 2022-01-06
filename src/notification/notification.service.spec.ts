@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { NotificationService } from './notification.service';
 import { ConfigService } from '@nestjs/config';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { User } from '../dal/entity/user.entity';
 import { Repository } from 'typeorm';
 import { PushNotificationDto } from './dto/pushNotification.dto';
@@ -11,6 +10,7 @@ import { HttpService, HttpModule } from '@nestjs/common';
 import { of } from 'rxjs';
 import { UserDevice } from '../dal/entity/userDevice.entity';
 import { AxiosResponse } from 'axios';
+import { getRepositoryToken } from '@mikro-orm/nestjs';
 
 describe('NotificationService', () => {
   let service: NotificationService;

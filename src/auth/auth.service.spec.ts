@@ -1,6 +1,5 @@
 import { ConfigService, ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { InAppNotification } from '../dal/entity/inAppNotification.entity';
 import { User } from '../dal/entity/user.entity';
 import { Repository } from 'typeorm';
@@ -15,6 +14,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { S3Module, S3ModuleOptions } from 'nestjs-s3';
 import { ImageFileService } from '../file/image-file/image-file.service';
 import { FILE_SERVICE } from '../file/file-service.token';
+import { getRepositoryToken } from '@mikro-orm/nestjs';
 
 describe('AuthService', () => {
   let service: AuthService;

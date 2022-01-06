@@ -1,7 +1,6 @@
 import { HttpModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { Hub } from '../dal/entity/hub.entity';
 import { InAppNotification } from '../dal/entity/inAppNotification.entity';
 import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
@@ -15,6 +14,7 @@ import { HubService } from './hub.service';
 import { Invite } from '../dal/entity/invite.entity';
 import { LocalFileService } from '../file/local-file/local-file.service';
 import { FILE_SERVICE } from '../file/file-service.token';
+import { getRepositoryToken } from '@mikro-orm/nestjs';
 
 describe('HubService', () => {
   let hubService: HubService;
