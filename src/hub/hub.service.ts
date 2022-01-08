@@ -1,13 +1,13 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Hub } from '../dal/entity/hub.entity';
 import { Invite } from '../dal/entity/invite.entity';
 import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
 import { User } from '../dal/entity/user.entity';
 import { FileServiceInterface } from '../file/interfaces/file-service.interface';
-import { Repository } from 'typeorm';
 import { FILE_SERVICE } from '../file/file-service.token';
 import { NotificationService } from '../notification/notification.service';
+import { InjectRepository } from '@mikro-orm/nestjs';
+import { EntityRepository } from '@mikro-orm/core';
 
 @Injectable()
 export class HubService {
@@ -16,11 +16,11 @@ export class HubService {
     @Inject(FILE_SERVICE)
     private readonly fileService: FileServiceInterface,
     @InjectRepository(Hub)
-    private hubRepository: Repository<Hub>,
+    private hubRepository: EntityRepository<Hub>,
     @InjectRepository(JoinUserHub)
-    private joinUserHubRepository: Repository<JoinUserHub>,
+    private joinUserHubRepository: EntityRepository<JoinUserHub>,
     @InjectRepository(Invite)
-    private inviteRepository: Repository<Invite>,
+    private inviteRepository: EntityRepository<Invite>,
     private notificationService: NotificationService,
   ) {
     this.logger.log('constructor');
@@ -90,24 +90,23 @@ export class HubService {
     hub.image = imageUrl;
     // repository.create => save pattern used to so that the @BeforeInsert decorated method
     // will fire generating a uuid for the shareableId
-    const persistedHub = await this.hubRepository.save(this.hubRepository.create(hub));
+    const persistedHub = await this.hubRepository.persist(this.hubRepository.create(hub));
     
     const joinUserHub = this.joinUserHubRepository.create({
       userId,
       hubId: persistedHub.id,
       isOwner: true,
     });
-    return await this.joinUserHubRepository.save(joinUserHub);
+    await this.joinUserHubRepository.persist(joinUserHub);
+    return joinUserHub;
   }
 
   async deleteHub(userId: any, hubId: number) {
     this.logger.log(this.deleteHub.name);
     const userHubRelationship = await this.joinUserHubRepository.findOne({
-      where: {
         userId,
         hubId,
-      },
-    });
+      });
 
     if (!userHubRelationship) {
       throw new Error(
@@ -116,11 +115,7 @@ export class HubService {
     } else if (this.isNotOwner(userHubRelationship)) {
       throw new Error(`userId: ${userId} is not an owner of hubId: ${hubId}`);
     }
-    const hub = await this.hubRepository.findOne({
-      where: {
-        id: hubId,
-      },
-    });
+    const hub = await this.hubRepository.findOne({ id: hubId });
     if (hub.image) {
       await this.fileService.delete(hub.image);
     }
@@ -143,7 +138,7 @@ export class HubService {
     let hub = await joinUserHubResult.hub;
     hub.name = name;
     hub.description = description;
-    hub = await this.hubRepository.save(hub);
+    await this.hubRepository.persist(hub);
     return hub;
   }
 
@@ -163,7 +158,7 @@ export class HubService {
     let hub = await joinUserHubResult.hub;
     hub.latitude = latitude;
     hub.longitude = longitude;
-    hub = await this.hubRepository.save(hub);
+    await this.hubRepository.persist(hub);
 
     const relationships = await this.joinUserHubRepository.find({
       hubId,
@@ -207,7 +202,7 @@ export class HubService {
     const imageUrl = await this.fileService.storeImageFromBase64(newImage);
 
     hub.image = imageUrl;
-    hub = await this.hubRepository.save(hub);
+    await this.hubRepository.persist(hub);
 
     return hub;
   }
@@ -234,7 +229,7 @@ export class HubService {
       hubId,
     });
     hubRelationship.starred = true;
-    await this.joinUserHubRepository.save(hubRelationship);
+    await this.joinUserHubRepository.persist(hubRelationship);
     return hubRelationship;
   }
 
@@ -245,7 +240,7 @@ export class HubService {
       hubId,
     });
     hubRelationship.starred = false;
-    await this.joinUserHubRepository.save(hubRelationship);
+    await this.joinUserHubRepository.persist(hubRelationship);
     return hubRelationship;
   }
 
