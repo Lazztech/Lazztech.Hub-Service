@@ -49,7 +49,7 @@ export class PageableOptions {
 /**
  *
  * @param sortOptions
- * @returns typeorm order param compatible result
+ * @returns orm order param compatible result
  */
 export function generateOrderOptions(
   sortOptions?: SortOptions,

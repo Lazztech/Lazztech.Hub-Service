@@ -1,7 +1,7 @@
+import { EntityRepository } from '@mikro-orm/core';
+import { InjectRepository } from '@mikro-orm/nestjs';
 import { Logger } from '@nestjs/common';
 import { Parent, ResolveField, Resolver } from '@nestjs/graphql';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { JoinUserHub } from '../entity/joinUserHub.entity';
 
 @Resolver((of) => JoinUserHub)
@@ -10,7 +10,7 @@ export class JoinUserHubsResolver {
 
   constructor(
     @InjectRepository(JoinUserHub)
-    private joinUserHubRepository: Repository<JoinUserHub>,
+    private joinUserHubRepository: EntityRepository<JoinUserHub>,
   ) {}
 
   @ResolveField(() => Boolean, { nullable: true })
