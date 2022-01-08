@@ -64,7 +64,7 @@ export class UserService {
     user.firstName = details.firstName;
     user.lastName = details.lastName;
     user.description = details.description;
-    await this.userRepository.persist(user);
+    await this.userRepository.persistAndFlush(user);
     return user;
   }
 
@@ -72,7 +72,7 @@ export class UserService {
     this.logger.log(this.changeEmail.name);
     const user = await this.userRepository.findOne({ id: userId });
     user.email = newEmail;
-    await this.userRepository.persist(user);
+    await this.userRepository.persistAndFlush(user);
     return user;
   }
 
@@ -84,7 +84,7 @@ export class UserService {
     }
     const imageUrl = await this.fileService.storeImageFromBase64(newImage);
     user.image = imageUrl;
-    await this.userRepository.persist(user);
+    await this.userRepository.persistAndFlush(user);
     return user;
   }
 }

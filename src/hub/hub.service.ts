@@ -90,14 +90,14 @@ export class HubService {
     hub.image = imageUrl;
     // repository.create => save pattern used to so that the @BeforeInsert decorated method
     // will fire generating a uuid for the shareableId
-    const persistedHub = await this.hubRepository.persist(this.hubRepository.create(hub));
+    const persistedHub = await this.hubRepository.persistAndFlush(this.hubRepository.create(hub));
     
     const joinUserHub = this.joinUserHubRepository.create({
       userId,
       hubId: persistedHub.id,
       isOwner: true,
     });
-    await this.joinUserHubRepository.persist(joinUserHub);
+    await this.joinUserHubRepository.persistAndFlush(joinUserHub);
     return joinUserHub;
   }
 
@@ -138,7 +138,7 @@ export class HubService {
     let hub = await joinUserHubResult.hub;
     hub.name = name;
     hub.description = description;
-    await this.hubRepository.persist(hub);
+    await this.hubRepository.persistAndFlush(hub);
     return hub;
   }
 
@@ -158,7 +158,7 @@ export class HubService {
     let hub = await joinUserHubResult.hub;
     hub.latitude = latitude;
     hub.longitude = longitude;
-    await this.hubRepository.persist(hub);
+    await this.hubRepository.persistAndFlush(hub);
 
     const relationships = await this.joinUserHubRepository.find({
       hubId,
@@ -202,7 +202,7 @@ export class HubService {
     const imageUrl = await this.fileService.storeImageFromBase64(newImage);
 
     hub.image = imageUrl;
-    await this.hubRepository.persist(hub);
+    await this.hubRepository.persistAndFlush(hub);
 
     return hub;
   }
@@ -229,7 +229,7 @@ export class HubService {
       hubId,
     });
     hubRelationship.starred = true;
-    await this.joinUserHubRepository.persist(hubRelationship);
+    await this.joinUserHubRepository.persistAndFlush(hubRelationship);
     return hubRelationship;
   }
 
@@ -240,7 +240,7 @@ export class HubService {
       hubId,
     });
     hubRelationship.starred = false;
-    await this.joinUserHubRepository.persist(hubRelationship);
+    await this.joinUserHubRepository.persistAndFlush(hubRelationship);
     return hubRelationship;
   }
 

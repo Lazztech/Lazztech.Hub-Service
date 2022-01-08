@@ -33,7 +33,7 @@ export class HubGeofenceService {
       );
     }
 
-    this.joinUserHubRepository.persist({
+    this.joinUserHubRepository.persistAndFlush({
       ...hubRelationship,
       isPresent: true,
       lastUpdated: Date.now().toString(),
@@ -61,7 +61,7 @@ export class HubGeofenceService {
       );
     }
 
-    await this.joinUserHubRepository.persist({
+    await this.joinUserHubRepository.persistAndFlush({
       ...hubRelationship,
       isPresent: true,
       lastUpdated: Date.now().toString(),
@@ -84,7 +84,7 @@ export class HubGeofenceService {
       );
     }
 
-    await this.joinUserHubRepository.persist({
+    await this.joinUserHubRepository.persistAndFlush({
       ...hubRelationship,
       isPresent: false,
       lastUpdated: Date.now().toString(),

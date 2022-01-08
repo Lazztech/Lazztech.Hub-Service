@@ -48,7 +48,7 @@ export class AuthService {
       email,
       password: hashedPassword,
     });
-    await this.userRepository.persist(user);
+    await this.userRepository.persistAndFlush(user);
 
     await this.notificationService.addInAppNotificationForUser(user.id, {
       text: `You'll find your notifications here.
@@ -91,7 +91,7 @@ export class AuthService {
     if (valid) {
       const newHashedPassword = await bcrypt.hash(details.newPassword, 12);
       user.password = newHashedPassword;
-      await this.userRepository.persist(user);
+      await this.userRepository.persistAndFlush(user);
 
       return true;
     } else {

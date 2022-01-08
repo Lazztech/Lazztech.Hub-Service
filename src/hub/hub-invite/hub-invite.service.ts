@@ -77,7 +77,7 @@ export class HubInviteService {
       inviteesId: invitee.id,
       invitersId: userId,
     });
-    await this.inviteRepository.persist(invite);
+    await this.inviteRepository.persistAndFlush(invite);
 
     const hub = await userHubRelationship.hub;
     await this.notificationService.addInAppNotificationForUser(invitee.id, {
@@ -107,7 +107,7 @@ export class HubInviteService {
       hubId: invite.hubId,
       isOwner: false,
     });
-    await this.joinUserHubRepository.persist(newRelationship);
+    await this.joinUserHubRepository.persistAndFlush(newRelationship);
     newRelationship = await this.joinUserHubRepository.findOneOrFail({
       userId: newRelationship.userId,
       hubId: newRelationship.hubId,
@@ -115,7 +115,7 @@ export class HubInviteService {
     const invitee = await newRelationship.user;
     const hub = await newRelationship.hub;
 
-    await this.inviteRepository.persist(invite);
+    await this.inviteRepository.persistAndFlush(invite);
     await this.notificationService.addInAppNotificationForUser(invitee.id, {
       thumbnail: hub.image,
       header: `${invitee.firstName} accepted invite`,

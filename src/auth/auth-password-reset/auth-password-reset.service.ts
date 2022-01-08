@@ -31,7 +31,7 @@ export class AuthPasswordResetService {
     if (pinMatches) {
       const hashedPassword = await bcrypt.hash(details.newPassword, 12);
       user.password = hashedPassword;
-      await this.userRepository.persist(user);
+      await this.userRepository.persistAndFlush(user);
       return true;
     } else {
       return false;
@@ -54,7 +54,7 @@ export class AuthPasswordResetService {
       //This is ugly but needed for assignment of lazy relation
       user.passwordReset = Promise.resolve({ pin } as PasswordReset);
       // TODO does this actually save the passwordReset?
-      await this.userRepository.persist(user);
+      await this.userRepository.persistAndFlush(user);
 
       return true;
     } else {

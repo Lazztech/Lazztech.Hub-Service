@@ -69,7 +69,7 @@ export class HubMicroChatService {
     let microChat = new MicroChat();
     microChat.hubId = hubId;
     microChat.text = microChatText;
-    await this.microChatRepository.persist(microChat);
+    await this.microChatRepository.persistAndFlush(microChat);
 
     this.logger.log(
       `createMicroChat(userId: ${userId}, hubId: ${hubId}, microChatText: ${microChatText}) completed successfully.`,

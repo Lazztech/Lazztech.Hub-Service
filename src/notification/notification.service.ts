@@ -48,7 +48,7 @@ export class NotificationService {
       const userDevice = new UserDevice();
       userDevice.userId = user.id;
       userDevice.fcmPushUserToken = token;
-      await this.userDeviceRepository.persist(userDevice);
+      await this.userDeviceRepository.persistAndFlush(userDevice);
       // TODO notify via email that a new device has been used on the account for security.
     } else {
       this.logger.warn('User device token already stored.');
@@ -83,7 +83,7 @@ export class NotificationService {
       ...details,
       userId,
     });
-    await this.inAppNotificationRepository.persist(inAppNotification);
+    await this.inAppNotificationRepository.persistAndFlush(inAppNotification);
   }
 
   async deleteInAppNotification(
