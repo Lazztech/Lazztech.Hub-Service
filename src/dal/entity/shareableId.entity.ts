@@ -4,8 +4,9 @@ import { v4 as uuid } from 'uuid';
 
 @ObjectType({ isAbstract: true })
 export abstract class ShareableId {
-  @Property()
+
   @Field({nullable: false})
+  @Property({ fieldName: 'shareableId' })
   shareableId:string;
 
   // Only fires is repostiory.create is used for before save
