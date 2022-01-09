@@ -15,6 +15,8 @@ async function bootstrap() {
     AppModule,
     new ExpressAdapter(instance),
   );
+  // Starts listening for shutdown hooks
+  app.enableShutdownHooks();
   app.enable('trust proxy');
   app.use(bodyParser.json({ limit: '50mb' }));
   app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
