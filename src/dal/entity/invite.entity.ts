@@ -29,17 +29,22 @@ export class Invite {
   public accepted: boolean;
 
   @Field(() => User)
-  @ManyToOne({ onDelete: 'CASCADE', joinColumn: 'invitersId' })
-  public inviter: Promise<User>;
+  @ManyToOne({ 
+    entity: () => User,
+    onDelete: 'CASCADE', 
+    joinColumn: 'invitersId' 
+  })
+  public inviter: User;
 
   @Field(() => User)
   @ManyToOne({
+    entity: () => User,
     onDelete: 'CASCADE',
     joinColumn: 'inviteesId'
   })
-  public invitee: Promise<User>;
+  public invitee: User;
 
   @Field(() => Hub)
   @ManyToOne({ onDelete: 'CASCADE' })
-  public hub: Promise<Hub>;
+  public hub: Hub;
 }

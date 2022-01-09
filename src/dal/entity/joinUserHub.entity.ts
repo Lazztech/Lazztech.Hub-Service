@@ -21,14 +21,18 @@ export class JoinUserHub {
   public hubId: number;
 
   @Field(() => User)
-  @ManyToOne({ onDelete: 'CASCADE' })
-  public user: Promise<User>;
+  @ManyToOne({
+    entity: () => User,
+    onDelete: 'CASCADE'
+  })
+  public user: User;
 
   @Field(() => Hub)
   @ManyToOne({ 
+    entity: () => Hub,
     onDelete: 'CASCADE',
   })
-  public hub: Promise<Hub>;
+  public hub: Hub;
 
   @Field()
   @Property()

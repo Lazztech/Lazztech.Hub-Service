@@ -50,25 +50,25 @@ export class User extends ShareableId{
     () => InAppNotification,
     (inAppNotifications) => inAppNotifications.user,
   )
-  public inAppNotifications: Promise<InAppNotification[]>;
+  public inAppNotifications: InAppNotification[];
 
   @OneToMany(() => JoinUserHub, (joinUserHub) => joinUserHub.user)
-  public hubsConnection: Promise<JoinUserHub[]>;
+  public hubsConnection: JoinUserHub[];
 
   @OneToOne({
     cascade: [Cascade.ALL],
   })
-  public passwordReset: Promise<PasswordReset>;
+  public passwordReset: PasswordReset;
 
   /**
    * Exposed as a field resolver
    */
   @OneToMany(() => UserDevice, (userDevice) => userDevice.user)
-  public userDevices: Promise<UserDevice[]>;
+  public userDevices: UserDevice[];
 
   @OneToMany(() => Invite, (invite) => invite.invitee)
-  public invitesSent: Promise<Invite[]>;
+  public invitesSent: Invite[];
 
   @OneToMany(() => Invite, (invite) => invite.inviter)
-  public invitesReceived: Promise<Invite[]>;
+  public invitesReceived: Invite[];
 }

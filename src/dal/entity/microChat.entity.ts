@@ -15,6 +15,7 @@ export class MicroChat {
 
   @Field(() => ID)
   @ManyToOne({
+    entity: () => Hub,
     onDelete: 'CASCADE',
   })
   public hub: Hub;

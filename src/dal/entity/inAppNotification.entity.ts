@@ -36,8 +36,9 @@ export class InAppNotification {
   public actionLink: string;
 
   @ManyToOne({
+    entity: () => User,
     onDelete: 'CASCADE',
     joinColumn: 'userId'
   })
-  public user: Promise<User>;
+  public user: User;
 }

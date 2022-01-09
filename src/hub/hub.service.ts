@@ -90,11 +90,12 @@ export class HubService {
     hub.image = imageUrl;
     // repository.create => save pattern used to so that the @BeforeInsert decorated method
     // will fire generating a uuid for the shareableId
-    const persistedHub = await this.hubRepository.persistAndFlush(this.hubRepository.create(hub));
+    hub = this.hubRepository.create(hub);
+    await this.hubRepository.persistAndFlush(hub);
     
     const joinUserHub = this.joinUserHubRepository.create({
       userId,
-      hubId: persistedHub.id,
+      hubId: hub.id,
       isOwner: true,
     });
     await this.joinUserHubRepository.persistAndFlush(joinUserHub);

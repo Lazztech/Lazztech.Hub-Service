@@ -51,8 +51,7 @@ export class AuthPasswordResetService {
         html: `<b>Hello, <strong>${user.firstName}</strong>, Please paste in the follow to reset your password: ${pin}</p>`,
       });
 
-      //This is ugly but needed for assignment of lazy relation
-      user.passwordReset = Promise.resolve({ pin } as PasswordReset);
+      user.passwordReset = { pin } as PasswordReset;
       // TODO does this actually save the passwordReset?
       await this.userRepository.persistAndFlush(user);
 

@@ -17,8 +17,9 @@ export class UserDevice {
   public userId: number;
 
   @ManyToOne({
+    entity: () => User,
     primary: true,
     onDelete: 'CASCADE',
   })
-  public user: Promise<User>;
+  public user: User;
 }

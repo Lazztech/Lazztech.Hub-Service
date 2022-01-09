@@ -107,7 +107,9 @@ import { Connection, IDatabaseDriver } from '@mikro-orm/core';
         const commonSettings = {
           logger: (message) => console.log(message),
           // migrationsRun: true,
-          // migrationsTransactionMode: 'each',
+          migrations: {
+            transactional: true,
+          },
           entities: [__dirname + '/dal/entity/**/*.*.*'],
         }  as MikroOrmModuleOptions<IDatabaseDriver<Connection>>;
         switch (configService.get('DATABASE_TYPE', 'sqlite')) {
@@ -123,7 +125,10 @@ import { Connection, IDatabaseDriver } from '@mikro-orm/core';
             );
             return {
               ...commonSettings,
-              migrations: [__dirname + '/dal/migrations/sqlite/*.*'],
+              migrations: {
+                ...commonSettings.migrations,
+                path: __dirname + '/dal/migrations/sqlite/*.*',
+              },
               type: 'sqlite',
               baseDir: __dirname,
               dbName: configService.get(
@@ -140,7 +145,10 @@ import { Connection, IDatabaseDriver } from '@mikro-orm/core';
             );
             return {
               ...commonSettings,
-              migrations: [__dirname + '/dal/migrations/postgres/*.*'],
+              migrations: {
+                ...commonSettings.migrations,
+                path: __dirname + '/dal/migrations/postgres/*.*'
+              },
               type: 'postgresql',
               dbName: configService.get('DATABASE_SCHEMA', 'postgres'),
               host: configService.get('DATABASE_HOST', 'localhost'),

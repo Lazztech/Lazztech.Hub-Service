@@ -1,35 +1,50 @@
+import { EntityRepository, IDatabaseDriver } from '@mikro-orm/core';
 import { Migration } from '@mikro-orm/migrations';
+import { InjectRepository } from '@mikro-orm/nestjs';
+import { AbstractSqlConnection, AbstractSqlDriver } from '@mikro-orm/postgresql';
 import { v4 as uuid } from 'uuid';
 import { Hub } from "../../entity/hub.entity";
 import { User } from "../../entity/user.entity";
 
 export class InsertShareableIds1639774353045 extends Migration {
 
+  constructor(
+    driver: AbstractSqlDriver<AbstractSqlConnection>, 
+    config: any,
+    @InjectRepository(Hub)
+    private hubRepo: EntityRepository<Hub>,
+    @InjectRepository(User)
+    private userRepo: EntityRepository<User>,
+    ) {
+    super(driver, config);
+  }
+
 
   public async up(): Promise<void> {
-    const hubRepo = queryRunner.connection.getRepository(Hub)
-    const hubs = await hubRepo.find({where:{shareableId: null}})
-    for (let i = 0; i < hubs.length; i++) {
-      await queryRunner.manager.createQueryBuilder().update('hub').set({shareableId: uuid()}).where({id: hubs[i].id}).execute()
+    const hubs = await this.hubRepo.find({shareableId: null});
+    for (const hub of hubs) {
+      hub.shareableId = uuid();
+      await this.hubRepo.persistAndFlush(hub);
     }
 
-    const userRepo = queryRunner.connection.getRepository(User)
-    const users = await userRepo.find({where:{shareableId: null}})
-    for (let i = 0; i < users.length; i++) {
-      await queryRunner.manager.createQueryBuilder().update('user').set({shareableId: uuid()}).where({id: users[i].id}).execute()
+    const users = await this.userRepo.find({shareableId: null});
+    for (const user of users) {
+      user.shareableId = uuid();
+      await this.hubRepo.persistAndFlush(user);
     }
   }
 
   public async down(): Promise<void> {
-    const hubRepo = queryRunner.connection.getRepository(Hub)
-    const hubs = await hubRepo.find({where:{shareableId: Not(IsNull()) }})
-    for (let i = 0; i < hubs.length; i++) {
-      await queryRunner.manager.createQueryBuilder().update('hub').set({shareableId: null}).where({id: hubs[i].id}).execute()
+    const hubs = await this.hubRepo.find({shareableId: { $ne: null } });
+    for (const hub of hubs) {
+      hub.shareableId = null;
+      await this.userRepo.persistAndFlush(hubs);
     }
-    const userRepo = queryRunner.connection.getRepository(User)
-    const users = await userRepo.find({where:{shareableId: Not(IsNull())}})
-    for (let i = 0; i < users.length; i++) {
-      await queryRunner.manager.createQueryBuilder().update('user').set({shareableId: null}).where({id: users[i].id}).execute()
+
+    const users = await this.userRepo.find({shareableId: { $ne: null }});
+    for (const user of users) {
+      user.shareableId = null;
+      await this.userRepo.persistAndFlush(user);
     }
   }
 }

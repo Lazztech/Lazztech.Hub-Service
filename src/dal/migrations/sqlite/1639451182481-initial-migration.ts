@@ -42,9 +42,9 @@ export class initialMigration1639451182481 extends Migration {
     }
 
     public async down(): Promise<void> {
-        await queryRunner.commitTransaction();
-        this.addSql('PRAGMA foreign_keys=off');
-        await queryRunner.startTransaction();
+        // await queryRunner.commitTransaction();
+        // this.addSql('PRAGMA foreign_keys=off');
+        // await queryRunner.startTransaction();
         this.addSql(`ALTER TABLE "micro_chat" RENAME TO "temporary_micro_chat"`);
         this.addSql(`CREATE TABLE "micro_chat" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "hubId" integer NOT NULL, "text" varchar NOT NULL)`);
         this.addSql(`INSERT INTO "micro_chat"("id", "hubId", "text") SELECT "id", "hubId", "text" FROM "temporary_micro_chat"`);
@@ -80,8 +80,8 @@ export class initialMigration1639451182481 extends Migration {
         this.addSql(`DROP INDEX "IDX_c8772f9bcb1e9f4faaa9c8873d"`);
         this.addSql(`DROP TABLE "invite"`);
         this.addSql(`DROP TABLE "in_app_notification"`);
-        this.addSql('PRAGMA main.foreign_key_check')
-        this.addSql('PRAGMA foreign_keys=on');
+        // this.addSql('PRAGMA main.foreign_key_check')
+        // this.addSql('PRAGMA foreign_keys=on');
     }
 
 }
