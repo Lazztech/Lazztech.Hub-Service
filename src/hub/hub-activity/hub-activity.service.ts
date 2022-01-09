@@ -37,7 +37,7 @@ export class HubActivityService {
       );
     }
 
-    let hub = await hubRelationship.hub;
+    const hub = await hubRelationship.hub;
     hub.active = true;
     await this.hubRepository.persistAndFlush(hub);
 
@@ -59,7 +59,7 @@ export class HubActivityService {
       );
     }
 
-    let hub = await hubRelationship.hub;
+    const hub = await hubRelationship.hub;
     hub.active = false;
     await this.hubRepository.persistAndFlush(hub);
     return hub;

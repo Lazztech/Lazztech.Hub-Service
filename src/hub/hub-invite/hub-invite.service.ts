@@ -72,7 +72,7 @@ export class HubInviteService {
     }
     this.validateInvitee(invitee, inviteesEmail, userId);
 
-    let invite = this.inviteRepository.create({
+    const invite = this.inviteRepository.create({
       hubId,
       inviteesId: invitee.id,
       invitersId: userId,
@@ -99,7 +99,7 @@ export class HubInviteService {
 
   public async acceptHubInvite(inviteesId: number, inviteId: number) {
     this.logger.log(this.acceptHubInvite.name);
-    let invite = await this.inviteRepository.findOneOrFail({ id: inviteId });
+    const invite = await this.inviteRepository.findOneOrFail({ id: inviteId });
     invite.accepted = true;
 
     let newRelationship = this.joinUserHubRepository.create({

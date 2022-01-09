@@ -60,7 +60,7 @@ export class UserService {
 
   public async editUserDetails(userId: any, details: EditUserDetails) {
     this.logger.log(this.editUserDetails.name);
-    let user = await this.userRepository.findOne({ id: userId });
+    const user = await this.userRepository.findOne({ id: userId });
     user.firstName = details.firstName;
     user.lastName = details.lastName;
     user.description = details.description;
@@ -78,7 +78,7 @@ export class UserService {
 
   public async changeUserImage(userId: any, newImage: string) {
     this.logger.log(this.changeUserImage.name);
-    let user = await this.userRepository.findOne(userId);
+    const user = await this.userRepository.findOne(userId);
     if (user.image) {
       await this.fileService.delete(user.image);
     }

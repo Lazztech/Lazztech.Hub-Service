@@ -1,4 +1,4 @@
-import { EntityRepository, IDatabaseDriver } from '@mikro-orm/core';
+import { EntityRepository } from '@mikro-orm/core';
 import { Migration } from '@mikro-orm/migrations';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { AbstractSqlConnection, AbstractSqlDriver } from '@mikro-orm/postgresql';

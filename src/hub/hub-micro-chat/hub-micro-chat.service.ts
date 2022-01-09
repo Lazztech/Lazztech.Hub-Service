@@ -66,7 +66,7 @@ export class HubMicroChatService {
       );
     }
 
-    let microChat = new MicroChat();
+    const microChat = new MicroChat();
     microChat.hubId = hubId;
     microChat.text = microChatText;
     await this.microChatRepository.persistAndFlush(microChat);

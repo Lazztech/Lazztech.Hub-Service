@@ -41,7 +41,7 @@ export class AuthService {
     const hashedPassword = await bcrypt.hash(password, 12);
 
     // TODO THIS SECTION SHOULD BE AN ACID TRANSACTION
-    let user = await this.userRepository.create({
+    const user = await this.userRepository.create({
       firstName,
       lastName,
       birthdate,

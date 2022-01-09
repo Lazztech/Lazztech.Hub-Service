@@ -136,7 +136,7 @@ export class HubService {
       isOwner: true,
     });
 
-    let hub = await joinUserHubResult.hub;
+    const hub = await joinUserHubResult.hub;
     hub.name = name;
     hub.description = description;
     await this.hubRepository.persistAndFlush(hub);
@@ -156,7 +156,7 @@ export class HubService {
       isOwner: true,
     });
 
-    let hub = await joinUserHubResult.hub;
+    const hub = await joinUserHubResult.hub;
     hub.latitude = latitude;
     hub.longitude = longitude;
     await this.hubRepository.persistAndFlush(hub);
@@ -195,7 +195,7 @@ export class HubService {
       isOwner: true,
     });
 
-    let hub = await joinUserHubResult.hub;
+    const hub = await joinUserHubResult.hub;
 
     if (hub.image) {
       await this.fileService.delete(hub.image);
