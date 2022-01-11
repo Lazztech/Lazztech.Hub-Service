@@ -33,6 +33,7 @@
     "migration:apply:all": "npm run typeorm -- migration:run -t each && npm run typeorm -- migration:run -t each -c postgres",
     "migration:log:all": "npm run typeorm schema:log && npm run typeorm -- schema:log -c postgres",
     "migration:show:all": "npm run typeorm migration:show && npm run typeorm -- migration:show -c postgres",
+    "mikroorm:list:all": "MIKRO_ORM_CLI=$PWD/mikro-orm.sqlite.config.js mikro-orm migration:list && MIKRO_ORM_CLI=$PWD/mikro-orm.postgres.config.js mikro-orm migration:list",
     "mikroorm:debug:sqlite": "MIKRO_ORM_CLI=$PWD/mikro-orm.sqlite.config.js mikro-orm debug",
     "mikroorm:debug:postgres": "MIKRO_ORM_CLI=$PWD/mikro-orm.postgres.config.js mikro-orm debug"
   },
@@ -131,5 +132,13 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "mikro-orm": {
+    "useTsNode": true,
+    "tsConfigPath": "./tsconfig.mikro-orm.json",
+    "configPaths": [
+      "./src/mikro-orm.config.ts",
+      "./dist/mikro-orm.config.js"
+    ]
   }
 }
