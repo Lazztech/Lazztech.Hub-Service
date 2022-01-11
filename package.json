@@ -32,7 +32,9 @@
     "migration:create:all": "npm run typeorm -- migration:create -c postgres -n $name && npm run typeorm -- migration:create -n $name",
     "migration:apply:all": "npm run typeorm -- migration:run -t each && npm run typeorm -- migration:run -t each -c postgres",
     "migration:log:all": "npm run typeorm schema:log && npm run typeorm -- schema:log -c postgres",
-    "migration:show:all": "npm run typeorm migration:show && npm run typeorm -- migration:show -c postgres"
+    "migration:show:all": "npm run typeorm migration:show && npm run typeorm -- migration:show -c postgres",
+    "mikroorm:debug:sqlite": "MIKRO_ORM_CLI=$PWD/mikro-orm.sqlite.config.js mikro-orm debug",
+    "mikroorm:debug:postgres": "MIKRO_ORM_CLI=$PWD/mikro-orm.postgres.config.js mikro-orm debug"
   },
   "dependencies": {
     "@mikro-orm/cli": "^4.5.10",
