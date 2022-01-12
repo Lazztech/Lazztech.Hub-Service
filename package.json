@@ -36,7 +36,7 @@
     "migration:list:all": "MIKRO_ORM_CLI=$PWD/mikro-orm.sqlite.config.js mikro-orm migration:list && MIKRO_ORM_CLI=$PWD/mikro-orm.postgres.config.js mikro-orm migration:list",
     "migration:list:sqlite": "MIKRO_ORM_CLI=$PWD/mikro-orm.sqlite.config.js mikro-orm migration:list",
     "migration:list:postgres": "MIKRO_ORM_CLI=$PWD/mikro-orm.postgres.config.js mikro-orm migration:list",
-    "migration:pending:all": "IKRO_ORM_CLI=$PWD/mikro-orm.sqlite.config.js mikro-orm migration:pending && MIKRO_ORM_CLI=$PWD/mikro-orm.sqlite.config.js mikro-orm migration:postgres",
+    "migration:pending:all": "MIKRO_ORM_CLI=$PWD/mikro-orm.sqlite.config.js mikro-orm migration:pending && MIKRO_ORM_CLI=$PWD/mikro-orm.sqlite.config.js mikro-orm migration:pending",
     "migration:pending:sqlite": "MIKRO_ORM_CLI=$PWD/mikro-orm.sqlite.config.js mikro-orm migration:pending",
     "migration:pending:postgres": "MIKRO_ORM_CLI=$PWD/mikro-orm.sqlite.config.js mikro-orm migration:postgres",
     "migration:debug:all": "MIKRO_ORM_CLI=$PWD/mikro-orm.postgres.config.js mikro-orm debug && MIKRO_ORM_CLI=$PWD/mikro-orm.postgres.config.js mikro-orm debug",
