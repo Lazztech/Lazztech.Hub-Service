@@ -28,7 +28,7 @@
     "migration:revert:sqlite": "npm run typeorm -- migration:revert",
     "migration:revert:postgres": "npm run typeorm -- migration:revert -c postgres",
     "migration:revert:all": "npm run typeorm -- migration:revert && npm run typeorm -- migration:revert -c postgres",
-    "migration:generate:all": "npm run build && npm run typeorm -- migration:generate -c postgres -n $name && npm run typeorm -- migration:generate -n $name",
+    "migration:generate:all": "MIKRO_ORM_CLI=$PWD/mikro-orm.sqlite.config.js mikro-orm migration:create && MIKRO_ORM_CLI=$PWD/mikro-orm.postgres.config.js mikro-orm migration:create",
     "migration:create:all": "MIKRO_ORM_CLI=$PWD/mikro-orm.sqlite.config.js mikro-orm migration:create -b && MIKRO_ORM_CLI=$PWD/mikro-orm.postgres.config.js mikro-orm migration:create -b",
     "migration:apply:all": "npm run typeorm -- migration:run -t each && npm run typeorm -- migration:run -t each -c postgres",
     "migration:log:all": "npm run typeorm schema:log && npm run typeorm -- schema:log -c postgres",
