@@ -5,7 +5,7 @@ const mikroOrmSqliteConfig = {
   dbName: __dirname + '/data/sqlite3.db',
   entities: ['src/dal/entity/**/*.*.*'],
   migrations: {
-    path: 'src/dal/migrations/sqlite/*.ts',
+    path: 'src/dal/migrations/sqlite',
   },
   debug: true,
 };

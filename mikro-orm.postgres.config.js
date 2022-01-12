@@ -9,7 +9,7 @@ const mikroOrmPostgresConfig = {
   dbName: 'postgres',
   entities: ['src/dal/entity/**/*.*.*'],
   migrations: {
-    path: 'src/dal/migrations/postgres/*.ts',
+    path: 'src/dal/migrations/postgres',
   },
   debug: true,
 };

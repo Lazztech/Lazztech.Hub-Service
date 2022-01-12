@@ -29,13 +29,13 @@
     "migration:revert:postgres": "npm run typeorm -- migration:revert -c postgres",
     "migration:revert:all": "npm run typeorm -- migration:revert && npm run typeorm -- migration:revert -c postgres",
     "migration:generate:all": "npm run build && npm run typeorm -- migration:generate -c postgres -n $name && npm run typeorm -- migration:generate -n $name",
-    "migration:create:all": "npm run typeorm -- migration:create -c postgres -n $name && npm run typeorm -- migration:create -n $name",
+    "migration:create:all": "MIKRO_ORM_CLI=$PWD/mikro-orm.sqlite.config.js mikro-orm migration:create -b && MIKRO_ORM_CLI=$PWD/mikro-orm.postgres.config.js mikro-orm migration:create -b",
     "migration:apply:all": "npm run typeorm -- migration:run -t each && npm run typeorm -- migration:run -t each -c postgres",
     "migration:log:all": "npm run typeorm schema:log && npm run typeorm -- schema:log -c postgres",
     "migration:show:all": "npm run typeorm migration:show && npm run typeorm -- migration:show -c postgres",
-    "mikroorm:list:all": "MIKRO_ORM_CLI=$PWD/mikro-orm.sqlite.config.js mikro-orm migration:list && MIKRO_ORM_CLI=$PWD/mikro-orm.postgres.config.js mikro-orm migration:list",
-    "mikroorm:debug:sqlite": "MIKRO_ORM_CLI=$PWD/mikro-orm.sqlite.config.js mikro-orm debug",
-    "mikroorm:debug:postgres": "MIKRO_ORM_CLI=$PWD/mikro-orm.postgres.config.js mikro-orm debug"
+    "migration:list:all": "MIKRO_ORM_CLI=$PWD/mikro-orm.sqlite.config.js mikro-orm migration:list && MIKRO_ORM_CLI=$PWD/mikro-orm.postgres.config.js mikro-orm migration:list",
+    "migration:debug:sqlite": "MIKRO_ORM_CLI=$PWD/mikro-orm.sqlite.config.js mikro-orm debug",
+    "migration:debug:postgres": "MIKRO_ORM_CLI=$PWD/mikro-orm.postgres.config.js mikro-orm debug"
   },
   "dependencies": {
     "@mikro-orm/cli": "^4.5.10",
