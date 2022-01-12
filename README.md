@@ -141,6 +141,9 @@ docker exec -it lazztech_postgres bash
 
 # restore it from within
 pg_restore -U postgres -d postgres --no-owner -1 /var/lib/postgresql/data/db.dump
+
+# cleanup
+$ docker rm lazztech_postgres
 ```
 
 In your .env or .env.local file configure these enviroment varaibles for postgres

@@ -32,7 +32,7 @@ export class InAppNotification {
   public thumbnail: string;
 
   @Field({ nullable: true })
-  @Property({ nullable: true })
+  @Property({ fieldName: 'actionLink', nullable: true })
   public actionLink: string;
 
   @ManyToOne({

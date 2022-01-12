@@ -35,7 +35,7 @@ export class JoinUserHub {
   public hub: Hub;
 
   @Field()
-  @Property()
+  @Property({ fieldName: 'isOwner' })
   public isOwner: boolean;
 
   @Field()
@@ -45,14 +45,14 @@ export class JoinUserHub {
   /**
    * Exposed as a field resolver
    */
-  @Property({ default: false })
+  @Property({ fieldName: 'isPresent' })
   public isPresent: boolean;
 
   @Field({ nullable: true, description: 'last update event for presence' })
-  @Property({ nullable: true })
+  @Property({ fieldName: 'lastGeofenceEvent', nullable: true })
   public lastGeofenceEvent: string;
   
   @Field({ nullable: true, description: 'unix timestamp for the last time the presence state was updated' })
-  @Property({ nullable: true })
+  @Property({ fieldName: 'lastUpdated', nullable: true })
   public lastUpdated: string;
 }

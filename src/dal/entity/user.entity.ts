@@ -15,11 +15,11 @@ export class User extends ShareableId{
   public id: number;
 
   @Field()
-  @Property()
+  @Property({ fieldName: 'firstName' })
   public firstName: string;
 
   @Field()
-  @Property()
+  @Property({ fieldName: 'lastName' })
   public lastName: string;
 
   @Field({
