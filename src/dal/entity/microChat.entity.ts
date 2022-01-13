@@ -10,7 +10,7 @@ export class MicroChat {
   public id: number;
 
   @Field()
-  @Property()
+  @Property({ fieldName: 'hubId'})
   public hubId: number;
 
   @Field(() => ID)
