@@ -18,8 +18,8 @@ export class UserDevice {
 
   @ManyToOne({
     entity: () => User,
-    primary: true,
-    onDelete: 'CASCADE',
+    fieldName: 'userId',
+    onDelete: 'cascade'
   })
   public user: User;
 }
