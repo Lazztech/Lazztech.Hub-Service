@@ -45,7 +45,7 @@ export class JoinUserHub {
   /**
    * Exposed as a field resolver
    */
-  @Property({ fieldName: 'isPresent' })
+  @Property({ fieldName: 'isPresent', default: false })
   public isPresent: boolean;
 
   @Field({ nullable: true, description: 'last update event for presence' })
