@@ -10,7 +10,7 @@ export class UserDevice {
   public id: number;
 
   @Field()
-  @Property({ unique: true })
+  @Property({ fieldName: 'fcmPushUserToken', unique: true })
   public fcmPushUserToken: string;
 
   @Property()
