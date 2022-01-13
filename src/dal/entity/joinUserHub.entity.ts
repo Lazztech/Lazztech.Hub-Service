@@ -13,17 +13,18 @@ export enum GeofenceEvent {
 @Entity()
 export class JoinUserHub {
   @Field(() => ID)
+  @PrimaryKey({ fieldName: 'userId'})
   public userId: number;
 
   @Field(() => ID)
+  @PrimaryKey({ fieldName: 'hubId'})
   public hubId: number;
 
   @Field(() => User)
   @ManyToOne({
     entity: () => User,
     fieldName: 'userId',
-    onDelete: 'cascade',
-    primary: true
+    onDelete: 'cascade', primary: true
   })
   public user: User;
 
