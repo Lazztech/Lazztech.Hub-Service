@@ -108,7 +108,6 @@ import { Connection, IDatabaseDriver } from '@mikro-orm/core';
           logger: (message) => console.log(message),
           // migrationsRun: true,
           migrations: {
-            tableName: "migrations",
             pattern: /^[\w-]+\d+|\d\.ts$/,
             transactional: true,
           },

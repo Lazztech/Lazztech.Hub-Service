@@ -9,7 +9,6 @@ const mikroOrmPostgresConfig = {
   dbName: 'postgres',
   entities: ['src/dal/entity/**/*.*.*'],
   migrations: {
-    tableName: "migrations",
     path: 'src/dal/migrations/postgres',
     pattern: /^[\w-]+\d+|\d\.ts$/,
     transactional: true,
