@@ -45,8 +45,9 @@ export class Invite {
 
   @Field(() => Hub)
   @ManyToOne({ 
-    entity: () => Hub,
-    onDelete: 'CASCADE' 
+    entity: () => Hub, 
+    fieldName: 'hubId',
+    onDelete: 'cascade'
   })
   public hub: Hub;
 }
