@@ -12,15 +12,15 @@ export class Invite {
   public id: number;
 
   @Field(() => ID)
-  @Property()
+  @Property({ fieldName: 'invitersId'})
   public invitersId: number;
 
   @Field(() => ID)
-  @Property()
+  @Property({ fieldName: 'inviteesId'})
   public inviteesId: number;
 
   @Field(() => ID)
-  @Property()
+  @Property({ fieldName: 'hubId'})
   public hubId: number;
 
   @Field(() => Boolean)
@@ -30,18 +30,18 @@ export class Invite {
   @Field(() => User)
   @ManyToOne({ 
     entity: () => User,
-    onDelete: 'CASCADE', 
-    joinColumn: 'invitersId' 
+    fieldName: 'invitersId',
+    onDelete: 'cascade'
   })
-  public inviter: User;
+  public inviter!: User;
 
   @Field(() => User)
   @ManyToOne({
     entity: () => User,
-    onDelete: 'CASCADE',
-    joinColumn: 'inviteesId'
+    fieldName: 'inviteesId',
+    onDelete: 'cascade'
   })
-  public invitee: User;
+  public invitee!: User;
 
   @Field(() => Hub)
   @ManyToOne({ 
@@ -49,5 +49,5 @@ export class Invite {
     fieldName: 'hubId',
     onDelete: 'cascade'
   })
-  public hub: Hub;
+  public hub!: Hub;
 }
