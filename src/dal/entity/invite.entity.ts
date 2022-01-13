@@ -5,7 +5,6 @@ import { Entity, Index, ManyToOne, PrimaryKey, Property, Unique } from '@mikro-o
 
 @ObjectType()
 @Entity()
-@Index({ properties: ['invitersId', 'inviteesId', 'hubId'] })
 @Unique({ properties: ['invitersId', 'inviteesId', 'hubId'] })
 export class Invite {
   @Field(() => ID)
