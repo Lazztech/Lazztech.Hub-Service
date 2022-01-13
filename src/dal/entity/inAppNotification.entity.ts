@@ -10,6 +10,7 @@ export class InAppNotification {
   public id: number;
 
   @Field(() => ID)
+  @Property({ fieldName: 'userId' })
   public userId: number;
 
   @Field({ nullable: true })
