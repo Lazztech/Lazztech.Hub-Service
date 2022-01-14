@@ -5,7 +5,7 @@ import { JoinUserHub } from './joinUserHub.entity';
 import { PasswordReset } from './passwordReset.entity';
 import { UserDevice } from './userDevice.entity';
 import { ShareableId } from './shareableId.entity'
-import { Cascade, Entity, OneToMany, OneToOne, PrimaryKey, Property } from '@mikro-orm/core';
+import { Cascade, Collection, Entity, OneToMany, OneToOne, PrimaryKey, Property } from '@mikro-orm/core';
 
 @ObjectType()
 @Entity()
@@ -50,10 +50,10 @@ export class User extends ShareableId{
     () => InAppNotification,
     (inAppNotifications) => inAppNotifications.user,
   )
-  public inAppNotifications: InAppNotification[];
+  public inAppNotifications = new Collection<InAppNotification>(this);
 
   @OneToMany(() => JoinUserHub, (joinUserHub) => joinUserHub.user)
-  public hubsConnection: JoinUserHub[];
+  public hubsConnection = new Collection<JoinUserHub>(this);
 
   @OneToOne({
     cascade: [Cascade.ALL],
@@ -66,11 +66,11 @@ export class User extends ShareableId{
    * Exposed as a field resolver
    */
   @OneToMany(() => UserDevice, (userDevice) => userDevice.user)
-  public userDevices: UserDevice[];
+  public userDevices = new Collection<UserDevice>(this);
 
   @OneToMany(() => Invite, (invite) => invite.invitee)
-  public invitesSent: Invite[];
+  public invitesSent = new Collection<Invite>(this);
 
   @OneToMany(() => Invite, (invite) => invite.inviter)
-  public invitesReceived: Invite[];
+  public invitesReceived = new Collection<Invite>(this);
 }
