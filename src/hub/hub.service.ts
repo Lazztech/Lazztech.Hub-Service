@@ -70,7 +70,7 @@ export class HubService {
     }
 
     const resultingOtherUsers: User[] = await Promise.all(
-      commonConnections.filter((x) => x.userId != userId).map((x) => x.user),
+      commonConnections.filter((x) => x.userId != userId).map((x) => x.user.load()),
     );
 
     const uniqueUsers: User[] = [];
@@ -136,7 +136,7 @@ export class HubService {
       isOwner: true,
     });
 
-    const hub = await joinUserHubResult.hub;
+    const hub = await joinUserHubResult.hub.load();
     hub.name = name;
     hub.description = description;
     await this.hubRepository.persistAndFlush(hub);
@@ -156,7 +156,7 @@ export class HubService {
       isOwner: true,
     });
 
-    const hub = await joinUserHubResult.hub;
+    const hub = await joinUserHubResult.hub.load();
     hub.latitude = latitude;
     hub.longitude = longitude;
     await this.hubRepository.persistAndFlush(hub);
@@ -164,7 +164,7 @@ export class HubService {
     const relationships = await this.joinUserHubRepository.find({
       hubId,
     });
-    const user = await joinUserHubResult.user;
+    const user = await joinUserHubResult.user.load();
     for (const relationship of relationships) {
       await this.notificationService.addInAppNotificationForUser(
         relationship.userId,
@@ -195,7 +195,7 @@ export class HubService {
       isOwner: true,
     });
 
-    const hub = await joinUserHubResult.hub;
+    const hub = await joinUserHubResult.hub.load();
 
     if (hub.image) {
       await this.fileService.delete(hub.image);
@@ -254,8 +254,9 @@ export class HubService {
     const results: Hub[] = [];
     for (let index = 0; index < userHubRelationship.length; index++) {
       const element = userHubRelationship[index];
-      if ((await element.hub).name.toLowerCase().includes(search)) {
-        results.push(await element.hub);
+      const hub = await element.hub.load();
+      if (hub.name.toLowerCase().includes(search)) {
+        results.push(hub);
       }
     }
 

@@ -40,7 +40,7 @@ export class HubGeofenceService {
       lastGeofenceEvent: GeofenceEvent.ENTERED
     })
 
-    const hub = await hubRelationship.hub;
+    const hub = await hubRelationship.hub.load();
     if (hub.active) {
       await this.notifyMembersOfArrival(userId, hubId);
     }
@@ -91,7 +91,7 @@ export class HubGeofenceService {
       lastGeofenceEvent: GeofenceEvent.EXITED
     })
 
-    const hub = await hubRelationship.hub;
+    const hub = await hubRelationship.hub.load();
     if (hub.active) {
       await this.notifyMembersOfExit(userId, hubId);
     }

@@ -67,7 +67,7 @@ export class HubInviteService {
     if(invitee){
       const alreadyInvited = await this.inviteRepository.findOne({inviteesId: invitee.id, invitersId: userId, hubId });
       if (alreadyInvited) {
-        throw new Error(`${invitee.firstName} has already been invited to ${(await alreadyInvited.hub).name}`);
+        throw new Error(`${invitee.firstName} has already been invited to ${(await alreadyInvited.hub.load()).name}`);
       }
     }
     this.validateInvitee(invitee, inviteesEmail, userId);
@@ -79,7 +79,7 @@ export class HubInviteService {
     });
     await this.inviteRepository.persistAndFlush(invite);
 
-    const hub = await userHubRelationship.hub;
+    const hub = await userHubRelationship.hub.load();
     await this.notificationService.addInAppNotificationForUser(invitee.id, {
       thumbnail: hub.image,
       header: `You're invited to "${hub.name}" hub.`,
@@ -112,8 +112,8 @@ export class HubInviteService {
       userId: newRelationship.userId,
       hubId: newRelationship.hubId,
     });
-    const invitee = await newRelationship.user;
-    const hub = await newRelationship.hub;
+    const invitee = await newRelationship.user.load();
+    const hub = await newRelationship.hub.load();
 
     await this.inviteRepository.persistAndFlush(invite);
     await this.notificationService.addInAppNotificationForUser(invitee.id, {

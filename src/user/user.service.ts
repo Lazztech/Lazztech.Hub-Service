@@ -40,7 +40,7 @@ export class UserService {
       isOwner: true,
     });
     const hubs: Hub[] = await Promise.all(
-      joinUserHubResults.map((result) => result.hub),
+      joinUserHubResults.map((result) => result.hub.load()),
     );
     return hubs;
   }
@@ -53,7 +53,7 @@ export class UserService {
       isOwner: false,
     });
     const hubs: Hub[] = await Promise.all(
-      joinUserHubResults.map((result) => result.hub),
+      joinUserHubResults.map((result) => result.hub.load()),
     );
     return hubs;
   }

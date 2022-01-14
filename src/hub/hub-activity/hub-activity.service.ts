@@ -37,7 +37,7 @@ export class HubActivityService {
       );
     }
 
-    const hub = await hubRelationship.hub;
+    const hub = await hubRelationship.hub.load();
     hub.active = true;
     await this.hubRepository.persistAndFlush(hub);
 
@@ -59,7 +59,7 @@ export class HubActivityService {
       );
     }
 
-    const hub = await hubRelationship.hub;
+    const hub = await hubRelationship.hub.load();
     hub.active = false;
     await this.hubRepository.persistAndFlush(hub);
     return hub;
@@ -73,7 +73,7 @@ export class HubActivityService {
     });
 
     for (const joinUserHub of hubRelationships) {
-      const hub = await joinUserHub.hub;
+      const hub = await joinUserHub.hub.load();
       await this.notificationService.sendPushToUser(joinUserHub.userId, {
         title: `"${hub.name}" hub became active`,
         body: `Touch to go to hub.`,
