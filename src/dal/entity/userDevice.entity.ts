@@ -1,4 +1,4 @@
-import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+import { Entity, IdentifiedReference, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { User } from './user.entity';
 
@@ -21,5 +21,5 @@ export class UserDevice {
     fieldName: 'userId',
     onDelete: 'cascade'
   })
-  public user: User;
+  public user: IdentifiedReference<User>;
 }

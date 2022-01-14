@@ -15,7 +15,7 @@ export class JoinUserHubsResolver {
 
   @ResolveField(() => Boolean, { nullable: true })
   async isPresent(@Parent() joinUserHub: JoinUserHub): Promise<boolean> {
-    const hub = await joinUserHub.hub;
+    const hub = await joinUserHub.hub.load();
     if (hub.active) {
       return (
         await this.joinUserHubRepository.findOneOrFail({

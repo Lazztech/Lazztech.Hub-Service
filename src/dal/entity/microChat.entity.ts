@@ -1,4 +1,4 @@
-import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+import { Entity, IdentifiedReference, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Hub } from './hub.entity';
 
@@ -19,7 +19,7 @@ export class MicroChat {
     onDelete: 'cascade',
     fieldName: 'hubId',
   })
-  public hub: Hub;
+  public hub: IdentifiedReference<Hub>;
 
   @Field()
   @Property()

@@ -1,7 +1,7 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { User } from './user.entity';
 import { Hub } from './hub.entity';
-import { Entity, Index, ManyToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+import { Entity, IdentifiedReference, Index, ManyToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
 
 @ObjectType()
 @Entity()
@@ -33,7 +33,7 @@ export class Invite {
     fieldName: 'invitersId',
     onDelete: 'cascade'
   })
-  public inviter!: User;
+  public inviter!: IdentifiedReference<User>;
 
   @Field(() => User)
   @ManyToOne({
@@ -41,7 +41,7 @@ export class Invite {
     fieldName: 'inviteesId',
     onDelete: 'cascade'
   })
-  public invitee!: User;
+  public invitee!: IdentifiedReference<User>;
 
   @Field(() => Hub)
   @ManyToOne({ 
@@ -49,5 +49,5 @@ export class Invite {
     fieldName: 'hubId',
     onDelete: 'cascade'
   })
-  public hub!: Hub;
+  public hub!: IdentifiedReference<Hub>;
 }
