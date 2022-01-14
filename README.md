@@ -143,6 +143,7 @@ docker exec -it lazztech_postgres bash
 pg_restore -U postgres -d postgres --no-owner -1 /var/lib/postgresql/data/db.dump
 
 # cleanup
+$ docker stop lazztech_postgres
 $ docker rm lazztech_postgres
 ```
 
