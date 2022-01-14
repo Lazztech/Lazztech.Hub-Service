@@ -108,10 +108,11 @@ export class HubInviteService {
       isOwner: false,
     });
     await this.joinUserHubRepository.persistAndFlush(newRelationship);
-    newRelationship = await this.joinUserHubRepository.findOneOrFail({
-      userId: newRelationship.userId,
-      hubId: newRelationship.hubId,
-    });
+    // does it automatically populate the newRelation now with mikro-orm?
+    // newRelationship = await this.joinUserHubRepository.findOneOrFail({
+    //   userId: newRelationship.userId,
+    //   hubId: newRelationship.hubId,
+    // });
     const invitee = await newRelationship.user.load();
     const hub = await newRelationship.hub.load();
 

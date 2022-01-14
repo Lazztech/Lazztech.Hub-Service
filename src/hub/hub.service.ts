@@ -45,7 +45,7 @@ export class HubService {
     const hubs = await Promise.all(userHubRelationships.map((x) => x.hub));
     const commonHubRelationships = [];
     for (const hub of hubs) {
-      const result = (await hub.usersConnection).find(
+      const result = (await (await hub.load()).usersConnection.loadItems()).find(
         (x) => x.userId == otherUsersId,
       );
       if (result) {
@@ -66,7 +66,7 @@ export class HubService {
 
     let commonConnections: JoinUserHub[] = [];
     for (const hub of usersHubs) {
-      commonConnections = commonConnections.concat(await hub.usersConnection);
+      commonConnections = commonConnections.concat(await (await hub.load()).usersConnection.loadItems());
     }
 
     const resultingOtherUsers: User[] = await Promise.all(

@@ -23,7 +23,7 @@ export class UserFieldResolver {
   ): Promise<UserDevice[]> {
     this.logger.log(this.userDevices.name);
     if (userId === user.id) {
-      return await user.userDevices;
+      return await user.userDevices.loadItems();
     } else {
       throw new Error('Not allowed to access other users device information');
     }

@@ -44,7 +44,7 @@ export class NotificationService {
     this.logger.log(this.addUserFcmNotificationToken.name);
     const user = await this.userRepository.findOne({ id: userId });
 
-    if (!(await user.userDevices).find((x) => x.fcmPushUserToken == token)) {
+    if (!(await user.userDevices.loadItems()).find((x) => x.fcmPushUserToken == token)) {
       const userDevice = new UserDevice();
       userDevice.userId = user.id;
       userDevice.fcmPushUserToken = token;
@@ -113,7 +113,7 @@ export class NotificationService {
     this.logger.log(this.sendPushToUser.name);
 
     const user = await this.userRepository.findOne({ id: userId });
-    const fcmUserTokens = (await user.userDevices).map(
+    const fcmUserTokens = (await user.userDevices.loadItems()).map(
       (x) => x.fcmPushUserToken,
     );
 
