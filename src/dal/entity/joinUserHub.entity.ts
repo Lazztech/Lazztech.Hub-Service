@@ -20,7 +20,9 @@ export class JoinUserHub {
   @PrimaryKey({ fieldName: 'hubId'})
   public hubId: number;
 
-  @Field(() => User)
+  /**
+   * Exposed as a field resolver
+   */
   @ManyToOne({
     entity: () => User,
     fieldName: 'userId',
@@ -28,7 +30,9 @@ export class JoinUserHub {
   })
   public user: IdentifiedReference<User>;
 
-  @Field(() => Hub)
+  /**
+   * Exposed as a field resolver
+   */
   @ManyToOne({ 
     entity: () => Hub,
     fieldName: 'hubId',
