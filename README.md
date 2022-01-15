@@ -134,13 +134,13 @@ $ pg_dump -h <host> -p <port> -U <username> -Fc <database> > ./data/db.dump
 $ docker run --name lazztech_postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=Password123 -e POSTGRES_DB=postgres -p 5432:5432 postgres
 
 # copy dump file to the docker container
-docker cp ./data/db.dump lazztech_postgres:/var/lib/postgresql/data/db.dump
+$ docker cp ./data/db.dump lazztech_postgres:/var/lib/postgresql/data/db.dump
 
 # shell into container
-docker exec -it lazztech_postgres bash
+$ docker exec -it lazztech_postgres bash
 
 # restore it from within
-pg_restore -U postgres -d postgres --no-owner -1 /var/lib/postgresql/data/db.dump
+$ pg_restore -U postgres -d postgres --no-owner -1 /var/lib/postgresql/data/db.dump
 
 # cleanup
 $ docker stop lazztech_postgres
