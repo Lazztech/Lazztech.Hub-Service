@@ -64,7 +64,7 @@
     "@types/sharp": "^0.24.0",
     "@willsoto/nestjs-prometheus": "^4.0.0",
     "@zxing/library": "^0.15.2",
-    "adorable-avatars": "^0.4.1",
+    "adorable-avatars": "^0.5.0",
     "apollo-server-express": "^2.25.2",
     "aws-sdk": "^2.805.0",
     "bcryptjs": "^2.4.3",
@@ -91,7 +91,7 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.3.0",
-    "sharp": "^0.22.1",
+    "sharp": "^0.25.3",
     "sqlite3": "^5.0.2",
     "ts-morph": "^11.0.3",
     "typedi": "^0.8.0"

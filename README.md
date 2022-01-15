@@ -30,7 +30,7 @@ $ npm install
 # https://www.reddit.com/r/node/comments/lp9xlk/mac_mini_m1_issues_with_node_js_15/
 
 # open x86 shell with rosetta
-$ $ arch -x86_64 zsh
+$ arch -x86_64 zsh
 # install node version manager & use the version from the .nvmrc file
 $ nvm install
 # Now check that the architecture is correct:
