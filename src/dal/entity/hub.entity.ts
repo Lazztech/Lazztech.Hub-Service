@@ -38,15 +38,21 @@ export class Hub extends ShareableId {
   @Property({ type: 'float', nullable: true })
   public longitude: number;
 
-  @Field(() => [JoinUserHub], { nullable: true })
+  /**
+   * Handled with a field resolver
+   */
   @OneToMany(() => JoinUserHub, (joinUserHub) => joinUserHub.hub)
   public usersConnection = new Collection<JoinUserHub>(this);
 
-  @Field(() => [MicroChat], { nullable: true })
+  /**
+   * Handled with a field resolver
+   */
   @OneToMany(() => MicroChat, (microChat) => microChat.hub)
   public microChats = new Collection<MicroChat>(this);
 
-  @Field(() => [Invite], { nullable: true })
+  /**
+   * Handled with a field resolver
+   */
   @OneToMany(() => Invite, (invite) => invite.hub)
   public invites = new Collection<Invite>(this);
 }
