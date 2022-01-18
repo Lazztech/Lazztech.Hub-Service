@@ -162,8 +162,7 @@ export class HubResolver {
   @Query(() => [User])
   public async usersPeople(@UserId() userId): Promise<User[]> {
     this.logger.log(this.usersPeople.name);
-    const result = await this.hubService.usersPeople(userId);
-    return result;
+    return this.hubService.usersPeople(userId);
   }
 
   @Query(() => [Hub])
