@@ -15,7 +15,7 @@ import * as path from 'path';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import * as Joi from 'joi';
 import { MikroOrmModule, MikroOrmModuleOptions } from '@mikro-orm/nestjs';
-import { Connection, IDatabaseDriver } from '@mikro-orm/core';
+import { Connection, IDatabaseDriver, MikroORM } from '@mikro-orm/core';
 
 @Module({
   imports: [
@@ -128,7 +128,7 @@ import { Connection, IDatabaseDriver } from '@mikro-orm/core';
               ...commonSettings,
               migrations: {
                 ...commonSettings.migrations,
-                path: __dirname + '/dal/migrations/sqlite/*.*',
+                path: __dirname + '/dal/migrations/sqlite/',
               },
               type: 'sqlite',
               baseDir: __dirname,
@@ -148,7 +148,7 @@ import { Connection, IDatabaseDriver } from '@mikro-orm/core';
               ...commonSettings,
               migrations: {
                 ...commonSettings.migrations,
-                path: __dirname + '/dal/migrations/postgres/*.*'
+                path: __dirname + '/dal/migrations/postgres/'
               },
               type: 'postgresql',
               dbName: configService.get('DATABASE_SCHEMA', 'postgres'),
@@ -215,5 +215,11 @@ import { Connection, IDatabaseDriver } from '@mikro-orm/core';
   ],
 })
 export class AppModule {
+
+  constructor(
+    readonly orm: MikroORM
+  ) {
+    orm.getMigrator().up();
+  }
   public static logger = new Logger(AppModule.name);
 }
