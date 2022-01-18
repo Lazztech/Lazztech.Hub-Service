@@ -1,10 +1,12 @@
-import { Controller, Get, Inject, Param, Res } from '@nestjs/common';
-import { FileServiceInterface } from '../interfaces/file-service.interface';
-import { FILE_SERVICE } from '../file-service.token';
+import { Controller, Get, Inject, Logger, Param, Res } from '@nestjs/common';
 import { Response } from 'express';
+import { FILE_SERVICE } from '../file-service.token';
+import { FileServiceInterface } from '../interfaces/file-service.interface';
 
 @Controller('file')
 export class FileController {
+  private logger = new Logger(FileController.name);
+
   constructor(
     @Inject(FILE_SERVICE)
     private readonly fileService: FileServiceInterface,
@@ -12,6 +14,6 @@ export class FileController {
 
   @Get(':fileName')
   get(@Param('fileName') fileName: string, @Res() response: Response) {
-    this.fileService.get(fileName).pipe(response);
+    this.fileService.get(fileName).on('error', (err) => this.logger.warn(err)).pipe(response);
   }
 }
