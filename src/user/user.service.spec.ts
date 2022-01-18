@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { Hub } from '../dal/entity/hub.entity';
 import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
 import { User } from '../dal/entity/user.entity';
-import { Repository } from 'typeorm';
 import { UserService } from './user.service';
 import { EmailService } from '../email/email.service';
 import { Invite } from '../dal/entity/invite.entity';
@@ -14,11 +13,12 @@ import { FileServiceInterface } from '../file/interfaces/file-service.interface'
 import { LocalFileService } from '../file/local-file/local-file.service';
 import { FILE_SERVICE } from '../file/file-service.token';
 import { getRepositoryToken } from '@mikro-orm/nestjs';
+import { EntityRepository } from '@mikro-orm/core';
 
 describe('UserService', () => {
   let service: UserService;
-  let joinUserHubRepo: Repository<JoinUserHub>;
-  let userRepo: Repository<User>;
+  let joinUserHubRepo: EntityRepository<JoinUserHub>;
+  let userRepo: EntityRepository<User>;
   let fileService: FileServiceInterface;
 
   beforeEach(async () => {
@@ -34,29 +34,29 @@ describe('UserService', () => {
         ConfigService,
         {
           provide: getRepositoryToken(PasswordReset),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(JoinUserHub),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(User),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(Invite),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
       ],
     }).compile();
 
     service = module.get<UserService>(UserService);
     // Save the instance of the repository and set the correct generics
-    joinUserHubRepo = module.get<Repository<JoinUserHub>>(
+    joinUserHubRepo = module.get<EntityRepository<JoinUserHub>>(
       getRepositoryToken(JoinUserHub),
     );
-    userRepo = module.get<Repository<User>>(getRepositoryToken(User));
+    userRepo = module.get<EntityRepository<User>>(getRepositoryToken(User));
     fileService = module.get<FileServiceInterface>(FILE_SERVICE);
   });
 

@@ -2,8 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { EmailService } from './email.service';
 import { ConfigService } from '@nestjs/config';
 import { PasswordReset } from '../dal/entity/passwordReset.entity';
-import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@mikro-orm/nestjs';
+import { EntityRepository } from '@mikro-orm/core';
 
 describe('EmailService', () => {
   let service: EmailService;
@@ -15,7 +15,7 @@ describe('EmailService', () => {
         ConfigService,
         {
           provide: getRepositoryToken(PasswordReset),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
       ],
     }).compile();

@@ -3,19 +3,19 @@ import { HubInviteService } from './hub-invite.service';
 import { ConfigModule } from '@nestjs/config';
 import { HttpModule } from '@nestjs/common';
 import { Invite } from '../../dal/entity/invite.entity';
-import { Repository } from 'typeorm';
 import { User } from '../../dal/entity/user.entity';
 import { JoinUserHub } from '../../dal/entity/joinUserHub.entity';
 import { NotificationService } from '../../notification/notification.service';
 import { InAppNotification } from '../../dal/entity/inAppNotification.entity';
 import { UserDevice } from '../../dal/entity/userDevice.entity';
 import { getRepositoryToken } from '@mikro-orm/nestjs';
+import { EntityRepository } from '@mikro-orm/core';
 
 describe('HubInviteService', () => {
   let service: HubInviteService;
-  let inviteRepo: Repository<Invite>;
-  let joinUserHubRepo: Repository<JoinUserHub>;
-  let userRepo: Repository<User>;
+  let inviteRepo: EntityRepository<Invite>;
+  let joinUserHubRepo: EntityRepository<JoinUserHub>;
+  let userRepo: EntityRepository<User>;
   let notificationService: NotificationService;
 
   beforeEach(async () => {
@@ -32,33 +32,33 @@ describe('HubInviteService', () => {
         NotificationService,
         {
           provide: getRepositoryToken(Invite),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(JoinUserHub),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(User),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(InAppNotification),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(UserDevice),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
       ],
     }).compile();
 
     service = module.get<HubInviteService>(HubInviteService);
-    inviteRepo = module.get<Repository<Invite>>(getRepositoryToken(Invite));
-    joinUserHubRepo = module.get<Repository<JoinUserHub>>(
+    inviteRepo = module.get<EntityRepository<Invite>>(getRepositoryToken(Invite));
+    joinUserHubRepo = module.get<EntityRepository<JoinUserHub>>(
       getRepositoryToken(JoinUserHub),
     );
-    userRepo = module.get<Repository<User>>(getRepositoryToken(User));
+    userRepo = module.get<EntityRepository<User>>(getRepositoryToken(User));
     notificationService = module.get<NotificationService>(NotificationService);
   });
 

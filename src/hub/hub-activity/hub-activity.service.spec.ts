@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { HubActivityService } from './hub-activity.service';
-import { Repository } from 'typeorm';
 import { JoinUserHub } from '../../dal/entity/joinUserHub.entity';
 import { Hub } from '../../dal/entity/hub.entity';
 import { InAppNotification } from '../../dal/entity/inAppNotification.entity';
@@ -10,11 +9,12 @@ import { User } from '../../dal/entity/user.entity';
 import { HttpModule } from '@nestjs/common';
 import { UserDevice } from '../../dal/entity/userDevice.entity';
 import { getRepositoryToken } from '@mikro-orm/nestjs';
+import { EntityRepository } from '@mikro-orm/core';
 
 describe('HubActivityService', () => {
   let service: HubActivityService;
-  let joinUserHubRepo: Repository<JoinUserHub>;
-  let hubRepo: Repository<Hub>;
+  let joinUserHubRepo: EntityRepository<JoinUserHub>;
+  let hubRepo: EntityRepository<Hub>;
   let notificationService: NotificationService;
 
   beforeEach(async () => {
@@ -31,32 +31,32 @@ describe('HubActivityService', () => {
         NotificationService,
         {
           provide: getRepositoryToken(JoinUserHub),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(Hub),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(User),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(InAppNotification),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(UserDevice),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
       ],
     }).compile();
 
     service = module.get<HubActivityService>(HubActivityService);
-    joinUserHubRepo = module.get<Repository<JoinUserHub>>(
+    joinUserHubRepo = module.get<EntityRepository<JoinUserHub>>(
       getRepositoryToken(JoinUserHub),
     );
-    hubRepo = module.get<Repository<Hub>>(getRepositoryToken(Hub));
+    hubRepo = module.get<EntityRepository<Hub>>(getRepositoryToken(Hub));
     notificationService = module.get(NotificationService);
   });
 

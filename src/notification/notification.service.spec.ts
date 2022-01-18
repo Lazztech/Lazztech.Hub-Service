@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { NotificationService } from './notification.service';
 import { ConfigService } from '@nestjs/config';
 import { User } from '../dal/entity/user.entity';
-import { Repository } from 'typeorm';
 import { PushNotificationDto } from './dto/pushNotification.dto';
 import { InAppNotificationDto } from './dto/inAppNotification.dto';
 import { InAppNotification } from '../dal/entity/inAppNotification.entity';
@@ -11,13 +10,14 @@ import { of } from 'rxjs';
 import { UserDevice } from '../dal/entity/userDevice.entity';
 import { AxiosResponse } from 'axios';
 import { getRepositoryToken } from '@mikro-orm/nestjs';
+import { EntityRepository } from '@mikro-orm/core';
 
 describe('NotificationService', () => {
   let service: NotificationService;
-  let userRepo: Repository<User>;
-  let inAppNotificationRepo: Repository<InAppNotification>;
+  let userRepo: EntityRepository<User>;
+  let inAppNotificationRepo: EntityRepository<InAppNotification>;
   let httpService: HttpService;
-  let userDeviceRepo: Repository<UserDevice>;
+  let userDeviceRepo: EntityRepository<UserDevice>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -41,26 +41,26 @@ describe('NotificationService', () => {
         NotificationService,
         {
           provide: getRepositoryToken(User),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(InAppNotification),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(UserDevice),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
       ],
     }).compile();
 
     service = module.get<NotificationService>(NotificationService);
-    userRepo = module.get<Repository<User>>(getRepositoryToken(User));
-    inAppNotificationRepo = module.get<Repository<InAppNotification>>(
+    userRepo = module.get<EntityRepository<User>>(getRepositoryToken(User));
+    inAppNotificationRepo = module.get<EntityRepository<InAppNotification>>(
       getRepositoryToken(InAppNotification),
     );
     httpService = module.get(HttpService);
-    userDeviceRepo = module.get<Repository<UserDevice>>(
+    userDeviceRepo = module.get<EntityRepository<UserDevice>>(
       getRepositoryToken(UserDevice),
     );
   });

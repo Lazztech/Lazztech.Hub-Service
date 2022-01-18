@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { HubMicroChatService } from './hub-micro-chat.service';
 import { User } from '../../dal/entity/user.entity';
-import { Repository } from 'typeorm';
 import { Hub } from '../../dal/entity/hub.entity';
 import { InAppNotification } from '../../dal/entity/inAppNotification.entity';
 import { JoinUserHub } from '../../dal/entity/joinUserHub.entity';
@@ -11,13 +10,14 @@ import { ConfigModule } from '@nestjs/config';
 import { HttpModule } from '@nestjs/common';
 import { UserDevice } from '../../dal/entity/userDevice.entity';
 import { getRepositoryToken } from '@mikro-orm/nestjs';
+import { EntityRepository } from '@mikro-orm/core';
 
 describe('HubMicroChatService', () => {
   let service: HubMicroChatService;
-  let joinUserHubRepo: Repository<JoinUserHub>;
-  let microChatRepo: Repository<MicroChat>;
-  let userRepo: Repository<User>;
-  let hubRepo: Repository<Hub>;
+  let joinUserHubRepo: EntityRepository<JoinUserHub>;
+  let microChatRepo: EntityRepository<MicroChat>;
+  let userRepo: EntityRepository<User>;
+  let hubRepo: EntityRepository<Hub>;
   let notificationService: NotificationService;
 
   beforeEach(async () => {
@@ -34,40 +34,40 @@ describe('HubMicroChatService', () => {
         NotificationService,
         {
           provide: getRepositoryToken(User),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(Hub),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(InAppNotification),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(JoinUserHub),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(MicroChat),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(UserDevice),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
       ],
     }).compile();
 
     service = module.get<HubMicroChatService>(HubMicroChatService);
-    joinUserHubRepo = module.get<Repository<JoinUserHub>>(
+    joinUserHubRepo = module.get<EntityRepository<JoinUserHub>>(
       getRepositoryToken(JoinUserHub),
     );
-    microChatRepo = module.get<Repository<MicroChat>>(
+    microChatRepo = module.get<EntityRepository<MicroChat>>(
       getRepositoryToken(MicroChat),
     );
-    userRepo = module.get<Repository<User>>(getRepositoryToken(User));
-    hubRepo = module.get<Repository<Hub>>(getRepositoryToken(Hub));
+    userRepo = module.get<EntityRepository<User>>(getRepositoryToken(User));
+    hubRepo = module.get<EntityRepository<Hub>>(getRepositoryToken(Hub));
     notificationService = module.get(NotificationService);
   });
 

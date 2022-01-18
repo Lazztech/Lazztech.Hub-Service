@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { HubGeofenceService } from './hub-geofence.service';
-import { Repository } from 'typeorm';
 import { GeofenceEvent, JoinUserHub } from '../../dal/entity/joinUserHub.entity';
 import { User } from '../../dal/entity/user.entity';
 import { Hub } from '../../dal/entity/hub.entity';
@@ -10,10 +9,11 @@ import { HttpModule } from '@nestjs/common';
 import { InAppNotification } from '../../dal/entity/inAppNotification.entity';
 import { UserDevice } from '../../dal/entity/userDevice.entity';
 import { getRepositoryToken } from '@mikro-orm/nestjs';
+import { EntityRepository } from '@mikro-orm/core';
 
 describe('HubGeofenceService', () => {
   let service: HubGeofenceService;
-  let joinUserHubRepository: Repository<JoinUserHub>;
+  let joinUserHubRepository: EntityRepository<JoinUserHub>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -22,23 +22,23 @@ describe('HubGeofenceService', () => {
         HubGeofenceService,
         {
           provide: getRepositoryToken(JoinUserHub),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(User),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(Hub),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(InAppNotification),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(UserDevice),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: ConfigService,
@@ -60,7 +60,7 @@ describe('HubGeofenceService', () => {
     }).compile();
 
     service = module.get<HubGeofenceService>(HubGeofenceService);
-    joinUserHubRepository = module.get<Repository<JoinUserHub>>(
+    joinUserHubRepository = module.get<EntityRepository<JoinUserHub>>(
       getRepositoryToken(JoinUserHub),
     );
   });

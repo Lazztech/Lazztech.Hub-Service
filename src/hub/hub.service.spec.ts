@@ -8,18 +8,18 @@ import { User } from '../dal/entity/user.entity';
 import { UserDevice } from '../dal/entity/userDevice.entity';
 import { FileServiceInterface } from '../file/interfaces/file-service.interface';
 import { ImageFileService } from '../file/image-file/image-file.service';
-import { Repository } from 'typeorm';
 import { NotificationService } from '../notification/notification.service';
 import { HubService } from './hub.service';
 import { Invite } from '../dal/entity/invite.entity';
 import { LocalFileService } from '../file/local-file/local-file.service';
 import { FILE_SERVICE } from '../file/file-service.token';
 import { getRepositoryToken } from '@mikro-orm/nestjs';
+import { EntityRepository } from '@mikro-orm/core';
 
 describe('HubService', () => {
   let hubService: HubService;
-  let joinUserHubRepo: Repository<JoinUserHub>;
-  let hubRepo: Repository<Hub>;
+  let joinUserHubRepo: EntityRepository<JoinUserHub>;
+  let hubRepo: EntityRepository<Hub>;
   let fileService: FileServiceInterface;
 
   beforeEach(async () => {
@@ -42,36 +42,36 @@ describe('HubService', () => {
         NotificationService,
         {
           provide: getRepositoryToken(User),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(Hub),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(JoinUserHub),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(InAppNotification),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(UserDevice),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(Invite),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
       ],
     }).compile();
 
     hubService = module.get<HubService>(HubService);
-    joinUserHubRepo = module.get<Repository<JoinUserHub>>(
+    joinUserHubRepo = module.get<EntityRepository<JoinUserHub>>(
       getRepositoryToken(JoinUserHub),
     );
-    hubRepo = module.get<Repository<Hub>>(getRepositoryToken(Hub));
+    hubRepo = module.get<EntityRepository<Hub>>(getRepositoryToken(Hub));
     fileService = module.get<FileServiceInterface>(FILE_SERVICE);
   });
 

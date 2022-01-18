@@ -2,7 +2,6 @@ import { ConfigService, ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { InAppNotification } from '../dal/entity/inAppNotification.entity';
 import { User } from '../dal/entity/user.entity';
-import { Repository } from 'typeorm';
 import { AuthService } from './auth.service';
 import { NotificationService } from '../notification/notification.service';
 import { HttpModule } from '@nestjs/common';
@@ -15,6 +14,7 @@ import { S3Module, S3ModuleOptions } from 'nestjs-s3';
 import { ImageFileService } from '../file/image-file/image-file.service';
 import { FILE_SERVICE } from '../file/file-service.token';
 import { getRepositoryToken } from '@mikro-orm/nestjs';
+import { EntityRepository } from '@mikro-orm/core';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -55,25 +55,25 @@ describe('AuthService', () => {
         },
         {
           provide: getRepositoryToken(User),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(InAppNotification),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(UserDevice),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(JoinUserHub),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
       ],
     }).compile();
 
     service = module.get<AuthService>(AuthService);
-    userRepo = module.get<Repository<User>>(getRepositoryToken(User));
+    userRepo = module.get<EntityRepository<User>>(getRepositoryToken(User));
     notificationService = module.get(NotificationService);
   });
 

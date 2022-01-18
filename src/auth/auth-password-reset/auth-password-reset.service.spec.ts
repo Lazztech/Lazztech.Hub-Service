@@ -1,12 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthPasswordResetService } from './auth-password-reset.service';
 import { EmailService } from '../../email/email.service';
-import { Repository } from 'typeorm';
 import { PasswordReset } from '../../dal/entity/passwordReset.entity';
 import { User } from '../../dal/entity/user.entity';
 import { ConfigService } from '@nestjs/config';
 import { ResetPassword } from '../dto/resetPassword.input';
 import { getRepositoryToken } from '@mikro-orm/nestjs';
+import { EntityRepository } from '@mikro-orm/core';
 
 describe('AuthPasswordResetService', () => {
   let service: AuthPasswordResetService;
@@ -22,19 +22,19 @@ describe('AuthPasswordResetService', () => {
         ConfigService,
         {
           provide: getRepositoryToken(User),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(PasswordReset),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
       ],
     }).compile();
 
     service = module.get<AuthPasswordResetService>(AuthPasswordResetService);
-    userRepo = module.get<Repository<User>>(getRepositoryToken(User));
+    userRepo = module.get<EntityRepository<User>>(getRepositoryToken(User));
     emailService = module.get(EmailService);
-    passwordResetRepo = module.get<Repository<PasswordReset>>(
+    passwordResetRepo = module.get<EntityRepository<PasswordReset>>(
       getRepositoryToken(PasswordReset),
     );
   });
