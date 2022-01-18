@@ -1,6 +1,5 @@
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { EntityManager } from '@mikro-orm/postgresql';
 import { Logger } from '@nestjs/common';
 import { Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { Hub } from '../entity/hub.entity';
@@ -14,19 +13,13 @@ export class JoinUserHubsResolver {
   constructor(
     @InjectRepository(JoinUserHub)
     private joinUserHubRepository: EntityRepository<JoinUserHub>,
-    private readonly em: EntityManager,
   ) {}
 
   @ResolveField(() => Boolean, { nullable: true })
   async isPresent(@Parent() joinUserHub: JoinUserHub): Promise<boolean> {
-    const hub = await this.em.getRepository(Hub).findOneOrFail(joinUserHub.hub);
+    const hub = await joinUserHub.hub.load();
     if (hub.active) {
-      return (
-        await this.joinUserHubRepository.findOneOrFail({
-          userId: joinUserHub.userId,
-          hubId: joinUserHub.hubId,
-        })
-      ).isPresent;
+      return joinUserHub.isPresent;
     } else {
       this.logger.warn("Hub must be active to query who's present.");
       return null;
@@ -35,12 +28,12 @@ export class JoinUserHubsResolver {
 
   @ResolveField(() => User)
   public user(@Parent() joinUserHub: JoinUserHub): Promise<User> {
-    return this.em.getRepository(User).findOne(joinUserHub.user);
+    return joinUserHub.user.load();
   }
 
   @ResolveField(() => Hub)
   public hub(@Parent() joinUserHub: JoinUserHub): Promise<Hub> {
-    return this.em.getRepository(Hub).findOne(joinUserHub.hub);
+    return joinUserHub.hub.load();
   }
 
 }

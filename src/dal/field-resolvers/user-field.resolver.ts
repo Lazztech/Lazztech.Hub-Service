@@ -12,7 +12,6 @@ export class UserFieldResolver {
 
   constructor(
     private readonly fileUrlService: FileUrlService,
-    private readonly em: SqlEntityManager,
   ) {}
 
   @ResolveField(() => String, { nullable: true })
@@ -27,7 +26,7 @@ export class UserFieldResolver {
   ): Promise<UserDevice[]> {
     this.logger.log(this.userDevices.name);
     if (userId === user.id) {
-      return this.em.getRepository(UserDevice).find({ userId });
+      return user.userDevices.loadItems();
     } else {
       throw new Error('Not allowed to access other users device information');
     }
