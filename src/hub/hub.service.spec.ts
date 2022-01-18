@@ -86,14 +86,14 @@ describe('HubService', () => {
     const userHubTestResult = {
       userId,
       hubId,
-      hub: Promise.resolve({
-        usersConnection: Promise.resolve([
+      hub: {
+        usersConnection: [
           {
             user: {},
           },
-        ]),
-        microChats: Promise.resolve([{}]),
-      }),
+        ] as any,
+        microChats: [{}],
+      } as any,
     } as JoinUserHub;
     jest
       .spyOn(joinUserHubRepo, 'findOne')
@@ -110,9 +110,9 @@ describe('HubService', () => {
     const testResult = [
       {
         userId,
-        hub: Promise.resolve({
+        hub: {
           usersConnection: {},
-        }),
+        } as any,
       } as JoinUserHub,
     ];
     jest.spyOn(joinUserHubRepo, 'find').mockResolvedValueOnce(testResult);
@@ -130,29 +130,29 @@ describe('HubService', () => {
     jest.spyOn(joinUserHubRepo, 'find').mockResolvedValueOnce([
       {
         userId,
-        hub: Promise.resolve({
-          usersConnection: Promise.resolve([
+        hub: {
+          usersConnection: [
             {
               userId,
             },
             {
               userId: otherUsersId,
             },
-          ]),
-        }),
+          ] as any,
+        },
       },
       {
         userId,
-        hub: Promise.resolve({
-          usersConnection: Promise.resolve([
+        hub: {
+          usersConnection: [
             {
               userId,
             },
             {
               userId: thirdUsersId,
             },
-          ]),
-        }),
+          ] as any,
+        } as any,
       },
     ] as JoinUserHub[]);
     const expectedResult = [
@@ -173,50 +173,50 @@ describe('HubService', () => {
       {
         userId: 2,
         hubId: 9,
-        hub: Promise.resolve({
+        hub: {
           id: 9,
-          usersConnection: Promise.resolve([
+          usersConnection: [
             {
               userId: 3,
-              user: Promise.resolve({
+              user: {
                 id: 3,
-              }),
+              },
             },
             {
               userId: 2,
-              user: Promise.resolve({
+              user: {
                 id: 2,
-              }),
+              },
             },
-          ]),
-        }),
+          ] as any,
+        } as any,
       } as JoinUserHub,
       {
         userId: 2,
         hubId: 10,
-        hub: Promise.resolve({
+        hub: {
           id: 10,
-          usersConnection: Promise.resolve([
+          usersConnection: [
             {
               userId: 4,
-              user: Promise.resolve({
+              user: {
                 id: 4,
-              }),
+              } as any,
             },
             {
               userId: 2,
-              user: Promise.resolve({
+              user: {
                 id: 2,
-              }),
+              } as any,
             },
             {
               userId: 3,
-              user: Promise.resolve({
+              user: {
                 id: 3,
-              }),
+              } as any,
             },
-          ]),
-        }),
+          ],
+        } as any,
       } as JoinUserHub,
     ]);
     const expectedResult = [
@@ -254,18 +254,18 @@ describe('HubService', () => {
       userId,
       hubId: hub.id,
       isOwner: true,
-      hub: Promise.resolve(hub),
+      hub: hub as any,
     } as JoinUserHub;
 
     jest
       .spyOn(fileService, 'storeImageFromBase64')
       .mockResolvedValueOnce('https://x.com/' + hub.image);
     jest.spyOn(hubRepo, 'create').mockReturnValueOnce(hub);
-    jest.spyOn(hubRepo, 'save').mockResolvedValueOnce(hub);
+    jest.spyOn(hubRepo, 'persistAndFlush').mockResolvedValueOnce(hub);
 
     jest.spyOn(joinUserHubRepo, 'create').mockReturnValueOnce(joinUserHub);
     const saveCall = jest
-      .spyOn(joinUserHubRepo, 'save')
+      .spyOn(joinUserHubRepo, 'persistAndFlush')
       .mockResolvedValueOnce(expectedResult);
 
     // Act
@@ -313,10 +313,10 @@ describe('HubService', () => {
       userId,
       hubId: expectedResult.id,
       isOwner: true,
-      hub: Promise.resolve(expectedResult),
+      hub: expectedResult as any,
     } as JoinUserHub);
     const saveCall = jest
-      .spyOn(hubRepo, 'save')
+      .spyOn(hubRepo, 'persistAndFlush')
       .mockResolvedValueOnce(expectedResult);
     // Act
     const result = await hubService.editHub(
@@ -339,9 +339,9 @@ describe('HubService', () => {
       userId,
       hubId,
       isOwner: true,
-      hub: Promise.resolve({
+      hub: {
         image: 'oldImage',
-      } as Hub),
+      } as any,
     } as JoinUserHub);
     const expectedResult = {
       id: hubId,
@@ -354,7 +354,7 @@ describe('HubService', () => {
       .spyOn(fileService, 'storeImageFromBase64')
       .mockResolvedValueOnce(expectedResult.image);
     const saveCall = jest
-      .spyOn(hubRepo, 'save')
+      .spyOn(hubRepo, 'persistAndFlush')
       .mockResolvedValueOnce(expectedResult);
     // Act
     const result = await hubService.changeHubImage(userId, hubId, newImage);
@@ -379,7 +379,7 @@ describe('HubService', () => {
       hubId,
     } as JoinUserHub);
     const saveCall = jest
-      .spyOn(joinUserHubRepo, 'save')
+      .spyOn(joinUserHubRepo, 'persistAndFlush')
       .mockResolvedValueOnce(expectedResult);
     // Act
     const result = await hubService.setHubStarred(userId, hubId);
@@ -402,7 +402,7 @@ describe('HubService', () => {
       hubId,
     } as JoinUserHub);
     const saveCall = jest
-      .spyOn(joinUserHubRepo, 'save')
+      .spyOn(joinUserHubRepo, 'persistAndFlush')
       .mockResolvedValueOnce(expectedResult);
     // Act
     const result = await hubService.setHubNotStarred(userId, hubId);
@@ -418,21 +418,21 @@ describe('HubService', () => {
     const testHubRelationships: JoinUserHub[] = [
       {
         userId,
-        hub: Promise.resolve({
+        hub: {
           name: 'a',
-        }),
+        } as any,
       } as JoinUserHub,
       {
         userId,
-        hub: Promise.resolve({
+        hub: {
           name: 'b',
-        }),
+        } as any,
       } as JoinUserHub,
       {
         userId,
-        hub: Promise.resolve({
+        hub: {
           name: 'Lazzarini',
-        }),
+        } as any,
       } as JoinUserHub,
     ];
     const expectedResult = [

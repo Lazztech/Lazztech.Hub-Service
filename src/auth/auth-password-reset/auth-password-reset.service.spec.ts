@@ -10,9 +10,9 @@ import { EntityRepository } from '@mikro-orm/core';
 
 describe('AuthPasswordResetService', () => {
   let service: AuthPasswordResetService;
-  let userRepo: Repository<User>;
+  let userRepo: EntityRepository<User>;
   let emailService: EmailService;
-  let passwordResetRepo: Repository<PasswordReset>;
+  let passwordResetRepo: EntityRepository<PasswordReset>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -52,9 +52,9 @@ describe('AuthPasswordResetService', () => {
     } as ResetPassword;
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce({
       email: details.usersEmail,
-      passwordReset: Promise.resolve({
+      passwordReset: {
         pin: details.resetPin,
-      }),
+      },
     } as User);
     const saveCall = jest
       .spyOn(userRepo, 'save')
@@ -73,7 +73,7 @@ describe('AuthPasswordResetService', () => {
       firstName: 'Gian',
       lastName: 'Lazzarini',
       email,
-      passwordReset: Promise.resolve({}),
+      passwordReset: {},
     } as User);
     jest.spyOn(passwordResetRepo, 'findOne').mockResolvedValueOnce(null);
     jest
