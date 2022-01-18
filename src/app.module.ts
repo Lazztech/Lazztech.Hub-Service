@@ -173,7 +173,6 @@ import { Connection, IDatabaseDriver } from '@mikro-orm/core';
         }
       },
     }),
-    MikroOrmModule.forFeature([User]),
     S3Module.forRootAsync({
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
