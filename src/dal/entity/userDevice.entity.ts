@@ -19,7 +19,8 @@ export class UserDevice {
   @ManyToOne({
     entity: () => User,
     fieldName: 'userId',
-    onDelete: 'cascade'
+    onDelete: 'cascade',
+    wrappedReference: true
   })
   public user: IdentifiedReference<User>;
 }

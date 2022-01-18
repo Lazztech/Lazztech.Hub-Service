@@ -26,7 +26,9 @@ export class JoinUserHub {
   @ManyToOne({
     entity: () => User,
     fieldName: 'userId',
-    onDelete: 'cascade', primary: true
+    onDelete: 'cascade', 
+    primary: true,
+    wrappedReference: true
   })
   public user: IdentifiedReference<User>;
 
@@ -37,7 +39,8 @@ export class JoinUserHub {
     entity: () => Hub,
     fieldName: 'hubId',
     onDelete: 'cascade',
-    primary: true
+    primary: true,
+    wrappedReference: true
   })
   public hub: IdentifiedReference<Hub>;
 

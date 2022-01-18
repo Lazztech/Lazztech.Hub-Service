@@ -84,12 +84,10 @@ export class HubGeofenceService {
       );
     }
 
-    await this.joinUserHubRepository.persistAndFlush({
-      ...hubRelationship,
-      isPresent: false,
-      lastUpdated: Date.now().toString(),
-      lastGeofenceEvent: GeofenceEvent.EXITED
-    })
+    hubRelationship.isPresent = false;
+    hubRelationship.lastUpdated = Date.now().toString();
+    hubRelationship.lastGeofenceEvent = GeofenceEvent.EXITED;
+    await this.joinUserHubRepository.persistAndFlush(hubRelationship);
 
     const hub = await hubRelationship.hub.load();
     if (hub.active) {

@@ -18,6 +18,7 @@ export class MicroChat {
     entity: () => Hub,
     onDelete: 'cascade',
     fieldName: 'hubId',
+    wrappedReference: true
   })
   public hub: IdentifiedReference<Hub>;
 

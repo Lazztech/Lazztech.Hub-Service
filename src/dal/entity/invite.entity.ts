@@ -31,7 +31,8 @@ export class Invite {
   @ManyToOne({ 
     entity: () => User,
     fieldName: 'invitersId',
-    onDelete: 'cascade'
+    onDelete: 'cascade',
+    wrappedReference: true
   })
   public inviter!: IdentifiedReference<User>;
 
@@ -39,7 +40,8 @@ export class Invite {
   @ManyToOne({
     entity: () => User,
     fieldName: 'inviteesId',
-    onDelete: 'cascade'
+    onDelete: 'cascade',
+    wrappedReference: true
   })
   public invitee!: IdentifiedReference<User>;
 
@@ -47,7 +49,8 @@ export class Invite {
   @ManyToOne({ 
     entity: () => Hub, 
     fieldName: 'hubId',
-    onDelete: 'cascade'
+    onDelete: 'cascade',
+    wrappedReference: true
   })
   public hub!: IdentifiedReference<Hub>;
 }
