@@ -90,11 +90,7 @@ describe('AuthService', () => {
     const password = 'Password123';
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(undefined);
     jest.spyOn(userRepo, 'create').mockReturnValueOnce(undefined);
-    const saveCall = jest.spyOn(userRepo, 'persistAndFlush').mockResolvedValueOnce({
-      firstName,
-      lastName,
-      email,
-    } as User);
+    const saveCall = jest.spyOn(userRepo, 'persistAndFlush').mockImplementationOnce(() => Promise.resolve());
     jest
       .spyOn(notificationService, 'addInAppNotificationForUser')
       .mockImplementationOnce(() => Promise.resolve());
@@ -142,7 +138,7 @@ describe('AuthService', () => {
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
     const saveCall = jest
       .spyOn(userRepo, 'persistAndFlush')
-      .mockResolvedValueOnce({} as User);
+      .mockImplementationOnce(() => Promise.resolve());
     // Act
     const result = await service.changePassword(testUser.id, {
       oldPassword: password,

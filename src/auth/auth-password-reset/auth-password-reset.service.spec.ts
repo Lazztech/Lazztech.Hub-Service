@@ -58,7 +58,7 @@ describe('AuthPasswordResetService', () => {
     } as User);
     const saveCall = jest
       .spyOn(userRepo, 'persistAndFlush')
-      .mockResolvedValueOnce({} as User);
+      .mockImplementationOnce(() => Promise.resolve());
     // Act
     const result = await service.resetPassword(details);
     // Assert
@@ -81,7 +81,7 @@ describe('AuthPasswordResetService', () => {
       .mockResolvedValueOnce('id');
     const saveCall = jest
       .spyOn(userRepo, 'persistAndFlush')
-      .mockResolvedValueOnce({} as User);
+      .mockImplementationOnce(() => Promise.resolve());
     // Act
     const result = await service.sendPasswordResetEmail(email);
     // Assert

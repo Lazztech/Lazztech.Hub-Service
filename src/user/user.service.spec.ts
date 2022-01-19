@@ -153,7 +153,7 @@ describe('UserService', () => {
       description: testDetails.description,
     } as User;
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
-    jest.spyOn(userRepo, 'persistAndFlush').mockResolvedValueOnce(expectedResult);
+    jest.spyOn(userRepo, 'persistAndFlush').mockImplementationOnce(() => Promise.resolve());
     // Act
     const result = await service.editUserDetails(userId, testDetails);
     // Assert
@@ -175,7 +175,7 @@ describe('UserService', () => {
       email: newEmail,
     } as User;
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
-    jest.spyOn(userRepo, 'persistAndFlush').mockResolvedValueOnce(expectedResult);
+    jest.spyOn(userRepo, 'persistAndFlush').mockImplementationOnce(() => Promise.resolve());
     // Act
     const result = await service.changeEmail(userId, newEmail);
     // Assert
@@ -201,7 +201,7 @@ describe('UserService', () => {
     jest
       .spyOn(fileService, 'storeImageFromBase64')
       .mockResolvedValueOnce(expectedResult.image);
-    jest.spyOn(userRepo, 'persistAndFlush').mockResolvedValueOnce(expectedResult);
+    jest.spyOn(userRepo, 'persistAndFlush').mockImplementationOnce(() => Promise.resolve());
     // Act
     const result = await service.changeUserImage(userId, newImage);
     // Assert

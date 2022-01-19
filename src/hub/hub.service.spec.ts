@@ -261,12 +261,12 @@ describe('HubService', () => {
       .spyOn(fileService, 'storeImageFromBase64')
       .mockResolvedValueOnce('https://x.com/' + hub.image);
     jest.spyOn(hubRepo, 'create').mockReturnValueOnce(hub);
-    jest.spyOn(hubRepo, 'persistAndFlush').mockResolvedValueOnce(hub);
+    jest.spyOn(hubRepo, 'persistAndFlush').mockImplementationOnce(() => Promise.resolve());
 
     jest.spyOn(joinUserHubRepo, 'create').mockReturnValueOnce(joinUserHub);
     const saveCall = jest
       .spyOn(joinUserHubRepo, 'persistAndFlush')
-      .mockResolvedValueOnce(expectedResult);
+      .mockImplementationOnce(() => Promise.resolve());
 
     // Act
     const result = await hubService.createHub(userId, hub);
@@ -317,7 +317,7 @@ describe('HubService', () => {
     } as JoinUserHub);
     const saveCall = jest
       .spyOn(hubRepo, 'persistAndFlush')
-      .mockResolvedValueOnce(expectedResult);
+      .mockImplementationOnce(() => Promise.resolve());
     // Act
     const result = await hubService.editHub(
       userId,
@@ -355,7 +355,7 @@ describe('HubService', () => {
       .mockResolvedValueOnce(expectedResult.image);
     const saveCall = jest
       .spyOn(hubRepo, 'persistAndFlush')
-      .mockResolvedValueOnce(expectedResult);
+      .mockImplementationOnce(() => Promise.resolve());
     // Act
     const result = await hubService.changeHubImage(userId, hubId, newImage);
     // Assert
@@ -380,7 +380,7 @@ describe('HubService', () => {
     } as JoinUserHub);
     const saveCall = jest
       .spyOn(joinUserHubRepo, 'persistAndFlush')
-      .mockResolvedValueOnce(expectedResult);
+      .mockImplementationOnce(() => Promise.resolve());
     // Act
     const result = await hubService.setHubStarred(userId, hubId);
     // Assert
@@ -403,7 +403,7 @@ describe('HubService', () => {
     } as JoinUserHub);
     const saveCall = jest
       .spyOn(joinUserHubRepo, 'persistAndFlush')
-      .mockResolvedValueOnce(expectedResult);
+      .mockImplementationOnce(() => Promise.resolve());
     // Act
     const result = await hubService.setHubNotStarred(userId, hubId);
     // Assert
