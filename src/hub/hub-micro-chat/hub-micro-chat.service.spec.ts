@@ -162,8 +162,8 @@ describe('HubMicroChatService', () => {
       user: Promise.resolve({}),
     } as JoinUserHub);
     const deleteCall = jest
-      .spyOn(microChatRepo, 'remove')
-      .mockResolvedValueOnce({} as MicroChat);
+      .spyOn(microChatRepo, 'removeAndFlush')
+      .mockImplementationOnce(() => Promise.resolve());
     // Act
     await service.deleteMicroChat(userId, hubId, microChatId);
     // Assert

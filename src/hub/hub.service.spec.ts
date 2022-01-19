@@ -292,8 +292,8 @@ describe('HubService', () => {
       .spyOn(fileService, 'delete')
       .mockImplementationOnce(() => Promise.resolve());
     const removeCall = jest
-      .spyOn(hubRepo, 'remove')
-      .mockResolvedValueOnce({} as Hub);
+      .spyOn(hubRepo, 'removeAndFlush')
+      .mockImplementationOnce(() => Promise.resolve());
     // Act
     await hubService.deleteHub(1, 1);
     // Assert

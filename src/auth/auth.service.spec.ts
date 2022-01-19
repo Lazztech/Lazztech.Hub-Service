@@ -159,8 +159,8 @@ describe('AuthService', () => {
     } as User;
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
     const removeCall = jest
-      .spyOn(userRepo, 'remove')
-      .mockResolvedValueOnce({} as User);
+      .spyOn(userRepo, 'removeAndFlush')
+      .mockImplementationOnce(() => Promise.resolve());
     // Act
     const result = await service.deleteAccount(
       testUser.id,
