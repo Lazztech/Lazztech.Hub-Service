@@ -106,7 +106,7 @@ describe('HubInviteService', () => {
       .mockImplementationOnce(() => Promise.resolve());
 
     const saveCall = jest
-      .spyOn(inviteRepo, 'save')
+      .spyOn(inviteRepo, 'persistAndFlush')
       .mockResolvedValueOnce(invite);
     // Act
     await service.inviteUserToHub(userId, hubId, invitee.email);

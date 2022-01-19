@@ -82,7 +82,7 @@ describe('NotificationService', () => {
       ]),
     } as User);
     const saveCall = jest
-      .spyOn(userDeviceRepo, 'save')
+      .spyOn(userDeviceRepo, 'persistAndFlush')
       .mockResolvedValueOnce({} as UserDevice);
     // Act
     await service.addUserFcmNotificationToken(userId, token);
@@ -125,7 +125,7 @@ describe('NotificationService', () => {
       .spyOn(inAppNotificationRepo, 'create')
       .mockReturnValueOnce({ ...details, userId } as InAppNotification);
     const saveCall1 = jest
-      .spyOn(inAppNotificationRepo, 'save')
+      .spyOn(inAppNotificationRepo, 'persistAndFlush')
       .mockResolvedValueOnce({
         id: 1,
         text: details.text,

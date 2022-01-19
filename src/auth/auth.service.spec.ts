@@ -18,7 +18,7 @@ import { EntityRepository } from '@mikro-orm/core';
 
 describe('AuthService', () => {
   let service: AuthService;
-  let userRepo: Repository<User>;
+  let userRepo: EntityRepository<User>;
   let notificationService: NotificationService;
 
   beforeEach(async () => {
@@ -90,7 +90,7 @@ describe('AuthService', () => {
     const password = 'Password123';
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(undefined);
     jest.spyOn(userRepo, 'create').mockReturnValueOnce(undefined);
-    const saveCall = jest.spyOn(userRepo, 'save').mockResolvedValueOnce({
+    const saveCall = jest.spyOn(userRepo, 'persistAndFlush').mockResolvedValueOnce({
       firstName,
       lastName,
       email,
@@ -141,7 +141,7 @@ describe('AuthService', () => {
     const newPassword = 'NewPassword123';
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
     const saveCall = jest
-      .spyOn(userRepo, 'save')
+      .spyOn(userRepo, 'persistAndFlush')
       .mockResolvedValueOnce({} as User);
     // Act
     const result = await service.changePassword(testUser.id, {

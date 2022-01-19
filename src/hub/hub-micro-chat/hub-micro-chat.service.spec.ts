@@ -132,7 +132,7 @@ describe('HubMicroChatService', () => {
       text: microChatText,
     } as MicroChat;
     const saveCall = jest
-      .spyOn(microChatRepo, 'save')
+      .spyOn(microChatRepo, 'persistAndFlush')
       .mockResolvedValueOnce(expectResult);
     // Act
     const result = await service.createMicroChat(userId, hubId, microChatText);
