@@ -76,9 +76,9 @@ describe('HubGeofenceService', () => {
     const hubRelationshipTest = {
       userId,
       hubId,
-      hub: Promise.resolve({
+      hub: {
         active: true,
-      } as Hub),
+      } as any,
     } as JoinUserHub;
     jest
       .spyOn(joinUserHubRepository, 'findOne')
@@ -112,9 +112,9 @@ describe('HubGeofenceService', () => {
     const hubRelationshipTest = {
       userId,
       hubId,
-      hub: Promise.resolve({
+      hub: {
         active: true,
-      } as Hub),
+      } as any,
     } as JoinUserHub;
     jest
       .spyOn(joinUserHubRepository, 'findOne')
@@ -147,9 +147,9 @@ describe('HubGeofenceService', () => {
     const hubRelationshipTest = {
       userId,
       hubId,
-      hub: Promise.resolve({
+      hub: {
         active: true,
-      } as Hub),
+      } as any,
     } as JoinUserHub;
     jest
       .spyOn(joinUserHubRepository, 'findOne')

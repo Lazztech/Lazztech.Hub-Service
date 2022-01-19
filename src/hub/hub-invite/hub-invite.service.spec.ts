@@ -85,11 +85,11 @@ describe('HubInviteService', () => {
       userId,
       hubId,
       isOwner: true,
-      hub: Promise.resolve({
+      hub: {
         id: hubId,
         name: 'testHub',
         image: 'testImage.png',
-      }),
+      } as any,
     } as JoinUserHub;
     jest
       .spyOn(joinUserHubRepo, 'findOne')
