@@ -138,7 +138,7 @@ export class HubInviteService {
     this.logger.log(this.deleteInvite.name);
     const invite = await this.inviteRepository.findOneOrFail({ id: inviteId });
     if (invite.inviteesId == userId && invite.hubId == hubId) {
-      return await this.inviteRepository.remove(invite);
+      return await this.inviteRepository.removeAndFlush(invite);
     } else {
       const userHubRelationship = await this.joinUserHubRepository.findOne({
         userId,
@@ -147,7 +147,7 @@ export class HubInviteService {
       });
       this.validateRelationship(userHubRelationship, hubId, userId);
 
-      return await this.inviteRepository.remove(invite);
+      return await this.inviteRepository.removeAndFlush(invite);
     }
   }
 

@@ -120,7 +120,7 @@ export class HubService {
     if (hub.image) {
       await this.fileService.delete(hub.image);
     }
-    await this.hubRepository.remove(hub);
+    await this.hubRepository.removeAndFlush(hub);
   }
 
   private isNotOwner(userHubRelationship: JoinUserHub) {
@@ -214,13 +214,13 @@ export class HubService {
       userId,
       hubId,
     });
-    await this.joinUserHubRepository.remove(joinUserHub);
+    await this.joinUserHubRepository.removeAndFlush(joinUserHub);
 
     const invite = await this.inviteRepository.findOne({
       inviteesId: userId,
       hubId,
     });
-    await this.inviteRepository.remove(invite);
+    await this.inviteRepository.removeAndFlush(invite);
   }
 
   async setHubStarred(userId: any, hubId: number) {

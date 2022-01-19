@@ -93,7 +93,7 @@ export class HubMicroChatService {
     const microChat = (await (await usersConnection.hub.load()).microChats.loadItems()).find(
       (x) => x.id == microChatId,
     );
-    await this.microChatRepository.remove(microChat);
+    await this.microChatRepository.removeAndFlush(microChat);
 
     this.logger.log(
       `deleteMicroChat(userId: ${userId}, hubId: ${hubId}, microChatId ${microChatId}) completed successfully.`,

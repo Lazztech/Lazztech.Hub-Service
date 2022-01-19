@@ -95,7 +95,7 @@ export class NotificationService {
       id: inAppNotificationId,
       userId,
     });
-    await this.inAppNotificationRepository.remove(inAppNotification);
+    await this.inAppNotificationRepository.removeAndFlush(inAppNotification);
   }
 
   async deleteAllInAppNotifications(userId: any): Promise<void> {
@@ -103,7 +103,7 @@ export class NotificationService {
     const inAppNotifications = await this.inAppNotificationRepository.find({
       userId,
     });
-    await this.inAppNotificationRepository.remove(inAppNotifications);
+    await this.inAppNotificationRepository.removeAndFlush(inAppNotifications);
   }
 
   public async sendPushToUser(

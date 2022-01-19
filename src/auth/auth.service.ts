@@ -106,7 +106,7 @@ export class AuthService {
     const valid = await bcrypt.compare(password, user.password);
 
     if (valid && email === user.email) {
-      await this.userRepository.remove(user);
+      await this.userRepository.removeAndFlush(user);
       return true;
     } else {
       return false;
