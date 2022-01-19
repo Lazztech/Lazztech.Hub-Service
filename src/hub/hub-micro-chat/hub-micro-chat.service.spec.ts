@@ -88,7 +88,7 @@ describe('HubMicroChatService', () => {
     jest.spyOn(hubRepo, 'findOne').mockResolvedValueOnce({
       id: hubId,
       name: 'TestHubName',
-      usersConnection: Promise.resolve([
+      usersConnection: [
         {
           userId,
         },
@@ -98,12 +98,12 @@ describe('HubMicroChatService', () => {
         {
           userId: 3,
         },
-      ]),
-      microChats: Promise.resolve([
+      ] as any,
+      microChats: [
         {
           id: microChatId,
         },
-      ]),
+      ] as any,
     } as Hub);
     const sendPushToUserCall = jest
       .spyOn(notificationService, 'sendPushToUser')
@@ -133,7 +133,7 @@ describe('HubMicroChatService', () => {
     } as MicroChat;
     const saveCall = jest
       .spyOn(microChatRepo, 'persistAndFlush')
-      .mockResolvedValueOnce(expectResult);
+      .mockImplementationOnce(() => Promise.resolve());
     // Act
     const result = await service.createMicroChat(userId, hubId, microChatText);
     // Assert

@@ -107,7 +107,7 @@ describe('HubInviteService', () => {
 
     const saveCall = jest
       .spyOn(inviteRepo, 'persistAndFlush')
-      .mockResolvedValueOnce(invite);
+      .mockImplementationOnce(() => Promise.resolve());
     // Act
     await service.inviteUserToHub(userId, hubId, invitee.email);
     // Assert
@@ -115,9 +115,9 @@ describe('HubInviteService', () => {
     expect(addInAppNotificationForUserCall).toHaveBeenCalledWith(
       invitee.id,
       expect.objectContaining({
-        thumbnail: (await mockedFindOneJoinUserHub.hub).image,
+        thumbnail: (await mockedFindOneJoinUserHub.hub.load()).image,
         header: `You're invited to "${
-          (await mockedFindOneJoinUserHub.hub).name
+          (await mockedFindOneJoinUserHub.hub.load()).name
         }" hub.`,
         text: `View the invite.`,
         // date: Date.now().toString(),
@@ -128,10 +128,10 @@ describe('HubInviteService', () => {
       invitee.id,
       expect.objectContaining({
         title: `You're invited to "${
-          (await mockedFindOneJoinUserHub.hub).name
+          (await mockedFindOneJoinUserHub.hub.load()).name
         }" hub.`,
         body: `View the invite.`,
-        click_action: `preview-hub/${(await mockedFindOneJoinUserHub.hub).id}`,
+        click_action: `preview-hub/${(await mockedFindOneJoinUserHub.hub.load()).id}`,
       }),
     );
   });

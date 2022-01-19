@@ -165,7 +165,7 @@ describe('NotificationService', () => {
     ] as InAppNotification[]);
     const removeCall = jest
       .spyOn(inAppNotificationRepo, 'removeAndFlush')
-      .mockResolvedValueOnce({} as InAppNotification);
+      .mockImplementationOnce(() => Promise.resolve());
     // Act
     await service.deleteAllInAppNotifications(userId);
     // Assert

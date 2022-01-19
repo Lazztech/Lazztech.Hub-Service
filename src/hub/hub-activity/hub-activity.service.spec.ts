@@ -80,7 +80,7 @@ describe('HubActivityService', () => {
     const expectedResult = {
       active: true,
     } as Hub;
-    jest.spyOn(hubRepo, 'persistAndFlush').mockResolvedValueOnce(expectedResult);
+    jest.spyOn(hubRepo, 'persistAndFlush').mockImplementationOnce(() => Promise.resolve());
     jest.spyOn(joinUserHubRepo, 'find').mockResolvedValueOnce([
       {
         hubId,
@@ -128,7 +128,7 @@ describe('HubActivityService', () => {
     const expectedResult = {
       active: false,
     } as Hub;
-    jest.spyOn(hubRepo, 'persistAndFlush').mockResolvedValueOnce(expectedResult);
+    jest.spyOn(hubRepo, 'persistAndFlush').mockImplementationOnce(() => Promise.resolve());
     // Act
     const result = await service.deactivateHub(userId, hubId);
     // Assert
