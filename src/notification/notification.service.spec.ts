@@ -182,20 +182,22 @@ describe('NotificationService', () => {
     } as PushNotificationDto;
     const testUser = {
       id: userId,
-      userDevices: [
-        {
-          id: 1,
-          fcmPushUserToken: 'token1',
-        },
-        {
-          id: 2,
-          fcmPushUserToken: 'token2',
-        },
-        {
-          id: 3,
-          fcmPushUserToken: 'token3',
-        },
-      ] as any,
+      userDevices: {
+        loadItems: jest.fn().mockResolvedValueOnce([
+          {
+            id: 1,
+            fcmPushUserToken: 'token1',
+          },
+          {
+            id: 2,
+            fcmPushUserToken: 'token2',
+          },
+          {
+            id: 3,
+            fcmPushUserToken: 'token3',
+          },
+        ] as any),
+      } as any
     } as User;
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
     const sendPushNotification = jest
