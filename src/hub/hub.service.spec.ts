@@ -111,7 +111,11 @@ describe('HubService', () => {
       {
         userId,
         hub: {
-          usersConnection: {},
+          load: jest.fn().mockResolvedValueOnce({
+            usersConnection: {
+              load: jest.fn().mockResolvedValueOnce({})
+            }
+          }),
         } as any,
       } as JoinUserHub,
     ];
@@ -174,48 +178,66 @@ describe('HubService', () => {
         userId: 2,
         hubId: 9,
         hub: {
-          id: 9,
-          usersConnection: [
-            {
-              userId: 3,
-              user: {
-                id: 3,
-              },
-            },
-            {
-              userId: 2,
-              user: {
-                id: 2,
-              },
-            },
-          ] as any,
+          load: jest.fn().mockResolvedValueOnce({
+            id: 9,
+            usersConnection: {
+              loadItems: jest.fn().mockResolvedValueOnce([
+                {
+                  userId: 3,
+                  user: {
+                    load: jest.fn().mockResolvedValueOnce({
+                      id: 3,
+                    })
+                  },
+                },
+                {
+                  userId: 2,
+                  user: {
+                    load: jest.fn().mockResolvedValueOnce({
+                      id: 2,
+                    })
+                  },
+                },
+              ] as any)
+            }
+          }),
         } as any,
       } as JoinUserHub,
       {
         userId: 2,
         hubId: 10,
         hub: {
-          id: 10,
-          usersConnection: [
-            {
-              userId: 4,
-              user: {
-                id: 4,
-              } as any,
+          load: jest.fn().mockResolvedValueOnce({
+            id: 10,
+            usersConnection: {
+              loadItems: jest.fn().mockResolvedValueOnce([
+                {
+                  userId: 4,
+                  user: {
+                    load: jest.fn().mockResolvedValueOnce({
+                      id: 4,
+                    })
+                  } as any,
+                },
+                {
+                  userId: 2,
+                  user: {
+                    load: jest.fn().mockResolvedValueOnce({
+                      id: 2,
+                    })
+                  } as any,
+                },
+                {
+                  userId: 3,
+                  user: {
+                    load: jest.fn().mockResolvedValueOnce({
+                      id: 3,
+                    })
+                  } as any,
+                },
+              ])
             },
-            {
-              userId: 2,
-              user: {
-                id: 2,
-              } as any,
-            },
-            {
-              userId: 3,
-              user: {
-                id: 3,
-              } as any,
-            },
-          ],
+          })
         } as any,
       } as JoinUserHub,
     ]);
@@ -313,7 +335,9 @@ describe('HubService', () => {
       userId,
       hubId: expectedResult.id,
       isOwner: true,
-      hub: expectedResult as any,
+      hub: {
+        load: jest.fn().mockResolvedValueOnce(expectedResult as any)
+      } as any,
     } as JoinUserHub);
     const saveCall = jest
       .spyOn(hubRepo, 'persistAndFlush')
@@ -340,7 +364,9 @@ describe('HubService', () => {
       hubId,
       isOwner: true,
       hub: {
-        image: 'oldImage',
+        load: jest.fn().mockResolvedValueOnce({
+          image: 'oldImage',
+        })
       } as any,
     } as JoinUserHub);
     const expectedResult = {
@@ -419,19 +445,25 @@ describe('HubService', () => {
       {
         userId,
         hub: {
-          name: 'a',
+          load: jest.fn().mockResolvedValueOnce({
+            name: 'a',
+          })
         } as any,
       } as JoinUserHub,
       {
         userId,
         hub: {
-          name: 'b',
+          load: jest.fn().mockResolvedValueOnce({
+            name: 'b',
+          })
         } as any,
       } as JoinUserHub,
       {
         userId,
         hub: {
-          name: 'Lazzarini',
+          load: jest.fn().mockResolvedValueOnce({
+            name: 'Lazzarini',
+          })
         } as any,
       } as JoinUserHub,
     ];
