@@ -99,11 +99,13 @@ describe('HubMicroChatService', () => {
           userId: 3,
         },
       ] as any,
-      microChats: [
-        {
-          id: microChatId,
-        },
-      ] as any,
+      microChats: {
+        loadItems: jest.fn().mockResolvedValueOnce([
+          {
+            id: microChatId,
+          },
+        ] as any)
+      } as any,
     } as Hub);
     const sendPushToUserCall = jest
       .spyOn(notificationService, 'sendPushToUser')
@@ -150,14 +152,18 @@ describe('HubMicroChatService', () => {
       userId,
       hubId,
       hub: {
-        microChats: [
-          {
-            id: microChatId,
-          },
-          {
-            id: 2,
-          },
-        ] as any,
+        load: jest.fn().mockResolvedValueOnce({
+          microChats: {
+            loadItems: jest.fn().mockResolvedValueOnce([
+              {
+                id: microChatId,
+              },
+              {
+                id: 2,
+              },
+            ] as any)
+          }
+        })
       } as any,
       user: {} as any,
     } as JoinUserHub);
