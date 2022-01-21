@@ -74,7 +74,9 @@ describe('HubActivityService', () => {
       hubId,
       isOwner: true,
       hub: {
-        active: false,
+        load: jest.fn().mockResolvedValueOnce({
+          active: false,
+        })
       } as any,
     } as JoinUserHub);
     const expectedResult = {
@@ -86,16 +88,20 @@ describe('HubActivityService', () => {
         hubId,
         userId,
         hub: {
-          name: 'HubName',
-          image: 'HubImage',
+          load: jest.fn().mockResolvedValueOnce({
+            name: 'HubName',
+            image: 'HubImage',
+          })
         } as any,
       },
       {
         hubId,
         userId: 2,
         hub: {
-          name: 'HubName',
-          image: 'HubImage',
+          load: jest.fn().mockResolvedValueOnce({
+            name: 'HubName',
+            image: 'HubImage',
+          })
         } as any,
       },
     ] as JoinUserHub[]);
@@ -122,7 +128,9 @@ describe('HubActivityService', () => {
       hubId,
       isOwner: true,
       hub: {
-        active: true,
+        load: jest.fn().mockResolvedValueOnce({
+          active: true,
+        })
       } as any,
     } as JoinUserHub);
     const expectedResult = {
