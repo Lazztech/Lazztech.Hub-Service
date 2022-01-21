@@ -75,11 +75,13 @@ describe('NotificationService', () => {
     const token = 'asdfasdf';
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce({
       id: userId,
-      userDevices: [
-        {
-          fcmPushUserToken: 'otherToken',
-        },
-      ] as any,
+      userDevices: {
+        loadItems: jest.fn().mockResolvedValueOnce([
+          {
+            fcmPushUserToken: 'otherToken',
+          },
+        ] as any)
+      } as any,
     } as User);
     const saveCall = jest
       .spyOn(userDeviceRepo, 'persistAndFlush')
