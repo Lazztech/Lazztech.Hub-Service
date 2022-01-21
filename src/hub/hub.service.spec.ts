@@ -135,27 +135,35 @@ describe('HubService', () => {
       {
         userId,
         hub: {
-          usersConnection: [
-            {
-              userId,
-            },
-            {
-              userId: otherUsersId,
-            },
-          ] as any,
+          load: jest.fn().mockResolvedValueOnce({
+            usersConnection: {
+              loadItems: jest.fn().mockResolvedValueOnce([
+                {
+                  userId,
+                },
+                {
+                  userId: otherUsersId,
+                },
+              ] as any,)
+            }
+          })
         },
       },
       {
         userId,
         hub: {
-          usersConnection: [
-            {
-              userId,
-            },
-            {
-              userId: thirdUsersId,
-            },
-          ] as any,
+          load: jest.fn().mockResolvedValueOnce({
+            usersConnection: {
+              loadItems: jest.fn().mockResolvedValue([
+                {
+                  userId,
+                },
+                {
+                  userId: thirdUsersId,
+                },
+              ] as any,)
+            }
+          })
         } as any,
       },
     ] as JoinUserHub[]);
