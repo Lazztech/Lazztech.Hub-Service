@@ -89,7 +89,14 @@ describe('AuthService', () => {
     const email = 'gianlazzarini@gmail.com';
     const password = 'Password123';
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(undefined);
-    jest.spyOn(userRepo, 'create').mockReturnValueOnce(undefined);
+    jest.spyOn(userRepo, 'create').mockReturnValueOnce({
+      firstName,
+      lastName,
+      birthdate,
+      email,
+      password,
+      id: 1,
+    } as any);
     const saveCall = jest.spyOn(userRepo, 'persistAndFlush').mockImplementationOnce(() => Promise.resolve());
     jest
       .spyOn(notificationService, 'addInAppNotificationForUser')
