@@ -28,8 +28,8 @@ export class HubTasksService {
             // check if last update was over 2 hours ago
             if (diff > 2) {
                 // check out user if there's been no from within 2 hours
-                await this.hubGeofenceService.exitedHubGeofence(userHub.userId, userHub.hubId);
-                this.logger.log(`checked out user ${userHub.userId} from hub ${userHub.hubId}`);
+                await this.hubGeofenceService.exitedHubGeofence(userHub.user.id, userHub.hub.id);
+                this.logger.log(`checked out user ${userHub.user.id} from hub ${userHub.hub.id}`);
             }
         }   
     }

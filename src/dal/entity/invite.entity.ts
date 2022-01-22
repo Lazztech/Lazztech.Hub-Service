@@ -5,23 +5,11 @@ import { User } from './user.entity';
 
 @ObjectType()
 @Entity()
-@Unique({ properties: ['invitersId', 'inviteesId', 'hubId'] })
+@Unique({ properties: ['inviter', 'invitee', 'hub'] })
 export class Invite {
   @Field(() => ID)
   @PrimaryKey()
   public id: number;
-
-  @Field(() => ID)
-  @ManyToOne(() => Invite, { mapToPk: true })
-  public invitersId: number;
-
-  @Field(() => ID)
-  @ManyToOne(() => Invite, { mapToPk: true, })
-  public inviteesId: number;
-
-  @Field(() => ID)
-  @ManyToOne(() => Hub, { mapToPk: true })
-  public hubId: number;
 
   @Field(() => Boolean)
   @Property({ default: false })

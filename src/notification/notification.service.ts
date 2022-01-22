@@ -46,7 +46,7 @@ export class NotificationService {
 
     if (!(await user.userDevices.loadItems()).find((x) => x.fcmPushUserToken == token)) {
       const userDevice = new UserDevice();
-      userDevice.userId = user.id;
+      userDevice.user.id = user.id;
       userDevice.fcmPushUserToken = token;
       await this.userDeviceRepository.persistAndFlush(userDevice);
       // TODO notify via email that a new device has been used on the account for security.
@@ -67,7 +67,7 @@ export class NotificationService {
     pageableOptions?: PageableOptions,
   ): Promise<[InAppNotification[], number]> {
     this.logger.log(this.getInAppNotifications.name);
-    return await this.inAppNotificationRepository.findAndCount({ userId }, {
+    return await this.inAppNotificationRepository.findAndCount({ user: userId }, {
       limit: pageableOptions?.limit,
       offset: pageableOptions?.offset,
       orderBy: generateOrderOptions(pageableOptions?.sortOptions),
@@ -93,7 +93,7 @@ export class NotificationService {
     this.logger.log(this.deleteInAppNotification.name);
     const inAppNotification = await this.inAppNotificationRepository.findOne({
       id: inAppNotificationId,
-      userId,
+      user: userId,
     });
     await this.inAppNotificationRepository.removeAndFlush(inAppNotification);
   }
@@ -101,7 +101,7 @@ export class NotificationService {
   async deleteAllInAppNotifications(userId: any): Promise<void> {
     this.logger.log(this.deleteAllInAppNotifications.name);
     const inAppNotifications = await this.inAppNotificationRepository.find({
-      userId,
+      user: userId,
     });
     await this.inAppNotificationRepository.removeAndFlush(inAppNotifications);
   }

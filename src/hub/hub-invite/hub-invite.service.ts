@@ -23,14 +23,14 @@ export class HubInviteService {
   async getInvitesByHub(userId: any, hubId: any, includeAccepted: boolean) {
     this.logger.log(this.getInvitesByHub.name);
     const userHubRelationship = await this.joinUserHubRepository.findOne({
-      userId,
-      hubId,
+      user: userId,
+      hub: hubId,
       isOwner: true,
     });
     this.validateRelationship(userHubRelationship, hubId, userId);
 
     return await this.inviteRepository.find({
-      hubId,
+      hub: hubId,
       accepted: includeAccepted,
     });
   }
@@ -38,15 +38,15 @@ export class HubInviteService {
   async getInvite(userId: any, hubId: any) {
     this.logger.log(this.getInvite.name);
     return await this.inviteRepository.findOne({
-      hubId,
-      inviteesId: userId,
+      hub: hubId,
+      invitee: userId,
     } as Invite);
   }
 
   async getInvitesByUser(userId: any, includeAccepted: boolean) {
     this.logger.log(this.getInvitesByUser.name);
     return await this.inviteRepository.find({
-      inviteesId: userId,
+      invitee: userId,
       accepted: includeAccepted,
     } as Invite);
   }
@@ -54,8 +54,8 @@ export class HubInviteService {
   async inviteUserToHub(userId: any, hubId: number, inviteesEmail: string) {
     this.logger.log(this.inviteUserToHub.name);
     const userHubRelationship = await this.joinUserHubRepository.findOne({
-      userId,
-      hubId,
+      user: userId,
+      hub: hubId,
       isOwner: true,
     });
     this.validateRelationship(userHubRelationship, hubId, userId);
@@ -65,7 +65,7 @@ export class HubInviteService {
     });
 
     if(invitee){
-      const alreadyInvited = await this.inviteRepository.findOne({inviteesId: invitee.id, invitersId: userId, hubId });
+      const alreadyInvited = await this.inviteRepository.findOne({invitee: invitee.id, inviter: userId, hub: hubId });
       if (alreadyInvited) {
         throw new Error(`${invitee.firstName} has already been invited to ${(await alreadyInvited.hub.load()).name}`);
       }
@@ -104,7 +104,7 @@ export class HubInviteService {
 
     const newRelationship = this.joinUserHubRepository.create({
       userId: inviteesId,
-      hubId: invite.hubId,
+      hubId: invite.hub.id,
       isOwner: false,
     });
     await this.joinUserHubRepository.persistAndFlush(newRelationship);
@@ -137,12 +137,12 @@ export class HubInviteService {
   async deleteInvite(userId: any, hubId: any, inviteId: any) {
     this.logger.log(this.deleteInvite.name);
     const invite = await this.inviteRepository.findOneOrFail({ id: inviteId });
-    if (invite.inviteesId == userId && invite.hubId == hubId) {
+    if (invite.invitee.id == userId && invite.hub.id == hubId) {
       return await this.inviteRepository.removeAndFlush(invite);
     } else {
       const userHubRelationship = await this.joinUserHubRepository.findOne({
-        userId,
-        hubId,
+        user: userId,
+        hub: hubId,
         isOwner: true,
       });
       this.validateRelationship(userHubRelationship, hubId, userId);

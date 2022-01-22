@@ -28,25 +28,28 @@ export class HubService {
 
   async getOneUserHub(userId: any, hubId: number) {
     this.logger.log(this.getOneUserHub.name);
-    return await this.joinUserHubRepository.findOne({ hubId, userId });
+    return await this.joinUserHubRepository.findOne({       
+      user: userId,
+      hub: hubId,
+    });
   }
 
   async getUserHubs(userId: any) {
     this.logger.log(this.getUserHubs.name);
-    return await this.joinUserHubRepository.find({ userId });
+    return await this.joinUserHubRepository.find({ user: userId });
   }
 
   public async commonUsersHubs(userId: any, otherUsersId: any) {
     this.logger.log(this.commonUsersHubs.name);
     const userHubRelationships = await this.joinUserHubRepository.find({
-      userId,
+      user: userId
     });
 
     const hubs = await Promise.all(userHubRelationships.map((x) => x.hub));
     const commonHubRelationships = [];
     for (const hub of hubs) {
       const result = (await (await hub.load()).usersConnection.loadItems()).find(
-        (x) => x.userId == otherUsersId,
+        (x) => x.user.id == otherUsersId,
       );
       if (result) {
         commonHubRelationships.push(result);
@@ -59,7 +62,7 @@ export class HubService {
   async usersPeople(userId: any) {
     this.logger.log(this.usersPeople.name);
     const userHubRelationships = await this.joinUserHubRepository.find({
-      userId,
+      user: userId
     });
 
     const usersHubs = await Promise.all(userHubRelationships.map((x) => x.hub));
@@ -70,7 +73,7 @@ export class HubService {
     }
 
     const resultingOtherUsers: User[] = await Promise.all(
-      commonConnections.filter((x) => x.userId != userId).map((x) => x.user.load()),
+      commonConnections.filter((x) => x.user.id != userId).map((x) => x.user.load()),
     );
 
     const uniqueUsers: User[] = [];
@@ -94,8 +97,8 @@ export class HubService {
     await this.hubRepository.persistAndFlush(hub);
     
     const joinUserHub = this.joinUserHubRepository.create({
-      userId,
-      hubId: hub.id,
+      user: userId,
+      hub: hub.id,
       isOwner: true,
     });
     await this.joinUserHubRepository.persistAndFlush(joinUserHub);
@@ -105,8 +108,8 @@ export class HubService {
   async deleteHub(userId: any, hubId: number) {
     this.logger.log(this.deleteHub.name);
     const userHubRelationship = await this.joinUserHubRepository.findOne({
-        userId,
-        hubId,
+        user: userId,
+        hub: hubId,
       });
 
     if (!userHubRelationship) {
@@ -131,8 +134,8 @@ export class HubService {
   async editHub(userId: any, hubId: number, name: string, description: string) {
     this.logger.log(this.editHub.name);
     const joinUserHubResult = await this.joinUserHubRepository.findOne({
-      userId,
-      hubId,
+      user: userId,
+      hub: hubId,
       isOwner: true,
     });
 
@@ -151,8 +154,8 @@ export class HubService {
   ) {
     this.logger.log(this.changeHubLocation.name);
     const joinUserHubResult = await this.joinUserHubRepository.findOne({
-      userId,
-      hubId,
+      user: userId,
+      hub: hubId,
       isOwner: true,
     });
 
@@ -162,12 +165,12 @@ export class HubService {
     await this.hubRepository.persistAndFlush(hub);
 
     const relationships = await this.joinUserHubRepository.find({
-      hubId,
+      hub: hubId,
     });
     const user = await joinUserHubResult.user.load();
     for (const relationship of relationships) {
       await this.notificationService.addInAppNotificationForUser(
-        relationship.userId,
+        relationship.user.id,
         {
           header: `${hub.name} had its location changed.`,
           text: `By ${user.firstName} ${user.lastName}`,
@@ -177,7 +180,7 @@ export class HubService {
         },
       );
 
-      await this.notificationService.sendPushToUser(relationship.userId, {
+      await this.notificationService.sendPushToUser(relationship.user.id, {
         title: `${hub.name} had its location changed.`,
         body: `By ${user.firstName} ${user.lastName}`,
         click_action: undefined,
@@ -190,8 +193,8 @@ export class HubService {
   async changeHubImage(userId: any, hubId: number, newImage: string) {
     this.logger.log(this.changeHubImage.name);
     const joinUserHubResult = await this.joinUserHubRepository.findOne({
-      userId,
-      hubId,
+      user: userId,
+      hub: hubId,
       isOwner: true,
     });
 
@@ -211,14 +214,14 @@ export class HubService {
   async leaveHub(userId: any, hubId: number) {
     this.logger.log(this.leaveHub.name);
     const joinUserHub = await this.joinUserHubRepository.findOneOrFail({
-      userId,
-      hubId,
+      user: userId,
+      hub: hubId,
     });
     await this.joinUserHubRepository.removeAndFlush(joinUserHub);
 
     const invite = await this.inviteRepository.findOne({
-      inviteesId: userId,
-      hubId,
+      invitee: userId,
+      hub: hubId,
     });
     await this.inviteRepository.removeAndFlush(invite);
   }
@@ -226,8 +229,8 @@ export class HubService {
   async setHubStarred(userId: any, hubId: number) {
     this.logger.log(this.setHubStarred.name);
     const hubRelationship = await this.joinUserHubRepository.findOne({
-      userId,
-      hubId,
+      user: userId,
+      hub: hubId,
     });
     hubRelationship.starred = true;
     await this.joinUserHubRepository.persistAndFlush(hubRelationship);
@@ -237,8 +240,8 @@ export class HubService {
   async setHubNotStarred(userId: any, hubId: number) {
     this.logger.log(this.setHubNotStarred.name);
     const hubRelationship = await this.joinUserHubRepository.findOne({
-      userId,
-      hubId,
+      user: userId,
+      hub: hubId,
     });
     hubRelationship.starred = false;
     await this.joinUserHubRepository.persistAndFlush(hubRelationship);
@@ -248,7 +251,7 @@ export class HubService {
   async searchHubByName(userId: any, search: string) {
     this.logger.log(this.searchHubByName.name);
     const userHubRelationship = await this.joinUserHubRepository.find({
-      userId,
+      user: userId,
     });
     search = search.toLowerCase();
     const results: Hub[] = [];

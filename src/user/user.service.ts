@@ -36,7 +36,7 @@ export class UserService {
     this.logger.log(this.getUsersOwnedHubs.name);
 
     const joinUserHubResults = await this.joinUserHubRepository.find({
-      userId,
+      user: userId,
       isOwner: true,
     });
     const hubs: Hub[] = await Promise.all(
@@ -49,7 +49,7 @@ export class UserService {
     this.logger.log(this.memberOfHubs.name);
 
     const joinUserHubResults = await this.joinUserHubRepository.find({
-      userId,
+      user: userId,
       isOwner: false,
     });
     const hubs: Hub[] = await Promise.all(

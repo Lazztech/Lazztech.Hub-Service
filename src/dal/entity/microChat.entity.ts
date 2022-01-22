@@ -9,10 +9,6 @@ export class MicroChat {
   @PrimaryKey()
   public id: number;
 
-  @Field()
-  @ManyToOne(() => Hub, { mapToPk: true })
-  public hubId: number;
-
   @Field(() => ID)
   @ManyToOne({
     entity: () => Hub,

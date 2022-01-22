@@ -23,8 +23,8 @@ export class HubGeofenceService {
   async enteredHubGeofence(userId: any, hubId: number) {
     this.logger.log(this.enteredHubGeofence.name);
     const hubRelationship = await this.joinUserHubRepository.findOne({
-      userId,
-      hubId,
+      user: userId,
+      hub: hubId,
     });
 
     if (!hubRelationship) {
@@ -51,8 +51,8 @@ export class HubGeofenceService {
   async dwellHubGeofence(userId: any, hubId: number) {
     this.logger.log(this.dwellHubGeofence.name);
     const hubRelationship = await this.joinUserHubRepository.findOne({
-      userId,
-      hubId,
+      user: userId,
+      hub: hubId,
     });
 
     if (!hubRelationship) {
@@ -74,8 +74,8 @@ export class HubGeofenceService {
   async exitedHubGeofence(userId: any, hubId: number) {
     this.logger.log(this.exitedHubGeofence.name);
     const hubRelationship = await this.joinUserHubRepository.findOne({
-      userId,
-      hubId,
+      user: userId,
+      hub: hubId,
     });
 
     if (!hubRelationship) {
@@ -99,7 +99,7 @@ export class HubGeofenceService {
 
   async notifyMembersOfArrival(userId: any, hubId: number) {
     const membersHubRelations = await this.joinUserHubRepository.find({
-      hubId,
+      hub: hubId,
     });
     const user = await this.userRepository.findOne({ id: userId });
     const hub = await this.hubRepository.findOne({ id: hubId });
@@ -107,7 +107,7 @@ export class HubGeofenceService {
 
     for (const relation of membersHubRelations) {
       await this.notificationService.addInAppNotificationForUser(
-        relation.userId,
+        relation.user.id,
         {
           header: message,
           thumbnail: hub.image,
@@ -117,7 +117,7 @@ export class HubGeofenceService {
         },
       );
 
-      await this.notificationService.sendPushToUser(relation.userId, {
+      await this.notificationService.sendPushToUser(relation.user.id, {
         title: message,
         click_action: undefined,
         body: `at the "${hub.name}" hub.`,
@@ -127,7 +127,7 @@ export class HubGeofenceService {
 
   async notifyMembersOfExit(userId: any, hubId: number) {
     const membersHubRelations = await this.joinUserHubRepository.find({
-      hubId,
+      hub: hubId,
     });
     const user = await this.userRepository.findOne({ id: userId });
     const hub = await this.hubRepository.findOne({ id: hubId });
@@ -135,7 +135,7 @@ export class HubGeofenceService {
 
     for (const relation of membersHubRelations) {
       await this.notificationService.addInAppNotificationForUser(
-        relation.userId,
+        relation.user.id,
         {
           header: message,
           thumbnail: hub.image,
@@ -145,7 +145,7 @@ export class HubGeofenceService {
         },
       );
 
-      await this.notificationService.sendPushToUser(relation.userId, {
+      await this.notificationService.sendPushToUser(relation.user.id, {
         title: message,
         click_action: undefined,
         body: `the "${hub.name}" hub`,

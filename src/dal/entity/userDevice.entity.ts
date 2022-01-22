@@ -13,9 +13,6 @@ export class UserDevice {
   @Property({ fieldName: 'fcmPushUserToken', unique: true })
   public fcmPushUserToken: string;
 
-  @ManyToOne(() => User, { mapToPk: true })
-  public userId: number;
-
   @ManyToOne({
     entity: () => User,
     fieldName: 'userId',

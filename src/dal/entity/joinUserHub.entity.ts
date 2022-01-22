@@ -12,13 +12,6 @@ export enum GeofenceEvent {
 @ObjectType()
 @Entity()
 export class JoinUserHub {
-  @Field(() => ID)
-  @ManyToOne(() => User, { mapToPk: true })
-  public userId: number;
-
-  @Field(() => ID)
-  @ManyToOne(() => Hub, { mapToPk: true })
-  public hubId: number;
 
   /**
    * Exposed as a field resolver

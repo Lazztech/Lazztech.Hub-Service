@@ -35,14 +35,14 @@ export class HubMicroChatService {
     const microChat = (await hub.microChats.loadItems()).find((x) => x.id == microChatId);
 
     for (const memberConnection of await hub.usersConnection) {
-      await this.notificationService.sendPushToUser(memberConnection.userId, {
+      await this.notificationService.sendPushToUser(memberConnection.user.id, {
         title: `${microChat.text}`,
         body: `From ${fromUser.firstName} to the ${hub.name} hub`,
         click_action: '',
       } as PushNotificationDto);
 
       await this.notificationService.addInAppNotificationForUser(
-        memberConnection.userId,
+        memberConnection.user.id,
         {
           thumbnail: fromUser.image,
           header: `${microChat.text}`,
@@ -56,8 +56,8 @@ export class HubMicroChatService {
   async createMicroChat(userId: any, hubId: number, microChatText: string) {
     this.logger.log(this.createMicroChat.name);
     const usersConnection = await this.joinUserHubRepository.findOne({
-      userId,
-      hubId,
+      user: userId,
+      hub: hubId,
     });
 
     if (!usersConnection) {
@@ -67,7 +67,7 @@ export class HubMicroChatService {
     }
 
     const microChat = new MicroChat();
-    microChat.hubId = hubId;
+    microChat.hub.id = hubId;
     microChat.text = microChatText;
     await this.microChatRepository.persistAndFlush(microChat);
 
@@ -80,8 +80,8 @@ export class HubMicroChatService {
   async deleteMicroChat(userId: number, hubId: number, microChatId: number) {
     this.logger.log(this.deleteMicroChat.name);
     const usersConnection = await this.joinUserHubRepository.findOne({
-      userId,
-      hubId,
+      user: userId,
+      hub: hubId,
     });
 
     if (!usersConnection) {

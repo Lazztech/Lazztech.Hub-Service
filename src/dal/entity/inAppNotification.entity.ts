@@ -9,10 +9,6 @@ export class InAppNotification {
   @PrimaryKey()
   public id: number;
 
-  @Field(() => ID)
-  @ManyToOne(() => User, { mapToPk: true })
-  public userId: number;
-
   @Field({ nullable: true })
   @Property({ nullable: true })
   public header: string;
