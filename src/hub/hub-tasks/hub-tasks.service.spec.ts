@@ -67,13 +67,19 @@ describe('HubTasksService', () => {
   it('should exit expired presence', async () => {
     // arrange
     const validPresence = {
-      lastUpdated: Date.now().toString()
+      lastUpdated: Date.now().toString(),
+      user: { id: 1 } as any,
+      hub: { id: 1 } as any
     } as JoinUserHub;
     const expiredPresence = {
-      lastUpdated: '00000'
+      lastUpdated: '00000',
+      user: { id: 1 } as any,
+      hub: { id: 1 } as any
     } as JoinUserHub;
     const undefinedLastUpdated = {
-      lastUpdated: undefined
+      lastUpdated: undefined,
+      user: { id: 1 } as any,
+      hub: { id: 1 } as any
     } as JoinUserHub;
     const findSpy = jest
       .spyOn(joinUserHubRepo, 'find')

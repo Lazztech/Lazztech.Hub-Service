@@ -90,13 +90,13 @@ describe('HubMicroChatService', () => {
       name: 'TestHubName',
       usersConnection: [
         {
-          userId,
+          user: { id: userId },
         },
         {
-          userId: 2,
+          user: { id: 2 },
         },
         {
-          userId: 3,
+          user: { id: 3 },
         },
       ] as any,
       microChats: {
@@ -126,13 +126,14 @@ describe('HubMicroChatService', () => {
     const hubId = 1;
     const microChatText = 'Hello';
     jest.spyOn(joinUserHubRepo, 'findOne').mockResolvedValueOnce({
-      userId,
-      hubId,
+      user: { id: userId },
+      hub: { id: hubId },
     } as JoinUserHub);
     const expectResult = {
-      hubId,
+      hub: { id: hubId },
       text: microChatText,
     } as MicroChat;
+    jest.spyOn(microChatRepo, 'create').mockImplementationOnce(value => value as any);
     const saveCall = jest
       .spyOn(microChatRepo, 'persistAndFlush')
       .mockImplementationOnce(() => Promise.resolve());
@@ -149,9 +150,9 @@ describe('HubMicroChatService', () => {
     const hubId = 1;
     const microChatId = 1;
     jest.spyOn(joinUserHubRepo, 'findOne').mockResolvedValueOnce({
-      userId,
-      hubId,
+      user: { id: userId },
       hub: {
+        id: hubId,
         load: jest.fn().mockResolvedValueOnce({
           microChats: {
             loadItems: jest.fn().mockResolvedValueOnce([
@@ -165,7 +166,6 @@ describe('HubMicroChatService', () => {
           }
         })
       } as any,
-      user: {} as any,
     } as JoinUserHub);
     const deleteCall = jest
       .spyOn(microChatRepo, 'removeAndFlush')

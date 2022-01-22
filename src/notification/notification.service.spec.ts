@@ -78,11 +78,13 @@ describe('NotificationService', () => {
       userDevices: {
         loadItems: jest.fn().mockResolvedValueOnce([
           {
+            user: { id: userId },
             fcmPushUserToken: 'otherToken',
           },
         ] as any)
       } as any,
     } as User);
+    jest.spyOn(userDeviceRepo, 'create').mockImplementationOnce(value => value as any);
     const saveCall = jest
       .spyOn(userDeviceRepo, 'persistAndFlush')
       .mockImplementationOnce(() => Promise.resolve());
@@ -98,11 +100,11 @@ describe('NotificationService', () => {
     const userId = 1;
     const expectedResult = [
       {
-        userId,
+        user: { id: userId },
         text: 'test',
       },
       {
-        userId,
+        user: { id: userId },
         text: 'test',
       },
     ] as InAppNotification[];
@@ -125,7 +127,7 @@ describe('NotificationService', () => {
     } as InAppNotificationDto;
     jest
       .spyOn(inAppNotificationRepo, 'create')
-      .mockReturnValueOnce({ ...details, userId } as InAppNotification);
+      .mockReturnValueOnce({ ...details, user: { id: userId }} as InAppNotification);
     const saveCall1 = jest
       .spyOn(inAppNotificationRepo, 'persistAndFlush')
       .mockImplementationOnce(() => Promise.resolve());
@@ -140,7 +142,7 @@ describe('NotificationService', () => {
     const userId = 1;
     const inAppNotificationId = 1;
     jest.spyOn(inAppNotificationRepo, 'findOne').mockResolvedValueOnce({
-      userId,
+      user: { id: userId },
     } as InAppNotification);
     const removeCall = jest
       .spyOn(inAppNotificationRepo, 'removeAndFlush')
@@ -156,13 +158,13 @@ describe('NotificationService', () => {
     const userId = 1;
     jest.spyOn(inAppNotificationRepo, 'find').mockResolvedValueOnce([
       {
-        userId,
+        user: { id: userId },
       },
       {
-        userId,
+        user: { id: userId },
       },
       {
-        userId,
+        user: { id: userId },
       },
     ] as InAppNotification[]);
     const removeCall = jest

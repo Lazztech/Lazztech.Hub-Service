@@ -70,10 +70,10 @@ describe('HubActivityService', () => {
     const userId = 1;
     const hubId = 1;
     jest.spyOn(joinUserHubRepo, 'findOne').mockResolvedValueOnce({
-      userId,
-      hubId,
+      user: { id: userId } as any,
       isOwner: true,
       hub: {
+        id: hubId,
         load: jest.fn().mockResolvedValueOnce({
           active: false,
         })
@@ -85,9 +85,9 @@ describe('HubActivityService', () => {
     jest.spyOn(hubRepo, 'persistAndFlush').mockImplementationOnce(() => Promise.resolve());
     jest.spyOn(joinUserHubRepo, 'find').mockResolvedValueOnce([
       {
-        hubId,
-        userId,
+        user: { id: userId } as any,
         hub: {
+          id: hubId,
           load: jest.fn().mockResolvedValueOnce({
             name: 'HubName',
             image: 'HubImage',
@@ -95,9 +95,9 @@ describe('HubActivityService', () => {
         } as any,
       },
       {
-        hubId,
-        userId: 2,
+        user: { id: 2 },
         hub: {
+          id: hubId,
           load: jest.fn().mockResolvedValueOnce({
             name: 'HubName',
             image: 'HubImage',
@@ -124,10 +124,10 @@ describe('HubActivityService', () => {
     const userId = 1;
     const hubId = 1;
     jest.spyOn(joinUserHubRepo, 'findOne').mockResolvedValueOnce({
-      userId,
-      hubId,
+      user: { id: userId } as any,
       isOwner: true,
       hub: {
+        id: hubId,
         load: jest.fn().mockResolvedValueOnce({
           active: true,
         })

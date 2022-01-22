@@ -84,9 +84,9 @@ describe('HubService', () => {
     const userId = 1;
     const hubId = 2;
     const userHubTestResult = {
-      userId,
-      hubId,
+      user: { id: userId },
       hub: {
+        id: hubId,
         usersConnection: [
           {
             user: {},
@@ -109,7 +109,7 @@ describe('HubService', () => {
     const userId = 1;
     const testResult = [
       {
-        userId,
+        user: { id: userId },
         hub: {
           load: jest.fn().mockResolvedValueOnce({
             usersConnection: {
@@ -133,16 +133,16 @@ describe('HubService', () => {
     const thirdUsersId = 3;
     jest.spyOn(joinUserHubRepo, 'find').mockResolvedValueOnce([
       {
-        userId,
+        user: { id: userId },
         hub: {
           load: jest.fn().mockResolvedValueOnce({
             usersConnection: {
               loadItems: jest.fn().mockResolvedValueOnce([
                 {
-                  userId,
+                  user: { id: userId },
                 },
                 {
-                  userId: otherUsersId,
+                  user: { id: otherUsersId },
                 },
               ] as any,)
             }
@@ -150,16 +150,16 @@ describe('HubService', () => {
         },
       },
       {
-        userId,
+        user: { id: userId },
         hub: {
           load: jest.fn().mockResolvedValueOnce({
             usersConnection: {
               loadItems: jest.fn().mockResolvedValue([
                 {
-                  userId,
+                  user: { id: userId },
                 },
                 {
-                  userId: thirdUsersId,
+                  user: { id: thirdUsersId },
                 },
               ] as any,)
             }
@@ -169,7 +169,7 @@ describe('HubService', () => {
     ] as JoinUserHub[]);
     const expectedResult = [
       {
-        userId: otherUsersId,
+        user: { id: otherUsersId },
       },
     ] as JoinUserHub[];
     // Act
@@ -183,24 +183,24 @@ describe('HubService', () => {
     const userId = 2;
     jest.spyOn(joinUserHubRepo, 'find').mockResolvedValueOnce([
       {
-        userId: 2,
-        hubId: 9,
+        user: { id: 2 },
         hub: {
+          id: 9,
           load: jest.fn().mockResolvedValueOnce({
             id: 9,
             usersConnection: {
               loadItems: jest.fn().mockResolvedValueOnce([
                 {
-                  userId: 3,
                   user: {
+                    id: 3,
                     load: jest.fn().mockResolvedValueOnce({
                       id: 3,
                     })
                   },
                 },
                 {
-                  userId: 2,
                   user: {
+                    id: 2,
                     load: jest.fn().mockResolvedValueOnce({
                       id: 2,
                     })
@@ -212,32 +212,32 @@ describe('HubService', () => {
         } as any,
       } as JoinUserHub,
       {
-        userId: 2,
-        hubId: 10,
+        user: { id: 2 },
         hub: {
+          id: 10,
           load: jest.fn().mockResolvedValueOnce({
             id: 10,
             usersConnection: {
               loadItems: jest.fn().mockResolvedValueOnce([
                 {
-                  userId: 4,
                   user: {
+                    id: 4,
                     load: jest.fn().mockResolvedValueOnce({
                       id: 4,
                     })
                   } as any,
                 },
                 {
-                  userId: 2,
                   user: {
+                    id: 2,
                     load: jest.fn().mockResolvedValueOnce({
                       id: 2,
                     })
                   } as any,
                 },
                 {
-                  userId: 3,
                   user: {
+                    id: 3,
                     load: jest.fn().mockResolvedValueOnce({
                       id: 3,
                     })
@@ -276,15 +276,14 @@ describe('HubService', () => {
       shareableId: "b33d028f-c423-4137-a9e4-88be6976a7d3"
     } as Hub;
     const joinUserHub = {
-      userId,
-      hubId: hub.id,
+      user: { id: userId },
+      hub: { id: hub.id },
       isOwner: true,
     } as JoinUserHub;
     const expectedResult = {
-      userId,
-      hubId: hub.id,
+      user: { id: userId },
+      hub: { ...hub as any, id: hub.id, image: 'https://x.com/' + hub.image},
       isOwner: true,
-      hub: hub as any,
     } as JoinUserHub;
 
     jest
@@ -311,8 +310,8 @@ describe('HubService', () => {
     const userId = 1;
     const hubId = 1;
     jest.spyOn(joinUserHubRepo, 'findOne').mockResolvedValueOnce({
-      userId,
-      hubId,
+      user: { id: userId },
+      hub: { id: hubId },
       isOwner: true,
     } as JoinUserHub);
     jest.spyOn(hubRepo, 'findOne').mockResolvedValueOnce({
@@ -340,10 +339,10 @@ describe('HubService', () => {
       description: 'description',
     } as Hub;
     jest.spyOn(joinUserHubRepo, 'findOne').mockResolvedValueOnce({
-      userId,
-      hubId: expectedResult.id,
+      user: { id: userId },
       isOwner: true,
       hub: {
+        id: expectedResult.id,
         load: jest.fn().mockResolvedValueOnce(expectedResult as any)
       } as any,
     } as JoinUserHub);
@@ -368,10 +367,10 @@ describe('HubService', () => {
     const hubId = 1;
     const newImage = 'newImage';
     jest.spyOn(joinUserHubRepo, 'findOne').mockResolvedValueOnce({
-      userId,
-      hubId,
+      user: { id: userId },
       isOwner: true,
       hub: {
+        id: hubId,
         load: jest.fn().mockResolvedValueOnce({
           id: hubId,
           image: 'oldImage',
@@ -405,13 +404,13 @@ describe('HubService', () => {
     const userId = 1;
     const hubId = 1;
     const expectedResult = {
-      userId,
-      hubId,
+      user: { id: userId },
+      hub: { id: hubId },
       starred: true,
     } as JoinUserHub;
     jest.spyOn(joinUserHubRepo, 'findOne').mockResolvedValueOnce({
-      userId,
-      hubId,
+      user: { id: userId },
+      hub: { id: hubId },
     } as JoinUserHub);
     const saveCall = jest
       .spyOn(joinUserHubRepo, 'persistAndFlush')
@@ -428,13 +427,13 @@ describe('HubService', () => {
     const userId = 1;
     const hubId = 1;
     const expectedResult = {
-      userId,
-      hubId,
+      user: { id: userId },
+      hub: { id: hubId },
       starred: false,
     } as JoinUserHub;
     jest.spyOn(joinUserHubRepo, 'findOne').mockResolvedValueOnce({
-      userId,
-      hubId,
+      user: { id: userId },
+      hub: { id: hubId },
     } as JoinUserHub);
     const saveCall = jest
       .spyOn(joinUserHubRepo, 'persistAndFlush')
@@ -452,7 +451,7 @@ describe('HubService', () => {
     const search = 'Lazzarini';
     const testHubRelationships: JoinUserHub[] = [
       {
-        userId,
+        user: { id: userId },
         hub: {
           load: jest.fn().mockResolvedValueOnce({
             name: 'a',
@@ -460,7 +459,7 @@ describe('HubService', () => {
         } as any,
       } as JoinUserHub,
       {
-        userId,
+        user: { id: userId },
         hub: {
           load: jest.fn().mockResolvedValueOnce({
             name: 'b',
@@ -468,7 +467,7 @@ describe('HubService', () => {
         } as any,
       } as JoinUserHub,
       {
-        userId,
+        user: { id: userId },
         hub: {
           load: jest.fn().mockResolvedValueOnce({
             name: 'Lazzarini',

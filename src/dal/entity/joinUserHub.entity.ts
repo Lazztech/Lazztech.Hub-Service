@@ -41,9 +41,9 @@ export class JoinUserHub {
   @Property({ fieldName: 'isOwner' })
   public isOwner: boolean;
 
-  @Field()
+  @Field(() => Boolean)
   @Property({ default: false })
-  public starred: boolean = false;
+  public starred = false;
 
   /**
    * Exposed as a field resolver

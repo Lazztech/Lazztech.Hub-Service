@@ -45,9 +45,10 @@ export class NotificationService {
     const user = await this.userRepository.findOne({ id: userId });
 
     if (!(await user.userDevices.loadItems()).find((x) => x.fcmPushUserToken == token)) {
-      const userDevice = new UserDevice();
-      userDevice.user.id = user.id;
-      userDevice.fcmPushUserToken = token;
+      const userDevice = this.userDeviceRepository.create({
+        user: { id: user.id },
+        fcmPushUserToken: token,
+      });
       await this.userDeviceRepository.persistAndFlush(userDevice);
       // TODO notify via email that a new device has been used on the account for security.
     } else {
