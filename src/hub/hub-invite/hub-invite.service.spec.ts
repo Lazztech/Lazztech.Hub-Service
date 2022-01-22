@@ -76,22 +76,30 @@ describe('HubInviteService', () => {
     } as User;
 
     const invite = {
-      hubId,
-      invitersId: userId,
-      inviteesId: invitee.id,
+      hub: {
+        id: hubId
+      },
+      inviter: {
+        id: userId
+      },
+      invitee: {
+        id: invitee.id
+      },
     } as Invite;
 
     const mockedFindOneJoinUserHub = {
-      userId,
-      hubId,
+      user: {
+        id: userId,
+      },
       isOwner: true,
       hub: {
+        id: hubId,
         load: jest.fn().mockResolvedValue({
           id: hubId,
           name: 'testHub',
           image: 'testImage.png',
-        })
-      } as any,
+        }) as any
+      },
     } as JoinUserHub;
     jest
       .spyOn(joinUserHubRepo, 'findOne')
@@ -123,7 +131,7 @@ describe('HubInviteService', () => {
         }" hub.`,
         text: `View the invite.`,
         // date: Date.now().toString(),
-        actionLink: `preview-hub/${mockedFindOneJoinUserHub.hubId}`,
+        actionLink: `preview-hub/${mockedFindOneJoinUserHub.hub.id}`,
       }),
     );
     expect(sendPushToUser).toHaveBeenCalledWith(
