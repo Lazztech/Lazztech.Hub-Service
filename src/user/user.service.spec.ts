@@ -88,7 +88,9 @@ describe('UserService', () => {
         hubId: 1,
         user: {} as any,
         hub: {
-          name: 'hub1',
+          load: jest.fn().mockResolvedValue({
+            name: 'hub1',
+          })
         } as any,
         isOwner: true,
       } as JoinUserHub,
@@ -97,7 +99,9 @@ describe('UserService', () => {
         hubId: 2,
         user: {} as any,
         hub: {
-          name: 'hub2',
+          load: jest.fn().mockResolvedValue({
+            name: 'hub2',
+          })
         } as any,
         isOwner: true,
       } as JoinUserHub,
@@ -115,14 +119,18 @@ describe('UserService', () => {
         userId: testUserId,
         isOwner: false,
         hub: {
-          name: 'hub1',
+          load: jest.fn().mockResolvedValue({
+            name: 'hub1',
+          })
         } as any,
       } as JoinUserHub,
       {
         userId: testUserId,
         isOwner: false,
         hub: {
-          name: 'hub2',
+          load: jest.fn().mockResolvedValue({
+            name: 'hub2',
+          })
         } as any,
       } as JoinUserHub,
     ];
