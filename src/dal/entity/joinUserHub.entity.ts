@@ -13,11 +13,11 @@ export enum GeofenceEvent {
 @Entity()
 export class JoinUserHub {
   @Field(() => ID)
-  @PrimaryKey({ fieldName: 'userId'})
+  @ManyToOne(() => User, { mapToPk: true })
   public userId: number;
 
   @Field(() => ID)
-  @PrimaryKey({ fieldName: 'hubId'})
+  @ManyToOne(() => Hub, { mapToPk: true })
   public hubId: number;
 
   /**

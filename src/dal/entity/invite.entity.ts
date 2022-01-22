@@ -12,15 +12,15 @@ export class Invite {
   public id: number;
 
   @Field(() => ID)
-  @Property({ fieldName: 'invitersId'})
+  @ManyToOne(() => Invite, { mapToPk: true })
   public invitersId: number;
 
   @Field(() => ID)
-  @Property({ fieldName: 'inviteesId'})
+  @ManyToOne(() => Invite, { mapToPk: true, })
   public inviteesId: number;
 
   @Field(() => ID)
-  @Property({ fieldName: 'hubId'})
+  @ManyToOne(() => Hub, { mapToPk: true })
   public hubId: number;
 
   @Field(() => Boolean)

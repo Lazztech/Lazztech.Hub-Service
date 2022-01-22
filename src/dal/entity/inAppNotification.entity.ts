@@ -10,7 +10,7 @@ export class InAppNotification {
   public id: number;
 
   @Field(() => ID)
-  @Property({ fieldName: 'userId' })
+  @ManyToOne(() => User, { mapToPk: true })
   public userId: number;
 
   @Field({ nullable: true })

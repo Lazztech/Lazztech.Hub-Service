@@ -10,7 +10,7 @@ export class MicroChat {
   public id: number;
 
   @Field()
-  @Property({ fieldName: 'hubId'})
+  @ManyToOne(() => Hub, { mapToPk: true })
   public hubId: number;
 
   @Field(() => ID)
