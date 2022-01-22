@@ -214,11 +214,5 @@ import { Connection, IDatabaseDriver, MikroORM } from '@mikro-orm/core';
   ],
 })
 export class AppModule {
-
-  constructor(
-    readonly orm: MikroORM
-  ) {
-    orm.getMigrator().up();
-  }
   public static logger = new Logger(AppModule.name);
 }

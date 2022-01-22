@@ -43,7 +43,7 @@ export class JoinUserHub {
 
   @Field()
   @Property({ default: false })
-  public starred: boolean;
+  public starred: boolean = false;
 
   /**
    * Exposed as a field resolver

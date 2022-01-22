@@ -7,6 +7,7 @@ import * as bodyParser from 'body-parser';
 import { AppModule } from './app.module';
 /* eslint-disable */
 import express = require('express');
+import { MikroORM } from '@mikro-orm/core';
 
 async function bootstrap() {
   const instance = express();
@@ -25,6 +26,7 @@ async function bootstrap() {
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
+  await app.get<MikroORM>(MikroORM).getMigrator().up();
   await app.listen(process.env.PORT || 8080);
 }
 bootstrap();

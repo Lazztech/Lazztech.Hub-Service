@@ -33,12 +33,10 @@ export class HubGeofenceService {
       );
     }
 
-    await this.joinUserHubRepository.persistAndFlush({
-      ...hubRelationship,
-      isPresent: true,
-      lastUpdated: Date.now().toString(),
-      lastGeofenceEvent: GeofenceEvent.ENTERED
-    })
+    hubRelationship.isPresent = true;
+    hubRelationship. lastUpdated = Date.now().toString();
+    hubRelationship. lastGeofenceEvent = GeofenceEvent.ENTERED;
+    await this.joinUserHubRepository.persistAndFlush(hubRelationship);
 
     const hub = await hubRelationship.hub.load();
     if (hub.active) {
@@ -61,12 +59,10 @@ export class HubGeofenceService {
       );
     }
 
-    await this.joinUserHubRepository.persistAndFlush({
-      ...hubRelationship,
-      isPresent: true,
-      lastUpdated: Date.now().toString(),
-      lastGeofenceEvent: GeofenceEvent.DWELL
-    })
+    hubRelationship.isPresent = true;
+    hubRelationship.lastUpdated = Date.now().toString();
+    hubRelationship.lastGeofenceEvent = GeofenceEvent.DWELL;
+    await this.joinUserHubRepository.persistAndFlush(hubRelationship);
 
     return hubRelationship;
   }
