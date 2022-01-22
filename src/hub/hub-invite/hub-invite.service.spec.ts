@@ -86,9 +86,11 @@ describe('HubInviteService', () => {
       hubId,
       isOwner: true,
       hub: {
-        id: hubId,
-        name: 'testHub',
-        image: 'testImage.png',
+        load: jest.fn().mockResolvedValue({
+          id: hubId,
+          name: 'testHub',
+          image: 'testImage.png',
+        })
       } as any,
     } as JoinUserHub;
     jest
