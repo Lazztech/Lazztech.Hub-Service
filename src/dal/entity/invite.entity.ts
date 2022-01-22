@@ -1,7 +1,7 @@
+import { Entity, IdentifiedReference, ManyToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { User } from './user.entity';
 import { Hub } from './hub.entity';
-import { Entity, IdentifiedReference, Index, ManyToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+import { User } from './user.entity';
 
 @ObjectType()
 @Entity()

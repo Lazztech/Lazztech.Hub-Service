@@ -1,4 +1,3 @@
-import { SqlEntityManager } from '@mikro-orm/postgresql';
 import { Logger } from '@nestjs/common';
 import { Context, Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { UserId } from '../../decorators/user.decorator';

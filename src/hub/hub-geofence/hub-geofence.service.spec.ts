@@ -5,7 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Hub } from '../../dal/entity/hub.entity';
 import { InAppNotification } from '../../dal/entity/inAppNotification.entity';
-import { GeofenceEvent, JoinUserHub } from '../../dal/entity/joinUserHub.entity';
+import { JoinUserHub } from '../../dal/entity/joinUserHub.entity';
 import { User } from '../../dal/entity/user.entity';
 import { UserDevice } from '../../dal/entity/userDevice.entity';
 import { NotificationService } from '../../notification/notification.service';

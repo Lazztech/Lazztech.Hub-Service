@@ -3,7 +3,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { S3Module, S3ModuleOptions } from 'nestjs-s3';
 import { AuthModule } from './auth/auth.module';
-import { User } from './dal/entity/user.entity';
 import { FieldResolversModule } from './dal/field-resolvers/field-resolvers.module';
 import { EmailModule } from './email/email.module';
 import { FileModule } from './file/file.module';

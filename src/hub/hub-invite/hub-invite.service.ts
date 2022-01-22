@@ -102,7 +102,7 @@ export class HubInviteService {
     const invite = await this.inviteRepository.findOneOrFail({ id: inviteId });
     invite.accepted = true;
 
-    let newRelationship = this.joinUserHubRepository.create({
+    const newRelationship = this.joinUserHubRepository.create({
       userId: inviteesId,
       hubId: invite.hubId,
       isOwner: false,
