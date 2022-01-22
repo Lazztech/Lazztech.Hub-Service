@@ -74,13 +74,13 @@ describe('HubGeofenceService', () => {
     const userId = 1;
     const hubId = 1;
     const hubRelationshipTest = {
-      userId,
-      hubId,
+      user: { id: userId },
       hub: {
+        id: hubId,
         load: jest.fn().mockResolvedValueOnce({
           active: true,
-        } as Hub)
-      } as any,
+        } as Hub) as any
+      },
     } as JoinUserHub;
     jest
       .spyOn(joinUserHubRepository, 'findOne')
@@ -107,13 +107,13 @@ describe('HubGeofenceService', () => {
     const userId = 1;
     const hubId = 1;
     const hubRelationshipTest = {
-      userId,
-      hubId,
+      user: { id: userId },
       hub: {
+        id: hubId,
         load: jest.fn().mockResolvedValueOnce({
           active: true,
-        } as Hub)
-      } as any,
+        } as Hub) as any
+      },
     } as JoinUserHub;
     jest
       .spyOn(joinUserHubRepository, 'findOne')
@@ -137,13 +137,13 @@ describe('HubGeofenceService', () => {
     const userId = 1;
     const hubId = 1;
     const hubRelationshipTest = {
-      userId,
-      hubId,
+      user: { id: userId },
       hub: {
+        id: hubId,
         load: jest.fn().mockResolvedValueOnce({
           active: true,
-        } as Hub)
-      } as any,
+        } as Hub) as any
+      },
     } as JoinUserHub;
     jest
       .spyOn(joinUserHubRepository, 'findOne')
