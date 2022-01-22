@@ -293,7 +293,7 @@ describe('HubService', () => {
     jest.spyOn(hubRepo, 'create').mockReturnValueOnce(hub);
     jest.spyOn(hubRepo, 'persistAndFlush').mockImplementationOnce(() => Promise.resolve());
 
-    jest.spyOn(joinUserHubRepo, 'create').mockReturnValueOnce(joinUserHub);
+    jest.spyOn(joinUserHubRepo, 'create').mockReturnValueOnce({...joinUserHub, hub} as any);
     const saveCall = jest
       .spyOn(joinUserHubRepo, 'persistAndFlush')
       .mockImplementationOnce(() => Promise.resolve());
@@ -373,6 +373,7 @@ describe('HubService', () => {
       isOwner: true,
       hub: {
         load: jest.fn().mockResolvedValueOnce({
+          id: hubId,
           image: 'oldImage',
         })
       } as any,
