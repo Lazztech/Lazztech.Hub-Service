@@ -12,8 +12,8 @@ export class Invite {
   public id: number;
 
   @Field(() => Boolean)
-  @Property({ default: false })
-  public accepted: boolean;
+  @Property()
+  public accepted: boolean = false;
 
   @Field(() => User)
   @ManyToOne({ 

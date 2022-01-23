@@ -42,14 +42,14 @@ export class JoinUserHub {
   public isOwner: boolean;
 
   @Field(() => Boolean)
-  @Property({ default: false })
-  public starred = false;
+  @Property()
+  public starred: boolean = false;
 
   /**
    * Exposed as a field resolver
    */
-  @Property({ fieldName: 'isPresent', default: false })
-  public isPresent: boolean;
+  @Property({ fieldName: 'isPresent' })
+  public isPresent: boolean = false;
 
   @Field({ nullable: true, description: 'last update event for presence' })
   @Property({ fieldName: 'lastGeofenceEvent', nullable: true })
