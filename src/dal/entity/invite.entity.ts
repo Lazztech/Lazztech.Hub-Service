@@ -3,6 +3,7 @@ import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Hub } from './hub.entity';
 import { User } from './user.entity';
 
+ /* eslint-disable */ // needed for mikroorm default value & type which conflicts with typescript-eslint/no-unused-vars
 @ObjectType()
 @Entity()
 @Unique({ properties: ['inviter', 'invitee', 'hub'] })

@@ -9,6 +9,7 @@ export enum GeofenceEvent {
   EXITED = "exited"
 }
 
+ /* eslint-disable */ // needed for mikroorm default value & type which conflicts with typescript-eslint/no-unused-vars
 @ObjectType()
 @Entity()
 export class JoinUserHub {

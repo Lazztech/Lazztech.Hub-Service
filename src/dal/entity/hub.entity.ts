@@ -5,6 +5,7 @@ import { Invite } from './invite.entity';
 import { ShareableId } from './shareableId.entity'
 import { Collection, Entity, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';
 
+ /* eslint-disable */ // needed for mikroorm default value & type which conflicts with typescript-eslint/no-unused-vars
 @ObjectType()
 @Entity()
 export class Hub extends ShareableId {
