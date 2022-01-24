@@ -1,6 +1,6 @@
 import { Migration } from '@mikro-orm/migrations';
 
-export class Migration20220122223316 extends Migration {
+export class Migration20220124233621 extends Migration {
 
   async up(): Promise<void> {
     this.addSql('create table `password_reset` (`id` integer not null primary key autoincrement, `pin` varchar not null);');
@@ -12,11 +12,11 @@ export class Migration20220122223316 extends Migration {
 
     this.addSql('create table `in_app_notification` (`id` integer not null primary key autoincrement, `header` varchar null, `text` varchar not null, `date` varchar not null, `thumbnail` varchar null, `actionLink` varchar null);');
 
-    this.addSql('create table `hub` (`id` integer not null primary key autoincrement, `shareableId` varchar not null, `name` varchar not null, `description` varchar null, `active` integer not null default false, `image` varchar null, `latitude` varchar null, `longitude` varchar null);');
+    this.addSql('create table `hub` (`id` integer not null primary key autoincrement, `shareableId` varchar not null, `name` varchar not null, `description` varchar null, `active` integer not null, `image` varchar null, `latitude` varchar null, `longitude` varchar null);');
 
-    this.addSql('create table `invite` (`id` integer not null primary key autoincrement, `accepted` integer not null default false);');
+    this.addSql('create table `invite` (`id` integer not null primary key autoincrement, `accepted` integer not null);');
 
-    this.addSql('create table `join_user_hub` (`userId` integer not null, `hubId` integer not null, `isOwner` integer not null, `starred` integer not null default false, `isPresent` integer not null default false, `lastGeofenceEvent` varchar null, `lastUpdated` varchar null, primary key (`userId`, `hubId`));');
+    this.addSql('create table `join_user_hub` (`userId` integer not null, `hubId` integer not null, `isOwner` integer not null, `starred` integer not null, `isPresent` integer not null, `lastGeofenceEvent` varchar null, `lastUpdated` varchar null, primary key (`userId`, `hubId`));');
     this.addSql('create index `join_user_hub_userId_index` on `join_user_hub` (`userId`);');
     this.addSql('create index `join_user_hub_hubId_index` on `join_user_hub` (`hubId`);');
 
