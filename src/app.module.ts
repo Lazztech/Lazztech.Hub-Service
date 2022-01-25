@@ -1,7 +1,12 @@
+import { Connection, IDatabaseDriver } from '@mikro-orm/core';
+import { MikroOrmModule, MikroOrmModuleOptions } from '@mikro-orm/nestjs';
 import { Logger, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
+import { PrometheusModule } from '@willsoto/nestjs-prometheus';
+import * as Joi from 'joi';
 import { S3Module, S3ModuleOptions } from 'nestjs-s3';
+import * as path from 'path';
 import { AuthModule } from './auth/auth.module';
 import { FieldResolversModule } from './dal/field-resolvers/field-resolvers.module';
 import { EmailModule } from './email/email.module';
@@ -10,11 +15,6 @@ import { HealthModule } from './health/health.module';
 import { HubModule } from './hub/hub.module';
 import { NotificationModule } from './notification/notification.module';
 import { UserModule } from './user/user.module';
-import * as path from 'path';
-import { PrometheusModule } from '@willsoto/nestjs-prometheus';
-import * as Joi from 'joi';
-import { MikroOrmModule, MikroOrmModuleOptions } from '@mikro-orm/nestjs';
-import { Connection, IDatabaseDriver, MikroORM } from '@mikro-orm/core';
 
 @Module({
   imports: [
