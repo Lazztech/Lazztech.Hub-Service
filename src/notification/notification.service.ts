@@ -82,7 +82,7 @@ export class NotificationService {
     this.logger.log(this.addInAppNotificationForUser.name);
     const inAppNotification = this.inAppNotificationRepository.create({
       ...details,
-      userId,
+      user: userId,
     });
     await this.inAppNotificationRepository.persistAndFlush(inAppNotification);
   }
