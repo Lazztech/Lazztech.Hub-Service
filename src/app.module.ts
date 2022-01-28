@@ -107,7 +107,7 @@ import { UserModule } from './user/user.module';
           logger: (message) => console.log(message),
           // migrationsRun: true,
           migrations: {
-            pattern: /^[\w-]+\d+|\d\.ts$/,
+            pattern: /^.*\.(js|ts)$/, // ends with .js or .ts
             transactional: true,
           },
           entities: [__dirname + '/dal/entity/**/*.*.*'],
