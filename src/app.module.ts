@@ -1,6 +1,6 @@
-import { Connection, IDatabaseDriver } from '@mikro-orm/core';
+import { Connection, IDatabaseDriver, MikroORM } from '@mikro-orm/core';
 import { MikroOrmModule, MikroOrmModuleOptions } from '@mikro-orm/nestjs';
-import { Logger, Module } from '@nestjs/common';
+import { Logger, Module, OnModuleInit } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
@@ -213,6 +213,12 @@ import { UserModule } from './user/user.module';
     EmailModule,
   ],
 })
-export class AppModule {
+export class AppModule implements OnModuleInit {
   public static logger = new Logger(AppModule.name);
+
+  constructor(private readonly orm: MikroORM) {}
+
+  async onModuleInit(): Promise<void> {
+    await this.orm.getMigrator().up();
+  }
 }

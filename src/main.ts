@@ -26,7 +26,6 @@ async function bootstrap() {
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
-  await app.get<MikroORM>(MikroORM).getMigrator().up();
   await app.listen(process.env.PORT || 8080);
 }
 bootstrap();
