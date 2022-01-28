@@ -1,13 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import {
   ExpressAdapter,
-  NestExpressApplication,
+  NestExpressApplication
 } from '@nestjs/platform-express';
 import * as bodyParser from 'body-parser';
 import { AppModule } from './app.module';
 /* eslint-disable */
 import express = require('express');
-import { MikroORM } from '@mikro-orm/core';
 
 async function bootstrap() {
   const instance = express();
