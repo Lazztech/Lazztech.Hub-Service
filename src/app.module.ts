@@ -105,7 +105,6 @@ import { UserModule } from './user/user.module';
       ) => {
         const commonSettings = {
           logger: (message) => console.log(message),
-          // migrationsRun: true,
           migrations: {
             pattern: /^.*\.(js|ts)$/, // ends with .js or .ts
             transactional: true,
