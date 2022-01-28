@@ -102,6 +102,7 @@ jobs:
       run: |
         nohup npm run start:prod >> app.log 2>&1 &
         timeout 30 bash -c 'until echo > /dev/tcp/localhost/8080; do sleep 0.5; done'
+        cat app.log
         kill %1
       env:
         CI: true
