@@ -21,25 +21,6 @@ jobs:
       run: |
         npm install
         npm run build
-
-    - name: npm start & health check
-      # 'nohup npm run start:prod >> app.log 2>&1 &' runs the command as a background job: https://stackoverflow.com/a/46732894/848396
-      # 'timeout 30 bash -c 'until echo > /dev/tcp/localhost/13000; do sleep 0.5; done' wait for server to start up or timeout with error: https://unix.stackexchange.com/a/349138
-      # 'kill %1' kills background job: https://unix.stackexchange.com/a/104822
-      run: |
-        nohup npm run start:prod >> app.log 2>&1 &
-        timeout 30 bash -c 'until echo > /dev/tcp/localhost/8080; do cat app.log && sleep 0.5; done'
-        kill %1
-      env:
-        CI: true
-        APP_NAME: Test Lazztech Hub
-        ACCESS_TOKEN_SECRET: SecretKey
-        FIREBASE_SERVER_KEY: test
-        PUSH_NOTIFICATION_ENDPOINT: test
-        EMAIL_FROM_ADDRESS: test
-        EMAIL_PASSWORD: test
-        DATABASE_TYPE: sqlite
-        FILE_STORAGE_TYPE: local
   
     - name: npm format:check
       run: |
@@ -113,6 +94,25 @@ jobs:
         OBJECT_STORAGE_ACCESS_KEY_ID: minioadmin
         OBJECT_STORAGE_SECRET_ACCESS_KEY: minioadmin
         OBJECT_STORAGE_ENDPOINT: http://127.0.0.1:9000
+
+    - name: npm start & health check
+      # 'nohup npm run start:prod >> app.log 2>&1 &' runs the command as a background job: https://stackoverflow.com/a/46732894/848396
+      # 'timeout 30 bash -c 'until echo > /dev/tcp/localhost/13000; do sleep 0.5; done' wait for server to start up or timeout with error: https://unix.stackexchange.com/a/349138
+      # 'kill %1' kills background job: https://unix.stackexchange.com/a/104822
+      run: |
+        nohup npm run start:prod >> app.log 2>&1 &
+        timeout 30 bash -c 'until echo > /dev/tcp/localhost/8080; do cat app.log && sleep 0.5; done'
+        kill %1
+      env:
+        CI: true
+        APP_NAME: Test Lazztech Hub
+        ACCESS_TOKEN_SECRET: SecretKey
+        FIREBASE_SERVER_KEY: test
+        PUSH_NOTIFICATION_ENDPOINT: test
+        EMAIL_FROM_ADDRESS: test
+        EMAIL_PASSWORD: test
+        DATABASE_TYPE: sqlite
+        FILE_STORAGE_TYPE: local
 
   # deploy:
   #   name: deploy-cd-master

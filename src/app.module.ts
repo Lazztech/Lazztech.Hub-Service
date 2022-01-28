@@ -106,8 +106,7 @@ import { UserModule } from './user/user.module';
         const commonSettings = {
           logger: (message) => console.log(message),
           migrations: {
-            // pattern: /^.*\.(js|ts)$/, // ends with .js or .ts
-            pattern: /^.*\.(js)$/, // ends with .js or .ts
+            pattern: /^.*\.(js|ts)$/, // ends with .js or .ts
             transactional: true,
           },
           entities: [__dirname + '/dal/entity/**/*.*.*'],
