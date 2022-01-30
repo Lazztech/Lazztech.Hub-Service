@@ -78,7 +78,7 @@ describe('HubActivityService', () => {
           active: false,
         })
       } as any,
-    } as JoinUserHub);
+    } as any);
     const expectedResult = {
       active: true,
     } as Hub;
@@ -104,7 +104,7 @@ describe('HubActivityService', () => {
           })
         } as any,
       },
-    ] as JoinUserHub[]);
+    ] as any[]);
     const sendPushCall = jest
       .spyOn(notificationService, 'sendPushToUser')
       .mockImplementation(() => Promise.resolve());
@@ -132,7 +132,7 @@ describe('HubActivityService', () => {
           active: true,
         })
       } as any,
-    } as JoinUserHub);
+    } as any);
     const expectedResult = {
       active: false,
     } as Hub;
