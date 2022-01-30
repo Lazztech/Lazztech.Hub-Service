@@ -84,7 +84,7 @@ describe('HubGeofenceService', () => {
     } as JoinUserHub;
     jest
       .spyOn(joinUserHubRepository, 'findOne')
-      .mockResolvedValueOnce(hubRelationshipTest);
+      .mockResolvedValueOnce(hubRelationshipTest as any);
 
     const notifyMembersSpy = jest
       .spyOn(service, 'notifyMembersOfArrival')
@@ -117,7 +117,7 @@ describe('HubGeofenceService', () => {
     } as JoinUserHub;
     jest
       .spyOn(joinUserHubRepository, 'findOne')
-      .mockResolvedValueOnce(hubRelationshipTest);
+      .mockResolvedValueOnce(hubRelationshipTest as any);
 
     const notifyMembersSpy = jest
       .spyOn(service, 'notifyMembersOfArrival')
@@ -147,7 +147,7 @@ describe('HubGeofenceService', () => {
     } as JoinUserHub;
     jest
       .spyOn(joinUserHubRepository, 'findOne')
-      .mockResolvedValueOnce(hubRelationshipTest);
+      .mockResolvedValueOnce(hubRelationshipTest as any);
 
     const notifyMembersSpy = jest
       .spyOn(service, 'notifyMembersOfExit')

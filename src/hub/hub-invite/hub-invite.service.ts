@@ -73,9 +73,9 @@ export class HubInviteService {
     this.validateInvitee(invitee, inviteesEmail, userId);
 
     const invite = this.inviteRepository.create({
-      hubId,
-      inviteesId: invitee.id,
-      invitersId: userId,
+      hub: hubId,
+      invitee: invitee.id,
+      inviter: userId,
     });
     await this.inviteRepository.persistAndFlush(invite);
 
@@ -103,8 +103,8 @@ export class HubInviteService {
     invite.accepted = true;
 
     const newRelationship = this.joinUserHubRepository.create({
-      userId: inviteesId,
-      hubId: invite.hub.id,
+      user: inviteesId,
+      hub: invite.hub.id,
       isOwner: false,
     });
     await this.joinUserHubRepository.persistAndFlush(newRelationship);
