@@ -83,7 +83,7 @@ describe('NotificationService', () => {
           },
         ] as any)
       } as any,
-    } as User);
+    } as any);
     jest.spyOn(userDeviceRepo, 'create').mockImplementationOnce(value => value as any);
     const saveCall = jest
       .spyOn(userDeviceRepo, 'persistAndFlush')
@@ -110,7 +110,7 @@ describe('NotificationService', () => {
     ] as InAppNotification[];
     jest
       .spyOn(inAppNotificationRepo, 'findAndCount')
-      .mockResolvedValueOnce([expectedResult, expectedResult.length]);
+      .mockResolvedValueOnce([expectedResult as any, expectedResult.length]);
     // Act
     const [items, total] = await service.getInAppNotifications(userId);
     // Assert
@@ -127,7 +127,7 @@ describe('NotificationService', () => {
     } as InAppNotificationDto;
     jest
       .spyOn(inAppNotificationRepo, 'create')
-      .mockReturnValueOnce({ ...details, user: { id: userId }} as InAppNotification);
+      .mockReturnValueOnce({ ...details, user: { id: userId }} as any);
     const saveCall1 = jest
       .spyOn(inAppNotificationRepo, 'persistAndFlush')
       .mockImplementationOnce(() => Promise.resolve());
@@ -143,7 +143,7 @@ describe('NotificationService', () => {
     const inAppNotificationId = 1;
     jest.spyOn(inAppNotificationRepo, 'findOne').mockResolvedValueOnce({
       user: { id: userId },
-    } as InAppNotification);
+    } as any);
     const removeCall = jest
       .spyOn(inAppNotificationRepo, 'removeAndFlush')
       .mockImplementationOnce(() => Promise.resolve());
@@ -166,7 +166,7 @@ describe('NotificationService', () => {
       {
         user: { id: userId },
       },
-    ] as InAppNotification[]);
+    ] as any[]);
     const removeCall = jest
       .spyOn(inAppNotificationRepo, 'removeAndFlush')
       .mockImplementationOnce(() => Promise.resolve());
@@ -203,7 +203,7 @@ describe('NotificationService', () => {
         ] as any),
       } as any
     } as User;
-    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
+    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser as any);
     const sendPushNotification = jest
       .spyOn(httpService, 'post')
       .mockImplementation(() => of({} as AxiosResponse<any>));

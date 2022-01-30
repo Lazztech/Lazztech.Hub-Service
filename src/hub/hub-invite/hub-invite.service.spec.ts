@@ -103,10 +103,10 @@ describe('HubInviteService', () => {
     } as JoinUserHub;
     jest
       .spyOn(joinUserHubRepo, 'findOne')
-      .mockResolvedValueOnce(mockedFindOneJoinUserHub);
-    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(invitee);
+      .mockResolvedValueOnce(mockedFindOneJoinUserHub as any);
+    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(invitee as any);
     jest.spyOn(inviteRepo, 'findOne').mockResolvedValueOnce(undefined);
-    jest.spyOn(inviteRepo, 'create').mockReturnValueOnce(invite);
+    jest.spyOn(inviteRepo, 'create').mockReturnValueOnce(invite as any);
 
     const addInAppNotificationForUserCall = jest
       .spyOn(notificationService, 'addInAppNotificationForUser')

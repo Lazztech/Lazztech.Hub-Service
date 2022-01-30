@@ -72,7 +72,7 @@ describe('UserService', () => {
       firstName: 'Test',
       lastName: 'Test',
     } as User;
-    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
+    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser as any);
     // Act
     const result = await service.getUser(userId);
     // Assert
@@ -106,7 +106,7 @@ describe('UserService', () => {
     ];
     const hubResults: Hub[] = await Promise.all(testResults.map((x) => x.hub.load()));
     // notice we are pulling the repo variable and using jest.spyOn with no issues
-    jest.spyOn(joinUserHubRepo, 'find').mockResolvedValueOnce(testResults);
+    jest.spyOn(joinUserHubRepo, 'find').mockResolvedValueOnce(testResults as any);
     expect(await service.getUsersOwnedHubs(testUserId)).toEqual(hubResults);
   });
 
@@ -134,7 +134,7 @@ describe('UserService', () => {
     ];
     const hubResults: Hub[] = await Promise.all(testResults.map((x) => x.hub.load()));
     // notice we are pulling the repo variable and using jest.spyOn with no issues
-    jest.spyOn(joinUserHubRepo, 'find').mockResolvedValueOnce(testResults);
+    jest.spyOn(joinUserHubRepo, 'find').mockResolvedValueOnce(testResults as any);
     expect(await service.memberOfHubs(testUserId)).toEqual(hubResults);
   });
 
@@ -158,7 +158,7 @@ describe('UserService', () => {
       lastName: testDetails.lastName,
       description: testDetails.description,
     } as User;
-    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
+    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser as any);
     jest.spyOn(userRepo, 'persistAndFlush').mockImplementationOnce(() => Promise.resolve());
     // Act
     const result = await service.editUserDetails(userId, testDetails);
@@ -180,7 +180,7 @@ describe('UserService', () => {
       firstName: testUser.firstName,
       email: newEmail,
     } as User;
-    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
+    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser as any);
     jest.spyOn(userRepo, 'persistAndFlush').mockImplementationOnce(() => Promise.resolve());
     // Act
     const result = await service.changeEmail(userId, newEmail);
@@ -200,7 +200,7 @@ describe('UserService', () => {
       id: userId,
       image: `https://x.com/${newImage}.png`,
     } as User;
-    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
+    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser as any);
     const deletePublicImageMock = jest
       .spyOn(fileService, 'delete')
       .mockImplementation(() => Promise.resolve());

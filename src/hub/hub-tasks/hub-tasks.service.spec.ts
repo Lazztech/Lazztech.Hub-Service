@@ -87,7 +87,7 @@ describe('HubTasksService', () => {
         validPresence,
         expiredPresence,
         undefinedLastUpdated
-      ]);
+      ] as any);
 
     const exitHubGeofenceSpy = jest
       .spyOn(hubGeofenceService, 'exitedHubGeofence')

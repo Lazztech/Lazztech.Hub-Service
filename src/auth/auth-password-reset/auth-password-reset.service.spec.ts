@@ -55,7 +55,7 @@ describe('AuthPasswordResetService', () => {
       passwordReset: {
         pin: details.resetPin,
       },
-    } as User);
+    } as any);
     const saveCall = jest
       .spyOn(userRepo, 'persistAndFlush')
       .mockImplementationOnce(() => Promise.resolve());
@@ -74,7 +74,7 @@ describe('AuthPasswordResetService', () => {
       lastName: 'Lazzarini',
       email,
       passwordReset: {},
-    } as User);
+    } as any);
     jest.spyOn(passwordResetRepo, 'findOne').mockResolvedValueOnce(null);
     jest
       .spyOn(emailService, 'sendEmailFromPrimaryAddress')

@@ -123,7 +123,7 @@ describe('AuthService', () => {
       email,
       password: '$2a$12$kYPNrlyLr7z4D.V3dEHFn.kQD2nRC0x7fINzPgfoSW4D4GQhyeGTO',
     } as User;
-    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
+    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser as any);
 
     // Act
     const result = await service.login(password, email);
@@ -142,7 +142,7 @@ describe('AuthService', () => {
       password: '$2a$12$kYPNrlyLr7z4D.V3dEHFn.kQD2nRC0x7fINzPgfoSW4D4GQhyeGTO',
     } as User;
     const newPassword = 'NewPassword123';
-    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
+    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser as any);
     const saveCall = jest
       .spyOn(userRepo, 'persistAndFlush')
       .mockImplementationOnce(() => Promise.resolve());
@@ -164,7 +164,7 @@ describe('AuthService', () => {
       email: 'gianlazzarini@gmail.com',
       password: '$2a$12$kYPNrlyLr7z4D.V3dEHFn.kQD2nRC0x7fINzPgfoSW4D4GQhyeGTO',
     } as User;
-    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
+    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser as any);
     const removeCall = jest
       .spyOn(userRepo, 'removeAndFlush')
       .mockImplementationOnce(() => Promise.resolve());
