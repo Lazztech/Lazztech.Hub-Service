@@ -22,7 +22,7 @@ export class Hub extends ShareableId {
   public description: string;
 
   @Field({ nullable: true })
-  @Property()
+  @Property({ default: false })
   public active: boolean = false;
 
   /**

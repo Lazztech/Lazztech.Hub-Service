@@ -13,7 +13,7 @@ export class Invite {
   public id: number;
 
   @Field(() => Boolean)
-  @Property()
+  @Property({ default: false })
   public accepted: boolean = false;
 
   @Field(() => User)

@@ -43,13 +43,13 @@ export class JoinUserHub {
   public isOwner: boolean;
 
   @Field(() => Boolean)
-  @Property()
+  @Property({ default: false })
   public starred: boolean = false;
 
   /**
    * Exposed as a field resolver
    */
-  @Property({ fieldName: 'isPresent' })
+  @Property({ fieldName: 'isPresent', default: false })
   public isPresent: boolean = false;
 
   @Field({ nullable: true, description: 'last update event for presence' })
