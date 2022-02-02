@@ -193,6 +193,55 @@ describe('AppController (e2e)', () => {
     return result;
   });
 
+  it('/graphql hub', async () => {
+    const result = await request(app.getHttpServer())
+      .post('/graphql')
+      .set({ authorization: `Bearer ${token}` })
+      .send({
+        operationName: null,
+        query: `query hub($hubId: ID!) {
+          hub(id: $hubId) {
+            userId
+            hubId
+            isOwner
+            starred
+            isPresent
+            hub {
+              id
+              name
+              description
+              active
+              image
+              latitude
+              longitude
+              usersConnection {
+                user {
+                  id
+                  firstName
+                  lastName
+                  description
+                  image
+                }
+                isOwner
+                isPresent
+              }
+              microChats {
+                id
+                text
+              }
+            }
+          }
+        }`,
+        variables: {
+          hubId
+        },
+      })
+      .expect(200);
+
+    expect(result.body?.data?.hub).toBeDefined();
+    return result;
+  });
+
   it('/graphql activateHub', async () => {
     const result = await request(app.getHttpServer())
       .post('/graphql')
