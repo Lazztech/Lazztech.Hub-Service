@@ -108,6 +108,7 @@ import { UserModule } from './user/user.module';
           migrations: {
             pattern: /^.*\.(js|ts)$/, // ends with .js or .ts
             transactional: true,
+            disableForeignKeys: false
           },
           entities: [__dirname + '/dal/entity/**/*.*.*'],
         }  as MikroOrmModuleOptions<IDatabaseDriver<Connection>>;
