@@ -1,4 +1,4 @@
-import { Entity, IdentifiedReference, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+import { Entity, IdentifiedReference, ManyToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { User } from './user.entity';
 
@@ -10,7 +10,8 @@ export class UserDevice {
   public id: number;
 
   @Field()
-  @Property({ fieldName: 'fcmPushUserToken', unique: true })
+  @Unique()
+  @Property({ fieldName: 'fcmPushUserToken' })
   public fcmPushUserToken: string;
 
   @ManyToOne({
