@@ -24,7 +24,7 @@ export class JoinUserHub {
     primary: true,
     wrappedReference: true
   })
-  public user: IdentifiedReference<User>;
+  public user!: IdentifiedReference<User>;
 
   /**
    * Exposed as a field resolver
@@ -36,11 +36,11 @@ export class JoinUserHub {
     primary: true,
     wrappedReference: true
   })
-  public hub: IdentifiedReference<Hub>;
+  public hub!: IdentifiedReference<Hub>;
 
   @Field()
   @Property({ fieldName: 'isOwner' })
-  public isOwner: boolean;
+  public isOwner!: boolean;
 
   @Field(() => Boolean)
   @Property({ default: false })
@@ -54,9 +54,9 @@ export class JoinUserHub {
 
   @Field({ nullable: true, description: 'last update event for presence' })
   @Property({ fieldName: 'lastGeofenceEvent', nullable: true })
-  public lastGeofenceEvent: string;
+  public lastGeofenceEvent?: string;
   
   @Field({ nullable: true, description: 'unix timestamp for the last time the presence state was updated' })
   @Property({ fieldName: 'lastUpdated', nullable: true })
-  public lastUpdated: string;
+  public lastUpdated?: string;
 }

@@ -11,15 +11,15 @@ import { Collection, Entity, OneToMany, PrimaryKey, Property } from '@mikro-orm/
 export class Hub extends ShareableId {
   @Field(() => ID)
   @PrimaryKey()
-  public id: number;
+  public id!: number;
 
   @Field()
   @Property()
-  public name: string;
+  public name!: string;
 
   @Field({ nullable: true })
   @Property({ nullable: true })
-  public description: string;
+  public description?: string;
 
   @Field({ nullable: true })
   @Property({ default: false })
@@ -29,15 +29,15 @@ export class Hub extends ShareableId {
    * Handled with a field resolver
    */
   @Property({ nullable: true })
-  public image: string;
+  public image?: string;
 
   @Field({ nullable: true })
   @Property({ type: 'float', nullable: true })
-  public latitude: number;
+  public latitude?: number;
 
   @Field({ nullable: true })
   @Property({ type: 'float', nullable: true })
-  public longitude: number;
+  public longitude?: number;
 
   /**
    * Handled with a field resolver

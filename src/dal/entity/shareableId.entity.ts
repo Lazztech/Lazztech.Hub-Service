@@ -7,7 +7,7 @@ export abstract class ShareableId {
 
   @Field({nullable: false})
   @Property({ fieldName: 'shareableId' })
-  shareableId:string;
+  shareableId!: string;
 
   // Only fires is repostiory.create is used for before save
   @BeforeCreate()

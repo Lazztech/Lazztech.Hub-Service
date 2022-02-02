@@ -7,12 +7,12 @@ import { User } from './user.entity';
 export class UserDevice {
   @Field(() => ID)
   @PrimaryKey()
-  public id: number;
+  public id!: number;
 
   @Field()
   @Unique()
   @Property({ fieldName: 'fcmPushUserToken' })
-  public fcmPushUserToken: string;
+  public fcmPushUserToken!: string;
 
   @ManyToOne({
     entity: () => User,
@@ -20,5 +20,5 @@ export class UserDevice {
     onDelete: 'cascade',
     wrappedReference: true
   })
-  public user: IdentifiedReference<User>;
+  public user!: IdentifiedReference<User>;
 }

@@ -7,7 +7,7 @@ import { Hub } from './hub.entity';
 export class MicroChat {
   @Field(() => ID)
   @PrimaryKey()
-  public id: number;
+  public id!: number;
 
   @Field(() => ID)
   @ManyToOne({
@@ -16,9 +16,9 @@ export class MicroChat {
     fieldName: 'hubId',
     wrappedReference: true
   })
-  public hub: IdentifiedReference<Hub>;
+  public hub!: IdentifiedReference<Hub>;
 
   @Field()
   @Property()
-  public text: string;
+  public text!: string;
 }

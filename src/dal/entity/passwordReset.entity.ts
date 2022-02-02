@@ -5,8 +5,8 @@ import { Field, ID } from '@nestjs/graphql';
 export class PasswordReset {
   @Field(() => ID)
   @PrimaryKey()
-  public id: number;
+  public id!: number;
 
   @Property()
-  public pin: string;
+  public pin!: string;
 }

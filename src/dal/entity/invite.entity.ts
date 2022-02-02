@@ -10,7 +10,7 @@ import { User } from './user.entity';
 export class Invite {
   @Field(() => ID)
   @PrimaryKey()
-  public id: number;
+  public id!: number;
 
   @Field(() => Boolean)
   @Property({ default: false })

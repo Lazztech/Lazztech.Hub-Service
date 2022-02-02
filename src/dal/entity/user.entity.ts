@@ -12,39 +12,39 @@ import { Cascade, Collection, Entity, OneToMany, OneToOne, PrimaryKey, Property 
 export class User extends ShareableId{
   @Field(() => ID)
   @PrimaryKey()
-  public id: number;
+  public id!: number;
 
   @Field()
   @Property({ fieldName: 'firstName' })
-  public firstName: string;
+  public firstName!: string;
 
   @Field()
   @Property({ fieldName: 'lastName' })
-  public lastName: string;
+  public lastName!: string;
 
   @Field({
     nullable: true,
     description: 'string representation of unix timestamp',
   })
   @Property({ nullable: true })
-  public birthdate: string;
+  public birthdate?: string;
 
   @Field({ nullable: true })
   @Property({ nullable: true })
-  public description: string;
+  public description?: string;
 
   /**
    * Exposed as a field resolver
    */
   @Property({ nullable: true })
-  public image: string;
+  public image?: string;
 
   @Field()
   @Property()
-  public email: string;
+  public email!: string;
 
   @Property()
-  public password: string;
+  public password!: string;
 
   @OneToMany(
     () => InAppNotification,
@@ -60,7 +60,7 @@ export class User extends ShareableId{
     fieldName: 'passwordResetId',
     nullable: true
   })
-  public passwordReset: PasswordReset;
+  public passwordReset!: PasswordReset;
 
   /**
    * Exposed as a field resolver
