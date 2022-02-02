@@ -1,7 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { JoinUserHub } from '../../dal/entity/joinUserHub.entity';
-import { Repository } from 'typeorm';
 import { HubTasksService } from './hub-tasks.service';
 import { HubGeofenceService } from '../hub-geofence/hub-geofence.service';
 import { User } from '../../dal/entity/user.entity';
@@ -11,10 +9,12 @@ import { ConfigModule } from '@nestjs/config';
 import { HttpModule } from '@nestjs/common';
 import { InAppNotification } from '../../dal/entity/inAppNotification.entity';
 import { UserDevice } from '../../dal/entity/userDevice.entity';
+import { getRepositoryToken } from '@mikro-orm/nestjs';
+import { EntityRepository } from '@mikro-orm/core';
 
 describe('HubTasksService', () => {
   let service: HubTasksService;
-  let joinUserHubRepo: Repository<JoinUserHub>;
+  let joinUserHubRepo: EntityRepository<JoinUserHub>;
   let hubGeofenceService: HubGeofenceService;
 
   beforeEach(async () => {
@@ -32,29 +32,29 @@ describe('HubTasksService', () => {
         NotificationService,
         {
           provide: getRepositoryToken(JoinUserHub),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(User),
-          useClass: Repository
+          useClass: EntityRepository
         },
         {
           provide: getRepositoryToken(Hub),
-          useClass: Repository
+          useClass: EntityRepository
         },
         {
           provide: getRepositoryToken(InAppNotification),
-          useClass: Repository
+          useClass: EntityRepository
         },
         {
           provide: getRepositoryToken(UserDevice),
-          useClass: Repository
+          useClass: EntityRepository
         }
       ],
     }).compile();
 
     service = module.get<HubTasksService>(HubTasksService);
-    joinUserHubRepo = module.get<Repository<JoinUserHub>>(
+    joinUserHubRepo = module.get<EntityRepository<JoinUserHub>>(
       getRepositoryToken(JoinUserHub),
     );
     hubGeofenceService = module.get<HubGeofenceService>(HubGeofenceService);
@@ -67,13 +67,19 @@ describe('HubTasksService', () => {
   it('should exit expired presence', async () => {
     // arrange
     const validPresence = {
-      lastUpdated: Date.now().toString()
+      lastUpdated: Date.now().toString(),
+      user: { id: 1 } as any,
+      hub: { id: 1 } as any
     } as JoinUserHub;
     const expiredPresence = {
-      lastUpdated: '00000'
+      lastUpdated: '00000',
+      user: { id: 1 } as any,
+      hub: { id: 1 } as any
     } as JoinUserHub;
     const undefinedLastUpdated = {
-      lastUpdated: undefined
+      lastUpdated: undefined,
+      user: { id: 1 } as any,
+      hub: { id: 1 } as any
     } as JoinUserHub;
     const findSpy = jest
       .spyOn(joinUserHubRepo, 'find')
@@ -81,7 +87,7 @@ describe('HubTasksService', () => {
         validPresence,
         expiredPresence,
         undefinedLastUpdated
-      ]);
+      ] as any);
 
     const exitHubGeofenceSpy = jest
       .spyOn(hubGeofenceService, 'exitedHubGeofence')

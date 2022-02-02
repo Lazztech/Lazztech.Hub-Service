@@ -1,10 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { JoinUserHub } from '../../dal/entity/joinUserHub.entity';
-import { Repository } from 'typeorm';
 import { Invite } from '../../dal/entity/invite.entity';
 import { User } from '../../dal/entity/user.entity';
 import { NotificationService } from '../../notification/notification.service';
+import { InjectRepository } from '@mikro-orm/nestjs';
+import { EntityRepository } from '@mikro-orm/core';
 
 @Injectable()
 export class HubInviteService {
@@ -12,25 +12,25 @@ export class HubInviteService {
 
   constructor(
     @InjectRepository(JoinUserHub)
-    private joinUserHubRepository: Repository<JoinUserHub>,
+    private joinUserHubRepository: EntityRepository<JoinUserHub>,
     @InjectRepository(User)
-    private userRepository: Repository<User>,
+    private userRepository: EntityRepository<User>,
     @InjectRepository(Invite)
-    private inviteRepository: Repository<Invite>,
+    private inviteRepository: EntityRepository<Invite>,
     private notificationService: NotificationService,
   ) {}
 
   async getInvitesByHub(userId: any, hubId: any, includeAccepted: boolean) {
     this.logger.log(this.getInvitesByHub.name);
     const userHubRelationship = await this.joinUserHubRepository.findOne({
-      userId,
-      hubId,
+      user: userId,
+      hub: hubId,
       isOwner: true,
     });
     this.validateRelationship(userHubRelationship, hubId, userId);
 
     return await this.inviteRepository.find({
-      hubId,
+      hub: hubId,
       accepted: includeAccepted,
     });
   }
@@ -38,15 +38,15 @@ export class HubInviteService {
   async getInvite(userId: any, hubId: any) {
     this.logger.log(this.getInvite.name);
     return await this.inviteRepository.findOne({
-      hubId,
-      inviteesId: userId,
+      hub: hubId,
+      invitee: userId,
     } as Invite);
   }
 
   async getInvitesByUser(userId: any, includeAccepted: boolean) {
     this.logger.log(this.getInvitesByUser.name);
     return await this.inviteRepository.find({
-      inviteesId: userId,
+      invitee: userId,
       accepted: includeAccepted,
     } as Invite);
   }
@@ -54,34 +54,32 @@ export class HubInviteService {
   async inviteUserToHub(userId: any, hubId: number, inviteesEmail: string) {
     this.logger.log(this.inviteUserToHub.name);
     const userHubRelationship = await this.joinUserHubRepository.findOne({
-      userId,
-      hubId,
+      user: userId,
+      hub: hubId,
       isOwner: true,
     });
     this.validateRelationship(userHubRelationship, hubId, userId);
     
     const invitee = await this.userRepository.findOne({
-      where: {
         email: inviteesEmail,
-      },
     });
 
     if(invitee){
-      const alreadyInvited = await this.inviteRepository.findOne({where: {inviteesId: invitee.id, invitersId: userId, hubId }})
+      const alreadyInvited = await this.inviteRepository.findOne({invitee: invitee.id, inviter: userId, hub: hubId });
       if (alreadyInvited) {
-        throw new Error(`${invitee.firstName} has already been invited to ${(await alreadyInvited.hub).name}`);
+        throw new Error(`${invitee.firstName} has already been invited to ${(await alreadyInvited.hub.load()).name}`);
       }
     }
     this.validateInvitee(invitee, inviteesEmail, userId);
 
-    let invite = this.inviteRepository.create({
-      hubId,
-      inviteesId: invitee.id,
-      invitersId: userId,
+    const invite = this.inviteRepository.create({
+      hub: hubId,
+      invitee: invitee.id,
+      inviter: userId,
     });
-    invite = await this.inviteRepository.save(invite);
+    await this.inviteRepository.persistAndFlush(invite);
 
-    const hub = await userHubRelationship.hub;
+    const hub = await userHubRelationship.hub.load();
     await this.notificationService.addInAppNotificationForUser(invitee.id, {
       thumbnail: hub.image,
       header: `You're invited to "${hub.name}" hub.`,
@@ -101,23 +99,24 @@ export class HubInviteService {
 
   public async acceptHubInvite(inviteesId: number, inviteId: number) {
     this.logger.log(this.acceptHubInvite.name);
-    let invite = await this.inviteRepository.findOneOrFail({ id: inviteId });
+    const invite = await this.inviteRepository.findOneOrFail({ id: inviteId });
     invite.accepted = true;
 
-    let newRelationship = this.joinUserHubRepository.create({
-      userId: inviteesId,
-      hubId: invite.hubId,
+    const newRelationship = this.joinUserHubRepository.create({
+      user: inviteesId,
+      hub: invite.hub.id,
       isOwner: false,
     });
-    newRelationship = await this.joinUserHubRepository.save(newRelationship);
-    newRelationship = await this.joinUserHubRepository.findOneOrFail({
-      userId: newRelationship.userId,
-      hubId: newRelationship.hubId,
-    });
-    const invitee = await newRelationship.user;
-    const hub = await newRelationship.hub;
+    await this.joinUserHubRepository.persistAndFlush(newRelationship);
+    // does it automatically populate the newRelation now with mikro-orm?
+    // newRelationship = await this.joinUserHubRepository.findOneOrFail({
+    //   userId: newRelationship.userId,
+    //   hubId: newRelationship.hubId,
+    // });
+    const invitee = await newRelationship.user.load();
+    const hub = await newRelationship.hub.load();
 
-    invite = await this.inviteRepository.save(invite);
+    await this.inviteRepository.persistAndFlush(invite);
     await this.notificationService.addInAppNotificationForUser(invitee.id, {
       thumbnail: hub.image,
       header: `${invitee.firstName} accepted invite`,
@@ -138,17 +137,17 @@ export class HubInviteService {
   async deleteInvite(userId: any, hubId: any, inviteId: any) {
     this.logger.log(this.deleteInvite.name);
     const invite = await this.inviteRepository.findOneOrFail({ id: inviteId });
-    if (invite.inviteesId == userId && invite.hubId == hubId) {
-      return await this.inviteRepository.remove(invite);
+    if (invite.invitee.id == userId && invite.hub.id == hubId) {
+      return await this.inviteRepository.removeAndFlush(invite);
     } else {
       const userHubRelationship = await this.joinUserHubRepository.findOne({
-        userId,
-        hubId,
+        user: userId,
+        hub: hubId,
         isOwner: true,
       });
       this.validateRelationship(userHubRelationship, hubId, userId);
 
-      return await this.inviteRepository.remove(invite);
+      return await this.inviteRepository.removeAndFlush(invite);
     }
   }
 

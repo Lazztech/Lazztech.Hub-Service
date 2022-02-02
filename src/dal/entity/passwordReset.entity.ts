@@ -1,12 +1,12 @@
+import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
 import { Field, ID } from '@nestjs/graphql';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class PasswordReset {
   @Field(() => ID)
-  @PrimaryGeneratedColumn()
-  public id: number;
+  @PrimaryKey()
+  public id!: number;
 
-  @Column()
-  public pin: string;
+  @Property()
+  public pin!: string;
 }

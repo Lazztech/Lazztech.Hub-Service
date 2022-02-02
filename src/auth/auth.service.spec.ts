@@ -1,9 +1,7 @@
 import { ConfigService, ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { InAppNotification } from '../dal/entity/inAppNotification.entity';
 import { User } from '../dal/entity/user.entity';
-import { Repository } from 'typeorm';
 import { AuthService } from './auth.service';
 import { NotificationService } from '../notification/notification.service';
 import { HttpModule } from '@nestjs/common';
@@ -15,10 +13,12 @@ import { JwtModule } from '@nestjs/jwt';
 import { S3Module, S3ModuleOptions } from 'nestjs-s3';
 import { ImageFileService } from '../file/image-file/image-file.service';
 import { FILE_SERVICE } from '../file/file-service.token';
+import { getRepositoryToken } from '@mikro-orm/nestjs';
+import { EntityRepository } from '@mikro-orm/core';
 
 describe('AuthService', () => {
   let service: AuthService;
-  let userRepo: Repository<User>;
+  let userRepo: EntityRepository<User>;
   let notificationService: NotificationService;
 
   beforeEach(async () => {
@@ -55,25 +55,25 @@ describe('AuthService', () => {
         },
         {
           provide: getRepositoryToken(User),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(InAppNotification),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(UserDevice),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(JoinUserHub),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
       ],
     }).compile();
 
     service = module.get<AuthService>(AuthService);
-    userRepo = module.get<Repository<User>>(getRepositoryToken(User));
+    userRepo = module.get<EntityRepository<User>>(getRepositoryToken(User));
     notificationService = module.get(NotificationService);
   });
 
@@ -89,12 +89,15 @@ describe('AuthService', () => {
     const email = 'gianlazzarini@gmail.com';
     const password = 'Password123';
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(undefined);
-    jest.spyOn(userRepo, 'create').mockReturnValueOnce(undefined);
-    const saveCall = jest.spyOn(userRepo, 'save').mockResolvedValueOnce({
+    jest.spyOn(userRepo, 'create').mockReturnValueOnce({
       firstName,
       lastName,
+      birthdate,
       email,
-    } as User);
+      password,
+      id: 1,
+    } as any);
+    const saveCall = jest.spyOn(userRepo, 'persistAndFlush').mockImplementationOnce(() => Promise.resolve());
     jest
       .spyOn(notificationService, 'addInAppNotificationForUser')
       .mockImplementationOnce(() => Promise.resolve());
@@ -120,7 +123,7 @@ describe('AuthService', () => {
       email,
       password: '$2a$12$kYPNrlyLr7z4D.V3dEHFn.kQD2nRC0x7fINzPgfoSW4D4GQhyeGTO',
     } as User;
-    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
+    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser as any);
 
     // Act
     const result = await service.login(password, email);
@@ -139,10 +142,10 @@ describe('AuthService', () => {
       password: '$2a$12$kYPNrlyLr7z4D.V3dEHFn.kQD2nRC0x7fINzPgfoSW4D4GQhyeGTO',
     } as User;
     const newPassword = 'NewPassword123';
-    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
+    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser as any);
     const saveCall = jest
-      .spyOn(userRepo, 'save')
-      .mockResolvedValueOnce({} as User);
+      .spyOn(userRepo, 'persistAndFlush')
+      .mockImplementationOnce(() => Promise.resolve());
     // Act
     const result = await service.changePassword(testUser.id, {
       oldPassword: password,
@@ -161,10 +164,10 @@ describe('AuthService', () => {
       email: 'gianlazzarini@gmail.com',
       password: '$2a$12$kYPNrlyLr7z4D.V3dEHFn.kQD2nRC0x7fINzPgfoSW4D4GQhyeGTO',
     } as User;
-    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
+    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser as any);
     const removeCall = jest
-      .spyOn(userRepo, 'remove')
-      .mockResolvedValueOnce({} as User);
+      .spyOn(userRepo, 'removeAndFlush')
+      .mockImplementationOnce(() => Promise.resolve());
     // Act
     const result = await service.deleteAccount(
       testUser.id,

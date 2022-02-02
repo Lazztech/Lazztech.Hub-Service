@@ -1,52 +1,45 @@
+import { Entity, IdentifiedReference, ManyToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-  ManyToOne,
-  JoinColumn,
-  Index,
-} from 'typeorm';
-import { User } from './user.entity';
 import { Hub } from './hub.entity';
+import { User } from './user.entity';
 
+ /* eslint-disable */ // needed for mikroorm default value & type which conflicts with typescript-eslint/no-unused-vars
 @ObjectType()
 @Entity()
-@Index(['invitersId', 'inviteesId', 'hubId'], { unique: true })
+@Unique({ properties: ['inviter', 'invitee', 'hub'] })
 export class Invite {
   @Field(() => ID)
-  @PrimaryGeneratedColumn()
-  public id: number;
-
-  @Field(() => ID)
-  @Column()
-  public invitersId: number;
-
-  @Field(() => ID)
-  @Column()
-  public inviteesId: number;
-
-  @Field(() => ID)
-  @Column()
-  public hubId: number;
+  @PrimaryKey()
+  public id!: number;
 
   @Field(() => Boolean)
-  @Column({ default: false })
-  public accepted: boolean;
+  @Property({ default: false })
+  public accepted: boolean = false;
 
   @Field(() => User)
-  @ManyToOne(() => User, (user) => user.invitesSent, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'invitersId' })
-  public inviter: Promise<User>;
-
-  @Field(() => User)
-  @ManyToOne(() => User, (user) => user.invitesReceived, {
-    onDelete: 'CASCADE',
+  @ManyToOne({ 
+    entity: () => User,
+    fieldName: 'invitersId',
+    onDelete: 'cascade',
+    wrappedReference: true
   })
-  @JoinColumn({ name: 'inviteesId' })
-  public invitee: Promise<User>;
+  public inviter!: IdentifiedReference<User>;
+
+  @Field(() => User)
+  @ManyToOne({
+    entity: () => User,
+    fieldName: 'inviteesId',
+    onDelete: 'cascade',
+    wrappedReference: true
+  })
+  public invitee!: IdentifiedReference<User>;
 
   @Field(() => Hub)
-  @ManyToOne(() => Hub, (hub) => hub.invites, { onDelete: 'CASCADE' })
-  public hub: Promise<Hub>;
+  @ManyToOne({ 
+    entity: () => Hub, 
+    fieldName: 'hubId',
+    onDelete: 'cascade',
+    wrappedReference: true
+  })
+  public hub!: IdentifiedReference<Hub>;
 }

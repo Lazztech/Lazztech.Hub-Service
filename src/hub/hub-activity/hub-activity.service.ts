@@ -1,11 +1,11 @@
+import { EntityRepository } from '@mikro-orm/core';
+import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable, Logger } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Hub } from '../../dal/entity/hub.entity';
 import { InAppNotification } from '../../dal/entity/inAppNotification.entity';
 import { JoinUserHub } from '../../dal/entity/joinUserHub.entity';
 import { PushNotificationDto } from '../../notification/dto/pushNotification.dto';
 import { NotificationService } from '../../notification/notification.service';
-import { Repository } from 'typeorm';
 
 @Injectable()
 export class HubActivityService {
@@ -13,11 +13,11 @@ export class HubActivityService {
 
   constructor(
     @InjectRepository(JoinUserHub)
-    private joinUserHubRepository: Repository<JoinUserHub>,
+    private joinUserHubRepository: EntityRepository<JoinUserHub>,
     @InjectRepository(Hub)
-    private hubRepository: Repository<Hub>,
+    private hubRepository: EntityRepository<Hub>,
     @InjectRepository(InAppNotification)
-    private inAppNotificationRepository: Repository<InAppNotification>,
+    private inAppNotificationRepository: EntityRepository<InAppNotification>,
     private notificationService: NotificationService,
   ) {
     this.logger.log('constructor');
@@ -26,8 +26,8 @@ export class HubActivityService {
   async activateHub(userId: any, hubId: number) {
     this.logger.log(this.activateHub.name);
     const hubRelationship = await this.joinUserHubRepository.findOne({
-      userId,
-      hubId,
+      user: userId,
+      hub: hubId,
       isOwner: true,
     });
 
@@ -37,9 +37,9 @@ export class HubActivityService {
       );
     }
 
-    let hub = await hubRelationship.hub;
+    const hub = await hubRelationship.hub.load();
     hub.active = true;
-    hub = await this.hubRepository.save(hub);
+    await this.hubRepository.persistAndFlush(hub);
 
     await this.notifyOfHubActivated(hubId);
     return hub;
@@ -48,8 +48,8 @@ export class HubActivityService {
   async deactivateHub(userId: any, hubId: number) {
     this.logger.log(this.deactivateHub.name);
     const hubRelationship = await this.joinUserHubRepository.findOne({
-      userId,
-      hubId,
+      user: userId,
+      hub: hubId,
       isOwner: true,
     });
 
@@ -59,9 +59,9 @@ export class HubActivityService {
       );
     }
 
-    let hub = await hubRelationship.hub;
+    const hub = await hubRelationship.hub.load();
     hub.active = false;
-    hub = await this.hubRepository.save(hub);
+    await this.hubRepository.persistAndFlush(hub);
     return hub;
   }
 
@@ -69,19 +69,19 @@ export class HubActivityService {
     this.logger.log(this.notifyOfHubActivated.name);
 
     const hubRelationships = await this.joinUserHubRepository.find({
-      hubId,
+      hub: hubId,
     });
 
     for (const joinUserHub of hubRelationships) {
-      const hub = await joinUserHub.hub;
-      await this.notificationService.sendPushToUser(joinUserHub.userId, {
+      const hub = await joinUserHub.hub.load();
+      await this.notificationService.sendPushToUser(joinUserHub.user.id, {
         title: `"${hub.name}" hub became active`,
         body: `Touch to go to hub.`,
         click_action: '',
       } as PushNotificationDto);
 
       await this.notificationService.addInAppNotificationForUser(
-        joinUserHub.userId,
+        joinUserHub.user.id,
         {
           thumbnail: hub.image,
           header: `"${hub.name}" hub became active`,

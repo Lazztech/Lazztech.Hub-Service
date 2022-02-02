@@ -1,15 +1,16 @@
+import { BeforeCreate, Property } from '@mikro-orm/core';
 import { Field, ObjectType } from '@nestjs/graphql';
-import { BeforeInsert, Column } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 
 @ObjectType({ isAbstract: true })
 export abstract class ShareableId {
-  @Column()
+
   @Field({nullable: false})
-  shareableId:string;
+  @Property({ fieldName: 'shareableId' })
+  shareableId!: string;
 
   // Only fires is repostiory.create is used for before save
-  @BeforeInsert()
+  @BeforeCreate()
   private addId(){
     this.shareableId = uuid();
   }

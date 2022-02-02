@@ -2,16 +2,16 @@ import { Service } from 'typedi';
 import { User } from '../dal/entity/user.entity';
 import { ConfigService } from '@nestjs/config';
 import { Logger, HttpService } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { PushNotificationDto } from './dto/pushNotification.dto';
 import { InAppNotificationDto } from './dto/inAppNotification.dto';
 import { UserDevice } from '../dal/entity/userDevice.entity';
 import { InAppNotification } from '../dal/entity/inAppNotification.entity';
 import {
-  generateTypeOrmOrderOptions,
+  generateOrderOptions,
   PageableOptions,
 } from '../dal/pagination/paginatedResponse.helper';
+import { InjectRepository } from '@mikro-orm/nestjs';
+import { EntityRepository } from '@mikro-orm/core';
 
 @Service()
 export class NotificationService {
@@ -28,11 +28,11 @@ export class NotificationService {
     private configService: ConfigService,
     private httpService: HttpService,
     @InjectRepository(User)
-    private userRepository: Repository<User>,
+    private userRepository: EntityRepository<User>,
     @InjectRepository(InAppNotification)
-    private inAppNotificationRepository: Repository<InAppNotification>,
+    private inAppNotificationRepository: EntityRepository<InAppNotification>,
     @InjectRepository(UserDevice)
-    private userDeviceRepository: Repository<UserDevice>,
+    private userDeviceRepository: EntityRepository<UserDevice>,
   ) {
     this.logger.log('constructor');
   }
@@ -44,11 +44,12 @@ export class NotificationService {
     this.logger.log(this.addUserFcmNotificationToken.name);
     const user = await this.userRepository.findOne({ id: userId });
 
-    if (!(await user.userDevices).find((x) => x.fcmPushUserToken == token)) {
-      const userDevice = new UserDevice();
-      userDevice.userId = user.id;
-      userDevice.fcmPushUserToken = token;
-      await this.userDeviceRepository.save(userDevice);
+    if (!(await user.userDevices.loadItems()).find((x) => x.fcmPushUserToken == token)) {
+      const userDevice = this.userDeviceRepository.create({
+        user: { id: user.id },
+        fcmPushUserToken: token,
+      });
+      await this.userDeviceRepository.persistAndFlush(userDevice);
       // TODO notify via email that a new device has been used on the account for security.
     } else {
       this.logger.warn('User device token already stored.');
@@ -67,12 +68,11 @@ export class NotificationService {
     pageableOptions?: PageableOptions,
   ): Promise<[InAppNotification[], number]> {
     this.logger.log(this.getInAppNotifications.name);
-    return await this.inAppNotificationRepository.findAndCount({
-      where: { userId },
-      take: pageableOptions?.limit,
-      skip: pageableOptions?.offset,
-      order: generateTypeOrmOrderOptions(pageableOptions?.sortOptions),
-    });
+    return await this.inAppNotificationRepository.findAndCount({ user: userId }, {
+      limit: pageableOptions?.limit,
+      offset: pageableOptions?.offset,
+      orderBy: generateOrderOptions(pageableOptions?.sortOptions),
+    })
   }
 
   public async addInAppNotificationForUser(
@@ -82,9 +82,9 @@ export class NotificationService {
     this.logger.log(this.addInAppNotificationForUser.name);
     const inAppNotification = this.inAppNotificationRepository.create({
       ...details,
-      userId,
+      user: userId,
     });
-    await this.inAppNotificationRepository.save(inAppNotification);
+    await this.inAppNotificationRepository.persistAndFlush(inAppNotification);
   }
 
   async deleteInAppNotification(
@@ -94,17 +94,17 @@ export class NotificationService {
     this.logger.log(this.deleteInAppNotification.name);
     const inAppNotification = await this.inAppNotificationRepository.findOne({
       id: inAppNotificationId,
-      userId,
+      user: userId,
     });
-    await this.inAppNotificationRepository.remove(inAppNotification);
+    await this.inAppNotificationRepository.removeAndFlush(inAppNotification);
   }
 
   async deleteAllInAppNotifications(userId: any): Promise<void> {
     this.logger.log(this.deleteAllInAppNotifications.name);
     const inAppNotifications = await this.inAppNotificationRepository.find({
-      userId,
+      user: userId,
     });
-    await this.inAppNotificationRepository.remove(inAppNotifications);
+    await this.inAppNotificationRepository.removeAndFlush(inAppNotifications);
   }
 
   public async sendPushToUser(
@@ -114,7 +114,7 @@ export class NotificationService {
     this.logger.log(this.sendPushToUser.name);
 
     const user = await this.userRepository.findOne({ id: userId });
-    const fcmUserTokens = (await user.userDevices).map(
+    const fcmUserTokens = (await user.userDevices.loadItems()).map(
       (x) => x.fcmPushUserToken,
     );
 

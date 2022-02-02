@@ -9,7 +9,9 @@ import { UserDevice } from '../entity/userDevice.entity';
 export class UserFieldResolver {
   private logger = new Logger(UserFieldResolver.name);
 
-  constructor(private readonly fileUrlService: FileUrlService) {}
+  constructor(
+    private readonly fileUrlService: FileUrlService,
+  ) {}
 
   @ResolveField(() => String, { nullable: true })
   image(@Parent() user: User, @Context() ctx: any): string {
@@ -17,13 +19,13 @@ export class UserFieldResolver {
   }
 
   @ResolveField(() => [UserDevice], { nullable: true })
-  async userDevices(
+  userDevices(
     @UserId() userId,
     @Parent() user: User,
   ): Promise<UserDevice[]> {
     this.logger.log(this.userDevices.name);
     if (userId === user.id) {
-      return await user.userDevices;
+      return user.userDevices.loadItems();
     } else {
       throw new Error('Not allowed to access other users device information');
     }

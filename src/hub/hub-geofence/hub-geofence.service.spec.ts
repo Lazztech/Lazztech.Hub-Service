@@ -1,19 +1,19 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { HubGeofenceService } from './hub-geofence.service';
-import { Repository } from 'typeorm';
-import { GeofenceEvent, JoinUserHub } from '../../dal/entity/joinUserHub.entity';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import { User } from '../../dal/entity/user.entity';
-import { Hub } from '../../dal/entity/hub.entity';
-import { NotificationService } from '../../notification/notification.service';
-import { ConfigService } from '@nestjs/config';
+import { EntityRepository } from '@mikro-orm/core';
+import { getRepositoryToken } from '@mikro-orm/nestjs';
 import { HttpModule } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { Test, TestingModule } from '@nestjs/testing';
+import { Hub } from '../../dal/entity/hub.entity';
 import { InAppNotification } from '../../dal/entity/inAppNotification.entity';
+import { JoinUserHub } from '../../dal/entity/joinUserHub.entity';
+import { User } from '../../dal/entity/user.entity';
 import { UserDevice } from '../../dal/entity/userDevice.entity';
+import { NotificationService } from '../../notification/notification.service';
+import { HubGeofenceService } from './hub-geofence.service';
 
 describe('HubGeofenceService', () => {
   let service: HubGeofenceService;
-  let joinUserHubRepository: Repository<JoinUserHub>;
+  let joinUserHubRepository: EntityRepository<JoinUserHub>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -22,23 +22,23 @@ describe('HubGeofenceService', () => {
         HubGeofenceService,
         {
           provide: getRepositoryToken(JoinUserHub),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(User),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(Hub),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(InAppNotification),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(UserDevice),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: ConfigService,
@@ -60,7 +60,7 @@ describe('HubGeofenceService', () => {
     }).compile();
 
     service = module.get<HubGeofenceService>(HubGeofenceService);
-    joinUserHubRepository = module.get<Repository<JoinUserHub>>(
+    joinUserHubRepository = module.get<EntityRepository<JoinUserHub>>(
       getRepositoryToken(JoinUserHub),
     );
   });
@@ -74,34 +74,31 @@ describe('HubGeofenceService', () => {
     const userId = 1;
     const hubId = 1;
     const hubRelationshipTest = {
-      userId,
-      hubId,
-      hub: Promise.resolve({
-        active: true,
-      } as Hub),
+      user: { id: userId },
+      hub: {
+        id: hubId,
+        load: jest.fn().mockResolvedValueOnce({
+          active: true,
+        } as Hub) as any
+      },
     } as JoinUserHub;
     jest
       .spyOn(joinUserHubRepository, 'findOne')
-      .mockResolvedValueOnce(hubRelationshipTest);
+      .mockResolvedValueOnce(hubRelationshipTest as any);
 
     const notifyMembersSpy = jest
       .spyOn(service, 'notifyMembersOfArrival')
       .mockResolvedValue();
 
-    const updateCall = jest
-      .spyOn(joinUserHubRepository, 'update')
-      .mockResolvedValueOnce(null);
+    const persistAndFlushCall = jest
+      .spyOn(joinUserHubRepository, 'persistAndFlush')
+      .mockImplementationOnce(() => Promise.resolve());
+
     // Act
     await service.enteredHubGeofence(userId, hubId);
+
     // Assert
-    expect(updateCall).toHaveBeenCalledWith({
-      userId,
-      hubId,
-    }, {
-      isPresent: true,
-      lastUpdated: expect.any(String),
-      lastGeofenceEvent: GeofenceEvent.ENTERED
-    } as JoinUserHub);
+    expect(persistAndFlushCall).toHaveBeenCalled();
     expect(notifyMembersSpy).toHaveBeenCalled();
   });
 
@@ -110,34 +107,29 @@ describe('HubGeofenceService', () => {
     const userId = 1;
     const hubId = 1;
     const hubRelationshipTest = {
-      userId,
-      hubId,
-      hub: Promise.resolve({
-        active: true,
-      } as Hub),
+      user: { id: userId },
+      hub: {
+        id: hubId,
+        load: jest.fn().mockResolvedValueOnce({
+          active: true,
+        } as Hub) as any
+      },
     } as JoinUserHub;
     jest
       .spyOn(joinUserHubRepository, 'findOne')
-      .mockResolvedValueOnce(hubRelationshipTest);
+      .mockResolvedValueOnce(hubRelationshipTest as any);
 
     const notifyMembersSpy = jest
       .spyOn(service, 'notifyMembersOfArrival')
       .mockResolvedValue();
 
-    const updateCall = jest
-      .spyOn(joinUserHubRepository, 'update')
-      .mockResolvedValueOnce(null);
+    const persistAndFlushCall = jest
+      .spyOn(joinUserHubRepository, 'persistAndFlush')
+      .mockImplementationOnce(() => Promise.resolve());
     // Act
     await service.dwellHubGeofence(userId, hubId);
     // Assert
-    expect(updateCall).toHaveBeenCalledWith({
-      userId,
-      hubId
-    }, {
-      isPresent: true,
-      lastUpdated: expect.any(String),
-      lastGeofenceEvent: GeofenceEvent.DWELL
-    } as JoinUserHub);
+    expect(persistAndFlushCall).toHaveBeenCalled();
     expect(notifyMembersSpy).not.toHaveBeenCalled();
   });
 
@@ -145,34 +137,29 @@ describe('HubGeofenceService', () => {
     const userId = 1;
     const hubId = 1;
     const hubRelationshipTest = {
-      userId,
-      hubId,
-      hub: Promise.resolve({
-        active: true,
-      } as Hub),
+      user: { id: userId },
+      hub: {
+        id: hubId,
+        load: jest.fn().mockResolvedValueOnce({
+          active: true,
+        } as Hub) as any
+      },
     } as JoinUserHub;
     jest
       .spyOn(joinUserHubRepository, 'findOne')
-      .mockResolvedValueOnce(hubRelationshipTest);
+      .mockResolvedValueOnce(hubRelationshipTest as any);
 
     const notifyMembersSpy = jest
       .spyOn(service, 'notifyMembersOfExit')
       .mockResolvedValue();
 
-    const updateCall = jest
-      .spyOn(joinUserHubRepository, 'update')
-      .mockResolvedValueOnce(null);
+    const persistAndFlushCall = jest
+      .spyOn(joinUserHubRepository, 'persistAndFlush')
+      .mockImplementationOnce(() => Promise.resolve());
     // Act
     await service.exitedHubGeofence(userId, hubId);
     // Assert
-    expect(updateCall).toHaveBeenCalledWith({
-      userId,
-      hubId,
-    }, {
-      isPresent: false,
-      lastUpdated: expect.any(String),
-      lastGeofenceEvent: GeofenceEvent.EXITED
-    } as JoinUserHub);
+    expect(persistAndFlushCall).toHaveBeenCalled();
     expect(notifyMembersSpy).toHaveBeenCalled();
   });
 });

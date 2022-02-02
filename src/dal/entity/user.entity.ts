@@ -1,81 +1,76 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  OneToMany,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
 import { InAppNotification } from './inAppNotification.entity';
 import { Invite } from './invite.entity';
 import { JoinUserHub } from './joinUserHub.entity';
 import { PasswordReset } from './passwordReset.entity';
 import { UserDevice } from './userDevice.entity';
 import { ShareableId } from './shareableId.entity'
+import { Cascade, Collection, Entity, OneToMany, OneToOne, PrimaryKey, Property } from '@mikro-orm/core';
+
 @ObjectType()
 @Entity()
 export class User extends ShareableId{
   @Field(() => ID)
-  @PrimaryGeneratedColumn()
-  public id: number;
+  @PrimaryKey()
+  public id!: number;
 
   @Field()
-  @Column()
-  public firstName: string;
+  @Property({ fieldName: 'firstName' })
+  public firstName!: string;
 
   @Field()
-  @Column()
-  public lastName: string;
+  @Property({ fieldName: 'lastName' })
+  public lastName!: string;
 
   @Field({
     nullable: true,
     description: 'string representation of unix timestamp',
   })
-  @Column({ nullable: true })
-  public birthdate: string;
+  @Property({ nullable: true })
+  public birthdate?: string;
 
   @Field({ nullable: true })
-  @Column({ nullable: true })
-  public description: string;
+  @Property({ nullable: true })
+  public description?: string;
 
   /**
    * Exposed as a field resolver
    */
-  @Column({ nullable: true })
-  public image: string;
+  @Property({ nullable: true })
+  public image?: string;
 
   @Field()
-  @Column()
-  public email: string;
+  @Property()
+  public email!: string;
 
-  @Column()
-  public password: string;
+  @Property()
+  public password!: string;
 
   @OneToMany(
     () => InAppNotification,
     (inAppNotifications) => inAppNotifications.user,
   )
-  public inAppNotifications: Promise<InAppNotification[]>;
+  public inAppNotifications = new Collection<InAppNotification>(this);
 
   @OneToMany(() => JoinUserHub, (joinUserHub) => joinUserHub.user)
-  public hubsConnection: Promise<JoinUserHub[]>;
+  public hubsConnection = new Collection<JoinUserHub>(this);
 
-  @OneToOne(() => PasswordReset, {
-    cascade: true,
+  @OneToOne({
+    cascade: [Cascade.ALL],
+    fieldName: 'passwordResetId',
+    nullable: true
   })
-  @JoinColumn()
-  public passwordReset: Promise<PasswordReset>;
+  public passwordReset!: PasswordReset;
 
   /**
    * Exposed as a field resolver
    */
   @OneToMany(() => UserDevice, (userDevice) => userDevice.user)
-  public userDevices: Promise<UserDevice[]>;
+  public userDevices = new Collection<UserDevice>(this);
 
   @OneToMany(() => Invite, (invite) => invite.invitee)
-  public invitesSent: Promise<Invite[]>;
+  public invitesSent = new Collection<Invite>(this);
 
   @OneToMany(() => Invite, (invite) => invite.inviter)
-  public invitesReceived: Promise<Invite[]>;
+  public invitesReceived = new Collection<Invite>(this);
 }

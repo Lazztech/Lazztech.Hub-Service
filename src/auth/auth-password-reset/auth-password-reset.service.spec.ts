@@ -1,18 +1,18 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthPasswordResetService } from './auth-password-reset.service';
 import { EmailService } from '../../email/email.service';
-import { Repository } from 'typeorm';
 import { PasswordReset } from '../../dal/entity/passwordReset.entity';
 import { User } from '../../dal/entity/user.entity';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { ResetPassword } from '../dto/resetPassword.input';
+import { getRepositoryToken } from '@mikro-orm/nestjs';
+import { EntityRepository } from '@mikro-orm/core';
 
 describe('AuthPasswordResetService', () => {
   let service: AuthPasswordResetService;
-  let userRepo: Repository<User>;
+  let userRepo: EntityRepository<User>;
   let emailService: EmailService;
-  let passwordResetRepo: Repository<PasswordReset>;
+  let passwordResetRepo: EntityRepository<PasswordReset>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -22,19 +22,19 @@ describe('AuthPasswordResetService', () => {
         ConfigService,
         {
           provide: getRepositoryToken(User),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(PasswordReset),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
       ],
     }).compile();
 
     service = module.get<AuthPasswordResetService>(AuthPasswordResetService);
-    userRepo = module.get<Repository<User>>(getRepositoryToken(User));
+    userRepo = module.get<EntityRepository<User>>(getRepositoryToken(User));
     emailService = module.get(EmailService);
-    passwordResetRepo = module.get<Repository<PasswordReset>>(
+    passwordResetRepo = module.get<EntityRepository<PasswordReset>>(
       getRepositoryToken(PasswordReset),
     );
   });
@@ -52,13 +52,13 @@ describe('AuthPasswordResetService', () => {
     } as ResetPassword;
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce({
       email: details.usersEmail,
-      passwordReset: Promise.resolve({
+      passwordReset: {
         pin: details.resetPin,
-      }),
-    } as User);
+      },
+    } as any);
     const saveCall = jest
-      .spyOn(userRepo, 'save')
-      .mockResolvedValueOnce({} as User);
+      .spyOn(userRepo, 'persistAndFlush')
+      .mockImplementationOnce(() => Promise.resolve());
     // Act
     const result = await service.resetPassword(details);
     // Assert
@@ -73,15 +73,15 @@ describe('AuthPasswordResetService', () => {
       firstName: 'Gian',
       lastName: 'Lazzarini',
       email,
-      passwordReset: Promise.resolve({}),
-    } as User);
+      passwordReset: {},
+    } as any);
     jest.spyOn(passwordResetRepo, 'findOne').mockResolvedValueOnce(null);
     jest
       .spyOn(emailService, 'sendEmailFromPrimaryAddress')
       .mockResolvedValueOnce('id');
     const saveCall = jest
-      .spyOn(userRepo, 'save')
-      .mockResolvedValueOnce({} as User);
+      .spyOn(userRepo, 'persistAndFlush')
+      .mockImplementationOnce(() => Promise.resolve());
     // Act
     const result = await service.sendPasswordResetEmail(email);
     // Assert

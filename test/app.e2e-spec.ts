@@ -4,9 +4,14 @@ import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 import { base64_encoded_1x1px_jpeg_for_testing } from './e2e-helpers';
 
+ /* eslint-disable */
 describe('AppController (e2e)', () => {
   let app: INestApplication;
   let token: string;
+  let emailAddress = "testtest@gmail.com";
+  let password = "Password123";
+  let userId;
+  let hubId;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -32,10 +37,10 @@ describe('AppController (e2e)', () => {
         operationName: null,
         query: `mutation {
         register(data: {
-          firstName: "gian",
-          lastName: "lazzarini",
+          firstName: "test",
+          lastName: "test",
           birthdate: "759398400",
-          email: "gianlazzarini@gmail.com",
+          email: "testtest@gmail.com",
           password: "Password123"
         })
       }`,
@@ -53,7 +58,7 @@ describe('AppController (e2e)', () => {
         operationName: null,
         query: `mutation {
         login(
-          email: "gianlazzarini@gmail.com",
+          email: "testtest@gmail.com",
           password: "Password123"
         )
       }`,
@@ -91,14 +96,17 @@ describe('AppController (e2e)', () => {
         variables: {},
       })
       .expect(200);
+    
+    expect(result.body?.data?.me?.id).toBeDefined();
+    userId = result.body?.data?.me?.id;
 
     expect(result.body?.data?.me).toEqual({
-      id: '1',
-      firstName: 'gian',
-      lastName: 'lazzarini',
+      id: userId,
+      firstName: 'test',
+      lastName: 'test',
       description: null,
       image: null,
-      email: 'gianlazzarini@gmail.com',
+      email: 'testtest@gmail.com',
       birthdate: '759398400',
       userDevices: [],
     });
@@ -148,6 +156,8 @@ describe('AppController (e2e)', () => {
       .expect(200);
 
     expect(result.body?.data?.createHub?.hub).toBeDefined();
+    expect(result.body?.data?.createHub?.hubId).toBeDefined();
+    hubId = result.body?.data?.createHub?.hubId;
     return result;
   });
 
@@ -184,18 +194,95 @@ describe('AppController (e2e)', () => {
     return result;
   });
 
+  it('/graphql hub', async () => {
+    const result = await request(app.getHttpServer())
+      .post('/graphql')
+      .set({ authorization: `Bearer ${token}` })
+      .send({
+        operationName: null,
+        query: `query hub($hubId: ID!) {
+          hub(id: $hubId) {
+            userId
+            hubId
+            isOwner
+            starred
+            isPresent
+            hub {
+              id
+              name
+              description
+              active
+              image
+              latitude
+              longitude
+              usersConnection {
+                user {
+                  id
+                  firstName
+                  lastName
+                  description
+                  image
+                }
+                isOwner
+                isPresent
+              }
+              microChats {
+                id
+                text
+              }
+            }
+          }
+        }`,
+        variables: {
+          hubId
+        },
+      })
+      .expect(200);
+
+    expect(result.body?.data?.hub).toBeDefined();
+    return result;
+  });
+
+  it('/graphql usersPeople', async () => {
+    const result = await request(app.getHttpServer())
+      .post('/graphql')
+      .set({ authorization: `Bearer ${token}` })
+      .send({
+        operationName: null,
+        query: `query usersPeople {
+          usersPeople {
+              id
+              firstName
+              lastName
+              email
+              description
+              image
+          }
+      }`,
+        variables: {
+          hubId
+        },
+      })
+      .expect(200);
+
+    expect(result.body?.data?.usersPeople).toBeDefined();
+    return result;
+  });
+
   it('/graphql activateHub', async () => {
     const result = await request(app.getHttpServer())
       .post('/graphql')
       .set({ authorization: `Bearer ${token}` })
       .send({
         operationName: null,
-        query: `mutation enter_test {
-          activateHub(hubId: 1) {
+        query: `mutation enter_test($hubId: ID!) {
+          activateHub(hubId: $hubId) {
             active
           }
         }`,
-        variables: {},
+        variables: {
+          hubId
+        },
       })
       .expect(200);
 
@@ -210,17 +297,43 @@ describe('AppController (e2e)', () => {
       .set({ authorization: `Bearer ${token}` })
       .send({
         operationName: null,
-        query: `mutation enter_test {
-          enteredHubGeofence(hubId: 1) {
+        query: `mutation enter_test($hubId: ID!) {
+          enteredHubGeofence(hubId: $hubId) {
             isPresent
           }
         }`,
-        variables: {},
+        variables: {
+          hubId
+        },
       })
       .expect(200);
 
     expect(result.body?.data?.enteredHubGeofence).toBeDefined();
     expect(result.body?.data?.enteredHubGeofence?.isPresent).toBe(true);
+    return result;
+  });
+
+  it('/graphql dwellHubGeofence', async () => {
+    const result = await request(app.getHttpServer())
+      .post('/graphql')
+      .set({ authorization: `Bearer ${token}` })
+      .send({
+        operationName: null,
+        query: `mutation dwellHubGeofence($hubId: ID!) {
+          dwellHubGeofence(hubId: $hubId) {
+          userId
+          hubId
+          isPresent
+        }
+      }`,
+        variables: {
+          hubId
+        },
+      })
+      .expect(200);
+
+    expect(result.body?.data?.dwellHubGeofence).toBeDefined();
+    expect(result.body?.data?.dwellHubGeofence?.isPresent).toBe(true);
     return result;
   });
 
@@ -230,17 +343,62 @@ describe('AppController (e2e)', () => {
       .set({ authorization: `Bearer ${token}` })
       .send({
         operationName: null,
-        query: `mutation exit_test {
-          exitedHubGeofence(hubId: 1) {
+        query: `mutation exit_test($hubId: ID!) {
+          exitedHubGeofence(hubId: $hubId) {
             isPresent
           }
         }`,
-        variables: {},
+        variables: {
+          hubId
+        },
       })
       .expect(200);
 
     expect(result.body?.data?.exitedHubGeofence).toBeDefined();
     expect(result.body?.data?.exitedHubGeofence?.isPresent).toBe(false);
     return result;
+  });
+
+  it('/graphql deleteHub', async () => {
+    const result = await request(app.getHttpServer())
+      .post('/graphql')
+      .set({ authorization: `Bearer ${token}` })
+      .send({
+        operationName: null,
+        query: `mutation deleteHub($hubId: ID!) {
+          deleteHub(hubId: $hubId)
+      }`,
+        variables: {
+          hubId,
+        },
+      })
+      .expect(200);
+
+    expect(result.body?.data?.deleteHub).toBeDefined();
+  });
+
+  it('/graphql deleteAccount', async () => {
+    const result = await request(app.getHttpServer())
+      .post('/graphql')
+      .set({ authorization: `Bearer ${token}` })
+      .send({
+        operationName: null,
+        query: `mutation deleteAccount(
+          $emailAddress: String!
+          $password: String!
+      ){
+          deleteAccount(
+              email: $emailAddress, 
+              password: $password
+              )
+      }`,
+        variables: {
+          emailAddress,
+          password,
+        },
+      })
+      .expect(200);
+
+    expect(result.body?.data?.deleteAccount).toBeDefined();
   });
 });

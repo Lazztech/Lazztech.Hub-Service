@@ -30,7 +30,7 @@ $ npm install
 # https://www.reddit.com/r/node/comments/lp9xlk/mac_mini_m1_issues_with_node_js_15/
 
 # open x86 shell with rosetta
-$ $ arch -x86_64 zsh
+$ arch -x86_64 zsh
 # install node version manager & use the version from the .nvmrc file
 $ nvm install
 # Now check that the architecture is correct:
@@ -134,13 +134,17 @@ $ pg_dump -h <host> -p <port> -U <username> -Fc <database> > ./data/db.dump
 $ docker run --name lazztech_postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=Password123 -e POSTGRES_DB=postgres -p 5432:5432 postgres
 
 # copy dump file to the docker container
-docker cp ./data/db.dump lazztech_postgres:/var/lib/postgresql/data/db.dump
+$ docker cp ./data/db.dump lazztech_postgres:/var/lib/postgresql/data/db.dump
 
 # shell into container
-docker exec -it lazztech_postgres bash
+$ docker exec -it lazztech_postgres bash
 
 # restore it from within
-pg_restore -U postgres -d postgres --no-owner -1 /var/lib/postgresql/data/db.dump
+$ pg_restore -U postgres -d postgres --no-owner -1 /var/lib/postgresql/data/db.dump
+
+# cleanup
+$ docker stop lazztech_postgres
+$ docker rm lazztech_postgres
 ```
 
 In your .env or .env.local file configure these enviroment varaibles for postgres

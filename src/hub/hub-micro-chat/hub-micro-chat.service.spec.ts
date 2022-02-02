@@ -1,8 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { HubMicroChatService } from './hub-micro-chat.service';
 import { User } from '../../dal/entity/user.entity';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { Hub } from '../../dal/entity/hub.entity';
 import { InAppNotification } from '../../dal/entity/inAppNotification.entity';
 import { JoinUserHub } from '../../dal/entity/joinUserHub.entity';
@@ -11,13 +9,15 @@ import { NotificationService } from '../../notification/notification.service';
 import { ConfigModule } from '@nestjs/config';
 import { HttpModule } from '@nestjs/common';
 import { UserDevice } from '../../dal/entity/userDevice.entity';
+import { getRepositoryToken } from '@mikro-orm/nestjs';
+import { EntityRepository } from '@mikro-orm/core';
 
 describe('HubMicroChatService', () => {
   let service: HubMicroChatService;
-  let joinUserHubRepo: Repository<JoinUserHub>;
-  let microChatRepo: Repository<MicroChat>;
-  let userRepo: Repository<User>;
-  let hubRepo: Repository<Hub>;
+  let joinUserHubRepo: EntityRepository<JoinUserHub>;
+  let microChatRepo: EntityRepository<MicroChat>;
+  let userRepo: EntityRepository<User>;
+  let hubRepo: EntityRepository<Hub>;
   let notificationService: NotificationService;
 
   beforeEach(async () => {
@@ -34,40 +34,40 @@ describe('HubMicroChatService', () => {
         NotificationService,
         {
           provide: getRepositoryToken(User),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(Hub),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(InAppNotification),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(JoinUserHub),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(MicroChat),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(UserDevice),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
       ],
     }).compile();
 
     service = module.get<HubMicroChatService>(HubMicroChatService);
-    joinUserHubRepo = module.get<Repository<JoinUserHub>>(
+    joinUserHubRepo = module.get<EntityRepository<JoinUserHub>>(
       getRepositoryToken(JoinUserHub),
     );
-    microChatRepo = module.get<Repository<MicroChat>>(
+    microChatRepo = module.get<EntityRepository<MicroChat>>(
       getRepositoryToken(MicroChat),
     );
-    userRepo = module.get<Repository<User>>(getRepositoryToken(User));
-    hubRepo = module.get<Repository<Hub>>(getRepositoryToken(Hub));
+    userRepo = module.get<EntityRepository<User>>(getRepositoryToken(User));
+    hubRepo = module.get<EntityRepository<Hub>>(getRepositoryToken(Hub));
     notificationService = module.get(NotificationService);
   });
 
@@ -84,27 +84,29 @@ describe('HubMicroChatService', () => {
       id: userId,
       firstName: 'Gian',
       image: 'image.png',
-    } as User);
+    } as any);
     jest.spyOn(hubRepo, 'findOne').mockResolvedValueOnce({
       id: hubId,
       name: 'TestHubName',
-      usersConnection: Promise.resolve([
+      usersConnection: [
         {
-          userId,
+          user: { id: userId },
         },
         {
-          userId: 2,
+          user: { id: 2 },
         },
         {
-          userId: 3,
+          user: { id: 3 },
         },
-      ]),
-      microChats: Promise.resolve([
-        {
-          id: microChatId,
-        },
-      ]),
-    } as Hub);
+      ] as any,
+      microChats: {
+        loadItems: jest.fn().mockResolvedValueOnce([
+          {
+            id: microChatId,
+          },
+        ] as any)
+      } as any,
+    } as any);
     const sendPushToUserCall = jest
       .spyOn(notificationService, 'sendPushToUser')
       .mockImplementation(() => Promise.resolve());
@@ -124,16 +126,17 @@ describe('HubMicroChatService', () => {
     const hubId = 1;
     const microChatText = 'Hello';
     jest.spyOn(joinUserHubRepo, 'findOne').mockResolvedValueOnce({
-      userId,
-      hubId,
-    } as JoinUserHub);
+      user: { id: userId },
+      hub: { id: hubId },
+    } as any);
     const expectResult = {
-      hubId,
+      hub: { id: hubId },
       text: microChatText,
     } as MicroChat;
+    jest.spyOn(microChatRepo, 'create').mockImplementationOnce(value => value as any);
     const saveCall = jest
-      .spyOn(microChatRepo, 'save')
-      .mockResolvedValueOnce(expectResult);
+      .spyOn(microChatRepo, 'persistAndFlush')
+      .mockImplementationOnce(() => Promise.resolve());
     // Act
     const result = await service.createMicroChat(userId, hubId, microChatText);
     // Assert
@@ -147,23 +150,26 @@ describe('HubMicroChatService', () => {
     const hubId = 1;
     const microChatId = 1;
     jest.spyOn(joinUserHubRepo, 'findOne').mockResolvedValueOnce({
-      userId,
-      hubId,
-      hub: Promise.resolve({
-        microChats: Promise.resolve([
-          {
-            id: microChatId,
-          },
-          {
-            id: 2,
-          },
-        ]),
-      }),
-      user: Promise.resolve({}),
-    } as JoinUserHub);
+      user: { id: userId },
+      hub: {
+        id: hubId,
+        load: jest.fn().mockResolvedValueOnce({
+          microChats: {
+            loadItems: jest.fn().mockResolvedValueOnce([
+              {
+                id: microChatId,
+              },
+              {
+                id: 2,
+              },
+            ] as any)
+          }
+        })
+      } as any,
+    } as any);
     const deleteCall = jest
-      .spyOn(microChatRepo, 'remove')
-      .mockResolvedValueOnce({} as MicroChat);
+      .spyOn(microChatRepo, 'removeAndFlush')
+      .mockImplementationOnce(() => Promise.resolve());
     // Act
     await service.deleteMicroChat(userId, hubId, microChatId);
     // Assert

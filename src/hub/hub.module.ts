@@ -2,7 +2,6 @@ import { Module, HttpModule } from '@nestjs/common';
 import { HubResolver } from './hub.resolver';
 import { HubService } from './hub.service';
 import { NotificationService } from '../notification/notification.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { Hub } from '../dal/entity/hub.entity';
 import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
 import { MicroChat } from '../dal/entity/microChat.entity';
@@ -20,10 +19,11 @@ import { FileModule } from '../file/file.module';
 import { EmailModule } from '../email/email.module';
 import { HubTasksService } from './hub-tasks/hub-tasks.service';
 import { ScheduleModule } from '@nestjs/schedule';
+import { MikroOrmModule } from '@mikro-orm/nestjs';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([
+    MikroOrmModule.forFeature([
       Hub,
       JoinUserHub,
       MicroChat,

@@ -1,9 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { Hub } from '../dal/entity/hub.entity';
 import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
 import { User } from '../dal/entity/user.entity';
-import { Repository } from 'typeorm';
 import { UserService } from './user.service';
 import { EmailService } from '../email/email.service';
 import { Invite } from '../dal/entity/invite.entity';
@@ -14,11 +12,13 @@ import { ImageFileService } from '../file/image-file/image-file.service';
 import { FileServiceInterface } from '../file/interfaces/file-service.interface';
 import { LocalFileService } from '../file/local-file/local-file.service';
 import { FILE_SERVICE } from '../file/file-service.token';
+import { getRepositoryToken } from '@mikro-orm/nestjs';
+import { EntityRepository } from '@mikro-orm/core';
 
 describe('UserService', () => {
   let service: UserService;
-  let joinUserHubRepo: Repository<JoinUserHub>;
-  let userRepo: Repository<User>;
+  let joinUserHubRepo: EntityRepository<JoinUserHub>;
+  let userRepo: EntityRepository<User>;
   let fileService: FileServiceInterface;
 
   beforeEach(async () => {
@@ -34,29 +34,29 @@ describe('UserService', () => {
         ConfigService,
         {
           provide: getRepositoryToken(PasswordReset),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(JoinUserHub),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(User),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(Invite),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
       ],
     }).compile();
 
     service = module.get<UserService>(UserService);
     // Save the instance of the repository and set the correct generics
-    joinUserHubRepo = module.get<Repository<JoinUserHub>>(
+    joinUserHubRepo = module.get<EntityRepository<JoinUserHub>>(
       getRepositoryToken(JoinUserHub),
     );
-    userRepo = module.get<Repository<User>>(getRepositoryToken(User));
+    userRepo = module.get<EntityRepository<User>>(getRepositoryToken(User));
     fileService = module.get<FileServiceInterface>(FILE_SERVICE);
   });
 
@@ -72,7 +72,7 @@ describe('UserService', () => {
       firstName: 'Test',
       lastName: 'Test',
     } as User;
-    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
+    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser as any);
     // Act
     const result = await service.getUser(userId);
     // Assert
@@ -84,27 +84,29 @@ describe('UserService', () => {
     const testUserId = 1;
     const testResults: JoinUserHub[] = [
       {
-        userId: testUserId,
-        hubId: 1,
-        user: Promise.resolve({}),
-        hub: Promise.resolve({
-          name: 'hub1',
-        } as Hub),
+        user: { id: testUserId },
+        hub: {
+          id: 1,
+          load: jest.fn().mockResolvedValue({
+            name: 'hub1',
+          })
+        } as any,
         isOwner: true,
       } as JoinUserHub,
       {
-        userId: testUserId,
-        hubId: 2,
-        user: Promise.resolve({}),
-        hub: Promise.resolve({
-          name: 'hub2',
-        } as Hub),
+        user: { id: testUserId },
+        hub: {
+          id: 2,
+          load: jest.fn().mockResolvedValue({
+            name: 'hub2',
+          })
+        } as any,
         isOwner: true,
       } as JoinUserHub,
     ];
-    const hubResults: Hub[] = await Promise.all(testResults.map((x) => x.hub));
+    const hubResults: Hub[] = await Promise.all(testResults.map((x) => x.hub.load()));
     // notice we are pulling the repo variable and using jest.spyOn with no issues
-    jest.spyOn(joinUserHubRepo, 'find').mockResolvedValueOnce(testResults);
+    jest.spyOn(joinUserHubRepo, 'find').mockResolvedValueOnce(testResults as any);
     expect(await service.getUsersOwnedHubs(testUserId)).toEqual(hubResults);
   });
 
@@ -112,23 +114,27 @@ describe('UserService', () => {
     const testUserId = 1;
     const testResults: JoinUserHub[] = [
       {
-        userId: testUserId,
+        user: { id: testUserId },
         isOwner: false,
-        hub: Promise.resolve({
-          name: 'hub1',
-        } as Hub),
+        hub: {
+          load: jest.fn().mockResolvedValue({
+            name: 'hub1',
+          })
+        } as any,
       } as JoinUserHub,
       {
-        userId: testUserId,
+        user: { id: testUserId },
         isOwner: false,
-        hub: Promise.resolve({
-          name: 'hub2',
-        } as Hub),
+        hub: {
+          load: jest.fn().mockResolvedValue({
+            name: 'hub2',
+          })
+        } as any,
       } as JoinUserHub,
     ];
-    const hubResults: Hub[] = await Promise.all(testResults.map((x) => x.hub));
+    const hubResults: Hub[] = await Promise.all(testResults.map((x) => x.hub.load()));
     // notice we are pulling the repo variable and using jest.spyOn with no issues
-    jest.spyOn(joinUserHubRepo, 'find').mockResolvedValueOnce(testResults);
+    jest.spyOn(joinUserHubRepo, 'find').mockResolvedValueOnce(testResults as any);
     expect(await service.memberOfHubs(testUserId)).toEqual(hubResults);
   });
 
@@ -152,8 +158,8 @@ describe('UserService', () => {
       lastName: testDetails.lastName,
       description: testDetails.description,
     } as User;
-    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
-    jest.spyOn(userRepo, 'save').mockResolvedValueOnce(expectedResult);
+    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser as any);
+    jest.spyOn(userRepo, 'persistAndFlush').mockImplementationOnce(() => Promise.resolve());
     // Act
     const result = await service.editUserDetails(userId, testDetails);
     // Assert
@@ -174,8 +180,8 @@ describe('UserService', () => {
       firstName: testUser.firstName,
       email: newEmail,
     } as User;
-    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
-    jest.spyOn(userRepo, 'save').mockResolvedValueOnce(expectedResult);
+    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser as any);
+    jest.spyOn(userRepo, 'persistAndFlush').mockImplementationOnce(() => Promise.resolve());
     // Act
     const result = await service.changeEmail(userId, newEmail);
     // Assert
@@ -194,14 +200,14 @@ describe('UserService', () => {
       id: userId,
       image: `https://x.com/${newImage}.png`,
     } as User;
-    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
+    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser as any);
     const deletePublicImageMock = jest
       .spyOn(fileService, 'delete')
       .mockImplementation(() => Promise.resolve());
     jest
       .spyOn(fileService, 'storeImageFromBase64')
       .mockResolvedValueOnce(expectedResult.image);
-    jest.spyOn(userRepo, 'save').mockResolvedValueOnce(expectedResult);
+    jest.spyOn(userRepo, 'persistAndFlush').mockImplementationOnce(() => Promise.resolve());
     // Act
     const result = await service.changeUserImage(userId, newImage);
     // Assert

@@ -1,5 +1,5 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Entity, IdentifiedReference, ManyToOne, Property } from '@mikro-orm/core';
+import { Field, ObjectType } from '@nestjs/graphql';
 import { Hub } from './hub.entity';
 import { User } from './user.entity';
 
@@ -9,49 +9,54 @@ export enum GeofenceEvent {
   EXITED = "exited"
 }
 
+ /* eslint-disable */ // needed for mikroorm default value & type which conflicts with typescript-eslint/no-unused-vars
 @ObjectType()
 @Entity()
 export class JoinUserHub {
-  @Field(() => ID)
-  @PrimaryColumn()
-  public userId: number;
-
-  @Field(() => ID)
-  @PrimaryColumn()
-  public hubId: number;
-
-  @Field(() => User)
-  @ManyToOne(() => User, (user) => user.hubsConnection, { onDelete: 'CASCADE' })
-  @JoinColumn()
-  public user: Promise<User>;
-
-  @Field(() => Hub)
-  @ManyToOne(() => Hub, (hub) => hub.usersConnection, {
-    onDelete: 'CASCADE',
-    orphanedRowAction: 'delete',
-  })
-  @JoinColumn()
-  public hub: Promise<Hub>;
-
-  @Field()
-  @Column()
-  public isOwner: boolean;
-
-  @Field()
-  @Column({ default: false })
-  public starred: boolean;
 
   /**
    * Exposed as a field resolver
    */
-  @Column({ default: false })
-  public isPresent: boolean;
+  @ManyToOne({
+    entity: () => User,
+    fieldName: 'userId',
+    onDelete: 'cascade', 
+    primary: true,
+    wrappedReference: true
+  })
+  public user!: IdentifiedReference<User>;
+
+  /**
+   * Exposed as a field resolver
+   */
+  @ManyToOne({ 
+    entity: () => Hub,
+    fieldName: 'hubId',
+    onDelete: 'cascade',
+    primary: true,
+    wrappedReference: true
+  })
+  public hub!: IdentifiedReference<Hub>;
+
+  @Field()
+  @Property({ fieldName: 'isOwner' })
+  public isOwner!: boolean;
+
+  @Field(() => Boolean)
+  @Property({ default: false })
+  public starred: boolean = false;
+
+  /**
+   * Exposed as a field resolver
+   */
+  @Property({ fieldName: 'isPresent', default: false })
+  public isPresent: boolean = false;
 
   @Field({ nullable: true, description: 'last update event for presence' })
-  @Column({ nullable: true })
-  public lastGeofenceEvent: string;
+  @Property({ fieldName: 'lastGeofenceEvent', nullable: true })
+  public lastGeofenceEvent?: string;
   
   @Field({ nullable: true, description: 'unix timestamp for the last time the presence state was updated' })
-  @Column({ nullable: true })
-  public lastUpdated: string;
+  @Property({ fieldName: 'lastUpdated', nullable: true })
+  public lastUpdated?: string;
 }

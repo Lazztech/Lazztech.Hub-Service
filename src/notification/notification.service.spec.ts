@@ -1,9 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { NotificationService } from './notification.service';
 import { ConfigService } from '@nestjs/config';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { User } from '../dal/entity/user.entity';
-import { Repository } from 'typeorm';
 import { PushNotificationDto } from './dto/pushNotification.dto';
 import { InAppNotificationDto } from './dto/inAppNotification.dto';
 import { InAppNotification } from '../dal/entity/inAppNotification.entity';
@@ -11,13 +9,15 @@ import { HttpService, HttpModule } from '@nestjs/common';
 import { of } from 'rxjs';
 import { UserDevice } from '../dal/entity/userDevice.entity';
 import { AxiosResponse } from 'axios';
+import { getRepositoryToken } from '@mikro-orm/nestjs';
+import { EntityRepository } from '@mikro-orm/core';
 
 describe('NotificationService', () => {
   let service: NotificationService;
-  let userRepo: Repository<User>;
-  let inAppNotificationRepo: Repository<InAppNotification>;
+  let userRepo: EntityRepository<User>;
+  let inAppNotificationRepo: EntityRepository<InAppNotification>;
   let httpService: HttpService;
-  let userDeviceRepo: Repository<UserDevice>;
+  let userDeviceRepo: EntityRepository<UserDevice>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -41,26 +41,26 @@ describe('NotificationService', () => {
         NotificationService,
         {
           provide: getRepositoryToken(User),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(InAppNotification),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
         {
           provide: getRepositoryToken(UserDevice),
-          useClass: Repository,
+          useClass: EntityRepository,
         },
       ],
     }).compile();
 
     service = module.get<NotificationService>(NotificationService);
-    userRepo = module.get<Repository<User>>(getRepositoryToken(User));
-    inAppNotificationRepo = module.get<Repository<InAppNotification>>(
+    userRepo = module.get<EntityRepository<User>>(getRepositoryToken(User));
+    inAppNotificationRepo = module.get<EntityRepository<InAppNotification>>(
       getRepositoryToken(InAppNotification),
     );
     httpService = module.get(HttpService);
-    userDeviceRepo = module.get<Repository<UserDevice>>(
+    userDeviceRepo = module.get<EntityRepository<UserDevice>>(
       getRepositoryToken(UserDevice),
     );
   });
@@ -75,15 +75,19 @@ describe('NotificationService', () => {
     const token = 'asdfasdf';
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce({
       id: userId,
-      userDevices: Promise.resolve([
-        {
-          fcmPushUserToken: 'otherToken',
-        },
-      ]),
-    } as User);
+      userDevices: {
+        loadItems: jest.fn().mockResolvedValueOnce([
+          {
+            user: { id: userId },
+            fcmPushUserToken: 'otherToken',
+          },
+        ] as any)
+      } as any,
+    } as any);
+    jest.spyOn(userDeviceRepo, 'create').mockImplementationOnce(value => value as any);
     const saveCall = jest
-      .spyOn(userDeviceRepo, 'save')
-      .mockResolvedValueOnce({} as UserDevice);
+      .spyOn(userDeviceRepo, 'persistAndFlush')
+      .mockImplementationOnce(() => Promise.resolve());
     // Act
     await service.addUserFcmNotificationToken(userId, token);
     // Assert
@@ -96,17 +100,17 @@ describe('NotificationService', () => {
     const userId = 1;
     const expectedResult = [
       {
-        userId,
+        user: { id: userId },
         text: 'test',
       },
       {
-        userId,
+        user: { id: userId },
         text: 'test',
       },
     ] as InAppNotification[];
     jest
       .spyOn(inAppNotificationRepo, 'findAndCount')
-      .mockResolvedValueOnce([expectedResult, expectedResult.length]);
+      .mockResolvedValueOnce([expectedResult as any, expectedResult.length]);
     // Act
     const [items, total] = await service.getInAppNotifications(userId);
     // Assert
@@ -123,14 +127,10 @@ describe('NotificationService', () => {
     } as InAppNotificationDto;
     jest
       .spyOn(inAppNotificationRepo, 'create')
-      .mockReturnValueOnce({ ...details, userId } as InAppNotification);
+      .mockReturnValueOnce({ ...details, user: { id: userId }} as any);
     const saveCall1 = jest
-      .spyOn(inAppNotificationRepo, 'save')
-      .mockResolvedValueOnce({
-        id: 1,
-        text: details.text,
-        date: details.date,
-      } as InAppNotification);
+      .spyOn(inAppNotificationRepo, 'persistAndFlush')
+      .mockImplementationOnce(() => Promise.resolve());
     // Act
     await service.addInAppNotificationForUser(userId, details);
     // Assert
@@ -142,11 +142,11 @@ describe('NotificationService', () => {
     const userId = 1;
     const inAppNotificationId = 1;
     jest.spyOn(inAppNotificationRepo, 'findOne').mockResolvedValueOnce({
-      userId,
-    } as InAppNotification);
+      user: { id: userId },
+    } as any);
     const removeCall = jest
-      .spyOn(inAppNotificationRepo, 'remove')
-      .mockResolvedValueOnce({} as InAppNotification);
+      .spyOn(inAppNotificationRepo, 'removeAndFlush')
+      .mockImplementationOnce(() => Promise.resolve());
     // Act
     await service.deleteInAppNotification(userId, inAppNotificationId);
     // Assert
@@ -158,18 +158,18 @@ describe('NotificationService', () => {
     const userId = 1;
     jest.spyOn(inAppNotificationRepo, 'find').mockResolvedValueOnce([
       {
-        userId,
+        user: { id: userId },
       },
       {
-        userId,
+        user: { id: userId },
       },
       {
-        userId,
+        user: { id: userId },
       },
-    ] as InAppNotification[]);
+    ] as any[]);
     const removeCall = jest
-      .spyOn(inAppNotificationRepo, 'remove')
-      .mockResolvedValueOnce({} as InAppNotification);
+      .spyOn(inAppNotificationRepo, 'removeAndFlush')
+      .mockImplementationOnce(() => Promise.resolve());
     // Act
     await service.deleteAllInAppNotifications(userId);
     // Assert
@@ -186,22 +186,24 @@ describe('NotificationService', () => {
     } as PushNotificationDto;
     const testUser = {
       id: userId,
-      userDevices: Promise.resolve([
-        {
-          id: 1,
-          fcmPushUserToken: 'token1',
-        },
-        {
-          id: 2,
-          fcmPushUserToken: 'token2',
-        },
-        {
-          id: 3,
-          fcmPushUserToken: 'token3',
-        },
-      ]),
+      userDevices: {
+        loadItems: jest.fn().mockResolvedValueOnce([
+          {
+            id: 1,
+            fcmPushUserToken: 'token1',
+          },
+          {
+            id: 2,
+            fcmPushUserToken: 'token2',
+          },
+          {
+            id: 3,
+            fcmPushUserToken: 'token3',
+          },
+        ] as any),
+      } as any
     } as User;
-    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser);
+    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser as any);
     const sendPushNotification = jest
       .spyOn(httpService, 'post')
       .mockImplementation(() => of({} as AxiosResponse<any>));

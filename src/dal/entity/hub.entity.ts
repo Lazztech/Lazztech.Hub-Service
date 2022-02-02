@@ -1,52 +1,59 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { JoinUserHub } from './joinUserHub.entity';
 import { MicroChat } from './microChat.entity';
 import { Invite } from './invite.entity';
 import { ShareableId } from './shareableId.entity'
+import { Collection, Entity, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';
 
+ /* eslint-disable */ // needed for mikroorm default value & type which conflicts with typescript-eslint/no-unused-vars
 @ObjectType()
 @Entity()
 export class Hub extends ShareableId {
   @Field(() => ID)
-  @PrimaryGeneratedColumn()
-  public id: number;
+  @PrimaryKey()
+  public id!: number;
 
   @Field()
-  @Column()
-  public name: string;
+  @Property()
+  public name!: string;
 
   @Field({ nullable: true })
-  @Column({ nullable: true })
-  public description: string;
+  @Property({ nullable: true })
+  public description?: string;
 
   @Field({ nullable: true })
-  @Column({ default: false })
-  public active: boolean;
+  @Property({ default: false })
+  public active: boolean = false;
 
   /**
    * Handled with a field resolver
    */
-  @Column({ nullable: true })
-  public image: string;
+  @Property({ nullable: true })
+  public image?: string;
 
   @Field({ nullable: true })
-  @Column({ type: 'float', nullable: true })
-  public latitude: number;
+  @Property({ type: 'float', nullable: true })
+  public latitude?: number;
 
   @Field({ nullable: true })
-  @Column({ type: 'float', nullable: true })
-  public longitude: number;
+  @Property({ type: 'float', nullable: true })
+  public longitude?: number;
 
-  @Field(() => [JoinUserHub], { nullable: true })
+  /**
+   * Handled with a field resolver
+   */
   @OneToMany(() => JoinUserHub, (joinUserHub) => joinUserHub.hub)
-  public usersConnection: Promise<JoinUserHub[]>;
+  public usersConnection = new Collection<JoinUserHub>(this);
 
-  @Field(() => [MicroChat], { nullable: true })
+  /**
+   * Handled with a field resolver
+   */
   @OneToMany(() => MicroChat, (microChat) => microChat.hub)
-  public microChats: Promise<MicroChat[]>;
+  public microChats = new Collection<MicroChat>(this);
 
-  @Field(() => [Invite], { nullable: true })
+  /**
+   * Handled with a field resolver
+   */
   @OneToMany(() => Invite, (invite) => invite.hub)
-  public invites: Promise<Invite[]>;
+  public invites = new Collection<Invite>(this);
 }

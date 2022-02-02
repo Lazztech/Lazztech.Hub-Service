@@ -1,12 +1,13 @@
-import { Logger, Module } from '@nestjs/common';
+import { Connection, IDatabaseDriver, MikroORM } from '@mikro-orm/core';
+import { MikroOrmModule, MikroOrmModuleOptions } from '@mikro-orm/nestjs';
+import { Logger, Module, OnModuleInit } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
-import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { PrometheusModule } from '@willsoto/nestjs-prometheus';
+import * as Joi from 'joi';
 import { S3Module, S3ModuleOptions } from 'nestjs-s3';
-import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
-import { SqliteConnectionOptions } from 'typeorm/driver/sqlite/SqliteConnectionOptions';
+import * as path from 'path';
 import { AuthModule } from './auth/auth.module';
-import { User } from './dal/entity/user.entity';
 import { FieldResolversModule } from './dal/field-resolvers/field-resolvers.module';
 import { EmailModule } from './email/email.module';
 import { FileModule } from './file/file.module';
@@ -14,9 +15,6 @@ import { HealthModule } from './health/health.module';
 import { HubModule } from './hub/hub.module';
 import { NotificationModule } from './notification/notification.module';
 import { UserModule } from './user/user.module';
-import * as path from 'path';
-import { PrometheusModule } from '@willsoto/nestjs-prometheus';
-import * as Joi from 'joi';
 
 @Module({
   imports: [
@@ -99,37 +97,45 @@ import * as Joi from 'joi';
       isGlobal: true,
     }),
     PrometheusModule.register(),
-    TypeOrmModule.forRootAsync({
+    MikroOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (
         configService: ConfigService,
-      ): Promise<TypeOrmModuleOptions> => {
+      ) => {
         const commonSettings = {
-          logging: true,
-          migrationsRun: true,
-          migrationsTransactionMode: 'each',
-          synchronize: false,
+          logger: (message) => console.log(message),
+          migrations: {
+            pattern: /^.*\.(js|ts)$/, // ends with .js or .ts
+            transactional: true,
+            disableForeignKeys: false
+          },
           entities: [__dirname + '/dal/entity/**/*.*.*'],
-        };
-        const sqliteConfig = {
-          ...commonSettings,
-          migrations: [__dirname + '/dal/migrations/sqlite/*.*'],
-          type: 'sqlite',
-          database: configService.get(
-            'DATABASE_SCHEMA',
-            path.join('data', 'sqlite3.db'),
-          ),
-        } as SqliteConnectionOptions;
+        }  as MikroOrmModuleOptions<IDatabaseDriver<Connection>>;
         switch (configService.get('DATABASE_TYPE', 'sqlite')) {
           case 'sqlite':
             AppModule.logger.log(
               `Using sqlite db: ${path.join(
                 process.cwd(),
-                sqliteConfig.database,
+                configService.get(
+                  'DATABASE_SCHEMA',
+                  path.join('data', 'sqlite3.db'),
+                )
               )}`,
             );
-            return sqliteConfig;
+            return {
+              ...commonSettings,
+              migrations: {
+                ...commonSettings.migrations,
+                path: __dirname + '/dal/migrations/sqlite/',
+              },
+              type: 'sqlite',
+              baseDir: __dirname,
+              dbName: configService.get(
+                'DATABASE_SCHEMA',
+                path.join('data', 'sqlite3.db'),
+              ),
+            } as MikroOrmModuleOptions<IDatabaseDriver<Connection>>;
           case 'postgres':
             AppModule.logger.log(
               `Using postgres db: ${configService.get(
@@ -139,29 +145,33 @@ import * as Joi from 'joi';
             );
             return {
               ...commonSettings,
-              migrations: [__dirname + '/dal/migrations/postgres/*.*'],
-              type: 'postgres' as const,
-              database: configService.get('DATABASE_SCHEMA', 'postgres'),
+              migrations: {
+                ...commonSettings.migrations,
+                path: __dirname + '/dal/migrations/postgres/'
+              },
+              type: 'postgresql',
+              dbName: configService.get('DATABASE_SCHEMA', 'postgres'),
               host: configService.get('DATABASE_HOST', 'localhost'),
               port: configService.get<number>('DATABASE_PORT', 5432),
-              username: configService.get('DATABASE_USER', 'postgres'),
+              user: configService.get('DATABASE_USER', 'postgres'),
               password: configService.get('DATABASE_PASS', 'postgres'),
-              extra: {
-                ssl: configService.get('DATABASE_SSL')
+              driverOptions: {
+                connection: {
+                  ssl: configService.get('DATABASE_SSL')
                   ? {
                       rejectUnauthorized: false,
                     }
                   : undefined,
+                }
               },
-            } as PostgresConnectionOptions;
+            } as MikroOrmModuleOptions<IDatabaseDriver<Connection>>;
           default:
             throw new Error(
               'Invalid database type selected. It must be either sqlite (default) or postgres.',
             );
         }
       },
-    } as TypeOrmModuleOptions),
-    TypeOrmModule.forFeature([User]),
+    }),
     S3Module.forRootAsync({
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
@@ -203,6 +213,12 @@ import * as Joi from 'joi';
     EmailModule,
   ],
 })
-export class AppModule {
+export class AppModule implements OnModuleInit {
   public static logger = new Logger(AppModule.name);
+
+  constructor(private readonly orm: MikroORM) {}
+
+  async onModuleInit(): Promise<void> {
+    await this.orm.getMigrator().up();
+  }
 }
