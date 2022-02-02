@@ -237,6 +237,30 @@ describe('AppController (e2e)', () => {
     return result;
   });
 
+  it('/graphql dwellHubGeofence', async () => {
+    const result = await request(app.getHttpServer())
+      .post('/graphql')
+      .set({ authorization: `Bearer ${token}` })
+      .send({
+        operationName: null,
+        query: `mutation dwellHubGeofence($hubId: ID!) {
+          dwellHubGeofence(hubId: $hubId) {
+          userId
+          hubId
+          isPresent
+        }
+      }`,
+        variables: {
+          hubId
+        },
+      })
+      .expect(200);
+
+    expect(result.body?.data?.dwellHubGeofence).toBeDefined();
+    expect(result.body?.data?.dwellHubGeofence?.isPresent).toBe(true);
+    return result;
+  });
+
   it('/graphql exitedHubGeofence', async () => {
     const result = await request(app.getHttpServer())
       .post('/graphql')
