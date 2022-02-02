@@ -4,6 +4,7 @@ import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 import { base64_encoded_1x1px_jpeg_for_testing } from './e2e-helpers';
 
+ /* eslint-disable */
 describe('AppController (e2e)', () => {
   let app: INestApplication;
   let token: string;
