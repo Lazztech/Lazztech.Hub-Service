@@ -242,6 +242,32 @@ describe('AppController (e2e)', () => {
     return result;
   });
 
+  it('/graphql usersPeople', async () => {
+    const result = await request(app.getHttpServer())
+      .post('/graphql')
+      .set({ authorization: `Bearer ${token}` })
+      .send({
+        operationName: null,
+        query: `query usersPeople {
+          usersPeople {
+              id
+              firstName
+              lastName
+              email
+              description
+              image
+          }
+      }`,
+        variables: {
+          hubId
+        },
+      })
+      .expect(200);
+
+    expect(result.body?.data?.usersPeople).toBeDefined();
+    return result;
+  });
+
   it('/graphql activateHub', async () => {
     const result = await request(app.getHttpServer())
       .post('/graphql')
