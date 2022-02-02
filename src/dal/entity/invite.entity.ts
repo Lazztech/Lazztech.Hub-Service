@@ -6,7 +6,7 @@ import { User } from './user.entity';
  /* eslint-disable */ // needed for mikroorm default value & type which conflicts with typescript-eslint/no-unused-vars
 @ObjectType()
 @Entity()
-@Unique({ name: 'IDX_c8772f9bcb1e9f4faaa9c8873d', properties: ['inviter', 'invitee', 'hub'] })
+@Unique({ properties: ['inviter', 'invitee', 'hub'] })
 export class Invite {
   @Field(() => ID)
   @PrimaryKey()

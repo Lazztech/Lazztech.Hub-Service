@@ -33,7 +33,7 @@ export class InAppNotification {
 
   @ManyToOne({
     entity: () => User,
-    onDelete: 'cascade',
+    onDelete: 'CASCADE',
     joinColumn: 'userId',
     wrappedReference: true
   })

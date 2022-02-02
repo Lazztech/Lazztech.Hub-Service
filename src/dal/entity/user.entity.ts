@@ -58,8 +58,7 @@ export class User extends ShareableId{
   @OneToOne({
     cascade: [Cascade.ALL],
     fieldName: 'passwordResetId',
-    nullable: true,
-    unique: 'REL_5d250ff0a3f3eba15ff2db819d'
+    nullable: true
   })
   public passwordReset: PasswordReset;
 
