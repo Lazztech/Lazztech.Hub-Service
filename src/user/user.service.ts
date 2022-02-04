@@ -87,4 +87,10 @@ export class UserService {
     await this.userRepository.persistAndFlush(user);
     return user;
   }
+
+  public async updateLastOnline(user: User) {
+    this.logger.log(this.updateLastOnline.name);
+    user.lastOnline = Date.now().toString();
+    this.userRepository.persistAndFlush(user);
+  }
 }

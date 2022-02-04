@@ -46,6 +46,10 @@ export class User extends ShareableId{
   @Property()
   public password!: string;
 
+  @Field({ nullable: true })
+  @Property({ nullable: true })
+  public lastOnline?: string;
+
   @OneToMany(
     () => InAppNotification,
     (inAppNotifications) => inAppNotifications.user,
