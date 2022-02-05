@@ -2,12 +2,14 @@ const mikroOrmSqliteConfig = {
   type: 'sqlite',
   contextName: 'sqliteConfig',
   name: 'sqlite',
-  dbName: __dirname + '/data/sqlite3.db',
-  entities: ['src/dal/entity/**/*.*.*'],
+  dbName: './data/sqlite3.db',
+  entities: ['./src/dal/entity/**/*.*.*'],
+  entitiesTs: ['./dist/dal/entity/**/*.*.*'],
   migrations: {
-    path: 'src/dal/migrations/sqlite',
-    pattern: /^[\w-]+\d+|\d\.ts$/,
+    path: './dist/dal/migrations/sqlite',
+    pathTs: './src/dal/migrations/sqlite',
     transactional: true,
+    snapshot: false // see https://github.com/mikro-orm/mikro-orm/issues/2710
   },
   debug: true,
 };

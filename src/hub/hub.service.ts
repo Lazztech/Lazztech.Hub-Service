@@ -100,7 +100,7 @@ export class HubService {
       user: userId,
       hub: hub.id,
       isOwner: true,
-    });
+    } as any);
     await this.joinUserHubRepository.persistAndFlush(joinUserHub);
     return joinUserHub;
   }

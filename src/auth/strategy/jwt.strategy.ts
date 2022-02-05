@@ -28,6 +28,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       this.logger.error('unable to verify access token.');
       throw new UnauthorizedException();
     } else {
+      await this.userService.updateLastOnline(user);
       this.logger.log('verified user');
     }
 

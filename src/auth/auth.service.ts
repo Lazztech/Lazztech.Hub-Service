@@ -41,13 +41,13 @@ export class AuthService {
     const hashedPassword = await bcrypt.hash(password, 12);
 
     // TODO THIS SECTION SHOULD BE AN ACID TRANSACTION
-    const user = await this.userRepository.create({
+    const user = this.userRepository.create({
       firstName,
       lastName,
       birthdate,
       email,
       password: hashedPassword,
-    });
+    } as any);
     await this.userRepository.persistAndFlush(user);
 
     await this.notificationService.addInAppNotificationForUser(user.id, {

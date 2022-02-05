@@ -46,6 +46,10 @@ export class User extends ShareableId{
   @Property()
   public password!: string;
 
+  @Field({ nullable: true, description: 'unix timestamp for the last time the user was successfully authenticated' })
+  @Property({ nullable: true })
+  public lastOnline?: string;
+
   @OneToMany(
     () => InAppNotification,
     (inAppNotifications) => inAppNotifications.user,
