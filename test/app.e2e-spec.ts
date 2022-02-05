@@ -12,6 +12,8 @@ describe('AppController (e2e)', () => {
   let password = "Password123";
   let userId;
   let hubId;
+  let lastOnline;
+  let lastUpdated;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -87,6 +89,7 @@ describe('AppController (e2e)', () => {
             image
             email
             birthdate
+            lastOnline
             userDevices {
               id
               fcmPushUserToken
@@ -97,10 +100,14 @@ describe('AppController (e2e)', () => {
       })
       .expect(200);
     
-    expect(result.body?.data?.me?.id).toBeDefined();
     userId = result.body?.data?.me?.id;
+    expect(userId).toBeDefined();
+    
+    lastOnline = result.body?.data?.me?.lastOnline;
+    expect(lastOnline).toBeDefined();
+    
 
-    expect(result.body?.data?.me).toEqual({
+    expect(result.body?.data?.me).toMatchObject({
       id: userId,
       firstName: 'test',
       lastName: 'test',
