@@ -22,9 +22,12 @@ $ nvm install
 $ nvm use
 # install node dependencies
 $ npm install
+
+# if you run into an issue installing sharp on apple M1 see the link below:
+# https://github.com/lovell/sharp/issues/2460#issuecomment-751491241 
 ```
 
-```bash
+<!-- ```bash
 # Apple M1 support & troubleshooting resources: 
 # https://github.com/nvm-sh/nvm#macos-troubleshooting
 # https://www.reddit.com/r/node/comments/lp9xlk/mac_mini_m1_issues_with_node_js_15/
@@ -48,7 +51,7 @@ $ node -p process.arch
 x64
 # install node dependencies
 $ npm install
-```
+``` -->
 
 ## Running the app
 

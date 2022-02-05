@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "engines": {
-    "node": "15.x"
+    "node": "16.x"
   },
   "scripts": {
     "prebuild": "rimraf dist",
@@ -102,7 +102,7 @@
     "@apollo/gateway": "^0.35.1",
     "@mikro-orm/cli": "^5.0.0-rc.2",
     "@mikro-orm/entity-generator": "^5.0.0-rc.2",
-    "@nestjs/cli": "^8.1.0",
+    "@nestjs/cli": "^8.2.0",
     "@nestjs/schematics": "^8.0.2",
     "@nestjs/testing": "^8.0.5",
     "@types/cron": "^1.7.3",
