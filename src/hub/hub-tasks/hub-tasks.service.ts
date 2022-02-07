@@ -14,7 +14,7 @@ export class HubTasksService {
         private hubGeofenceService: HubGeofenceService,
     ) {}
 
-    @Cron(CronExpression.EVERY_2_HOURS)
+    @Cron(CronExpression.EVERY_10_SECONDS)
     async checkoutStalePresentUsers() {
         this.logger.log(this.checkoutStalePresentUsers.name);
         const em = this.orm.em.fork();
@@ -22,7 +22,7 @@ export class HubTasksService {
         const userHubs = await joinUserHubRepository.find({ isPresent: true });
         for (const userHub of userHubs) {
             // get hours diff
-            const date1 = new Date(userHub?.lastUpdated || null);
+            const date1 = new Date(Number(userHub?.lastUpdated) || null);
             const date2 = new Date();
             const diff = Math.abs(date1.getTime() - date2.getTime()) / 3600000;
 
