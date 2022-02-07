@@ -105,6 +105,7 @@ import { UserModule } from './user/user.module';
       ) => {
         const commonSettings = {
           logger: (message) => console.log(message),
+          allowGlobalContext: true,
           migrations: {
             pattern: /^.*\.(js|ts)$/, // ends with .js or .ts
             transactional: true,

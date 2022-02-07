@@ -21,7 +21,7 @@ export class HubTasksService {
         const userHubs = await this.joinUserHubRepository.find({ isPresent: true });
         for (const userHub of userHubs) {
             // get hours diff
-            const date1 = new Date(userHub?.lastUpdated || null);
+            const date1 = new Date(Number(userHub?.lastUpdated) || null);
             const date2 = new Date();
             const diff = Math.abs(date1.getTime() - date2.getTime()) / 3600000;
 
