@@ -1,4 +1,4 @@
-import { EntityRepository } from '@mikro-orm/core';
+import { EntityRepository, MikroORM } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
@@ -10,15 +10,16 @@ export class HubTasksService {
     private readonly logger = new Logger(HubTasksService.name);
 
     constructor(
-        @InjectRepository(JoinUserHub)
-        private joinUserHubRepository: EntityRepository<JoinUserHub>,
+        private readonly orm: MikroORM,
         private hubGeofenceService: HubGeofenceService,
     ) {}
 
     @Cron(CronExpression.EVERY_2_HOURS)
     async checkoutStalePresentUsers() {
         this.logger.log(this.checkoutStalePresentUsers.name);
-        const userHubs = await this.joinUserHubRepository.find({ isPresent: true });
+        const em = this.orm.em.fork();
+        const joinUserHubRepository = em.getRepository(JoinUserHub);
+        const userHubs = await joinUserHubRepository.find({ isPresent: true });
         for (const userHub of userHubs) {
             // get hours diff
             const date1 = new Date(userHub?.lastUpdated || null);
