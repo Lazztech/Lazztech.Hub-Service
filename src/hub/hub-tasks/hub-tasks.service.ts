@@ -25,9 +25,9 @@ export class HubTasksService {
             const date2 = new Date();
             const diff = Math.abs(date1.getTime() - date2.getTime()) / 3600000;
 
-            // check if last update was over 2 hours ago
-            if (diff > 12) {
-                // check out user if there's been no from within 2 hours
+            // check hours elapsed sinse last updated
+            if (diff > 48) {
+                // check out user if there's no updates within the desired elapsed time
                 await this.hubGeofenceService.exitedHubGeofence(userHub.user.id, userHub.hub.id);
                 this.logger.log(`checked out user ${userHub.user.id} from hub ${userHub.hub.id}`);
             }
