@@ -33,17 +33,24 @@ export class HubGeofenceService {
       );
     }
 
-    hubRelationship.isPresent = true;
-    hubRelationship. lastUpdated = Date.now().toString();
-    hubRelationship. lastGeofenceEvent = GeofenceEvent.ENTERED;
-    await this.joinUserHubRepository.persistAndFlush(hubRelationship);
-
-    const hub = await hubRelationship.hub.load();
-    if (hub.active) {
-      await this.notifyMembersOfArrival(userId, hubId);
+    if (hubRelationship.isPresent) {
+      hubRelationship.lastUpdated = Date.now().toString();
+      hubRelationship.lastGeofenceEvent = GeofenceEvent.ENTERED;
+      await this.joinUserHubRepository.persistAndFlush(hubRelationship);
+      return hubRelationship;
+    } else {
+      hubRelationship.isPresent = true;
+      hubRelationship.lastUpdated = Date.now().toString();
+      hubRelationship.lastGeofenceEvent = GeofenceEvent.ENTERED;
+      await this.joinUserHubRepository.persistAndFlush(hubRelationship);
+  
+      const hub = await hubRelationship.hub.load();
+      if (hub.active) {
+        await this.notifyMembersOfArrival(userId, hubId);
+      }
+  
+      return hubRelationship;
     }
-
-    return hubRelationship;
   }
 
   async dwellHubGeofence(userId: any, hubId: number) {
@@ -59,12 +66,18 @@ export class HubGeofenceService {
       );
     }
 
-    hubRelationship.isPresent = true;
-    hubRelationship.lastUpdated = Date.now().toString();
-    hubRelationship.lastGeofenceEvent = GeofenceEvent.DWELL;
-    await this.joinUserHubRepository.persistAndFlush(hubRelationship);
-
-    return hubRelationship;
+    if (hubRelationship.isPresent) {
+      hubRelationship.lastUpdated = Date.now().toString();
+      hubRelationship.lastGeofenceEvent = GeofenceEvent.DWELL;
+      await this.joinUserHubRepository.persistAndFlush(hubRelationship);
+    } else {
+      hubRelationship.isPresent = true;
+      hubRelationship.lastUpdated = Date.now().toString();
+      hubRelationship.lastGeofenceEvent = GeofenceEvent.DWELL;
+      await this.joinUserHubRepository.persistAndFlush(hubRelationship);
+  
+      return hubRelationship;
+    }
   }
 
   async exitedHubGeofence(userId: any, hubId: number) {
@@ -80,17 +93,23 @@ export class HubGeofenceService {
       );
     }
 
-    hubRelationship.isPresent = false;
-    hubRelationship.lastUpdated = Date.now().toString();
-    hubRelationship.lastGeofenceEvent = GeofenceEvent.EXITED;
-    await this.joinUserHubRepository.persistAndFlush(hubRelationship);
-
-    const hub = await hubRelationship.hub.load();
-    if (hub.active) {
-      await this.notifyMembersOfExit(userId, hubId);
+    if (!hubRelationship.isPresent) {
+      hubRelationship.lastUpdated = Date.now().toString();
+      hubRelationship.lastGeofenceEvent = GeofenceEvent.EXITED;
+      await this.joinUserHubRepository.persistAndFlush(hubRelationship);
+    } else {
+      hubRelationship.isPresent = false;
+      hubRelationship.lastUpdated = Date.now().toString();
+      hubRelationship.lastGeofenceEvent = GeofenceEvent.EXITED;
+      await this.joinUserHubRepository.persistAndFlush(hubRelationship);
+  
+      const hub = await hubRelationship.hub.load();
+      if (hub.active) {
+        await this.notifyMembersOfExit(userId, hubId);
+      }
+  
+      return hubRelationship;
     }
-
-    return hubRelationship;
   }
 
   async notifyMembersOfArrival(userId: any, hubId: number) {
