@@ -69,11 +69,37 @@ describe('HubGeofenceService', () => {
     expect(service).toBeDefined();
   });
 
-  it('should return for enteredHubGeofence', async () => {
+  //enteredHubGeofence
+
+  it('should throw for enteredHubGeofence when hubRelationship doesnt exist', async () => {
+    // Arrange
+    const userId = 1;
+    const hubId = 1;
+    const hubRelationshipTest = undefined;
+    jest
+      .spyOn(joinUserHubRepository, 'findOne')
+      .mockResolvedValueOnce(hubRelationshipTest as any);
+
+    const notifyMembersSpy = jest
+      .spyOn(service, 'notifyMembersOfArrival')
+      .mockResolvedValue();
+
+    const persistAndFlushCall = jest
+      .spyOn(joinUserHubRepository, 'persistAndFlush')
+      .mockImplementationOnce(() => Promise.resolve());
+
+    // Act & Assert
+    await expect(service.enteredHubGeofence(userId, hubId)).rejects.toThrow();
+    expect(persistAndFlushCall).not.toHaveBeenCalled();
+    expect(notifyMembersSpy).not.toHaveBeenCalled();
+  });
+
+  it('should return for enteredHubGeofence user was not present & hub is active', async () => {
     // Arrange
     const userId = 1;
     const hubId = 1;
     const hubRelationshipTest = {
+      isPresent: false,
       user: { id: userId },
       hub: {
         id: hubId,
@@ -102,11 +128,105 @@ describe('HubGeofenceService', () => {
     expect(notifyMembersSpy).toHaveBeenCalled();
   });
 
-  it('should return for dwellHubGeofence', async () => {
+  it('should return for enteredHubGeofence user was not present & hub is not active', async () => {
     // Arrange
     const userId = 1;
     const hubId = 1;
     const hubRelationshipTest = {
+      isPresent: false,
+      user: { id: userId },
+      hub: {
+        id: hubId,
+        load: jest.fn().mockResolvedValueOnce({
+          active: false,
+        } as Hub) as any
+      },
+    } as JoinUserHub;
+    jest
+      .spyOn(joinUserHubRepository, 'findOne')
+      .mockResolvedValueOnce(hubRelationshipTest as any);
+
+    const notifyMembersSpy = jest
+      .spyOn(service, 'notifyMembersOfArrival')
+      .mockResolvedValue();
+
+    const persistAndFlushCall = jest
+      .spyOn(joinUserHubRepository, 'persistAndFlush')
+      .mockImplementationOnce(() => Promise.resolve());
+
+    // Act
+    await service.enteredHubGeofence(userId, hubId);
+
+    // Assert
+    expect(persistAndFlushCall).toHaveBeenCalled();
+    expect(notifyMembersSpy).not.toHaveBeenCalled();
+  });
+
+  it('should return for enteredHubGeofence user was present', async () => {
+    // Arrange
+    const userId = 1;
+    const hubId = 1;
+    const hubRelationshipTest = {
+      isPresent: true,
+      user: { id: userId },
+      hub: {
+        id: hubId,
+        load: jest.fn().mockResolvedValueOnce({
+          active: true,
+        } as Hub) as any
+      },
+    } as JoinUserHub;
+    jest
+      .spyOn(joinUserHubRepository, 'findOne')
+      .mockResolvedValueOnce(hubRelationshipTest as any);
+
+    const notifyMembersSpy = jest
+      .spyOn(service, 'notifyMembersOfArrival')
+      .mockResolvedValue();
+
+    const persistAndFlushCall = jest
+      .spyOn(joinUserHubRepository, 'persistAndFlush')
+      .mockImplementationOnce(() => Promise.resolve());
+
+    // Act
+    await service.enteredHubGeofence(userId, hubId);
+
+    // Assert
+    expect(persistAndFlushCall).toHaveBeenCalled();
+    expect(notifyMembersSpy).not.toHaveBeenCalled();
+  });
+
+  // dwellHubGeofence
+
+  it('should return for dwellHubGeofence when hubRelationship doesnt exist', async () => {
+    // Arrange
+    const userId = 1;
+    const hubId = 1;
+    const hubRelationshipTest = undefined;
+    jest
+      .spyOn(joinUserHubRepository, 'findOne')
+      .mockResolvedValueOnce(hubRelationshipTest as any);
+
+    const notifyMembersSpy = jest
+      .spyOn(service, 'notifyMembersOfArrival')
+      .mockResolvedValue();
+
+    const persistAndFlushCall = jest
+      .spyOn(joinUserHubRepository, 'persistAndFlush')
+      .mockImplementationOnce(() => Promise.resolve());
+
+    // Act & Assert
+    await expect(service.dwellHubGeofence(userId, hubId)).rejects.toThrow();
+    expect(persistAndFlushCall).not.toHaveBeenCalled();
+    expect(notifyMembersSpy).not.toHaveBeenCalled();
+  });
+
+  it('should return for dwellHubGeofence user was not present', async () => {
+    // Arrange
+    const userId = 1;
+    const hubId = 1;
+    const hubRelationshipTest = {
+      isPresent: false,
       user: { id: userId },
       hub: {
         id: hubId,
@@ -133,10 +253,67 @@ describe('HubGeofenceService', () => {
     expect(notifyMembersSpy).not.toHaveBeenCalled();
   });
 
-  it('should return for exitedHubGeofence', async () => {
+  it('should return for dwellHubGeofence user was present', async () => {
+    // Arrange
     const userId = 1;
     const hubId = 1;
     const hubRelationshipTest = {
+      isPresent: true,
+      user: { id: userId },
+      hub: {
+        id: hubId,
+        load: jest.fn().mockResolvedValueOnce({
+          active: true,
+        } as Hub) as any
+      },
+    } as JoinUserHub;
+    jest
+      .spyOn(joinUserHubRepository, 'findOne')
+      .mockResolvedValueOnce(hubRelationshipTest as any);
+
+    const notifyMembersSpy = jest
+      .spyOn(service, 'notifyMembersOfArrival')
+      .mockResolvedValue();
+
+    const persistAndFlushCall = jest
+      .spyOn(joinUserHubRepository, 'persistAndFlush')
+      .mockImplementationOnce(() => Promise.resolve());
+    // Act
+    await service.dwellHubGeofence(userId, hubId);
+    // Assert
+    expect(persistAndFlushCall).toHaveBeenCalled();
+    expect(notifyMembersSpy).not.toHaveBeenCalled();
+  });
+
+  // exitedHubGeofence
+
+  it('should return for exitedHubGeofence user was not present', async () => {
+    const userId = 1;
+    const hubId = 1;
+    const hubRelationshipTest = undefined;
+    jest
+      .spyOn(joinUserHubRepository, 'findOne')
+      .mockResolvedValueOnce(hubRelationshipTest as any);
+
+    const notifyMembersSpy = jest
+      .spyOn(service, 'notifyMembersOfExit')
+      .mockResolvedValue();
+
+    const persistAndFlushCall = jest
+      .spyOn(joinUserHubRepository, 'persistAndFlush')
+      .mockImplementationOnce(() => Promise.resolve());
+
+    // Act & Assert
+    await expect(service.exitedHubGeofence(userId, hubId)).rejects.toThrow();
+    expect(persistAndFlushCall).not.toHaveBeenCalled();
+    expect(notifyMembersSpy).not.toHaveBeenCalled();
+  });
+
+  it('should return for exitedHubGeofence user was not present & hub is active', async () => {
+    const userId = 1;
+    const hubId = 1;
+    const hubRelationshipTest = {
+      isPresent: true,
       user: { id: userId },
       hub: {
         id: hubId,
@@ -161,5 +338,67 @@ describe('HubGeofenceService', () => {
     // Assert
     expect(persistAndFlushCall).toHaveBeenCalled();
     expect(notifyMembersSpy).toHaveBeenCalled();
+  });
+
+  it('should return for exitedHubGeofence user was not present & hub is not active', async () => {
+    const userId = 1;
+    const hubId = 1;
+    const hubRelationshipTest = {
+      isPresent: true,
+      user: { id: userId },
+      hub: {
+        id: hubId,
+        load: jest.fn().mockResolvedValueOnce({
+          active: false,
+        } as Hub) as any
+      },
+    } as JoinUserHub;
+    jest
+      .spyOn(joinUserHubRepository, 'findOne')
+      .mockResolvedValueOnce(hubRelationshipTest as any);
+
+    const notifyMembersSpy = jest
+      .spyOn(service, 'notifyMembersOfExit')
+      .mockResolvedValue();
+
+    const persistAndFlushCall = jest
+      .spyOn(joinUserHubRepository, 'persistAndFlush')
+      .mockImplementationOnce(() => Promise.resolve());
+    // Act
+    await service.exitedHubGeofence(userId, hubId);
+    // Assert
+    expect(persistAndFlushCall).toHaveBeenCalled();
+    expect(notifyMembersSpy).not.toHaveBeenCalled();
+  });
+
+  it('should return for exitedHubGeofence user was present', async () => {
+    const userId = 1;
+    const hubId = 1;
+    const hubRelationshipTest = {
+      isPresent: false,
+      user: { id: userId },
+      hub: {
+        id: hubId,
+        load: jest.fn().mockResolvedValueOnce({
+          active: true,
+        } as Hub) as any
+      },
+    } as JoinUserHub;
+    jest
+      .spyOn(joinUserHubRepository, 'findOne')
+      .mockResolvedValueOnce(hubRelationshipTest as any);
+
+    const notifyMembersSpy = jest
+      .spyOn(service, 'notifyMembersOfExit')
+      .mockResolvedValue();
+
+    const persistAndFlushCall = jest
+      .spyOn(joinUserHubRepository, 'persistAndFlush')
+      .mockImplementationOnce(() => Promise.resolve());
+    // Act
+    await service.exitedHubGeofence(userId, hubId);
+    // Assert
+    expect(persistAndFlushCall).toHaveBeenCalled();
+    expect(notifyMembersSpy).not.toHaveBeenCalled();
   });
 });

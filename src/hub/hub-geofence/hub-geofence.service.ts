@@ -26,23 +26,20 @@ export class HubGeofenceService {
       user: userId,
       hub: hubId,
     });
+    this.throwIfNotDefined(hubRelationship, userId, hubId);
 
-    if (!hubRelationship) {
-      throw Error(
-        `no corresponding hub relationship found for userId: ${userId} & hubId: ${hubId}`,
-      );
+    hubRelationship.lastUpdated = Date.now().toString();
+    hubRelationship.lastGeofenceEvent = GeofenceEvent.ENTERED;
+
+    if (!hubRelationship.isPresent) {
+      hubRelationship.isPresent = true;  
+      const hub = await hubRelationship.hub.load();
+      if (hub.active) {
+        await this.notifyMembersOfArrival(userId, hubId);
+      }
     }
 
-    hubRelationship.isPresent = true;
-    hubRelationship. lastUpdated = Date.now().toString();
-    hubRelationship. lastGeofenceEvent = GeofenceEvent.ENTERED;
     await this.joinUserHubRepository.persistAndFlush(hubRelationship);
-
-    const hub = await hubRelationship.hub.load();
-    if (hub.active) {
-      await this.notifyMembersOfArrival(userId, hubId);
-    }
-
     return hubRelationship;
   }
 
@@ -52,18 +49,16 @@ export class HubGeofenceService {
       user: userId,
       hub: hubId,
     });
+    this.throwIfNotDefined(hubRelationship, userId, hubId);
 
-    if (!hubRelationship) {
-      throw Error(
-        `no corresponding hub relationship found for userId: ${userId} & hubId: ${hubId}`,
-      );
-    }
-
-    hubRelationship.isPresent = true;
     hubRelationship.lastUpdated = Date.now().toString();
     hubRelationship.lastGeofenceEvent = GeofenceEvent.DWELL;
-    await this.joinUserHubRepository.persistAndFlush(hubRelationship);
 
+    if (!hubRelationship.isPresent) {
+      hubRelationship.isPresent = true;
+    }
+
+    await this.joinUserHubRepository.persistAndFlush(hubRelationship);
     return hubRelationship;
   }
 
@@ -73,24 +68,29 @@ export class HubGeofenceService {
       user: userId,
       hub: hubId,
     });
+    this.throwIfNotDefined(hubRelationship, userId, hubId);
 
+    hubRelationship.lastUpdated = Date.now().toString();
+    hubRelationship.lastGeofenceEvent = GeofenceEvent.EXITED;
+
+    if (hubRelationship.isPresent) {
+      hubRelationship.isPresent = false;
+      const hub = await hubRelationship.hub.load();
+      if (hub.active) {
+        await this.notifyMembersOfExit(userId, hubId);
+      }
+    }
+
+    await this.joinUserHubRepository.persistAndFlush(hubRelationship);
+    return hubRelationship;
+  }
+
+  private throwIfNotDefined(hubRelationship: JoinUserHub, userId: any, hubId: any) {
     if (!hubRelationship) {
       throw Error(
         `no corresponding hub relationship found for userId: ${userId} & hubId: ${hubId}`,
       );
     }
-
-    hubRelationship.isPresent = false;
-    hubRelationship.lastUpdated = Date.now().toString();
-    hubRelationship.lastGeofenceEvent = GeofenceEvent.EXITED;
-    await this.joinUserHubRepository.persistAndFlush(hubRelationship);
-
-    const hub = await hubRelationship.hub.load();
-    if (hub.active) {
-      await this.notifyMembersOfExit(userId, hubId);
-    }
-
-    return hubRelationship;
   }
 
   async notifyMembersOfArrival(userId: any, hubId: number) {
