@@ -74,6 +74,7 @@ describe('HubGeofenceService', () => {
     const userId = 1;
     const hubId = 1;
     const hubRelationshipTest = {
+      isPresent: false,
       user: { id: userId },
       hub: {
         id: hubId,
@@ -107,6 +108,7 @@ describe('HubGeofenceService', () => {
     const userId = 1;
     const hubId = 1;
     const hubRelationshipTest = {
+      isPresent: false,
       user: { id: userId },
       hub: {
         id: hubId,
@@ -137,6 +139,7 @@ describe('HubGeofenceService', () => {
     const userId = 1;
     const hubId = 1;
     const hubRelationshipTest = {
+      isPresent: true,
       user: { id: userId },
       hub: {
         id: hubId,
