@@ -164,6 +164,29 @@ describe('HubGeofenceService', () => {
 
   // dwellHubGeofence
 
+  it('should return for dwellHubGeofence when hubRelationship doesnt exist', async () => {
+    // Arrange
+    const userId = 1;
+    const hubId = 1;
+    const hubRelationshipTest = undefined;
+    jest
+      .spyOn(joinUserHubRepository, 'findOne')
+      .mockResolvedValueOnce(hubRelationshipTest as any);
+
+    const notifyMembersSpy = jest
+      .spyOn(service, 'notifyMembersOfArrival')
+      .mockResolvedValue();
+
+    const persistAndFlushCall = jest
+      .spyOn(joinUserHubRepository, 'persistAndFlush')
+      .mockImplementationOnce(() => Promise.resolve());
+
+    // Act & Assert
+    await expect(service.dwellHubGeofence(userId, hubId)).rejects.toThrow();
+    expect(persistAndFlushCall).not.toHaveBeenCalled();
+    expect(notifyMembersSpy).not.toHaveBeenCalled();
+  });
+
   it('should return for dwellHubGeofence user was not present', async () => {
     // Arrange
     const userId = 1;
