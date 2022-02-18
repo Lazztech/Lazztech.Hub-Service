@@ -26,31 +26,21 @@ export class HubGeofenceService {
       user: userId,
       hub: hubId,
     });
+    this.throwIfNotDefined(hubRelationship, userId, hubId);
 
-    if (!hubRelationship) {
-      throw Error(
-        `no corresponding hub relationship found for userId: ${userId} & hubId: ${hubId}`,
-      );
-    }
+    hubRelationship.lastUpdated = Date.now().toString();
+    hubRelationship.lastGeofenceEvent = GeofenceEvent.ENTERED;
 
-    if (hubRelationship.isPresent) {
-      hubRelationship.lastUpdated = Date.now().toString();
-      hubRelationship.lastGeofenceEvent = GeofenceEvent.ENTERED;
-      await this.joinUserHubRepository.persistAndFlush(hubRelationship);
-      return hubRelationship;
-    } else {
-      hubRelationship.isPresent = true;
-      hubRelationship.lastUpdated = Date.now().toString();
-      hubRelationship.lastGeofenceEvent = GeofenceEvent.ENTERED;
-      await this.joinUserHubRepository.persistAndFlush(hubRelationship);
-  
+    if (!hubRelationship.isPresent) {
+      hubRelationship.isPresent = true;  
       const hub = await hubRelationship.hub.load();
       if (hub.active) {
         await this.notifyMembersOfArrival(userId, hubId);
       }
-  
-      return hubRelationship;
     }
+
+    await this.joinUserHubRepository.persistAndFlush(hubRelationship);
+    return hubRelationship;
   }
 
   async dwellHubGeofence(userId: any, hubId: number) {
@@ -59,25 +49,17 @@ export class HubGeofenceService {
       user: userId,
       hub: hubId,
     });
+    this.throwIfNotDefined(hubRelationship, userId, hubId);
 
-    if (!hubRelationship) {
-      throw Error(
-        `no corresponding hub relationship found for userId: ${userId} & hubId: ${hubId}`,
-      );
-    }
+    hubRelationship.lastUpdated = Date.now().toString();
+    hubRelationship.lastGeofenceEvent = GeofenceEvent.DWELL;
 
-    if (hubRelationship.isPresent) {
-      hubRelationship.lastUpdated = Date.now().toString();
-      hubRelationship.lastGeofenceEvent = GeofenceEvent.DWELL;
-      await this.joinUserHubRepository.persistAndFlush(hubRelationship);
-    } else {
+    if (!hubRelationship.isPresent) {
       hubRelationship.isPresent = true;
-      hubRelationship.lastUpdated = Date.now().toString();
-      hubRelationship.lastGeofenceEvent = GeofenceEvent.DWELL;
-      await this.joinUserHubRepository.persistAndFlush(hubRelationship);
-  
-      return hubRelationship;
     }
+
+    await this.joinUserHubRepository.persistAndFlush(hubRelationship);
+    return hubRelationship;
   }
 
   async exitedHubGeofence(userId: any, hubId: number) {
@@ -86,29 +68,28 @@ export class HubGeofenceService {
       user: userId,
       hub: hubId,
     });
+    this.throwIfNotDefined(hubRelationship, userId, hubId);
 
-    if (!hubRelationship) {
-      throw Error(
-        `no corresponding hub relationship found for userId: ${userId} & hubId: ${hubId}`,
-      );
-    }
+    hubRelationship.lastUpdated = Date.now().toString();
+    hubRelationship.lastGeofenceEvent = GeofenceEvent.EXITED;
 
-    if (!hubRelationship.isPresent) {
-      hubRelationship.lastUpdated = Date.now().toString();
-      hubRelationship.lastGeofenceEvent = GeofenceEvent.EXITED;
-      await this.joinUserHubRepository.persistAndFlush(hubRelationship);
-    } else {
+    if (hubRelationship.isPresent) {
       hubRelationship.isPresent = false;
-      hubRelationship.lastUpdated = Date.now().toString();
-      hubRelationship.lastGeofenceEvent = GeofenceEvent.EXITED;
-      await this.joinUserHubRepository.persistAndFlush(hubRelationship);
-  
       const hub = await hubRelationship.hub.load();
       if (hub.active) {
         await this.notifyMembersOfExit(userId, hubId);
       }
-  
-      return hubRelationship;
+    }
+
+    await this.joinUserHubRepository.persistAndFlush(hubRelationship);
+    return hubRelationship;
+  }
+
+  private throwIfNotDefined(hubRelationship: JoinUserHub, userId: any, hubId: any) {
+    if (!hubRelationship) {
+      throw Error(
+        `no corresponding hub relationship found for userId: ${userId} & hubId: ${hubId}`,
+      );
     }
   }
 
