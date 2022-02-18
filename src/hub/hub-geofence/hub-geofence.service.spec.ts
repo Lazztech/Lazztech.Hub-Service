@@ -256,6 +256,28 @@ describe('HubGeofenceService', () => {
   it('should return for exitedHubGeofence user was not present', async () => {
     const userId = 1;
     const hubId = 1;
+    const hubRelationshipTest = undefined;
+    jest
+      .spyOn(joinUserHubRepository, 'findOne')
+      .mockResolvedValueOnce(hubRelationshipTest as any);
+
+    const notifyMembersSpy = jest
+      .spyOn(service, 'notifyMembersOfExit')
+      .mockResolvedValue();
+
+    const persistAndFlushCall = jest
+      .spyOn(joinUserHubRepository, 'persistAndFlush')
+      .mockImplementationOnce(() => Promise.resolve());
+
+    // Act & Assert
+    await expect(service.exitedHubGeofence(userId, hubId)).rejects.toThrow();
+    expect(persistAndFlushCall).not.toHaveBeenCalled();
+    expect(notifyMembersSpy).not.toHaveBeenCalled();
+  });
+
+  it('should return for exitedHubGeofence user was not present', async () => {
+    const userId = 1;
+    const hubId = 1;
     const hubRelationshipTest = {
       isPresent: true,
       user: { id: userId },
