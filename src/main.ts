@@ -7,8 +7,10 @@ import * as bodyParser from 'body-parser';
 import { AppModule } from './app.module';
 /* eslint-disable */
 import express = require('express');
+const tracer = require('./tracer')
 
 async function bootstrap() {
+  await tracer.start();
   const instance = express();
   instance.use('/avatars', require('adorable-avatars/dist/index'));
   const app: NestExpressApplication = await NestFactory.create(
