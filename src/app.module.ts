@@ -28,13 +28,12 @@ import { UserModule } from './user/user.module';
         EMAIL_TRANSPORT: Joi.string()
           .valid('gmail', 'mailgun')
           .default('mailgun'),
-        EMAIL_API_KEY: Joi.string()
-          .when('EMAIL_TRANSPORT', {
+        EMAIL_API_KEY: Joi.when('EMAIL_TRANSPORT', {
             is: 'mailgun',
             then: Joi.string().required(),
+            otherwise: Joi.optional()
           }),
-        EMAIL_DOMAIN: Joi.string()
-          .when('EMAIL_TRANSPORT', {
+        EMAIL_DOMAIN: Joi.when('EMAIL_TRANSPORT', {
             is: 'mailgun',
             then: Joi.string().required(),
           }),
