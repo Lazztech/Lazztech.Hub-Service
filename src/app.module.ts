@@ -25,8 +25,26 @@ import { UserModule } from './user/user.module';
         ACCESS_TOKEN_SECRET: Joi.string().required(),
         FIREBASE_SERVER_KEY: Joi.string().required(),
         PUSH_NOTIFICATION_ENDPOINT: Joi.string().required(),
+        EMAIL_TRANSPORT: Joi.string()
+          .valid('gmail', 'mailgun')
+          .default('mailgun'),
+        EMAIL_API_KEY: Joi.string()
+          .when('EMAIL_TRANSPORT', {
+            is: 'mailgun',
+            then: Joi.string().required(),
+          }),
+        EMAIL_DOMAIN: Joi.string()
+          .when('EMAIL_TRANSPORT', {
+            is: 'mailgun',
+            then: Joi.string().required(),
+          }),
         EMAIL_FROM_ADDRESS: Joi.string().required(),
-        EMAIL_PASSWORD: Joi.string().required(),
+        // EMAIL_PASSWORD: Joi.string()
+        //   .when('EMAIL_TRANSPORT', {
+        //     is: 'gmail',
+        //     then: Joi.string().required(),
+        //     otherwise: Joi.optional(),
+        //   }),
         DATABASE_TYPE: Joi.string()
           .valid('sqlite', 'postgres')
           .default('sqlite'),
