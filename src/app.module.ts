@@ -27,7 +27,7 @@ import { UserModule } from './user/user.module';
         PUSH_NOTIFICATION_ENDPOINT: Joi.string().required(),
         EMAIL_TRANSPORT: Joi.string()
           .valid('gmail', 'mailgun')
-          .default('mailgun'),
+          .default('gmail'),
         EMAIL_API_KEY: Joi.when('EMAIL_TRANSPORT', {
             is: 'mailgun',
             then: Joi.string().required(),
