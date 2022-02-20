@@ -232,8 +232,11 @@ $ ./scripts/preCommit.sh && ./scripts/buildTagAndPushDocker.sh && ./scripts/depl
 | ACCESS_TOKEN_SECRET | Used for jwt tokens | ❌ |
 | FIREBASE_SERVER_KEY | Used for push notifications | ❌ |
 | PUSH_NOTIFICATION_ENDPOINT | Used for triggering push notifications via http | ❌ |
+| EMAIL_TRANSPORT | Used for emailing users | ✅ | 'gmail' or 'mailgun' defaults to mailgun |
+| EMAIL_API_KEY | Used for emailing users | required for mailgun |
+| EMAIL_DOMAIN | | required for mailgun |
 | EMAIL_FROM_ADDRESS | Used for emailing users | ❌ |
-| EMAIL_PASSWORD | Used for emailing users | ❌ |
+| EMAIL_PASSWORD | Used for emailing users | ✅ when transport is mailgun |
 | DATABASE_TYPE | Used for selecting sqlite or postgres | Defaults to sqlite ✅ | 'sqlite' or 'postgres' |
 | DATABASE_HOST | Used for connecting to database | Optional depending on database type ✅ |
 | DATABASE_PORT | Used for connecting to database | Optional depending on database type ✅ |
