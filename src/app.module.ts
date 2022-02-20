@@ -39,12 +39,11 @@ import { UserModule } from './user/user.module';
             then: Joi.string().required(),
           }),
         EMAIL_FROM_ADDRESS: Joi.string().required(),
-        // EMAIL_PASSWORD: Joi.string()
-        //   .when('EMAIL_TRANSPORT', {
-        //     is: 'gmail',
-        //     then: Joi.string().required(),
-        //     otherwise: Joi.optional(),
-        //   }),
+        EMAIL_PASSWORD: Joi.when('EMAIL_TRANSPORT', {
+            is: 'gmail',
+            then: Joi.string().required(),
+            otherwise: Joi.optional(),
+          }),
         DATABASE_TYPE: Joi.string()
           .valid('sqlite', 'postgres')
           .default('sqlite'),
