@@ -5,7 +5,7 @@ import { JoinUserHub } from './joinUserHub.entity';
 import { PasswordReset } from './passwordReset.entity';
 import { UserDevice } from './userDevice.entity';
 import { ShareableId } from './shareableId.entity'
-import { Cascade, Collection, Entity, OneToMany, OneToOne, PrimaryKey, Property } from '@mikro-orm/core';
+import { Cascade, Collection, Entity, IdentifiedReference, OneToMany, OneToOne, PrimaryKey, Property } from '@mikro-orm/core';
 
 @ObjectType()
 @Entity()
@@ -60,11 +60,14 @@ export class User extends ShareableId{
   public hubsConnection = new Collection<JoinUserHub>(this);
 
   @OneToOne({
+    entity: () => PasswordReset,
     cascade: [Cascade.ALL],
     fieldName: 'passwordResetId',
-    nullable: true
+    nullable: true,
+    wrappedReference: true,
+    inversedBy: 'user',
   })
-  public passwordReset!: PasswordReset;
+  public passwordReset!: IdentifiedReference<PasswordReset>;
 
   /**
    * Exposed as a field resolver

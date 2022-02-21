@@ -26,9 +26,9 @@ export class AuthPasswordResetService {
       email: details.usersEmail,
     });
 
-    const pinMatches = (await user.passwordReset).pin === details.resetPin;
-
-    if (pinMatches) {
+    const passwordReset = await user.passwordReset.load();
+    
+    if (passwordReset?.pin === details.resetPin) {
       const hashedPassword = await bcrypt.hash(details.newPassword, 12);
       user.password = hashedPassword;
       await this.userRepository.persistAndFlush(user);
@@ -51,9 +51,8 @@ export class AuthPasswordResetService {
         html: `<b>Hello, <strong>${user.firstName}</strong>, Please paste in the follow to reset your password: ${pin}</p>`,
       });
 
-      user.passwordReset = { pin } as PasswordReset;
-      // TODO does this actually save the passwordReset?
-      await this.userRepository.persistAndFlush(user);
+      const passwordReset = this.passwordResetRepository.create({ pin, user });
+      await this.passwordResetRepository.persistAndFlush(passwordReset);
 
       return true;
     } else {
