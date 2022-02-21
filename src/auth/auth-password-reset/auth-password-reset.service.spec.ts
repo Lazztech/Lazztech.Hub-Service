@@ -53,7 +53,9 @@ describe('AuthPasswordResetService', () => {
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce({
       email: details.usersEmail,
       passwordReset: {
-        pin: details.resetPin,
+        load: jest.fn().mockResolvedValueOnce({
+          pin: details.resetPin,
+        })
       },
     } as any);
     const saveCall = jest
@@ -79,8 +81,10 @@ describe('AuthPasswordResetService', () => {
     jest
       .spyOn(emailService, 'sendEmailFromPrimaryAddress')
       .mockResolvedValueOnce('id');
+    jest.spyOn(passwordResetRepo, 'create')
+      .mockImplementationOnce(value => value as any);
     const saveCall = jest
-      .spyOn(userRepo, 'persistAndFlush')
+      .spyOn(passwordResetRepo, 'persistAndFlush')
       .mockImplementationOnce(() => Promise.resolve());
     // Act
     const result = await service.sendPasswordResetEmail(email);
