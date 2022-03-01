@@ -16,7 +16,9 @@ export class Invite {
   @Property({ default: false })
   public accepted: boolean = false;
 
-  @Field(() => User)
+  /**
+   * Exposed as a field resolver
+   */
   @ManyToOne({ 
     entity: () => User,
     fieldName: 'invitersId',
@@ -25,7 +27,9 @@ export class Invite {
   })
   public inviter!: IdentifiedReference<User>;
 
-  @Field(() => User)
+  /**
+   * Exposed as a field resolver
+   */
   @ManyToOne({
     entity: () => User,
     fieldName: 'inviteesId',
@@ -34,7 +38,9 @@ export class Invite {
   })
   public invitee!: IdentifiedReference<User>;
 
-  @Field(() => Hub)
+  /**
+   * Exposed as a field resolver
+   */
   @ManyToOne({ 
     entity: () => Hub, 
     fieldName: 'hubId',
