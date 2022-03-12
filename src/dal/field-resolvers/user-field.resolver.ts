@@ -33,8 +33,15 @@ export class UserFieldResolver {
   }
 
   @ResolveField(() => [Block], { nullable: true })
-  blocks(@Parent() parent: User): Promise<Block[]> {
+  blocks(
+    @UserId() userId,
+    @Parent() parent: User
+  ): Promise<Block[]> {
     this.logger.log(this.blocks.name);
-    return parent.blocks.loadItems();
+    if (userId === parent.id) {
+      return parent.blocks.loadItems();
+    } else {
+      this.logger.warn('Not allowed to access other users blocks');
+    }
   }
 }
