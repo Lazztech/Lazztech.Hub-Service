@@ -729,15 +729,6 @@
     },
     {
       "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "unsigned": true,
-          "autoincrement": true,
-          "primary": true,
-          "nullable": false,
-          "mappedType": "integer"
-        },
         "from_id": {
           "name": "from_id",
           "type": "int",
@@ -763,9 +754,10 @@
         {
           "keyName": "block_pkey",
           "columnNames": [
-            "id"
+            "from_id",
+            "to_id"
           ],
-          "composite": false,
+          "composite": true,
           "primary": true,
           "unique": true
         }
@@ -782,6 +774,7 @@
             "id"
           ],
           "referencedTableName": "public.user",
+          "deleteRule": "cascade",
           "updateRule": "cascade"
         },
         "block_to_id_foreign": {
@@ -794,6 +787,7 @@
             "id"
           ],
           "referencedTableName": "public.user",
+          "deleteRule": "cascade",
           "updateRule": "cascade"
         }
       }
