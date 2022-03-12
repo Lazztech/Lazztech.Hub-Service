@@ -38,6 +38,7 @@
           "unique": true
         }
       ],
+      "checks": [],
       "foreignKeys": {}
     },
     {
@@ -164,6 +165,7 @@
           "unique": true
         }
       ],
+      "checks": [],
       "foreignKeys": {
         "user_passwordResetId_foreign": {
           "constraintName": "user_passwordResetId_foreign",
@@ -232,6 +234,7 @@
           "unique": true
         }
       ],
+      "checks": [],
       "foreignKeys": {
         "user_device_userId_foreign": {
           "constraintName": "user_device_userId_foreign",
@@ -327,6 +330,7 @@
           "unique": true
         }
       ],
+      "checks": [],
       "foreignKeys": {
         "in_app_notification_userId_foreign": {
           "constraintName": "in_app_notification_userId_foreign",
@@ -432,6 +436,7 @@
           "unique": true
         }
       ],
+      "checks": [],
       "foreignKeys": {}
     },
     {
@@ -507,6 +512,7 @@
           "unique": true
         }
       ],
+      "checks": [],
       "foreignKeys": {
         "invite_invitersId_foreign": {
           "constraintName": "invite_invitersId_foreign",
@@ -631,6 +637,7 @@
           "unique": true
         }
       ],
+      "checks": [],
       "foreignKeys": {
         "join_user_hub_userId_foreign": {
           "constraintName": "join_user_hub_userId_foreign",
@@ -703,6 +710,7 @@
           "unique": true
         }
       ],
+      "checks": [],
       "foreignKeys": {
         "micro_chat_hubId_foreign": {
           "constraintName": "micro_chat_hubId_foreign",
@@ -715,6 +723,77 @@
           ],
           "referencedTableName": "public.hub",
           "deleteRule": "cascade",
+          "updateRule": "cascade"
+        }
+      }
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "unsigned": true,
+          "autoincrement": true,
+          "primary": true,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "from_id": {
+          "name": "from_id",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "to_id": {
+          "name": "to_id",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        }
+      },
+      "name": "block",
+      "schema": "public",
+      "indexes": [
+        {
+          "keyName": "block_pkey",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "block_from_id_foreign": {
+          "constraintName": "block_from_id_foreign",
+          "columnNames": [
+            "from_id"
+          ],
+          "localTableName": "public.block",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.user",
+          "updateRule": "cascade"
+        },
+        "block_to_id_foreign": {
+          "constraintName": "block_to_id_foreign",
+          "columnNames": [
+            "to_id"
+          ],
+          "localTableName": "public.block",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.user",
           "updateRule": "cascade"
         }
       }
