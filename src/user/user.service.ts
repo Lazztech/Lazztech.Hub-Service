@@ -7,7 +7,7 @@ import { EditUserDetails } from './dto/editUserDetails.input';
 import { FILE_SERVICE } from '../file/file-service.token';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/core';
-import { Block } from 'src/dal/entity/block';
+import { Block } from 'src/dal/entity/block.entity';
 
 @Injectable()
 export class UserService {

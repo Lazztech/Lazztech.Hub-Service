@@ -4,9 +4,9 @@ import { Invite } from './invite.entity';
 import { JoinUserHub } from './joinUserHub.entity';
 import { PasswordReset } from './passwordReset.entity';
 import { UserDevice } from './userDevice.entity';
-import { ShareableId } from './shareableId.entity'
+import { ShareableId } from './shareableId.entity';
+import { Block } from './block.entity';
 import { Cascade, Collection, Entity, IdentifiedReference, OneToMany, OneToOne, PrimaryKey, Property } from '@mikro-orm/core';
-import { Block } from './block';
 
 @ObjectType()
 @Entity()
@@ -82,7 +82,7 @@ export class User extends ShareableId{
   @OneToMany(() => Invite, (invite) => invite.inviter)
   public invitesReceived = new Collection<Invite>(this);
 
-  @Field({ nullable: true })
+  @Field(() => [Block], { nullable: true })
   @OneToMany(() => Block, (block) => block.to)
   public blocks = new Collection<Block>(this);
 

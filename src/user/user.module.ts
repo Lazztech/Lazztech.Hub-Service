@@ -1,5 +1,6 @@
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
+import { Block } from 'src/dal/entity/block.entity';
 import { Invite } from '../dal/entity/invite.entity';
 import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
 import { User } from '../dal/entity/user.entity';
@@ -10,7 +11,7 @@ import { UserService } from './user.service';
 
 @Module({
   imports: [
-    MikroOrmModule.forFeature([JoinUserHub, User, Invite]),
+    MikroOrmModule.forFeature([JoinUserHub, User, Invite, Block]),
     FileModule,
     EmailModule,
   ],
