@@ -41,7 +41,7 @@ export class UserFieldResolver {
     if (userId === parent.id) {
       return parent.blocks.loadItems();
     } else {
-      this.logger.warn('Not allowed to access other users blocks');
+      throw new Error('Not allowed to access other users blocks');
     }
   }
 }
