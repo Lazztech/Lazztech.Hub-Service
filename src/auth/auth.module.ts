@@ -12,7 +12,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './strategy/jwt.strategy';
 import { EmailModule } from '../email/email.module';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
-import { Block } from 'src/dal/entity/block.entity';
+import { Block } from '../dal/entity/block.entity';
 
 @Module({
   imports: [

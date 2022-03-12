@@ -20,7 +20,7 @@ import { EmailModule } from '../email/email.module';
 import { HubTasksService } from './hub-tasks/hub-tasks.service';
 import { ScheduleModule } from '@nestjs/schedule';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
-import { Block } from 'src/dal/entity/block.entity';
+import { Block } from '../dal/entity/block.entity';
 
 @Module({
   imports: [

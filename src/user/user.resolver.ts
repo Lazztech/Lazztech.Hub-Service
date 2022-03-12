@@ -4,7 +4,7 @@ import { UserId } from '../decorators/user.decorator';
 import { GqlJwtAuthGuard } from '../auth/guards/gql-jwt-auth.guard';
 import { User } from '../dal/entity/user.entity';
 import { UserService } from './user.service';
-import { Block } from 'src/dal/entity/block.entity';
+import { Block } from '../dal/entity/block.entity';
 
 @UseGuards(GqlJwtAuthGuard)
 @Resolver()

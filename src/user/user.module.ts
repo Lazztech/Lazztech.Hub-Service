@@ -1,6 +1,6 @@
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
-import { Block } from 'src/dal/entity/block.entity';
+import { Block } from '../dal/entity/block.entity';
 import { Invite } from '../dal/entity/invite.entity';
 import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
 import { User } from '../dal/entity/user.entity';
