@@ -93,4 +93,12 @@ export class UserService {
     user.lastOnline = Date.now().toString();
     await this.userRepository.persistAndFlush(user);
   }
+
+  public async blockUser(fromUserId: any, toUserId: any) {
+
+  }
+
+  public async unblockUser(fromUserId: any, toUserId: any) {
+    
+  }
 }
