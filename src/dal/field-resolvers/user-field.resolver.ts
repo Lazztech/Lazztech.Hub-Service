@@ -2,6 +2,7 @@ import { Logger } from '@nestjs/common';
 import { Context, Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { UserId } from '../../decorators/user.decorator';
 import { FileUrlService } from '../../file/file-url/file-url.service';
+import { Block } from '../entity/block.entity';
 import { User } from '../entity/user.entity';
 import { UserDevice } from '../entity/userDevice.entity';
 
@@ -29,5 +30,11 @@ export class UserFieldResolver {
     } else {
       throw new Error('Not allowed to access other users device information');
     }
+  }
+
+  @ResolveField(() => [Block], { nullable: true })
+  blocks(@Parent() parent: User): Promise<Block[]> {
+    this.logger.log(this.blocks.name);
+    return parent.blocks.loadItems();
   }
 }

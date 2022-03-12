@@ -82,13 +82,15 @@ export class User extends ShareableId{
   @OneToMany(() => Invite, (invite) => invite.inviter)
   public invitesReceived = new Collection<Invite>(this);
 
-  @Field(() => [Block], { nullable: true })
-  @OneToMany(() => Block, (block) => block.to)
+  /**
+   * Exposed as a field resolver
+   */
+  @OneToMany(() => Block, (block) => block.from)
   public blocks = new Collection<Block>(this);
 
   /**
    * Not exposed out
    */
-  @OneToMany(() => Block, (block) => block.from)
+  @OneToMany(() => Block, (block) => block.to)
   public blockedBy = new Collection<Block>(this);
 }
