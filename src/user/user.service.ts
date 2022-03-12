@@ -103,13 +103,15 @@ export class UserService {
       to: toUserId
     });
     await this.blockRepository.persistAndFlush(block);
+    return block;
   }
 
   public async unblockUser(fromUserId: any, toUserId: any) {
-    const block = this.blockRepository.create({
+    const block = await this.blockRepository.findOneOrFail({
       from: fromUserId,
       to: toUserId
     });
     await this.blockRepository.removeAndFlush(block);
+    return block;
   }
 }

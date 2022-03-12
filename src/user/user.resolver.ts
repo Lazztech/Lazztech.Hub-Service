@@ -57,7 +57,7 @@ export class UserResolver {
     return user;
   }
 
-  @Mutation(() => [Block])
+  @Mutation(() => Block)
   public async blockUser(
     @UserId() userId,
     @Args({ name: 'toUserId', type: () => ID }) toUserId: number,
@@ -66,7 +66,7 @@ export class UserResolver {
     return await this.userService.blockUser(userId, toUserId);
   }
 
-  @Mutation(() => [Block])
+  @Mutation(() => Block)
   public async unblockUser(
     @UserId() userId,
     @Args({ name: 'toUserId', type: () => ID }) toUserId: number,
