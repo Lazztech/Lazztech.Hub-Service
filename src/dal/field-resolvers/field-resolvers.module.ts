@@ -1,6 +1,7 @@
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
 import { FileModule } from '../../file/file.module';
+import { Block } from '../entity/block.entity';
 import { JoinUserHub } from '../entity/joinUserHub.entity';
 import { BlockFieldResolver } from './block-field.resolver';
 import { HubFieldResolver } from './hub-field.resolver';
@@ -12,7 +13,7 @@ import { UserFieldResolver } from './user-field.resolver';
 import { UserDeviceFieldResolver } from './userDevice-field.resolver';
 
 @Module({
-  imports: [FileModule, MikroOrmModule.forFeature([JoinUserHub])],
+  imports: [FileModule, MikroOrmModule.forFeature([JoinUserHub, Block])],
   providers: [
     JoinUserHubsFieldResolver,
     HubFieldResolver,
