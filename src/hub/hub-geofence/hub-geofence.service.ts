@@ -1,7 +1,7 @@
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable, Logger } from '@nestjs/common';
-import { Block } from 'src/dal/entity/block.entity';
+import { Block } from '../../dal/entity/block.entity';
 import { Hub } from '../../dal/entity/hub.entity';
 import { GeofenceEvent, JoinUserHub } from '../../dal/entity/joinUserHub.entity';
 import { User } from '../../dal/entity/user.entity';

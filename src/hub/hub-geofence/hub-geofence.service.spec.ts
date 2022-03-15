@@ -3,6 +3,7 @@ import { getRepositoryToken } from '@mikro-orm/nestjs';
 import { HttpModule } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
+import { Block } from '../../dal/entity/block.entity';
 import { Hub } from '../../dal/entity/hub.entity';
 import { InAppNotification } from '../../dal/entity/inAppNotification.entity';
 import { JoinUserHub } from '../../dal/entity/joinUserHub.entity';
@@ -38,6 +39,10 @@ describe('HubGeofenceService', () => {
         },
         {
           provide: getRepositoryToken(UserDevice),
+          useClass: EntityRepository,
+        },
+        {
+          provide: getRepositoryToken(Block),
           useClass: EntityRepository,
         },
         {
