@@ -422,8 +422,7 @@ describe('HubGeofenceService', () => {
   });
 
   // notifyMembersOfArrival
-
-  it('should only notify users you haven not blocked', async () => {
+  it('should only notify users on arrival that you have not blocked', async () => {
     // Arrange
     const mockHub = {
       id: 1,
@@ -488,4 +487,67 @@ describe('HubGeofenceService', () => {
   });
 
   // notifyMembersOfExit
+  it('should only notify users on exit that you have not blocked', async () => {
+    // Arrange
+    const mockHub = {
+      id: 1,
+      name: 'testHub',
+      image: 'testImage'
+    } as Hub;
+    const mockUser = {
+      id: 1,
+      firstName: 'testUser'
+    } as User;
+
+    const unblockedUserId = 2;
+    const blockedUserId = 3;
+    const mockHubRelationships = [
+      {
+        user: { id: mockUser.id },
+        hub: { id: mockHub.id },
+      },
+      {
+        user: { id: unblockedUserId },
+        hub: { id: mockHub.id },
+      },
+      {
+        user: { id: blockedUserId },
+        hub: { id: mockHub.id },
+      }
+    ] as Array<JoinUserHub>;
+    jest
+      .spyOn(joinUserHubRepository, 'find')
+      .mockResolvedValueOnce(mockHubRelationships as any);
+
+    const mockBlocks = [
+      {
+        from: { id: mockUser.id },
+        to: { id: blockedUserId }
+      }
+    ] as Array<Block>;
+    jest
+      .spyOn(blockRepository, 'find')
+      .mockResolvedValueOnce(mockBlocks as any);
+
+    jest
+      .spyOn(userRepository, 'findOne')
+      .mockResolvedValueOnce(mockUser as any);
+    jest
+      .spyOn(hubRepository, 'findOne')
+      .mockResolvedValueOnce(mockHub as any);
+
+    const addInAppNotificationForUserSpy = jest
+      .spyOn(notificationService, 'addInAppNotificationForUser')
+      .mockResolvedValue();
+    const sendPushToUserSpy = jest
+      .spyOn(notificationService, 'sendPushToUser')
+      .mockResolvedValue();
+
+    // Act
+    await service.notifyMembersOfExit(mockUser.id, mockHub.id);
+
+    // Assert
+    expect(addInAppNotificationForUserSpy).toHaveBeenCalledTimes(2);
+    expect(sendPushToUserSpy).toHaveBeenCalledTimes(2);
+  });
 });
