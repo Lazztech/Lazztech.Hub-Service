@@ -1,6 +1,7 @@
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable, Logger } from '@nestjs/common';
+import { Block } from 'src/dal/entity/block.entity';
 import { Hub } from '../../dal/entity/hub.entity';
 import { GeofenceEvent, JoinUserHub } from '../../dal/entity/joinUserHub.entity';
 import { User } from '../../dal/entity/user.entity';
@@ -17,6 +18,8 @@ export class HubGeofenceService {
     private userRepository: EntityRepository<User>,
     @InjectRepository(Hub)
     private hubRepository: EntityRepository<Hub>,
+    @InjectRepository(Block)
+    private blockRepository: EntityRepository<Block>,
     private notificationService: NotificationService,
   ) {}
 
@@ -97,11 +100,15 @@ export class HubGeofenceService {
     const membersHubRelations = await this.joinUserHubRepository.find({
       hub: hubId,
     });
+    const blocks = await this.blockRepository.find({ from: userId });
+    const unblockedRelations = membersHubRelations.filter(
+      relation => !blocks.find(block => block.to.id === relation.user.id)
+    );
     const user = await this.userRepository.findOne({ id: userId });
     const hub = await this.hubRepository.findOne({ id: hubId });
     const message = `${user.firstName} arrived`;
 
-    for (const relation of membersHubRelations) {
+    for (const relation of unblockedRelations) {
       await this.notificationService.addInAppNotificationForUser(
         relation.user.id,
         {
@@ -125,11 +132,15 @@ export class HubGeofenceService {
     const membersHubRelations = await this.joinUserHubRepository.find({
       hub: hubId,
     });
+    const blocks = await this.blockRepository.find({ from: userId });
+    const unblockedRelations = membersHubRelations.filter(
+      relation => !blocks.find(block => block.to.id === relation.user.id)
+    );
     const user = await this.userRepository.findOne({ id: userId });
     const hub = await this.hubRepository.findOne({ id: hubId });
     const message = `${user.firstName} exited`;
 
-    for (const relation of membersHubRelations) {
+    for (const relation of unblockedRelations) {
       await this.notificationService.addInAppNotificationForUser(
         relation.user.id,
         {
