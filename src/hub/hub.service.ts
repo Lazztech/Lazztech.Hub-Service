@@ -8,6 +8,7 @@ import { FILE_SERVICE } from '../file/file-service.token';
 import { NotificationService } from '../notification/notification.service';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/core';
+import { Block } from '../dal/entity/block.entity';
 
 @Injectable()
 export class HubService {
@@ -21,6 +22,8 @@ export class HubService {
     private joinUserHubRepository: EntityRepository<JoinUserHub>,
     @InjectRepository(Invite)
     private inviteRepository: EntityRepository<Invite>,
+    @InjectRepository(Block)
+    private blockRepository: EntityRepository<Block>,
     private notificationService: NotificationService,
   ) {
     this.logger.log('constructor');
@@ -84,7 +87,8 @@ export class HubService {
       }
     }
 
-    return uniqueUsers;
+    const blocks = await this.blockRepository.find({ to: userId });
+    return uniqueUsers.filter(user => !blocks.find(block => block.from.id === user.id));
   }
 
   async createHub(userId: any, hub: Hub) {

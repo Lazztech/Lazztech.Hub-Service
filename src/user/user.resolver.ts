@@ -1,9 +1,10 @@
 import { Logger, UseGuards } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserId } from '../decorators/user.decorator';
 import { GqlJwtAuthGuard } from '../auth/guards/gql-jwt-auth.guard';
 import { User } from '../dal/entity/user.entity';
 import { UserService } from './user.service';
+import { Block } from '../dal/entity/block.entity';
 
 @UseGuards(GqlJwtAuthGuard)
 @Resolver()
@@ -54,5 +55,23 @@ export class UserResolver {
     this.logger.log(this.changeUserImage.name);
     const user = await this.userService.changeUserImage(userId, newImage);
     return user;
+  }
+
+  @Mutation(() => Block)
+  public async blockUser(
+    @UserId() userId,
+    @Args({ name: 'toUserId', type: () => ID }) toUserId: number,
+  ) {
+    this.logger.log(this.blockUser.name);
+    return await this.userService.blockUser(userId, toUserId);
+  }
+
+  @Mutation(() => Block)
+  public async unblockUser(
+    @UserId() userId,
+    @Args({ name: 'toUserId', type: () => ID }) toUserId: number,
+  ) {
+    this.logger.log(this.unblockUser.name);
+    return await this.userService.unblockUser(userId, toUserId);
   }
 }
