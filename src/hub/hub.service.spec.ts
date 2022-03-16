@@ -20,6 +20,7 @@ import { Block } from '../dal/entity/block.entity';
 describe('HubService', () => {
   let hubService: HubService;
   let joinUserHubRepo: EntityRepository<JoinUserHub>;
+  let blockRepo: EntityRepository<Block>;
   let hubRepo: EntityRepository<Hub>;
   let fileService: FileServiceInterface;
 
@@ -75,6 +76,9 @@ describe('HubService', () => {
     hubService = module.get<HubService>(HubService);
     joinUserHubRepo = module.get<EntityRepository<JoinUserHub>>(
       getRepositoryToken(JoinUserHub),
+    );
+    blockRepo = module.get<EntityRepository<Block>>(
+      getRepositoryToken(Block)
     );
     hubRepo = module.get<EntityRepository<Hub>>(getRepositoryToken(Hub));
     fileService = module.get<FileServiceInterface>(FILE_SERVICE);
@@ -183,12 +187,43 @@ describe('HubService', () => {
     expect(result).toStrictEqual(expectedResult);
   });
 
-  it('should return for usersPeople', async () => {
+  it('should return only unblocked users for usersPeople', async () => {
     // Arrange
-    const userId = 2;
+    const user = {
+      id: 2,
+      load: jest.fn().mockResolvedValue({
+        id: 2,
+      })
+    };
+    const firstCommonUser = {
+      id: 3,
+      load: jest.fn().mockResolvedValue({
+        id: 3,
+      })
+    };
+    const secondCommonUser = {
+      id: 4,
+      load: jest.fn().mockResolvedValue({
+        id: 4,
+      })
+    };
+    const userWhoBlockedMe = {
+      id: 13,
+      load: jest.fn().mockResolvedValue({
+        id: 13,
+      })
+    };
+    const mockBlocks = [
+      {
+        from: { id: userWhoBlockedMe.id },
+        to: { id: user.id }
+      }
+    ] as Array<Block>;
+    jest.spyOn(blockRepo, 'find')
+      .mockResolvedValueOnce(mockBlocks as any);
     jest.spyOn(joinUserHubRepo, 'find').mockResolvedValueOnce([
       {
-        user: { id: 2 },
+        user: { id: user.id },
         hub: {
           id: 9,
           load: jest.fn().mockResolvedValueOnce({
@@ -196,28 +231,21 @@ describe('HubService', () => {
             usersConnection: {
               loadItems: jest.fn().mockResolvedValueOnce([
                 {
-                  user: {
-                    id: 3,
-                    load: jest.fn().mockResolvedValueOnce({
-                      id: 3,
-                    })
-                  },
+                  user: firstCommonUser,
                 },
                 {
-                  user: {
-                    id: 2,
-                    load: jest.fn().mockResolvedValueOnce({
-                      id: 2,
-                    })
-                  },
+                  user,
                 },
+                {
+                  user: userWhoBlockedMe
+                }
               ] as any)
             }
           }),
         } as any,
       } as JoinUserHub,
       {
-        user: { id: 2 },
+        user: { id: user.id },
         hub: {
           id: 10,
           load: jest.fn().mockResolvedValueOnce({
@@ -225,28 +253,13 @@ describe('HubService', () => {
             usersConnection: {
               loadItems: jest.fn().mockResolvedValueOnce([
                 {
-                  user: {
-                    id: 4,
-                    load: jest.fn().mockResolvedValueOnce({
-                      id: 4,
-                    })
-                  } as any,
+                  user: secondCommonUser,
                 },
                 {
-                  user: {
-                    id: 2,
-                    load: jest.fn().mockResolvedValueOnce({
-                      id: 2,
-                    })
-                  } as any,
+                  user,
                 },
                 {
-                  user: {
-                    id: 3,
-                    load: jest.fn().mockResolvedValueOnce({
-                      id: 3,
-                    })
-                  } as any,
+                  user: firstCommonUser,
                 },
               ])
             },
@@ -254,18 +267,18 @@ describe('HubService', () => {
         } as any,
       } as JoinUserHub,
     ] as any);
-    const expectedResult = [
-      {
-        id: 3,
-      },
-      {
-        id: 4,
-      },
-    ] as User[];
+
     // Act
-    const result = await hubService.usersPeople(userId);
+    const result = await hubService.usersPeople(user.id);
     // Assert
-    expect(result).toEqual(expectedResult);
+    expect(result).toEqual([
+      {
+        id: firstCommonUser.id,
+      },
+      {
+        id: secondCommonUser.id,
+      },
+    ] as User[]);
   });
 
   it('should return for createHub', async () => {
