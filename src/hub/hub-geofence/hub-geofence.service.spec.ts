@@ -3,6 +3,7 @@ import { getRepositoryToken } from '@mikro-orm/nestjs';
 import { HttpModule } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
+import { Block } from '../../dal/entity/block.entity';
 import { Hub } from '../../dal/entity/hub.entity';
 import { InAppNotification } from '../../dal/entity/inAppNotification.entity';
 import { JoinUserHub } from '../../dal/entity/joinUserHub.entity';
@@ -14,6 +15,10 @@ import { HubGeofenceService } from './hub-geofence.service';
 describe('HubGeofenceService', () => {
   let service: HubGeofenceService;
   let joinUserHubRepository: EntityRepository<JoinUserHub>;
+  let userRepository: EntityRepository<User>;
+  let hubRepository: EntityRepository<Hub>;
+  let blockRepository: EntityRepository<Block>;
+  let notificationService: NotificationService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -41,6 +46,10 @@ describe('HubGeofenceService', () => {
           useClass: EntityRepository,
         },
         {
+          provide: getRepositoryToken(Block),
+          useClass: EntityRepository,
+        },
+        {
           provide: ConfigService,
           useValue: {
             get: jest.fn((key: string) => {
@@ -63,6 +72,16 @@ describe('HubGeofenceService', () => {
     joinUserHubRepository = module.get<EntityRepository<JoinUserHub>>(
       getRepositoryToken(JoinUserHub),
     );
+    userRepository = module.get<EntityRepository<User>>(
+      getRepositoryToken(User)
+    );
+    hubRepository = module.get<EntityRepository<Hub>>(
+      getRepositoryToken(Hub)
+    );
+    blockRepository = module.get<EntityRepository<Block>>(
+      getRepositoryToken(Block),
+    );
+    notificationService = module.get<NotificationService>(NotificationService);
   });
 
   it('should be defined', () => {
@@ -400,5 +419,135 @@ describe('HubGeofenceService', () => {
     // Assert
     expect(persistAndFlushCall).toHaveBeenCalled();
     expect(notifyMembersSpy).not.toHaveBeenCalled();
+  });
+
+  // notifyMembersOfArrival
+  it('should only notify users on arrival that you have not blocked', async () => {
+    // Arrange
+    const mockHub = {
+      id: 1,
+      name: 'testHub',
+      image: 'testImage'
+    } as Hub;
+    const mockUser = {
+      id: 1,
+      firstName: 'testUser'
+    } as User;
+
+    const unblockedUserId = 2;
+    const blockedUserId = 3;
+    const mockHubRelationships = [
+      {
+        user: { id: mockUser.id },
+        hub: { id: mockHub.id },
+      },
+      {
+        user: { id: unblockedUserId },
+        hub: { id: mockHub.id },
+      },
+      {
+        user: { id: blockedUserId },
+        hub: { id: mockHub.id },
+      }
+    ] as Array<JoinUserHub>;
+    jest
+      .spyOn(joinUserHubRepository, 'find')
+      .mockResolvedValueOnce(mockHubRelationships as any);
+
+    const mockBlocks = [
+      {
+        from: { id: mockUser.id },
+        to: { id: blockedUserId }
+      }
+    ] as Array<Block>;
+    jest
+      .spyOn(blockRepository, 'find')
+      .mockResolvedValueOnce(mockBlocks as any);
+
+    jest
+      .spyOn(userRepository, 'findOne')
+      .mockResolvedValueOnce(mockUser as any);
+    jest
+      .spyOn(hubRepository, 'findOne')
+      .mockResolvedValueOnce(mockHub as any);
+
+    const addInAppNotificationForUserSpy = jest
+      .spyOn(notificationService, 'addInAppNotificationForUser')
+      .mockResolvedValue();
+    const sendPushToUserSpy = jest
+      .spyOn(notificationService, 'sendPushToUser')
+      .mockResolvedValue();
+
+    // Act
+    await service.notifyMembersOfArrival(mockUser.id, mockHub.id);
+
+    // Assert
+    expect(addInAppNotificationForUserSpy).toHaveBeenCalledTimes(2);
+    expect(sendPushToUserSpy).toHaveBeenCalledTimes(2);
+  });
+
+  // notifyMembersOfExit
+  it('should only notify users on exit that you have not blocked', async () => {
+    // Arrange
+    const mockHub = {
+      id: 1,
+      name: 'testHub',
+      image: 'testImage'
+    } as Hub;
+    const mockUser = {
+      id: 1,
+      firstName: 'testUser'
+    } as User;
+
+    const unblockedUserId = 2;
+    const blockedUserId = 3;
+    const mockHubRelationships = [
+      {
+        user: { id: mockUser.id },
+        hub: { id: mockHub.id },
+      },
+      {
+        user: { id: unblockedUserId },
+        hub: { id: mockHub.id },
+      },
+      {
+        user: { id: blockedUserId },
+        hub: { id: mockHub.id },
+      }
+    ] as Array<JoinUserHub>;
+    jest
+      .spyOn(joinUserHubRepository, 'find')
+      .mockResolvedValueOnce(mockHubRelationships as any);
+
+    const mockBlocks = [
+      {
+        from: { id: mockUser.id },
+        to: { id: blockedUserId }
+      }
+    ] as Array<Block>;
+    jest
+      .spyOn(blockRepository, 'find')
+      .mockResolvedValueOnce(mockBlocks as any);
+
+    jest
+      .spyOn(userRepository, 'findOne')
+      .mockResolvedValueOnce(mockUser as any);
+    jest
+      .spyOn(hubRepository, 'findOne')
+      .mockResolvedValueOnce(mockHub as any);
+
+    const addInAppNotificationForUserSpy = jest
+      .spyOn(notificationService, 'addInAppNotificationForUser')
+      .mockResolvedValue();
+    const sendPushToUserSpy = jest
+      .spyOn(notificationService, 'sendPushToUser')
+      .mockResolvedValue();
+
+    // Act
+    await service.notifyMembersOfExit(mockUser.id, mockHub.id);
+
+    // Assert
+    expect(addInAppNotificationForUserSpy).toHaveBeenCalledTimes(2);
+    expect(sendPushToUserSpy).toHaveBeenCalledTimes(2);
   });
 });

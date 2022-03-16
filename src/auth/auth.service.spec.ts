@@ -15,6 +15,7 @@ import { ImageFileService } from '../file/image-file/image-file.service';
 import { FILE_SERVICE } from '../file/file-service.token';
 import { getRepositoryToken } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/core';
+import { Block } from '../dal/entity/block.entity';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -67,6 +68,10 @@ describe('AuthService', () => {
         },
         {
           provide: getRepositoryToken(JoinUserHub),
+          useClass: EntityRepository,
+        },
+        {
+          provide: getRepositoryToken(Block),
           useClass: EntityRepository,
         },
       ],

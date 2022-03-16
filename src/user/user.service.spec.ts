@@ -14,6 +14,7 @@ import { LocalFileService } from '../file/local-file/local-file.service';
 import { FILE_SERVICE } from '../file/file-service.token';
 import { getRepositoryToken } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/core';
+import { Block } from '../dal/entity/block.entity';
 
 describe('UserService', () => {
   let service: UserService;
@@ -46,6 +47,10 @@ describe('UserService', () => {
         },
         {
           provide: getRepositoryToken(Invite),
+          useClass: EntityRepository,
+        },
+        {
+          provide: getRepositoryToken(Block),
           useClass: EntityRepository,
         },
       ],

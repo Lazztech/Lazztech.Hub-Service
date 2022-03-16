@@ -1,6 +1,10 @@
+import { EntityRepository } from '@mikro-orm/core';
+import { InjectRepository } from '@mikro-orm/nestjs';
 import { Logger } from '@nestjs/common';
 import { Context, Parent, ResolveField, Resolver } from '@nestjs/graphql';
+import { UserId } from '../../decorators/user.decorator';
 import { FileUrlService } from '../../file/file-url/file-url.service';
+import { Block } from '../entity/block.entity';
 import { Hub } from '../entity/hub.entity';
 import { Invite } from '../entity/invite.entity';
 import { JoinUserHub } from '../entity/joinUserHub.entity';
@@ -10,7 +14,11 @@ import { MicroChat } from '../entity/microChat.entity';
 export class HubFieldResolver {
   private logger = new Logger(HubFieldResolver.name);
 
-  constructor(private readonly fileUrlService: FileUrlService) {}
+  constructor(
+    private readonly fileUrlService: FileUrlService,
+    @InjectRepository(Block)
+    private blockRepository: EntityRepository<Block>,
+  ) {}
 
   @ResolveField(() => String, { nullable: true })
   image(@Parent() hub: Hub, @Context() ctx: any): string {
@@ -18,8 +26,13 @@ export class HubFieldResolver {
   }
 
   @ResolveField(() => [JoinUserHub], { nullable: true })
-  public usersConnection(@Parent() hub: Hub): Promise<JoinUserHub[]> {
-    return hub.usersConnection.loadItems();
+  public async usersConnection(
+    @UserId() userId,
+    @Parent() parent: Hub,
+  ): Promise<JoinUserHub[]> {
+    const blocks = await this.blockRepository.find({ to: userId });
+    const usersConnections = await parent.usersConnection.loadItems();
+    return usersConnections.filter(joinUserHub => !blocks.find(block => block.from.id === joinUserHub.user.id));    
   }
 
   @ResolveField(() => [MicroChat], { nullable: true })

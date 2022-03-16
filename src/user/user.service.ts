@@ -7,6 +7,7 @@ import { EditUserDetails } from './dto/editUserDetails.input';
 import { FILE_SERVICE } from '../file/file-service.token';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/core';
+import { Block } from '../dal/entity/block.entity';
 
 @Injectable()
 export class UserService {
@@ -19,6 +20,8 @@ export class UserService {
     private joinUserHubRepository: EntityRepository<JoinUserHub>,
     @InjectRepository(User)
     private userRepository: EntityRepository<User>,
+    @InjectRepository(Block)
+    private blockRepository: EntityRepository<Block>,
   ) {
     this.logger.log('constructor');
   }
@@ -92,5 +95,23 @@ export class UserService {
     this.logger.log(this.updateLastOnline.name);
     user.lastOnline = Date.now().toString();
     await this.userRepository.persistAndFlush(user);
+  }
+
+  public async blockUser(fromUserId: any, toUserId: any) {
+    const block = this.blockRepository.create({
+      from: fromUserId,
+      to: toUserId
+    });
+    await this.blockRepository.persistAndFlush(block);
+    return block;
+  }
+
+  public async unblockUser(fromUserId: any, toUserId: any) {
+    const block = await this.blockRepository.findOneOrFail({
+      from: fromUserId,
+      to: toUserId
+    });
+    await this.blockRepository.removeAndFlush(block);
+    return block;
   }
 }

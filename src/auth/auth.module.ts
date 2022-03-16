@@ -12,6 +12,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './strategy/jwt.strategy';
 import { EmailModule } from '../email/email.module';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
+import { Block } from '../dal/entity/block.entity';
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import { MikroOrmModule } from '@mikro-orm/nestjs';
         signOptions: { expiresIn: '60s' },
       }),
     }),
-    MikroOrmModule.forFeature([PasswordReset, User, InAppNotification]),
+    MikroOrmModule.forFeature([PasswordReset, User, InAppNotification, Block]),
     EmailModule,
     NotificationModule,
     UserModule,

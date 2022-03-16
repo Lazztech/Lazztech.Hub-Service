@@ -11,6 +11,7 @@ import { InAppNotification } from '../../dal/entity/inAppNotification.entity';
 import { UserDevice } from '../../dal/entity/userDevice.entity';
 import { getRepositoryToken } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/core';
+import { Block } from '../../dal/entity/block.entity';
 
 describe('HubTasksService', () => {
   let service: HubTasksService;
@@ -49,7 +50,11 @@ describe('HubTasksService', () => {
         {
           provide: getRepositoryToken(UserDevice),
           useClass: EntityRepository
-        }
+        },
+        {
+          provide: getRepositoryToken(Block),
+          useClass: EntityRepository
+        },
       ],
     }).compile();
 
