@@ -1,3 +1,5 @@
+import { EntityRepository } from '@mikro-orm/core';
+import { InjectRepository } from '@mikro-orm/nestjs';
 import { Logger } from '@nestjs/common';
 import { Context, Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { UserId } from '../../decorators/user.decorator';
@@ -12,6 +14,8 @@ export class UserFieldResolver {
 
   constructor(
     private readonly fileUrlService: FileUrlService,
+    @InjectRepository(Block)
+    private blockRepository: EntityRepository<Block>,
   ) {}
 
   @ResolveField(() => String, { nullable: true })
@@ -43,5 +47,17 @@ export class UserFieldResolver {
     } else {
       throw new Error('Not allowed to access other users blocks');
     }
+  }
+
+  @ResolveField(() => Boolean, { nullable: true })
+  async blocked(
+    @UserId() userId,
+    @Parent() parent: User
+  ): Promise<boolean> {
+    this.logger.log(this.blocked.name);
+    return !!(await this.blockRepository.findOne({
+      from: userId,
+      to: parent.id
+    }));
   }
 }
