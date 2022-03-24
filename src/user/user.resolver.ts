@@ -74,4 +74,13 @@ export class UserResolver {
     this.logger.log(this.unblockUser.name);
     return await this.userService.unblockUser(userId, toUserId);
   }
+
+  @Mutation(() => Boolean)
+  public reportAsInappropriate(
+    @UserId() userId,
+    @Args({ name: 'toUserId', type: () => ID }) toUserId: number,
+  ) {
+    this.logger.log(this.reportAsInappropriate.name);
+    return this.userService.reportAsInappropriate(userId, toUserId);
+  }
 }

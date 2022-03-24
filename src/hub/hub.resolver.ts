@@ -350,4 +350,13 @@ export class HubResolver {
     await this.hubMicroChatService.deleteMicroChat(userId, hubId, microChatId);
     return true;
   }
+
+  @Mutation(() => Boolean)
+  public reportAsInappropriate(
+    @UserId() userId,
+    @Args({ name: 'hubId', type: () => ID }) hubId: number,
+  ) {
+    this.logger.log(this.reportAsInappropriate.name);
+    return this.hubService.reportAsInappropriate(userId, hubId);
+  }
 }
