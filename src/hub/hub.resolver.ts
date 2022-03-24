@@ -352,11 +352,11 @@ export class HubResolver {
   }
 
   @Mutation(() => Boolean)
-  public reportAsInappropriate(
+  public reportHubAsInappropriate(
     @UserId() userId,
     @Args({ name: 'hubId', type: () => ID }) hubId: number,
   ) {
-    this.logger.log(this.reportAsInappropriate.name);
+    this.logger.log(this.reportHubAsInappropriate.name);
     return this.hubService.reportAsInappropriate(userId, hubId);
   }
 }

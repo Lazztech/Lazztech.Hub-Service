@@ -76,11 +76,11 @@ export class UserResolver {
   }
 
   @Mutation(() => Boolean)
-  public reportAsInappropriate(
+  public reportUserAsInappropriate(
     @UserId() userId,
     @Args({ name: 'toUserId', type: () => ID }) toUserId: number,
   ) {
-    this.logger.log(this.reportAsInappropriate.name);
+    this.logger.log(this.reportUserAsInappropriate.name);
     return this.userService.reportAsInappropriate(userId, toUserId);
   }
 }
