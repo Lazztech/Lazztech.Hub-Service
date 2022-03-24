@@ -52,5 +52,8 @@ import { Block } from '../dal/entity/block.entity';
     HubInviteService,
     HubTasksService,
   ],
+  exports: [
+    HubService
+  ]
 })
 export class HubModule {}

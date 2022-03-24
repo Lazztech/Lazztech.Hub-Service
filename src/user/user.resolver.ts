@@ -1,17 +1,19 @@
 import { Logger, UseGuards } from '@nestjs/common';
 import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { UserId } from '../decorators/user.decorator';
 import { GqlJwtAuthGuard } from '../auth/guards/gql-jwt-auth.guard';
-import { User } from '../dal/entity/user.entity';
-import { UserService } from './user.service';
 import { Block } from '../dal/entity/block.entity';
+import { User } from '../dal/entity/user.entity';
+import { UserId } from '../decorators/user.decorator';
+import { UserService } from './user.service';
 
 @UseGuards(GqlJwtAuthGuard)
 @Resolver()
 export class UserResolver {
   private logger = new Logger(UserResolver.name);
 
-  constructor(private userService: UserService) {
+  constructor(
+    private userService: UserService,
+  ) {
     this.logger.log('constructor');
   }
 
@@ -73,14 +75,5 @@ export class UserResolver {
   ) {
     this.logger.log(this.unblockUser.name);
     return await this.userService.unblockUser(userId, toUserId);
-  }
-
-  @Mutation(() => Boolean)
-  public reportUserAsInappropriate(
-    @UserId() userId,
-    @Args({ name: 'toUserId', type: () => ID }) toUserId: number,
-  ) {
-    this.logger.log(this.reportUserAsInappropriate.name);
-    return this.userService.reportAsInappropriate(userId, toUserId);
   }
 }

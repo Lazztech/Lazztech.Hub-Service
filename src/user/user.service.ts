@@ -114,8 +114,4 @@ export class UserService {
     await this.blockRepository.removeAndFlush(block);
     return block;
   }
-
-  reportAsInappropriate(userId: any, toUserId: number) {
-    throw new Error('Method not implemented.');
-  }
 }

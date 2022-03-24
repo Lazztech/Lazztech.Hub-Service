@@ -269,8 +269,4 @@ export class HubService {
 
     return results;
   }
-
-  reportAsInappropriate(userId: any, hubId: number) {
-    throw new Error('Method not implemented.');
-  }
 }

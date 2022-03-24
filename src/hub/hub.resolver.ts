@@ -1,13 +1,13 @@
 import { Logger, UseGuards } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver, Float, ID } from '@nestjs/graphql';
-import { Invite } from '../dal/entity/invite.entity';
-import { MicroChat } from '../dal/entity/microChat.entity';
-import { UserId } from '../decorators/user.decorator';
-import { UserService } from '../user/user.service';
+import { Args, Float, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GqlJwtAuthGuard } from '../auth/guards/gql-jwt-auth.guard';
 import { Hub } from '../dal/entity/hub.entity';
+import { Invite } from '../dal/entity/invite.entity';
 import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
+import { MicroChat } from '../dal/entity/microChat.entity';
 import { User } from '../dal/entity/user.entity';
+import { UserId } from '../decorators/user.decorator';
+import { UserService } from '../user/user.service';
 import { HubActivityService } from './hub-activity/hub-activity.service';
 import { HubGeofenceService } from './hub-geofence/hub-geofence.service';
 import { HubInviteService } from './hub-invite/hub-invite.service';
@@ -351,12 +351,4 @@ export class HubResolver {
     return true;
   }
 
-  @Mutation(() => Boolean)
-  public reportHubAsInappropriate(
-    @UserId() userId,
-    @Args({ name: 'hubId', type: () => ID }) hubId: number,
-  ) {
-    this.logger.log(this.reportHubAsInappropriate.name);
-    return this.hubService.reportAsInappropriate(userId, hubId);
-  }
 }
