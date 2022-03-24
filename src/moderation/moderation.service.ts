@@ -1,6 +1,7 @@
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
+import { Cron, CronExpression } from '@nestjs/schedule';
 import { Hub } from '../dal/entity/hub.entity';
 import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
 import { User } from '../dal/entity/user.entity';
@@ -8,6 +9,7 @@ import { HubService } from '../hub/hub.service';
 
 @Injectable()
 export class ModerationService {
+    private logger = new Logger(ModerationService.name);
 
     constructor(
         @InjectRepository(Hub)
@@ -19,6 +21,21 @@ export class ModerationService {
         private hubService: HubService
     ) {}
 
+    @Cron(CronExpression.EVERY_6_HOURS)
+    private async autoBanner() {
+        this.logger.log(this.autoBanner.name);
+        const users = await this.userRepository.find({ flagged: true });
+        users.forEach(user => {
+            user.banned = true;
+        });
+        await this.userRepository.persistAndFlush(users);
+        const hubs = await this.hubRepository.find({ flagged: true });
+        hubs.forEach(hub => {
+            hub.banned = true;
+        });
+        await this.joinUserHubRepository.persistAndFlush(hubs);
+    }
+
     public async reportHubAsInappropriate(userId: any, hubId: number) {
         const relation = await this.joinUserHubRepository.findOneOrFail({
             user: userId,
@@ -29,6 +46,12 @@ export class ModerationService {
         }
         const hub = await relation.hub.load();
         hub.flagged = true;
+        const adminRelations = await this.joinUserHubRepository.find({ hub: hubId, isOwner: true });
+        for (const ownerRelation of adminRelations) {
+            const owner = await ownerRelation.user.load();
+            owner.banned = true;
+        }
+        await this.joinUserHubRepository.persistAndFlush(adminRelations);
         await this.hubRepository.persistAndFlush(hub);
     }
 
