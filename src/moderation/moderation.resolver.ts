@@ -14,20 +14,22 @@ export class ModerationResolver {
   ) {}
 
   @Mutation(() => Boolean)
-  public reportHubAsInappropriate(
+  public async reportHubAsInappropriate(
     @UserId() userId,
     @Args({ name: 'hubId', type: () => ID }) hubId: number,
-  ) {
+  ): Promise<boolean> {
     this.logger.log(this.reportHubAsInappropriate.name);
-    return this.moderationService.reportHubAsInappropriate(userId, hubId);
+    await this.moderationService.reportHubAsInappropriate(userId, hubId);
+    return true;
   }
 
   @Mutation(() => Boolean)
-  public reportUserAsInappropriate(
+  public async reportUserAsInappropriate(
     @UserId() userId,
     @Args({ name: 'toUserId', type: () => ID }) toUserId: number,
-  ) {
+  ): Promise<boolean> {
     this.logger.log(this.reportUserAsInappropriate.name);
-    return this.moderationService.reportUserAsInappropriate(userId, toUserId);
+    await this.moderationService.reportUserAsInappropriate(userId, toUserId);
+    return true;
   }
 }

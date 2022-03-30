@@ -49,7 +49,7 @@ export class ModerationService {
         const adminRelations = await this.joinUserHubRepository.find({ hub: hubId, isOwner: true });
         for (const ownerRelation of adminRelations) {
             const owner = await ownerRelation.user.load();
-            owner.banned = true;
+            owner.flagged = true;
         }
         await this.joinUserHubRepository.persistAndFlush(adminRelations);
         await this.hubRepository.persistAndFlush(hub);
