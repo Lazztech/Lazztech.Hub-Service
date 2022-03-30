@@ -218,7 +218,8 @@ import { ModerationModule } from './moderation/moderation.module';
     UserModule,
     GraphQLModule.forRoot({
       autoSchemaFile: true,
-      context: ({ req }) => ({ req }),
+      context: ({ req, res }) => ({ req, res }),
+      fieldResolverEnhancers: ['interceptors'],
       cors: {
         credentials: true,
         origin: true,
