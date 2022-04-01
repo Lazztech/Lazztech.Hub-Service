@@ -9,7 +9,7 @@ export class ModerationInterceptor implements NestInterceptor {
         if (response?.banned) {
           console.log('intercepted banned', response);
           return;
-        } else if (response?.find(x => x?.banned)) {
+        } else if (Array.isArray(response)) {
           return response.filter(y => {
             console.log('intercepted banned', y);
             return !y.banned;
