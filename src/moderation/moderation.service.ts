@@ -21,7 +21,7 @@ export class ModerationService {
         private hubService: HubService
     ) {}
 
-    @Cron(CronExpression.EVERY_6_HOURS)
+    @Cron(CronExpression.EVERY_12_HOURS)
     private async autoBanner() {
         this.logger.log(this.autoBanner.name);
         const users = await this.userRepository.find({ flagged: true });
