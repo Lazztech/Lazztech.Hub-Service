@@ -1,6 +1,5 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
-import { GqlExecutionContext } from '@nestjs/graphql';
-import { filter, map, Observable, throwError } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 @Injectable()
 export class ModerationInterceptor implements NestInterceptor {
@@ -8,10 +7,16 @@ export class ModerationInterceptor implements NestInterceptor {
     return next.handle().pipe(
       map(response => {
         if (response?.banned) {
-          console.log(response);
+          console.log('intercepted banned', response);
           return;
+        } else if (response?.find(x => x?.banned)) {
+          return response.filter(y => {
+            console.log('intercepted banned', y);
+            return !y.banned;
+          })
+        } else {
+          return response;
         }
-        return response;
       })
     );
   }
