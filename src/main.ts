@@ -7,7 +7,7 @@ import * as bodyParser from 'body-parser';
 import { AppModule } from './app.module';
 /* eslint-disable */
 import express = require('express');
-import { ModerationInterceptor } from './moderation.interceptor';
+import { ModerationInterceptor } from './moderation/moderation.interceptor';
 
 async function bootstrap() {
   const instance = express();
