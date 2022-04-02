@@ -145,7 +145,8 @@
       "!**/migrations/**/*",
       "!**/entity/**/*",
       "!**/*.dto.*",
-      "!**/*.input.*"
+      "!**/*.input.*",
+      "!**/*.module.*"
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
