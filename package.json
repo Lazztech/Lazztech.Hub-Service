@@ -143,7 +143,9 @@
     "collectCoverageFrom": [
       "**/*.(t|j)s",
       "!**/migrations/**/*",
-      "!**/entity/**/*"
+      "!**/entity/**/*",
+      "!**/*.dto.*",
+      "!**/*.input.*"
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
