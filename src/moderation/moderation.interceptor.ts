@@ -1,18 +1,22 @@
-import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
+import { CallHandler, ExecutionContext, Injectable, Logger, NestInterceptor } from '@nestjs/common';
 import { map, Observable } from 'rxjs';
 
 @Injectable()
 export class ModerationInterceptor implements NestInterceptor {
+  private logger = new Logger(ModerationInterceptor.name);
+
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       map(response => {
         if (response?.banned) {
-          console.log('intercepted banned', response);
+          this.logger.warn(`intercepted banned object: ${JSON.stringify(response)}`);
           return;
         } else if (Array.isArray(response)) {
           return response.filter(y => {
-            console.log('intercepted banned', y);
-            return !y.banned;
+            if (y?.banned) {
+              this.logger.warn(`intercepted banned object: ${JSON.stringify(y)}`);
+            }
+            return !y?.banned;
           })
         } else {
           return response;
