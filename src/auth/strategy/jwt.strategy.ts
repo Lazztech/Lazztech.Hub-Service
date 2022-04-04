@@ -24,7 +24,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     this.logger.log('verified access token.');
 
     const user = await this.userService.getUser(payload.userId);
-    if (!user) {
+    if (!user || user?.banned) {
       this.logger.error('unable to verify access token.');
       throw new UnauthorizedException();
     } else {

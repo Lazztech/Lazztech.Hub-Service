@@ -56,4 +56,10 @@ export class Hub extends ShareableId {
    */
   @OneToMany(() => Invite, (invite) => invite.hub)
   public invites = new Collection<Invite>(this);
+
+  @Property({ nullable: true })
+  public flagged?: boolean;
+
+  @Property({ nullable: true })
+  public banned?: boolean;
 }

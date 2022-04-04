@@ -36,12 +36,12 @@ export class JoinUserHubsResolver {
     }
   }
 
-  @ResolveField(() => User)
+  @ResolveField(() => User, { nullable: true })
   public user(@Parent() joinUserHub: JoinUserHub): Promise<User> {
     return joinUserHub.user.load();
   }
 
-  @ResolveField(() => Hub)
+  @ResolveField(() => Hub, { nullable: true })
   public hub(@Parent() joinUserHub: JoinUserHub): Promise<Hub> {
     return joinUserHub.hub.load();
   }

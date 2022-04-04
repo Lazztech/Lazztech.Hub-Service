@@ -21,17 +21,17 @@ export class InviteFieldResolver {
       return parent.hub.id;
     }
 
-    @ResolveField(() => User)
+    @ResolveField(() => User, { nullable: true })
     async inviter(@Parent() parent: Invite) {
         return parent.inviter.load();
     }
 
-    @ResolveField(() => User)
+    @ResolveField(() => User, { nullable: true })
     async invitee(@Parent() parent: Invite) {
         return parent.invitee.load();
     }
 
-    @ResolveField(() => Hub)
+    @ResolveField(() => Hub, { nullable: true })
     async hub(@Parent() parent: Invite) {
         return parent.hub.load();
     }

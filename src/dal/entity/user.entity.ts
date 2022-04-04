@@ -8,6 +8,7 @@ import { ShareableId } from './shareableId.entity';
 import { Block } from './block.entity';
 import { Cascade, Collection, Entity, IdentifiedReference, OneToMany, OneToOne, PrimaryKey, Property } from '@mikro-orm/core';
 
+ /* eslint-disable */ // needed for mikroorm default value & type which conflicts with typescript-eslint/no-unused-vars
 @ObjectType()
 @Entity()
 export class User extends ShareableId{
@@ -93,4 +94,10 @@ export class User extends ShareableId{
    */
   @OneToMany(() => Block, (block) => block.to)
   public blockedBy = new Collection<Block>(this);
+
+  @Property({ nullable: true })
+  public flagged?: boolean;
+
+  @Property({ nullable: true })
+  public banned?: boolean;
 }
