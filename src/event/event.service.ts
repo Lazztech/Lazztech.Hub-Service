@@ -38,6 +38,14 @@ export class EventService {
         return joinUserEvent;
     }
 
+    async getOneUserEvent(userId: any, eventId: number) {
+        this.logger.log(this.getOneUserEvent.name);
+        return await this.joinUserEventRepository.findOne({
+            user: userId,
+            event: eventId,
+        });
+    }
+
     async getUserEvents(userId: any) {
         this.logger.log(this.getUserEvents.name);
         return await this.joinUserEventRepository.find({ user: userId });
