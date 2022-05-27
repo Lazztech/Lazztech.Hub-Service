@@ -20,15 +20,21 @@ export class EventResolver {
     public async createEvent(
         @UserId() userId,
         @Args({ name: 'name', type: () => String }) name: string,
-        @Args({ name: 'description', type: () => String }) description: string,
-        @Args({ name: 'image', type: () => String }) image: string,
-        @Args({ name: 'latitude', type: () => Float }) latitude: number,
-        @Args({ name: 'longitude', type: () => Float }) longitude: number,
+        @Args({ name: 'description', type: () => String, nullable: true }) description: string,
+        @Args({ name: 'allDay', type: () => Boolean, nullable: true }) allDay: boolean,
+        @Args({ name: 'startDateTime', type: () => String, nullable: true }) startDateTime: string,
+        @Args({ name: 'endDateTime', type: () => String, nullable: true }) endDateTime: string,
+        @Args({ name: 'image', type: () => String, nullable: true }) image: string,
+        @Args({ name: 'latitude', type: () => Float, nullable: true }) latitude: number,
+        @Args({ name: 'longitude', type: () => Float, nullable: true }) longitude: number,
     ): Promise<JoinUserEvent> {
         this.logger.log(this.createEvent.name);
         return this.eventService.createEvent(userId, {
             name,
             description,
+            allDay,
+            startDateTime,
+            endDateTime,
             image,
             latitude,
             longitude,
