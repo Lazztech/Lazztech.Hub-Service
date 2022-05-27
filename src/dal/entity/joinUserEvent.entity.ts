@@ -37,7 +37,7 @@ export class JoinUserEvent {
    */
   @ManyToOne({ 
     entity: () => Event,
-    fieldName: 'hubId',
+    fieldName: 'eventId',
     onDelete: 'cascade',
     primary: true,
     wrappedReference: true
