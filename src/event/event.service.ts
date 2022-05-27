@@ -21,8 +21,10 @@ export class EventService {
 
     async createEvent(userId: any, event: Event): Promise<JoinUserEvent> {
         this.logger.log(this.createEvent.name);
-        const imageUrl = await this.fileService.storeImageFromBase64(event.image);
-        event.image = imageUrl;
+        if (event?.image) {
+            const imageUrl = await this.fileService.storeImageFromBase64(event.image);
+            event.image = imageUrl;
+        }
 
         event = this.eventRepository.create(event);
         await this.eventRepository.persistAndFlush(event);
