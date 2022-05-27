@@ -37,4 +37,9 @@ export class EventService {
         await this.joinUserEventRepository.persistAndFlush(joinUserEvent);
         return joinUserEvent;
     }
+
+    async getUserEvents(userId: any) {
+        this.logger.log(this.getUserEvents.name);
+        return await this.joinUserEventRepository.find({ user: userId });
+    }
 }

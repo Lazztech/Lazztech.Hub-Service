@@ -1,5 +1,5 @@
 import { Logger, UseGuards } from '@nestjs/common';
-import { Args, Float, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Float, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GqlJwtAuthGuard } from 'src/auth/guards/gql-jwt-auth.guard';
 import { Event } from 'src/dal/entity/event.entity';
 import { JoinUserEvent } from 'src/dal/entity/joinUserEvent.entity';
@@ -39,6 +39,12 @@ export class EventResolver {
             latitude,
             longitude,
           } as Event);
+    }
+
+    @Query(() => [JoinUserEvent])
+    public async usersEvents(@UserId() userId): Promise<JoinUserEvent[]> {
+      this.logger.log(this.usersEvents.name);
+      return await this.eventService.getUserEvents(userId);
     }
 
 }
