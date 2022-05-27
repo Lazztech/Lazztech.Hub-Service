@@ -1,5 +1,6 @@
-import { Entity, PrimaryKey, Property } from "@mikro-orm/core";
+import { Collection, Entity, OneToMany, PrimaryKey, Property } from "@mikro-orm/core";
 import { Field, ID, ObjectType } from "@nestjs/graphql";
+import { JoinUserEvent } from "./joinUserEvent.entity";
 import { ShareableId } from "./shareableId.entity";
 
 /* eslint-disable */ // needed for mikroorm default value & type which conflicts with typescript-eslint/no-unused-vars
@@ -48,6 +49,12 @@ export class Event extends ShareableId {
   @Field({ nullable: true })
   @Property({ type: 'float', nullable: true })
   public longitude?: number;
+
+  /**
+   * Handled with a field resolver
+   */
+  @OneToMany(() => JoinUserEvent, (joinUserEvent) => joinUserEvent.event)
+  public usersConnection = new Collection<JoinUserEvent>(this);
 
   @Property({ nullable: true })
   public flagged?: boolean;
