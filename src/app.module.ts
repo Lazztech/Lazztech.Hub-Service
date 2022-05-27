@@ -16,6 +16,7 @@ import { HubModule } from './hub/hub.module';
 import { NotificationModule } from './notification/notification.module';
 import { UserModule } from './user/user.module';
 import { ModerationModule } from './moderation/moderation.module';
+import { EventModule } from './event/event.module';
 
 @Module({
   imports: [
@@ -231,6 +232,7 @@ import { ModerationModule } from './moderation/moderation.module';
     HealthModule,
     EmailModule,
     ModerationModule,
+    EventModule,
   ],
 })
 export class AppModule implements OnModuleInit {
