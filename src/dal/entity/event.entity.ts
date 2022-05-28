@@ -1,7 +1,8 @@
-import { Collection, Entity, OneToMany, PrimaryKey, Property } from "@mikro-orm/core";
+import { Collection, Entity, IdentifiedReference, ManyToOne, OneToMany, PrimaryKey, Property } from "@mikro-orm/core";
 import { Field, ID, ObjectType } from "@nestjs/graphql";
 import { JoinUserEvent } from "./joinUserEvent.entity";
 import { ShareableId } from "./shareableId.entity";
+import { User } from "./user.entity";
 
 /* eslint-disable */ // needed for mikroorm default value & type which conflicts with typescript-eslint/no-unused-vars
 @ObjectType()
@@ -18,6 +19,16 @@ export class Event extends ShareableId {
   @Field({ nullable: true })
   @Property({ nullable: true })
   public description?: string;
+
+  /**
+   * Exposed as a field resolver
+   */
+  @ManyToOne({
+    entity: () => User,
+    fieldName: 'createdByUserId',
+    wrappedReference: true
+  })
+  public createdBy!: IdentifiedReference<User>;
 
   @Property({ nullable: true })
   public allDay?: boolean;

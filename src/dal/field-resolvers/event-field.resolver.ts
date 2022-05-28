@@ -6,6 +6,7 @@ import { FileUrlService } from '../../file/file-url/file-url.service';
 import { Block } from '../entity/block.entity';
 import { Event } from '../entity/event.entity';
 import { JoinUserEvent } from '../entity/joinUserEvent.entity';
+import { User } from '../entity/user.entity';
 
 @Resolver((of) => Event)
 export class EventFieldResolver {
@@ -15,6 +16,11 @@ export class EventFieldResolver {
     @InjectRepository(Block)
     private blockRepository: EntityRepository<Block>,
   ) {}
+
+  @ResolveField(() => User, { nullable: true })
+  public createdBy(@Parent() parent: Event): Promise<User> {
+    return parent.createdBy.load();
+  }
 
   @ResolveField(() => String, { nullable: true })
   image(@Parent() parent: Event, @Context() ctx: any): string {

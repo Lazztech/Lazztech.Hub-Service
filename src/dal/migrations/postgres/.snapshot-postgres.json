@@ -801,6 +801,15 @@
           "nullable": true,
           "mappedType": "string"
         },
+        "createdByUserId": {
+          "name": "createdByUserId",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
         "all_day": {
           "name": "all_day",
           "type": "boolean",
@@ -888,7 +897,20 @@
         }
       ],
       "checks": [],
-      "foreignKeys": {}
+      "foreignKeys": {
+        "event_createdByUserId_foreign": {
+          "constraintName": "event_createdByUserId_foreign",
+          "columnNames": [
+            "createdByUserId"
+          ],
+          "localTableName": "public.event",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.user",
+          "updateRule": "cascade"
+        }
+      }
     },
     {
       "columns": {

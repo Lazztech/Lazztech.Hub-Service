@@ -26,7 +26,7 @@ export class EventService {
             event.image = imageUrl;
         }
 
-        event = this.eventRepository.create(event);
+        event = this.eventRepository.create({ ...event, createdBy: userId });
         await this.eventRepository.persistAndFlush(event);
 
         const joinUserEvent = this.joinUserEventRepository.create({
