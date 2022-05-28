@@ -38,6 +38,27 @@ export class EventService {
         return joinUserEvent;
     }
 
+    async rsvpForEvent(userId: any, eventId: any, rsvp: any) {
+        switch (rsvp) {
+            case RSVP.GOING:
+                break;
+            case RSVP.CANTGO:
+                break;
+            case RSVP.MAYBE:
+                break;
+            default:
+                throw new Error('rsvp must be going, maybe, or cantgo.');
+        }
+
+        const userEvent = await this.joinUserEventRepository.findOneOrFail({
+            user: userId,
+            event: eventId,
+        });
+        userEvent.rsvp = rsvp;
+        await this.joinUserEventRepository.persistAndFlush(userEvent);
+        return userEvent;
+    }
+
     async getOneUserEvent(userId: any, eventId: number) {
         this.logger.log(this.getOneUserEvent.name);
         return await this.joinUserEventRepository.findOne({

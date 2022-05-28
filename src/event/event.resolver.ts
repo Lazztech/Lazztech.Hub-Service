@@ -41,6 +41,16 @@ export class EventResolver {
           } as Event);
     }
 
+    @Mutation(() => JoinUserEvent)
+    public async rsvp(
+        @UserId() userId,
+        @Args({ name: 'eventId', type: () => ID }) eventId: number,
+        @Args({ name: 'rsvp', type: () => String, description: 'going || maybe || cantgo' }) rsvp: string,
+    ): Promise<JoinUserEvent> {
+        this.logger.log(this.rsvp.name);
+        return this.eventService.rsvpForEvent(userId, eventId, rsvp);
+    }
+
     @Query(() => JoinUserEvent)
     public async event(
         @UserId() userId,
