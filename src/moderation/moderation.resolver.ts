@@ -38,7 +38,7 @@ export class ModerationResolver {
     @UserId() userId,
     @Args({ name: 'eventId', type: () => ID }) eventId: number,
   ): Promise<boolean> {
-    this.logger.log(this.reportHubAsInappropriate.name);
+    this.logger.log(this.reportEventAsInappropriate.name);
     await this.moderationService.reportEventAsInappropriate(userId, eventId);
     return true;
   }
