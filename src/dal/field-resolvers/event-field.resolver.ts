@@ -1,7 +1,7 @@
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Context, Parent, ResolveField, Resolver } from '@nestjs/graphql';
-import { UserId } from 'src/decorators/user.decorator';
+import { UserId } from '../../decorators/user.decorator';
 import { FileUrlService } from '../../file/file-url/file-url.service';
 import { Block } from '../entity/block.entity';
 import { Event } from '../entity/event.entity';

@@ -6,8 +6,8 @@ import { User } from '../dal/entity/user.entity';
 import { ModerationService } from './moderation.service';
 import { ModerationResolver } from './moderation.resolver';
 import { HubModule } from '../hub/hub.module';
-import { Event } from 'src/dal/entity/event.entity';
-import { JoinUserEvent } from 'src/dal/entity/joinUserEvent.entity';
+import { Event } from '../dal/entity/event.entity';
+import { JoinUserEvent } from '../dal/entity/joinUserEvent.entity';
 
 @Module({
   imports: [

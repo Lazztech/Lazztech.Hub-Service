@@ -1,10 +1,10 @@
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { Event } from 'src/dal/entity/event.entity';
-import { JoinUserEvent, RSVP } from 'src/dal/entity/joinUserEvent.entity';
-import { FILE_SERVICE } from 'src/file/file-service.token';
-import { FileServiceInterface } from 'src/file/interfaces/file-service.interface';
+import { Event } from '../dal/entity/event.entity';
+import { JoinUserEvent, RSVP } from '../dal/entity/joinUserEvent.entity';
+import { FILE_SERVICE } from '../file/file-service.token';
+import { FileServiceInterface } from '../file/interfaces/file-service.interface';
 
 @Injectable()
 export class EventService {

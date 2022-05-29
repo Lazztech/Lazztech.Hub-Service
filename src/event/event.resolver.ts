@@ -1,10 +1,10 @@
 import { Logger, UseGuards } from '@nestjs/common';
 import { Args, Float, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { GqlJwtAuthGuard } from 'src/auth/guards/gql-jwt-auth.guard';
-import { Event } from 'src/dal/entity/event.entity';
-import { JoinUserEvent } from 'src/dal/entity/joinUserEvent.entity';
-import { UserId } from 'src/decorators/user.decorator';
-import { HubResolver } from 'src/hub/hub.resolver';
+import { GqlJwtAuthGuard } from '../auth/guards/gql-jwt-auth.guard';
+import { Event } from '../dal/entity/event.entity';
+import { JoinUserEvent } from '../dal/entity/joinUserEvent.entity';
+import { UserId } from '../decorators/user.decorator';
+import { HubResolver } from '../hub/hub.resolver';
 import { EventService } from './event.service';
 
 @UseGuards(GqlJwtAuthGuard)

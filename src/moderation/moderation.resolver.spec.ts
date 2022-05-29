@@ -17,6 +17,8 @@ import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
 import { User } from '../dal/entity/user.entity';
 import { ModerationResolver } from './moderation.resolver';
 import { ModerationService } from './moderation.service';
+import { Event } from '../dal/entity/event.entity';
+import { JoinUserEvent } from '../dal/entity/joinUserEvent.entity';
 
 describe('ModerationResolver', () => {
   let resolver: ModerationResolver;
@@ -67,6 +69,14 @@ describe('ModerationResolver', () => {
         },
         {
           provide: getRepositoryToken(Block),
+          useClass: EntityRepository,
+        },
+        {
+          provide: getRepositoryToken(Event),
+          useClass: EntityRepository,
+        },
+        {
+          provide: getRepositoryToken(JoinUserEvent),
           useClass: EntityRepository,
         },
       ],

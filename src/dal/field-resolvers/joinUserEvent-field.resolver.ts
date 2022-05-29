@@ -17,7 +17,6 @@ export class JoinUserEventFieldResolver {
 
   @ResolveField(() => Boolean, { nullable: true })
   async isPresent(@Parent() joinUserEvent: JoinUserEvent): Promise<boolean> {
-    const event = await joinUserEvent.event.load();
     return joinUserEvent.isPresent;
   }
 

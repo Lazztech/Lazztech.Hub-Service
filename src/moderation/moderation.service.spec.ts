@@ -16,6 +16,8 @@ import { UserDevice } from '../dal/entity/userDevice.entity';
 import { Invite } from '../dal/entity/invite.entity';
 import { HttpModule } from '@nestjs/common';
 import { Block } from '../dal/entity/block.entity';
+import { Event } from '../dal/entity/event.entity';
+import { JoinUserEvent } from '../dal/entity/joinUserEvent.entity';
 
 describe('ModerationService', () => {
   let service: ModerationService;
@@ -65,6 +67,14 @@ describe('ModerationService', () => {
         },
         {
           provide: getRepositoryToken(Block),
+          useClass: EntityRepository,
+        },
+        {
+          provide: getRepositoryToken(Event),
+          useClass: EntityRepository,
+        },
+        {
+          provide: getRepositoryToken(JoinUserEvent),
           useClass: EntityRepository,
         },
       ],
