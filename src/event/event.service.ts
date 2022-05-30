@@ -1,6 +1,8 @@
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Inject, Injectable, Logger } from '@nestjs/common';
+import { User } from '../dal/entity/user.entity';
+import { NotificationService } from '../notification/notification.service';
 import { Event } from '../dal/entity/event.entity';
 import { JoinUserEvent, RSVP } from '../dal/entity/joinUserEvent.entity';
 import { FILE_SERVICE } from '../file/file-service.token';
@@ -17,6 +19,9 @@ export class EventService {
         private readonly joinUserEventRepository: EntityRepository<JoinUserEvent>,
         @InjectRepository(Event)
         private readonly eventRepository: EntityRepository<Event>,
+        @InjectRepository(User)
+        private readonly userRepository: EntityRepository<User>,
+        private readonly notificationService: NotificationService,
     ) {}
 
     async createEvent(userId: any, event: Event): Promise<JoinUserEvent> {
@@ -39,6 +44,7 @@ export class EventService {
     }
 
     async rsvpForEvent(userId: any, eventId: any, rsvp: any) {
+        this.logger.log(this.rsvpForEvent.name);
         switch (rsvp) {
             case RSVP.GOING:
                 break;
@@ -57,6 +63,25 @@ export class EventService {
         userEvent.rsvp = rsvp;
         await this.joinUserEventRepository.persistAndFlush(userEvent);
         return userEvent;
+    }
+
+    async inviteUserToEvent(userId: any, eventId: number, inviteesEmail: string): Promise<JoinUserEvent> {
+        const invitee = await this.userRepository.findOneOrFail({ email: inviteesEmail });
+        const event = await this.eventRepository.findOneOrFail({ id: eventId });
+
+        const joinUserEvent = this.joinUserEventRepository.create({
+            user: invitee.id,
+            event: event.id,
+            isPresent: false,
+        });
+        await this.joinUserEventRepository.persistAndFlush(joinUserEvent);
+
+        await this.notificationService.sendPushToUser(invitee.id, {
+            title: `You're invited to "${event.name}" event.`,
+            body: `View the invite.`,
+            click_action: `event/${eventId}`,
+        });
+        return joinUserEvent;
     }
 
     async getOneUserEvent(userId: any, eventId: number) {

@@ -8,6 +8,11 @@ import { JoinUserEvent } from '../dal/entity/joinUserEvent.entity';
 import { EventService } from './event.service';
 import { ConfigModule } from '@nestjs/config';
 import { ImageFileService } from '../file/image-file/image-file.service';
+import { User } from '../dal/entity/user.entity';
+import { HttpModule } from '@nestjs/common';
+import { InAppNotification } from '../dal/entity/inAppNotification.entity';
+import { NotificationService } from '../notification/notification.service';
+import { UserDevice } from '../dal/entity/userDevice.entity';
 
 describe('EventService', () => {
   let service: EventService;
@@ -19,10 +24,12 @@ describe('EventService', () => {
           envFilePath: ['.env.local', '.env'],
           isGlobal: true,
         }),
+        HttpModule,
       ],
       providers: [
         EventService,
         ImageFileService,
+        NotificationService,
         {
           provide: FILE_SERVICE,
           useClass: LocalFileService,
@@ -33,6 +40,18 @@ describe('EventService', () => {
         },
         {
           provide: getRepositoryToken(JoinUserEvent),
+          useClass: EntityRepository,
+        },
+        {
+          provide: getRepositoryToken(User),
+          useClass: EntityRepository,
+        },
+        {
+          provide: getRepositoryToken(InAppNotification),
+          useClass: EntityRepository,
+        },
+        {
+          provide: getRepositoryToken(UserDevice),
           useClass: EntityRepository,
         },
       ],

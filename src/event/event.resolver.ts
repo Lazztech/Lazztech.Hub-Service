@@ -51,6 +51,20 @@ export class EventResolver {
         return this.eventService.rsvpForEvent(userId, eventId, rsvp);
     }
 
+    @Mutation(() => JoinUserEvent)
+    public async inviteUserToEvent(
+        @UserId() userId,
+        @Args({ name: 'eventId', type: () => ID }) eventId: number,
+        @Args({ name: 'inviteesEmail', type: () => String }) inviteesEmail: string,
+    ): Promise<JoinUserEvent> {
+        this.logger.log(this.inviteUserToEvent.name);
+        return this.eventService.inviteUserToEvent(
+            userId,
+            eventId,
+            inviteesEmail,
+        );
+    }
+
     @Query(() => JoinUserEvent)
     public async event(
         @UserId() userId,
