@@ -35,14 +35,14 @@ export class Event extends ShareableId {
 
   @Field({
     nullable: true,
-    description: 'string representation of unix timestamp',
+    description: 'ISO 8601 Date Time',
   })
   @Property({ nullable: true })
   public startDateTime?: string;
 
   @Field({
     nullable: true,
-    description: 'string representation of unix timestamp',
+    description: 'ISO 8601 Date Time',
   })
   @Property({ nullable: true })
   public endDateTime?: string;
