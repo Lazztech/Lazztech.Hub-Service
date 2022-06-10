@@ -32,4 +32,14 @@ export class ModerationResolver {
     await this.moderationService.reportUserAsInappropriate(userId, toUserId);
     return true;
   }
+
+  @Mutation(() => Boolean)
+  public async reportEventAsInappropriate(
+    @UserId() userId,
+    @Args({ name: 'eventId', type: () => ID }) eventId: number,
+  ): Promise<boolean> {
+    this.logger.log(this.reportEventAsInappropriate.name);
+    await this.moderationService.reportEventAsInappropriate(userId, eventId);
+    return true;
+  }
 }
