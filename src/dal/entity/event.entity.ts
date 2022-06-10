@@ -30,9 +30,6 @@ export class Event extends ShareableId {
   })
   public createdBy!: IdentifiedReference<User>;
 
-  @Property({ nullable: true })
-  public allDay?: boolean;
-
   @Field({
     nullable: true,
     description: 'ISO 8601 Date Time',
@@ -60,6 +57,10 @@ export class Event extends ShareableId {
   @Field({ nullable: true })
   @Property({ type: 'float', nullable: true })
   public longitude?: number;
+
+  @Field({ nullable: true })
+  @Property({ nullable: true })
+  public locationLabel?: string;
 
   /**
    * Handled with a field resolver

@@ -21,23 +21,23 @@ export class EventResolver {
         @UserId() userId,
         @Args({ name: 'name', type: () => String }) name: string,
         @Args({ name: 'description', type: () => String, nullable: true }) description: string,
-        @Args({ name: 'allDay', type: () => Boolean, nullable: true }) allDay: boolean,
         @Args({ name: 'startDateTime', type: () => String, nullable: true }) startDateTime: string,
         @Args({ name: 'endDateTime', type: () => String, nullable: true }) endDateTime: string,
         @Args({ name: 'image', type: () => String, nullable: true }) image: string,
         @Args({ name: 'latitude', type: () => Float, nullable: true }) latitude: number,
         @Args({ name: 'longitude', type: () => Float, nullable: true }) longitude: number,
+        @Args({ name: 'locationLabel', type: () => String, nullable: true }) locationLabel: string,
     ): Promise<JoinUserEvent> {
         this.logger.log(this.createEvent.name);
         return this.eventService.createEvent(userId, {
             name,
             description,
-            allDay,
             startDateTime,
             endDateTime,
             image,
             latitude,
             longitude,
+            locationLabel
           } as Event);
     }
 
@@ -96,24 +96,24 @@ export class EventResolver {
         @Args({ name: 'eventId', type: () => ID }) eventId: number,
         @Args({ name: 'name', type: () => String }) name: string,
         @Args({ name: 'description', type: () => String, nullable: true }) description: string,
-        @Args({ name: 'allDay', type: () => Boolean, nullable: true }) allDay: boolean,
         @Args({ name: 'startDateTime', type: () => String, nullable: true }) startDateTime: string,
         @Args({ name: 'endDateTime', type: () => String, nullable: true }) endDateTime: string,
         @Args({ name: 'image', type: () => String, nullable: true }) image: string,
         @Args({ name: 'latitude', type: () => Float, nullable: true }) latitude: number,
         @Args({ name: 'longitude', type: () => Float, nullable: true }) longitude: number,
+        @Args({ name: 'locationLabel', type: () => String, nullable: true }) locationLabel: string,
     ): Promise<Event> {
         this.logger.log(this.updateEvent.name);
         return this.eventService.updateEvent(userId, {
             id: eventId,
             name,
             description,
-            allDay,
             startDateTime,
             endDateTime,
             image,
             latitude,
             longitude,
+            locationLabel
           } as Event);
     }
 }

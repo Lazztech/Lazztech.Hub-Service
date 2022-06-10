@@ -810,15 +810,6 @@
           "nullable": false,
           "mappedType": "integer"
         },
-        "all_day": {
-          "name": "all_day",
-          "type": "boolean",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": true,
-          "mappedType": "boolean"
-        },
         "start_date_time": {
           "name": "start_date_time",
           "type": "varchar(255)",
@@ -863,6 +854,15 @@
           "primary": false,
           "nullable": true,
           "mappedType": "float"
+        },
+        "location_label": {
+          "name": "location_label",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "string"
         },
         "flagged": {
           "name": "flagged",
