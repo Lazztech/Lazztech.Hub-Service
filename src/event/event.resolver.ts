@@ -80,4 +80,13 @@ export class EventResolver {
       return await this.eventService.getUserEvents(userId);
     }
 
+    @Mutation(() => Boolean)
+    public async deleteEvent(
+        @UserId() userId,
+        @Args({ name: 'id', type: () => ID }) id: number,
+    ): Promise<boolean> {
+        this.logger.log(this.deleteEvent.name);
+        await this.eventService.deleteEvent(userId, id);
+        return true;
+    }
 }

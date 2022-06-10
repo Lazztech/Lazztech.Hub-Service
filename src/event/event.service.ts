@@ -96,4 +96,13 @@ export class EventService {
         this.logger.log(this.getUserEvents.name);
         return await this.joinUserEventRepository.find({ user: userId });
     }
+
+    async deleteEvent(userId: any, eventId: number) {
+        this.logger.log(this.deleteEvent.name);
+        const event = await this.eventRepository.findOneOrFail({
+            createdBy: userId,
+            id: eventId
+        });
+        await this.eventRepository.removeAndFlush(event);
+    }
 }
