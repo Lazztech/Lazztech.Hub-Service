@@ -89,4 +89,31 @@ export class EventResolver {
         await this.eventService.deleteEvent(userId, id);
         return true;
     }
+
+    @Mutation(() => Event)
+    public async updateEvent(
+        @UserId() userId,
+        @Args({ name: 'eventId', type: () => ID }) eventId: number,
+        @Args({ name: 'name', type: () => String }) name: string,
+        @Args({ name: 'description', type: () => String, nullable: true }) description: string,
+        @Args({ name: 'allDay', type: () => Boolean, nullable: true }) allDay: boolean,
+        @Args({ name: 'startDateTime', type: () => String, nullable: true }) startDateTime: string,
+        @Args({ name: 'endDateTime', type: () => String, nullable: true }) endDateTime: string,
+        @Args({ name: 'image', type: () => String, nullable: true }) image: string,
+        @Args({ name: 'latitude', type: () => Float, nullable: true }) latitude: number,
+        @Args({ name: 'longitude', type: () => Float, nullable: true }) longitude: number,
+    ): Promise<Event> {
+        this.logger.log(this.updateEvent.name);
+        return this.eventService.updateEvent(userId, {
+            id: eventId,
+            name,
+            description,
+            allDay,
+            startDateTime,
+            endDateTime,
+            image,
+            latitude,
+            longitude,
+          } as Event);
+    }
 }

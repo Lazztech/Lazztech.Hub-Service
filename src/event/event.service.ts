@@ -97,6 +97,17 @@ export class EventService {
         return await this.joinUserEventRepository.find({ user: userId });
     }
 
+    async updateEvent(userId: any, value: Event): Promise<Event> {
+        this.logger.log(this.updateEvent.name);
+        let event = await this.eventRepository.findOneOrFail({
+            createdBy: userId,
+            id: value.id
+        });
+        event = this.eventRepository.assign(event, value);
+        await this.eventRepository.persistAndFlush(event);
+        return event;
+    }
+
     async deleteEvent(userId: any, eventId: number) {
         this.logger.log(this.deleteEvent.name);
         const event = await this.eventRepository.findOneOrFail({
