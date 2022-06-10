@@ -103,6 +103,13 @@ export class EventService {
             createdBy: userId,
             id: value.id
         });
+        if (value?.image && value?.image?.includes('base64')) {
+            const imageUrl = await this.fileService.storeImageFromBase64(value.image);
+            value.image = imageUrl;
+        } else {
+            delete value?.image;
+        }
+
         event = this.eventRepository.assign(event, value);
         await this.eventRepository.persistAndFlush(event);
         return event;
