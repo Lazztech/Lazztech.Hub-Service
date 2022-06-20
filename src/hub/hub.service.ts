@@ -93,8 +93,10 @@ export class HubService {
 
   async createHub(userId: any, hub: Hub) {
     this.logger.log(this.createHub.name);
-    const imageUrl = await this.fileService.storeImageFromBase64(hub.image);
-    hub.image = imageUrl;
+    if (hub?.image) {
+      const imageUrl = await this.fileService.storeImageFromBase64(hub.image);
+      hub.image = imageUrl;
+    }
     // repository.create => save pattern used to so that the @BeforeInsert decorated method
     // will fire generating a uuid for the shareableId
     hub = this.hubRepository.create(hub);
