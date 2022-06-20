@@ -39,6 +39,10 @@ export class Hub extends ShareableId {
   @Property({ type: 'float', nullable: true })
   public longitude?: number;
 
+  @Field({ nullable: true })
+  @Property({ nullable: true })
+  public locationLabel?: string;
+
   /**
    * Handled with a field resolver
    */

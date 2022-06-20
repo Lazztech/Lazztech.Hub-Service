@@ -440,6 +440,15 @@
           "nullable": true,
           "mappedType": "float"
         },
+        "location_label": {
+          "name": "location_label",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "string"
+        },
         "flagged": {
           "name": "flagged",
           "type": "boolean",

@@ -36,6 +36,7 @@ export class HubResolver {
     @Args({ name: 'image', type: () => String, nullable: true }) image: string,
     @Args({ name: 'latitude', type: () => Float }) latitude: number,
     @Args({ name: 'longitude', type: () => Float }) longitude: number,
+    @Args({ name: 'locationLabel', type: () => String, nullable: true }) locationLabel: string,
   ): Promise<JoinUserHub> {
     this.logger.log(this.createHub.name);
     const hub = await this.hubService.createHub(userId, {
@@ -44,6 +45,7 @@ export class HubResolver {
       image,
       latitude,
       longitude,
+      locationLabel
     } as Hub);
     return hub;
   }
