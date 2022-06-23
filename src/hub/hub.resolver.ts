@@ -202,11 +202,37 @@ export class HubResolver {
   }
 
   @Mutation(() => Hub)
+  public async updateHub(
+    @UserId() userId,
+    @Args({ name: 'hubId', type: () => ID }) hubId: number,
+    @Args({ name: 'name', type: () => String }) name: string,
+    @Args({ name: 'description', type: () => String, nullable: true }) description: string,
+    @Args({ name: 'image', type: () => String, nullable: true }) image: string,
+    @Args({ name: 'latitude', type: () => Float }) latitude: number,
+    @Args({ name: 'longitude', type: () => Float }) longitude: number,
+    @Args({ name: 'locationLabel', type: () => String, nullable: true }) locationLabel: string,
+  ): Promise<Hub> {
+    this.logger.log(this.updateHub.name);
+    return this.hubService.updateHub(userId, {
+      id: hubId,
+      name,
+      description,
+      image,
+      latitude,
+      longitude,
+      locationLabel,
+    } as Hub);
+  }
+
+  /**
+   * @deprecated use updateHub
+   */
+  @Mutation(() => Hub)
   public async editHub(
     @UserId() userId,
     @Args({ name: 'hubId', type: () => ID }) hubId: number,
     @Args({ name: 'name', type: () => String }) name: string,
-    @Args({ name: 'description', type: () => String }) description: string,
+    @Args({ name: 'description', type: () => String, nullable: true }) description: string,
   ): Promise<Hub> {
     this.logger.log(this.editHub.name);
     const result = await this.hubService.editHub(
@@ -218,6 +244,9 @@ export class HubResolver {
     return result;
   }
 
+  /**
+   * @deprecated use updateHub
+   */
   @Mutation(() => Hub)
   public async changeHubLocation(
     @UserId() userId,
