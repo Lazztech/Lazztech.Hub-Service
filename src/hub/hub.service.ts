@@ -137,6 +137,30 @@ export class HubService {
     return !userHubRelationship.isOwner;
   }
 
+  async updateHub(userId: any, value: Hub): Promise<Hub> {
+    this.logger.log(this.updateHub.name);
+    const joinUserHubResult = await this.joinUserHubRepository.findOneOrFail({
+      user: userId,
+      hub: value.id,
+      isOwner: true,
+    });
+
+    if (value?.image && value?.image?.includes('base64')) {
+      const imageUrl = await this.fileService.storeImageFromBase64(value.image);
+      value.image = imageUrl;
+    } else {
+        delete value?.image;
+    }
+
+    let hub = await joinUserHubResult.hub.load();
+    hub = this.hubRepository.assign(hub, value);
+    await this.hubRepository.persistAndFlush(hub);
+    return hub;
+  }
+
+  /**
+   * @deprecated use updateHub
+   */
   async editHub(userId: any, hubId: number, name: string, description: string) {
     this.logger.log(this.editHub.name);
     const joinUserHubResult = await this.joinUserHubRepository.findOne({
@@ -152,6 +176,9 @@ export class HubService {
     return hub;
   }
 
+  /**
+   * @deprecated use updateHub
+   */
   async changeHubLocation(
     userId: any,
     hubId: number,
