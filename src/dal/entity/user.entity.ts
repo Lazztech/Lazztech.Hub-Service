@@ -45,6 +45,10 @@ export class User extends ShareableId{
   @Property()
   public email!: string;
 
+  @Field({ nullable: true })
+  @Property({ nullable: true })
+  public phoneNumber?: number;
+
   @Property()
   public password!: string;
 
