@@ -30,7 +30,7 @@ export class AuthResolver {
   @Mutation(() => String, { nullable: true })
   public async register(
     @Args('data')
-    { firstName, lastName, birthdate, email, password }: UserInput,
+    { firstName, lastName, birthdate, email, password, phoneNumber }: UserInput,
   ): Promise<string> {
     this.logger.log(this.register.name);
 
@@ -40,6 +40,7 @@ export class AuthResolver {
       birthdate,
       email,
       password,
+      phoneNumber,
     );
     return accessToken;
   }
