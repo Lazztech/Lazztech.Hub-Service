@@ -1,5 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsEmail, Length } from 'class-validator';
+import { IsEmail, IsPhoneNumber, Length } from 'class-validator';
 
 @InputType()
 export class UserInput {
@@ -17,6 +17,15 @@ export class UserInput {
   @Field()
   @IsEmail()
   public email: string;
+
+  @Field({ nullable: true })
+  public phoneCountryCode?: number;
+
+  @Field({ nullable: true })
+  public phoneAreaCode?: number;
+
+  @Field({ nullable: true })
+  public phoneNumber?: number;
 
   @Field()
   public password: string;

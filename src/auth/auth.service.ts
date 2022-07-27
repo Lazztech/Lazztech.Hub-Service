@@ -30,6 +30,7 @@ export class AuthService {
     birthdate: string,
     email: string,
     password: string,
+    phoneNumber?: number,
   ) {
     this.logger.log(this.register.name);
     const existingUser = await this.userService.findOne(email);
@@ -47,6 +48,7 @@ export class AuthService {
       birthdate,
       email,
       password: hashedPassword,
+      phoneNumber,
     } as any);
     await this.userRepository.persistAndFlush(user);
 

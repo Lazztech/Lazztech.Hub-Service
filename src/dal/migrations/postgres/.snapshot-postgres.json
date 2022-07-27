@@ -115,6 +115,33 @@
           "nullable": false,
           "mappedType": "string"
         },
+        "phone_country_code": {
+          "name": "phone_country_code",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        },
+        "phone_area_code": {
+          "name": "phone_area_code",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        },
+        "phone_number": {
+          "name": "phone_number",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        },
         "password": {
           "name": "password",
           "type": "varchar(255)",
