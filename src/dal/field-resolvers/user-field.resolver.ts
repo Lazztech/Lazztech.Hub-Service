@@ -66,6 +66,9 @@ export class UserFieldResolver {
     @UserId() userId,
     @Parent() parent: User
   ) {
-    return `${parent.phoneCountryCode}${parent.phoneAreaCode}${parent.phoneNumber}`;
+    if (parent?.phoneAreaCode && parent?.phoneNumber) {
+      return `${parent.phoneCountryCode}${parent.phoneAreaCode}${parent.phoneNumber}`;
+    }
+    return null;
   }
 }
