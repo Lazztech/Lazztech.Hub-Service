@@ -60,4 +60,12 @@ export class UserFieldResolver {
       to: parent.id
     }));
   }
+
+  @ResolveField(() => String, { nullable: true })
+  fullPhoneNumber(
+    @UserId() userId,
+    @Parent() parent: User
+  ) {
+    return `${parent.phoneCountryCode}${parent.phoneAreaCode}${parent.phoneNumber}`;
+  }
 }

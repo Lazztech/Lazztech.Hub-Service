@@ -47,6 +47,14 @@ export class User extends ShareableId{
 
   @Field({ nullable: true })
   @Property({ nullable: true })
+  public phoneCountryCode?: number;
+
+  @Field({ nullable: true })
+  @Property({ nullable: true })
+  public phoneAreaCode?: number;
+
+  @Field({ nullable: true })
+  @Property({ nullable: true })
   public phoneNumber?: number;
 
   @Property()

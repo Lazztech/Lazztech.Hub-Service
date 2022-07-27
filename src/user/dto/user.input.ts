@@ -18,9 +18,14 @@ export class UserInput {
   @IsEmail()
   public email: string;
 
-  @Field()
-  @IsPhoneNumber()
-  public phoneNumber: number;
+  @Field({ nullable: true })
+  public phoneCountryCode?: number;
+
+  @Field({ nullable: true })
+  public phoneAreaCode?: number;
+
+  @Field({ nullable: true })
+  public phoneNumber?: number;
 
   @Field()
   public password: string;
