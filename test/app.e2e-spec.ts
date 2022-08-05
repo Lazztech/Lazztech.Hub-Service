@@ -194,10 +194,8 @@ describe('AppController (e2e)', () => {
 
     expect(result.body?.data?.usersHubs).toBeDefined();
     expect((result.body?.data?.usersHubs as []).length).toBeTruthy();
-    // hub should be not active when first created
-    expect(result.body?.data?.usersHubs[0]?.hub?.active).toBe(false);
-    // isPresent should be null when hub is not active
-    expect(result.body?.data?.usersHubs[0]?.isPresent).toBeNull();
+    // hub should be active when first created
+    expect(result.body?.data?.usersHubs[0]?.hub?.active).toBe(true);
     return result;
   });
 
