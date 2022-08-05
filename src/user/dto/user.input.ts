@@ -19,13 +19,7 @@ export class UserInput {
   public email: string;
 
   @Field({ nullable: true })
-  public phoneCountryCode?: number;
-
-  @Field({ nullable: true })
-  public phoneAreaCode?: number;
-
-  @Field({ nullable: true })
-  public phoneNumber?: number;
+  public phoneNumber?: string;
 
   @Field()
   public password: string;

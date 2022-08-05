@@ -60,15 +60,4 @@ export class UserFieldResolver {
       to: parent.id
     }));
   }
-
-  @ResolveField(() => String, { nullable: true })
-  fullPhoneNumber(
-    @UserId() userId,
-    @Parent() parent: User
-  ) {
-    if (parent?.phoneAreaCode && parent?.phoneNumber) {
-      return `${parent.phoneCountryCode}${parent.phoneAreaCode}${parent.phoneNumber}`;
-    }
-    return null;
-  }
 }

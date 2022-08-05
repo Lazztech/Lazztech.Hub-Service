@@ -30,7 +30,7 @@ export class AuthService {
     birthdate: string,
     email: string,
     password: string,
-    phoneNumber?: number,
+    phoneNumber?: string,
   ) {
     this.logger.log(this.register.name);
     const existingUser = await this.userService.findOne(email);
