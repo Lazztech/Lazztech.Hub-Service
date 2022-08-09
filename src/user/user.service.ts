@@ -71,6 +71,13 @@ export class UserService {
     return user;
   }
 
+  public async updateUser(userId: any, value: User): Promise<User> {
+    let user = await this.userRepository.findOneOrFail({ id: userId });
+    user = this.userRepository.assign(user, value);
+    await this.userRepository.persistAndFlush(user);
+    return user;
+  }
+
   public async changeEmail(userId: any, newEmail: string) {
     this.logger.log(this.changeEmail.name);
     const user = await this.userRepository.findOne({ id: userId });

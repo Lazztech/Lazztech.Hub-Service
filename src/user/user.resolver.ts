@@ -1,9 +1,11 @@
 import { Logger, UseGuards } from '@nestjs/common';
-import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Directive, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GqlJwtAuthGuard } from '../auth/guards/gql-jwt-auth.guard';
 import { Block } from '../dal/entity/block.entity';
 import { User } from '../dal/entity/user.entity';
 import { UserId } from '../decorators/user.decorator';
+import { UpdateUserInput } from './dto/updateUser.input';
+import { UserInput } from './dto/user.input';
 import { UserService } from './user.service';
 
 @UseGuards(GqlJwtAuthGuard)
@@ -23,6 +25,9 @@ export class UserResolver {
     return await this.userService.getUser(userId);
   }
 
+  @Directive(
+    '@deprecated(reason: "Use updateUser instead.")',
+  )
   @Mutation(() => User)
   public async editUserDetails(
     @UserId() userId,
@@ -37,6 +42,17 @@ export class UserResolver {
       description,
     });
     return user;
+  }
+
+  @Mutation(() => User)
+  public async updateUser(
+    @UserId() userId,
+    @Args('data') data: UpdateUserInput,
+  ) {
+    this.logger.log(this.updateUser.name);
+    return this.userService.updateUser(userId, {
+      ...data
+    } as User);
   }
 
   @Mutation(() => User)
