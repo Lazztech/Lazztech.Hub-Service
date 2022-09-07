@@ -91,6 +91,7 @@ export class HubResolver {
       includeAccepted,
     );
   }
+  
 
   @Query(() => Invite)
   public async invite(
@@ -127,6 +128,17 @@ export class HubResolver {
       inviteesEmail,
     );
     return invite;
+  }
+
+  @Mutation(() => Boolean)
+  public async removeUserFromHub(
+    @UserId() userId,
+    @Args({ name: 'hubId', type: () => ID }) hubId: number,
+    @Args({ name: 'otherUsersId', type: () => ID }) otherUsersId: number,
+  ): Promise<boolean> {
+    this.logger.log(this.removeUserFromHub.name);
+    await this.hubService.removeUserFromHub(userId, hubId, otherUsersId);
+    return true;
   }
 
   @Mutation(() => JoinUserHub)

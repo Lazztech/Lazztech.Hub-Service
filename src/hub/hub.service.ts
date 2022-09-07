@@ -111,6 +111,13 @@ export class HubService {
     return joinUserHub;
   }
 
+  async removeUserFromHub(userId: any, hubId: any, otherUsersId: any) {
+    this.logger.log(this.removeUserFromHub.name);
+    await this.joinUserHubRepository.findOneOrFail({ user: userId, hub: hubId, isOwner: true });
+    const userToBeRemoved = await this.joinUserHubRepository.findOneOrFail({ user: otherUsersId, hub: hubId });
+    await this.joinUserHubRepository.removeAndFlush(userToBeRemoved);
+  }
+
   async deleteHub(userId: any, hubId: number) {
     this.logger.log(this.deleteHub.name);
     const userHubRelationship = await this.joinUserHubRepository.findOne({
