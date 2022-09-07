@@ -114,6 +114,11 @@ export class HubService {
   async removeUserFromHub(userId: any, hubId: any, otherUsersId: any) {
     this.logger.log(this.removeUserFromHub.name);
     await this.joinUserHubRepository.findOneOrFail({ user: userId, hub: hubId, isOwner: true });
+    if (userId == otherUsersId) {
+      throw new Error(
+        `You cannot delete your relationship to the hub as an owner.`,
+      );
+    }
     const userToBeRemoved = await this.joinUserHubRepository.findOneOrFail({ user: otherUsersId, hub: hubId });
     await this.joinUserHubRepository.removeAndFlush(userToBeRemoved);
   }
