@@ -56,8 +56,11 @@ export class HubResolver {
     @Args({ name: 'id', type: () => ID }) id: number,
   ): Promise<JoinUserHub> {
     this.logger.log(this.hub.name);
-    const result = await this.hubService.getOneUserHub(userId, id);
-    return result;
+    try {
+      return await this.hubService.getOneUserHub(userId, id);
+    } catch (error) {
+      return await this.hubService.joinByShareableLink(userId, id);
+    }
   }
 
   @Query(() => [JoinUserHub])

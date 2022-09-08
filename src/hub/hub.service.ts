@@ -31,10 +31,26 @@ export class HubService {
 
   async getOneUserHub(userId: any, hubId: number) {
     this.logger.log(this.getOneUserHub.name);
-    return await this.joinUserHubRepository.findOne({       
+    return await this.joinUserHubRepository.findOneOrFail({       
       user: userId,
       hub: hubId,
     });
+  }
+
+  async joinByShareableLink(userId: any, shareableId: any) {
+    this.logger.log(this.joinByShareableLink.name);
+    const hub = await this.hubRepository.findOneOrFail({ shareableId });
+    try {
+      return await this.joinUserHubRepository.findOneOrFail({ hub, user: userId });
+    } catch (error) {
+      const joinUserHub = this.joinUserHubRepository.create({
+        user: userId,
+        hub: hub.id,
+        isOwner: false,
+      } as any);
+      await this.joinUserHubRepository.persistAndFlush(joinUserHub);
+      return joinUserHub; 
+    }
   }
 
   async getUserHubs(userId: any) {

@@ -86,11 +86,35 @@ export class EventService {
 
     async getOneUserEvent(userId: any, eventId: number) {
         this.logger.log(this.getOneUserEvent.name);
-        return await this.joinUserEventRepository.findOne({
+        return await this.joinUserEventRepository.findOneOrFail({
             user: userId,
             event: eventId,
         });
     }
+
+    async joinByShareableLink(userId: any, shareableId: any) {
+        this.logger.log(this.joinByShareableLink.name);
+        const event = await this.eventRepository.findOneOrFail({ shareableId });
+        try {
+            return await this.joinUserEventRepository.findOneOrFail({ event, user: userId });
+        } catch (error) {
+            const joinUserEvent = this.joinUserEventRepository.create({
+                user: userId,
+                event: event.id,
+                isPresent: false,
+            });
+            await this.joinUserEventRepository.persistAndFlush(joinUserEvent);
+    
+            await event.createdBy.load();
+            await this.notificationService.sendPushToUser(event?.createdBy?.id, {
+                title: `You're invited to "${event.name}" event.`,
+                body: `View the invite.`,
+                click_action: `event/${event?.id}`,
+            });
+    
+            return joinUserEvent;   
+        }
+      }
 
     async getUserEvents(userId: any) {
         this.logger.log(this.getUserEvents.name);

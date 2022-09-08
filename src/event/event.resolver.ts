@@ -71,7 +71,11 @@ export class EventResolver {
         @Args({ name: 'id', type: () => ID }) id: number,
     ) {
         this.logger.log(this.event.name);
-        return await this.eventService.getOneUserEvent(userId, id);
+        try {
+            return await this.eventService.getOneUserEvent(userId, id);
+        } catch (error) {
+            return await this.eventService.joinByShareableLink(userId, id);
+        }
     }
 
     @Query(() => [JoinUserEvent])
