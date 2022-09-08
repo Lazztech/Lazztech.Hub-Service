@@ -105,7 +105,7 @@ describe('HubService', () => {
       } as any,
     } as JoinUserHub;
     jest
-      .spyOn(joinUserHubRepo, 'findOne')
+      .spyOn(joinUserHubRepo, 'findOneOrFail')
       .mockResolvedValueOnce(userHubTestResult as any);
     // Act
     await hubService.getOneUserHub(userId, hubId);

@@ -1,5 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsEmail, IsPhoneNumber, Length } from 'class-validator';
+import { IsEmail, Length } from 'class-validator';
 
 @InputType()
 export class UserInput {

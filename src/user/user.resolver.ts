@@ -5,7 +5,6 @@ import { Block } from '../dal/entity/block.entity';
 import { User } from '../dal/entity/user.entity';
 import { UserId } from '../decorators/user.decorator';
 import { UpdateUserInput } from './dto/updateUser.input';
-import { UserInput } from './dto/user.input';
 import { UserService } from './user.service';
 
 @UseGuards(GqlJwtAuthGuard)
