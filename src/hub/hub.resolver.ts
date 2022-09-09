@@ -63,6 +63,15 @@ export class HubResolver {
     }
   }
 
+  @Mutation(() => JoinUserHub)
+  public async resetShareableHubID(
+      @UserId() userId,
+      @Args({ name: 'id', type: () => ID }) id: number,
+  ) {
+      this.logger.log(this.resetShareableHubID.name);
+      return this.hubService.resetShareableID(userId, id);
+  }
+
   @Query(() => [JoinUserHub])
   public async usersHubs(@UserId() userId): Promise<JoinUserHub[]> {
     this.logger.log(this.usersHubs.name);

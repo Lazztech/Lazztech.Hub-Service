@@ -9,6 +9,7 @@ import { NotificationService } from '../notification/notification.service';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/core';
 import { Block } from '../dal/entity/block.entity';
+import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class HubService {
@@ -52,6 +53,15 @@ export class HubService {
       return joinUserHub; 
     }
   }
+
+  async resetShareableID(userId: any, hubId: number) {
+    this.logger.log(this.resetShareableID.name);
+    const userHub = await this.joinUserHubRepository.findOneOrFail({ user: userId, hub: hubId, isOwner: true });
+    const hub = await userHub.hub.load();
+    hub.shareableId = uuid();
+    this.hubRepository.persistAndFlush(hub);
+    return userHub;
+}
 
   async getUserHubs(userId: any) {
     this.logger.log(this.getUserHubs.name);

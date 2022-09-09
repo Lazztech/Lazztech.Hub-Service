@@ -78,6 +78,15 @@ export class EventResolver {
         }
     }
 
+    @Mutation(() => JoinUserEvent)
+    public async resetShareableEventID(
+        @UserId() userId,
+        @Args({ name: 'id', type: () => ID }) id: number,
+    ) {
+        this.logger.log(this.resetShareableEventID.name);
+        return this.eventService.resetShareableID(userId, id);
+    }
+
     @Query(() => [JoinUserEvent])
     public async usersEvents(@UserId() userId): Promise<JoinUserEvent[]> {
       this.logger.log(this.usersEvents.name);

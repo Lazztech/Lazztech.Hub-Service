@@ -7,6 +7,7 @@ import { Event } from '../dal/entity/event.entity';
 import { JoinUserEvent, RSVP } from '../dal/entity/joinUserEvent.entity';
 import { FILE_SERVICE } from '../file/file-service.token';
 import { FileServiceInterface } from '../file/interfaces/file-service.interface';
+import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class EventService {
@@ -114,7 +115,20 @@ export class EventService {
     
             return joinUserEvent;   
         }
-      }
+    }
+
+    async resetShareableID(userId: any, eventId: number) {
+        this.logger.log(this.resetShareableID.name);
+        const userEvent = await this.joinUserEventRepository.findOneOrFail({ user: userId, event: eventId });
+        const event = await userEvent.event.load();
+        const createdBy = await event?.createdBy.load();
+        if (createdBy?.id != userId) {
+            throw new Error('Only the event creator can reset the shareable ID');
+        }
+        event.shareableId = uuid();
+        this.eventRepository.persistAndFlush(event);
+        return userEvent;
+    }
 
     async getUserEvents(userId: any) {
         this.logger.log(this.getUserEvents.name);
