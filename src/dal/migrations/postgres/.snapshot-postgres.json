@@ -15,6 +15,185 @@
           "nullable": false,
           "mappedType": "integer"
         },
+        "shareableId": {
+          "name": "shareableId",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "text"
+        },
+        "active": {
+          "name": "active",
+          "type": "boolean",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "default": "true",
+          "mappedType": "boolean"
+        },
+        "image": {
+          "name": "image",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "string"
+        },
+        "latitude": {
+          "name": "latitude",
+          "type": "real",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "float"
+        },
+        "longitude": {
+          "name": "longitude",
+          "type": "real",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "float"
+        },
+        "location_label": {
+          "name": "location_label",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "string"
+        },
+        "flagged": {
+          "name": "flagged",
+          "type": "boolean",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "boolean"
+        },
+        "banned": {
+          "name": "banned",
+          "type": "boolean",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "boolean"
+        }
+      },
+      "name": "hub",
+      "schema": "public",
+      "indexes": [
+        {
+          "keyName": "hub_pkey",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {}
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "unsigned": true,
+          "autoincrement": true,
+          "primary": true,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "hubId": {
+          "name": "hubId",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "text": {
+          "name": "text",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        }
+      },
+      "name": "micro_chat",
+      "schema": "public",
+      "indexes": [
+        {
+          "keyName": "micro_chat_pkey",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "micro_chat_hubId_foreign": {
+          "constraintName": "micro_chat_hubId_foreign",
+          "columnNames": [
+            "hubId"
+          ],
+          "localTableName": "public.micro_chat",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.hub",
+          "deleteRule": "cascade",
+          "updateRule": "cascade"
+        }
+      }
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "unsigned": true,
+          "autoincrement": true,
+          "primary": true,
+          "nullable": false,
+          "mappedType": "integer"
+        },
         "pin": {
           "name": "pin",
           "type": "varchar(255)",
@@ -211,6 +390,118 @@
     },
     {
       "columns": {
+        "userId": {
+          "name": "userId",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "hubId": {
+          "name": "hubId",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "isOwner": {
+          "name": "isOwner",
+          "type": "boolean",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "boolean"
+        },
+        "starred": {
+          "name": "starred",
+          "type": "boolean",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "default": "false",
+          "mappedType": "boolean"
+        },
+        "isPresent": {
+          "name": "isPresent",
+          "type": "boolean",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "default": "false",
+          "mappedType": "boolean"
+        },
+        "lastGeofenceEvent": {
+          "name": "lastGeofenceEvent",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "string"
+        },
+        "lastUpdated": {
+          "name": "lastUpdated",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "string"
+        }
+      },
+      "name": "join_user_hub",
+      "schema": "public",
+      "indexes": [
+        {
+          "keyName": "join_user_hub_pkey",
+          "columnNames": [
+            "userId",
+            "hubId"
+          ],
+          "composite": true,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "join_user_hub_userId_foreign": {
+          "constraintName": "join_user_hub_userId_foreign",
+          "columnNames": [
+            "userId"
+          ],
+          "localTableName": "public.join_user_hub",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.user",
+          "deleteRule": "cascade",
+          "updateRule": "cascade"
+        },
+        "join_user_hub_hubId_foreign": {
+          "constraintName": "join_user_hub_hubId_foreign",
+          "columnNames": [
+            "hubId"
+          ],
+          "localTableName": "public.join_user_hub",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.hub",
+          "deleteRule": "cascade",
+          "updateRule": "cascade"
+        }
+      }
+    },
+    {
+      "columns": {
         "id": {
           "name": "id",
           "type": "serial",
@@ -220,17 +511,36 @@
           "nullable": false,
           "mappedType": "integer"
         },
-        "fcmPushUserToken": {
-          "name": "fcmPushUserToken",
-          "type": "varchar(255)",
+        "accepted": {
+          "name": "accepted",
+          "type": "boolean",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "mappedType": "string"
+          "default": "false",
+          "mappedType": "boolean"
         },
-        "userId": {
-          "name": "userId",
+        "invitersId": {
+          "name": "invitersId",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "inviteesId": {
+          "name": "inviteesId",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "hubId": {
+          "name": "hubId",
           "type": "int",
           "unsigned": false,
           "autoincrement": false,
@@ -239,20 +549,22 @@
           "mappedType": "integer"
         }
       },
-      "name": "user_device",
+      "name": "invite",
       "schema": "public",
       "indexes": [
         {
+          "keyName": "invite_invitersId_inviteesId_hubId_unique",
           "columnNames": [
-            "fcmPushUserToken"
+            "invitersId",
+            "inviteesId",
+            "hubId"
           ],
-          "composite": false,
-          "keyName": "user_device_fcmPushUserToken_unique",
+          "composite": true,
           "primary": false,
           "unique": true
         },
         {
-          "keyName": "user_device_pkey",
+          "keyName": "invite_pkey",
           "columnNames": [
             "id"
           ],
@@ -263,16 +575,42 @@
       ],
       "checks": [],
       "foreignKeys": {
-        "user_device_userId_foreign": {
-          "constraintName": "user_device_userId_foreign",
+        "invite_invitersId_foreign": {
+          "constraintName": "invite_invitersId_foreign",
           "columnNames": [
-            "userId"
+            "invitersId"
           ],
-          "localTableName": "public.user_device",
+          "localTableName": "public.invite",
           "referencedColumnNames": [
             "id"
           ],
           "referencedTableName": "public.user",
+          "deleteRule": "cascade",
+          "updateRule": "cascade"
+        },
+        "invite_inviteesId_foreign": {
+          "constraintName": "invite_inviteesId_foreign",
+          "columnNames": [
+            "inviteesId"
+          ],
+          "localTableName": "public.invite",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.user",
+          "deleteRule": "cascade",
+          "updateRule": "cascade"
+        },
+        "invite_hubId_foreign": {
+          "constraintName": "invite_hubId_foreign",
+          "columnNames": [
+            "hubId"
+          ],
+          "localTableName": "public.invite",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.hub",
           "deleteRule": "cascade",
           "updateRule": "cascade"
         }
@@ -405,419 +743,12 @@
         },
         "description": {
           "name": "description",
-          "type": "varchar(255)",
+          "type": "text",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": true,
-          "mappedType": "string"
-        },
-        "active": {
-          "name": "active",
-          "type": "boolean",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "default": "true",
-          "mappedType": "boolean"
-        },
-        "image": {
-          "name": "image",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": true,
-          "mappedType": "string"
-        },
-        "latitude": {
-          "name": "latitude",
-          "type": "real",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": true,
-          "mappedType": "float"
-        },
-        "longitude": {
-          "name": "longitude",
-          "type": "real",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": true,
-          "mappedType": "float"
-        },
-        "location_label": {
-          "name": "location_label",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": true,
-          "mappedType": "string"
-        },
-        "flagged": {
-          "name": "flagged",
-          "type": "boolean",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": true,
-          "mappedType": "boolean"
-        },
-        "banned": {
-          "name": "banned",
-          "type": "boolean",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": true,
-          "mappedType": "boolean"
-        }
-      },
-      "name": "hub",
-      "schema": "public",
-      "indexes": [
-        {
-          "keyName": "hub_pkey",
-          "columnNames": [
-            "id"
-          ],
-          "composite": false,
-          "primary": true,
-          "unique": true
-        }
-      ],
-      "checks": [],
-      "foreignKeys": {}
-    },
-    {
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "unsigned": true,
-          "autoincrement": true,
-          "primary": true,
-          "nullable": false,
-          "mappedType": "integer"
-        },
-        "accepted": {
-          "name": "accepted",
-          "type": "boolean",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "default": "false",
-          "mappedType": "boolean"
-        },
-        "invitersId": {
-          "name": "invitersId",
-          "type": "int",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "integer"
-        },
-        "inviteesId": {
-          "name": "inviteesId",
-          "type": "int",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "integer"
-        },
-        "hubId": {
-          "name": "hubId",
-          "type": "int",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "integer"
-        }
-      },
-      "name": "invite",
-      "schema": "public",
-      "indexes": [
-        {
-          "keyName": "invite_invitersId_inviteesId_hubId_unique",
-          "columnNames": [
-            "invitersId",
-            "inviteesId",
-            "hubId"
-          ],
-          "composite": true,
-          "primary": false,
-          "unique": true
-        },
-        {
-          "keyName": "invite_pkey",
-          "columnNames": [
-            "id"
-          ],
-          "composite": false,
-          "primary": true,
-          "unique": true
-        }
-      ],
-      "checks": [],
-      "foreignKeys": {
-        "invite_invitersId_foreign": {
-          "constraintName": "invite_invitersId_foreign",
-          "columnNames": [
-            "invitersId"
-          ],
-          "localTableName": "public.invite",
-          "referencedColumnNames": [
-            "id"
-          ],
-          "referencedTableName": "public.user",
-          "deleteRule": "cascade",
-          "updateRule": "cascade"
-        },
-        "invite_inviteesId_foreign": {
-          "constraintName": "invite_inviteesId_foreign",
-          "columnNames": [
-            "inviteesId"
-          ],
-          "localTableName": "public.invite",
-          "referencedColumnNames": [
-            "id"
-          ],
-          "referencedTableName": "public.user",
-          "deleteRule": "cascade",
-          "updateRule": "cascade"
-        },
-        "invite_hubId_foreign": {
-          "constraintName": "invite_hubId_foreign",
-          "columnNames": [
-            "hubId"
-          ],
-          "localTableName": "public.invite",
-          "referencedColumnNames": [
-            "id"
-          ],
-          "referencedTableName": "public.hub",
-          "deleteRule": "cascade",
-          "updateRule": "cascade"
-        }
-      }
-    },
-    {
-      "columns": {
-        "userId": {
-          "name": "userId",
-          "type": "int",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "integer"
-        },
-        "hubId": {
-          "name": "hubId",
-          "type": "int",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "integer"
-        },
-        "isOwner": {
-          "name": "isOwner",
-          "type": "boolean",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "boolean"
-        },
-        "starred": {
-          "name": "starred",
-          "type": "boolean",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "default": "false",
-          "mappedType": "boolean"
-        },
-        "isPresent": {
-          "name": "isPresent",
-          "type": "boolean",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "default": "false",
-          "mappedType": "boolean"
-        },
-        "lastGeofenceEvent": {
-          "name": "lastGeofenceEvent",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": true,
-          "mappedType": "string"
-        },
-        "lastUpdated": {
-          "name": "lastUpdated",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": true,
-          "mappedType": "string"
-        }
-      },
-      "name": "join_user_hub",
-      "schema": "public",
-      "indexes": [
-        {
-          "keyName": "join_user_hub_pkey",
-          "columnNames": [
-            "userId",
-            "hubId"
-          ],
-          "composite": true,
-          "primary": true,
-          "unique": true
-        }
-      ],
-      "checks": [],
-      "foreignKeys": {
-        "join_user_hub_userId_foreign": {
-          "constraintName": "join_user_hub_userId_foreign",
-          "columnNames": [
-            "userId"
-          ],
-          "localTableName": "public.join_user_hub",
-          "referencedColumnNames": [
-            "id"
-          ],
-          "referencedTableName": "public.user",
-          "deleteRule": "cascade",
-          "updateRule": "cascade"
-        },
-        "join_user_hub_hubId_foreign": {
-          "constraintName": "join_user_hub_hubId_foreign",
-          "columnNames": [
-            "hubId"
-          ],
-          "localTableName": "public.join_user_hub",
-          "referencedColumnNames": [
-            "id"
-          ],
-          "referencedTableName": "public.hub",
-          "deleteRule": "cascade",
-          "updateRule": "cascade"
-        }
-      }
-    },
-    {
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "unsigned": true,
-          "autoincrement": true,
-          "primary": true,
-          "nullable": false,
-          "mappedType": "integer"
-        },
-        "hubId": {
-          "name": "hubId",
-          "type": "int",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "integer"
-        },
-        "text": {
-          "name": "text",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "string"
-        }
-      },
-      "name": "micro_chat",
-      "schema": "public",
-      "indexes": [
-        {
-          "keyName": "micro_chat_pkey",
-          "columnNames": [
-            "id"
-          ],
-          "composite": false,
-          "primary": true,
-          "unique": true
-        }
-      ],
-      "checks": [],
-      "foreignKeys": {
-        "micro_chat_hubId_foreign": {
-          "constraintName": "micro_chat_hubId_foreign",
-          "columnNames": [
-            "hubId"
-          ],
-          "localTableName": "public.micro_chat",
-          "referencedColumnNames": [
-            "id"
-          ],
-          "referencedTableName": "public.hub",
-          "deleteRule": "cascade",
-          "updateRule": "cascade"
-        }
-      }
-    },
-    {
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "unsigned": true,
-          "autoincrement": true,
-          "primary": true,
-          "nullable": false,
-          "mappedType": "integer"
-        },
-        "shareableId": {
-          "name": "shareableId",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "string"
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "string"
-        },
-        "description": {
-          "name": "description",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": true,
-          "mappedType": "string"
+          "mappedType": "text"
         },
         "createdByUserId": {
           "name": "createdByUserId",
@@ -1088,6 +1019,75 @@
             "to_id"
           ],
           "localTableName": "public.block",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.user",
+          "deleteRule": "cascade",
+          "updateRule": "cascade"
+        }
+      }
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "unsigned": true,
+          "autoincrement": true,
+          "primary": true,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "fcmPushUserToken": {
+          "name": "fcmPushUserToken",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "userId": {
+          "name": "userId",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        }
+      },
+      "name": "user_device",
+      "schema": "public",
+      "indexes": [
+        {
+          "columnNames": [
+            "fcmPushUserToken"
+          ],
+          "composite": false,
+          "keyName": "user_device_fcmPushUserToken_unique",
+          "primary": false,
+          "unique": true
+        },
+        {
+          "keyName": "user_device_pkey",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "user_device_userId_foreign": {
+          "constraintName": "user_device_userId_foreign",
+          "columnNames": [
+            "userId"
+          ],
+          "localTableName": "public.user_device",
           "referencedColumnNames": [
             "id"
           ],
