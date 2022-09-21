@@ -1,4 +1,4 @@
-import { Collection, Entity, IdentifiedReference, ManyToOne, OneToMany, PrimaryKey, Property } from "@mikro-orm/core";
+import { Collection, Entity, IdentifiedReference, ManyToOne, OneToMany, PrimaryKey, Property, types } from "@mikro-orm/core";
 import { Field, ID, ObjectType } from "@nestjs/graphql";
 import { JoinUserEvent } from "./joinUserEvent.entity";
 import { ShareableId } from "./shareableId.entity";
@@ -17,7 +17,7 @@ export class Event extends ShareableId {
   public name!: string;
 
   @Field({ nullable: true })
-  @Property({ nullable: true })
+  @Property({ nullable: true, type: types.text })
   public description?: string;
 
   /**
