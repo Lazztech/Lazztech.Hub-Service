@@ -119,12 +119,13 @@ export class HubGeofenceService {
           text: `at the "${hub.name}" hub.`,
         },
       );
-
-      await this.notificationService.sendPushToUser(relation.user.id, {
-        title: message,
-        click_action: undefined,
-        body: `at the "${hub.name}" hub.`,
-      });
+      if (!relation.muted) {
+        await this.notificationService.sendPushToUser(relation.user.id, {
+          title: message,
+          click_action: undefined,
+          body: `at the "${hub.name}" hub.`,
+        });
+      }
     }
   }
 
@@ -151,12 +152,13 @@ export class HubGeofenceService {
           text: `the "${hub.name}" hub`,
         },
       );
-
-      await this.notificationService.sendPushToUser(relation.user.id, {
-        title: message,
-        click_action: undefined,
-        body: `the "${hub.name}" hub`,
-      });
+      if (!relation.muted) {
+        await this.notificationService.sendPushToUser(relation.user.id, {
+          title: message,
+          click_action: undefined,
+          body: `the "${hub.name}" hub`,
+        });
+      }
     }
   }
 }
