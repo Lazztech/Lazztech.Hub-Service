@@ -319,6 +319,28 @@ export class HubService {
     return hubRelationship;
   }
 
+  async mute(userId: any, hubId: number) {
+    this.logger.log(this.mute.name);
+    const hubRelationship = await this.joinUserHubRepository.findOneOrFail({
+      user: userId,
+      hub: hubId,
+    });
+    hubRelationship.muted = true;
+    await this.joinUserHubRepository.persistAndFlush(hubRelationship);
+    return hubRelationship;
+  }
+
+  async unmute(userId: any, hubId: number) {
+    this.logger.log(this.unmute.name);
+    const hubRelationship = await this.joinUserHubRepository.findOneOrFail({
+      user: userId,
+      hub: hubId,
+    });
+    hubRelationship.muted = false;
+    await this.joinUserHubRepository.persistAndFlush(hubRelationship);
+    return hubRelationship;
+  }
+
   async searchHubByName(userId: any, search: string) {
     this.logger.log(this.searchHubByName.name);
     const userHubRelationship = await this.joinUserHubRepository.find({

@@ -318,8 +318,26 @@ export class HubResolver {
     @Args({ name: 'hubId', type: () => ID }) hubId: number,
   ) {
     this.logger.log(this.setHubNotStarred.name);
-    await this.setHubNotStarred(userId, hubId);
+    await this.hubService.setHubNotStarred(userId, hubId);
     return true;
+  }
+
+  @Mutation(() => JoinUserHub)
+  public async mute(
+    @UserId() userId,
+    @Args({ name: 'hubId', type: () => ID }) hubId: number,
+  ): Promise<JoinUserHub> {
+    this.logger.log(this.mute.name);
+    return this.hubService.mute(userId, hubId);
+  }
+
+  @Mutation(() => JoinUserHub)
+  public async unmute(
+    @UserId() userId,
+    @Args({ name: 'hubId', type: () => ID }) hubId: number,
+  ): Promise<JoinUserHub> {
+    this.logger.log(this.unmute.name);
+    return this.hubService.unmute(userId, hubId);
   }
 
   @Mutation(() => JoinUserHub)
