@@ -46,6 +46,10 @@ export class JoinUserHub {
   @Property({ default: false })
   public starred: boolean = false;
 
+  @Field(() => Boolean)
+  @Property({ default: false })
+  public muted: boolean = false;
+
   /**
    * Exposed as a field resolver
    */
