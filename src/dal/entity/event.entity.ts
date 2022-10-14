@@ -1,5 +1,6 @@
 import { Collection, Entity, IdentifiedReference, ManyToOne, OneToMany, PrimaryKey, Property, types } from "@mikro-orm/core";
 import { Field, ID, ObjectType } from "@nestjs/graphql";
+import { Hub } from "./hub.entity";
 import { JoinUserEvent } from "./joinUserEvent.entity";
 import { ShareableId } from "./shareableId.entity";
 import { User } from "./user.entity";
@@ -49,6 +50,16 @@ export class Event extends ShareableId {
    */
   @Property({ nullable: true })
   public image?: string;
+
+  /**
+   * Exposed as a field resolver
+   */
+  @ManyToOne({ 
+    entity: () => Hub,
+    wrappedReference: true,
+    nullable: true,
+  })
+  public hub?: IdentifiedReference<Hub>;
 
   @Field({ nullable: true })
   @Property({ type: 'float', nullable: true })

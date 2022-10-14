@@ -5,6 +5,7 @@ import { Context, Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { UserId } from '../../decorators/user.decorator';
 import { FileUrlService } from '../../file/file-url/file-url.service';
 import { Block } from '../entity/block.entity';
+import { Event } from '../entity/event.entity';
 import { Hub } from '../entity/hub.entity';
 import { Invite } from '../entity/invite.entity';
 import { JoinUserHub } from '../entity/joinUserHub.entity';
@@ -38,6 +39,11 @@ export class HubFieldResolver {
   @ResolveField(() => [MicroChat], { nullable: true })
   public microChats(@Parent() hub: Hub): Promise<MicroChat[]> {
     return hub.microChats.loadItems();
+  }
+
+  @ResolveField(() => [Event], { nullable: true })
+  public events(@Parent() parent: Hub): Promise<Event[]> {
+    return parent.events.loadItems();
   }
 
   @ResolveField(() => [Invite], { nullable: true })

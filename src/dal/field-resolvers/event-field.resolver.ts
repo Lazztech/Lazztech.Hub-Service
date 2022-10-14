@@ -5,6 +5,7 @@ import { UserId } from '../../decorators/user.decorator';
 import { FileUrlService } from '../../file/file-url/file-url.service';
 import { Block } from '../entity/block.entity';
 import { Event } from '../entity/event.entity';
+import { Hub } from '../entity/hub.entity';
 import { JoinUserEvent } from '../entity/joinUserEvent.entity';
 import { User } from '../entity/user.entity';
 
@@ -20,6 +21,11 @@ export class EventFieldResolver {
   @ResolveField(() => User, { nullable: true })
   public createdBy(@Parent() parent: Event): Promise<User> {
     return parent.createdBy.load();
+  }
+
+  @ResolveField(() => Hub, { nullable: true })
+  public hub(@Parent() parent: Event): Promise<Hub> {
+    return parent.hub.load();
   }
 
   @ResolveField(() => String, { nullable: true })

@@ -796,6 +796,15 @@
           "nullable": true,
           "mappedType": "string"
         },
+        "hub_id": {
+          "name": "hub_id",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        },
         "latitude": {
           "name": "latitude",
           "type": "real",
@@ -867,6 +876,19 @@
             "id"
           ],
           "referencedTableName": "public.user",
+          "updateRule": "cascade"
+        },
+        "event_hub_id_foreign": {
+          "constraintName": "event_hub_id_foreign",
+          "columnNames": [
+            "hub_id"
+          ],
+          "localTableName": "public.event",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.hub",
+          "deleteRule": "set null",
           "updateRule": "cascade"
         }
       }
