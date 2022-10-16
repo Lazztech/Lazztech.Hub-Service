@@ -4,6 +4,7 @@ import { MicroChat } from './microChat.entity';
 import { Invite } from './invite.entity';
 import { ShareableId } from './shareableId.entity'
 import { Collection, Entity, OneToMany, PrimaryKey, Property, types } from '@mikro-orm/core';
+import { Event } from './event.entity';
 
  /* eslint-disable */ // needed for mikroorm default value & type which conflicts with typescript-eslint/no-unused-vars
 @ObjectType()
@@ -48,6 +49,12 @@ export class Hub extends ShareableId {
    */
   @OneToMany(() => JoinUserHub, (joinUserHub) => joinUserHub.hub)
   public usersConnection = new Collection<JoinUserHub>(this);
+
+  /**
+   * Handled with a field resolver
+   */
+   @OneToMany(() => Event, (event) => event.hub)
+   public events = new Collection<Event>(this);
 
   /**
    * Handled with a field resolver

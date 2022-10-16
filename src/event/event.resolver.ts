@@ -24,6 +24,7 @@ export class EventResolver {
         @Args({ name: 'startDateTime', type: () => String, nullable: true }) startDateTime: string,
         @Args({ name: 'endDateTime', type: () => String, nullable: true }) endDateTime: string,
         @Args({ name: 'image', type: () => String, nullable: true }) image: string,
+        @Args({ name: 'hubId', type: () => String, nullable: true }) hubId: any,
         @Args({ name: 'latitude', type: () => Float, nullable: true }) latitude: number,
         @Args({ name: 'longitude', type: () => Float, nullable: true }) longitude: number,
         @Args({ name: 'locationLabel', type: () => String, nullable: true }) locationLabel: string,
@@ -35,6 +36,7 @@ export class EventResolver {
             startDateTime,
             endDateTime,
             image,
+            hub: hubId,
             latitude,
             longitude,
             locationLabel
@@ -112,6 +114,7 @@ export class EventResolver {
         @Args({ name: 'startDateTime', type: () => String, nullable: true }) startDateTime: string,
         @Args({ name: 'endDateTime', type: () => String, nullable: true }) endDateTime: string,
         @Args({ name: 'image', type: () => String, nullable: true }) image: string,
+        @Args({ name: 'hubId', type: () => String, nullable: true }) hubId: any,
         @Args({ name: 'latitude', type: () => Float, nullable: true }) latitude: number,
         @Args({ name: 'longitude', type: () => Float, nullable: true }) longitude: number,
         @Args({ name: 'locationLabel', type: () => String, nullable: true }) locationLabel: string,
@@ -124,6 +127,7 @@ export class EventResolver {
             startDateTime,
             endDateTime,
             image,
+            hub: hubId,
             latitude,
             longitude,
             locationLabel
