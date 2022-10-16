@@ -25,7 +25,7 @@ export class EventFieldResolver {
 
   @ResolveField(() => Hub, { nullable: true })
   public hub(@Parent() parent: Event): Promise<Hub> {
-    return parent.hub.load();
+    return parent.hub?.load();
   }
 
   @ResolveField(() => String, { nullable: true })

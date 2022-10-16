@@ -43,7 +43,7 @@ export class HubFieldResolver {
 
   @ResolveField(() => [Event], { nullable: true })
   public events(@Parent() parent: Hub): Promise<Event[]> {
-    return parent.events.loadItems();
+    return parent.events?.loadItems();
   }
 
   @ResolveField(() => [Invite], { nullable: true })
