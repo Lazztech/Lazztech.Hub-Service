@@ -23,12 +23,7 @@ export class AuthResolver {
     @Args('password') password: string,
   ): Promise<string> {
     this.logger.log(this.login.name);
-
-    try {
-      return await this.authService.login(password, email);
-    } catch (error) {
-      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
-    }
+    return this.authService.login(password, email);
   }
 
   @Mutation(() => String, { nullable: true })
