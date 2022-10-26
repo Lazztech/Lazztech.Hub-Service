@@ -8,7 +8,6 @@ import { AppModule } from './app.module';
 /* eslint-disable */
 import express = require('express');
 import { ModerationInterceptor } from './moderation/moderation.interceptor';
-import { SentryService } from '@ntegral/nestjs-sentry';
 
 async function bootstrap() {
   const instance = express();
