@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Logger, Response, UseGuards } from '@nestjs/common';
+import { Logger, Response, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { UserId } from '../decorators/user.decorator';
 import { UserInput } from '../user/dto/user.input';

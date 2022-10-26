@@ -20,6 +20,7 @@ import { EventModule } from './event/event.module';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { GraphqlInterceptor, SentryModule } from '@ntegral/nestjs-sentry';
 import { APP_INTERCEPTOR } from '@nestjs/core';
+import { SentryPlugin } from './sentry/sentry.plugin';
 
 @Module({
   imports: [
@@ -255,6 +256,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
       provide: APP_INTERCEPTOR,
       useFactory: () => new GraphqlInterceptor(),
     },
+    SentryPlugin,
   ]
 })
 export class AppModule implements OnModuleInit {
