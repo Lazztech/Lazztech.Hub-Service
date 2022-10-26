@@ -9,7 +9,7 @@ import { EventService } from './event.service';
 import { ConfigModule } from '@nestjs/config';
 import { ImageFileService } from '../file/image-file/image-file.service';
 import { User } from '../dal/entity/user.entity';
-import { HttpModule } from '@nestjs/common';
+import { HttpModule } from '@nestjs/axios';
 import { InAppNotification } from '../dal/entity/inAppNotification.entity';
 import { NotificationService } from '../notification/notification.service';
 import { UserDevice } from '../dal/entity/userDevice.entity';

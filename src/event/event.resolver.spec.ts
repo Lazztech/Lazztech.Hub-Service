@@ -11,7 +11,7 @@ import { EventResolver } from './event.resolver';
 import { EventService } from './event.service';
 import { User } from '../dal/entity/user.entity';
 import { NotificationService } from '../notification/notification.service';
-import { HttpModule } from '@nestjs/common';
+import { HttpModule } from '@nestjs/axios';
 import { InAppNotification } from '../dal/entity/inAppNotification.entity';
 import { UserDevice } from '../dal/entity/userDevice.entity';
 

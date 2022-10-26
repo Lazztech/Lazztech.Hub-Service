@@ -5,7 +5,7 @@ import { User } from '../dal/entity/user.entity';
 import { PushNotificationDto } from './dto/pushNotification.dto';
 import { InAppNotificationDto } from './dto/inAppNotification.dto';
 import { InAppNotification } from '../dal/entity/inAppNotification.entity';
-import { HttpService, HttpModule } from '@nestjs/common';
+import { HttpService, HttpModule } from '@nestjs/axios';
 import { of } from 'rxjs';
 import { UserDevice } from '../dal/entity/userDevice.entity';
 import { AxiosResponse } from 'axios';

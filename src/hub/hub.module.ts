@@ -1,4 +1,5 @@
-import { Module, HttpModule } from '@nestjs/common';
+import { Module } from '@nestjs/common';
+import { HttpModule } from '@nestjs/axios';
 import { HubResolver } from './hub.resolver';
 import { HubService } from './hub.service';
 import { NotificationService } from '../notification/notification.service';

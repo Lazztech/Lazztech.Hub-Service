@@ -4,7 +4,7 @@ import { InAppNotification } from '../dal/entity/inAppNotification.entity';
 import { User } from '../dal/entity/user.entity';
 import { AuthService } from './auth.service';
 import { NotificationService } from '../notification/notification.service';
-import { HttpModule } from '@nestjs/common';
+import { HttpModule } from '@nestjs/axios';
 import { UserDevice } from '../dal/entity/userDevice.entity';
 import { UserService } from '../user/user.service';
 import { S3FileService } from '../file/s3-file/s3-file.service';

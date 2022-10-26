@@ -1,4 +1,5 @@
-import { Module, HttpModule } from '@nestjs/common';
+import { Module } from '@nestjs/common';
+import { HttpModule } from '@nestjs/axios';
 import { NotificationResolver } from './notification.resolver';
 import { NotificationService } from './notification.service';
 import { User } from '../dal/entity/user.entity';
