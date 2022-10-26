@@ -17,6 +17,7 @@ import { NotificationModule } from './notification/notification.module';
 import { UserModule } from './user/user.module';
 import { ModerationModule } from './moderation/moderation.module';
 import { EventModule } from './event/event.module';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 
 @Module({
   imports: [
@@ -217,7 +218,8 @@ import { EventModule } from './event/event.module';
     NotificationModule,
     HubModule,
     UserModule,
-    GraphQLModule.forRoot({
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
       autoSchemaFile: true,
       context: ({ req, res }) => ({ req, res }),
       fieldResolverEnhancers: ['interceptors'],

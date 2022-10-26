@@ -14,7 +14,7 @@ import { LocalFileService } from '../file/local-file/local-file.service';
 import { InAppNotification } from '../dal/entity/inAppNotification.entity';
 import { UserDevice } from '../dal/entity/userDevice.entity';
 import { Invite } from '../dal/entity/invite.entity';
-import { HttpModule } from '@nestjs/common';
+import { HttpModule } from '@nestjs/axios';
 import { Block } from '../dal/entity/block.entity';
 import { Event } from '../dal/entity/event.entity';
 import { JoinUserEvent } from '../dal/entity/joinUserEvent.entity';

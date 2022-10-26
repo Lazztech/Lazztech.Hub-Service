@@ -3,7 +3,7 @@ import { Hub } from "../entity/hub.entity";
 import { Invite } from "../entity/invite.entity";
 import { User } from "../entity/user.entity";
 
-@Resolver((of) => Invite)
+@Resolver(() => Invite)
 export class InviteFieldResolver {
 
     @ResolveField(() => ID)

@@ -1,7 +1,7 @@
 import { ID, Parent, ResolveField, Resolver } from "@nestjs/graphql";
 import { UserDevice } from "../entity/userDevice.entity";
 
-@Resolver((of) => UserDevice)
+@Resolver(() => UserDevice)
 export class UserDeviceFieldResolver {
 
     @ResolveField(() => ID)

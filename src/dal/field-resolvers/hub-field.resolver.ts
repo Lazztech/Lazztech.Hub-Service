@@ -11,7 +11,7 @@ import { Invite } from '../entity/invite.entity';
 import { JoinUserHub } from '../entity/joinUserHub.entity';
 import { MicroChat } from '../entity/microChat.entity';
 
-@Resolver((of) => Hub)
+@Resolver(() => Hub)
 export class HubFieldResolver {
   private logger = new Logger(HubFieldResolver.name);
 

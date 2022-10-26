@@ -6,7 +6,7 @@ import { InAppNotification } from '../../dal/entity/inAppNotification.entity';
 import { NotificationService } from '../../notification/notification.service';
 import { ConfigModule } from '@nestjs/config';
 import { User } from '../../dal/entity/user.entity';
-import { HttpModule } from '@nestjs/common';
+import { HttpModule } from '@nestjs/axios';
 import { UserDevice } from '../../dal/entity/userDevice.entity';
 import { getRepositoryToken } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/core';

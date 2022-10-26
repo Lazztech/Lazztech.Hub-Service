@@ -2,7 +2,7 @@ import { Context, ID, Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { FileUrlService } from '../../file/file-url/file-url.service';
 import { InAppNotification } from '../entity/inAppNotification.entity';
 
-@Resolver((of) => InAppNotification)
+@Resolver(() => InAppNotification)
 export class InAppNotificationFieldResolver {
   constructor(private readonly fileUrlService: FileUrlService) {}
 

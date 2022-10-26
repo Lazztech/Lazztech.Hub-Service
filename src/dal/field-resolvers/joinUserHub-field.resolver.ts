@@ -6,7 +6,7 @@ import { Hub } from '../entity/hub.entity';
 import { JoinUserHub } from '../entity/joinUserHub.entity';
 import { User } from '../entity/user.entity';
 
-@Resolver((of) => JoinUserHub)
+@Resolver(() => JoinUserHub)
 export class JoinUserHubsResolver {
   private logger = new Logger(JoinUserHubsResolver.name);
 

@@ -8,7 +8,7 @@ import { Block } from '../entity/block.entity';
 import { User } from '../entity/user.entity';
 import { UserDevice } from '../entity/userDevice.entity';
 
-@Resolver((of) => User)
+@Resolver(() => User)
 export class UserFieldResolver {
   private logger = new Logger(UserFieldResolver.name);
 

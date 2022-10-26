@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { HubInviteService } from './hub-invite.service';
 import { ConfigModule } from '@nestjs/config';
-import { HttpModule } from '@nestjs/common';
+import { HttpModule } from '@nestjs/axios';
 import { Invite } from '../../dal/entity/invite.entity';
 import { User } from '../../dal/entity/user.entity';
 import { JoinUserHub } from '../../dal/entity/joinUserHub.entity';

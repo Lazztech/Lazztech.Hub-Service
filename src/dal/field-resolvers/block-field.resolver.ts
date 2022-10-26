@@ -3,7 +3,7 @@ import { Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { Block } from '../entity/block.entity';
 import { User } from '../entity/user.entity';
 
-@Resolver((of) => Block)
+@Resolver(() => Block)
 export class BlockFieldResolver {
   private logger = new Logger(BlockFieldResolver.name);
 
