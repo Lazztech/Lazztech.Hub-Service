@@ -8,6 +8,7 @@ import { AppModule } from './app.module';
 /* eslint-disable */
 import express = require('express');
 import { ModerationInterceptor } from './moderation/moderation.interceptor';
+import { SentryService } from '@ntegral/nestjs-sentry';
 
 async function bootstrap() {
   const instance = express();
@@ -26,6 +27,7 @@ async function bootstrap() {
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
+  app.useLogger(SentryService.SentryServiceInstance());
   app.useGlobalInterceptors(new ModerationInterceptor());
   await app.listen(process.env.PORT || 8080);
 }
