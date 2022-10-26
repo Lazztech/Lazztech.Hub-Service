@@ -3,7 +3,7 @@ import { Event } from '../entity/event.entity';
 import { JoinUserEvent } from '../entity/joinUserEvent.entity';
 import { User } from '../entity/user.entity';
 
-@Resolver((of) => JoinUserEvent)
+@Resolver(() => JoinUserEvent)
 export class JoinUserEventFieldResolver {
   @ResolveField(() => ID)
   public userId(@Parent() joinUserEvent: JoinUserEvent) {

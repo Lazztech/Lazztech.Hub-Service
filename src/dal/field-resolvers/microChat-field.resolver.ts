@@ -1,7 +1,7 @@
 import { ID, Parent, ResolveField, Resolver } from "@nestjs/graphql";
 import { MicroChat } from "../entity/microChat.entity";
 
-@Resolver((of) => MicroChat)
+@Resolver(() => MicroChat)
 export class MicroChatFieldResolver {
 
   @ResolveField(() => ID)

@@ -9,7 +9,7 @@ import { Hub } from '../entity/hub.entity';
 import { JoinUserEvent } from '../entity/joinUserEvent.entity';
 import { User } from '../entity/user.entity';
 
-@Resolver((of) => Event)
+@Resolver(() => Event)
 export class EventFieldResolver {
 
   constructor(
