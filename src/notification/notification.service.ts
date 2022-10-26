@@ -1,7 +1,8 @@
 import { Service } from 'typedi';
 import { User } from '../dal/entity/user.entity';
 import { ConfigService } from '@nestjs/config';
-import { Logger, HttpService } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
+import { HttpService } from '@nestjs/axios';
 import { PushNotificationDto } from './dto/pushNotification.dto';
 import { InAppNotificationDto } from './dto/inAppNotification.dto';
 import { UserDevice } from '../dal/entity/userDevice.entity';
