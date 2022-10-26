@@ -101,7 +101,6 @@
     "typedi": "^0.8.0"
   },
   "devDependencies": {
-    "@apollo/gateway": "^0.35.1",
     "@mikro-orm/cli": "^5.4.2",
     "@mikro-orm/entity-generator": "^5.4.2",
     "@nestjs/cli": "^8.2.0",
