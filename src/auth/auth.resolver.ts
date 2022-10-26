@@ -1,4 +1,4 @@
-import { Logger, Response, UseGuards } from '@nestjs/common';
+import { HttpException, HttpStatus, Logger, Response, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { UserId } from '../decorators/user.decorator';
 import { UserInput } from '../user/dto/user.input';
@@ -23,8 +23,12 @@ export class AuthResolver {
     @Args('password') password: string,
   ): Promise<string> {
     this.logger.log(this.login.name);
-    const accessToken = await this.authService.login(password, email);
-    return accessToken;
+
+    try {
+      return await this.authService.login(password, email);
+    } catch (error) {
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    }
   }
 
   @Mutation(() => String, { nullable: true })

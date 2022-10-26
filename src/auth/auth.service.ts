@@ -66,19 +66,13 @@ export class AuthService {
     const user = await this.userService.findOne(email);
 
     if (!user) {
-      this.logger.warn(
-        `User not found by email address for user.id: ${user.id}`,
-      );
-      // FIXME throw error instead of returning null
-      return null;
+      throw new Error(`User not found by email address for user.id: ${user.id}`)
     }
 
     const valid = await bcrypt.compare(password, user.password);
 
     if (!valid) {
-      this.logger.warn(`Password not valid for user.id: ${user.id}.`);
-      // FIXME throw error instead of returning null
-      return null;
+      throw new Error(`Password not valid for user.id: ${user.id}.`);
     }
 
     return this.jwtService.sign({ userId: user.id } as Payload);
