@@ -23,8 +23,7 @@ export class AuthResolver {
     @Args('password') password: string,
   ): Promise<string> {
     this.logger.log(this.login.name);
-    const accessToken = await this.authService.login(password, email);
-    return accessToken;
+    return this.authService.login(password, email);
   }
 
   @Mutation(() => String, { nullable: true })
