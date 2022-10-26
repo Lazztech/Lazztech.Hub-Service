@@ -18,9 +18,23 @@ import { UserModule } from './user/user.module';
 import { ModerationModule } from './moderation/moderation.module';
 import { EventModule } from './event/event.module';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { GraphqlInterceptor, SentryModule } from '@ntegral/nestjs-sentry';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 
 @Module({
   imports: [
+    SentryModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        dsn: configService.get('SENTRY_DSN'),
+        debug: true,
+        environment: 'production',
+        release: null, // must create a release in sentry.io dashboard
+        logLevels: ['debug'], // based on sentry.io loglevel
+        tracesSampleRate: 1.0,
+      }),
+      inject: [ConfigService],
+    }),
     ConfigModule.forRoot({
       envFilePath: ['.env.local', '.env'],
       validationSchema: Joi.object({
@@ -236,6 +250,12 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
     ModerationModule,
     EventModule,
   ],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useFactory: () => new GraphqlInterceptor(),
+    },
+  ]
 })
 export class AppModule implements OnModuleInit {
   public static logger = new Logger(AppModule.name);
