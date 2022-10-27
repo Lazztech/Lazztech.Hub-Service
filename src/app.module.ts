@@ -31,7 +31,7 @@ import { SentryPlugin } from './sentry/sentry.plugin';
         debug: true,
         environment: 'production',
         release: null, // must create a release in sentry.io dashboard
-        logLevels: ['debug'], // based on sentry.io loglevel
+        logLevels: ['error'], // based on sentry.io loglevel
         tracesSampleRate: 1.0,
       }),
       inject: [ConfigService],
