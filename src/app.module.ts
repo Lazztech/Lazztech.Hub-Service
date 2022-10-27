@@ -21,6 +21,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { GraphqlInterceptor, SentryModule } from '@ntegral/nestjs-sentry';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { SentryPlugin } from './sentry/sentry.plugin';
+import { SeverityLevel } from '@sentry/node';
 
 @Module({
   imports: [
@@ -33,6 +34,20 @@ import { SentryPlugin } from './sentry/sentry.plugin';
         release: null, // must create a release in sentry.io dashboard
         logLevels: ['error'], // based on sentry.io loglevel
         tracesSampleRate: 1.0,
+        beforeSend: (event) => {
+          // workaround to bug: https://github.com/ntegral/nestjs-sentry/pull/42#issuecomment-1021257277
+          const excluded: Array<SeverityLevel> = [
+            'debug',
+            'info',
+            'log',
+            'warning'
+          ];
+          if (excluded.includes(event.level)) {
+            return null;
+          } else {
+            return event;
+          }
+        },
       }),
       inject: [ConfigService],
     }),
