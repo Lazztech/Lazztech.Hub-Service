@@ -28,7 +28,7 @@ import { SentryPlugin } from './sentry/sentry.plugin';
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         dsn: configService.get('SENTRY_DSN'),
-        debug: true,
+        debug: false,
         environment: 'production',
         release: null, // must create a release in sentry.io dashboard
         logLevels: ['error'], // based on sentry.io loglevel
