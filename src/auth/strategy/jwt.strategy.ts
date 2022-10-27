@@ -21,7 +21,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: Payload) {
-    this.logger.log('verified access token.');
+    this.logger.debug('verified access token.');
 
     const user = await this.userService.getUser(payload.userId);
     if (!user || user?.banned) {
@@ -29,7 +29,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       throw new UnauthorizedException();
     } else {
       await this.userService.updateLastOnline(user);
-      this.logger.log('verified user');
+      this.logger.debug('verified user');
     }
 
     return payload;

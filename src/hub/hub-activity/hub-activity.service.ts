@@ -20,11 +20,11 @@ export class HubActivityService {
     private inAppNotificationRepository: EntityRepository<InAppNotification>,
     private notificationService: NotificationService,
   ) {
-    this.logger.log('constructor');
+    this.logger.debug('constructor');
   }
 
   async activateHub(userId: any, hubId: number) {
-    this.logger.log(this.activateHub.name);
+    this.logger.debug(this.activateHub.name);
     const hubRelationship = await this.joinUserHubRepository.findOne({
       user: userId,
       hub: hubId,
@@ -46,7 +46,7 @@ export class HubActivityService {
   }
 
   async deactivateHub(userId: any, hubId: number) {
-    this.logger.log(this.deactivateHub.name);
+    this.logger.debug(this.deactivateHub.name);
     const hubRelationship = await this.joinUserHubRepository.findOne({
       user: userId,
       hub: hubId,
@@ -66,7 +66,7 @@ export class HubActivityService {
   }
 
   private async notifyOfHubActivated(hubId: number) {
-    this.logger.log(this.notifyOfHubActivated.name);
+    this.logger.debug(this.notifyOfHubActivated.name);
 
     const hubRelationships = await this.joinUserHubRepository.find({
       hub: hubId,

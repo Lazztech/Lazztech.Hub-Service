@@ -14,6 +14,6 @@ export class FileController {
 
   @Get(':fileName')
   get(@Param('fileName') fileName: string, @Res() response: Response) {
-    this.fileService.get(fileName).on('error', (err) => this.logger.warn(err)).pipe(response);
+    this.fileService.get(fileName).on('error', (err) => this.logger.error(err)).pipe(response);
   }
 }

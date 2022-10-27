@@ -35,14 +35,14 @@ export class NotificationService {
     @InjectRepository(UserDevice)
     private userDeviceRepository: EntityRepository<UserDevice>,
   ) {
-    this.logger.log('constructor');
+    this.logger.debug('constructor');
   }
 
   public async addUserFcmNotificationToken(
     userId: any,
     token: string,
   ): Promise<void> {
-    this.logger.log(this.addUserFcmNotificationToken.name);
+    this.logger.debug(this.addUserFcmNotificationToken.name);
     const user = await this.userRepository.findOne({ id: userId });
 
     if (!(await user.userDevices.loadItems()).find((x) => x.fcmPushUserToken == token)) {
@@ -68,7 +68,7 @@ export class NotificationService {
     userId: any,
     pageableOptions?: PageableOptions,
   ): Promise<[InAppNotification[], number]> {
-    this.logger.log(this.getInAppNotifications.name);
+    this.logger.debug(this.getInAppNotifications.name);
     return await this.inAppNotificationRepository.findAndCount({ user: userId }, {
       limit: pageableOptions?.limit,
       offset: pageableOptions?.offset,
@@ -80,7 +80,7 @@ export class NotificationService {
     userId: number,
     details: InAppNotificationDto,
   ): Promise<void> {
-    this.logger.log(this.addInAppNotificationForUser.name);
+    this.logger.debug(this.addInAppNotificationForUser.name);
     const inAppNotification = this.inAppNotificationRepository.create({
       ...details,
       user: userId,
@@ -92,7 +92,7 @@ export class NotificationService {
     userId: any,
     inAppNotificationId: number,
   ): Promise<void> {
-    this.logger.log(this.deleteInAppNotification.name);
+    this.logger.debug(this.deleteInAppNotification.name);
     const inAppNotification = await this.inAppNotificationRepository.findOne({
       id: inAppNotificationId,
       user: userId,
@@ -101,7 +101,7 @@ export class NotificationService {
   }
 
   async deleteAllInAppNotifications(userId: any): Promise<void> {
-    this.logger.log(this.deleteAllInAppNotifications.name);
+    this.logger.debug(this.deleteAllInAppNotifications.name);
     const inAppNotifications = await this.inAppNotificationRepository.find({
       user: userId,
     });
@@ -112,21 +112,21 @@ export class NotificationService {
     userId: number,
     notification: PushNotificationDto,
   ): Promise<void> {
-    this.logger.log(this.sendPushToUser.name);
+    this.logger.debug(this.sendPushToUser.name);
 
     const user = await this.userRepository.findOne({ id: userId });
     const fcmUserTokens = (await user.userDevices.loadItems()).map(
       (x) => x.fcmPushUserToken,
     );
 
-    this.logger.log(
+    this.logger.debug(
       `${fcmUserTokens.length} push notification tokens found for userId: ${userId}`,
     );
 
     for (const iterator of fcmUserTokens) {
       await this.sendPushNotification(notification, iterator);
 
-      this.logger.log(`Sent push notification to fcmToken ${iterator}`);
+      this.logger.debug(`Sent push notification to fcmToken ${iterator}`);
     }
   }
 
@@ -134,7 +134,7 @@ export class NotificationService {
     notification: PushNotificationDto,
     to: string,
   ) {
-    this.logger.log(this.sendPushNotification.name);
+    this.logger.debug(this.sendPushNotification.name);
     const data = {
       notification,
       to,
@@ -146,7 +146,7 @@ export class NotificationService {
         },
       })
       .toPromise()
-      .catch((e) => this.logger.log(e));
+      .catch((e) => this.logger.debug(e));
 
     return result;
   }

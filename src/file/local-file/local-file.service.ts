@@ -18,12 +18,12 @@ export class LocalFileService implements FileServiceInterface {
     private readonly configService: ConfigService,
     private readonly imageFileService: ImageFileService,
   ) {
-    this.logger.log('constructor');
+    this.logger.debug('constructor');
     this.setupDir();
   }
 
   async storeImageFromBase64(base64Image: string): Promise<string> {
-    this.logger.log(this.storeImageFromBase64.name);
+    this.logger.debug(this.storeImageFromBase64.name);
     const data = base64Image.split('base64,')[1];
     let buf = Buffer.from(data, 'base64');
     buf = await this.imageFileService.compress(buf);
@@ -46,10 +46,10 @@ export class LocalFileService implements FileServiceInterface {
 
   setupDir() {
     if (!fs.existsSync(this.directory)) {
-      this.logger.log('creating uploads directory');
+      this.logger.debug('creating uploads directory');
       fs.mkdirSync(this.directory, { recursive: true });
     }
-    this.logger.log('uploads directory exists');
+    this.logger.debug('uploads directory exists');
   }
 
   private deleteFile(fileName: string): Promise<void> {

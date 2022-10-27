@@ -16,6 +16,11 @@ async function bootstrap() {
   const app: NestExpressApplication = await NestFactory.create(
     AppModule,
     new ExpressAdapter(instance),
+    {
+      logger: process.env.NODE_ENV === 'development' 
+        ? ['log', 'debug', 'error', 'verbose', 'warn'] 
+        : ['error'],
+    }
   );
   // Starts listening for shutdown hooks
   app.enableShutdownHooks();

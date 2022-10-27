@@ -26,7 +26,7 @@ export class HubMicroChatService {
   ) {}
 
   async microChatToHub(userId: number, hubId: number, microChatId: number) {
-    this.logger.log(this.microChatToHub.name);
+    this.logger.debug(this.microChatToHub.name);
 
     const fromUser = await this.userRepository.findOne(userId);
     const hub = await this.hubRepository.findOne({
@@ -54,7 +54,7 @@ export class HubMicroChatService {
   }
 
   async createMicroChat(userId: any, hubId: number, microChatText: string) {
-    this.logger.log(this.createMicroChat.name);
+    this.logger.debug(this.createMicroChat.name);
     const usersConnection = await this.joinUserHubRepository.findOne({
       user: userId,
       hub: hubId,
@@ -74,14 +74,14 @@ export class HubMicroChatService {
     });
     await this.microChatRepository.persistAndFlush(microChat);
 
-    this.logger.log(
+    this.logger.debug(
       `createMicroChat(userId: ${userId}, hubId: ${hubId}, microChatText: ${microChatText}) completed successfully.`,
     );
     return microChat;
   }
 
   async deleteMicroChat(userId: number, hubId: number, microChatId: number) {
-    this.logger.log(this.deleteMicroChat.name);
+    this.logger.debug(this.deleteMicroChat.name);
     const usersConnection = await this.joinUserHubRepository.findOne({
       user: userId,
       hub: hubId,
@@ -98,7 +98,7 @@ export class HubMicroChatService {
     );
     await this.microChatRepository.removeAndFlush(microChat);
 
-    this.logger.log(
+    this.logger.debug(
       `deleteMicroChat(userId: ${userId}, hubId: ${hubId}, microChatId ${microChatId}) completed successfully.`,
     );
   }

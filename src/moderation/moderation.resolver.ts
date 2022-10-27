@@ -18,7 +18,7 @@ export class ModerationResolver {
     @UserId() userId,
     @Args({ name: 'hubId', type: () => ID }) hubId: number,
   ): Promise<boolean> {
-    this.logger.log(this.reportHubAsInappropriate.name);
+    this.logger.debug(this.reportHubAsInappropriate.name);
     await this.moderationService.reportHubAsInappropriate(userId, hubId);
     return true;
   }
@@ -28,7 +28,7 @@ export class ModerationResolver {
     @UserId() userId,
     @Args({ name: 'toUserId', type: () => ID }) toUserId: number,
   ): Promise<boolean> {
-    this.logger.log(this.reportUserAsInappropriate.name);
+    this.logger.debug(this.reportUserAsInappropriate.name);
     await this.moderationService.reportUserAsInappropriate(userId, toUserId);
     return true;
   }
@@ -38,7 +38,7 @@ export class ModerationResolver {
     @UserId() userId,
     @Args({ name: 'eventId', type: () => ID }) eventId: number,
   ): Promise<boolean> {
-    this.logger.log(this.reportEventAsInappropriate.name);
+    this.logger.debug(this.reportEventAsInappropriate.name);
     await this.moderationService.reportEventAsInappropriate(userId, eventId);
     return true;
   }

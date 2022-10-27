@@ -18,7 +18,7 @@ export class S3FileService implements FileServiceInterface {
   ) {}
 
   public async storeImageFromBase64(base64Image: string): Promise<string> {
-    this.logger.log(this.storeImageFromBase64.name);
+    this.logger.debug(this.storeImageFromBase64.name);
 
     await this.ensureBucketExists();
 
@@ -35,14 +35,14 @@ export class S3FileService implements FileServiceInterface {
         Body: buf,
       })
       .promise();
-    this.logger.log(
+    this.logger.debug(
       'Object was uploaded successfully. ' + uploadObjectResponse.VersionId,
     );
     return objectName;
   }
 
   public async delete(url: string): Promise<void> {
-    this.logger.log(this.delete.name);
+    this.logger.debug(this.delete.name);
     const splitUrl = url.split('/');
     const objectName = splitUrl[splitUrl.length - 1];
     const result = await this.s3
@@ -51,7 +51,7 @@ export class S3FileService implements FileServiceInterface {
         Key: objectName,
       })
       .promise();
-    this.logger.log(`Deleted image with result: ${result.$response}`);
+    this.logger.debug(`Deleted image with result: ${result.$response}`);
   }
 
   get(fileName: string): ReadStream {
@@ -64,7 +64,7 @@ export class S3FileService implements FileServiceInterface {
   }
 
   private async ensureBucketExists() {
-    this.logger.log(this.ensureBucketExists.name);
+    this.logger.debug(this.ensureBucketExists.name);
     const list = await this.s3.listBuckets().promise();
     const bucket = list.Buckets.find((x) => x.Name == this.bucketName);
     if (!bucket) {

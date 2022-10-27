@@ -14,7 +14,7 @@ export class AuthResolver {
     private authService: AuthService,
     private authPasswordResetService: AuthPasswordResetService,
   ) {
-    this.logger.log('constructor');
+    this.logger.debug('constructor');
   }
 
   @Mutation(() => String, { nullable: true })
@@ -22,7 +22,7 @@ export class AuthResolver {
     @Args('email') email: string,
     @Args('password') password: string,
   ): Promise<string> {
-    this.logger.log(this.login.name);
+    this.logger.debug(this.login.name);
     return this.authService.login(password, email);
   }
 
@@ -31,7 +31,7 @@ export class AuthResolver {
     @Args('data')
     { firstName, lastName, birthdate, email, password, phoneNumber }: UserInput,
   ): Promise<string> {
-    this.logger.log(this.register.name);
+    this.logger.debug(this.register.name);
 
     const accessToken = await this.authService.register(
       firstName,
@@ -47,7 +47,7 @@ export class AuthResolver {
   @Mutation(() => Boolean)
   public async logout(@Response() res): Promise<boolean> {
     // FIXME: not using cookies anymore?
-    this.logger.log(this.logout.name);
+    this.logger.debug(this.logout.name);
 
     res.cookie('access-token', '', { expires: new Date(Date.now()) });
     return true;
@@ -59,7 +59,7 @@ export class AuthResolver {
     @Args('resetPin') resetPin: string,
     @Args('newPassword') newPassword: string,
   ): Promise<boolean> {
-    this.logger.log(this.resetPassword.name);
+    this.logger.debug(this.resetPassword.name);
     const result = await this.authPasswordResetService.resetPassword({
       usersEmail,
       resetPin,
@@ -72,7 +72,7 @@ export class AuthResolver {
   public async sendPasswordResetEmail(
     @Args('email') email: string,
   ): Promise<boolean> {
-    this.logger.log(this.sendPasswordResetEmail.name);
+    this.logger.debug(this.sendPasswordResetEmail.name);
     const result = await this.authPasswordResetService.sendPasswordResetEmail(
       email,
     );
@@ -86,7 +86,7 @@ export class AuthResolver {
     @Args({ name: 'oldPassword', type: () => String }) oldPassword: string,
     @Args({ name: 'newPassword', type: () => String }) newPassword: string,
   ): Promise<boolean> {
-    this.logger.log(this.changePassword.name);
+    this.logger.debug(this.changePassword.name);
     const result = await this.authService.changePassword(userId, {
       oldPassword,
       newPassword,
@@ -101,7 +101,7 @@ export class AuthResolver {
     @Args({ name: 'email', type: () => String }) email: string,
     @Args({ name: 'password', type: () => String }) password: string,
   ): Promise<boolean> {
-    this.logger.log(this.deleteAccount.name);
+    this.logger.debug(this.deleteAccount.name);
     const result = await this.authService.deleteAccount(
       userId,
       email,

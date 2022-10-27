@@ -29,7 +29,7 @@ export class ModerationService {
 
     @Cron(CronExpression.EVERY_12_HOURS)
     private async autoBanner() {
-        this.logger.log(this.autoBanner.name);
+        this.logger.debug(this.autoBanner.name);
         // mark users
         const users = await this.userRepository.find({ flagged: true });
         users.forEach(user => {
