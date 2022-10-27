@@ -9,18 +9,18 @@ import { AppModule } from './app.module';
 import express = require('express');
 import { ModerationInterceptor } from './moderation/moderation.interceptor';
 import { SentryService } from '@ntegral/nestjs-sentry';
+import { LogLevel } from '@nestjs/common';
 
 async function bootstrap() {
   const instance = express();
   instance.use('/avatars', require('adorable-avatars/dist/index'));
+  const logLevels: LogLevel[] = process.env.NODE_ENV === 'development' 
+  ? ['log', 'debug', 'error', 'verbose', 'warn'] 
+  : ['error'];
   const app: NestExpressApplication = await NestFactory.create(
     AppModule,
     new ExpressAdapter(instance),
-    {
-      logger: process.env.NODE_ENV === 'development' 
-        ? ['log', 'debug', 'error', 'verbose', 'warn'] 
-        : ['error'],
-    }
+    { logger: logLevels, }
   );
   // Starts listening for shutdown hooks
   app.enableShutdownHooks();
@@ -32,7 +32,14 @@ async function bootstrap() {
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
-  app.useLogger(SentryService.SentryServiceInstance());
+
+
+  const sentry = SentryService.SentryServiceInstance();
+  sentry.setLogLevels(logLevels)
+  if (process.env.NODE_ENV !== 'development') {
+    app.useLogger(sentry);
+  }
+
   app.useGlobalInterceptors(new ModerationInterceptor());
   await app.listen(process.env.PORT || 8080);
 }
