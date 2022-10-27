@@ -11,7 +11,7 @@ export class BlockFieldResolver {
   from(
     @Parent() parent: Block,
   ): Promise<User> {
-    this.logger.log(this.from.name);
+    this.logger.debug(this.from.name);
     return parent.from.load();
   }
 
@@ -19,7 +19,7 @@ export class BlockFieldResolver {
   to(
     @Parent() parent: Block,
   ): Promise<User> {
-    this.logger.log(this.to.name);
+    this.logger.debug(this.to.name);
     return parent.to.load();
   }
 }

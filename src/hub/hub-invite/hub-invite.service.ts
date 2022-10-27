@@ -21,7 +21,7 @@ export class HubInviteService {
   ) {}
 
   async getInvitesByHub(userId: any, hubId: any, includeAccepted: boolean) {
-    this.logger.log(this.getInvitesByHub.name);
+    this.logger.debug(this.getInvitesByHub.name);
     const userHubRelationship = await this.joinUserHubRepository.findOne({
       user: userId,
       hub: hubId,
@@ -36,7 +36,7 @@ export class HubInviteService {
   }
 
   async getInvite(userId: any, hubId: any) {
-    this.logger.log(this.getInvite.name);
+    this.logger.debug(this.getInvite.name);
     return await this.inviteRepository.findOne({
       hub: hubId,
       invitee: userId,
@@ -44,7 +44,7 @@ export class HubInviteService {
   }
 
   async getInvitesByUser(userId: any, includeAccepted: boolean) {
-    this.logger.log(this.getInvitesByUser.name);
+    this.logger.debug(this.getInvitesByUser.name);
     return await this.inviteRepository.find({
       invitee: userId,
       accepted: includeAccepted,
@@ -52,7 +52,7 @@ export class HubInviteService {
   }
 
   async inviteUserToHub(userId: any, hubId: number, inviteesEmail: string) {
-    this.logger.log(this.inviteUserToHub.name);
+    this.logger.debug(this.inviteUserToHub.name);
     const userHubRelationship = await this.joinUserHubRepository.findOne({
       user: userId,
       hub: hubId,
@@ -98,7 +98,7 @@ export class HubInviteService {
   }
 
   public async acceptHubInvite(inviteesId: number, inviteId: number) {
-    this.logger.log(this.acceptHubInvite.name);
+    this.logger.debug(this.acceptHubInvite.name);
     const invite = await this.inviteRepository.findOneOrFail({ id: inviteId });
     invite.accepted = true;
 
@@ -135,7 +135,7 @@ export class HubInviteService {
   }
 
   async deleteInvite(userId: any, hubId: any, inviteId: any) {
-    this.logger.log(this.deleteInvite.name);
+    this.logger.debug(this.deleteInvite.name);
     const invite = await this.inviteRepository.findOneOrFail({ id: inviteId });
     if (invite.invitee.id == userId && invite.hub.id == hubId) {
       return await this.inviteRepository.removeAndFlush(invite);
@@ -152,7 +152,7 @@ export class HubInviteService {
   }
 
   private validateInvitee(invitee: User, inviteesEmail: string, userId: any) {
-    this.logger.log(this.validateInvitee.name);
+    this.logger.debug(this.validateInvitee.name);
 
     if (!invitee) {
       throw new Error(`Did not find user to invite by email address ${inviteesEmail}. Check Spelling`);
@@ -167,7 +167,7 @@ export class HubInviteService {
     hubId: number,
     userId: any,
   ) {
-    this.logger.log(this.validateRelationship.name);
+    this.logger.debug(this.validateRelationship.name);
     if (!userHubRelationship) {
       throw new Error(
         `Could not find admin relationship to hubId: ${hubId} for userId: ${userId}.`,

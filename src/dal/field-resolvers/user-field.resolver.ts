@@ -28,7 +28,7 @@ export class UserFieldResolver {
     @UserId() userId,
     @Parent() user: User,
   ): Promise<UserDevice[]> {
-    this.logger.log(this.userDevices.name);
+    this.logger.debug(this.userDevices.name);
     if (userId === user.id) {
       return user.userDevices.loadItems();
     } else {
@@ -41,7 +41,7 @@ export class UserFieldResolver {
     @UserId() userId,
     @Parent() parent: User
   ): Promise<Block[]> {
-    this.logger.log(this.blocks.name);
+    this.logger.debug(this.blocks.name);
     if (userId === parent.id) {
       return parent.blocks.loadItems();
     } else {
@@ -54,7 +54,7 @@ export class UserFieldResolver {
     @UserId() userId,
     @Parent() parent: User
   ): Promise<boolean> {
-    this.logger.log(this.blocked.name);
+    this.logger.debug(this.blocked.name);
     return !!(await this.blockRepository.findOne({
       from: userId,
       to: parent.id

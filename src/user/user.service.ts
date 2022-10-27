@@ -23,7 +23,7 @@ export class UserService {
     @InjectRepository(Block)
     private blockRepository: EntityRepository<Block>,
   ) {
-    this.logger.log('constructor');
+    this.logger.debug('constructor');
   }
 
   public async findOne(email: string) {
@@ -31,12 +31,12 @@ export class UserService {
   }
 
   public async getUser(userId: any) {
-    this.logger.log(this.getUser.name);
+    this.logger.debug(this.getUser.name);
     return await this.userRepository.findOne({ id: userId });
   }
 
   public async getUsersOwnedHubs(userId: number): Promise<Hub[]> {
-    this.logger.log(this.getUsersOwnedHubs.name);
+    this.logger.debug(this.getUsersOwnedHubs.name);
 
     const joinUserHubResults = await this.joinUserHubRepository.find({
       user: userId,
@@ -49,7 +49,7 @@ export class UserService {
   }
 
   public async memberOfHubs(userId: number): Promise<Hub[]> {
-    this.logger.log(this.memberOfHubs.name);
+    this.logger.debug(this.memberOfHubs.name);
 
     const joinUserHubResults = await this.joinUserHubRepository.find({
       user: userId,
@@ -62,7 +62,7 @@ export class UserService {
   }
 
   public async editUserDetails(userId: any, details: EditUserDetails) {
-    this.logger.log(this.editUserDetails.name);
+    this.logger.debug(this.editUserDetails.name);
     const user = await this.userRepository.findOne({ id: userId });
     user.firstName = details.firstName;
     user.lastName = details.lastName;
@@ -79,7 +79,7 @@ export class UserService {
   }
 
   public async changeEmail(userId: any, newEmail: string) {
-    this.logger.log(this.changeEmail.name);
+    this.logger.debug(this.changeEmail.name);
     const user = await this.userRepository.findOne({ id: userId });
     user.email = newEmail;
     await this.userRepository.persistAndFlush(user);
@@ -87,7 +87,7 @@ export class UserService {
   }
 
   public async changeUserImage(userId: any, newImage: string) {
-    this.logger.log(this.changeUserImage.name);
+    this.logger.debug(this.changeUserImage.name);
     const user = await this.userRepository.findOne(userId);
     if (user.image) {
       await this.fileService.delete(user.image);
@@ -99,7 +99,7 @@ export class UserService {
   }
 
   public async updateLastOnline(user: User) {
-    this.logger.log(this.updateLastOnline.name);
+    this.logger.debug(this.updateLastOnline.name);
     user.lastOnline = Date.now().toString();
     await this.userRepository.persistAndFlush(user);
   }

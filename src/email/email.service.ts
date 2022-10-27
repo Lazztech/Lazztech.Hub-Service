@@ -13,7 +13,7 @@ export class EmailService {
   private readonly transport: string;
 
   constructor(private readonly configService: ConfigService) {
-    this.logger.log('constructor');
+    this.logger.debug('constructor');
 
     this.transport = this.configService.get<string>('EMAIL_TRANSPORT');
     this.primaryEmailAddress = this.configService.get<string>(
@@ -39,7 +39,7 @@ export class EmailService {
   }
 
   public async sendEmailFromPrimaryAddress(options: EmailOptions) {
-    this.logger.log(this.sendEmailFromPrimaryAddress.name);
+    this.logger.debug(this.sendEmailFromPrimaryAddress.name);
 
     return await this.sendEmail({
       from: this.configService.get<string>('EMAIL_FROM_ADDRESS'),
@@ -51,7 +51,7 @@ export class EmailService {
   }
 
   private async sendEmail(email: Email) {
-    this.logger.log(this.sendEmail.name);
+    this.logger.debug(this.sendEmail.name);
 
     const messageId = await this.transporter
       .sendMail(email as nodemailer.SendMailOptions)

@@ -22,7 +22,7 @@ export class NotificationResolver {
   private logger = new Logger(NotificationResolver.name);
 
   constructor(private notificationService: NotificationService) {
-    this.logger.log('constructor');
+    this.logger.debug('constructor');
   }
 
   @Mutation(() => Boolean)
@@ -30,7 +30,7 @@ export class NotificationResolver {
     @UserId() userId,
     @Args({ name: 'token', type: () => String }) token: string,
   ): Promise<boolean> {
-    this.logger.log(this.addUserFcmNotificationToken.name);
+    this.logger.debug(this.addUserFcmNotificationToken.name);
     await this.notificationService.addUserFcmNotificationToken(userId, token);
     return true;
   }
@@ -42,7 +42,7 @@ export class NotificationResolver {
   public async getInAppNotifications(
     @UserId() userId,
   ): Promise<InAppNotification[]> {
-    this.logger.log(this.getInAppNotifications.name);
+    this.logger.debug(this.getInAppNotifications.name);
     const [result] = await this.notificationService.getInAppNotifications(
       userId,
     );
@@ -55,7 +55,7 @@ export class NotificationResolver {
     @Args('pageableOptions', { nullable: true })
     pageableOptions?: PageableOptions,
   ): Promise<PaginatedInAppNotificationsResponse> {
-    this.logger.log(this.getInAppNotifications.name);
+    this.logger.debug(this.getInAppNotifications.name);
     const [items, total] = await this.notificationService.getInAppNotifications(
       userId,
       pageableOptions,
@@ -72,7 +72,7 @@ export class NotificationResolver {
     @Args({ name: 'inAppNotificationId', type: () => ID })
     inAppNotificationId: number,
   ) {
-    this.logger.log(this.deleteInAppNotification.name);
+    this.logger.debug(this.deleteInAppNotification.name);
     await this.notificationService.deleteInAppNotification(
       userId,
       inAppNotificationId,
@@ -82,7 +82,7 @@ export class NotificationResolver {
 
   @Mutation(() => Boolean)
   public async deleteAllInAppNotifications(@UserId() userId) {
-    this.logger.log(this.deleteAllInAppNotifications.name);
+    this.logger.debug(this.deleteAllInAppNotifications.name);
     await this.notificationService.deleteAllInAppNotifications(userId);
     return true;
   }

@@ -29,7 +29,7 @@ export class EventResolver {
         @Args({ name: 'longitude', type: () => Float, nullable: true }) longitude: number,
         @Args({ name: 'locationLabel', type: () => String, nullable: true }) locationLabel: string,
     ): Promise<JoinUserEvent> {
-        this.logger.log(this.createEvent.name);
+        this.logger.debug(this.createEvent.name);
         return this.eventService.createEvent(userId, {
             name,
             description,
@@ -49,7 +49,7 @@ export class EventResolver {
         @Args({ name: 'eventId', type: () => ID }) eventId: number,
         @Args({ name: 'rsvp', type: () => String, description: 'going || maybe || cantgo' }) rsvp: string,
     ): Promise<JoinUserEvent> {
-        this.logger.log(this.rsvp.name);
+        this.logger.debug(this.rsvp.name);
         return this.eventService.rsvpForEvent(userId, eventId, rsvp);
     }
 
@@ -59,7 +59,7 @@ export class EventResolver {
         @Args({ name: 'eventId', type: () => ID }) eventId: number,
         @Args({ name: 'inviteesEmail', type: () => String }) inviteesEmail: string,
     ): Promise<JoinUserEvent> {
-        this.logger.log(this.inviteUserToEvent.name);
+        this.logger.debug(this.inviteUserToEvent.name);
         return this.eventService.inviteUserToEvent(
             userId,
             eventId,
@@ -72,7 +72,7 @@ export class EventResolver {
         @UserId() userId,
         @Args({ name: 'id', type: () => ID }) id: number,
     ) {
-        this.logger.log(this.event.name);
+        this.logger.debug(this.event.name);
         try {
             return await this.eventService.getOneUserEvent(userId, id);
         } catch (error) {
@@ -85,13 +85,13 @@ export class EventResolver {
         @UserId() userId,
         @Args({ name: 'id', type: () => ID }) id: number,
     ) {
-        this.logger.log(this.resetShareableEventID.name);
+        this.logger.debug(this.resetShareableEventID.name);
         return this.eventService.resetShareableID(userId, id);
     }
 
     @Query(() => [JoinUserEvent])
     public async usersEvents(@UserId() userId): Promise<JoinUserEvent[]> {
-      this.logger.log(this.usersEvents.name);
+      this.logger.debug(this.usersEvents.name);
       return await this.eventService.getUserEvents(userId);
     }
 
@@ -100,7 +100,7 @@ export class EventResolver {
         @UserId() userId,
         @Args({ name: 'id', type: () => ID }) id: number,
     ): Promise<boolean> {
-        this.logger.log(this.deleteEvent.name);
+        this.logger.debug(this.deleteEvent.name);
         await this.eventService.deleteEvent(userId, id);
         return true;
     }
@@ -119,7 +119,7 @@ export class EventResolver {
         @Args({ name: 'longitude', type: () => Float, nullable: true }) longitude: number,
         @Args({ name: 'locationLabel', type: () => String, nullable: true }) locationLabel: string,
     ): Promise<Event> {
-        this.logger.log(this.updateEvent.name);
+        this.logger.debug(this.updateEvent.name);
         return this.eventService.updateEvent(userId, {
             id: eventId,
             name,

@@ -15,12 +15,12 @@ export class UserResolver {
   constructor(
     private userService: UserService,
   ) {
-    this.logger.log('constructor');
+    this.logger.debug('constructor');
   }
 
   @Query(() => User, { nullable: true })
   public async me(@UserId() userId): Promise<User> {
-    this.logger.log(this.me.name);
+    this.logger.debug(this.me.name);
     return await this.userService.getUser(userId);
   }
 
@@ -34,7 +34,7 @@ export class UserResolver {
     @Args({ name: 'lastName', type: () => String }) lastName: string,
     @Args({ name: 'description', type: () => String }) description: string,
   ): Promise<User> {
-    this.logger.log(this.editUserDetails.name);
+    this.logger.debug(this.editUserDetails.name);
     const user = await this.userService.editUserDetails(userId, {
       firstName,
       lastName,
@@ -48,7 +48,7 @@ export class UserResolver {
     @UserId() userId,
     @Args('data') data: UpdateUserInput,
   ) {
-    this.logger.log(this.updateUser.name);
+    this.logger.debug(this.updateUser.name);
     return this.userService.updateUser(userId, {
       ...data
     } as User);
@@ -59,7 +59,7 @@ export class UserResolver {
     @UserId() userId,
     @Args({ name: 'newEmail', type: () => String }) newEmail: string,
   ): Promise<User> {
-    this.logger.log(this.changeEmail.name);
+    this.logger.debug(this.changeEmail.name);
     const user = await this.userService.changeEmail(userId, newEmail);
     return user;
   }
@@ -69,7 +69,7 @@ export class UserResolver {
     @UserId() userId,
     @Args({ name: 'newImage', type: () => String }) newImage: string,
   ): Promise<User> {
-    this.logger.log(this.changeUserImage.name);
+    this.logger.debug(this.changeUserImage.name);
     const user = await this.userService.changeUserImage(userId, newImage);
     return user;
   }
@@ -79,7 +79,7 @@ export class UserResolver {
     @UserId() userId,
     @Args({ name: 'toUserId', type: () => ID }) toUserId: number,
   ) {
-    this.logger.log(this.blockUser.name);
+    this.logger.debug(this.blockUser.name);
     return await this.userService.blockUser(userId, toUserId);
   }
 
@@ -88,7 +88,7 @@ export class UserResolver {
     @UserId() userId,
     @Args({ name: 'toUserId', type: () => ID }) toUserId: number,
   ) {
-    this.logger.log(this.unblockUser.name);
+    this.logger.debug(this.unblockUser.name);
     return await this.userService.unblockUser(userId, toUserId);
   }
 }

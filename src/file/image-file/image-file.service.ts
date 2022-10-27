@@ -9,7 +9,7 @@ export class ImageFileService {
   private logger = new Logger(ImageFileService.name);
 
   public isJpeg(input: Buffer) {
-    this.logger.log(this.isJpeg.name);
+    this.logger.debug(this.isJpeg.name);
     return isJpg(input);
   }
 
@@ -18,7 +18,7 @@ export class ImageFileService {
   }
 
   public async compress(input: Buffer) {
-    this.logger.log(this.compress.name);
+    this.logger.debug(this.compress.name);
     return await imagemin.buffer(input, {
       plugins: [this.convertToJpeg, mozjpeg({ quality: 70 })],
     });

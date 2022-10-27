@@ -24,7 +24,7 @@ export class HubGeofenceService {
   ) {}
 
   async enteredHubGeofence(userId: any, hubId: number) {
-    this.logger.log(this.enteredHubGeofence.name);
+    this.logger.debug(this.enteredHubGeofence.name);
     const hubRelationship = await this.joinUserHubRepository.findOne({
       user: userId,
       hub: hubId,
@@ -47,7 +47,7 @@ export class HubGeofenceService {
   }
 
   async dwellHubGeofence(userId: any, hubId: number) {
-    this.logger.log(this.dwellHubGeofence.name);
+    this.logger.debug(this.dwellHubGeofence.name);
     const hubRelationship = await this.joinUserHubRepository.findOne({
       user: userId,
       hub: hubId,
@@ -66,7 +66,7 @@ export class HubGeofenceService {
   }
 
   async exitedHubGeofence(userId: any, hubId: number) {
-    this.logger.log(this.exitedHubGeofence.name);
+    this.logger.debug(this.exitedHubGeofence.name);
     const hubRelationship = await this.joinUserHubRepository.findOne({
       user: userId,
       hub: hubId,

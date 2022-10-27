@@ -17,7 +17,7 @@ export class HubTasksService {
 
     @Cron(CronExpression.EVERY_30_MINUTES)
     async checkoutStalePresentUsers() {
-        this.logger.log(this.checkoutStalePresentUsers.name);
+        this.logger.debug(this.checkoutStalePresentUsers.name);
         const userHubs = await this.joinUserHubRepository.find({ isPresent: true });
         for (const userHub of userHubs) {
             // get hours diff
@@ -29,7 +29,7 @@ export class HubTasksService {
             if (diff > 48) {
                 // check out user if there's no updates within the desired elapsed time
                 await this.hubGeofenceService.exitedHubGeofence(userHub.user.id, userHub.hub.id);
-                this.logger.log(`checked out user ${userHub.user.id} from hub ${userHub.hub.id}`);
+                this.logger.debug(`checked out user ${userHub.user.id} from hub ${userHub.hub.id}`);
             }
         }   
     }

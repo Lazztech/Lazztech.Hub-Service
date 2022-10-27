@@ -38,7 +38,7 @@ export class HubResolver {
     @Args({ name: 'longitude', type: () => Float }) longitude: number,
     @Args({ name: 'locationLabel', type: () => String, nullable: true }) locationLabel: string,
   ): Promise<JoinUserHub> {
-    this.logger.log(this.createHub.name);
+    this.logger.debug(this.createHub.name);
     const hub = await this.hubService.createHub(userId, {
       name,
       description,
@@ -55,7 +55,7 @@ export class HubResolver {
     @UserId() userId,
     @Args({ name: 'id', type: () => ID }) id: number,
   ): Promise<JoinUserHub> {
-    this.logger.log(this.hub.name);
+    this.logger.debug(this.hub.name);
     try {
       return await this.hubService.getOneUserHub(userId, id);
     } catch (error) {
@@ -68,13 +68,13 @@ export class HubResolver {
       @UserId() userId,
       @Args({ name: 'id', type: () => ID }) id: number,
   ) {
-      this.logger.log(this.resetShareableHubID.name);
+      this.logger.debug(this.resetShareableHubID.name);
       return this.hubService.resetShareableID(userId, id);
   }
 
   @Query(() => [JoinUserHub])
   public async usersHubs(@UserId() userId): Promise<JoinUserHub[]> {
-    this.logger.log(this.usersHubs.name);
+    this.logger.debug(this.usersHubs.name);
     const result = await this.hubService.getUserHubs(userId);
     return result;
   }
@@ -84,7 +84,7 @@ export class HubResolver {
     @UserId() userId,
     @Args({ name: 'otherUsersId', type: () => ID }) otherUsersId: number,
   ) {
-    this.logger.log(this.commonUsersHubs.name);
+    this.logger.debug(this.commonUsersHubs.name);
     const result = await this.hubService.commonUsersHubs(userId, otherUsersId);
     return result;
   }
@@ -96,7 +96,7 @@ export class HubResolver {
     @Args({ name: 'includeAccepted', type: () => Boolean, nullable: true })
     includeAccepted = false,
   ): Promise<Invite[]> {
-    this.logger.log(this.invitesByHub.name);
+    this.logger.debug(this.invitesByHub.name);
     return await this.hubInviteService.getInvitesByHub(
       userId,
       hubId,
@@ -110,7 +110,7 @@ export class HubResolver {
     @UserId() userId,
     @Args({ name: 'hubId', type: () => ID }) hubId: number,
   ): Promise<Invite> {
-    this.logger.log(this.invite.name);
+    this.logger.debug(this.invite.name);
     return await this.hubInviteService.getInvite(userId, hubId);
   }
 
@@ -120,7 +120,7 @@ export class HubResolver {
     @Args({ name: 'includeAccepted', type: () => Boolean, nullable: true })
     includeAccepted = false,
   ): Promise<Invite[]> {
-    this.logger.log(this.invitesByUser.name);
+    this.logger.debug(this.invitesByUser.name);
     return await this.hubInviteService.getInvitesByUser(
       userId,
       includeAccepted,
@@ -133,7 +133,7 @@ export class HubResolver {
     @Args({ name: 'hubId', type: () => ID }) hubId: number,
     @Args({ name: 'inviteesEmail', type: () => String }) inviteesEmail: string,
   ): Promise<Invite> {
-    this.logger.log(this.inviteUserToHub.name);
+    this.logger.debug(this.inviteUserToHub.name);
     const invite: Invite = await this.hubInviteService.inviteUserToHub(
       userId,
       hubId,
@@ -148,7 +148,7 @@ export class HubResolver {
     @Args({ name: 'hubId', type: () => ID }) hubId: number,
     @Args({ name: 'otherUsersId', type: () => ID }) otherUsersId: number,
   ): Promise<boolean> {
-    this.logger.log(this.removeUserFromHub.name);
+    this.logger.debug(this.removeUserFromHub.name);
     await this.hubService.removeUserFromHub(userId, hubId, otherUsersId);
     return true;
   }
@@ -158,7 +158,7 @@ export class HubResolver {
     @UserId() userId,
     @Args({ name: 'inviteId', type: () => ID }) inviteId: number,
   ): Promise<JoinUserHub> {
-    this.logger.log(this.acceptHubInvite.name);
+    this.logger.debug(this.acceptHubInvite.name);
     const result = await this.hubInviteService.acceptHubInvite(
       userId,
       inviteId,
@@ -187,7 +187,7 @@ export class HubResolver {
 
   @Query(() => [User])
   public async usersPeople(@UserId() userId): Promise<User[]> {
-    this.logger.log(this.usersPeople.name);
+    this.logger.debug(this.usersPeople.name);
     return this.hubService.usersPeople(userId);
   }
 
@@ -196,21 +196,21 @@ export class HubResolver {
     @UserId() userId,
     @Args({ name: 'search', type: () => String }) search: string,
   ): Promise<Hub[]> {
-    this.logger.log(this.searchHubByName.name);
+    this.logger.debug(this.searchHubByName.name);
     const results = await this.hubService.searchHubByName(userId, search);
     return results;
   }
 
   @Query(() => [Hub])
   public async ownedHubs(@UserId() userId): Promise<Hub[]> {
-    this.logger.log(this.ownedHubs.name);
+    this.logger.debug(this.ownedHubs.name);
     const ownedHubs = await this.userService.getUsersOwnedHubs(userId);
     return ownedHubs;
   }
 
   @Query(() => [Hub])
   public async memberOfHubs(@UserId() userId): Promise<Hub[]> {
-    this.logger.log(this.memberOfHubs.name);
+    this.logger.debug(this.memberOfHubs.name);
     const memberOfHubs = await this.userService.memberOfHubs(userId);
     return memberOfHubs;
   }
@@ -220,7 +220,7 @@ export class HubResolver {
     @UserId() userId,
     @Args({ name: 'hubId', type: () => ID }) hubId: number,
   ) {
-    this.logger.log(this.deleteHub.name);
+    this.logger.debug(this.deleteHub.name);
     await this.hubService.deleteHub(userId, hubId);
     return true;
   }
@@ -236,7 +236,7 @@ export class HubResolver {
     @Args({ name: 'longitude', type: () => Float }) longitude: number,
     @Args({ name: 'locationLabel', type: () => String, nullable: true }) locationLabel: string,
   ): Promise<Hub> {
-    this.logger.log(this.updateHub.name);
+    this.logger.debug(this.updateHub.name);
     return this.hubService.updateHub(userId, {
       id: hubId,
       name,
@@ -258,7 +258,7 @@ export class HubResolver {
     @Args({ name: 'name', type: () => String }) name: string,
     @Args({ name: 'description', type: () => String, nullable: true }) description: string,
   ): Promise<Hub> {
-    this.logger.log(this.editHub.name);
+    this.logger.debug(this.editHub.name);
     const result = await this.hubService.editHub(
       userId,
       hubId,
@@ -278,7 +278,7 @@ export class HubResolver {
     @Args({ name: 'latitude', type: () => Float }) latitude: number,
     @Args({ name: 'longitude', type: () => Float }) longitude: number,
   ) {
-    this.logger.log(this.changeHubLocation.name);
+    this.logger.debug(this.changeHubLocation.name);
     return await this.hubService.changeHubLocation(
       userId,
       hubId,
@@ -293,7 +293,7 @@ export class HubResolver {
     @Args({ name: 'hubId', type: () => ID }) hubId: number,
     @Args({ name: 'newImage', type: () => String }) newImage: string,
   ): Promise<Hub> {
-    this.logger.log(this.changeHubImage.name);
+    this.logger.debug(this.changeHubImage.name);
     const result = await this.hubService.changeHubImage(
       userId,
       hubId,
@@ -307,7 +307,7 @@ export class HubResolver {
     @UserId() userId,
     @Args({ name: 'hubId', type: () => ID }) hubId: number,
   ) {
-    this.logger.log(this.setHubStarred.name);
+    this.logger.debug(this.setHubStarred.name);
     await this.hubService.setHubStarred(userId, hubId);
     return true;
   }
@@ -317,7 +317,7 @@ export class HubResolver {
     @UserId() userId,
     @Args({ name: 'hubId', type: () => ID }) hubId: number,
   ) {
-    this.logger.log(this.setHubNotStarred.name);
+    this.logger.debug(this.setHubNotStarred.name);
     await this.hubService.setHubNotStarred(userId, hubId);
     return true;
   }
@@ -327,7 +327,7 @@ export class HubResolver {
     @UserId() userId,
     @Args({ name: 'hubId', type: () => ID }) hubId: number,
   ): Promise<JoinUserHub> {
-    this.logger.log(this.mute.name);
+    this.logger.debug(this.mute.name);
     return this.hubService.mute(userId, hubId);
   }
 
@@ -336,7 +336,7 @@ export class HubResolver {
     @UserId() userId,
     @Args({ name: 'hubId', type: () => ID }) hubId: number,
   ): Promise<JoinUserHub> {
-    this.logger.log(this.unmute.name);
+    this.logger.debug(this.unmute.name);
     return this.hubService.unmute(userId, hubId);
   }
 
@@ -345,7 +345,7 @@ export class HubResolver {
     @UserId() userId,
     @Args({ name: 'hubId', type: () => ID }) hubId: number,
   ): Promise<JoinUserHub> {
-    this.logger.log(this.enteredHubGeofence.name);
+    this.logger.debug(this.enteredHubGeofence.name);
     return await this.hubGeofenceService.enteredHubGeofence(userId, hubId);
   }
 
@@ -354,7 +354,7 @@ export class HubResolver {
     @UserId() userId,
     @Args({ name: 'hubId', type: () => ID }) hubId: number,
   ): Promise<JoinUserHub> {
-    this.logger.log(this.dwellHubGeofence.name);
+    this.logger.debug(this.dwellHubGeofence.name);
     return await this.hubGeofenceService.dwellHubGeofence(userId, hubId);
   }
 
@@ -363,7 +363,7 @@ export class HubResolver {
     @UserId() userId,
     @Args({ name: 'hubId', type: () => ID }) hubId: number,
   ): Promise<JoinUserHub> {
-    this.logger.log(this.exitedHubGeofence.name);
+    this.logger.debug(this.exitedHubGeofence.name);
     return await this.hubGeofenceService.exitedHubGeofence(userId, hubId);
   }
 
@@ -372,7 +372,7 @@ export class HubResolver {
     @UserId() userId,
     @Args({ name: 'hubId', type: () => ID }) hubId: number,
   ) {
-    this.logger.log(this.activateHub.name);
+    this.logger.debug(this.activateHub.name);
     const result = await this.hubActivityService.activateHub(userId, hubId);
     return result;
   }
@@ -382,7 +382,7 @@ export class HubResolver {
     @UserId() userId,
     @Args({ name: 'hubId', type: () => ID }) hubId: number,
   ) {
-    this.logger.log(this.deactivateHub.name);
+    this.logger.debug(this.deactivateHub.name);
     const result = await this.hubActivityService.deactivateHub(userId, hubId);
     return result;
   }
@@ -393,7 +393,7 @@ export class HubResolver {
     @Args({ name: 'hubId', type: () => ID }) hubId: number,
     @Args({ name: 'microChatId', type: () => ID }) microChatId: number,
   ) {
-    this.logger.log(this.microChatToHub.name);
+    this.logger.debug(this.microChatToHub.name);
     await this.hubMicroChatService.microChatToHub(userId, hubId, microChatId);
     return true;
   }
@@ -404,7 +404,7 @@ export class HubResolver {
     @Args({ name: 'hubId', type: () => ID }) hubId: number,
     @Args({ name: 'microChatText', type: () => String }) microChatText: string,
   ) {
-    this.logger.log(this.createMicroChat.name);
+    this.logger.debug(this.createMicroChat.name);
     const microChat = await this.hubMicroChatService.createMicroChat(
       userId,
       hubId,
@@ -419,7 +419,7 @@ export class HubResolver {
     @Args({ name: 'hubId', type: () => ID }) hubId: number,
     @Args({ name: 'microChatId', type: () => ID }) microChatId: number,
   ) {
-    this.logger.log(this.deleteMicroChat.name);
+    this.logger.debug(this.deleteMicroChat.name);
     await this.hubMicroChatService.deleteMicroChat(userId, hubId, microChatId);
     return true;
   }

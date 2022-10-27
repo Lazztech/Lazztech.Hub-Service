@@ -21,7 +21,7 @@ export class AuthPasswordResetService {
   ) {}
 
   public async resetPassword(details: ResetPassword) {
-    this.logger.log(this.resetPassword.name);
+    this.logger.debug(this.resetPassword.name);
     const user = await this.userRepository.findOne({
       email: details.usersEmail,
     });
@@ -39,7 +39,7 @@ export class AuthPasswordResetService {
   }
 
   async sendPasswordResetEmail(email: string) {
-    this.logger.log(this.sendPasswordResetEmail.name);
+    this.logger.debug(this.sendPasswordResetEmail.name);
     const user = await this.userRepository.findOne({ email });
 
     if (user) {
@@ -61,7 +61,7 @@ export class AuthPasswordResetService {
   }
 
   private async generatePasswordResetPin() {
-    this.logger.log(this.generatePasswordResetPin.name);
+    this.logger.debug(this.generatePasswordResetPin.name);
     let pin: string;
     let isNewPin = false;
     while (!isNewPin) {
@@ -75,7 +75,7 @@ export class AuthPasswordResetService {
   }
 
   private generateRandomPin(): string {
-    this.logger.log(this.generateRandomPin.name);
+    this.logger.debug(this.generateRandomPin.name);
     const val = crypto.randomBytes(16).toString('hex');
     return val;
   }

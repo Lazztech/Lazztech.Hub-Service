@@ -27,11 +27,11 @@ export class HubService {
     private blockRepository: EntityRepository<Block>,
     private notificationService: NotificationService,
   ) {
-    this.logger.log('constructor');
+    this.logger.debug('constructor');
   }
 
   async getOneUserHub(userId: any, hubId: number) {
-    this.logger.log(this.getOneUserHub.name);
+    this.logger.debug(this.getOneUserHub.name);
     return await this.joinUserHubRepository.findOneOrFail({       
       user: userId,
       hub: hubId,
@@ -39,7 +39,7 @@ export class HubService {
   }
 
   async joinByShareableLink(userId: any, shareableId: any) {
-    this.logger.log(this.joinByShareableLink.name);
+    this.logger.debug(this.joinByShareableLink.name);
     const hub = await this.hubRepository.findOneOrFail({ shareableId });
     try {
       return await this.joinUserHubRepository.findOneOrFail({ hub, user: userId });
@@ -55,7 +55,7 @@ export class HubService {
   }
 
   async resetShareableID(userId: any, hubId: number) {
-    this.logger.log(this.resetShareableID.name);
+    this.logger.debug(this.resetShareableID.name);
     const userHub = await this.joinUserHubRepository.findOneOrFail({ user: userId, hub: hubId, isOwner: true });
     const hub = await userHub.hub.load();
     hub.shareableId = uuid();
@@ -64,12 +64,12 @@ export class HubService {
 }
 
   async getUserHubs(userId: any) {
-    this.logger.log(this.getUserHubs.name);
+    this.logger.debug(this.getUserHubs.name);
     return await this.joinUserHubRepository.find({ user: userId });
   }
 
   public async commonUsersHubs(userId: any, otherUsersId: any) {
-    this.logger.log(this.commonUsersHubs.name);
+    this.logger.debug(this.commonUsersHubs.name);
     const userHubRelationships = await this.joinUserHubRepository.find({
       user: userId
     });
@@ -89,7 +89,7 @@ export class HubService {
   }
 
   async usersPeople(userId: any) {
-    this.logger.log(this.usersPeople.name);
+    this.logger.debug(this.usersPeople.name);
     const userHubRelationships = await this.joinUserHubRepository.find({
       user: userId
     });
@@ -118,7 +118,7 @@ export class HubService {
   }
 
   async createHub(userId: any, hub: Hub) {
-    this.logger.log(this.createHub.name);
+    this.logger.debug(this.createHub.name);
     if (hub?.image) {
       const imageUrl = await this.fileService.storeImageFromBase64(hub.image);
       hub.image = imageUrl;
@@ -138,7 +138,7 @@ export class HubService {
   }
 
   async removeUserFromHub(userId: any, hubId: any, otherUsersId: any) {
-    this.logger.log(this.removeUserFromHub.name);
+    this.logger.debug(this.removeUserFromHub.name);
     await this.joinUserHubRepository.findOneOrFail({ user: userId, hub: hubId, isOwner: true });
     if (userId == otherUsersId) {
       throw new Error(
@@ -150,7 +150,7 @@ export class HubService {
   }
 
   async deleteHub(userId: any, hubId: number) {
-    this.logger.log(this.deleteHub.name);
+    this.logger.debug(this.deleteHub.name);
     const userHubRelationship = await this.joinUserHubRepository.findOne({
         user: userId,
         hub: hubId,
@@ -171,12 +171,12 @@ export class HubService {
   }
 
   private isNotOwner(userHubRelationship: JoinUserHub) {
-    this.logger.log(this.isNotOwner.name);
+    this.logger.debug(this.isNotOwner.name);
     return !userHubRelationship.isOwner;
   }
 
   async updateHub(userId: any, value: Hub): Promise<Hub> {
-    this.logger.log(this.updateHub.name);
+    this.logger.debug(this.updateHub.name);
     const joinUserHubResult = await this.joinUserHubRepository.findOneOrFail({
       user: userId,
       hub: value.id,
@@ -200,7 +200,7 @@ export class HubService {
    * @deprecated use updateHub
    */
   async editHub(userId: any, hubId: number, name: string, description: string) {
-    this.logger.log(this.editHub.name);
+    this.logger.debug(this.editHub.name);
     const joinUserHubResult = await this.joinUserHubRepository.findOne({
       user: userId,
       hub: hubId,
@@ -223,7 +223,7 @@ export class HubService {
     latitude: number,
     longitude: number,
   ) {
-    this.logger.log(this.changeHubLocation.name);
+    this.logger.debug(this.changeHubLocation.name);
     const joinUserHubResult = await this.joinUserHubRepository.findOne({
       user: userId,
       hub: hubId,
@@ -262,7 +262,7 @@ export class HubService {
   }
 
   async changeHubImage(userId: any, hubId: number, newImage: string) {
-    this.logger.log(this.changeHubImage.name);
+    this.logger.debug(this.changeHubImage.name);
     const joinUserHubResult = await this.joinUserHubRepository.findOne({
       user: userId,
       hub: hubId,
@@ -283,7 +283,7 @@ export class HubService {
   }
 
   async leaveHub(userId: any, hubId: number) {
-    this.logger.log(this.leaveHub.name);
+    this.logger.debug(this.leaveHub.name);
     const joinUserHub = await this.joinUserHubRepository.findOneOrFail({
       user: userId,
       hub: hubId,
@@ -298,7 +298,7 @@ export class HubService {
   }
 
   async setHubStarred(userId: any, hubId: number) {
-    this.logger.log(this.setHubStarred.name);
+    this.logger.debug(this.setHubStarred.name);
     const hubRelationship = await this.joinUserHubRepository.findOne({
       user: userId,
       hub: hubId,
@@ -309,7 +309,7 @@ export class HubService {
   }
 
   async setHubNotStarred(userId: any, hubId: number) {
-    this.logger.log(this.setHubNotStarred.name);
+    this.logger.debug(this.setHubNotStarred.name);
     const hubRelationship = await this.joinUserHubRepository.findOne({
       user: userId,
       hub: hubId,
@@ -320,7 +320,7 @@ export class HubService {
   }
 
   async mute(userId: any, hubId: number) {
-    this.logger.log(this.mute.name);
+    this.logger.debug(this.mute.name);
     const hubRelationship = await this.joinUserHubRepository.findOneOrFail({
       user: userId,
       hub: hubId,
@@ -331,7 +331,7 @@ export class HubService {
   }
 
   async unmute(userId: any, hubId: number) {
-    this.logger.log(this.unmute.name);
+    this.logger.debug(this.unmute.name);
     const hubRelationship = await this.joinUserHubRepository.findOneOrFail({
       user: userId,
       hub: hubId,
@@ -342,7 +342,7 @@ export class HubService {
   }
 
   async searchHubByName(userId: any, search: string) {
-    this.logger.log(this.searchHubByName.name);
+    this.logger.debug(this.searchHubByName.name);
     const userHubRelationship = await this.joinUserHubRepository.find({
       user: userId,
     });

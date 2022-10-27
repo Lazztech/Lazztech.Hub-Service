@@ -26,7 +26,7 @@ export class EventService {
     ) {}
 
     async createEvent(userId: any, event: Event): Promise<JoinUserEvent> {
-        this.logger.log(this.createEvent.name);
+        this.logger.debug(this.createEvent.name);
         if (event?.image) {
             const imageUrl = await this.fileService.storeImageFromBase64(event.image);
             event.image = imageUrl;
@@ -45,7 +45,7 @@ export class EventService {
     }
 
     async rsvpForEvent(userId: any, eventId: any, rsvp: any) {
-        this.logger.log(this.rsvpForEvent.name);
+        this.logger.debug(this.rsvpForEvent.name);
         switch (rsvp) {
             case RSVP.GOING:
                 break;
@@ -86,7 +86,7 @@ export class EventService {
     }
 
     async getOneUserEvent(userId: any, eventId: number) {
-        this.logger.log(this.getOneUserEvent.name);
+        this.logger.debug(this.getOneUserEvent.name);
         return await this.joinUserEventRepository.findOneOrFail({
             user: userId,
             event: eventId,
@@ -94,7 +94,7 @@ export class EventService {
     }
 
     async joinByShareableLink(userId: any, shareableId: any) {
-        this.logger.log(this.joinByShareableLink.name);
+        this.logger.debug(this.joinByShareableLink.name);
         const event = await this.eventRepository.findOneOrFail({ shareableId });
         try {
             return await this.joinUserEventRepository.findOneOrFail({ event, user: userId });
@@ -118,7 +118,7 @@ export class EventService {
     }
 
     async resetShareableID(userId: any, eventId: number) {
-        this.logger.log(this.resetShareableID.name);
+        this.logger.debug(this.resetShareableID.name);
         const userEvent = await this.joinUserEventRepository.findOneOrFail({ user: userId, event: eventId });
         const event = await userEvent.event.load();
         const createdBy = await event?.createdBy.load();
@@ -131,12 +131,12 @@ export class EventService {
     }
 
     async getUserEvents(userId: any) {
-        this.logger.log(this.getUserEvents.name);
+        this.logger.debug(this.getUserEvents.name);
         return await this.joinUserEventRepository.find({ user: userId });
     }
 
     async updateEvent(userId: any, value: Event): Promise<Event> {
-        this.logger.log(this.updateEvent.name);
+        this.logger.debug(this.updateEvent.name);
         let event = await this.eventRepository.findOneOrFail({
             createdBy: userId,
             id: value.id
@@ -154,7 +154,7 @@ export class EventService {
     }
 
     async deleteEvent(userId: any, eventId: number) {
-        this.logger.log(this.deleteEvent.name);
+        this.logger.debug(this.deleteEvent.name);
         const event = await this.eventRepository.findOneOrFail({
             createdBy: userId,
             id: eventId
