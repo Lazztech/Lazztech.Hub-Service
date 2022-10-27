@@ -21,7 +21,6 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { GraphqlInterceptor, SentryModule } from '@ntegral/nestjs-sentry';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { SentryPlugin } from './sentry/sentry.plugin';
-import { Severity } from '@sentry/node';
 
 @Module({
   imports: [
@@ -32,7 +31,7 @@ import { Severity } from '@sentry/node';
         debug: false,
         environment: 'production',
         release: null, // must create a release in sentry.io dashboard
-        logLevels: [Severity.Error], // based on sentry.io loglevel
+        logLevels: ['error'], // based on sentry.io loglevel
         tracesSampleRate: 1.0,
       }),
       inject: [ConfigService],
