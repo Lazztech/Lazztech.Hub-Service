@@ -11,12 +11,13 @@ import { ModerationInterceptor } from './moderation/moderation.interceptor';
 import { SentryService } from '@ntegral/nestjs-sentry';
 import { LogLevel } from '@nestjs/common';
 
+export const logLevels: LogLevel[] = process.env.NODE_ENV === 'development' 
+? ['log', 'debug', 'error', 'verbose', 'warn'] 
+: ['error'];
+
 async function bootstrap() {
   const instance = express();
   instance.use('/avatars', require('adorable-avatars/dist/index'));
-  const logLevels: LogLevel[] = process.env.NODE_ENV === 'development' 
-  ? ['log', 'debug', 'error', 'verbose', 'warn'] 
-  : ['error'];
   const app: NestExpressApplication = await NestFactory.create(
     AppModule,
     new ExpressAdapter(instance),

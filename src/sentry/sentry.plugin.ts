@@ -3,6 +3,7 @@ import { ApolloServerPlugin, GraphQLRequestListener } from 'apollo-server-plugin
 import { InjectSentry, SentryService } from '@ntegral/nestjs-sentry'
 import { GraphQLRequestContext } from 'apollo-server-types'
 import '@sentry/tracing'
+import { logLevels } from 'src/main'
 
 /**
  * @document: https://develop.sentry.dev/sdk/event-payloads/request/
@@ -14,7 +15,9 @@ import '@sentry/tracing'
 
 @Plugin()
 export class SentryPlugin implements ApolloServerPlugin {
-  constructor(@InjectSentry() private readonly sentry: SentryService) {}
+  constructor(@InjectSentry() private readonly sentry: SentryService) {
+    sentry.setLogLevels(logLevels);
+  }
 
   async requestDidStart({ request, context }: GraphQLRequestContext): Promise<GraphQLRequestListener> {
     const transaction = this.sentry.instance().startTransaction({
