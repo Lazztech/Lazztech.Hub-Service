@@ -22,6 +22,7 @@ import { GraphqlInterceptor, SentryModule } from '@ntegral/nestjs-sentry';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { SentryPlugin } from './sentry/sentry.plugin';
 import { SeverityLevel } from '@sentry/node';
+import { HubsByJoinUserHubLoader } from './dal/dataloaders/hubs-by-join-user-hub.loader';
 
 @Module({
   imports: [
@@ -272,6 +273,7 @@ import { SeverityLevel } from '@sentry/node';
       useFactory: () => new GraphqlInterceptor(),
     },
     SentryPlugin,
+    HubsByJoinUserHubLoader,
   ]
 })
 export class AppModule implements OnModuleInit {
