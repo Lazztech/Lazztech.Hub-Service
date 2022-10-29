@@ -19,8 +19,6 @@ export class HubFieldResolver {
 
   constructor(
     private readonly fileUrlService: FileUrlService,
-    @InjectRepository(Block)
-    private blockRepository: EntityRepository<Block>,
     private readonly joinUserHubsByHubLoader: JoinUserHubsByHubLoader,
     private readonly blocksByUserLoader: BlocksByUserLoader,
   ) {}
