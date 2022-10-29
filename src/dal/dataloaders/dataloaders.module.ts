@@ -10,6 +10,7 @@ import { BlocksByUserLoader } from './blocks-by-user.loader';
 import { Block } from '../entity/block.entity';
 import { EventsByJoinUserEventLoader } from './events-by-join-user-event.loader';
 import { Event } from '../entity/event.entity';
+import { UsersByJoinUserEventLoader } from './users-by-join-user-event.loader';
 
 @Module({
     imports: [
@@ -27,6 +28,7 @@ import { Event } from '../entity/event.entity';
         JoinUserHubsByHubLoader,
         BlocksByUserLoader,
         EventsByJoinUserEventLoader,
+        UsersByJoinUserEventLoader,
     ],
     exports: [
         HubsByJoinUserHubLoader,
@@ -34,6 +36,7 @@ import { Event } from '../entity/event.entity';
         JoinUserHubsByHubLoader,
         BlocksByUserLoader,
         EventsByJoinUserEventLoader,
+        UsersByJoinUserEventLoader,
     ]
 })
 export class DataloadersModule {}
