@@ -49,7 +49,7 @@ describe('BlockedByUserLoader', () => {
       mockBlock
     ];
     jest.spyOn(blockRepository, 'find')
-      .mockImplementationOnce(mocks as any);
+      .mockResolvedValueOnce(mocks as any);
 
     // act
     const results = await provider.load(mockBlock);
