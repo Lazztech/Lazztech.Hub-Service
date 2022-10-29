@@ -6,7 +6,7 @@ import { Hub } from '../entity/hub.entity';
 import { JoinUserHub } from '../entity/joinUserHub.entity';
 
 @Injectable({ scope: Scope.REQUEST })
-export class HubsByJoinUserHubLoader extends DataLoader<number, Hub[]> {
+export class HubsByJoinUserHubLoader extends DataLoader<number, Hub> {
     constructor(
         @InjectRepository(Hub)
         private readonly hubRepository: EntityRepository<Hub>,
@@ -16,13 +16,15 @@ export class HubsByJoinUserHubLoader extends DataLoader<number, Hub[]> {
         super(keys => this.batchLoadFn(keys));
     }
 
-   private async batchLoadFn(hubIds: readonly number[]): Promise<Hub[][]> {
-        const hubs = await this.hubRepository.find(hubIds as number[], {
-            populate: ['usersConnection']
+   private async batchLoadFn(hubIds: readonly number[]): Promise<Hub[]> {
+        const joinUserHubs = await this.joinUserHubRepository.find({
+            hub: { $in: hubIds as number[] },
+        }, {
+            populate: ['hub']
         });
 
-
-        return;
-        // return hubs.map(async hub => hub.usersConnection.getItems());
+        return await Promise.all(
+            joinUserHubs.map(join => join.hub.load() as Promise<Hub>)
+        );
     }
 }

@@ -10,6 +10,9 @@ import { HubsByJoinUserHubLoader } from './hubs-by-join-user-hub.loader';
     ],
     providers: [
         HubsByJoinUserHubLoader
+    ],
+    exports: [
+        HubsByJoinUserHubLoader,
     ]
 })
 export class DataloadersModule {}

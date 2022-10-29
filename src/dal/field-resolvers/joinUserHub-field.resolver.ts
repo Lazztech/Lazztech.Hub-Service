@@ -2,6 +2,7 @@ import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Logger } from '@nestjs/common';
 import { ID, Parent, ResolveField, Resolver } from '@nestjs/graphql';
+import { HubsByJoinUserHubLoader } from '../dataloaders/hubs-by-join-user-hub.loader';
 import { Hub } from '../entity/hub.entity';
 import { JoinUserHub } from '../entity/joinUserHub.entity';
 import { User } from '../entity/user.entity';
@@ -9,6 +10,10 @@ import { User } from '../entity/user.entity';
 @Resolver(() => JoinUserHub)
 export class JoinUserHubsResolver {
   private logger = new Logger(JoinUserHubsResolver.name);
+
+  constructor(
+    private readonly hubsByJoinUserHubLoader: HubsByJoinUserHubLoader,
+  ) {}
 
   @ResolveField(() => ID)
   public userId(@Parent() joinUserHub: JoinUserHub) {
@@ -38,7 +43,7 @@ export class JoinUserHubsResolver {
 
   @ResolveField(() => Hub, { nullable: true })
   public hub(@Parent() joinUserHub: JoinUserHub): Promise<Hub> {
-    return joinUserHub.hub.load();
+    return this.hubsByJoinUserHubLoader.load(joinUserHub.hub?.id);
   }
 
 }
