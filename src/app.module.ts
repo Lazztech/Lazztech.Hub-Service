@@ -156,7 +156,7 @@ import { DataloadersModule } from './dal/dataloaders/dataloaders.module';
         const commonSettings = {
           logger: (message) => console.log(message),
           allowGlobalContext: true,
-          debug: true,
+          debug: configService.get('NODE_ENV') == 'development' ? true : false,
           migrations: {
             pattern: /^.*\.(js|ts)$/, // ends with .js or .ts
             transactional: true,
