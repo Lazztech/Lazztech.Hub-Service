@@ -18,7 +18,7 @@ describe('UsersByJoinUserHubLoader', () => {
       ],
     }).compile();
 
-    provider = module.get<UsersByJoinUserHubLoader>(UsersByJoinUserHubLoader);
+    provider = await module.resolve<UsersByJoinUserHubLoader>(UsersByJoinUserHubLoader);
   });
 
   it('should be defined', () => {

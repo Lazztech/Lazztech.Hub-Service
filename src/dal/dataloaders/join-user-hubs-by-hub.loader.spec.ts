@@ -18,7 +18,7 @@ describe('JoinUserHubsByHubLoader', () => {
       ],
     }).compile();
 
-    provider = module.get<JoinUserHubsByHubLoader>(JoinUserHubsByHubLoader);
+    provider = await module.resolve<JoinUserHubsByHubLoader>(JoinUserHubsByHubLoader);
   });
 
   it('should be defined', () => {

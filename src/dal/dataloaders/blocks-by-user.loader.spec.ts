@@ -18,7 +18,7 @@ describe('BlocksByUserLoader', () => {
       ],
     }).compile();
 
-    provider = module.get<BlocksByUserLoader>(BlocksByUserLoader);
+    provider = await module.resolve<BlocksByUserLoader>(BlocksByUserLoader);
   });
 
   it('should be defined', () => {

@@ -18,7 +18,7 @@ describe('EventsByJoinUserEventLoader', () => {
       ],
     }).compile();
 
-    provider = module.get<EventsByJoinUserEventLoader>(EventsByJoinUserEventLoader);
+    provider = await module.resolve<EventsByJoinUserEventLoader>(EventsByJoinUserEventLoader);
   });
 
   it('should be defined', () => {

@@ -18,7 +18,7 @@ describe('BlockedByUserLoader', () => {
       ],
     }).compile();
 
-    provider = module.get<BlockedByUserLoader>(BlockedByUserLoader);
+    provider = await module.resolve<BlockedByUserLoader>(BlockedByUserLoader);
   });
 
   it('should be defined', () => {
