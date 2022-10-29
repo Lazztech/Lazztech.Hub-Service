@@ -1,4 +1,7 @@
+import { EntityRepository } from '@mikro-orm/core';
+import { getRepositoryToken } from '@mikro-orm/nestjs';
 import { Test, TestingModule } from '@nestjs/testing';
+import { Block } from '../entity/block.entity';
 import { BlocksByUserLoader } from './blocks-by-user.loader';
 
 describe('BlocksByUserLoader', () => {
@@ -6,7 +9,13 @@ describe('BlocksByUserLoader', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [BlocksByUserLoader],
+      providers: [
+        BlocksByUserLoader,
+        {
+          provide: getRepositoryToken(Block),
+          useClass: EntityRepository,
+        }
+      ],
     }).compile();
 
     provider = module.get<BlocksByUserLoader>(BlocksByUserLoader);
