@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectS3, S3 } from 'nestjs-s3';
 import { FileServiceInterface } from '../interfaces/file-service.interface';
 import { ImageFileService } from '../image-file/image-file.service';
-import * as uuidv1 from 'uuid/v1';
+import uuidv1 from 'uuid/v1';
 import { ConfigService } from '@nestjs/config';
 import { ReadStream } from 'fs';
 
