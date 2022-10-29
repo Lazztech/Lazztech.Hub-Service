@@ -1,5 +1,3 @@
-import { EntityRepository } from '@mikro-orm/core';
-import { InjectRepository } from '@mikro-orm/nestjs';
 import { Logger } from '@nestjs/common';
 import { ID, Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { HubsByJoinUserHubLoader } from '../dataloaders/hubs-by-join-user-hub.loader';
@@ -27,7 +25,7 @@ export class JoinUserHubsResolver {
 
   @ResolveField(() => Boolean, { nullable: true })
   async isPresent(@Parent() joinUserHub: JoinUserHub): Promise<boolean> {
-    const hub = await joinUserHub.hub.load();
+    const hub = await this.hubsByJoinUserHubLoader.load(joinUserHub.hub?.id);
     if (hub.active) {
       return joinUserHub.isPresent;
     } else {
