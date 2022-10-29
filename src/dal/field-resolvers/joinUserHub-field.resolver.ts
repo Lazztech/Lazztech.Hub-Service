@@ -8,12 +8,6 @@ import { User } from '../entity/user.entity';
 
 @Resolver(() => JoinUserHub)
 export class JoinUserHubsResolver {
-  private logger = new Logger(JoinUserHubsResolver.name);
-
-  constructor(
-    @InjectRepository(JoinUserHub)
-    private joinUserHubRepository: EntityRepository<JoinUserHub>,
-  ) {}
 
   @ResolveField(() => ID)
   public userId(@Parent() joinUserHub: JoinUserHub) {
