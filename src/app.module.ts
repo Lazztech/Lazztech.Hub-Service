@@ -23,6 +23,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { SentryPlugin } from './sentry/sentry.plugin';
 import { SeverityLevel } from '@sentry/node';
 import { HubsByJoinUserHubLoader } from './dal/dataloaders/hubs-by-join-user-hub.loader';
+import { DataloadersModule } from './dal/dataloaders/dataloaders.module';
 
 @Module({
   imports: [
@@ -156,6 +157,7 @@ import { HubsByJoinUserHubLoader } from './dal/dataloaders/hubs-by-join-user-hub
         const commonSettings = {
           logger: (message) => console.log(message),
           allowGlobalContext: true,
+          debug: true,
           migrations: {
             pattern: /^.*\.(js|ts)$/, // ends with .js or .ts
             transactional: true,
@@ -266,6 +268,7 @@ import { HubsByJoinUserHubLoader } from './dal/dataloaders/hubs-by-join-user-hub
     EmailModule,
     ModerationModule,
     EventModule,
+    DataloadersModule,
   ],
   providers: [
     {
@@ -273,7 +276,6 @@ import { HubsByJoinUserHubLoader } from './dal/dataloaders/hubs-by-join-user-hub
       useFactory: () => new GraphqlInterceptor(),
     },
     SentryPlugin,
-    HubsByJoinUserHubLoader,
   ]
 })
 export class AppModule implements OnModuleInit {

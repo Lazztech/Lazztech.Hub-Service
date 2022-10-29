@@ -1,8 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import isJpg from 'is-jpg';
-import * as sharp from 'sharp';
+import sharp from 'sharp';
 import * as imagemin from 'imagemin';
-import * as mozjpeg from 'imagemin-mozjpeg';
+import mozjpeg from 'imagemin-mozjpeg';
 
 @Injectable()
 export class ImageFileService {
