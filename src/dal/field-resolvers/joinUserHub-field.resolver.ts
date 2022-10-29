@@ -1,6 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { ID, Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { HubsByJoinUserHubLoader } from '../dataloaders/hubs-by-join-user-hub.loader';
+import { UsersByJoinUserHubLoader } from '../dataloaders/users-by-join-user-hub.loader';
 import { Hub } from '../entity/hub.entity';
 import { JoinUserHub } from '../entity/joinUserHub.entity';
 import { User } from '../entity/user.entity';
@@ -11,6 +12,7 @@ export class JoinUserHubsResolver {
 
   constructor(
     private readonly hubsByJoinUserHubLoader: HubsByJoinUserHubLoader,
+    private readonly usersByJoinUserHubLoader: UsersByJoinUserHubLoader,
   ) {}
 
   @ResolveField(() => ID)
@@ -36,7 +38,7 @@ export class JoinUserHubsResolver {
 
   @ResolveField(() => User, { nullable: true })
   public user(@Parent() joinUserHub: JoinUserHub): Promise<User> {
-    return joinUserHub.user.load();
+    return this.usersByJoinUserHubLoader.load(joinUserHub.user.id);
   }
 
   @ResolveField(() => Hub, { nullable: true })
