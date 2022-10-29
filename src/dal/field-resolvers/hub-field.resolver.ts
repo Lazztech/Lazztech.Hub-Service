@@ -4,6 +4,7 @@ import { Logger } from '@nestjs/common';
 import { Context, Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { UserId } from '../../decorators/user.decorator';
 import { FileUrlService } from '../../file/file-url/file-url.service';
+import { JoinUserHubsByHubLoader } from '../dataloaders/join-user-hubs-by-hub.loader';
 import { Block } from '../entity/block.entity';
 import { Event } from '../entity/event.entity';
 import { Hub } from '../entity/hub.entity';
@@ -19,6 +20,7 @@ export class HubFieldResolver {
     private readonly fileUrlService: FileUrlService,
     @InjectRepository(Block)
     private blockRepository: EntityRepository<Block>,
+    private readonly joinUserHubsByHubLoader: JoinUserHubsByHubLoader,
   ) {}
 
   @ResolveField(() => String, { nullable: true })
@@ -32,7 +34,7 @@ export class HubFieldResolver {
     @Parent() parent: Hub,
   ): Promise<JoinUserHub[]> {
     const blocks = await this.blockRepository.find({ to: userId });
-    const usersConnections = await parent.usersConnection.loadItems();
+    const usersConnections = await this.joinUserHubsByHubLoader.load(parent.id);
     return usersConnections.filter(joinUserHub => !blocks.find(block => block.from.id === joinUserHub.user.id));    
   }
 
