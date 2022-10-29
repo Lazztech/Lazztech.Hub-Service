@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import * as uuidv1 from 'uuid/v1';
+import uuidv1 from 'uuid/v1';
 import { FileServiceInterface } from '../interfaces/file-service.interface';
 import { ImageFileService } from '../image-file/image-file.service';
 import * as fs from 'fs';
