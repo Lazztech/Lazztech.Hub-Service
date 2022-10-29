@@ -17,14 +17,21 @@ export class HubsByJoinUserHubLoader extends DataLoader<number, Hub> {
     }
 
    private async batchLoadFn(hubIds: readonly number[]): Promise<Hub[]> {
-        const joinUserHubs = await this.joinUserHubRepository.find({
-            hub: { $in: hubIds as number[] },
-        }, {
-            populate: ['hub']
-        });
+        // const joinUserHubs = await this.joinUserHubRepository.find({
+        //     hub: { $in: hubIds as number[] },
+        // }, {
+        //     populate: ['hub']
+        // });
 
-        return await Promise.all(
-            joinUserHubs.map(join => join.hub.load() as Promise<Hub>)
-        );
+        // const x = await Promise.all(
+        //     joinUserHubs.map(join => join.hub.load() as Promise<Hub>)
+        // );
+        // console.log(x);
+        // return x;
+
+        // ----
+        console.log(hubIds);
+        return this.hubRepository.find(hubIds as number[]);
+
     }
 }
