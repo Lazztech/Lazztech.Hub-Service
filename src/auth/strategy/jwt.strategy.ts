@@ -1,9 +1,10 @@
-import { ExtractJwt, Strategy } from 'passport-jwt';
-import { PassportStrategy } from '@nestjs/passport';
+import { MikroORM } from '@mikro-orm/core';
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { PassportStrategy } from '@nestjs/passport';
+import { ExtractJwt, Strategy } from 'passport-jwt';
+import { User } from '../../dal/entity/user.entity';
 import { Payload } from '../dto/payload.dto';
-import { UserService } from '../../user/user.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -11,7 +12,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   constructor(
     private configService: ConfigService,
-    private userService: UserService,
+    private readonly orm: MikroORM,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -22,16 +23,19 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   async validate(payload: Payload) {
     this.logger.debug('verified access token.');
+    await this.orm.em.transactional(async em => {
+      const userRepository = em.getRepository(User);
+      const user = await userRepository.findOne(({ id: payload.userId }));
 
-    const user = await this.userService.getUser(payload.userId);
-    if (!user || user?.banned) {
-      this.logger.error('unable to verify access token.');
-      throw new UnauthorizedException();
-    } else {
-      await this.userService.updateLastOnline(user);
-      this.logger.debug('verified user');
-    }
-
+      if (!user || user?.banned) {
+        this.logger.error('unable to verify access token.');
+        throw new UnauthorizedException();
+      } else {
+        user.lastOnline = Date.now().toString();
+        this.logger.debug('verified user');
+      }
+      em.persist(user);
+    });
     return payload;
   }
 }
