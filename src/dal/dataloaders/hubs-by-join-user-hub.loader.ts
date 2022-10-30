@@ -17,6 +17,11 @@ export class HubsByJoinUserHubLoader extends DataLoader<number, Hub> {
 
    private async batchLoadFn(hubIds: readonly number[]): Promise<Hub[]> {
         this.logger.debug(hubIds);
-        return this.hubRepository.find(hubIds as number[]);
+        const hubs = await this.hubRepository.find(hubIds as number[]);
+        const map: { [hubId: string]: Hub } = {};
+        hubs.forEach(hub => {
+            map[hub.id] = hub
+        });
+        return hubIds.map(key => map[key]);
     }
 }

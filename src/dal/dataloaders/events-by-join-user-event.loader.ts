@@ -17,7 +17,12 @@ export class EventsByJoinUserEventLoader extends DataLoader<number, Event> {
 
     private async batchLoadFn(eventIds: readonly number[]): Promise<Event[]> {
         this.logger.debug(eventIds);
-        return this.eventRepository.find(eventIds as number[]);
+        const events = await this.eventRepository.find(eventIds as number[]);
+        const map: { [key: string]: Event } = {};
+        events.forEach(event => {
+            map[event.id] = event;
+        });
+        return eventIds.map(key => map[key]);
     }
 
 }

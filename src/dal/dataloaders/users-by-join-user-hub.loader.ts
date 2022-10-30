@@ -17,6 +17,11 @@ export class UsersByJoinUserHubLoader extends DataLoader<number, User> {
 
     private async batchLoadFn(userIds: readonly number[]): Promise<User[]> {
         this.logger.debug(userIds);
-        return this.userRepository.find(userIds as number[]);
+        const users = await this.userRepository.find(userIds as number[]);
+        const map: { [key: string]: User } = {};
+        users.forEach(user => {
+            map[user.id] = user;
+        });
+        return userIds.map(key => map[key]);
     }
 }
