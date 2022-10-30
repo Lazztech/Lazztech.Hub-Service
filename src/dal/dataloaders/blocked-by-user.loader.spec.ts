@@ -31,20 +31,10 @@ describe('BlockedByUserLoader', () => {
 
   it('should fucking work', async () => {
     // arrange
-    const mocks = [];
-    jest.spyOn(blockRepository, 'find')
-      .mockResolvedValueOnce(mocks as any);
-
-    // act
-    const results = await provider.load({ to: 2, from: 1 });
-
-    // assert
-    expect(!!results?.length).toBeFalsy();
-  });
-
-  it('should fucking be blocked', async () => {
-    // arrange
-    const mockBlock = { to: 2, from: 1 };
+    const mockBlock = { 
+      to: 2, 
+      from: 1, 
+    };
     const mocks = [
       mockBlock
     ];
@@ -52,9 +42,28 @@ describe('BlockedByUserLoader', () => {
       .mockResolvedValueOnce(mocks as any);
 
     // act
-    const results = await provider.load(mockBlock);
+    const blocked = await provider.load({ to: 6, from: 1 });
 
     // assert
-    expect(!!results?.length).toBeTruthy();
+    expect(blocked).toBeFalsy();
+  });
+
+  it('should fucking be blocked', async () => {
+    // arrange
+    const mockBlock = { 
+      to: 2, 
+      from: 1, 
+    };
+    const mocks = [
+      mockBlock
+    ];
+    jest.spyOn(blockRepository, 'find')
+      .mockResolvedValueOnce(mocks as any);
+
+    // act
+    const blocked = await provider.load(mockBlock);
+
+    // assert
+    expect(blocked).toBeTruthy();
   });
 });
