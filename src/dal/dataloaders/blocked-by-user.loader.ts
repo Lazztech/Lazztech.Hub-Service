@@ -18,23 +18,22 @@ export class BlockedByUserLoader extends DataLoader<{ to: number, from: number }
     private async batchLoadFn(keys: readonly { to: number, from: number }[]): Promise<Block[]> {
         this.logger.debug(this.batchLoadFn.name);
         const blocks = await this.blockRepository.find(keys as { to: number, from: number }[]);
-        // return blocks;
-        // const map = new Map<{ to: number, from: number }, Block>();
-        // blocks.forEach(block => {
-        //     map.set({ to: block.to.id, from: block.from.id }, block)
-        // });
-        
-        // return keys.map(key => map.get(key));
-        console.log('keys: ', keys);
-        console.log('blocks: ', blocks);
-        const results = keys?.map(key => blocks.find(block => {
-            console.log('block: ', block);
-            console.log('key: ', key);
-            const found = (block as any)?.from == key.from && (block as any)?.to == key.to;
-            console.log('found: ', found);
-            return found;
-        }));
-        console.log('results: ', results);
-        return results;
+        const map = new Map<{ to: number, from: number }, Block>();
+        blocks.forEach(block => {
+            map.set({ to: (block as any).to, from: (block as any).from }, block);
+        });
+        return keys.map(key => map.get(key));
+
+        // console.log('keys: ', keys);
+        // console.log('blocks: ', blocks);
+        // const results = keys?.map(key => blocks.find(block => {
+        //     console.log('block: ', block);
+        //     console.log('key: ', key);
+        //     const found = (block as any)?.from == key.from && (block as any)?.to == key.to;
+        //     console.log('found: ', found);
+        //     return found;
+        // }));
+        // console.log('results: ', results);
+        // return results;
     }
 }

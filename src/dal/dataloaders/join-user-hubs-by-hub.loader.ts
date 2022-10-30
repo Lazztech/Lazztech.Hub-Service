@@ -24,8 +24,12 @@ export class JoinUserHubsByHubLoader extends DataLoader<number, JoinUserHub[]> {
             fields: ['id'],
             populate: ['usersConnection']
         });
+        const map: { [key: string]: Hub } = {};
+        hubs.forEach(hub => {
+            map[hub.id] = hub;
+        });
         return Promise.all(
-            hubs?.map(hub => hub.usersConnection.loadItems())
+            hubIds.map(key => map[key].usersConnection.loadItems())  
         );
     }
 }
