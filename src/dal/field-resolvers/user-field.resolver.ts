@@ -53,9 +53,11 @@ export class UserFieldResolver {
     @Parent() parent: User
   ): Promise<boolean> {
     this.logger.debug(this.blocked.name);
-    return !!(await this.blockedByUserLoader.load({
+    const result = await this.blockedByUserLoader.load({
       from: userId,
       to: parent.id
-    }));
+    });
+    console.log(result);
+    return !!result;
   }
 }
