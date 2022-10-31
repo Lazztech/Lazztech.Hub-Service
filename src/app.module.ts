@@ -34,7 +34,7 @@ import { DataloadersModule } from './dal/dataloaders/dataloaders.module';
         environment: 'production',
         release: null, // must create a release in sentry.io dashboard
         logLevels: ['error'], // based on sentry.io loglevel
-        tracesSampleRate: 1.0,
+        tracesSampleRate: 0,
         beforeSend: (event) => {
           // workaround to bug: https://github.com/ntegral/nestjs-sentry/pull/42#issuecomment-1021257277
           const excluded: Array<SeverityLevel> = [
@@ -274,7 +274,7 @@ import { DataloadersModule } from './dal/dataloaders/dataloaders.module';
       provide: APP_INTERCEPTOR,
       useFactory: () => new GraphqlInterceptor(),
     },
-    SentryPlugin,
+    // SentryPlugin,
   ]
 })
 export class AppModule implements OnModuleInit {
