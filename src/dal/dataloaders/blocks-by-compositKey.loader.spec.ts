@@ -4,7 +4,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { Block } from '../entity/block.entity';
 import { BlocksByCompositKeyLoader } from './blocks-by-compositKey.loader';
 
-describe('BlockedByUserLoader', () => {
+describe('blocksByCompositKeyLoader', () => {
   let provider: BlocksByCompositKeyLoader;
   let blockRepository: EntityRepository<Block>;
 

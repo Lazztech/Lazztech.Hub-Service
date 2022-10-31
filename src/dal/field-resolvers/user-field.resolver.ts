@@ -13,7 +13,7 @@ export class UserFieldResolver {
 
   constructor(
     private readonly fileUrlService: FileUrlService,
-    private readonly blockedByUserLoader: BlocksByCompositKeyLoader,
+    private readonly blocksByCompositKeyLoader: BlocksByCompositKeyLoader,
   ) {}
 
   @ResolveField(() => String, { nullable: true })
@@ -53,7 +53,7 @@ export class UserFieldResolver {
     @Parent() parent: User
   ): Promise<boolean> {
     this.logger.debug(this.blocked.name);
-    const result = await this.blockedByUserLoader.load({
+    const result = await this.blocksByCompositKeyLoader.load({
       from: userId,
       to: parent.id
     });
