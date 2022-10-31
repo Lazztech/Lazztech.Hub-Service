@@ -6,8 +6,8 @@ import { EntityRepository } from '@mikro-orm/core';
 import _ from 'lodash';
 
 @Injectable({ scope: Scope.REQUEST })
-export class BlockedByUserLoader extends DataLoader<{ to: number, from: number }, Block | undefined> {
-    private logger = new Logger(BlockedByUserLoader.name);
+export class BlocksByCompositKeyLoader extends DataLoader<{ to: number, from: number }, Block | undefined> {
+    private logger = new Logger(BlocksByCompositKeyLoader.name);
 
     constructor(
         @InjectRepository(Block)

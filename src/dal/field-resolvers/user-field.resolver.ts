@@ -2,7 +2,7 @@ import { Logger } from '@nestjs/common';
 import { Context, Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { UserId } from '../../decorators/user.decorator';
 import { FileUrlService } from '../../file/file-url/file-url.service';
-import { BlockedByUserLoader } from '../dataloaders/blocked-by-user.loader';
+import { BlocksByCompositKeyLoader } from '../dataloaders/blocks-by-compositKey.loader';
 import { Block } from '../entity/block.entity';
 import { User } from '../entity/user.entity';
 import { UserDevice } from '../entity/userDevice.entity';
@@ -13,7 +13,7 @@ export class UserFieldResolver {
 
   constructor(
     private readonly fileUrlService: FileUrlService,
-    private readonly blockedByUserLoader: BlockedByUserLoader,
+    private readonly blockedByUserLoader: BlocksByCompositKeyLoader,
   ) {}
 
   @ResolveField(() => String, { nullable: true })
