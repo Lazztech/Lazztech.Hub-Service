@@ -1,0 +1,18 @@
+diff --git a/node_modules/@mikro-orm/knex/schema/SchemaGenerator.js b/node_modules/@mikro-orm/knex/schema/SchemaGenerator.js
+index e7f9f8f..306c672 100644
+--- a/node_modules/@mikro-orm/knex/schema/SchemaGenerator.js
++++ b/node_modules/@mikro-orm/knex/schema/SchemaGenerator.js
+@@ -32,7 +32,12 @@ class SchemaGenerator extends core_1.AbstractSchemaGenerator {
+      */
+     async ensureDatabase() {
+         const dbName = this.config.get('dbName');
+-        const exists = await this.helper.databaseExists(this.connection, dbName);
++        // this.helper.databaseExists is failing to accuratly return the existence with a pgbouncer db named "pool"
++        // this patch overrides the result if db name is "pool"
++        let exists = await this.helper.databaseExists(this.connection, dbName);
++        if (dbName == 'pool') {
++            exists = true;
++        } 
+         if (!exists) {
+             this.config.set('dbName', this.helper.getManagementDbName());
+             await this.driver.reconnect();
