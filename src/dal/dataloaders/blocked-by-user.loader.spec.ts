@@ -45,8 +45,8 @@ describe('BlockedByUserLoader', () => {
   it('should fucking be blocked', async () => {
     // arrange
     const mockBlock = { 
-      to: 12, 
-      from: 1, 
+      to: { id: 12 }, 
+      from: { id: 1 }, 
     };
     const mocks = [
       mockBlock
@@ -55,7 +55,7 @@ describe('BlockedByUserLoader', () => {
       .mockResolvedValueOnce(mocks as any);
 
     // act
-    const blocked = await provider.load(mockBlock);
+    const blocked = await provider.load({ to: 12, from: 1 });
 
     // assert
     expect(blocked).toBeTruthy();
