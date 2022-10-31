@@ -3,7 +3,7 @@ import { Context, Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { UserId } from '../../decorators/user.decorator';
 import { FileUrlService } from '../../file/file-url/file-url.service';
 import { BlocksByUserLoader } from '../dataloaders/blocks-by-user.loader';
-import { JoinUserHubsByHubLoader } from '../dataloaders/join-user-hubs-by-hub.loader';
+import { JoinUserHubsByHubIdsLoader } from '../dataloaders/joinUserHubs-by-hubIds.loader';
 import { Event } from '../entity/event.entity';
 import { Hub } from '../entity/hub.entity';
 import { Invite } from '../entity/invite.entity';
@@ -16,7 +16,7 @@ export class HubFieldResolver {
 
   constructor(
     private readonly fileUrlService: FileUrlService,
-    private readonly joinUserHubsByHubLoader: JoinUserHubsByHubLoader,
+    private readonly joinUserHubsByHubLoader: JoinUserHubsByHubIdsLoader,
     private readonly blocksByUserLoader: BlocksByUserLoader,
   ) {}
 
