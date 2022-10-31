@@ -1,6 +1,6 @@
 import { Logger } from '@nestjs/common';
 import { ID, Parent, ResolveField, Resolver } from '@nestjs/graphql';
-import { HubsByJoinUserHubLoader } from '../dataloaders/hubs-by-join-user-hub.loader';
+import { HubsByHubIdLoader } from '../dataloaders/hubs-by-hubId.loader';
 import { UsersByUserIdLoader } from '../dataloaders/users-by-userId.loader';
 import { Hub } from '../entity/hub.entity';
 import { JoinUserHub } from '../entity/joinUserHub.entity';
@@ -11,7 +11,7 @@ export class JoinUserHubsResolver {
   private logger = new Logger(JoinUserHubsResolver.name);
 
   constructor(
-    private readonly hubsByJoinUserHubLoader: HubsByJoinUserHubLoader,
+    private readonly hubsByJoinUserHubLoader: HubsByHubIdLoader,
     private readonly usersByUserIdLoader: UsersByUserIdLoader,
   ) {}
 

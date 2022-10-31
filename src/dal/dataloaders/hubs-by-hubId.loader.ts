@@ -5,8 +5,8 @@ import DataLoader from 'dataloader';
 import { Hub } from '../entity/hub.entity';
 
 @Injectable({ scope: Scope.REQUEST })
-export class HubsByJoinUserHubLoader extends DataLoader<number, Hub> {
-    private logger = new Logger(HubsByJoinUserHubLoader.name);
+export class HubsByHubIdLoader extends DataLoader<number, Hub> {
+    private logger = new Logger(HubsByHubIdLoader.name);
 
     constructor(
         @InjectRepository(Hub)

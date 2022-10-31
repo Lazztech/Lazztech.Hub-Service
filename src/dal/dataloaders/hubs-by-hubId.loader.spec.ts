@@ -2,15 +2,15 @@ import { getRepositoryToken } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/postgresql';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Hub } from '../entity/hub.entity';
-import { HubsByJoinUserHubLoader } from './hubs-by-join-user-hub.loader';
+import { HubsByHubIdLoader } from './hubs-by-hubId.loader';
 
 describe('HubsByJoinUserHubLoader', () => {
-  let provider: HubsByJoinUserHubLoader;
+  let provider: HubsByHubIdLoader;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        HubsByJoinUserHubLoader,
+        HubsByHubIdLoader,
         {
           provide: getRepositoryToken(Hub),
           useClass: EntityRepository,
@@ -18,7 +18,7 @@ describe('HubsByJoinUserHubLoader', () => {
       ],
     }).compile();
 
-    provider = await module.resolve<HubsByJoinUserHubLoader>(HubsByJoinUserHubLoader);
+    provider = await module.resolve<HubsByHubIdLoader>(HubsByHubIdLoader);
   });
 
   it('should be defined', () => {
