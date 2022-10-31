@@ -8,7 +8,7 @@ import { UsersByUserIdLoader } from './users-by-userId.loader';
 import { JoinUserHubsByHubIdsLoader } from './joinUserHubs-by-hubIds.loader';
 import { BlocksByUserLoader } from './blocks-by-user.loader';
 import { Block } from '../entity/block.entity';
-import { EventsByJoinUserEventLoader } from './events-by-join-user-event.loader';
+import { EventByEventIdsLoader } from './events-by-eventIds.loader';
 import { Event } from '../entity/event.entity';
 import { BlockedByUserLoader } from './blocked-by-user.loader';
 
@@ -27,7 +27,7 @@ import { BlockedByUserLoader } from './blocked-by-user.loader';
         UsersByUserIdLoader,
         JoinUserHubsByHubIdsLoader,
         BlocksByUserLoader,
-        EventsByJoinUserEventLoader,
+        EventByEventIdsLoader,
         BlockedByUserLoader,
     ],
     exports: [
@@ -35,7 +35,7 @@ import { BlockedByUserLoader } from './blocked-by-user.loader';
         UsersByUserIdLoader,
         JoinUserHubsByHubIdsLoader,
         BlocksByUserLoader,
-        EventsByJoinUserEventLoader,
+        EventByEventIdsLoader,
         BlockedByUserLoader,
     ]
 })

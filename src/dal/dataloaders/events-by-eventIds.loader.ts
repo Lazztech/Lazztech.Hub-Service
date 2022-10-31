@@ -5,8 +5,8 @@ import DataLoader from 'dataloader';
 import { Event } from '../entity/event.entity';
 
 @Injectable({ scope: Scope.REQUEST })
-export class EventsByJoinUserEventLoader extends DataLoader<number, Event> {
-    private logger = new Logger(EventsByJoinUserEventLoader.name);
+export class EventByEventIdsLoader extends DataLoader<number, Event> {
+    private logger = new Logger(EventByEventIdsLoader.name);
 
     constructor(
         @InjectRepository(Event)

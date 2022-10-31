@@ -1,5 +1,5 @@
 import { ID, Parent, ResolveField, Resolver } from '@nestjs/graphql';
-import { EventsByJoinUserEventLoader } from '../dataloaders/events-by-join-user-event.loader';
+import { EventByEventIdsLoader } from '../dataloaders/events-by-eventIds.loader';
 import { UsersByUserIdLoader } from '../dataloaders/users-by-userId.loader';
 import { Event } from '../entity/event.entity';
 import { JoinUserEvent } from '../entity/joinUserEvent.entity';
@@ -9,7 +9,7 @@ import { User } from '../entity/user.entity';
 export class JoinUserEventFieldResolver {
 
   constructor(
-    private readonly eventsByJoinUserEventLoader: EventsByJoinUserEventLoader,
+    private readonly eventsByJoinUserEventLoader: EventByEventIdsLoader,
     private readonly usersByUserIdLoader: UsersByUserIdLoader,
   ) {}
 
