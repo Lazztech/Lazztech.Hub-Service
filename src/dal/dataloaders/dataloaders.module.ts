@@ -6,7 +6,6 @@ import { User } from '../entity/user.entity';
 import { HubsByHubIdLoader } from './hubs-by-hubId.loader';
 import { UsersByUserIdLoader } from './users-by-userId.loader';
 import { JoinUserHubsByHubIdsLoader } from './joinUserHubs-by-hubIds.loader';
-import { BlocksByUserLoader } from './blocks-by-user.loader';
 import { Block } from '../entity/block.entity';
 import { EventByEventIdsLoader } from './events-by-eventIds.loader';
 import { Event } from '../entity/event.entity';
@@ -26,7 +25,6 @@ import { BlocksByCompositKeyLoader } from './blocks-by-compositKey.loader';
         HubsByHubIdLoader,
         UsersByUserIdLoader,
         JoinUserHubsByHubIdsLoader,
-        BlocksByUserLoader,
         EventByEventIdsLoader,
         BlocksByCompositKeyLoader,
     ],
@@ -34,7 +32,6 @@ import { BlocksByCompositKeyLoader } from './blocks-by-compositKey.loader';
         HubsByHubIdLoader,
         UsersByUserIdLoader,
         JoinUserHubsByHubIdsLoader,
-        BlocksByUserLoader,
         EventByEventIdsLoader,
         BlocksByCompositKeyLoader,
     ]
