@@ -1,9 +1,8 @@
-import { EntityRepository } from '@mikro-orm/core';
-import { InjectRepository } from '@mikro-orm/nestjs';
 import { Logger } from '@nestjs/common';
 import { Context, Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { UserId } from '../../decorators/user.decorator';
 import { FileUrlService } from '../../file/file-url/file-url.service';
+import { BlocksByCompositKeyLoader } from '../dataloaders/blocks-by-compositKey.loader';
 import { Block } from '../entity/block.entity';
 import { User } from '../entity/user.entity';
 import { UserDevice } from '../entity/userDevice.entity';
@@ -14,8 +13,7 @@ export class UserFieldResolver {
 
   constructor(
     private readonly fileUrlService: FileUrlService,
-    @InjectRepository(Block)
-    private blockRepository: EntityRepository<Block>,
+    private readonly blocksByCompositKeyLoader: BlocksByCompositKeyLoader,
   ) {}
 
   @ResolveField(() => String, { nullable: true })
@@ -55,9 +53,11 @@ export class UserFieldResolver {
     @Parent() parent: User
   ): Promise<boolean> {
     this.logger.debug(this.blocked.name);
-    return !!(await this.blockRepository.findOne({
+    const result = await this.blocksByCompositKeyLoader.load({
       from: userId,
       to: parent.id
-    }));
+    });
+    console.log(result);
+    return !!result;
   }
 }

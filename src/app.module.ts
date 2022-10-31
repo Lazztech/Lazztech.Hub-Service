@@ -22,6 +22,7 @@ import { GraphqlInterceptor, SentryModule } from '@ntegral/nestjs-sentry';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { SentryPlugin } from './sentry/sentry.plugin';
 import { SeverityLevel } from '@sentry/node';
+import { DataloadersModule } from './dal/dataloaders/dataloaders.module';
 
 @Module({
   imports: [
@@ -155,6 +156,7 @@ import { SeverityLevel } from '@sentry/node';
         const commonSettings = {
           logger: (message) => console.log(message),
           allowGlobalContext: true,
+          debug: configService.get('NODE_ENV') == 'development' ? true : false,
           migrations: {
             pattern: /^.*\.(js|ts)$/, // ends with .js or .ts
             transactional: true,
@@ -265,6 +267,7 @@ import { SeverityLevel } from '@sentry/node';
     EmailModule,
     ModerationModule,
     EventModule,
+    DataloadersModule,
   ],
   providers: [
     {

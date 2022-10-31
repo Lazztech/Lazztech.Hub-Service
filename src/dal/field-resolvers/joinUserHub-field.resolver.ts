@@ -1,7 +1,7 @@
-import { EntityRepository } from '@mikro-orm/core';
-import { InjectRepository } from '@mikro-orm/nestjs';
 import { Logger } from '@nestjs/common';
 import { ID, Parent, ResolveField, Resolver } from '@nestjs/graphql';
+import { HubsByHubIdLoader } from '../dataloaders/hubs-by-hubId.loader';
+import { UsersByUserIdLoader } from '../dataloaders/users-by-userId.loader';
 import { Hub } from '../entity/hub.entity';
 import { JoinUserHub } from '../entity/joinUserHub.entity';
 import { User } from '../entity/user.entity';
@@ -11,8 +11,8 @@ export class JoinUserHubsResolver {
   private logger = new Logger(JoinUserHubsResolver.name);
 
   constructor(
-    @InjectRepository(JoinUserHub)
-    private joinUserHubRepository: EntityRepository<JoinUserHub>,
+    private readonly hubsByJoinUserHubLoader: HubsByHubIdLoader,
+    private readonly usersByUserIdLoader: UsersByUserIdLoader,
   ) {}
 
   @ResolveField(() => ID)
@@ -27,23 +27,22 @@ export class JoinUserHubsResolver {
 
   @ResolveField(() => Boolean, { nullable: true })
   async isPresent(@Parent() joinUserHub: JoinUserHub): Promise<boolean> {
-    const hub = await joinUserHub.hub.load();
+    const hub = await this.hubsByJoinUserHubLoader.load(joinUserHub.hub?.id);
     if (hub.active) {
       return joinUserHub.isPresent;
     } else {
-      this.logger.warn("Hub must be active to query who's present.");
       return null;
     }
   }
 
   @ResolveField(() => User, { nullable: true })
   public user(@Parent() joinUserHub: JoinUserHub): Promise<User> {
-    return joinUserHub.user.load();
+    return this.usersByUserIdLoader.load(joinUserHub.user.id);
   }
 
   @ResolveField(() => Hub, { nullable: true })
   public hub(@Parent() joinUserHub: JoinUserHub): Promise<Hub> {
-    return joinUserHub.hub.load();
+    return this.hubsByJoinUserHubLoader.load(joinUserHub.hub?.id);
   }
 
 }
