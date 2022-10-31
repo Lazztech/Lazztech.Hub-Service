@@ -31,7 +31,6 @@ export class JoinUserHubsResolver {
     if (hub.active) {
       return joinUserHub.isPresent;
     } else {
-      this.logger.warn("Hub must be active to query who's present.");
       return null;
     }
   }
