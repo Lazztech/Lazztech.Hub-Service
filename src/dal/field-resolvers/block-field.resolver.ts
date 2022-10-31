@@ -1,5 +1,6 @@
 import { Logger } from '@nestjs/common';
 import { Parent, ResolveField, Resolver } from '@nestjs/graphql';
+import { UsersByUserIdLoader } from '../dataloaders/users-by-userId.loader';
 import { Block } from '../entity/block.entity';
 import { User } from '../entity/user.entity';
 
@@ -7,12 +8,16 @@ import { User } from '../entity/user.entity';
 export class BlockFieldResolver {
   private logger = new Logger(BlockFieldResolver.name);
 
+  constructor(
+    private readonly usersByUserIdLoader: UsersByUserIdLoader,
+  ) {}
+
   @ResolveField(() => User)
   from(
     @Parent() parent: Block,
   ): Promise<User> {
     this.logger.debug(this.from.name);
-    return parent.from.load();
+    return this.usersByUserIdLoader.load(parent.from.id);
   }
 
   @ResolveField(() => User)
@@ -20,6 +25,6 @@ export class BlockFieldResolver {
     @Parent() parent: Block,
   ): Promise<User> {
     this.logger.debug(this.to.name);
-    return parent.to.load();
+    return this.usersByUserIdLoader.load(parent.to.id);
   }
 }
