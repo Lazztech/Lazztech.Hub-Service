@@ -3,6 +3,7 @@ import { InjectRepository } from '@mikro-orm/nestjs';
 import { Context, Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { UserId } from '../../decorators/user.decorator';
 import { FileUrlService } from '../../file/file-url/file-url.service';
+import { UsersByUserIdLoader } from '../dataloaders/users-by-userId.loader';
 import { Block } from '../entity/block.entity';
 import { Event } from '../entity/event.entity';
 import { Hub } from '../entity/hub.entity';
@@ -16,11 +17,12 @@ export class EventFieldResolver {
     private readonly fileUrlService: FileUrlService,
     @InjectRepository(Block)
     private blockRepository: EntityRepository<Block>,
+    private readonly usersByUserIdLoader: UsersByUserIdLoader,
   ) {}
 
   @ResolveField(() => User, { nullable: true })
   public createdBy(@Parent() parent: Event): Promise<User> {
-    return parent.createdBy.load();
+    return this.usersByUserIdLoader.load(parent.createdBy.id);
   }
 
   @ResolveField(() => Hub, { nullable: true })
