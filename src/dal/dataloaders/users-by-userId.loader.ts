@@ -5,12 +5,12 @@ import DataLoader from 'dataloader';
 import { User } from '../entity/user.entity';
 
 @Injectable({ scope: Scope.REQUEST })
-export class UsersByJoinUserEventLoader extends DataLoader<number, User> {
-    private logger = new Logger(UsersByJoinUserEventLoader.name);
+export class UsersByUserIdLoader extends DataLoader<number, User> {
+    private logger = new Logger(UsersByUserIdLoader.name);
 
     constructor(
         @InjectRepository(User)
-        private readonly userRepository: EntityRepository<User>,
+        private readonly userRepository: EntityRepository<User>
     ) {
         super(keys => this.batchLoadFn(keys));
     }
