@@ -35,13 +35,16 @@ export class HubGeofenceService {
 
     if (!hubRelationship.isPresent) {
       hubRelationship.isPresent = true;  
+      await this.joinUserHubRepository.persistAndFlush(hubRelationship);
+
       const hub = await hubRelationship.hub.load();
       if (hub.active) {
         await this.notifyMembersOfArrival(userId, hubId);
       }
+    } else {
+      await this.joinUserHubRepository.persistAndFlush(hubRelationship);
     }
 
-    await this.joinUserHubRepository.persistAndFlush(hubRelationship);
     return hubRelationship;
   }
 
@@ -75,13 +78,16 @@ export class HubGeofenceService {
 
     if (hubRelationship.isPresent) {
       hubRelationship.isPresent = false;
+      await this.joinUserHubRepository.persistAndFlush(hubRelationship);
+
       const hub = await hubRelationship.hub.load();
       if (hub.active) {
         await this.notifyMembersOfExit(userId, hubId);
       }
+    } else {
+      await this.joinUserHubRepository.persistAndFlush(hubRelationship);
     }
 
-    await this.joinUserHubRepository.persistAndFlush(hubRelationship);
     return hubRelationship;
   }
 
