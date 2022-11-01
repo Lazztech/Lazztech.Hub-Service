@@ -25,11 +25,10 @@ export class HubGeofenceService {
 
   async enteredHubGeofence(userId: any, hubId: number) {
     this.logger.debug(this.enteredHubGeofence.name);
-    const hubRelationship = await this.joinUserHubRepository.findOne({
+    const hubRelationship = await this.joinUserHubRepository.findOneOrFail({
       user: userId,
       hub: hubId,
     });
-    this.throwIfNotDefined(hubRelationship, userId, hubId);
 
     hubRelationship.lastUpdated = Date.now().toString();
     hubRelationship.lastGeofenceEvent = GeofenceEvent.ENTERED;
@@ -48,11 +47,10 @@ export class HubGeofenceService {
 
   async dwellHubGeofence(userId: any, hubId: number) {
     this.logger.debug(this.dwellHubGeofence.name);
-    const hubRelationship = await this.joinUserHubRepository.findOne({
+    const hubRelationship = await this.joinUserHubRepository.findOneOrFail({
       user: userId,
       hub: hubId,
     });
-    this.throwIfNotDefined(hubRelationship, userId, hubId);
 
     hubRelationship.lastUpdated = Date.now().toString();
     hubRelationship.lastGeofenceEvent = GeofenceEvent.DWELL;
@@ -67,11 +65,10 @@ export class HubGeofenceService {
 
   async exitedHubGeofence(userId: any, hubId: number) {
     this.logger.debug(this.exitedHubGeofence.name);
-    const hubRelationship = await this.joinUserHubRepository.findOne({
+    const hubRelationship = await this.joinUserHubRepository.findOneOrFail({
       user: userId,
       hub: hubId,
     });
-    this.throwIfNotDefined(hubRelationship, userId, hubId);
 
     hubRelationship.lastUpdated = Date.now().toString();
     hubRelationship.lastGeofenceEvent = GeofenceEvent.EXITED;
@@ -86,14 +83,6 @@ export class HubGeofenceService {
 
     await this.joinUserHubRepository.persistAndFlush(hubRelationship);
     return hubRelationship;
-  }
-
-  private throwIfNotDefined(hubRelationship: JoinUserHub, userId: any, hubId: any) {
-    if (!hubRelationship) {
-      throw Error(
-        `no corresponding hub relationship found for userId: ${userId} & hubId: ${hubId}`,
-      );
-    }
   }
 
   async notifyMembersOfArrival(userId: any, hubId: number) {
