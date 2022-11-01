@@ -98,16 +98,6 @@ export class HubGeofenceService {
     const message = `${user.firstName} arrived`;
 
     for (const relation of unblockedRelations) {
-      await this.notificationService.addInAppNotificationForUser(
-        relation.user.id,
-        {
-          header: message,
-          thumbnail: hub.image,
-          date: Date.now().toString(),
-          actionLink: undefined,
-          text: `at the "${hub.name}" hub.`,
-        },
-      );
       if (!relation.muted) {
         await this.notificationService.sendPushToUser(relation.user.id, {
           title: message,
@@ -131,16 +121,6 @@ export class HubGeofenceService {
     const message = `${user.firstName} exited`;
 
     for (const relation of unblockedRelations) {
-      await this.notificationService.addInAppNotificationForUser(
-        relation.user.id,
-        {
-          header: message,
-          thumbnail: hub.image,
-          date: Date.now().toString(),
-          actionLink: undefined,
-          text: `the "${hub.name}" hub`,
-        },
-      );
       if (!relation.muted) {
         await this.notificationService.sendPushToUser(relation.user.id, {
           title: message,
