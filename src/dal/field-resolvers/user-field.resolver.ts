@@ -57,7 +57,6 @@ export class UserFieldResolver {
       from: userId,
       to: parent.id
     });
-    console.log(result);
     return !!result;
   }
 }
