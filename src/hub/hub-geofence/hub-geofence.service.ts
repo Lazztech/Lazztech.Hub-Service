@@ -25,34 +25,35 @@ export class HubGeofenceService {
 
   async enteredHubGeofence(userId: any, hubId: number) {
     this.logger.debug(this.enteredHubGeofence.name);
-    const hubRelationship = await this.joinUserHubRepository.findOne({
+    const hubRelationship = await this.joinUserHubRepository.findOneOrFail({
       user: userId,
       hub: hubId,
     });
-    this.throwIfNotDefined(hubRelationship, userId, hubId);
 
     hubRelationship.lastUpdated = Date.now().toString();
     hubRelationship.lastGeofenceEvent = GeofenceEvent.ENTERED;
 
     if (!hubRelationship.isPresent) {
       hubRelationship.isPresent = true;  
+      await this.joinUserHubRepository.persistAndFlush(hubRelationship);
+
       const hub = await hubRelationship.hub.load();
       if (hub.active) {
         await this.notifyMembersOfArrival(userId, hubId);
       }
+    } else {
+      await this.joinUserHubRepository.persistAndFlush(hubRelationship);
     }
 
-    await this.joinUserHubRepository.persistAndFlush(hubRelationship);
     return hubRelationship;
   }
 
   async dwellHubGeofence(userId: any, hubId: number) {
     this.logger.debug(this.dwellHubGeofence.name);
-    const hubRelationship = await this.joinUserHubRepository.findOne({
+    const hubRelationship = await this.joinUserHubRepository.findOneOrFail({
       user: userId,
       hub: hubId,
     });
-    this.throwIfNotDefined(hubRelationship, userId, hubId);
 
     hubRelationship.lastUpdated = Date.now().toString();
     hubRelationship.lastGeofenceEvent = GeofenceEvent.DWELL;
@@ -67,33 +68,27 @@ export class HubGeofenceService {
 
   async exitedHubGeofence(userId: any, hubId: number) {
     this.logger.debug(this.exitedHubGeofence.name);
-    const hubRelationship = await this.joinUserHubRepository.findOne({
+    const hubRelationship = await this.joinUserHubRepository.findOneOrFail({
       user: userId,
       hub: hubId,
     });
-    this.throwIfNotDefined(hubRelationship, userId, hubId);
 
     hubRelationship.lastUpdated = Date.now().toString();
     hubRelationship.lastGeofenceEvent = GeofenceEvent.EXITED;
 
     if (hubRelationship.isPresent) {
       hubRelationship.isPresent = false;
+      await this.joinUserHubRepository.persistAndFlush(hubRelationship);
+
       const hub = await hubRelationship.hub.load();
       if (hub.active) {
         await this.notifyMembersOfExit(userId, hubId);
       }
+    } else {
+      await this.joinUserHubRepository.persistAndFlush(hubRelationship);
     }
 
-    await this.joinUserHubRepository.persistAndFlush(hubRelationship);
     return hubRelationship;
-  }
-
-  private throwIfNotDefined(hubRelationship: JoinUserHub, userId: any, hubId: any) {
-    if (!hubRelationship) {
-      throw Error(
-        `no corresponding hub relationship found for userId: ${userId} & hubId: ${hubId}`,
-      );
-    }
   }
 
   async notifyMembersOfArrival(userId: any, hubId: number) {
@@ -109,16 +104,6 @@ export class HubGeofenceService {
     const message = `${user.firstName} arrived`;
 
     for (const relation of unblockedRelations) {
-      await this.notificationService.addInAppNotificationForUser(
-        relation.user.id,
-        {
-          header: message,
-          thumbnail: hub.image,
-          date: Date.now().toString(),
-          actionLink: undefined,
-          text: `at the "${hub.name}" hub.`,
-        },
-      );
       if (!relation.muted) {
         await this.notificationService.sendPushToUser(relation.user.id, {
           title: message,
@@ -142,16 +127,6 @@ export class HubGeofenceService {
     const message = `${user.firstName} exited`;
 
     for (const relation of unblockedRelations) {
-      await this.notificationService.addInAppNotificationForUser(
-        relation.user.id,
-        {
-          header: message,
-          thumbnail: hub.image,
-          date: Date.now().toString(),
-          actionLink: undefined,
-          text: `the "${hub.name}" hub`,
-        },
-      );
       if (!relation.muted) {
         await this.notificationService.sendPushToUser(relation.user.id, {
           title: message,

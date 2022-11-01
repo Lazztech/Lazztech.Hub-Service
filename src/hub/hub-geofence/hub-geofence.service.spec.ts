@@ -128,7 +128,7 @@ describe('HubGeofenceService', () => {
       },
     } as JoinUserHub;
     jest
-      .spyOn(joinUserHubRepository, 'findOne')
+      .spyOn(joinUserHubRepository, 'findOneOrFail')
       .mockResolvedValueOnce(hubRelationshipTest as any);
 
     const notifyMembersSpy = jest
@@ -162,7 +162,7 @@ describe('HubGeofenceService', () => {
       },
     } as JoinUserHub;
     jest
-      .spyOn(joinUserHubRepository, 'findOne')
+      .spyOn(joinUserHubRepository, 'findOneOrFail')
       .mockResolvedValueOnce(hubRelationshipTest as any);
 
     const notifyMembersSpy = jest
@@ -196,7 +196,7 @@ describe('HubGeofenceService', () => {
       },
     } as JoinUserHub;
     jest
-      .spyOn(joinUserHubRepository, 'findOne')
+      .spyOn(joinUserHubRepository, 'findOneOrFail')
       .mockResolvedValueOnce(hubRelationshipTest as any);
 
     const notifyMembersSpy = jest
@@ -255,7 +255,7 @@ describe('HubGeofenceService', () => {
       },
     } as JoinUserHub;
     jest
-      .spyOn(joinUserHubRepository, 'findOne')
+      .spyOn(joinUserHubRepository, 'findOneOrFail')
       .mockResolvedValueOnce(hubRelationshipTest as any);
 
     const notifyMembersSpy = jest
@@ -287,7 +287,7 @@ describe('HubGeofenceService', () => {
       },
     } as JoinUserHub;
     jest
-      .spyOn(joinUserHubRepository, 'findOne')
+      .spyOn(joinUserHubRepository, 'findOneOrFail')
       .mockResolvedValueOnce(hubRelationshipTest as any);
 
     const notifyMembersSpy = jest
@@ -342,7 +342,7 @@ describe('HubGeofenceService', () => {
       },
     } as JoinUserHub;
     jest
-      .spyOn(joinUserHubRepository, 'findOne')
+      .spyOn(joinUserHubRepository, 'findOneOrFail')
       .mockResolvedValueOnce(hubRelationshipTest as any);
 
     const notifyMembersSpy = jest
@@ -373,7 +373,7 @@ describe('HubGeofenceService', () => {
       },
     } as JoinUserHub;
     jest
-      .spyOn(joinUserHubRepository, 'findOne')
+      .spyOn(joinUserHubRepository, 'findOneOrFail')
       .mockResolvedValueOnce(hubRelationshipTest as any);
 
     const notifyMembersSpy = jest
@@ -404,7 +404,7 @@ describe('HubGeofenceService', () => {
       },
     } as JoinUserHub;
     jest
-      .spyOn(joinUserHubRepository, 'findOne')
+      .spyOn(joinUserHubRepository, 'findOneOrFail')
       .mockResolvedValueOnce(hubRelationshipTest as any);
 
     const notifyMembersSpy = jest
@@ -471,9 +471,6 @@ describe('HubGeofenceService', () => {
       .spyOn(hubRepository, 'findOne')
       .mockResolvedValueOnce(mockHub as any);
 
-    const addInAppNotificationForUserSpy = jest
-      .spyOn(notificationService, 'addInAppNotificationForUser')
-      .mockResolvedValue();
     const sendPushToUserSpy = jest
       .spyOn(notificationService, 'sendPushToUser')
       .mockResolvedValue();
@@ -482,7 +479,6 @@ describe('HubGeofenceService', () => {
     await service.notifyMembersOfArrival(mockUser.id, mockHub.id);
 
     // Assert
-    expect(addInAppNotificationForUserSpy).toHaveBeenCalledTimes(2);
     expect(sendPushToUserSpy).toHaveBeenCalledTimes(2);
   });
 
@@ -536,9 +532,6 @@ describe('HubGeofenceService', () => {
       .spyOn(hubRepository, 'findOne')
       .mockResolvedValueOnce(mockHub as any);
 
-    const addInAppNotificationForUserSpy = jest
-      .spyOn(notificationService, 'addInAppNotificationForUser')
-      .mockResolvedValue();
     const sendPushToUserSpy = jest
       .spyOn(notificationService, 'sendPushToUser')
       .mockResolvedValue();
@@ -547,7 +540,6 @@ describe('HubGeofenceService', () => {
     await service.notifyMembersOfExit(mockUser.id, mockHub.id);
 
     // Assert
-    expect(addInAppNotificationForUserSpy).toHaveBeenCalledTimes(2);
     expect(sendPushToUserSpy).toHaveBeenCalledTimes(2);
   });
 });
