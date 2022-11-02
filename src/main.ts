@@ -1,3 +1,4 @@
+import otelSDK from './tracing';
 import { NestFactory } from '@nestjs/core';
 import {
   ExpressAdapter,
@@ -12,6 +13,9 @@ import { SentryService } from '@ntegral/nestjs-sentry';
 import { LogLevel } from '@nestjs/common';
 
 async function bootstrap() {
+  // Start SDK before nestjs factory create
+  await otelSDK.start();
+
   const instance = express();
   instance.use('/avatars', require('adorable-avatars/dist/index'));
   const logLevels: LogLevel[] = process.env.NODE_ENV === 'development' 

@@ -22,9 +22,25 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { SentryPlugin } from './sentry/sentry.plugin';
 import { SeverityLevel } from '@sentry/node';
 import { DataloadersModule } from './dal/dataloaders/dataloaders.module';
+import { OpenTelemetryModule } from 'nestjs-otel';
+import otelSDK from './tracing';
 
 @Module({
   imports: [
+    OpenTelemetryModule.forRoot({
+      metrics: {
+        hostMetrics: true, // Includes Host Metrics
+        apiMetrics: {
+          enable: true, // Includes api metrics
+          defaultAttributes: {
+            // You can set default labels for api metrics
+            custom: 'label',
+          },
+          ignoreRoutes: ['/favicon.ico'], // You can ignore specific routes (See https://docs.nestjs.com/middleware#excluding-routes for options)
+          ignoreUndefinedRoutes: false, //Records metrics for all URLs, even undefined ones
+        },
+      },
+    }),
     SentryModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
@@ -282,5 +298,15 @@ export class AppModule implements OnModuleInit {
 
   async onModuleInit(): Promise<void> {
     await this.orm.getMigrator().up();
+  }
+
+  onApplicationShutdown(signal: string) {
+    otelSDK
+      .shutdown()
+      .then(
+        () => console.log('SDK shut down successfully'),
+        err => console.log('Error shutting down SDK', err)
+      )
+      .finally(() => process.exit(0));
   }
 }
