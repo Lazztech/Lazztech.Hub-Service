@@ -32,7 +32,7 @@ export class HubFieldResolver {
   ): Promise<JoinUserHub[]> {
     const blocks = await this.blocksByUserLoader.load(userId);
     const usersConnections = await this.joinUserHubsByHubLoader.load(parent.id);
-    return usersConnections.filter(joinUserHub => !blocks.find(block => block.from.id === joinUserHub.user.id)); 
+    return usersConnections.filter(joinUserHub => !blocks?.find(block => block.from.id === joinUserHub.user.id)); 
   }
 
   @ResolveField(() => [MicroChat], { nullable: true })
