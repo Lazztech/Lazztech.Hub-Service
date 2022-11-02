@@ -1,11 +1,9 @@
-import { EntityRepository } from '@mikro-orm/core';
-import { InjectRepository } from '@mikro-orm/nestjs';
 import { Logger } from '@nestjs/common';
 import { Context, Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { UserId } from '../../decorators/user.decorator';
 import { FileUrlService } from '../../file/file-url/file-url.service';
+import { BlocksByUserLoader } from '../dataloaders/blocks-by-user.loader';
 import { JoinUserHubsByHubIdsLoader } from '../dataloaders/joinUserHubs-by-hubIds.loader';
-import { Block } from '../entity/block.entity';
 import { Event } from '../entity/event.entity';
 import { Hub } from '../entity/hub.entity';
 import { Invite } from '../entity/invite.entity';
@@ -19,8 +17,7 @@ export class HubFieldResolver {
   constructor(
     private readonly fileUrlService: FileUrlService,
     private readonly joinUserHubsByHubLoader: JoinUserHubsByHubIdsLoader,
-    @InjectRepository(Block)
-    private blockRepository: EntityRepository<Block>,
+    private readonly blocksByUserLoader: BlocksByUserLoader,
   ) {}
 
   @ResolveField(() => String, { nullable: true })
@@ -33,9 +30,9 @@ export class HubFieldResolver {
     @UserId() userId,
     @Parent() parent: Hub,
   ): Promise<JoinUserHub[]> {
-    const blocks = await this.blockRepository.find({ to: userId });
+    const blocks = await this.blocksByUserLoader.load(userId);
     const usersConnections = await this.joinUserHubsByHubLoader.load(parent.id);
-    return usersConnections.filter(joinUserHub => !blocks.find(block => block.from.id === joinUserHub.user.id));    
+    return usersConnections.filter(joinUserHub => !blocks.find(block => block.from.id === joinUserHub.user.id)); 
   }
 
   @ResolveField(() => [MicroChat], { nullable: true })

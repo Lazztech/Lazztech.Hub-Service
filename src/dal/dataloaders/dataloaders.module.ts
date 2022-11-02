@@ -10,6 +10,7 @@ import { Block } from '../entity/block.entity';
 import { EventByEventIdsLoader } from './events-by-eventIds.loader';
 import { Event } from '../entity/event.entity';
 import { BlocksByCompositKeyLoader } from './blocks-by-compositKey.loader';
+import { BlocksByUserLoader } from './blocks-by-user.loader';
 
 @Module({
     imports: [
@@ -27,6 +28,7 @@ import { BlocksByCompositKeyLoader } from './blocks-by-compositKey.loader';
         JoinUserHubsByHubIdsLoader,
         EventByEventIdsLoader,
         BlocksByCompositKeyLoader,
+        BlocksByUserLoader,
     ],
     exports: [
         HubsByHubIdLoader,
@@ -34,6 +36,7 @@ import { BlocksByCompositKeyLoader } from './blocks-by-compositKey.loader';
         JoinUserHubsByHubIdsLoader,
         EventByEventIdsLoader,
         BlocksByCompositKeyLoader,
+        BlocksByUserLoader,
     ]
 })
 export class DataloadersModule {}

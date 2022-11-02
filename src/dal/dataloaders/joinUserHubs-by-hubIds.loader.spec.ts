@@ -1,7 +1,7 @@
 import { getRepositoryToken } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/postgresql';
 import { Test, TestingModule } from '@nestjs/testing';
-import { Hub } from '../entity/hub.entity';
+import { JoinUserHub } from '../entity/joinUserHub.entity';
 import { JoinUserHubsByHubIdsLoader } from './joinUserHubs-by-hubIds.loader';
 
 describe('JoinUserHubsByHubLoader', () => {
@@ -12,7 +12,7 @@ describe('JoinUserHubsByHubLoader', () => {
       providers: [
         JoinUserHubsByHubIdsLoader,
         {
-          provide: getRepositoryToken(Hub),
+          provide: getRepositoryToken(JoinUserHub),
           useClass: EntityRepository,
         }
       ],
