@@ -16,7 +16,6 @@ import {
     metricReader: new PrometheusExporter({
       port: 8081,
     }),
-    // metricInterval: 1000,
     spanProcessor: new BatchSpanProcessor(new JaegerExporter()),
     contextManager: new AsyncLocalStorageContextManager(),
     textMapPropagator: new CompositePropagator({
@@ -30,7 +29,7 @@ import {
         }),
       ],
     }),
-    instrumentations: [getNodeAutoInstrumentations()],
+    // instrumentations: [getNodeAutoInstrumentations()],
   });
   
   export default otelSDK;
