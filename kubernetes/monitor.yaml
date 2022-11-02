@@ -1,0 +1,52 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: node-exporter
+  # Namespace of prometheus operator
+  namespace: default
+  labels:
+    prometheus: mon
+spec:
+  namespaceSelector:
+    matchNames:
+    - default
+  selector:
+    matchLabels:
+      k8s-app: node-exporter
+  endpoints:
+  - port: metrics
+    interval: 10s
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lazztech-hub-prod
+  namespace: default
+  labels:
+    k8s-app: node-exporter
+spec:
+  type: ExternalName
+  externalName: lazztech-hub-service-z84zo.ondigitalocean.app
+  clusterIP: ""
+  # Maybe not relevant
+  ports:
+  - name: metrics
+    port: 9100
+    protocol: TCP
+    targetPort: 9100
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  # Name must match service name
+  name: lazztech-hub-prod
+  namespace: default
+  labels:
+    k8s-app: node-exporter
+subsets:
+  - addresses:
+    - ip: 104.16.244.78
+    ports:
+      - name: metrics
+        port: 9100
+        protocol: TCP
