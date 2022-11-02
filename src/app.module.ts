@@ -3,7 +3,6 @@ import { MikroOrmModule, MikroOrmModuleOptions } from '@mikro-orm/nestjs';
 import { Logger, Module, OnModuleInit } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
-import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import * as Joi from 'joi';
 import { S3Module, S3ModuleOptions } from 'nestjs-s3';
 import * as path from 'path';
@@ -146,7 +145,6 @@ import { DataloadersModule } from './dal/dataloaders/dataloaders.module';
       },
       isGlobal: true,
     }),
-    PrometheusModule.register(),
     MikroOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
