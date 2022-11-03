@@ -23,6 +23,7 @@ import { SentryPlugin } from './sentry/sentry.plugin';
 import { SeverityLevel } from '@sentry/node';
 import { DataloadersModule } from './dal/dataloaders/dataloaders.module';
 import { OpenTelemetryModule } from 'nestjs-otel';
+import { LoggerModule } from './logger/logger.module';
 import otelSDK from './tracing';
 
 @Module({
@@ -32,12 +33,6 @@ import otelSDK from './tracing';
         hostMetrics: true, // Includes Host Metrics
         apiMetrics: {
           enable: true, // Includes api metrics
-          defaultAttributes: {
-            // You can set default labels for api metrics
-            custom: 'label',
-          },
-          ignoreRoutes: ['/favicon.ico'], // You can ignore specific routes (See https://docs.nestjs.com/middleware#excluding-routes for options)
-          ignoreUndefinedRoutes: false, //Records metrics for all URLs, even undefined ones
         },
       },
     }),
@@ -282,6 +277,7 @@ import otelSDK from './tracing';
     ModerationModule,
     EventModule,
     DataloadersModule,
+    LoggerModule,
   ],
   providers: [
     {
