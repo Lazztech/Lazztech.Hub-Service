@@ -14,6 +14,8 @@ import { AsyncLocalStorageContextManager } from '@opentelemetry/context-async-ho
 import { PinoInstrumentation } from '@opentelemetry/instrumentation-pino';
 import { ExpressInstrumentation } from '@opentelemetry/instrumentation-express';
 import { NestInstrumentation } from '@opentelemetry/instrumentation-nestjs-core';
+import { GraphQLInstrumentation } from '@opentelemetry/instrumentation-graphql';
+import { HttpInstrumentation } from '@opentelemetry/instrumentation-http';
 
 const otelSDK = new NodeSDK({
   metricReader: new PrometheusExporter({
@@ -35,6 +37,12 @@ const otelSDK = new NodeSDK({
   instrumentations: [
     // getNodeAutoInstrumentations(),
     new PinoInstrumentation(),
+    new GraphQLInstrumentation({
+      // allowAttributes: true,
+      // depth: 2,
+      // mergeItems: true,
+    }),
+    new HttpInstrumentation(),
     new ExpressInstrumentation(),
     new NestInstrumentation(),
   ],
