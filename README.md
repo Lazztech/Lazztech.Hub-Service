@@ -216,6 +216,19 @@ $ npm run migration:log:all
 $ npm run migration:show:all
 ```
 
+## Open Telemetry
+This service is setup with OTel(Open Telemetry) for vendor agnostic observability. It's setup to export to the grafana stack.
+
+```bash
+# The Grafana Agent configuration file can be found at $(brew --prefix)/etc/grafana-agent/config.yml
+
+# start grafana agent locally to export metrics
+$ docker run \
+  -v /tmp/agent:/etc/agent/data \
+  -v $(pwd)/data/grafana-agent/config.yml:/etc/agent/agent.yaml \
+  grafana/agent:v0.28.0
+```
+
 
 ## Scripts
 
