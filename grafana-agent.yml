@@ -1,0 +1,61 @@
+server:
+  log_level: info
+
+metrics:
+  global:
+    scrape_interval: 60s
+    remote_write:
+      - url: https://prometheus-prod-10-prod-us-central-0.grafana.net/api/prom/push
+        basic_auth:
+          username: 325358
+          password: <GRAFANA-CLOUD-API-KEY>9
+  configs:
+    - name: default
+      scrape_configs:
+        - job_name: agent
+          static_configs:
+            - targets: ['localhost:8081']
+
+logs:
+  configs:
+  - name: default
+    positions:
+      filename: /tmp/positions.yaml
+    scrape_configs:
+      - job_name: lazztech-hub
+        static_configs:
+          - targets: [localhost]
+            labels:
+              job: lazztech-hub
+              __path__: /Users/gianlazzarini/Documents/Development/Lazztech.Hub-Service/data/lazztech-hub.log
+    clients:
+      - url: https://161649:<GRAFANA-CLOUD-API-KEY>9@logs-prod3.grafana.net/loki/api/v1/push
+
+traces:
+  configs:
+  - name: default
+    receivers:
+      jaeger:
+        protocols:
+          grpc: # listens on the default jaeger grpc port: 14250
+          thrift_binary:
+          thrift_compact:
+          thrift_http:
+      zipkin:
+      otlp:
+        protocols:
+          http:
+          grpc:
+      opencensus:
+    remote_write:
+      - endpoint: tempo-us-central1.grafana.net:443
+        basic_auth:
+          username: 158157
+          password: <GRAFANA-CLOUD-API-KEY>
+    batch:
+      timeout: 5s
+      send_batch_size: 100
+
+integrations:
+  node_exporter:
+    enabled: true
