@@ -50,6 +50,7 @@
     "migration:debug:postgres": "MIKRO_ORM_CLI=$PWD/mikro-orm.postgres.config.js mikro-orm debug"
   },
   "dependencies": {
+    "@grpc/grpc-js": "^1.7.3",
     "@mikro-orm/core": "^5.5.0",
     "@mikro-orm/migrations": "^5.5.0",
     "@mikro-orm/nestjs": "^5.1.2",
@@ -69,6 +70,7 @@
     "@opentelemetry/auto-instrumentations-node": "^0.33.1",
     "@opentelemetry/exporter-jaeger": "^1.7.0",
     "@opentelemetry/exporter-prometheus": "^0.33.0",
+    "@opentelemetry/exporter-trace-otlp-grpc": "^0.33.0",
     "@opentelemetry/sdk-node": "^0.33.0",
     "@sentry/node": "^7.16.0",
     "@sentry/tracing": "^7.16.0",
