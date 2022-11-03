@@ -14,7 +14,9 @@ import { LogLevel } from '@nestjs/common';
 
 async function bootstrap() {
   // Start SDK before nestjs factory create
-  await otelSDK.start();
+  await otelSDK.start()
+    .then(() => console.log('Tracing initialized'))
+    .catch((error) => console.log('Error initializing tracing', error));;
 
   const instance = express();
   instance.use('/avatars', require('adorable-avatars/dist/index'));
