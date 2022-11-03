@@ -92,6 +92,8 @@ export class HubService {
     this.logger.debug(this.usersPeople.name);
     const userHubRelationships = await this.joinUserHubRepository.find({
       user: userId
+    }, {
+      populate: ['hub', 'hub.usersConnection', 'hub.usersConnection.user']
     });
 
     const usersHubs = await Promise.all(userHubRelationships.map((x) => x.hub));
