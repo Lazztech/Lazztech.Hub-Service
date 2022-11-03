@@ -11,11 +11,6 @@ import { B3InjectEncoding, B3Propagator } from '@opentelemetry/propagator-b3';
 import { PrometheusExporter } from '@opentelemetry/exporter-prometheus';
 import { NodeSDK } from '@opentelemetry/sdk-node';
 import { AsyncLocalStorageContextManager } from '@opentelemetry/context-async-hooks';
-import { PinoInstrumentation } from '@opentelemetry/instrumentation-pino';
-import { ExpressInstrumentation } from '@opentelemetry/instrumentation-express';
-import { NestInstrumentation } from '@opentelemetry/instrumentation-nestjs-core';
-import { GraphQLInstrumentation } from '@opentelemetry/instrumentation-graphql';
-import { HttpInstrumentation } from '@opentelemetry/instrumentation-http';
 
 const otelSDK = new NodeSDK({
   metricReader: new PrometheusExporter({
@@ -35,16 +30,16 @@ const otelSDK = new NodeSDK({
     ],
   }),
   instrumentations: [
-    // getNodeAutoInstrumentations(),
-    new PinoInstrumentation(),
-    new GraphQLInstrumentation({
-      // allowAttributes: true,
-      // depth: 2,
-      // mergeItems: true,
+    getNodeAutoInstrumentations({
+      "@opentelemetry/instrumentation-pino": undefined,
+      "@opentelemetry/instrumentation-graphql": undefined,
+      "@opentelemetry/instrumentation-http": undefined,
+      "@opentelemetry/instrumentation-express": undefined,
+      "@opentelemetry/instrumentation-nestjs-core": undefined,
+      "@opentelemetry/instrumentation-dataloader": {
+        enabled: false,
+      }
     }),
-    new HttpInstrumentation(),
-    new ExpressInstrumentation(),
-    new NestInstrumentation(),
   ],
 });
 
