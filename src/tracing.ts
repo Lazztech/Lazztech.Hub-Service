@@ -11,6 +11,7 @@ import {
   import { PrometheusExporter } from '@opentelemetry/exporter-prometheus';
   import { NodeSDK } from '@opentelemetry/sdk-node';
   import { AsyncLocalStorageContextManager } from '@opentelemetry/context-async-hooks';
+import { PinoInstrumentation } from '@opentelemetry/instrumentation-pino';
   
   const otelSDK = new NodeSDK({
     metricReader: new PrometheusExporter({
@@ -29,7 +30,10 @@ import {
         }),
       ],
     }),
-    // instrumentations: [getNodeAutoInstrumentations()],
+    instrumentations: [
+      // getNodeAutoInstrumentations(),
+      new PinoInstrumentation(),
+    ],
   });
   
   export default otelSDK;
