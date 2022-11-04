@@ -44,3 +44,7 @@ docs/_book/**.**
 data/**
 **/grafana-agent.local.yml
 **/otel-collector.local.yml
+
+telemetry/data/tempo-data/
+telemetry/data/loki-data/
+telemetry/data/logs/
