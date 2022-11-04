@@ -11,6 +11,7 @@ export const loggerOptions: LoggerOptions = {
       return { ...object, spanId, traceId };
     },
   },
+  redact: ['req.headers.authorization'],
 };
 
 export const logger: Logger = Pino(
