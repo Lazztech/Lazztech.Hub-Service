@@ -39,10 +39,6 @@ async function bootstrap() {
     credentials: true,
   });
 
-  if (process.env.NODE_ENV !== 'development') {
-    app.useLogger(app.get(Logger));
-  }
-
   app.useGlobalInterceptors(new ModerationInterceptor());
   await app.listen(process.env.PORT || 8080);
 }
