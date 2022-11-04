@@ -27,7 +27,7 @@ async function bootstrap() {
   const app: NestExpressApplication = await NestFactory.create(
     AppModule,
     new ExpressAdapter(instance),
-    // { logger: logLevels, }
+    { logger: logLevels, }
   );
   // Starts listening for shutdown hooks
   app.enableShutdownHooks();
@@ -40,13 +40,9 @@ async function bootstrap() {
     credentials: true,
   });
 
-  app.useLogger(app.get(Logger));
-
-  // const sentry = SentryService.SentryServiceInstance();
-  // sentry.setLogLevels(logLevels)
-  // if (process.env.NODE_ENV !== 'development') {
-  //   app.useLogger(sentry);
-  // }
+  if (process.env.NODE_ENV !== 'development') {
+    app.useLogger(app.get(Logger));
+  }
 
   app.useGlobalInterceptors(new ModerationInterceptor());
   await app.listen(process.env.PORT || 8080);
