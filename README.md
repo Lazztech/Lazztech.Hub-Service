@@ -231,8 +231,13 @@ $ brew install grafana-agent
 $ docker run \
   -v /tmp/agent:/etc/agent/data \
   -v $(pwd)/telemetry/grafana-agent.local.yml:/etc/agent/agent.yaml \
-  -p 4318:4318 \
+  -p 6832:6832 -p 4317:4317 -p 4318:4318 \
   grafana/agent:v0.28.0
+
+# otel-collector
+$ cp telemetry/otel-collector.yml telemetry/otel-collector.local.yml
+$ cd telemetry
+$ docker-compose up
 ```
 
 

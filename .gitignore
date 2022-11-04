@@ -43,3 +43,4 @@ docs/_book/**.**
 **/*.sqlite3
 data/**
 **/grafana-agent.local.yml
+**/otel-collector.local.yml
