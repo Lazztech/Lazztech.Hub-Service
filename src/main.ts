@@ -11,12 +11,13 @@ import express = require('express');
 import { ModerationInterceptor } from './moderation/moderation.interceptor';
 import { SentryService } from '@ntegral/nestjs-sentry';
 import { LogLevel } from '@nestjs/common';
+import { Logger } from 'nestjs-pino';
 
 async function bootstrap() {
   // Start SDK before nestjs factory create
   await otelSDK.start()
     .then(() => console.log('Tracing initialized'))
-    .catch((error) => console.log('Error initializing tracing', error));;
+    .catch((error) => console.log('Error initializing tracing', error));
 
   const instance = express();
   instance.use('/avatars', require('adorable-avatars/dist/index'));
@@ -26,7 +27,7 @@ async function bootstrap() {
   const app: NestExpressApplication = await NestFactory.create(
     AppModule,
     new ExpressAdapter(instance),
-    { logger: logLevels, }
+    // { logger: logLevels, }
   );
   // Starts listening for shutdown hooks
   app.enableShutdownHooks();
@@ -39,12 +40,13 @@ async function bootstrap() {
     credentials: true,
   });
 
+  app.useLogger(app.get(Logger));
 
-  const sentry = SentryService.SentryServiceInstance();
-  sentry.setLogLevels(logLevels)
-  if (process.env.NODE_ENV !== 'development') {
-    app.useLogger(sentry);
-  }
+  // const sentry = SentryService.SentryServiceInstance();
+  // sentry.setLogLevels(logLevels)
+  // if (process.env.NODE_ENV !== 'development') {
+  //   app.useLogger(sentry);
+  // }
 
   app.useGlobalInterceptors(new ModerationInterceptor());
   await app.listen(process.env.PORT || 8080);

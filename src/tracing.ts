@@ -11,16 +11,10 @@ import { B3InjectEncoding, B3Propagator } from '@opentelemetry/propagator-b3';
 import { PrometheusExporter } from '@opentelemetry/exporter-prometheus';
 import { NodeSDK } from '@opentelemetry/sdk-node';
 import { AsyncLocalStorageContextManager } from '@opentelemetry/context-async-hooks';
-import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-grpc';
-const grpc = require('@grpc/grpc-js');
 
 const otelSDK = new NodeSDK({
   metricReader: new PrometheusExporter({
     port: 8081,
-  }),
-  traceExporter: new OTLPTraceExporter({
-    url: 'http://localhost:4317',
-    credentials: grpc.credentials.createInsecure(),
   }),
   spanProcessor: new BatchSpanProcessor(new JaegerExporter()),
   contextManager: new AsyncLocalStorageContextManager(),
@@ -37,11 +31,7 @@ const otelSDK = new NodeSDK({
   }),
   instrumentations: [
     getNodeAutoInstrumentations({
-      "@opentelemetry/instrumentation-pino": undefined,
-      "@opentelemetry/instrumentation-graphql": undefined,
-      "@opentelemetry/instrumentation-http": undefined,
-      "@opentelemetry/instrumentation-express": undefined,
-      "@opentelemetry/instrumentation-nestjs-core": undefined,
+      // disabled as it's causing an exception with the dataloaders
       "@opentelemetry/instrumentation-dataloader": {
         enabled: false,
       }

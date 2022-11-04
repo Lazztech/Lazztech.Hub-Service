@@ -4,7 +4,6 @@ import { trace, context } from '@opentelemetry/api';
 import fs from 'fs';
 
 export const loggerOptions: LoggerOptions = {
-  level: 'info',
   formatters: {
     level(label) {
       return { level: label };
@@ -18,14 +17,6 @@ export const loggerOptions: LoggerOptions = {
       return { ...object, spanId, traceId };
     },
   },
-//   prettyPrint:
-//     process.env.NODE_ENV === 'local'
-//       ? {
-//           colorize: true,
-//           levelFirst: true,
-//           translateTime: true,
-//         }
-//       : false,
 };
 
 export const logger: Logger = Pino(
