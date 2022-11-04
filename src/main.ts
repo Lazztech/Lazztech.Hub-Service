@@ -10,7 +10,6 @@ import { AppModule } from './app.module';
 import express = require('express');
 import { ModerationInterceptor } from './moderation/moderation.interceptor';
 import { LogLevel } from '@nestjs/common';
-import { Logger } from 'nestjs-pino';
 
 async function bootstrap() {
   // Start SDK before nestjs factory create
