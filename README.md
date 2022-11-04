@@ -220,10 +220,18 @@ $ npm run migration:show:all
 This service is setup with OTel(Open Telemetry) for vendor agnostic observability. It's setup to export to the grafana stack.
 
 ```bash
+# create a grafana-agent.local.yml and replace <GRAFANA-CLOUD-API-KEY> with your api-key
+$ cp telemetry/grafana-agent.yml telemetry/grafana-agent.local.yml
+
+# install agent on mac via brew
+$ brew install grafana-agent
+
 # start grafana agent locally to export metrics
+# tracing ports: jaeger 6832, grpc 4317, & http 4318
 $ docker run \
   -v /tmp/agent:/etc/agent/data \
-  -v $(pwd)/data/grafana-agent/config.yml:/etc/agent/agent.yaml \
+  -v $(pwd)/telemetry/grafana-agent.local.yml:/etc/agent/agent.yaml \
+  -p 4318:4318 \
   grafana/agent:v0.28.0
 ```
 

@@ -42,3 +42,4 @@ docs/_book/**.**
 **/*.sqlite
 **/*.sqlite3
 data/**
+**/grafana-agent.local.yml

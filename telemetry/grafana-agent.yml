@@ -3,12 +3,12 @@ server:
 
 metrics:
   global:
-    scrape_interval: 60s
+    scrape_interval: 1m
     remote_write:
       - url: https://prometheus-prod-10-prod-us-central-0.grafana.net/api/prom/push
         basic_auth:
-          username: 325358
-          password: <GRAFANA-CLOUD-API-KEY>9
+          username: 636737
+          password: <GRAFANA-CLOUD-API-KEY>
   configs:
     - name: default
       scrape_configs:
@@ -29,7 +29,7 @@ logs:
               job: lazztech-hub
               __path__: /Users/gianlazzarini/Documents/Development/Lazztech.Hub-Service/data/lazztech-hub.log
     clients:
-      - url: https://161649:<GRAFANA-CLOUD-API-KEY>9@logs-prod3.grafana.net/loki/api/v1/push
+      - url: https://161649:<GRAFANA-CLOUD-API-KEY>@logs-prod3.grafana.net/loki/api/v1/push
 
 traces:
   configs:
@@ -50,7 +50,7 @@ traces:
     remote_write:
       - endpoint: tempo-us-central1.grafana.net:443
         basic_auth:
-          username: 158157
+          username: 313852
           password: <GRAFANA-CLOUD-API-KEY>
     batch:
       timeout: 5s

@@ -11,12 +11,14 @@ import { B3InjectEncoding, B3Propagator } from '@opentelemetry/propagator-b3';
 import { PrometheusExporter } from '@opentelemetry/exporter-prometheus';
 import { NodeSDK } from '@opentelemetry/sdk-node';
 import { AsyncLocalStorageContextManager } from '@opentelemetry/context-async-hooks';
+import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 
 const otelSDK = new NodeSDK({
   metricReader: new PrometheusExporter({
     port: 8081,
   }),
   spanProcessor: new BatchSpanProcessor(new JaegerExporter()),
+  traceExporter: new OTLPTraceExporter({}),
   contextManager: new AsyncLocalStorageContextManager(),
   textMapPropagator: new CompositePropagator({
     propagators: [
