@@ -3,7 +3,6 @@ import { MikroOrmModule, MikroOrmModuleOptions } from '@mikro-orm/nestjs';
 import { Logger, Module, OnModuleInit } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
-import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import * as Joi from 'joi';
 import { S3Module, S3ModuleOptions } from 'nestjs-s3';
 import * as path from 'path';
@@ -23,9 +22,20 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { SentryPlugin } from './sentry/sentry.plugin';
 import { SeverityLevel } from '@sentry/node';
 import { DataloadersModule } from './dal/dataloaders/dataloaders.module';
+import { OpenTelemetryModule } from 'nestjs-otel';
+import { LoggerModule } from './logger/logger.module';
+import otelSDK from './tracing';
 
 @Module({
   imports: [
+    OpenTelemetryModule.forRoot({
+      metrics: {
+        hostMetrics: true, // Includes Host Metrics
+        apiMetrics: {
+          enable: true, // Includes api metrics
+        },
+      },
+    }),
     SentryModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
@@ -146,7 +156,6 @@ import { DataloadersModule } from './dal/dataloaders/dataloaders.module';
       },
       isGlobal: true,
     }),
-    PrometheusModule.register(),
     MikroOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -268,6 +277,7 @@ import { DataloadersModule } from './dal/dataloaders/dataloaders.module';
     ModerationModule,
     EventModule,
     DataloadersModule,
+    LoggerModule,
   ],
   providers: [
     {
@@ -284,5 +294,15 @@ export class AppModule implements OnModuleInit {
 
   async onModuleInit(): Promise<void> {
     await this.orm.getMigrator().up();
+  }
+
+  onApplicationShutdown(signal: string) {
+    otelSDK
+      .shutdown()
+      .then(
+        () => console.log('SDK shut down successfully'),
+        err => console.log('Error shutting down SDK', err)
+      )
+      .finally(() => process.exit(0));
   }
 }
