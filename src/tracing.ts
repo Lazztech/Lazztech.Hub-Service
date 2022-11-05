@@ -9,7 +9,7 @@ const otelSDK = new NodeSDK({
     url: 'http://143.244.157.167:4318/v1/traces'
   }),
   resource: new Resource({
-    [SemanticResourceAttributes.SERVICE_NAME]: 'Lazztech Hub',
+    [SemanticResourceAttributes.SERVICE_NAME]: process.env.NODE_ENV === 'development' ? 'Lazztech Hub Dev' : 'Lazztech Hub Prod'
   }),
   instrumentations: [
     getNodeAutoInstrumentations({
