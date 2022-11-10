@@ -1,0 +1,12 @@
+diff --git a/node_modules/adorable-avatars/dist/router/index.js b/node_modules/adorable-avatars/dist/router/index.js
+index 97785b8..1c324e4 100644
+--- a/node_modules/adorable-avatars/dist/router/index.js
++++ b/node_modules/adorable-avatars/dist/router/index.js
+@@ -28,6 +28,7 @@ router.get('/:size?/random', (req, res) => {
+         .pipe(pngResponse(res));
+ });
+ router.get('/:size?/:id', (req, res, next) => {
++    res.header('Cache-Control', 'public, max-age=31557600, s-maxage=31557600');
+     const { id, size } = req.params;
+     const face = FaceFactory_1.default.create(id);
+     imaging_1.combine(face)
