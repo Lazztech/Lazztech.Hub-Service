@@ -1,0 +1,50 @@
+diff --git a/node_modules/adorable-avatars/dist/router/index.js b/node_modules/adorable-avatars/dist/router/index.js
+index 97785b8..4bff0ba 100644
+--- a/node_modules/adorable-avatars/dist/router/index.js
++++ b/node_modules/adorable-avatars/dist/router/index.js
+@@ -10,9 +10,10 @@ const imaging_1 = require("../lib/imaging");
+ const FaceFactory_1 = __importDefault(require("../lib/FaceFactory"));
+ const imageTypes = ['eyes', 'nose', 'mouth'];
+ const router = express_1.default();
+-const pngResponse = (response) => {
++const webpResponse = (response) => {
+     response.setHeader('Expires', new Date(Date.now() + 604800000).toUTCString());
+-    return response.type('image/png');
++    response.setHeader('Cache-Control', 'public, max-age=31557600, s-maxage=31557600');
++    return response.type('image/webp');
+ };
+ router.get('/list', (req, res) => {
+     const face = {};
+@@ -23,17 +24,17 @@ router.get('/:size?/random', (req, res) => {
+     const { size } = req.params;
+     const face = FaceFactory_1.default.create(uuid_1.default.v4());
+     imaging_1.combine(face)
+-        .png()
++        .webp()
+         .pipe(imaging_1.resize(size))
+-        .pipe(pngResponse(res));
++        .pipe(webpResponse(res));
+ });
+ router.get('/:size?/:id', (req, res, next) => {
+     const { id, size } = req.params;
+     const face = FaceFactory_1.default.create(id);
+     imaging_1.combine(face)
+-        .png()
++        .webp()
+         .pipe(imaging_1.resize(size))
+-        .pipe(pngResponse(res));
++        .pipe(webpResponse(res));
+ });
+ router.get('/face/:eyes/:nose/:mouth/:color/:size?', (req, res, next) => {
+     const { color, size } = req.params;
+@@ -47,8 +48,8 @@ router.get('/face/:eyes/:nose/:mouth/:color/:size?', (req, res, next) => {
+         }
+     });
+     imaging_1.combine(face)
+-        .png()
++        .webp()
+         .pipe(imaging_1.resize(size))
+-        .pipe(pngResponse(res));
++        .pipe(webpResponse(res));
+ });
+ exports.default = router;
