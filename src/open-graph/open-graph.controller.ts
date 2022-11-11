@@ -8,19 +8,19 @@ export class OpenGraphController {
     private readonly openGraphService: OpenGraphService
   ) {}
 
-  @Get('/title/:shareableId')
-  getTitle(@Param('shareableId') shareableId: string) {
-    return shareableId;
+  @Get('/title/:href')
+  async getTitle(@Param('href') href: string): Promise<string> {
+    return href;
   }
 
-  @Get('/description/:shareableId')
-  getDescription(@Param('shareableId') shareableId: string) {
-    return shareableId;
+  @Get('/description/:href')
+  async getDescription(@Param('href') href: string): Promise<string> {
+    return href;
   }
 
-  @Get('/image/:shareableId')
-  getImage(@Param('shareableId') shareableId: string) {
-    return shareableId;
+  @Get('/image/:href')
+  async getImage(@Param('href') href: string): Promise<string> {
+    return href;
   }
 
 }

@@ -10,6 +10,7 @@ import { AppModule } from './app.module';
 import express = require('express');
 import { ModerationInterceptor } from './moderation/moderation.interceptor';
 import { LogLevel } from '@nestjs/common';
+import { join } from 'path';
 
 async function bootstrap() {
   // Start SDK before nestjs factory create
@@ -27,6 +28,12 @@ async function bootstrap() {
     new ExpressAdapter(instance),
     { logger: logLevels, }
   );
+
+  // for MVC server side rendering
+  app.useStaticAssets(join(__dirname, '..', 'public'));
+  app.setBaseViewsDir(join(__dirname, '..', 'views'));
+  app.setViewEngine('hbs');
+
   // Starts listening for shutdown hooks
   app.enableShutdownHooks();
   app.enable('trust proxy');

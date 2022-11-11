@@ -1,40 +1,34 @@
 import { Connection, IDatabaseDriver, MikroORM } from '@mikro-orm/core';
 import { MikroOrmModule, MikroOrmModuleOptions } from '@mikro-orm/nestjs';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Logger, Module, OnModuleInit } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 import { GraphQLModule } from '@nestjs/graphql';
+import { GraphqlInterceptor, SentryModule } from '@ntegral/nestjs-sentry';
+import { SeverityLevel } from '@sentry/node';
 import * as Joi from 'joi';
+import { OpenTelemetryModule } from 'nestjs-otel';
 import { S3Module, S3ModuleOptions } from 'nestjs-s3';
 import * as path from 'path';
 import { AuthModule } from './auth/auth.module';
+import { DataloadersModule } from './dal/dataloaders/dataloaders.module';
 import { FieldResolversModule } from './dal/field-resolvers/field-resolvers.module';
 import { EmailModule } from './email/email.module';
+import { EventModule } from './event/event.module';
 import { FileModule } from './file/file.module';
 import { HealthModule } from './health/health.module';
 import { HubModule } from './hub/hub.module';
-import { NotificationModule } from './notification/notification.module';
-import { UserModule } from './user/user.module';
-import { ModerationModule } from './moderation/moderation.module';
-import { EventModule } from './event/event.module';
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { GraphqlInterceptor, SentryModule } from '@ntegral/nestjs-sentry';
-import { APP_INTERCEPTOR } from '@nestjs/core';
-import { SentryPlugin } from './sentry/sentry.plugin';
-import { SeverityLevel } from '@sentry/node';
-import { DataloadersModule } from './dal/dataloaders/dataloaders.module';
-import { OpenTelemetryModule } from 'nestjs-otel';
 import { LoggerModule } from './logger/logger.module';
-import otelSDK from './tracing';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
+import { ModerationModule } from './moderation/moderation.module';
+import { NotificationModule } from './notification/notification.module';
 import { OpenGraphModule } from './open-graph/open-graph.module';
+import otelSDK from './tracing';
+import { UserModule } from './user/user.module';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'public'),
-      exclude: ['/graphql'], // for graphql playground
-    }),
     OpenTelemetryModule.forRoot({
       metrics: {
         hostMetrics: true, // Includes Host Metrics
@@ -293,7 +287,8 @@ import { OpenGraphModule } from './open-graph/open-graph.module';
       useFactory: () => new GraphqlInterceptor(),
     },
     // SentryPlugin,
-  ]
+  ],
+  controllers: [AppController]
 })
 export class AppModule implements OnModuleInit {
   public static logger = new Logger(AppModule.name);
