@@ -22,7 +22,6 @@ import { HubModule } from './hub/hub.module';
 import { LoggerModule } from './logger/logger.module';
 import { ModerationModule } from './moderation/moderation.module';
 import { NotificationModule } from './notification/notification.module';
-import { OpenGraphModule } from './open-graph/open-graph.module';
 import otelSDK from './tracing';
 import { UserModule } from './user/user.module';
 import { AppController } from './app.controller';
@@ -279,7 +278,6 @@ import { AppController } from './app.controller';
     EventModule,
     DataloadersModule,
     LoggerModule,
-    OpenGraphModule,
   ],
   providers: [
     {
