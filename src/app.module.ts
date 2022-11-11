@@ -27,6 +27,7 @@ import { LoggerModule } from './logger/logger.module';
 import otelSDK from './tracing';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { OpenGraphModule } from './open-graph/open-graph.module';
 
 @Module({
   imports: [
@@ -284,6 +285,7 @@ import { join } from 'path';
     EventModule,
     DataloadersModule,
     LoggerModule,
+    OpenGraphModule,
   ],
   providers: [
     {
