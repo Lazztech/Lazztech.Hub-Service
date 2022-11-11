@@ -25,9 +25,15 @@ import { DataloadersModule } from './dal/dataloaders/dataloaders.module';
 import { OpenTelemetryModule } from 'nestjs-otel';
 import { LoggerModule } from './logger/logger.module';
 import otelSDK from './tracing';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+      exclude: ['/graphql'], // for graphql playground
+    }),
     OpenTelemetryModule.forRoot({
       metrics: {
         hostMetrics: true, // Includes Host Metrics
