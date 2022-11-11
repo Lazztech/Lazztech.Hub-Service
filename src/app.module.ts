@@ -32,6 +32,7 @@ import { join } from 'path';
   imports: [
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
+      exclude: ['/graphql'], // for graphql playground
     }),
     OpenTelemetryModule.forRoot({
       metrics: {
