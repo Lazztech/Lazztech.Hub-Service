@@ -1,0 +1,11 @@
+[
+    {
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "tech.lazz.app",
+        "sha256_cert_fingerprints":
+          ["8C:18:4B:50:06:5B:A1:9B:86:5C:48:54:48:4B:45:45:DF:CB:56:09:EA:0F:3C:8C:73:66:F4:6D:01:A0:AB:08"]
+      }
+    }
+  ]
