@@ -37,7 +37,7 @@ export class OpenGraphService {
         return {
             ogTitle: event.name,
             ogDescription: event.description,
-            ogImage: this.fileUrlService.getFileUrl(event.name, req),
+            ogImage: this.fileUrlService.getFileUrl(event.image, req),
           };
     }
 
