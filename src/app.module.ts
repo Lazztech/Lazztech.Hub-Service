@@ -25,6 +25,7 @@ import { NotificationModule } from './notification/notification.module';
 import otelSDK from './tracing';
 import { UserModule } from './user/user.module';
 import { AppController } from './app.controller';
+import { OpenGraphModule } from './open-graph/open-graph.module';
 
 @Module({
   imports: [
@@ -278,6 +279,7 @@ import { AppController } from './app.controller';
     EventModule,
     DataloadersModule,
     LoggerModule,
+    OpenGraphModule,
   ],
   providers: [
     {
