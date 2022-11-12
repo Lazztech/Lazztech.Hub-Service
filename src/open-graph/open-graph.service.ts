@@ -26,18 +26,18 @@ export class OpenGraphService {
     public async getHubTagValues(shareableId: string, req: Request): Promise<OpenGraphTagValues> {
         const hub = await this.hubRepository.findOne({ shareableId });
         return {
-            ogTitle: hub.name,
-            ogDescription: hub.description,
-            ogImage: this.fileUrlService.getFileUrl(hub.image, req),
+            ogTitle: hub?.name,
+            ogDescription: hub?.description,
+            ogImage: hub?.image && this.fileUrlService.getFileUrl(hub.image, req),
           };
     }
 
     public async getEventTagValues(shareableId: string, req: Request): Promise<OpenGraphTagValues> {
         const event = await this.eventRepository.findOne({ shareableId });
         return {
-            ogTitle: event.name,
-            ogDescription: event.description,
-            ogImage: this.fileUrlService.getFileUrl(event.image, req),
+            ogTitle: event?.name,
+            ogDescription: event?.description,
+            ogImage: event?.image && this.fileUrlService.getFileUrl(event.image, req),
           };
     }
 

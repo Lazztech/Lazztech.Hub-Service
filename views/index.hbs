@@ -305,6 +305,21 @@
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 
                 <script>
+                    $(document).ready(function () {
+                        if (window.location.href.match('/hub/')) {
+                            const parts = window.location.href.split('/hub/');
+                            const redirect = parts.shift() + '/app/hub/' + parts.pop();
+                            window.location.href = redirect;
+                        }
+                        if (window.location.href.match('/event/')) {
+                            const parts = window.location.href.split('/event/');
+                            const redirect = parts.shift() + '/app/event/' + parts.pop();
+                            window.location.href = redirect;
+                        }
+                    })
+                </script>
+
+                <script>
 
                     $(function () {
 
