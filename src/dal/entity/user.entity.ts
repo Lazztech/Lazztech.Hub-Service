@@ -6,7 +6,7 @@ import { PasswordReset } from './passwordReset.entity';
 import { UserDevice } from './userDevice.entity';
 import { ShareableId } from './shareableId.entity';
 import { Block } from './block.entity';
-import { Cascade, Collection, Entity, IdentifiedReference, OneToMany, OneToOne, PrimaryKey, Property } from '@mikro-orm/core';
+import { Cascade, Collection, Entity, IdentifiedReference, OneToMany, OneToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
 
  /* eslint-disable */ // needed for mikroorm default value & type which conflicts with typescript-eslint/no-unused-vars
 @ObjectType()
@@ -42,6 +42,7 @@ export class User extends ShareableId{
   public image?: string;
 
   @Field()
+  @Unique()
   @Property()
   public email!: string;
 

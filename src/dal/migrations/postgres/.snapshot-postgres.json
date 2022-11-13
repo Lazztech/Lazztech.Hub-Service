@@ -354,6 +354,15 @@
       "indexes": [
         {
           "columnNames": [
+            "email"
+          ],
+          "composite": false,
+          "keyName": "user_email_unique",
+          "primary": false,
+          "unique": true
+        },
+        {
+          "columnNames": [
             "passwordResetId"
           ],
           "composite": false,
