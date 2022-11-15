@@ -6,6 +6,8 @@ import { User } from '../dal/entity/user.entity';
 import { UserId } from '../decorators/user.decorator';
 import { UpdateUserInput } from './dto/updateUser.input';
 import { UserService } from './user.service';
+import GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
+import { FileUpload } from 'src/file/interfaces/file-upload.interface';
 
 @UseGuards(GqlJwtAuthGuard)
 @Resolver()
@@ -68,6 +70,7 @@ export class UserResolver {
   public async changeUserImage(
     @UserId() userId,
     @Args({ name: 'newImage', type: () => String }) newImage: string,
+    @Args({name: 'image', type: () => GraphQLUpload }) image: Promise<FileUpload>
   ): Promise<User> {
     this.logger.debug(this.changeUserImage.name);
     const user = await this.userService.changeUserImage(userId, newImage);
