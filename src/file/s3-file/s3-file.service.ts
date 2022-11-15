@@ -57,14 +57,17 @@ export class S3FileService implements FileServiceInterface {
       const transformer = sharp()
         .webp({ quality: 80 });
 
+      const uploadStream = this.uploadStream(objectName);
       
       createReadStream()
         .pipe(transformer)
-        .pipe(this.uploadStream(objectName).writeStream)
-        .on('close', () => resolve(objectName))
+        .pipe(uploadStream.writeStream)
         .on('error', () => {
           new HttpException('Could not save image', HttpStatus.BAD_REQUEST);
         });
+      
+      // await completion of upload
+      await uploadStream.promise.then(() => resolve(objectName));
     });
   }
 
