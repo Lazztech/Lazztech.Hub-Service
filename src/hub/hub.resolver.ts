@@ -39,17 +39,17 @@ export class HubResolver {
     @Args({ name: 'latitude', type: () => Float }) latitude: number,
     @Args({ name: 'longitude', type: () => Float }) longitude: number,
     @Args({ name: 'locationLabel', type: () => String, nullable: true }) locationLabel: string,
+    @Args({ name: 'file', nullable: true, type: () => GraphQLUpload }) file: Promise<FileUpload>,
   ): Promise<JoinUserHub> {
     this.logger.debug(this.createHub.name);
-    const hub = await this.hubService.createHub(userId, {
+    return this.hubService.createHub(userId, {
       name,
       description,
       image,
       latitude,
       longitude,
       locationLabel
-    } as Hub);
-    return hub;
+    } as Hub, file);
   }
 
   @Query(() => JoinUserHub)
