@@ -38,7 +38,7 @@ async function bootstrap() {
   // Starts listening for shutdown hooks
   app.enableShutdownHooks();
   app.enable('trust proxy');
-  app.use(graphqlUploadExpress({ maxFileSize: 1000000, maxFiles: 10 }));
+  app.use(graphqlUploadExpress({ maxFileSize: 1000000 * 10, maxFiles: 10 }));
   app.enableCors({
     origin: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
