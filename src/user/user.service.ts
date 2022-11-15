@@ -83,7 +83,10 @@ export class UserService {
       user.image = imageUrl;
     }
 
-    user = this.userRepository.assign(user, value);
+    if (value) {
+      user = this.userRepository.assign(user, value);
+    }
+
     await this.userRepository.persistAndFlush(user);
     return user;
   }
