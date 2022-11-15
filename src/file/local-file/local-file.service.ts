@@ -7,6 +7,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { FileUpload } from '../interfaces/file-upload.interface';
 import sharp from 'sharp';
+import { Stream } from 'stream';
 
 @Injectable()
 export class LocalFileService implements FileServiceInterface {
@@ -36,25 +37,14 @@ export class LocalFileService implements FileServiceInterface {
 
   async storeImageFromFileUpload(file: FileUpload | Promise<FileUpload>): Promise<string> {
     const { createReadStream, filename, encoding, mimetype } = await file;
-    
-    return new Promise(async (resolve) => {
-      if (!mimetype?.startsWith('image/')) {
-        throw new HttpException('Wrong filetype', HttpStatus.BAD_REQUEST);
-      }
+    if (!mimetype?.startsWith('image/')) {
+      throw new HttpException('Wrong filetype', HttpStatus.BAD_REQUEST);
+    }
 
-      const fileName = uuidv1() + '.webp';
-  
-      const transformer = sharp()
-        .webp({ quality: 80 });
-
-      createReadStream()
-        .pipe(transformer)
-        .pipe(fs.createWriteStream(`${this.directory}/${fileName}`))
-        .on('finish', () => resolve(fileName))
-        .on('error', () => {
-          new HttpException('Could not save image', HttpStatus.BAD_REQUEST);
-        });
-    });
+    const fileName = uuidv1() + '.webp';
+    const transformer = sharp().webp({ quality: 70 });
+    await this.saveFile(fileName, createReadStream().pipe(transformer));
+    return fileName;
   }
 
   get(fileName: string): fs.ReadStream {
@@ -65,7 +55,7 @@ export class LocalFileService implements FileServiceInterface {
     return fs.promises.unlink(`${this.directory}/${fileName}`);
   }
 
-  private saveFile(fileName: string, data: Buffer | string): Promise<void> {
+  private saveFile(fileName: string, data: Buffer | string | Stream): Promise<void> {
     return fs.promises.writeFile(`${this.directory}/${fileName}`, data);
   }
 

@@ -46,7 +46,7 @@ export class S3FileService implements FileServiceInterface {
 
   public async storeImageFromFileUpload(file: Promise<FileUpload> | FileUpload): Promise<string> {
     const { createReadStream, filename, encoding, mimetype } = await file;
-    
+    console.log(file)
     return new Promise(async (resolve) => {
       if (!mimetype?.startsWith('image/')) {
         throw new HttpException('Wrong filetype', HttpStatus.BAD_REQUEST);
@@ -55,7 +55,7 @@ export class S3FileService implements FileServiceInterface {
       const objectName = uuidv1() + '.webp';
   
       const transformer = sharp()
-        .webp({ quality: 80 });
+        .webp({ quality: 70 });
 
       const uploadStream = this.uploadStream(objectName);
       
