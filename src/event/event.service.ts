@@ -8,6 +8,7 @@ import { JoinUserEvent, RSVP } from '../dal/entity/joinUserEvent.entity';
 import { FILE_SERVICE } from '../file/file-service.token';
 import { FileServiceInterface } from '../file/interfaces/file-service.interface';
 import { v4 as uuid } from 'uuid';
+import { FileUpload } from 'src/file/interfaces/file-upload.interface';
 
 @Injectable()
 export class EventService {
@@ -25,11 +26,13 @@ export class EventService {
         private readonly notificationService: NotificationService,
     ) {}
 
-    async createEvent(userId: any, event: Event): Promise<JoinUserEvent> {
+    async createEvent(userId: any, event: Event, image?: Promise<FileUpload>): Promise<JoinUserEvent> {
         this.logger.debug(this.createEvent.name);
         if (event?.image) {
-            const imageUrl = await this.fileService.storeImageFromBase64(event.image);
-            event.image = imageUrl;
+            event.image = await this.fileService.storeImageFromBase64(event.image);
+        }
+        if (image) {
+            event.image = await this.fileService.storeImageFromFileUpload(image);
         }
 
         event = this.eventRepository.create({ ...event, createdBy: userId });

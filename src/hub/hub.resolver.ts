@@ -237,7 +237,7 @@ export class HubResolver {
     @Args({ name: 'latitude', type: () => Float }) latitude: number,
     @Args({ name: 'longitude', type: () => Float }) longitude: number,
     @Args({ name: 'locationLabel', type: () => String, nullable: true }) locationLabel: string,
-    @Args({name: 'file', nullable: true, type: () => GraphQLUpload }) file: Promise<FileUpload>,
+    @Args({ name: 'file', nullable: true, type: () => GraphQLUpload }) file: Promise<FileUpload>,
   ): Promise<Hub> {
     this.logger.debug(this.updateHub.name);
     return this.hubService.updateHub(userId, {
