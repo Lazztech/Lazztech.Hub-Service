@@ -120,12 +120,15 @@ export class HubService {
     return uniqueUsers.filter(user => !blocks.find(block => block.from.id === user.id));
   }
 
-  async createHub(userId: any, hub: Hub) {
+  async createHub(userId: any, hub: Hub, image?: Promise<FileUpload>) {
     this.logger.debug(this.createHub.name);
     if (hub?.image) {
-      const imageUrl = await this.fileService.storeImageFromBase64(hub.image);
-      hub.image = imageUrl;
+      hub.image = await this.fileService.storeImageFromBase64(hub.image);
     }
+    if (image) {
+      hub.image = await this.fileService.storeImageFromFileUpload(image);
+    }
+
     // repository.create => save pattern used to so that the @BeforeInsert decorated method
     // will fire generating a uuid for the shareableId
     hub = this.hubRepository.create(hub);
@@ -187,14 +190,13 @@ export class HubService {
     });
 
     if (value?.image && value?.image?.includes('base64')) {
-      const imageUrl = await this.fileService.storeImageFromBase64(value.image);
-      value.image = imageUrl;
+      await this.fileService.delete(value.image).catch(err => this.logger.warn(err));
+      value.image = await this.fileService.storeImageFromBase64(value.image);
     } else if (image) {
       if (value?.image) {
         await this.fileService.delete(value.image).catch(err => this.logger.warn(err));
       }
-      const imageUrl = await this.fileService.storeImageFromFileUpload(image);
-      value.image = imageUrl;
+      value.image = await this.fileService.storeImageFromFileUpload(image);
     } else {
         delete value?.image;
     }

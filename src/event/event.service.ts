@@ -145,14 +145,13 @@ export class EventService {
             id: value.id
         });
         if (value?.image && value?.image?.includes('base64')) {
-            const imageUrl = await this.fileService.storeImageFromBase64(value.image);
-            value.image = imageUrl;
+            await this.fileService.delete(value.image).catch(err => this.logger.warn(err));
+            value.image = await this.fileService.storeImageFromBase64(value.image);
         } else if (image) {
             if (value?.image) {
               await this.fileService.delete(value.image).catch(err => this.logger.warn(err));
             }
-            const imageUrl = await this.fileService.storeImageFromFileUpload(image);
-            value.image = imageUrl;
+            value.image = await this.fileService.storeImageFromFileUpload(image);
         } else {
             delete value?.image;
         }
