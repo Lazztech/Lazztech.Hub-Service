@@ -30,7 +30,7 @@ export class EventResolver {
         @Args({ name: 'latitude', type: () => Float, nullable: true }) latitude: number,
         @Args({ name: 'longitude', type: () => Float, nullable: true }) longitude: number,
         @Args({ name: 'locationLabel', type: () => String, nullable: true }) locationLabel: string,
-        @Args({ name: 'file', nullable: true, type: () => GraphQLUpload }) file: Promise<FileUpload>,
+        @Args({ name: 'imageFile', nullable: true, type: () => GraphQLUpload }) imageFile: Promise<FileUpload>,
     ): Promise<JoinUserEvent> {
         this.logger.debug(this.createEvent.name);
         return this.eventService.createEvent(userId, {
@@ -43,7 +43,7 @@ export class EventResolver {
             latitude,
             longitude,
             locationLabel
-          } as Event, file);
+          } as Event, imageFile);
     }
 
     @Mutation(() => JoinUserEvent)
@@ -121,7 +121,7 @@ export class EventResolver {
         @Args({ name: 'latitude', type: () => Float, nullable: true }) latitude: number,
         @Args({ name: 'longitude', type: () => Float, nullable: true }) longitude: number,
         @Args({ name: 'locationLabel', type: () => String, nullable: true }) locationLabel: string,
-        @Args({ name: 'file', nullable: true, type: () => GraphQLUpload }) file: Promise<FileUpload>,
+        @Args({ name: 'imageFile', nullable: true, type: () => GraphQLUpload }) imageFile: Promise<FileUpload>,
     ): Promise<Event> {
         this.logger.debug(this.updateEvent.name);
         return this.eventService.updateEvent(userId, {
@@ -135,6 +135,6 @@ export class EventResolver {
             latitude,
             longitude,
             locationLabel
-          } as Event, file);
+          } as Event, imageFile);
     }
 }

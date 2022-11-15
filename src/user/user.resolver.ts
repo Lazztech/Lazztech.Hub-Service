@@ -48,13 +48,13 @@ export class UserResolver {
   @Mutation(() => User)
   public async updateUser(
     @UserId() userId,
-    @Args({name: 'image', nullable: true, type: () => GraphQLUpload }) image?: Promise<FileUpload>,
+    @Args({name: 'imageFile', nullable: true, type: () => GraphQLUpload }) imageFile?: Promise<FileUpload>,
     @Args({ name: 'data', nullable: true, }) data?: UpdateUserInput,
   ) {
     this.logger.debug(this.updateUser.name);
     return this.userService.updateUser(userId, {
       ...data
-    } as User, image);
+    } as User, imageFile);
   }
 
   @Mutation(() => User)

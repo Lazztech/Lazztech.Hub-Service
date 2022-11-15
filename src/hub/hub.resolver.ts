@@ -39,7 +39,7 @@ export class HubResolver {
     @Args({ name: 'latitude', type: () => Float }) latitude: number,
     @Args({ name: 'longitude', type: () => Float }) longitude: number,
     @Args({ name: 'locationLabel', type: () => String, nullable: true }) locationLabel: string,
-    @Args({ name: 'file', nullable: true, type: () => GraphQLUpload }) file: Promise<FileUpload>,
+    @Args({ name: 'imageFile', nullable: true, type: () => GraphQLUpload }) imageFile: Promise<FileUpload>,
   ): Promise<JoinUserHub> {
     this.logger.debug(this.createHub.name);
     return this.hubService.createHub(userId, {
@@ -49,7 +49,7 @@ export class HubResolver {
       latitude,
       longitude,
       locationLabel
-    } as Hub, file);
+    } as Hub, imageFile);
   }
 
   @Query(() => JoinUserHub)
@@ -237,7 +237,7 @@ export class HubResolver {
     @Args({ name: 'latitude', type: () => Float }) latitude: number,
     @Args({ name: 'longitude', type: () => Float }) longitude: number,
     @Args({ name: 'locationLabel', type: () => String, nullable: true }) locationLabel: string,
-    @Args({ name: 'file', nullable: true, type: () => GraphQLUpload }) file: Promise<FileUpload>,
+    @Args({ name: 'imageFile', nullable: true, type: () => GraphQLUpload }) imageFile: Promise<FileUpload>,
   ): Promise<Hub> {
     this.logger.debug(this.updateHub.name);
     return this.hubService.updateHub(userId, {
@@ -248,7 +248,7 @@ export class HubResolver {
       latitude,
       longitude,
       locationLabel,
-    } as Hub, file);
+    } as Hub, imageFile);
   }
 
   /**
