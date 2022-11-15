@@ -55,7 +55,8 @@ export class S3FileService implements FileServiceInterface {
       const objectName = uuidv1() + '.webp';
   
       const transformer = sharp()
-        .webp({ quality: 70 });
+        .webp({ quality: 100 })
+        .resize(1080, 1080, { fit: sharp.fit.inside });
 
       const uploadStream = this.uploadStream(objectName);
       

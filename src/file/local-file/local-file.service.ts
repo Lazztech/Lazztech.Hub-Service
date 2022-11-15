@@ -42,7 +42,9 @@ export class LocalFileService implements FileServiceInterface {
     }
 
     const fileName = uuidv1() + '.webp';
-    const transformer = sharp().webp({ quality: 70 });
+    const transformer = sharp()
+      .webp({ quality: 100 })
+      .resize(1080, 1080, { fit: sharp.fit.inside });
     await this.saveFile(fileName, createReadStream().pipe(transformer));
     return fileName;
   }
