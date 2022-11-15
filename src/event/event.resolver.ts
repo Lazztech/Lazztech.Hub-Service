@@ -121,6 +121,7 @@ export class EventResolver {
         @Args({ name: 'latitude', type: () => Float, nullable: true }) latitude: number,
         @Args({ name: 'longitude', type: () => Float, nullable: true }) longitude: number,
         @Args({ name: 'locationLabel', type: () => String, nullable: true }) locationLabel: string,
+        @Args({ name: 'file', nullable: true, type: () => GraphQLUpload }) file: Promise<FileUpload>,
     ): Promise<Event> {
         this.logger.debug(this.updateEvent.name);
         return this.eventService.updateEvent(userId, {
@@ -134,6 +135,6 @@ export class EventResolver {
             latitude,
             longitude,
             locationLabel
-          } as Event);
+          } as Event, file);
     }
 }

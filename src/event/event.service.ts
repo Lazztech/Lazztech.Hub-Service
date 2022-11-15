@@ -138,7 +138,7 @@ export class EventService {
         return await this.joinUserEventRepository.find({ user: userId });
     }
 
-    async updateEvent(userId: any, value: Event): Promise<Event> {
+    async updateEvent(userId: any, value: Event, image?: Promise<FileUpload>): Promise<Event> {
         this.logger.debug(this.updateEvent.name);
         let event = await this.eventRepository.findOneOrFail({
             createdBy: userId,
@@ -146,6 +146,12 @@ export class EventService {
         });
         if (value?.image && value?.image?.includes('base64')) {
             const imageUrl = await this.fileService.storeImageFromBase64(value.image);
+            value.image = imageUrl;
+        } else if (image) {
+            if (value?.image) {
+              await this.fileService.delete(value.image).catch(err => this.logger.warn(err));
+            }
+            const imageUrl = await this.fileService.storeImageFromFileUpload(image);
             value.image = imageUrl;
         } else {
             delete value?.image;
