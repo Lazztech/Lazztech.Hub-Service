@@ -3,6 +3,7 @@ import { FileUpload } from './file-upload.interface';
 
 export interface FileServiceInterface {
   /**
+   * @deprecated use storeImageFromFileUpload instead
    * @param base64Image base64 encoded string representation of the image
    * @returns imageFileName as it's stored from the upload
    */
