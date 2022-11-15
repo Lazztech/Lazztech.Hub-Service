@@ -48,12 +48,13 @@ export class UserResolver {
   @Mutation(() => User)
   public async updateUser(
     @UserId() userId,
-    @Args('data') data: UpdateUserInput,
+    @Args({name: 'image', nullable: true, type: () => GraphQLUpload }) image?: Promise<FileUpload>,
+    @Args({ name: 'data', nullable: true, }) data?: UpdateUserInput,
   ) {
     this.logger.debug(this.updateUser.name);
     return this.userService.updateUser(userId, {
       ...data
-    } as User);
+    } as User, image);
   }
 
   @Mutation(() => User)
@@ -66,11 +67,13 @@ export class UserResolver {
     return user;
   }
 
+  @Directive(
+    '@deprecated(reason: "Use updateUser instead.")',
+  )
   @Mutation(() => User)
   public async changeUserImage(
     @UserId() userId,
     @Args({ name: 'newImage', type: () => String }) newImage: string,
-    @Args({name: 'image', type: () => GraphQLUpload }) image: Promise<FileUpload>
   ): Promise<User> {
     this.logger.debug(this.changeUserImage.name);
     const user = await this.userService.changeUserImage(userId, newImage);
