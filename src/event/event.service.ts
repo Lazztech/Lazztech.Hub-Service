@@ -8,6 +8,7 @@ import { JoinUserEvent, RSVP } from '../dal/entity/joinUserEvent.entity';
 import { FILE_SERVICE } from '../file/file-service.token';
 import { FileServiceInterface } from '../file/interfaces/file-service.interface';
 import { v4 as uuid } from 'uuid';
+import { FileUpload } from 'src/file/interfaces/file-upload.interface';
 
 @Injectable()
 export class EventService {
@@ -25,11 +26,13 @@ export class EventService {
         private readonly notificationService: NotificationService,
     ) {}
 
-    async createEvent(userId: any, event: Event): Promise<JoinUserEvent> {
+    async createEvent(userId: any, event: Event, image?: Promise<FileUpload>): Promise<JoinUserEvent> {
         this.logger.debug(this.createEvent.name);
         if (event?.image) {
-            const imageUrl = await this.fileService.storeImageFromBase64(event.image);
-            event.image = imageUrl;
+            event.image = await this.fileService.storeImageFromBase64(event.image);
+        }
+        if (image) {
+            event.image = await this.fileService.storeImageFromFileUpload(image);
         }
 
         event = this.eventRepository.create({ ...event, createdBy: userId });
@@ -135,15 +138,20 @@ export class EventService {
         return await this.joinUserEventRepository.find({ user: userId });
     }
 
-    async updateEvent(userId: any, value: Event): Promise<Event> {
+    async updateEvent(userId: any, value: Event, image?: Promise<FileUpload>): Promise<Event> {
         this.logger.debug(this.updateEvent.name);
         let event = await this.eventRepository.findOneOrFail({
             createdBy: userId,
             id: value.id
         });
         if (value?.image && value?.image?.includes('base64')) {
-            const imageUrl = await this.fileService.storeImageFromBase64(value.image);
-            value.image = imageUrl;
+            await this.fileService.delete(value.image).catch(err => this.logger.warn(err));
+            value.image = await this.fileService.storeImageFromBase64(value.image);
+        } else if (image) {
+            if (value?.image) {
+              await this.fileService.delete(value.image).catch(err => this.logger.warn(err));
+            }
+            value.image = await this.fileService.storeImageFromFileUpload(image);
         } else {
             delete value?.image;
         }

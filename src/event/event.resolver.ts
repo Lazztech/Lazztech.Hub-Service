@@ -6,6 +6,8 @@ import { JoinUserEvent } from '../dal/entity/joinUserEvent.entity';
 import { UserId } from '../decorators/user.decorator';
 import { HubResolver } from '../hub/hub.resolver';
 import { EventService } from './event.service';
+import GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
+import { FileUpload } from 'src/file/interfaces/file-upload.interface';
 
 @UseGuards(GqlJwtAuthGuard)
 @Resolver()
@@ -28,6 +30,7 @@ export class EventResolver {
         @Args({ name: 'latitude', type: () => Float, nullable: true }) latitude: number,
         @Args({ name: 'longitude', type: () => Float, nullable: true }) longitude: number,
         @Args({ name: 'locationLabel', type: () => String, nullable: true }) locationLabel: string,
+        @Args({ name: 'imageFile', nullable: true, type: () => GraphQLUpload }) imageFile: Promise<FileUpload>,
     ): Promise<JoinUserEvent> {
         this.logger.debug(this.createEvent.name);
         return this.eventService.createEvent(userId, {
@@ -40,7 +43,7 @@ export class EventResolver {
             latitude,
             longitude,
             locationLabel
-          } as Event);
+          } as Event, imageFile);
     }
 
     @Mutation(() => JoinUserEvent)
@@ -118,6 +121,7 @@ export class EventResolver {
         @Args({ name: 'latitude', type: () => Float, nullable: true }) latitude: number,
         @Args({ name: 'longitude', type: () => Float, nullable: true }) longitude: number,
         @Args({ name: 'locationLabel', type: () => String, nullable: true }) locationLabel: string,
+        @Args({ name: 'imageFile', nullable: true, type: () => GraphQLUpload }) imageFile: Promise<FileUpload>,
     ): Promise<Event> {
         this.logger.debug(this.updateEvent.name);
         return this.eventService.updateEvent(userId, {
@@ -131,6 +135,6 @@ export class EventResolver {
             latitude,
             longitude,
             locationLabel
-          } as Event);
+          } as Event, imageFile);
     }
 }

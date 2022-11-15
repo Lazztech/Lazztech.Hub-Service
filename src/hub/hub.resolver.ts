@@ -13,6 +13,8 @@ import { HubGeofenceService } from './hub-geofence/hub-geofence.service';
 import { HubInviteService } from './hub-invite/hub-invite.service';
 import { HubMicroChatService } from './hub-micro-chat/hub-micro-chat.service';
 import { HubService } from './hub.service';
+import GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
+import { FileUpload } from 'src/file/interfaces/file-upload.interface';
 
 @UseGuards(GqlJwtAuthGuard)
 @Resolver()
@@ -37,17 +39,17 @@ export class HubResolver {
     @Args({ name: 'latitude', type: () => Float }) latitude: number,
     @Args({ name: 'longitude', type: () => Float }) longitude: number,
     @Args({ name: 'locationLabel', type: () => String, nullable: true }) locationLabel: string,
+    @Args({ name: 'imageFile', nullable: true, type: () => GraphQLUpload }) imageFile: Promise<FileUpload>,
   ): Promise<JoinUserHub> {
     this.logger.debug(this.createHub.name);
-    const hub = await this.hubService.createHub(userId, {
+    return this.hubService.createHub(userId, {
       name,
       description,
       image,
       latitude,
       longitude,
       locationLabel
-    } as Hub);
-    return hub;
+    } as Hub, imageFile);
   }
 
   @Query(() => JoinUserHub)
@@ -235,6 +237,7 @@ export class HubResolver {
     @Args({ name: 'latitude', type: () => Float }) latitude: number,
     @Args({ name: 'longitude', type: () => Float }) longitude: number,
     @Args({ name: 'locationLabel', type: () => String, nullable: true }) locationLabel: string,
+    @Args({ name: 'imageFile', nullable: true, type: () => GraphQLUpload }) imageFile: Promise<FileUpload>,
   ): Promise<Hub> {
     this.logger.debug(this.updateHub.name);
     return this.hubService.updateHub(userId, {
@@ -245,7 +248,7 @@ export class HubResolver {
       latitude,
       longitude,
       locationLabel,
-    } as Hub);
+    } as Hub, imageFile);
   }
 
   /**

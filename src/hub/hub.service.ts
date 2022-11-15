@@ -10,6 +10,7 @@ import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/core';
 import { Block } from '../dal/entity/block.entity';
 import { v4 as uuid } from 'uuid';
+import { FileUpload } from 'src/file/interfaces/file-upload.interface';
 
 @Injectable()
 export class HubService {
@@ -119,12 +120,15 @@ export class HubService {
     return uniqueUsers.filter(user => !blocks.find(block => block.from.id === user.id));
   }
 
-  async createHub(userId: any, hub: Hub) {
+  async createHub(userId: any, hub: Hub, image?: Promise<FileUpload>) {
     this.logger.debug(this.createHub.name);
     if (hub?.image) {
-      const imageUrl = await this.fileService.storeImageFromBase64(hub.image);
-      hub.image = imageUrl;
+      hub.image = await this.fileService.storeImageFromBase64(hub.image);
     }
+    if (image) {
+      hub.image = await this.fileService.storeImageFromFileUpload(image);
+    }
+
     // repository.create => save pattern used to so that the @BeforeInsert decorated method
     // will fire generating a uuid for the shareableId
     hub = this.hubRepository.create(hub);
@@ -177,7 +181,7 @@ export class HubService {
     return !userHubRelationship.isOwner;
   }
 
-  async updateHub(userId: any, value: Hub): Promise<Hub> {
+  async updateHub(userId: any, value: Hub, image?: Promise<FileUpload>): Promise<Hub> {
     this.logger.debug(this.updateHub.name);
     const joinUserHubResult = await this.joinUserHubRepository.findOneOrFail({
       user: userId,
@@ -186,8 +190,13 @@ export class HubService {
     });
 
     if (value?.image && value?.image?.includes('base64')) {
-      const imageUrl = await this.fileService.storeImageFromBase64(value.image);
-      value.image = imageUrl;
+      await this.fileService.delete(value.image).catch(err => this.logger.warn(err));
+      value.image = await this.fileService.storeImageFromBase64(value.image);
+    } else if (image) {
+      if (value?.image) {
+        await this.fileService.delete(value.image).catch(err => this.logger.warn(err));
+      }
+      value.image = await this.fileService.storeImageFromFileUpload(image);
     } else {
         delete value?.image;
     }

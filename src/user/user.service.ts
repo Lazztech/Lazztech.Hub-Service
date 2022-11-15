@@ -8,6 +8,7 @@ import { FILE_SERVICE } from '../file/file-service.token';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/core';
 import { Block } from '../dal/entity/block.entity';
+import { FileUpload } from 'src/file/interfaces/file-upload.interface';
 
 @Injectable()
 export class UserService {
@@ -71,8 +72,17 @@ export class UserService {
     return user;
   }
 
-  public async updateUser(userId: any, value: User): Promise<User> {
+  public async updateUser(userId: any, value: User, image: Promise<FileUpload>): Promise<User> {
     let user = await this.userRepository.findOneOrFail({ id: userId });
+
+    if (image) {
+      if (user.image) {
+        await this.fileService.delete(user.image);
+      }
+      const imageUrl = await this.fileService.storeImageFromFileUpload(image);
+      user.image = imageUrl;
+    }
+
     user = this.userRepository.assign(user, value);
     await this.userRepository.persistAndFlush(user);
     return user;

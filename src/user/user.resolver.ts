@@ -6,6 +6,8 @@ import { User } from '../dal/entity/user.entity';
 import { UserId } from '../decorators/user.decorator';
 import { UpdateUserInput } from './dto/updateUser.input';
 import { UserService } from './user.service';
+import GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
+import { FileUpload } from 'src/file/interfaces/file-upload.interface';
 
 @UseGuards(GqlJwtAuthGuard)
 @Resolver()
@@ -46,12 +48,13 @@ export class UserResolver {
   @Mutation(() => User)
   public async updateUser(
     @UserId() userId,
-    @Args('data') data: UpdateUserInput,
+    @Args({name: 'imageFile', nullable: true, type: () => GraphQLUpload }) imageFile?: Promise<FileUpload>,
+    @Args({ name: 'data', nullable: true, }) data?: UpdateUserInput,
   ) {
     this.logger.debug(this.updateUser.name);
     return this.userService.updateUser(userId, {
       ...data
-    } as User);
+    } as User, imageFile);
   }
 
   @Mutation(() => User)
@@ -64,6 +67,9 @@ export class UserResolver {
     return user;
   }
 
+  @Directive(
+    '@deprecated(reason: "Use updateUser instead.")',
+  )
   @Mutation(() => User)
   public async changeUserImage(
     @UserId() userId,

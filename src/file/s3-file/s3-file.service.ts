@@ -1,10 +1,13 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { InjectS3, S3 } from 'nestjs-s3';
 import { FileServiceInterface } from '../interfaces/file-service.interface';
 import { ImageFileService } from '../image-file/image-file.service';
 import uuidv1 from 'uuid/v1';
 import { ConfigService } from '@nestjs/config';
 import { ReadStream } from 'fs';
+import { FileUpload } from '../interfaces/file-upload.interface';
+import sharp from 'sharp';
+import { Stream } from 'stream';
 
 @Injectable()
 export class S3FileService implements FileServiceInterface {
@@ -41,6 +44,45 @@ export class S3FileService implements FileServiceInterface {
     return objectName;
   }
 
+  public async storeImageFromFileUpload(file: Promise<FileUpload> | FileUpload): Promise<string> {
+    const { createReadStream, mimetype } = await file;
+    console.log(file)
+    return new Promise(async (resolve) => {
+      if (!mimetype?.startsWith('image/')) {
+        throw new HttpException('Wrong filetype', HttpStatus.BAD_REQUEST);
+      }
+
+      const objectName = uuidv1() + '.webp';
+  
+      const transformer = sharp()
+        .webp({ quality: 100 })
+        .resize(1080, 1080, { fit: sharp.fit.inside });
+
+      const uploadStream = this.uploadStream(objectName);
+      
+      createReadStream()
+        .pipe(transformer)
+        .pipe(uploadStream.writeStream)
+        .on('error', () => {
+          new HttpException('Could not save image', HttpStatus.BAD_REQUEST);
+        });
+      
+      // await completion of upload
+      await uploadStream.promise.then(() => resolve(objectName));
+    });
+  }
+
+  private uploadStream(key: string) {
+    const pass = new Stream.PassThrough();
+    return {
+      writeStream: pass,
+      promise: this.s3.upload({ 
+        Bucket: this.bucketName, 
+        Key: key, 
+        Body: pass }).promise(),
+    };
+  }
+
   public async delete(url: string): Promise<void> {
     this.logger.debug(this.delete.name);
     const splitUrl = url.split('/');
@@ -60,7 +102,8 @@ export class S3FileService implements FileServiceInterface {
         Bucket: this.bucketName,
         Key: fileName,
       })
-      .createReadStream() as ReadStream;
+      .createReadStream()
+      .on('error', (err) => this.logger.warn(err)) as ReadStream;
   }
 
   private async ensureBucketExists() {
