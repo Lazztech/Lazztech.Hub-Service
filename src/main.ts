@@ -38,8 +38,6 @@ async function bootstrap() {
   // Starts listening for shutdown hooks
   app.enableShutdownHooks();
   app.enable('trust proxy');
-  app.use(bodyParser.json({ limit: '50mb' }));
-  app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
   app.use(graphqlUploadExpress({ maxFileSize: 1000000, maxFiles: 10 }));
   app.enableCors({
     origin: true,
