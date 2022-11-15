@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import uuidv1 from 'uuid/v1';
 import { FileServiceInterface } from '../interfaces/file-service.interface';
@@ -50,15 +50,20 @@ export class LocalFileService implements FileServiceInterface {
   }
 
   get(fileName: string): fs.ReadStream {
-    return fs.createReadStream(`${this.directory}/${fileName}`);
+    if (fs.existsSync(path.join(this.directory, fileName))) {
+      return fs.createReadStream(path.join(this.directory, fileName));
+    } else {
+      throw new NotFoundException(fileName);
+    }
   }
 
-  delete(fileName: string): Promise<void> {
-    return fs.promises.unlink(`${this.directory}/${fileName}`);
+  async delete(fileName: string): Promise<void> {
+    return fs.promises.unlink(path.join(this.directory, fileName))
+      .catch(err => this.logger.warn(err));
   }
 
   private saveFile(fileName: string, data: Buffer | string | Stream): Promise<void> {
-    return fs.promises.writeFile(`${this.directory}/${fileName}`, data);
+    return fs.promises.writeFile(path.join(this.directory, fileName), data);
   }
 
   setupDir() {
@@ -70,6 +75,6 @@ export class LocalFileService implements FileServiceInterface {
   }
 
   private deleteFile(fileName: string): Promise<void> {
-    return fs.promises.unlink(`${this.directory}/${fileName}`);
+    return fs.promises.unlink(path.join(this.directory, fileName));
   }
 }
