@@ -36,7 +36,7 @@ export class LocalFileService implements FileServiceInterface {
   }
 
   async storeImageFromFileUpload(file: FileUpload | Promise<FileUpload>): Promise<string> {
-    const { createReadStream, filename, encoding, mimetype } = await file;
+    const { createReadStream, mimetype } = await file;
     if (!mimetype?.startsWith('image/')) {
       throw new HttpException('Wrong filetype', HttpStatus.BAD_REQUEST);
     }

@@ -45,7 +45,7 @@ export class S3FileService implements FileServiceInterface {
   }
 
   public async storeImageFromFileUpload(file: Promise<FileUpload> | FileUpload): Promise<string> {
-    const { createReadStream, filename, encoding, mimetype } = await file;
+    const { createReadStream, mimetype } = await file;
     console.log(file)
     return new Promise(async (resolve) => {
       if (!mimetype?.startsWith('image/')) {
