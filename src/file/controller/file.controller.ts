@@ -13,14 +13,11 @@ export class FileController {
   ) {}
 
   @Get(':fileName')
-  @Header('Cache-Control', 'public, max-age=604800') // public for CDN, max-age= 1 week in seconds
+  @Header('Cache-Control', 'public, max-age=86400') // public for CDN, max-age= 24hrs in seconds
   get(@Param('fileName') fileName: string, @Res() response: Response) {
-    try {
-      return this.fileService.get(fileName)?.pipe(response).on('err', err => {
-        throw err
-      });
-    } catch (error) {
-      throw new NotFoundException(error);
-    }
+    this.fileService.get(fileName).on('error', (err) => {
+      this.logger.error(err);
+      response.status(500).send(err);
+    }).pipe(response);
   }
 }

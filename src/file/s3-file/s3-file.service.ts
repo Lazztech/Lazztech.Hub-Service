@@ -102,8 +102,7 @@ export class S3FileService implements FileServiceInterface {
         Bucket: this.bucketName,
         Key: fileName,
       })
-      .createReadStream()
-      .on('error', (err) => this.logger.warn(err)) as ReadStream;
+      .createReadStream() as ReadStream;
   }
 
   private async ensureBucketExists() {
