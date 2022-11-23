@@ -10,4 +10,12 @@ export class FileUrlService {
       return fileName;
     }
   }
+
+  getWatermarkedFileUrl(fileName: string, req: Request): string {
+    if (fileName) {
+      return `${req.protocol}://${req.get('host')}/file/watermark/${fileName}`;
+    } else {
+      return fileName;
+    }
+  }
 }
