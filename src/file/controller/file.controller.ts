@@ -32,13 +32,25 @@ export class FileController {
   async watermark(@Param('fileName') fileName: string, @Res() response: Response) {
     const watermark = await sharp(
       join(process.cwd(), 'public', 'assets', 'lazztech_icon.png')
-    ).resize(150, 150).toBuffer();
+    ).resize(150, 150)
+    .composite([
+      {
+        input: Buffer.from([0,0,0,128]),
+        raw: {
+          width: 1,
+          height: 1,
+          channels: 4,
+        },
+        tile: true,
+        blend: 'dest-in',
+      }
+    ]).toBuffer();
     this.fileService.get(fileName).pipe(
       sharp()
         .jpeg()
         .resize(1080, 1080, { fit: sharp.fit.inside })
         .composite([
-          { input: watermark, left: 50, top: 50 },
+          { input: watermark, gravity: 'southwest' },
         ])
     ).pipe(response).on('error', (err) => {
       this.logger.error(err);
