@@ -33,9 +33,16 @@ export class FileController {
     const watermark = await sharp(
       join(process.cwd(), 'public', 'assets', 'lazztech_icon.png')
     ).resize(150, 150)
+    .extend({
+      top: 0,
+      bottom: 20,
+      left: 20,
+      right: 0,
+      background: { r: 0, g: 0, b: 0, alpha: 0 }
+    })
     .composite([
       {
-        input: Buffer.from([0,0,0,128]),
+        input: Buffer.from([0,0,0,200]),
         raw: {
           width: 1,
           height: 1,
