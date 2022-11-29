@@ -110,10 +110,14 @@ export class HubResolver {
   @Query(() => Invite)
   public async invite(
     @UserId() userId,
-    @Args({ name: 'hubId', type: () => ID }) hubId: number,
+    @Args({ name: 'hubId', type: () => ID, nullable: true, description: 'Depricated, use inviteId instead' }) hubId: number,
+    @Args({ name: 'inviteId', type: () => ID, nullable: true }) inviteId: number,
   ): Promise<Invite> {
     this.logger.debug(this.invite.name);
-    return await this.hubInviteService.getInvite(userId, hubId);
+    if (inviteId) {
+      return this.hubInviteService.getInviteById(userId, inviteId);
+    }
+    return this.hubInviteService.getInvite(userId, hubId);
   }
 
   @Query(() => [Invite])
