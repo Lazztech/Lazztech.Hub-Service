@@ -11,6 +11,7 @@ import { Payload } from './dto/payload.dto';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/core';
 import { ExpeditedRegistration } from './dto/expeditedRegistration.dto';
+import { generateUsername } from "unique-username-generator";
 
 @Injectable()
 export class AuthService {
@@ -42,7 +43,7 @@ export class AuthService {
   }
 
   generateUsername(): string {
-    return '';
+    return generateUsername();
   }
 
   generatePassword(): string {
