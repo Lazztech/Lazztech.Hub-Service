@@ -17,6 +17,7 @@ export class User extends ShareableId{
   public id!: number;
 
   @Field({ nullable: true })
+  @Unique()
   @Property({ nullable: true })
   public username?: string;
 
