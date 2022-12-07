@@ -10,6 +10,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Payload } from './dto/payload.dto';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/core';
+import { ExpeditedRegistration } from './dto/expeditedRegistration.dto';
 
 @Injectable()
 export class AuthService {
@@ -23,6 +24,30 @@ export class AuthService {
     private userService: UserService,
     private jwtService: JwtService,
   ) {}
+
+  async expeditedRegistration(): Promise<ExpeditedRegistration> {
+    this.logger.debug(this.expeditedRegistration.name);
+    const password = this.generatePassword();
+    const hashedPassword = await bcrypt.hash(password, 12);
+    const username = this.generateUsername();
+    const user = this.userRepository.create({
+      username,
+      password: hashedPassword,
+    });
+    await this.userRepository.persistAndFlush(user);
+    return { 
+      jwt: this.jwtService.sign({ userId: user.id } as Payload),
+      password,
+    };
+  }
+
+  generateUsername(): string {
+    return '';
+  }
+
+  generatePassword(): string {
+    return '';
+  }
 
   async register(
     firstName: string,

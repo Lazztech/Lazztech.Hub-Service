@@ -5,6 +5,7 @@ import { UserInput } from '../user/dto/user.input';
 import { AuthService } from './auth.service';
 import { AuthPasswordResetService } from './auth-password-reset/auth-password-reset.service';
 import { GqlJwtAuthGuard } from './guards/gql-jwt-auth.guard';
+import { ExpeditedRegistration } from './dto/expeditedRegistration.dto';
 
 @Resolver()
 export class AuthResolver {
@@ -42,6 +43,12 @@ export class AuthResolver {
       phoneNumber,
     );
     return accessToken;
+  }
+
+  @Mutation(() => ExpeditedRegistration)
+  public async expeditedRegistration(): Promise<ExpeditedRegistration> {
+    this.logger.debug(this.expeditedRegistration.name);
+    return this.authService.expeditedRegistration();
   }
 
   @Mutation(() => Boolean)
