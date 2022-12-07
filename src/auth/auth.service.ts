@@ -56,7 +56,7 @@ export class AuthService {
     const ALPHANUMERIC_CHARS = LOWERCASE_ALPHABET + UPPERCASE_ALPHABET + NUMBERS; // 62 chars
     const ALL_CHARS = ALPHANUMERIC_CHARS + SYMBOLS; // 94 chars
 
-    const randomBytes = crypto.randomBytes(length);
+    const randomBytes = crypto.randomBytes(PASSWORD_LENGTH);
     let password = "";
 
     for (var i = 0; i < PASSWORD_LENGTH; i++) {

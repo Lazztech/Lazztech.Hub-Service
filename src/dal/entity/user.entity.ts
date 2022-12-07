@@ -21,12 +21,12 @@ export class User extends ShareableId{
   public username?: string;
 
   @Field()
-  @Property({ fieldName: 'firstName' })
-  public firstName!: string;
+  @Property({ fieldName: 'firstName', nullable: true })
+  public firstName?: string;
 
   @Field()
-  @Property({ fieldName: 'lastName' })
-  public lastName!: string;
+  @Property({ fieldName: 'lastName', nullable: true })
+  public lastName?: string;
 
   @Field({
     nullable: true,
