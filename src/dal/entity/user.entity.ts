@@ -16,15 +16,15 @@ export class User extends ShareableId{
   @PrimaryKey()
   public id!: number;
 
-  @Field()
+  @Field({ nullable: true })
   @Property({ nullable: true })
   public username?: string;
 
-  @Field()
+  @Field({ nullable: true })
   @Property({ fieldName: 'firstName', nullable: true })
   public firstName?: string;
 
-  @Field()
+  @Field({ nullable: true })
   @Property({ fieldName: 'lastName', nullable: true })
   public lastName?: string;
 
@@ -45,7 +45,7 @@ export class User extends ShareableId{
   @Property({ nullable: true })
   public image?: string;
 
-  @Field()
+  @Field({ nullable: true })
   @Unique()
   @Property({ nullable: true })
   public email?: string;

@@ -38,6 +38,7 @@ export class AuthService {
     });
     await this.userRepository.persistAndFlush(user);
     return { 
+      username,
       jwt: this.jwtService.sign({ userId: user.id } as Payload),
       password,
     };
