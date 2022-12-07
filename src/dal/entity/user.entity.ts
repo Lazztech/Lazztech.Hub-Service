@@ -47,8 +47,8 @@ export class User extends ShareableId{
 
   @Field()
   @Unique()
-  @Property()
-  public email!: string;
+  @Property({ nullable: true })
+  public email?: string;
 
   @Field({ nullable: true })
   @Property({ nullable: true })
