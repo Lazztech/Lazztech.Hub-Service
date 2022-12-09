@@ -10,6 +10,9 @@ import { JwtService } from '@nestjs/jwt';
 import { Payload } from './dto/payload.dto';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/core';
+import { ExpeditedRegistration } from './dto/expeditedRegistration.dto';
+import { generateUsername } from "unique-username-generator";
+import * as crypto from "crypto";
 
 @Injectable()
 export class AuthService {
@@ -23,6 +26,46 @@ export class AuthService {
     private userService: UserService,
     private jwtService: JwtService,
   ) {}
+
+  async expeditedRegistration(): Promise<ExpeditedRegistration> {
+    this.logger.debug(this.expeditedRegistration.name);
+    const password = this.generatePassword();
+    const hashedPassword = await bcrypt.hash(password, 12);
+    const username = this.generateUsername();
+    const user = this.userRepository.create({
+      username,
+      password: hashedPassword,
+    });
+    await this.userRepository.persistAndFlush(user);
+    return { 
+      username,
+      jwt: this.jwtService.sign({ userId: user.id } as Payload),
+      password,
+    };
+  }
+
+  generateUsername(): string {
+    return generateUsername();
+  }
+
+  generatePassword(): string {
+    const PASSWORD_LENGTH = 18;
+    const LOWERCASE_ALPHABET = 'abcdefghijklmnopqrstuvwxyz'; // 26 chars
+    const UPPERCASE_ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; // 26 chars
+    const NUMBERS = '0123456789'; // 10 chars
+    const SYMBOLS = ',./<>?;\'":[]\\|}{=-_+`~!@#$%^&*()'; // 32 chars
+    const ALPHANUMERIC_CHARS = LOWERCASE_ALPHABET + UPPERCASE_ALPHABET + NUMBERS; // 62 chars
+    const ALL_CHARS = ALPHANUMERIC_CHARS + SYMBOLS; // 94 chars
+
+    const randomBytes = crypto.randomBytes(PASSWORD_LENGTH);
+    let password = "";
+
+    for (let i = 0; i < PASSWORD_LENGTH; i++) {
+        randomBytes[i] = randomBytes[i] % ALL_CHARS.length;
+        password += ALL_CHARS[randomBytes[i]];
+    }
+    return password;
+  }
 
   async register(
     firstName: string,

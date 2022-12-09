@@ -1,7 +1,6 @@
-import { Controller, Get, Header, Inject, Logger, NotFoundException, Param, Res } from '@nestjs/common';
+import { Controller, Get, Header, Inject, Logger, Param, Res } from '@nestjs/common';
 import { Response } from 'express';
-import { readFile } from 'fs/promises';
-import { join, resolve } from 'path';
+import { join } from 'path';
 import sharp from 'sharp';
 import { FILE_SERVICE } from '../file-service.token';
 import { ImageFileService } from '../image-file/image-file.service';

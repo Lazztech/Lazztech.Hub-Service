@@ -11,6 +11,7 @@ import * as Joi from 'joi';
 import { OpenTelemetryModule } from 'nestjs-otel';
 import { S3Module, S3ModuleOptions } from 'nestjs-s3';
 import * as path from 'path';
+import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
 import { DataloadersModule } from './dal/dataloaders/dataloaders.module';
 import { FieldResolversModule } from './dal/field-resolvers/field-resolvers.module';
@@ -22,10 +23,9 @@ import { HubModule } from './hub/hub.module';
 import { LoggerModule } from './logger/logger.module';
 import { ModerationModule } from './moderation/moderation.module';
 import { NotificationModule } from './notification/notification.module';
+import { OpenGraphModule } from './open-graph/open-graph.module';
 import otelSDK from './tracing';
 import { UserModule } from './user/user.module';
-import { AppController } from './app.controller';
-import { OpenGraphModule } from './open-graph/open-graph.module';
 
 @Module({
   imports: [

@@ -1,4 +1,4 @@
-import Pino, { destination, Logger } from 'pino';
+import Pino, { Logger } from 'pino';
 import { LoggerOptions } from 'pino';
 import { trace, context } from '@opentelemetry/api';
 
