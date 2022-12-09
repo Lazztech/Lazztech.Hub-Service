@@ -60,7 +60,7 @@ export class AuthService {
     const randomBytes = crypto.randomBytes(PASSWORD_LENGTH);
     let password = "";
 
-    for (var i = 0; i < PASSWORD_LENGTH; i++) {
+    for (let i = 0; i < PASSWORD_LENGTH; i++) {
         randomBytes[i] = randomBytes[i] % ALL_CHARS.length;
         password += ALL_CHARS[randomBytes[i]];
     }
