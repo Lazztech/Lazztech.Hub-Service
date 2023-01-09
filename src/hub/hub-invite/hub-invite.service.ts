@@ -59,8 +59,11 @@ export class HubInviteService {
     } as Invite);
   }
 
-  async inviteUserToHub(userId: any, hubId: number, inviteesEmail: string) {
+  async inviteUserToHub(userId: any, hubId: number, inviteesEmail?: string, inviteesShareableId?: string) {
     this.logger.debug(this.inviteUserToHub.name);
+    if (!inviteesEmail && !inviteesShareableId) {
+      throw Error('Must supply either inviteesEmail or inviteesShareableId');
+    }
     const userHubRelationship = await this.joinUserHubRepository.findOne({
       user: userId,
       hub: hubId,
@@ -68,9 +71,10 @@ export class HubInviteService {
     });
     this.validateRelationship(userHubRelationship, hubId, userId);
     
-    const invitee = await this.userRepository.findOne({
-        email: inviteesEmail,
-    });
+    // fetch by either inviteesShareableId or else inviteesEmail if inviteesShareableId is undefined
+    const invitee = await this.userRepository.findOne(
+      inviteesShareableId ? { shareableId: inviteesShareableId } : { email: inviteesEmail }
+    );
 
     if(invitee){
       const alreadyInvited = await this.inviteRepository.findOne({invitee: invitee.id, inviter: userId, hub: hubId });

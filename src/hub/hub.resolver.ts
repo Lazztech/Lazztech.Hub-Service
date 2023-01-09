@@ -137,15 +137,16 @@ export class HubResolver {
   public async inviteUserToHub(
     @UserId() userId,
     @Args({ name: 'hubId', type: () => ID }) hubId: number,
-    @Args({ name: 'inviteesEmail', type: () => String }) inviteesEmail: string,
+    @Args({ name: 'inviteesEmail', type: () => String, nullable: true }) inviteesEmail?: string,
+    @Args({ name: 'inviteesShareableId', type: () => String, nullable: true }) inviteesShareableId?: string,
   ): Promise<Invite> {
     this.logger.debug(this.inviteUserToHub.name);
-    const invite: Invite = await this.hubInviteService.inviteUserToHub(
+    return this.hubInviteService.inviteUserToHub(
       userId,
       hubId,
       inviteesEmail,
+      inviteesShareableId
     );
-    return invite;
   }
 
   @Mutation(() => Boolean)
