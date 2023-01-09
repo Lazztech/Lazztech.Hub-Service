@@ -60,13 +60,15 @@ export class EventResolver {
     public async inviteUserToEvent(
         @UserId() userId,
         @Args({ name: 'eventId', type: () => ID }) eventId: number,
-        @Args({ name: 'inviteesEmail', type: () => String }) inviteesEmail: string,
+        @Args({ name: 'inviteesEmail', type: () => String, nullable: true }) inviteesEmail?: string,
+        @Args({ name: 'inviteesShareableId', type: () => String, nullable: true }) inviteesShareableId?: string,
     ): Promise<JoinUserEvent> {
         this.logger.debug(this.inviteUserToEvent.name);
         return this.eventService.inviteUserToEvent(
             userId,
             eventId,
             inviteesEmail,
+            inviteesShareableId,
         );
     }
 

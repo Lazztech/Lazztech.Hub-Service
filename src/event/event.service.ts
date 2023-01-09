@@ -69,8 +69,11 @@ export class EventService {
         return userEvent;
     }
 
-    async inviteUserToEvent(userId: any, eventId: number, inviteesEmail: string): Promise<JoinUserEvent> {
-        const invitee = await this.userRepository.findOneOrFail({ email: inviteesEmail });
+    async inviteUserToEvent(userId: any, eventId: number, inviteesEmail: string, inviteesShareableId: string): Promise<JoinUserEvent> {
+        // fetch by either inviteesShareableId or else inviteesEmail if inviteesShareableId is undefined
+        const invitee = await this.userRepository.findOneOrFail(
+            inviteesShareableId ? { shareableId: inviteesShareableId } : { email: inviteesEmail }
+        );
         const event = await this.eventRepository.findOneOrFail({ id: eventId });
 
         const joinUserEvent = this.joinUserEventRepository.create({
