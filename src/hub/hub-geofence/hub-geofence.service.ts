@@ -37,10 +37,10 @@ export class HubGeofenceService {
       hubRelationship.isPresent = true;  
       await this.joinUserHubRepository.persistAndFlush(hubRelationship);
 
-      const hub = await hubRelationship.hub.load();
-      if (hub.active) {
-        await this.notifyMembersOfArrival(userId, hubId);
-      }
+      // const hub = await hubRelationship.hub.load();
+      // if (hub.active) {
+      //   await this.notifyMembersOfArrival(userId, hubId);
+      // }
     } else {
       await this.joinUserHubRepository.persistAndFlush(hubRelationship);
     }
@@ -80,10 +80,10 @@ export class HubGeofenceService {
       hubRelationship.isPresent = false;
       await this.joinUserHubRepository.persistAndFlush(hubRelationship);
 
-      const hub = await hubRelationship.hub.load();
-      if (hub.active) {
-        await this.notifyMembersOfExit(userId, hubId);
-      }
+      // const hub = await hubRelationship.hub.load();
+      // if (hub.active) {
+      //   await this.notifyMembersOfExit(userId, hubId);
+      // }
     } else {
       await this.joinUserHubRepository.persistAndFlush(hubRelationship);
     }
