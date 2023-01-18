@@ -144,7 +144,7 @@ describe('HubGeofenceService', () => {
 
     // Assert
     expect(persistAndFlushCall).toHaveBeenCalled();
-    expect(notifyMembersSpy).toHaveBeenCalled();
+    expect(notifyMembersSpy).not.toHaveBeenCalled();
   });
 
   it('should return for enteredHubGeofence user was not present & hub is not active', async () => {
@@ -356,7 +356,7 @@ describe('HubGeofenceService', () => {
     await service.exitedHubGeofence(userId, hubId);
     // Assert
     expect(persistAndFlushCall).toHaveBeenCalled();
-    expect(notifyMembersSpy).toHaveBeenCalled();
+    expect(notifyMembersSpy).not.toHaveBeenCalled();
   });
 
   it('should return for exitedHubGeofence user was not present & hub is not active', async () => {
