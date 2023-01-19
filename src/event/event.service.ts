@@ -93,6 +93,11 @@ export class EventService {
 
     async removeUserFromEvent(userId: any, eventId: any, otherUsersId: any) {
         this.logger.debug(this.removeUserFromEvent.name);
+        if (userId == otherUsersId) {
+            throw new Error(
+              `You cannot delete your relationship to the event as an owner.`,
+            );
+          }
         const join = await this.joinUserEventRepository.findOneOrFail(
             { event: eventId, user: otherUsersId },
             { populate: ['event', 'event.createdBy'] }
