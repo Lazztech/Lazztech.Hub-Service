@@ -72,6 +72,21 @@ export class EventResolver {
         );
     }
 
+    @Mutation(() => Boolean)
+    public async removeUserFromEvent(
+        @UserId() userId,
+        @Args({ name: 'eventId', type: () => ID }) eventId: number,
+        @Args({ name: 'otherUsersId', type: () => ID }) otherUsersId: number,
+    ): Promise<boolean> {
+        this.logger.debug(this.removeUserFromEvent.name);
+        await this.eventService.removeUserFromEvent(
+            userId,
+            eventId,
+            otherUsersId
+        );
+        return true;
+    }
+
     @Query(() => JoinUserEvent)
     public async event(
         @UserId() userId,
