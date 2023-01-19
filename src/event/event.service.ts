@@ -91,6 +91,20 @@ export class EventService {
         return joinUserEvent;
     }
 
+    async removeUserFromEvent(userId: any, eventId: any, otherUsersId: any) {
+        this.logger.debug(this.removeUserFromEvent.name);
+        const join = await this.joinUserEventRepository.findOneOrFail(
+            { event: eventId, user: otherUsersId },
+            { populate: ['event', 'event.createdBy'] }
+        );
+        const event = await join.event.load();
+        const createdBy = await event.createdBy.load();
+        if (createdBy.id !== userId) {
+            throw new Error('Only the event creater may remove people');
+        }
+        await this.joinUserEventRepository.removeAndFlush(join);
+    }
+
     async getOneUserEvent(userId: any, eventId: number) {
         this.logger.debug(this.getOneUserEvent.name);
         return await this.joinUserEventRepository.findOneOrFail({
