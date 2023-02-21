@@ -1,3 +1,4 @@
+import { QueryOrder } from '@mikro-orm/core';
 import { Logger } from '@nestjs/common';
 import { Context, Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { UserId } from '../../decorators/user.decorator';
@@ -41,8 +42,19 @@ export class HubFieldResolver {
   }
 
   @ResolveField(() => [Event], { nullable: true })
-  public events(@Parent() parent: Hub): Promise<Event[]> {
-    return parent.events?.loadItems();
+  public async events(@UserId() userId, @Parent() parent: Hub): Promise<Event[]> {
+    // should only show events that the current use is invited to
+    const events = await parent.events?.init({
+      where: {
+        usersConnection: {
+          user: userId
+        }
+      },
+      orderBy: {
+        startDateTime: QueryOrder.DESC
+      }
+    });
+    return events.loadItems();
   }
 
   @ResolveField(() => [Invite], { nullable: true })
