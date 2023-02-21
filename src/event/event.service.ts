@@ -1,4 +1,4 @@
-import { EntityRepository } from '@mikro-orm/core';
+import { EntityRepository, QueryOrder } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { User } from '../dal/entity/user.entity';
@@ -157,7 +157,13 @@ export class EventService {
 
     async getUserEvents(userId: any) {
         this.logger.debug(this.getUserEvents.name);
-        return await this.joinUserEventRepository.find({ user: userId });
+        return this.joinUserEventRepository.find({ user: userId }, {
+            orderBy: {
+                event: {
+                    startDateTime: QueryOrder.DESC
+                }
+            }
+        });
     }
 
     async updateEvent(userId: any, value: Event, image?: Promise<FileUpload>): Promise<Event> {
