@@ -1,3 +1,4 @@
+import { QueryOrder } from '@mikro-orm/core';
 import { Logger } from '@nestjs/common';
 import { Context, Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { UserId } from '../../decorators/user.decorator';
@@ -48,6 +49,9 @@ export class HubFieldResolver {
         usersConnection: {
           user: userId
         }
+      },
+      orderBy: {
+        startDateTime: QueryOrder.DESC
       }
     });
     return events.loadItems();
