@@ -41,8 +41,16 @@ export class HubFieldResolver {
   }
 
   @ResolveField(() => [Event], { nullable: true })
-  public events(@Parent() parent: Hub): Promise<Event[]> {
-    return parent.events?.loadItems();
+  public async events(@UserId() userId, @Parent() parent: Hub): Promise<Event[]> {
+    // should only show events that the current use is invited to
+    const events = await parent.events?.init({
+      where: {
+        usersConnection: {
+          user: userId
+        }
+      }
+    });
+    return events.loadItems();
   }
 
   @ResolveField(() => [Invite], { nullable: true })
