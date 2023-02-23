@@ -61,15 +61,21 @@ export class Event extends ShareableId {
   })
   public hub?: IdentifiedReference<Hub>;
 
-  @Field({ nullable: true })
+  /**
+   * Handled with a field resolver
+   */
   @Property({ type: 'float', nullable: true })
   public latitude?: number;
 
-  @Field({ nullable: true })
+  /**
+   * Handled with a field resolver
+   */
   @Property({ type: 'float', nullable: true })
   public longitude?: number;
 
-  @Field({ nullable: true })
+  /**
+   * Handled with a field resolver
+   */
   @Property({ nullable: true })
   public locationLabel?: string;
 

@@ -1,6 +1,6 @@
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { Context, Parent, ResolveField, Resolver } from '@nestjs/graphql';
+import { Context, Float, Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { UserId } from '../../decorators/user.decorator';
 import { FileUrlService } from '../../file/file-url/file-url.service';
 import { UsersByUserIdLoader } from '../dataloaders/users-by-userId.loader';
@@ -23,6 +23,30 @@ export class EventFieldResolver {
   @ResolveField(() => User, { nullable: true })
   public createdBy(@Parent() parent: Event): Promise<User> {
     return this.usersByUserIdLoader.load(parent.createdBy.id);
+  }
+
+  @ResolveField(() => Float, { nullable: true, description: 'Returns from Hub if available, or else value from Event is returned' })
+  public async latitude(@Parent() parent: Event): Promise<number> {
+    if (parent.hub?.id) {
+      return (await parent.hub?.load()).latitude;
+    }
+    return parent.latitude;
+  }
+
+  @ResolveField(() => Float, { nullable: true, description: 'Returns from Hub if available, or else value from Event is returned' })
+  public async longitude(@Parent() parent: Event): Promise<number> {
+    if (parent.hub?.id) {
+      return (await parent.hub?.load()).longitude;
+    }
+    return parent.longitude;
+  }
+
+  @ResolveField(() => String, { nullable: true, description: 'Returns value from Hub if available, or else value from Event is returned' })
+  public async locationLabel(@Parent() parent: Event): Promise<string> {
+    if (parent.hub?.id) {
+      return (await parent.hub?.load()).locationLabel;
+    }
+    return parent.locationLabel;
   }
 
   @ResolveField(() => Hub, { nullable: true })
