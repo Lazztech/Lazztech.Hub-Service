@@ -14,5 +14,8 @@ export abstract class ShareableId {
   private addId(){
     this.shareableId = uuid();
   }
+
+  @Property({ nullable: true })
+  public flagged?: boolean;
   
 }

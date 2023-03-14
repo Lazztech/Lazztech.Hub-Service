@@ -86,8 +86,5 @@ export class Event extends ShareableId {
   public usersConnection = new Collection<JoinUserEvent>(this);
 
   @Property({ nullable: true })
-  public flagged?: boolean;
-
-  @Property({ nullable: true })
   public banned?: boolean;
 }
