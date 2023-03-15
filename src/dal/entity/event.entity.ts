@@ -1,5 +1,6 @@
 import { Collection, Entity, IdentifiedReference, ManyToOne, OneToMany, PrimaryKey, Property, types } from "@mikro-orm/core";
 import { Field, ID, ObjectType } from "@nestjs/graphql";
+import { FileUpload } from "./fileUpload.entity";
 import { Hub } from "./hub.entity";
 import { JoinUserEvent } from "./joinUserEvent.entity";
 import { ShareableId } from "./shareableId.entity";
@@ -44,6 +45,16 @@ export class Event extends ShareableId {
   })
   @Property({ nullable: true })
   public endDateTime?: string;
+
+  /**
+   * Exposed as a field resolver
+   */
+   @ManyToOne({
+    entity: () => FileUpload,
+    wrappedReference: true,
+    nullable: true,
+  })
+  public coverImage?: IdentifiedReference<FileUpload>;
 
   /**
    * Handled with a field resolver

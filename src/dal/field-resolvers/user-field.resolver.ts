@@ -17,8 +17,9 @@ export class UserFieldResolver {
   ) {}
 
   @ResolveField(() => String, { nullable: true })
-  image(@Parent() user: User, @Context() ctx: any): string {
-    return this.fileUrlService.getFileUrl(user.image, ctx.req);
+  async image(@Parent() user: User, @Context() ctx: any): Promise<string> {
+    const coverImage = await user.profileImage.load();
+    return this.fileUrlService.getFileUrl(coverImage.fileName, ctx.req);
   }
 
   @ResolveField(() => [UserDevice], { nullable: true })

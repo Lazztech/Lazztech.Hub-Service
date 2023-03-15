@@ -22,8 +22,9 @@ export class HubFieldResolver {
   ) {}
 
   @ResolveField(() => String, { nullable: true })
-  image(@Parent() hub: Hub, @Context() ctx: any): string {
-    return this.fileUrlService.getFileUrl(hub.image, ctx.req);
+  async image(@Parent() hub: Hub, @Context() ctx: any): Promise<string> {
+    const coverImage = await hub.coverImage.load();
+    return this.fileUrlService.getFileUrl(coverImage.fileName, ctx.req);
   }
 
   @ResolveField(() => [JoinUserHub], { nullable: true })

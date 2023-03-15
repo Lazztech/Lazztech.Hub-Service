@@ -6,7 +6,8 @@ import { PasswordReset } from './passwordReset.entity';
 import { UserDevice } from './userDevice.entity';
 import { ShareableId } from './shareableId.entity';
 import { Block } from './block.entity';
-import { Cascade, Collection, Entity, IdentifiedReference, OneToMany, OneToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+import { Cascade, Collection, Entity, IdentifiedReference, ManyToOne, OneToMany, OneToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+import { FileUpload } from './fileUpload.entity';
 
  /* eslint-disable */ // needed for mikroorm default value & type which conflicts with typescript-eslint/no-unused-vars
 @ObjectType()
@@ -39,6 +40,16 @@ export class User extends ShareableId {
   @Field({ nullable: true })
   @Property({ nullable: true })
   public description?: string;
+
+  /**
+   * Exposed as a field resolver
+   */
+   @ManyToOne({
+    entity: () => FileUpload,
+    wrappedReference: true,
+    nullable: true,
+  })
+  public profileImage?: IdentifiedReference<FileUpload>;
 
   /**
    * Exposed as a field resolver

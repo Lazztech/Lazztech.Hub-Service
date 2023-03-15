@@ -3,8 +3,9 @@ import { JoinUserHub } from './joinUserHub.entity';
 import { MicroChat } from './microChat.entity';
 import { Invite } from './invite.entity';
 import { ShareableId } from './shareableId.entity'
-import { Collection, Entity, OneToMany, PrimaryKey, Property, types } from '@mikro-orm/core';
+import { Collection, Entity, IdentifiedReference, ManyToOne, OneToMany, PrimaryKey, Property, types } from '@mikro-orm/core';
 import { Event } from './event.entity';
+import { FileUpload } from './fileUpload.entity';
 
  /* eslint-disable */ // needed for mikroorm default value & type which conflicts with typescript-eslint/no-unused-vars
 @ObjectType()
@@ -25,6 +26,16 @@ export class Hub extends ShareableId {
   @Field({ nullable: true })
   @Property({ default: true })
   public active: boolean = true;
+
+  /**
+   * Exposed as a field resolver
+   */
+   @ManyToOne({
+    entity: () => FileUpload,
+    wrappedReference: true,
+    nullable: true,
+  })
+  public coverImage?: IdentifiedReference<FileUpload>;
 
   /**
    * Handled with a field resolver
