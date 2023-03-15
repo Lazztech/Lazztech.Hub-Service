@@ -30,11 +30,9 @@ export class FileUpload extends ShareableId {
      */
     @ManyToOne({
         entity: () => User,
-        fieldName: 'userId',
-        onDelete: 'cascade',
-        primary: true,
+        fieldName: 'createdByUserId',
         wrappedReference: true,
         nullable: true,
     })
-    public uploadedBy?: IdentifiedReference<User>;
+    public createdBy?: IdentifiedReference<User>;
 }
