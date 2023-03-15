@@ -56,8 +56,8 @@ export class EventFieldResolver {
 
   @ResolveField(() => String, { nullable: true })
   async image(@Parent() parent: Event, @Context() ctx: any): Promise<string> {
-    const coverImage = await parent.coverImage.load();
-    return this.fileUrlService.getFileUrl(coverImage.fileName, ctx.req);
+    const coverImage = await parent?.coverImage?.load();
+    return this.fileUrlService.getFileUrl(coverImage?.fileName, ctx.req);
   }
 
   @ResolveField(() => [JoinUserEvent], { nullable: true })
