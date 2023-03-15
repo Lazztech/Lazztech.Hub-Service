@@ -14,16 +14,12 @@ export class FileUpload extends ShareableId {
     @Property()
     public fileName: string;
 
-    @Field({ description: 'mimetype' })
-    @Property()
-    public type: string;
-
     @Field({
         nullable: true,
         description: 'ISO 8601 Date Time',
     })
     @Property({ nullable: true })
-    public uploadedOn?: string;
+    public createdOn?: string;
 
     /**
      * Exposed as a field resolver
