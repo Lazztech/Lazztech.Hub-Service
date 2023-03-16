@@ -15,7 +15,7 @@ import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
 import { DataloadersModule } from './dal/dataloaders/dataloaders.module';
 import { Event } from './dal/entity/event.entity';
-import { FileUpload } from './dal/entity/fileUpload.entity';
+import { File } from './dal/entity/file.entity';
 import { Hub } from './dal/entity/hub.entity';
 import { JoinUserHub } from './dal/entity/joinUserHub.entity';
 import { User } from './dal/entity/user.entity';
@@ -37,7 +37,7 @@ import { UserModule } from './user/user.module';
     MikroOrmModule.forFeature([
       Hub,
       User,
-      FileUpload,
+      File,
       Event,
       JoinUserHub,
     ]),

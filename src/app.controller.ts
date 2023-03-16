@@ -2,7 +2,7 @@ import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/postgresql';
 import { Controller, Get, Render } from '@nestjs/common';
 import { Event } from './dal/entity/event.entity';
-import { FileUpload } from './dal/entity/fileUpload.entity';
+import { File } from './dal/entity/file.entity';
 import { Hub } from './dal/entity/hub.entity';
 import { JoinUserHub } from './dal/entity/joinUserHub.entity';
 import { User } from './dal/entity/user.entity';
@@ -19,8 +19,8 @@ export class AppController {
     private readonly eventRepository: EntityRepository<Event>,
     @InjectRepository(User)
     private readonly userRepository: EntityRepository<User>,
-    @InjectRepository(FileUpload)
-    private readonly fileUploadRepository: EntityRepository<FileUpload>,
+    @InjectRepository(File)
+    private readonly fileRepository: EntityRepository<File>,
   ) {}
 
   @Get()
@@ -44,44 +44,44 @@ export class AppController {
             hub,
             isOwner: true,
           });
-          const fileUpload = this.fileUploadRepository.create({
+          const file = this.fileRepository.create({
             fileName: hub.image,
             createdOn: new Date().toISOString(),
             createdBy: (await admin.user.load()).id,
           });
-          await this.fileUploadRepository.persistAndFlush(fileUpload);
-          hub.coverImage = fileUpload as any;
+          await this.fileRepository.persistAndFlush(file);
+          hub.coverImage = file as any;
           this.hubRepository.persist(hub);
         }
       }
       const users = await this.userRepository.findAll();
       for (const user of users) {
         if (user.image) {
-          const fileUpload = this.fileUploadRepository.create({
+          const file = this.fileRepository.create({
             fileName: user.image,
             createdOn: new Date().toISOString(),
             createdBy: user.id
           });
-          await this.fileUploadRepository.persistAndFlush(fileUpload);
-          user.profileImage = fileUpload as any;
+          await this.fileRepository.persistAndFlush(file);
+          user.profileImage = file as any;
           this.userRepository.persist(user);
         }
       }
       const events = await this.eventRepository.findAll();
       for (const event of events) {
         if (event.image) {
-          const fileUpload = this.fileUploadRepository.create({
+          const file = this.fileRepository.create({
             fileName: event.image,
             createdOn: new Date().toISOString(),
             createdBy: (await event.createdBy.load()).id,
           });
-          this.fileUploadRepository.persistAndFlush(fileUpload);
-          event.coverImage = fileUpload as any;
+          this.fileRepository.persistAndFlush(file);
+          event.coverImage = file as any;
           this.eventRepository.persist(event);
         }
       }
 
-      await this.fileUploadRepository.flush();
+      await this.fileRepository.flush();
       await this.hubRepository.flush();
       await this.eventRepository.flush();
       await this.userRepository.flush();

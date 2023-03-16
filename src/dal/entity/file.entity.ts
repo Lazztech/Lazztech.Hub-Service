@@ -4,7 +4,7 @@ import { ShareableId } from "./shareableId.entity";
 import { User } from './user.entity';
 
 @Entity()
-export class FileUpload extends ShareableId {
+export class File extends ShareableId {
     @Field(() => ID)
     @PrimaryKey()
     public id!: number;
@@ -13,6 +13,13 @@ export class FileUpload extends ShareableId {
     @Unique()
     @Property()
     public fileName: string;
+
+    @Field({ nullable: true })
+    @Property({ nullable: true })
+    public mimetype: string;
+
+    @Field({ nullable: true })
+    @Property({ nullable: true })
 
     @Field({
         nullable: true,

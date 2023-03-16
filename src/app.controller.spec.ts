@@ -4,7 +4,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { Hub } from '@sentry/node';
 import { AppController } from './app.controller';
 import { Event } from './dal/entity/event.entity';
-import { FileUpload } from './dal/entity/fileUpload.entity';
+import { File } from './dal/entity/file.entity';
 import { JoinUserHub } from './dal/entity/joinUserHub.entity';
 import { User } from './dal/entity/user.entity';
 
@@ -28,7 +28,7 @@ describe('AppController', () => {
           useClass: EntityRepository,
         },
         {
-          provide: getRepositoryToken(FileUpload),
+          provide: getRepositoryToken(File),
           useClass: EntityRepository,
         },
         {
