@@ -125,7 +125,7 @@ describe('HubInviteService', () => {
     expect(addInAppNotificationForUserCall).toHaveBeenCalledWith(
       invitee.id,
       expect.objectContaining({
-        thumbnail: (await mockedFindOneJoinUserHub.hub.load()).image,
+        thumbnail: (await mockedFindOneJoinUserHub.hub.load()).legacyImage,
         header: `You're invited to "${
           (await mockedFindOneJoinUserHub.hub.load()).name
         }" hub.`,

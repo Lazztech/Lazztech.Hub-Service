@@ -288,7 +288,7 @@ describe('HubService', () => {
       id: 1,
       name: 'testName',
       description: 'description',
-      image: 'image.png',
+      legacyImage: 'image.png',
       latitude: 1,
       longitude: -1,
       shareableId: "b33d028f-c423-4137-a9e4-88be6976a7d3"
@@ -300,13 +300,13 @@ describe('HubService', () => {
     } as JoinUserHub;
     const expectedResult = {
       user: { id: userId },
-      hub: { ...hub as any, id: hub.id, image: 'https://x.com/' + hub.image},
+      hub: { ...hub as any, id: hub.id, image: 'https://x.com/' + hub.legacyImage},
       isOwner: true,
     } as JoinUserHub;
 
     jest
       .spyOn(fileService, 'storeImageFromBase64')
-      .mockResolvedValueOnce('https://x.com/' + hub.image);
+      .mockResolvedValueOnce('https://x.com/' + hub.legacyImage);
     jest.spyOn(hubRepo, 'create').mockReturnValueOnce(hub as any);
     jest.spyOn(hubRepo, 'persistAndFlush').mockImplementationOnce(() => Promise.resolve());
 
@@ -397,14 +397,14 @@ describe('HubService', () => {
     } as any);
     const expectedResult = {
       id: hubId,
-      image: newImage,
+      legacyImage: newImage,
     } as Hub;
     const deleteCall = jest
       .spyOn(fileService, 'delete')
       .mockImplementationOnce(() => Promise.resolve());
     const storeCall = jest
       .spyOn(fileService, 'storeImageFromBase64')
-      .mockResolvedValueOnce(expectedResult.image);
+      .mockResolvedValueOnce(expectedResult.legacyImage);
     const saveCall = jest
       .spyOn(hubRepo, 'persistAndFlush')
       .mockImplementationOnce(() => Promise.resolve());

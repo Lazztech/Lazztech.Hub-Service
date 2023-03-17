@@ -83,7 +83,7 @@ export class HubActivityService {
       await this.notificationService.addInAppNotificationForUser(
         joinUserHub.user.id,
         {
-          thumbnail: hub.image,
+          thumbnail: hub.legacyImage,
           header: `"${hub.name}" hub became active`,
           text: `Touch to go to hub.`,
           date: Date.now().toString(),

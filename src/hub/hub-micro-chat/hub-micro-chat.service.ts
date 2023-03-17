@@ -44,7 +44,7 @@ export class HubMicroChatService {
       await this.notificationService.addInAppNotificationForUser(
         memberConnection.user.id,
         {
-          thumbnail: fromUser.image,
+          thumbnail: fromUser.legacyImage,
           header: `${microChat.text}`,
           text: `From ${fromUser.firstName} to ${hub.name}`,
           date: Date.now().toString(),

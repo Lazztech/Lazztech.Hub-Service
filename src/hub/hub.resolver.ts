@@ -45,7 +45,7 @@ export class HubResolver {
     return this.hubService.createHub(userId, {
       name,
       description,
-      image,
+      legacyImage: image,
       latitude,
       longitude,
       locationLabel
@@ -249,7 +249,7 @@ export class HubResolver {
       id: hubId,
       name,
       description,
-      image,
+      legacyImage: image,
       latitude,
       longitude,
       locationLabel,

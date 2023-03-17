@@ -199,11 +199,11 @@ describe('UserService', () => {
     const newImage = 'MockBase64String';
     const testUser = {
       id: userId,
-      image: 'oldIMage',
+      legacyImage: 'oldIMage',
     } as User;
     const expectedResult = {
       id: userId,
-      image: `https://x.com/${newImage}.png`,
+      legacyImage: `https://x.com/${newImage}.png`,
     } as User;
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser as any);
     const deletePublicImageMock = jest
@@ -211,7 +211,7 @@ describe('UserService', () => {
       .mockImplementation(() => Promise.resolve());
     jest
       .spyOn(fileService, 'storeImageFromBase64')
-      .mockResolvedValueOnce(expectedResult.image);
+      .mockResolvedValueOnce(expectedResult.legacyImage);
     jest.spyOn(userRepo, 'persistAndFlush').mockImplementationOnce(() => Promise.resolve());
     // Act
     const result = await service.changeUserImage(userId, newImage);

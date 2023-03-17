@@ -60,7 +60,7 @@ export class EventFieldResolver {
       const coverImage = await parent?.coverImage?.load();
       return this.fileUrlService.getFileUrl(coverImage?.fileName, ctx.req);
     }
-    return this.fileUrlService.getFileUrl(parent?.image, ctx.req);
+    return this.fileUrlService.getFileUrl(parent?.legacyImage, ctx.req);
   }
 
   @ResolveField(() => [JoinUserEvent], { nullable: true })

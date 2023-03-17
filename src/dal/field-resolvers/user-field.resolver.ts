@@ -22,7 +22,7 @@ export class UserFieldResolver {
       const coverImage = await user?.profileImage?.load();
       return this.fileUrlService.getFileUrl(coverImage?.fileName, ctx.req);
     }
-    return this.fileUrlService.getFileUrl(user?.image, ctx.req);
+    return this.fileUrlService.getFileUrl(user?.legacyImage, ctx.req);
   }
 
   @ResolveField(() => [UserDevice], { nullable: true })

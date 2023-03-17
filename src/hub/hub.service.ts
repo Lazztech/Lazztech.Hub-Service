@@ -122,11 +122,11 @@ export class HubService {
 
   async createHub(userId: any, hub: Hub, image?: Promise<FileUpload>) {
     this.logger.debug(this.createHub.name);
-    if (hub?.image) {
-      hub.image = await this.fileService.storeImageFromBase64(hub.image);
+    if (hub?.legacyImage) {
+      hub.legacyImage = await this.fileService.storeImageFromBase64(hub.legacyImage);
     }
     if (image) {
-      hub.image = await this.fileService.storeImageFromFileUpload(image);
+      hub.legacyImage = await this.fileService.storeImageFromFileUpload(image);
     }
 
     // repository.create => save pattern used to so that the @BeforeInsert decorated method
@@ -170,8 +170,8 @@ export class HubService {
       throw new Error(`userId: ${userId} is not an owner of hubId: ${hubId}`);
     }
     const hub = await this.hubRepository.findOne({ id: hubId });
-    if (hub.image) {
-      await this.fileService.delete(hub.image);
+    if (hub.legacyImage) {
+      await this.fileService.delete(hub.legacyImage);
     }
     await this.hubRepository.removeAndFlush(hub);
   }
@@ -189,16 +189,16 @@ export class HubService {
       isOwner: true,
     });
 
-    if (value?.image && value?.image?.includes('base64')) {
-      await this.fileService.delete(value.image).catch(err => this.logger.warn(err));
-      value.image = await this.fileService.storeImageFromBase64(value.image);
+    if (value?.legacyImage && value?.legacyImage?.includes('base64')) {
+      await this.fileService.delete(value.legacyImage).catch(err => this.logger.warn(err));
+      value.legacyImage = await this.fileService.storeImageFromBase64(value.legacyImage);
     } else if (image) {
-      if (value?.image) {
-        await this.fileService.delete(value.image).catch(err => this.logger.warn(err));
+      if (value?.legacyImage) {
+        await this.fileService.delete(value.legacyImage).catch(err => this.logger.warn(err));
       }
-      value.image = await this.fileService.storeImageFromFileUpload(image);
+      value.legacyImage = await this.fileService.storeImageFromFileUpload(image);
     } else {
-        delete value?.image;
+        delete value?.legacyImage;
     }
 
     let hub = await joinUserHubResult.hub.load();
@@ -257,7 +257,7 @@ export class HubService {
           header: `${hub.name} had its location changed.`,
           text: `By ${user.firstName} ${user.lastName}`,
           date: Date.now().toString(),
-          thumbnail: hub.image,
+          thumbnail: hub.legacyImage,
           actionLink: undefined,
         },
       );
@@ -282,12 +282,12 @@ export class HubService {
 
     const hub = await joinUserHubResult.hub.load();
 
-    if (hub.image) {
-      await this.fileService.delete(hub.image);
+    if (hub.legacyImage) {
+      await this.fileService.delete(hub.legacyImage);
     }
     const imageUrl = await this.fileService.storeImageFromBase64(newImage);
 
-    hub.image = imageUrl;
+    hub.legacyImage = imageUrl;
     await this.hubRepository.persistAndFlush(hub);
 
     return hub;

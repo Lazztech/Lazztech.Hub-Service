@@ -31,7 +31,7 @@ export class OpenGraphService {
             ogUrl,
             ogTitle: hub?.name,
             ogDescription: hub?.description,
-            ogImage: hub?.image && this.fileUrlService.getWatermarkedFileUrl(hub.image, req),
+            ogImage: hub?.legacyImage && this.fileUrlService.getWatermarkedFileUrl(hub.legacyImage, req),
           };
     }
 
@@ -42,7 +42,7 @@ export class OpenGraphService {
             ogUrl,
             ogTitle: event?.name,
             ogDescription: event?.description,
-            ogImage: event?.image && this.fileUrlService.getWatermarkedFileUrl(event.image, req),
+            ogImage: event?.legacyImage && this.fileUrlService.getWatermarkedFileUrl(event.legacyImage, req),
           };
     }
 

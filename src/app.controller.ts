@@ -39,13 +39,13 @@ export class AppController {
     try {
       const hubs = await this.hubRepository.findAll();
       for (const hub of hubs) {
-        if (hub.image) {
+        if (hub.legacyImage) {
           const admin = await this.joinUserHubRepository.findOne({
             hub,
             isOwner: true,
           });
           const file = this.fileRepository.create({
-            fileName: hub.image,
+            fileName: hub.legacyImage,
             createdOn: new Date().toISOString(),
             createdBy: (await admin.user.load()).id,
           });
@@ -56,9 +56,9 @@ export class AppController {
       }
       const users = await this.userRepository.findAll();
       for (const user of users) {
-        if (user.image) {
+        if (user.legacyImage) {
           const file = this.fileRepository.create({
-            fileName: user.image,
+            fileName: user.legacyImage,
             createdOn: new Date().toISOString(),
             createdBy: user.id
           });
@@ -69,9 +69,9 @@ export class AppController {
       }
       const events = await this.eventRepository.findAll();
       for (const event of events) {
-        if (event.image) {
+        if (event.legacyImage) {
           const file = this.fileRepository.create({
-            fileName: event.image,
+            fileName: event.legacyImage,
             createdOn: new Date().toISOString(),
             createdBy: (await event.createdBy.load()).id,
           });

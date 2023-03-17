@@ -52,10 +52,11 @@ export class User extends ShareableId {
   public profileImage?: IdentifiedReference<File>;
 
   /**
+   * @deprecated use file based field instead 
    * Exposed as a field resolver
    */
-  @Property({ nullable: true })
-  public image?: string;
+  @Property({ nullable: true, fieldName: 'image', })
+  public legacyImage?: string;
 
   @Field({ nullable: true })
   @Unique()

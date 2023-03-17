@@ -28,11 +28,11 @@ export class EventService {
 
     async createEvent(userId: any, event: Event, image?: Promise<FileUpload>): Promise<JoinUserEvent> {
         this.logger.debug(this.createEvent.name);
-        if (event?.image) {
-            event.image = await this.fileService.storeImageFromBase64(event.image);
+        if (event?.legacyImage) {
+            event.legacyImage = await this.fileService.storeImageFromBase64(event.legacyImage);
         }
         if (image) {
-            event.image = await this.fileService.storeImageFromFileUpload(image);
+            event.legacyImage = await this.fileService.storeImageFromFileUpload(image);
         }
 
         event = this.eventRepository.create({ ...event, createdBy: userId });
@@ -172,16 +172,16 @@ export class EventService {
             createdBy: userId,
             id: value.id
         });
-        if (value?.image && value?.image?.includes('base64')) {
-            await this.fileService.delete(value.image).catch(err => this.logger.warn(err));
-            value.image = await this.fileService.storeImageFromBase64(value.image);
+        if (value?.legacyImage && value?.legacyImage?.includes('base64')) {
+            await this.fileService.delete(value.legacyImage).catch(err => this.logger.warn(err));
+            value.legacyImage = await this.fileService.storeImageFromBase64(value.legacyImage);
         } else if (image) {
-            if (value?.image) {
-              await this.fileService.delete(value.image).catch(err => this.logger.warn(err));
+            if (value?.legacyImage) {
+              await this.fileService.delete(value.legacyImage).catch(err => this.logger.warn(err));
             }
-            value.image = await this.fileService.storeImageFromFileUpload(image);
+            value.legacyImage = await this.fileService.storeImageFromFileUpload(image);
         } else {
-            delete value?.image;
+            delete value?.legacyImage;
         }
 
         event = this.eventRepository.assign(event, value);

@@ -93,7 +93,7 @@ export class HubInviteService {
 
     const hub = await userHubRelationship.hub.load();
     await this.notificationService.addInAppNotificationForUser(invitee.id, {
-      thumbnail: hub.image,
+      thumbnail: hub.legacyImage,
       header: `You're invited to "${hub.name}" hub.`,
       text: `View the invite.`,
       date: Date.now().toString(),
@@ -130,7 +130,7 @@ export class HubInviteService {
 
     await this.inviteRepository.persistAndFlush(invite);
     await this.notificationService.addInAppNotificationForUser(invitee.id, {
-      thumbnail: hub.image,
+      thumbnail: hub.legacyImage,
       header: `${invitee.firstName} accepted invite`,
       text: `to "${hub.name}" hub.`,
       date: Date.now().toString(),

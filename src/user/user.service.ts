@@ -76,11 +76,11 @@ export class UserService {
     let user = await this.userRepository.findOneOrFail({ id: userId });
 
     if (image) {
-      if (user.image) {
-        await this.fileService.delete(user.image);
+      if (user.legacyImage) {
+        await this.fileService.delete(user.legacyImage);
       }
       const imageUrl = await this.fileService.storeImageFromFileUpload(image);
-      user.image = imageUrl;
+      user.legacyImage = imageUrl;
     }
 
     user = this.userRepository.assign(user, value);
@@ -99,11 +99,11 @@ export class UserService {
   public async changeUserImage(userId: any, newImage: string) {
     this.logger.debug(this.changeUserImage.name);
     const user = await this.userRepository.findOne(userId);
-    if (user.image) {
-      await this.fileService.delete(user.image);
+    if (user.legacyImage) {
+      await this.fileService.delete(user.legacyImage);
     }
     const imageUrl = await this.fileService.storeImageFromBase64(newImage);
-    user.image = imageUrl;
+    user.legacyImage = imageUrl;
     await this.userRepository.persistAndFlush(user);
     return user;
   }
