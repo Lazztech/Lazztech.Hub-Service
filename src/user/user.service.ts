@@ -88,11 +88,11 @@ export class UserService {
         await this.fileService.delete((await user.profileImage.load()).fileName);
       }
       const imageFileName = await this.fileService.storeImageFromFileUpload(image);
-      const imageFile = this.fileRepository.create({
+      const imageFile = {
         fileName: imageFileName,
         createdOn: new Date().toISOString(),
         createdBy: userId,
-      });
+      } as File;
       user.profileImage = imageFile as any;
     }
 
@@ -121,11 +121,11 @@ export class UserService {
       await this.fileService.delete((await user.profileImage.load()).fileName);
     }
     const imageFileName = await this.fileService.storeImageFromBase64(newImage);
-    const imageFile = this.fileRepository.create({
+    const imageFile = {
       createdBy: userId,
       fileName: imageFileName,
       createdOn: new Date().toISOString(),
-    });
+    } as File;
     user.profileImage = imageFile as any;
     await this.userRepository.persistAndFlush(user);
     return user;

@@ -127,11 +127,11 @@ export class HubService {
     this.logger.debug(this.createHub.name);
     if (image) {
       const fileName = await this.fileService.storeImageFromFileUpload(image);
-      const imageFile = this.fileRepository.create({
+      const imageFile = {
         createdBy: userId,
         createdOn: new Date().toISOString(),
         fileName,
-      });
+      } as File;
       hub.coverImage = imageFile as any;
     }
 
@@ -210,11 +210,11 @@ export class HubService {
         await this.fileService.delete((await value.coverImage.load()).fileName).catch(err => this.logger.warn(err));
       }
       const fileName = await this.fileService.storeImageFromFileUpload(image);
-      const imageFile = this.fileRepository.create({
+      const imageFile = {
         createdBy: userId,
         createdOn: new Date().toISOString(),
         fileName,
-      })
+      } as File;
       value.coverImage = imageFile as any; 
     } else {
         delete value?.legacyImage;
@@ -310,11 +310,11 @@ export class HubService {
       await this.fileService.delete((await hub.coverImage.load()).fileName);
     }
     const fileName = await this.fileService.storeImageFromBase64(newImage);
-    const imageFile = this.fileRepository.create({
+    const imageFile = {
       createdBy: userId,
       createdOn: new Date().toISOString(),
       fileName,
-    });
+    } as File;
 
     hub.coverImage = imageFile as any;
     await this.hubRepository.persistAndFlush(hub);

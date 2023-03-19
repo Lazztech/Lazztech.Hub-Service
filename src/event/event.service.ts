@@ -33,11 +33,11 @@ export class EventService {
         this.logger.debug(this.createEvent.name);
         if (image) {
             const imageFileName = await this.fileService.storeImageFromFileUpload(image);
-            const imageFile = this.fileRepository.create({
+            const imageFile = {
                 fileName: imageFileName,
                 createdOn: new Date().toISOString(),
                 createdBy: userId,
-            });
+            } as File;
             event.coverImage = imageFile as any;
         }
 
@@ -188,11 +188,11 @@ export class EventService {
                 await this.fileService.delete((await value?.coverImage.load()).fileName).catch(err => this.logger.warn(err));
             }
             const imageFileName = await this.fileService.storeImageFromFileUpload(image);
-            const imageFile = this.fileRepository.create({
+            const imageFile = {
                 createdBy: userId,
                 createdOn: new Date().toISOString(),
                 fileName: imageFileName,
-            })
+            } as File;
             value.coverImage = imageFile as any;
         } else {
             delete value?.legacyImage;
