@@ -9,6 +9,7 @@ import { FileModule } from '../file/file.module';
 import { EventResolver } from './event.resolver';
 import { EventService } from './event.service';
 import { NotificationModule } from '../notification/notification.module';
+import { File } from '../dal/entity/file.entity';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { NotificationModule } from '../notification/notification.module';
       User,
       InAppNotification,
       UserDevice,
+      File,
     ]),
     FileModule,
     NotificationModule,

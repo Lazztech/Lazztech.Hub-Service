@@ -24,7 +24,7 @@ export class EventService {
         private readonly eventRepository: EntityRepository<Event>,
         @InjectRepository(User)
         private readonly userRepository: EntityRepository<User>,
-        @Inject(File)
+        @InjectRepository(File)
         private readonly fileRepository: EntityRepository<File>,
         private readonly notificationService: NotificationService,
     ) {}
