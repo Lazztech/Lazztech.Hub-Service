@@ -36,13 +36,15 @@ export class OpenGraphService {
     }
 
     public async getEventTagValues(shareableId: string, req: Request): Promise<OpenGraphTagValues> {
-        const event = await this.eventRepository.findOne({ shareableId });
+        const event = await this.eventRepository.findOne({ shareableId }, {
+            populate: ['coverImage']
+        });
         const ogUrl = `${req.protocol}://${req.get('host')}/event/${shareableId}`;
         return {
             ogUrl,
             ogTitle: event?.name,
             ogDescription: event?.description,
-            ogImage: event?.legacyImage && this.fileUrlService.getWatermarkedFileUrl(event.legacyImage, req),
+            ogImage: event?.coverImage && this.fileUrlService.getWatermarkedFileUrl((await event.coverImage.load()).fileName, req),
           };
     }
 

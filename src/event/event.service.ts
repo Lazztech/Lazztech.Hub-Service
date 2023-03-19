@@ -9,6 +9,7 @@ import { FILE_SERVICE } from '../file/file-service.token';
 import { FileServiceInterface } from '../file/interfaces/file-service.interface';
 import { v4 as uuid } from 'uuid';
 import { FileUpload } from 'src/file/interfaces/file-upload.interface';
+import { File } from 'src/dal/entity/file.entity';
 
 @Injectable()
 export class EventService {
@@ -23,16 +24,21 @@ export class EventService {
         private readonly eventRepository: EntityRepository<Event>,
         @InjectRepository(User)
         private readonly userRepository: EntityRepository<User>,
+        @Inject(File)
+        private readonly fileRepository: EntityRepository<File>,
         private readonly notificationService: NotificationService,
     ) {}
 
     async createEvent(userId: any, event: Event, image?: Promise<FileUpload>): Promise<JoinUserEvent> {
         this.logger.debug(this.createEvent.name);
-        if (event?.legacyImage) {
-            event.legacyImage = await this.fileService.storeImageFromBase64(event.legacyImage);
-        }
         if (image) {
-            event.legacyImage = await this.fileService.storeImageFromFileUpload(image);
+            const imageFileName = await this.fileService.storeImageFromFileUpload(image);
+            const imageFile = this.fileRepository.create({
+                fileName: imageFileName,
+                createdOn: new Date().toISOString(),
+                createdBy: userId,
+            });
+            event.coverImage = imageFile as any;
         }
 
         event = this.eventRepository.create({ ...event, createdBy: userId });
@@ -171,15 +177,23 @@ export class EventService {
         let event = await this.eventRepository.findOneOrFail({
             createdBy: userId,
             id: value.id
-        });
-        if (value?.legacyImage && value?.legacyImage?.includes('base64')) {
-            await this.fileService.delete(value.legacyImage).catch(err => this.logger.warn(err));
-            value.legacyImage = await this.fileService.storeImageFromBase64(value.legacyImage);
-        } else if (image) {
+        }, {
+            populate: ['coverImage']
+        }) as Event;
+        if (image) {
             if (value?.legacyImage) {
               await this.fileService.delete(value.legacyImage).catch(err => this.logger.warn(err));
             }
-            value.legacyImage = await this.fileService.storeImageFromFileUpload(image);
+            if (value?.coverImage) {
+                await this.fileService.delete((await value?.coverImage.load()).fileName).catch(err => this.logger.warn(err));
+            }
+            const imageFileName = await this.fileService.storeImageFromFileUpload(image);
+            const imageFile = this.fileRepository.create({
+                createdBy: userId,
+                createdOn: new Date().toISOString(),
+                fileName: imageFileName,
+            })
+            value.coverImage = imageFile as any;
         } else {
             delete value?.legacyImage;
         }
