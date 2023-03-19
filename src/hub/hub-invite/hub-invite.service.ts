@@ -68,6 +68,8 @@ export class HubInviteService {
       user: userId,
       hub: hubId,
       isOwner: true,
+    }, {
+      populate: ['hub', 'hub.coverImage']
     });
     this.validateRelationship(userHubRelationship, hubId, userId);
     
@@ -93,7 +95,7 @@ export class HubInviteService {
 
     const hub = await userHubRelationship.hub.load();
     await this.notificationService.addInAppNotificationForUser(invitee.id, {
-      thumbnail: hub.legacyImage,
+      thumbnail: (await hub.coverImage.load()).fileName,
       header: `You're invited to "${hub.name}" hub.`,
       text: `View the invite.`,
       date: Date.now().toString(),
@@ -130,7 +132,7 @@ export class HubInviteService {
 
     await this.inviteRepository.persistAndFlush(invite);
     await this.notificationService.addInAppNotificationForUser(invitee.id, {
-      thumbnail: hub.legacyImage,
+      thumbnail: (await hub.coverImage.load()).fileName,
       header: `${invitee.firstName} accepted invite`,
       text: `to "${hub.name}" hub.`,
       date: Date.now().toString(),

@@ -70,6 +70,8 @@ export class HubActivityService {
 
     const hubRelationships = await this.joinUserHubRepository.find({
       hub: hubId,
+    }, {
+      populate: ['hub', 'hub.coverImage'],
     });
 
     for (const joinUserHub of hubRelationships) {
@@ -83,7 +85,7 @@ export class HubActivityService {
       await this.notificationService.addInAppNotificationForUser(
         joinUserHub.user.id,
         {
-          thumbnail: hub.legacyImage,
+          thumbnail: (await hub.coverImage.load()).fileName,
           header: `"${hub.name}" hub became active`,
           text: `Touch to go to hub.`,
           date: Date.now().toString(),

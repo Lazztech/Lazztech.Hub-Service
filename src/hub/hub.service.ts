@@ -11,6 +11,7 @@ import { EntityRepository } from '@mikro-orm/core';
 import { Block } from '../dal/entity/block.entity';
 import { v4 as uuid } from 'uuid';
 import { FileUpload } from 'src/file/interfaces/file-upload.interface';
+import { File } from 'src/dal/entity/file.entity';
 
 @Injectable()
 export class HubService {
@@ -26,6 +27,8 @@ export class HubService {
     private inviteRepository: EntityRepository<Invite>,
     @InjectRepository(Block)
     private blockRepository: EntityRepository<Block>,
+    @InjectRepository(File)
+    private fileRepository: EntityRepository<File>,
     private notificationService: NotificationService,
   ) {
     this.logger.debug('constructor');
@@ -122,11 +125,14 @@ export class HubService {
 
   async createHub(userId: any, hub: Hub, image?: Promise<FileUpload>) {
     this.logger.debug(this.createHub.name);
-    if (hub?.legacyImage) {
-      hub.legacyImage = await this.fileService.storeImageFromBase64(hub.legacyImage);
-    }
     if (image) {
-      hub.legacyImage = await this.fileService.storeImageFromFileUpload(image);
+      const fileName = await this.fileService.storeImageFromFileUpload(image);
+      const imageFile = this.fileRepository.create({
+        createdBy: userId,
+        createdOn: new Date().toISOString(),
+        fileName,
+      });
+      hub.coverImage = imageFile as any;
     }
 
     // repository.create => save pattern used to so that the @BeforeInsert decorated method
@@ -169,9 +175,14 @@ export class HubService {
     } else if (this.isNotOwner(userHubRelationship)) {
       throw new Error(`userId: ${userId} is not an owner of hubId: ${hubId}`);
     }
-    const hub = await this.hubRepository.findOne({ id: hubId });
+    const hub = await this.hubRepository.findOne({ id: hubId }, {
+      populate: ['coverImage']
+    });
     if (hub.legacyImage) {
       await this.fileService.delete(hub.legacyImage);
+    }
+    if (hub.coverImage) {
+      await this.fileService.delete((await hub.coverImage.load()).fileName);
     }
     await this.hubRepository.removeAndFlush(hub);
   }
@@ -187,16 +198,24 @@ export class HubService {
       user: userId,
       hub: value.id,
       isOwner: true,
+    }, {
+      populate: ['hub']
     });
 
-    if (value?.legacyImage && value?.legacyImage?.includes('base64')) {
-      await this.fileService.delete(value.legacyImage).catch(err => this.logger.warn(err));
-      value.legacyImage = await this.fileService.storeImageFromBase64(value.legacyImage);
-    } else if (image) {
+    if (image) {
       if (value?.legacyImage) {
         await this.fileService.delete(value.legacyImage).catch(err => this.logger.warn(err));
       }
-      value.legacyImage = await this.fileService.storeImageFromFileUpload(image);
+      if (value?.coverImage) {
+        await this.fileService.delete((await value.coverImage.load()).fileName).catch(err => this.logger.warn(err));
+      }
+      const fileName = await this.fileService.storeImageFromFileUpload(image);
+      const imageFile = this.fileRepository.create({
+        createdBy: userId,
+        createdOn: new Date().toISOString(),
+        fileName,
+      })
+      value.coverImage = imageFile as any; 
     } else {
         delete value?.legacyImage;
     }
@@ -257,7 +276,7 @@ export class HubService {
           header: `${hub.name} had its location changed.`,
           text: `By ${user.firstName} ${user.lastName}`,
           date: Date.now().toString(),
-          thumbnail: hub.legacyImage,
+          thumbnail: (await hub.coverImage.load()).fileName,
           actionLink: undefined,
         },
       );
@@ -278,6 +297,8 @@ export class HubService {
       user: userId,
       hub: hubId,
       isOwner: true,
+    }, {
+      populate: ['hub', 'hub.coverImage']
     });
 
     const hub = await joinUserHubResult.hub.load();
@@ -285,9 +306,17 @@ export class HubService {
     if (hub.legacyImage) {
       await this.fileService.delete(hub.legacyImage);
     }
-    const imageUrl = await this.fileService.storeImageFromBase64(newImage);
+    if (hub.coverImage) {
+      await this.fileService.delete((await hub.coverImage.load()).fileName);
+    }
+    const fileName = await this.fileService.storeImageFromBase64(newImage);
+    const imageFile = this.fileRepository.create({
+      createdBy: userId,
+      createdOn: new Date().toISOString(),
+      fileName,
+    });
 
-    hub.legacyImage = imageUrl;
+    hub.coverImage = imageFile as any;
     await this.hubRepository.persistAndFlush(hub);
 
     return hub;
