@@ -9,7 +9,7 @@ import { FILE_SERVICE } from '../file/file-service.token';
 import { FileServiceInterface } from '../file/interfaces/file-service.interface';
 import { v4 as uuid } from 'uuid';
 import { FileUpload } from 'src/file/interfaces/file-upload.interface';
-import { File } from 'src/dal/entity/file.entity';
+import { File } from '../dal/entity/file.entity';
 
 @Injectable()
 export class EventService {

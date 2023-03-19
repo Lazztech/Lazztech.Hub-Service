@@ -11,7 +11,7 @@ import { EntityRepository } from '@mikro-orm/core';
 import { Block } from '../dal/entity/block.entity';
 import { v4 as uuid } from 'uuid';
 import { FileUpload } from 'src/file/interfaces/file-upload.interface';
-import { File } from 'src/dal/entity/file.entity';
+import { File } from '../dal/entity/file.entity';
 
 @Injectable()
 export class HubService {

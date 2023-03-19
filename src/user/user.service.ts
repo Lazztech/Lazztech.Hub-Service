@@ -9,7 +9,7 @@ import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/core';
 import { Block } from '../dal/entity/block.entity';
 import { FileUpload } from 'src/file/interfaces/file-upload.interface';
-import { File } from 'src/dal/entity/file.entity';
+import { File } from '../dal/entity/file.entity';
 
 @Injectable()
 export class UserService {

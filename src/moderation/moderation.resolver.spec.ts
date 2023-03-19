@@ -19,6 +19,7 @@ import { ModerationResolver } from './moderation.resolver';
 import { ModerationService } from './moderation.service';
 import { Event } from '../dal/entity/event.entity';
 import { JoinUserEvent } from '../dal/entity/joinUserEvent.entity';
+import { File } from '../dal/entity/file.entity';
 
 describe('ModerationResolver', () => {
   let resolver: ModerationResolver;
@@ -77,6 +78,10 @@ describe('ModerationResolver', () => {
         },
         {
           provide: getRepositoryToken(JoinUserEvent),
+          useClass: EntityRepository,
+        },
+        {
+          provide: getRepositoryToken(File),
           useClass: EntityRepository,
         },
       ],

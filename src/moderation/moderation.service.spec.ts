@@ -18,6 +18,7 @@ import { HttpModule } from '@nestjs/axios';
 import { Block } from '../dal/entity/block.entity';
 import { Event } from '../dal/entity/event.entity';
 import { JoinUserEvent } from '../dal/entity/joinUserEvent.entity';
+import { File } from '../dal/entity/file.entity';
 
 describe('ModerationService', () => {
   let service: ModerationService;
@@ -75,6 +76,10 @@ describe('ModerationService', () => {
         },
         {
           provide: getRepositoryToken(JoinUserEvent),
+          useClass: EntityRepository,
+        },
+        {
+          provide: getRepositoryToken(File),
           useClass: EntityRepository,
         },
       ],
