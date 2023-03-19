@@ -12,21 +12,15 @@ export class File extends ShareableId {
     @Field()
     @Unique()
     @Property()
-    public fileName: string;
+    public fileName!: string;
 
     @Field({ nullable: true })
     @Property({ nullable: true })
-    public mimetype: string;
+    public mimetype?: string;
 
-    @Field({ nullable: true })
-    @Property({ nullable: true })
-
-    @Field({
-        nullable: true,
-        description: 'ISO 8601 Date Time',
-    })
-    @Property({ nullable: true })
-    public createdOn?: string;
+    @Field({ description: 'ISO 8601 Date Time' })
+    @Property()
+    public createdOn!: string;
 
     /**
      * Exposed as a field resolver
@@ -35,7 +29,6 @@ export class File extends ShareableId {
         entity: () => User,
         fieldName: 'createdByUserId',
         wrappedReference: true,
-        nullable: true,
     })
-    public createdBy?: IdentifiedReference<User>;
+    public createdBy!: IdentifiedReference<User>;
 }
