@@ -335,11 +335,11 @@ describe('HubService', () => {
       isOwner: true,
     } as any);
     jest.spyOn(hubRepo, 'findOne').mockResolvedValueOnce({
-      image: 'imageTest',
+      legacyImage: 'imageTest',
     } as any);
     const deleteImageCall = jest
       .spyOn(fileService, 'delete')
-      .mockImplementationOnce(() => Promise.resolve());
+      .mockImplementation(() => Promise.resolve());
     const removeCall = jest
       .spyOn(hubRepo, 'removeAndFlush')
       .mockImplementationOnce(() => Promise.resolve());
