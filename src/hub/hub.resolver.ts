@@ -295,21 +295,6 @@ export class HubResolver {
     );
   }
 
-  @Mutation(() => Hub)
-  public async changeHubImage(
-    @UserId() userId,
-    @Args({ name: 'hubId', type: () => ID }) hubId: number,
-    @Args({ name: 'newImage', type: () => String }) newImage: string,
-  ): Promise<Hub> {
-    this.logger.debug(this.changeHubImage.name);
-    const result = await this.hubService.changeHubImage(
-      userId,
-      hubId,
-      newImage,
-    );
-    return result;
-  }
-
   @Mutation(() => Boolean)
   public async setHubStarred(
     @UserId() userId,

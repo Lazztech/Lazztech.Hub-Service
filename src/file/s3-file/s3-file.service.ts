@@ -20,30 +20,6 @@ export class S3FileService implements FileServiceInterface {
     private readonly configService: ConfigService,
   ) {}
 
-  public async storeImageFromBase64(base64Image: string): Promise<string> {
-    this.logger.debug(this.storeImageFromBase64.name);
-
-    await this.ensureBucketExists();
-
-    const data = base64Image.split('base64,')[1];
-    let buf = Buffer.from(data, 'base64');
-    buf = await this.imageFileService.compress(buf);
-
-    const objectName = uuidv1() + '.jpg';
-
-    const uploadObjectResponse = await this.s3
-      .putObject({
-        Bucket: this.bucketName,
-        Key: objectName,
-        Body: buf,
-      })
-      .promise();
-    this.logger.debug(
-      'Object was uploaded successfully. ' + uploadObjectResponse.VersionId,
-    );
-    return objectName;
-  }
-
   public async storeImageFromFileUpload(file: Promise<FileUpload> | FileUpload): Promise<string> {
     const { createReadStream, mimetype } = await file;
     console.log(file)

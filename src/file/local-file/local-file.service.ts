@@ -25,16 +25,6 @@ export class LocalFileService implements FileServiceInterface {
     this.setupDir();
   }
 
-  async storeImageFromBase64(base64Image: string): Promise<string> {
-    this.logger.debug(this.storeImageFromBase64.name);
-    const data = base64Image.split('base64,')[1];
-    let buf = Buffer.from(data, 'base64');
-    buf = await this.imageFileService.compress(buf);
-    const objectName = uuidv1() + '.jpg';
-    await this.saveFile(objectName, buf);
-    return objectName;
-  }
-
   async storeImageFromFileUpload(file: FileUpload | Promise<FileUpload>): Promise<string> {
     const { createReadStream, mimetype } = await file;
     if (!mimetype?.startsWith('image/')) {

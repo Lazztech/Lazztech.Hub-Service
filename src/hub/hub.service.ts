@@ -291,37 +291,6 @@ export class HubService {
     return hub;
   }
 
-  async changeHubImage(userId: any, hubId: number, newImage: string) {
-    this.logger.debug(this.changeHubImage.name);
-    const joinUserHubResult = await this.joinUserHubRepository.findOne({
-      user: userId,
-      hub: hubId,
-      isOwner: true,
-    }, {
-      populate: ['hub', 'hub.coverImage']
-    });
-
-    const hub = await joinUserHubResult.hub.load();
-
-    if (hub.legacyImage) {
-      await this.fileService.delete(hub.legacyImage);
-    }
-    if (hub.coverImage) {
-      await this.fileService.delete((await hub.coverImage.load()).fileName);
-    }
-    const fileName = await this.fileService.storeImageFromBase64(newImage);
-    const imageFile = {
-      createdBy: userId,
-      createdOn: new Date().toISOString(),
-      fileName,
-    } as File;
-
-    hub.coverImage = imageFile as any;
-    await this.hubRepository.persistAndFlush(hub);
-
-    return hub;
-  }
-
   async leaveHub(userId: any, hubId: number) {
     this.logger.debug(this.leaveHub.name);
     const joinUserHub = await this.joinUserHubRepository.findOneOrFail({

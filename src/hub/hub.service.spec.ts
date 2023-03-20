@@ -309,9 +309,6 @@ describe('HubService', () => {
       isOwner: true,
     } as JoinUserHub;
 
-    jest
-      .spyOn(fileService, 'storeImageFromBase64')
-      .mockResolvedValueOnce('https://x.com/' + hub.legacyImage);
     jest.spyOn(hubRepo, 'create').mockReturnValueOnce(hub as any);
     jest.spyOn(hubRepo, 'persistAndFlush').mockImplementationOnce(() => Promise.resolve());
 
@@ -381,44 +378,6 @@ describe('HubService', () => {
     );
     // Assert
     expect(result).toEqual(expectedResult);
-    expect(saveCall).toHaveBeenCalled();
-  });
-
-  it('should return for changeHubImage', async () => {
-    // Arrange
-    const userId = 1;
-    const hubId = 1;
-    const newImage = 'newImage';
-    jest.spyOn(joinUserHubRepo, 'findOne').mockResolvedValueOnce({
-      user: { id: userId },
-      isOwner: true,
-      hub: {
-        id: hubId,
-        load: jest.fn().mockResolvedValueOnce({
-          id: hubId,
-          image: 'oldImage',
-        })
-      } as any,
-    } as any);
-    const expectedResult = {
-      id: hubId,
-      legacyImage: newImage,
-    } as Hub;
-    const deleteCall = jest
-      .spyOn(fileService, 'delete')
-      .mockImplementationOnce(() => Promise.resolve());
-    const storeCall = jest
-      .spyOn(fileService, 'storeImageFromBase64')
-      .mockResolvedValueOnce(expectedResult.legacyImage);
-    const saveCall = jest
-      .spyOn(hubRepo, 'persistAndFlush')
-      .mockImplementationOnce(() => Promise.resolve());
-    // Act
-    const result = await hubService.changeHubImage(userId, hubId, newImage);
-    // Assert
-    expect(result).toEqual(expectedResult);
-    expect(deleteCall).toHaveBeenCalled();
-    expect(storeCall).toHaveBeenCalled();
     expect(saveCall).toHaveBeenCalled();
   });
 
