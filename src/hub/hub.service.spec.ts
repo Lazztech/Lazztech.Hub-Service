@@ -293,11 +293,11 @@ describe('HubService', () => {
       id: 1,
       name: 'testName',
       description: 'description',
-      legacyImage: 'image.png',
       latitude: 1,
       longitude: -1,
       shareableId: "b33d028f-c423-4137-a9e4-88be6976a7d3"
     } as Hub;
+    const image = {} as File;
     const joinUserHub = {
       user: { id: userId },
       hub: { id: hub.id },
@@ -305,10 +305,11 @@ describe('HubService', () => {
     } as JoinUserHub;
     const expectedResult = {
       user: { id: userId },
-      hub: { ...hub as any, id: hub.id, image: 'https://x.com/' + hub.legacyImage},
+      hub: { ...hub as any, id: hub.id, coverImage: image },
       isOwner: true,
     } as JoinUserHub;
 
+    jest.spyOn(fileService, 'storeImageFromFileUpload').mockResolvedValueOnce(image);
     jest.spyOn(hubRepo, 'create').mockReturnValueOnce(hub as any);
     jest.spyOn(hubRepo, 'persistAndFlush').mockImplementationOnce(() => Promise.resolve());
 
@@ -318,7 +319,7 @@ describe('HubService', () => {
       .mockImplementationOnce(() => Promise.resolve());
 
     // Act
-    const result = await hubService.createHub(userId, hub);
+    const result = await hubService.createHub(userId, hub, image as any);
 
     // Assert
     expect(result).toEqual(expectedResult);

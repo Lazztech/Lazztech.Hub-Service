@@ -87,12 +87,7 @@ export class UserService {
       if (user.profileImage) {
         await this.fileService.delete((await user.profileImage.load()).fileName);
       }
-      const imageFileName = await this.fileService.storeImageFromFileUpload(image);
-      const imageFile = {
-        fileName: imageFileName,
-        createdOn: new Date().toISOString(),
-        createdBy: userId,
-      } as File;
+      const imageFile = await this.fileService.storeImageFromFileUpload(image, userId);
       user.profileImage = imageFile as any;
     }
 

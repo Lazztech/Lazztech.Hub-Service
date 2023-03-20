@@ -8,6 +8,9 @@ import * as path from 'path';
 import { FileUpload } from '../interfaces/file-upload.interface';
 import sharp from 'sharp';
 import { Stream } from 'stream';
+import { InjectRepository } from '@mikro-orm/nestjs';
+import { EntityRepository } from '@mikro-orm/core';
+import { File } from '../../dal/entity/file.entity';
 
 @Injectable()
 export class LocalFileService implements FileServiceInterface {
@@ -20,13 +23,15 @@ export class LocalFileService implements FileServiceInterface {
   constructor(
     private readonly configService: ConfigService,
     private readonly imageFileService: ImageFileService,
+    @InjectRepository(File)
+    private readonly fileRepository: EntityRepository<File>,
   ) {
     this.logger.debug('constructor');
     this.setupDir();
   }
 
-  async storeImageFromFileUpload(file: FileUpload | Promise<FileUpload>): Promise<string> {
-    const { createReadStream, mimetype } = await file;
+  async storeImageFromFileUpload(upload: FileUpload | Promise<FileUpload>, userId: any): Promise<File> {
+    const { createReadStream, mimetype } = await upload;
     if (!mimetype?.startsWith('image/')) {
       throw new HttpException('Wrong filetype', HttpStatus.BAD_REQUEST);
     }
@@ -36,7 +41,16 @@ export class LocalFileService implements FileServiceInterface {
       .webp({ quality: 100 })
       .resize(1080, 1080, { fit: sharp.fit.inside });
     await this.saveFile(fileName, createReadStream().pipe(transformer));
-    return fileName;
+
+    // repository.create => save pattern used to so that the @BeforeInsert decorated method
+    // will fire generating a uuid for the shareableId
+    const file = this.fileRepository.create({
+      fileName,
+      createdOn: new Date().toISOString(),
+      createdBy: userId,
+    });
+    await this.fileRepository.persistAndFlush(file);
+    return file;
   }
 
   get(fileName: string): fs.ReadStream {

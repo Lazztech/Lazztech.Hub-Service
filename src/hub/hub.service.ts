@@ -126,12 +126,7 @@ export class HubService {
   async createHub(userId: any, hub: Hub, image?: Promise<FileUpload>) {
     this.logger.debug(this.createHub.name);
     if (image) {
-      const fileName = await this.fileService.storeImageFromFileUpload(image);
-      const imageFile = {
-        createdBy: userId,
-        createdOn: new Date().toISOString(),
-        fileName,
-      } as File;
+      const imageFile = await this.fileService.storeImageFromFileUpload(image, userId);
       hub.coverImage = imageFile as any;
     }
 
@@ -209,12 +204,7 @@ export class HubService {
       if (value?.coverImage) {
         await this.fileService.delete((await value.coverImage.load()).fileName).catch(err => this.logger.warn(err));
       }
-      const fileName = await this.fileService.storeImageFromFileUpload(image);
-      const imageFile = {
-        createdBy: userId,
-        createdOn: new Date().toISOString(),
-        fileName,
-      } as File;
+      const imageFile = await this.fileService.storeImageFromFileUpload(image, userId);
       value.coverImage = imageFile as any; 
     } else {
         delete value?.legacyImage;

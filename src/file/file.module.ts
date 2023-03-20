@@ -7,6 +7,8 @@ import { LocalFileService } from './local-file/local-file.service';
 import { S3FileService } from './s3-file/s3-file.service';
 import { FileUrlService } from './file-url/file-url.service';
 import * as path from 'path';
+import { MikroOrmModule } from '@mikro-orm/nestjs';
+import { File } from 'src/dal/entity/file.entity';
 
 export const fileServiceFactory = {
   provide: FILE_SERVICE,
@@ -39,6 +41,11 @@ export const fileServiceFactory = {
   inject: [ConfigService, LocalFileService, S3FileService],
 } as FactoryProvider;
 @Module({
+  imports: [
+    MikroOrmModule.forFeature([
+      File,
+    ]),
+  ],
   controllers: [FileController],
   providers: [
     fileServiceFactory,

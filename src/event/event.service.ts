@@ -1,15 +1,15 @@
 import { EntityRepository, QueryOrder } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { User } from '../dal/entity/user.entity';
-import { NotificationService } from '../notification/notification.service';
+import { FileUpload } from 'src/file/interfaces/file-upload.interface';
+import { v4 as uuid } from 'uuid';
 import { Event } from '../dal/entity/event.entity';
+import { File } from '../dal/entity/file.entity';
 import { JoinUserEvent, RSVP } from '../dal/entity/joinUserEvent.entity';
+import { User } from '../dal/entity/user.entity';
 import { FILE_SERVICE } from '../file/file-service.token';
 import { FileServiceInterface } from '../file/interfaces/file-service.interface';
-import { v4 as uuid } from 'uuid';
-import { FileUpload } from 'src/file/interfaces/file-upload.interface';
-import { File } from '../dal/entity/file.entity';
+import { NotificationService } from '../notification/notification.service';
 
 @Injectable()
 export class EventService {
@@ -24,20 +24,13 @@ export class EventService {
         private readonly eventRepository: EntityRepository<Event>,
         @InjectRepository(User)
         private readonly userRepository: EntityRepository<User>,
-        @InjectRepository(File)
-        private readonly fileRepository: EntityRepository<File>,
         private readonly notificationService: NotificationService,
     ) {}
 
     async createEvent(userId: any, event: Event, image?: Promise<FileUpload>): Promise<JoinUserEvent> {
         this.logger.debug(this.createEvent.name);
         if (image) {
-            const imageFileName = await this.fileService.storeImageFromFileUpload(image);
-            const imageFile = {
-                fileName: imageFileName,
-                createdOn: new Date().toISOString(),
-                createdBy: userId,
-            } as File;
+            const imageFile = await this.fileService.storeImageFromFileUpload(image, userId);
             event.coverImage = imageFile as any;
         }
 
@@ -187,12 +180,7 @@ export class EventService {
             if (value?.coverImage) {
                 await this.fileService.delete((await value?.coverImage.load()).fileName).catch(err => this.logger.warn(err));
             }
-            const imageFileName = await this.fileService.storeImageFromFileUpload(image);
-            const imageFile = {
-                createdBy: userId,
-                createdOn: new Date().toISOString(),
-                fileName: imageFileName,
-            } as File;
+            const imageFile = await this.fileService.storeImageFromFileUpload(image, userId);
             value.coverImage = imageFile as any;
         } else {
             delete value?.legacyImage;

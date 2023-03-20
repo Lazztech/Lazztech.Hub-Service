@@ -8,6 +8,9 @@ import { ReadStream } from 'fs';
 import { FileUpload } from '../interfaces/file-upload.interface';
 import sharp from 'sharp';
 import { Stream } from 'stream';
+import { InjectRepository } from '@mikro-orm/nestjs';
+import { File } from '../../dal/entity/file.entity';
+import { EntityRepository } from '@mikro-orm/core';
 
 @Injectable()
 export class S3FileService implements FileServiceInterface {
@@ -18,23 +21,25 @@ export class S3FileService implements FileServiceInterface {
     @InjectS3() private readonly s3: S3,
     private readonly imageFileService: ImageFileService,
     private readonly configService: ConfigService,
+    @InjectRepository(File)
+    private readonly fileRepository: EntityRepository<File>,
   ) {}
 
-  public async storeImageFromFileUpload(file: Promise<FileUpload> | FileUpload): Promise<string> {
-    const { createReadStream, mimetype } = await file;
-    console.log(file)
+  public async storeImageFromFileUpload(upload: Promise<FileUpload> | FileUpload, userId: any): Promise<File> {
+    const { createReadStream, mimetype } = await upload;
+    console.log(upload)
     return new Promise(async (resolve) => {
       if (!mimetype?.startsWith('image/')) {
         throw new HttpException('Wrong filetype', HttpStatus.BAD_REQUEST);
       }
 
-      const objectName = uuidv1() + '.webp';
+      const fileName = uuidv1() + '.webp';
   
       const transformer = sharp()
         .webp({ quality: 100 })
         .resize(1080, 1080, { fit: sharp.fit.inside });
 
-      const uploadStream = this.uploadStream(objectName);
+      const uploadStream = this.uploadStream(fileName);
       
       createReadStream()
         .pipe(transformer)
@@ -44,7 +49,17 @@ export class S3FileService implements FileServiceInterface {
         });
       
       // await completion of upload
-      await uploadStream.promise.then(() => resolve(objectName));
+      await uploadStream.promise.then(async () => {
+        // repository.create => save pattern used to so that the @BeforeInsert decorated method
+        // will fire generating a uuid for the shareableId
+        const file = this.fileRepository.create({
+          fileName,
+          createdOn: new Date().toISOString(),
+          createdBy: userId,
+        });
+        await this.fileRepository.persistAndFlush(file);
+        resolve(file);
+      });
     });
   }
 

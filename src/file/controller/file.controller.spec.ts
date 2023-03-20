@@ -4,6 +4,9 @@ import { FILE_SERVICE } from '../file-service.token';
 import { FileController } from './file.controller';
 import { ImageFileService } from '../image-file/image-file.service';
 import { LocalFileService } from '../local-file/local-file.service';
+import { getRepositoryToken } from '@mikro-orm/nestjs';
+import { File } from '../../dal/entity/file.entity';
+import { EntityRepository } from '@mikro-orm/core';
 
 describe('FileController', () => {
   let controller: FileController;
@@ -18,6 +21,10 @@ describe('FileController', () => {
         },
         ConfigService,
         ImageFileService,
+        {
+          provide: getRepositoryToken(File),
+          useClass: EntityRepository,
+        },
       ],
     }).compile();
 
