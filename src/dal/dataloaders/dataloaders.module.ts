@@ -11,6 +11,8 @@ import { EventByEventIdsLoader } from './events-by-eventIds.loader';
 import { Event } from '../entity/event.entity';
 import { BlocksByCompositKeyLoader } from './blocks-by-compositKey.loader';
 import { BlocksByUserLoader } from './blocks-by-user.loader';
+import { FilesByFileIdLoader } from './files-by-fileId.loader';
+import { File } from '../entity/file.entity';
 
 @Module({
     imports: [
@@ -20,6 +22,7 @@ import { BlocksByUserLoader } from './blocks-by-user.loader';
             User,
             Block,
             Event,
+            File,
         ]),
     ],
     providers: [
@@ -29,6 +32,7 @@ import { BlocksByUserLoader } from './blocks-by-user.loader';
         EventByEventIdsLoader,
         BlocksByCompositKeyLoader,
         BlocksByUserLoader,
+        FilesByFileIdLoader,
     ],
     exports: [
         HubsByHubIdLoader,
@@ -37,6 +41,7 @@ import { BlocksByUserLoader } from './blocks-by-user.loader';
         EventByEventIdsLoader,
         BlocksByCompositKeyLoader,
         BlocksByUserLoader,
+        FilesByFileIdLoader,
     ]
 })
 export class DataloadersModule {}

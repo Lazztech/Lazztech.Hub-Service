@@ -1,8 +1,9 @@
 import { Entity, IdentifiedReference, ManyToOne, PrimaryKey, Property, Unique } from "@mikro-orm/core";
-import { Field, ID } from "@nestjs/graphql";
+import { Field, ID, ObjectType } from "@nestjs/graphql";
 import { ShareableId } from "./shareableId.entity";
 import { User } from './user.entity';
 
+@ObjectType()
 @Entity()
 export class File extends ShareableId {
     @Field(() => ID)
