@@ -109,28 +109,6 @@ export class UserService {
     return user;
   }
 
-  public async changeUserImage(userId: any, newImage: string) {
-    this.logger.debug(this.changeUserImage.name);
-    const user = await this.userRepository.findOne(userId, {
-      populate: ['profileImage']
-    });
-    if (user.legacyImage) {
-      await this.fileService.delete(user.legacyImage);
-    }
-    if (user.profileImage) {
-      await this.fileService.delete((await user.profileImage.load()).fileName);
-    }
-    const imageFileName = await this.fileService.storeImageFromBase64(newImage);
-    const imageFile = {
-      createdBy: userId,
-      fileName: imageFileName,
-      createdOn: new Date().toISOString(),
-    } as File;
-    user.profileImage = imageFile as any;
-    await this.userRepository.persistAndFlush(user);
-    return user;
-  }
-
   public async updateLastOnline(user: User) {
     this.logger.debug(this.updateLastOnline.name);
     user.lastOnline = Date.now().toString();
