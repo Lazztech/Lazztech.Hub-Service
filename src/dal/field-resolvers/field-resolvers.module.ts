@@ -1,8 +1,6 @@
-import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
 import { FileModule } from '../../file/file.module';
 import { DataloadersModule } from '../dataloaders/dataloaders.module';
-import { Block } from '../entity/block.entity';
 import { BlockFieldResolver } from './block-field.resolver';
 import { EventFieldResolver } from './event-field.resolver';
 import { FileFieldResolver } from './file-field.resolver';
@@ -17,8 +15,7 @@ import { UserDeviceFieldResolver } from './userDevice-field.resolver';
 
 @Module({
   imports: [
-    FileModule, 
-    MikroOrmModule.forFeature([Block]),
+    FileModule,
     DataloadersModule,
   ],
   providers: [
