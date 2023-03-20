@@ -97,7 +97,9 @@ describe('HubInviteService', () => {
         load: jest.fn().mockResolvedValue({
           id: hubId,
           name: 'testHub',
-          image: 'testImage.png',
+          coverImage: {
+            load: jest.fn().mockResolvedValue({ fileName: 'testImage.png'})
+          },
         }) as any
       },
     } as JoinUserHub;
@@ -125,7 +127,7 @@ describe('HubInviteService', () => {
     expect(addInAppNotificationForUserCall).toHaveBeenCalledWith(
       invitee.id,
       expect.objectContaining({
-        thumbnail: (await mockedFindOneJoinUserHub.hub.load()).image,
+        thumbnail: (await (await mockedFindOneJoinUserHub.hub.load()).coverImage.load()).fileName,
         header: `You're invited to "${
           (await mockedFindOneJoinUserHub.hub.load()).name
         }" hub.`,

@@ -4,8 +4,10 @@ import { Context, Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { UserId } from '../../decorators/user.decorator';
 import { FileUrlService } from '../../file/file-url/file-url.service';
 import { BlocksByUserLoader } from '../dataloaders/blocks-by-user.loader';
+import { FilesByFileIdLoader } from '../dataloaders/files-by-fileId.loader';
 import { JoinUserHubsByHubIdsLoader } from '../dataloaders/joinUserHubs-by-hubIds.loader';
 import { Event } from '../entity/event.entity';
+import { File } from '../entity/file.entity';
 import { Hub } from '../entity/hub.entity';
 import { Invite } from '../entity/invite.entity';
 import { JoinUserHub } from '../entity/joinUserHub.entity';
@@ -19,11 +21,21 @@ export class HubFieldResolver {
     private readonly fileUrlService: FileUrlService,
     private readonly joinUserHubsByHubLoader: JoinUserHubsByHubIdsLoader,
     private readonly blocksByUserLoader: BlocksByUserLoader,
+    private readonly filesByFileIdLoader: FilesByFileIdLoader,
   ) {}
 
+  @ResolveField(() => File, { nullable: true })
+  async coverImage(@Parent() parent: Hub): Promise<File> {
+    return parent?.coverImage?.id && this.filesByFileIdLoader.load(parent.coverImage.id);
+  }
+
   @ResolveField(() => String, { nullable: true })
-  image(@Parent() hub: Hub, @Context() ctx: any): string {
-    return this.fileUrlService.getFileUrl(hub.image, ctx.req);
+  async image(@Parent() hub: Hub, @Context() ctx: any): Promise<string> {
+    if (hub.coverImage) {
+      const coverImage = await this.filesByFileIdLoader.load(hub?.coverImage?.id);
+      return this.fileUrlService.getFileUrl(coverImage?.fileName, ctx.req);
+    }
+    return this.fileUrlService.getFileUrl(hub?.legacyImage, ctx.req);
   }
 
   @ResolveField(() => [JoinUserHub], { nullable: true })

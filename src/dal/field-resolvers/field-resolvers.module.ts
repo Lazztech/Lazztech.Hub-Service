@@ -1,11 +1,9 @@
-import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
 import { FileModule } from '../../file/file.module';
 import { DataloadersModule } from '../dataloaders/dataloaders.module';
-import { Block } from '../entity/block.entity';
-import { JoinUserHub } from '../entity/joinUserHub.entity';
 import { BlockFieldResolver } from './block-field.resolver';
 import { EventFieldResolver } from './event-field.resolver';
+import { FileFieldResolver } from './file-field.resolver';
 import { HubFieldResolver } from './hub-field.resolver';
 import { InAppNotificationFieldResolver } from './inAppNotification-field.resolver';
 import { InviteFieldResolver } from './invite-field.resolver';
@@ -17,8 +15,7 @@ import { UserDeviceFieldResolver } from './userDevice-field.resolver';
 
 @Module({
   imports: [
-    FileModule, 
-    MikroOrmModule.forFeature([JoinUserHub, Block]),
+    FileModule,
     DataloadersModule,
   ],
   providers: [
@@ -32,6 +29,7 @@ import { UserDeviceFieldResolver } from './userDevice-field.resolver';
     BlockFieldResolver,
     JoinUserEventFieldResolver,
     EventFieldResolver,
+    FileFieldResolver,
   ],
 })
 export class FieldResolversModule {}

@@ -15,6 +15,7 @@ import { FILE_SERVICE } from '../file/file-service.token';
 import { getRepositoryToken } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/core';
 import { Block } from '../dal/entity/block.entity';
+import { File } from '../dal/entity/file.entity';
 
 describe('UserService', () => {
   let service: UserService;
@@ -51,6 +52,10 @@ describe('UserService', () => {
         },
         {
           provide: getRepositoryToken(Block),
+          useClass: EntityRepository,
+        },
+        {
+          provide: getRepositoryToken(File),
           useClass: EntityRepository,
         },
       ],
@@ -193,30 +198,4 @@ describe('UserService', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  it('should return for changeUserImage', async () => {
-    // Arrange
-    const userId = 1;
-    const newImage = 'MockBase64String';
-    const testUser = {
-      id: userId,
-      image: 'oldIMage',
-    } as User;
-    const expectedResult = {
-      id: userId,
-      image: `https://x.com/${newImage}.png`,
-    } as User;
-    jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser as any);
-    const deletePublicImageMock = jest
-      .spyOn(fileService, 'delete')
-      .mockImplementation(() => Promise.resolve());
-    jest
-      .spyOn(fileService, 'storeImageFromBase64')
-      .mockResolvedValueOnce(expectedResult.image);
-    jest.spyOn(userRepo, 'persistAndFlush').mockImplementationOnce(() => Promise.resolve());
-    // Act
-    const result = await service.changeUserImage(userId, newImage);
-    // Assert
-    expect(deletePublicImageMock).toHaveBeenCalled();
-    expect(result).toEqual(expectedResult);
-  });
 });

@@ -22,6 +22,7 @@ import { HubTasksService } from './hub-tasks/hub-tasks.service';
 import { ScheduleModule } from '@nestjs/schedule';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Block } from '../dal/entity/block.entity';
+import { File } from '../dal/entity/file.entity';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { Block } from '../dal/entity/block.entity';
       Invite,
       UserDevice,
       Block,
+      File,
     ]),
     FileModule,
     EmailModule,

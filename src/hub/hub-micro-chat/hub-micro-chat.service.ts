@@ -28,7 +28,9 @@ export class HubMicroChatService {
   async microChatToHub(userId: number, hubId: number, microChatId: number) {
     this.logger.debug(this.microChatToHub.name);
 
-    const fromUser = await this.userRepository.findOne(userId);
+    const fromUser = await this.userRepository.findOne(userId, {
+      populate: ['profileImage'],
+    });
     const hub = await this.hubRepository.findOne({
       id: hubId,
     });
@@ -44,7 +46,7 @@ export class HubMicroChatService {
       await this.notificationService.addInAppNotificationForUser(
         memberConnection.user.id,
         {
-          thumbnail: fromUser.image,
+          thumbnail: (await fromUser.profileImage.load())?.fileName,
           header: `${microChat.text}`,
           text: `From ${fromUser.firstName} to ${hub.name}`,
           date: Date.now().toString(),

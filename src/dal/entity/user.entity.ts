@@ -6,12 +6,13 @@ import { PasswordReset } from './passwordReset.entity';
 import { UserDevice } from './userDevice.entity';
 import { ShareableId } from './shareableId.entity';
 import { Block } from './block.entity';
-import { Cascade, Collection, Entity, IdentifiedReference, OneToMany, OneToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+import { Cascade, Collection, Entity, IdentifiedReference, ManyToOne, OneToMany, OneToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+import { File } from './file.entity';
 
  /* eslint-disable */ // needed for mikroorm default value & type which conflicts with typescript-eslint/no-unused-vars
 @ObjectType()
 @Entity()
-export class User extends ShareableId{
+export class User extends ShareableId {
   @Field(() => ID)
   @PrimaryKey()
   public id!: number;
@@ -43,8 +44,19 @@ export class User extends ShareableId{
   /**
    * Exposed as a field resolver
    */
-  @Property({ nullable: true })
-  public image?: string;
+   @ManyToOne({
+    entity: () => File,
+    wrappedReference: true,
+    nullable: true,
+  })
+  public profileImage?: IdentifiedReference<File>;
+
+  /**
+   * @deprecated use file based field instead 
+   * Exposed as a field resolver
+   */
+  @Property({ nullable: true, fieldName: 'image', })
+  public legacyImage?: string;
 
   @Field({ nullable: true })
   @Unique()
@@ -104,9 +116,6 @@ export class User extends ShareableId{
    */
   @OneToMany(() => Block, (block) => block.to)
   public blockedBy = new Collection<Block>(this);
-
-  @Property({ nullable: true })
-  public flagged?: boolean;
 
   @Property({ nullable: true })
   public banned?: boolean;

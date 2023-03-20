@@ -11,6 +11,7 @@ import { EntityRepository } from '@mikro-orm/core';
 import { Block } from '../dal/entity/block.entity';
 import { v4 as uuid } from 'uuid';
 import { FileUpload } from 'src/file/interfaces/file-upload.interface';
+import { File } from '../dal/entity/file.entity';
 
 @Injectable()
 export class HubService {
@@ -26,6 +27,8 @@ export class HubService {
     private inviteRepository: EntityRepository<Invite>,
     @InjectRepository(Block)
     private blockRepository: EntityRepository<Block>,
+    @InjectRepository(File)
+    private fileRepository: EntityRepository<File>,
     private notificationService: NotificationService,
   ) {
     this.logger.debug('constructor');
@@ -122,11 +125,9 @@ export class HubService {
 
   async createHub(userId: any, hub: Hub, image?: Promise<FileUpload>) {
     this.logger.debug(this.createHub.name);
-    if (hub?.image) {
-      hub.image = await this.fileService.storeImageFromBase64(hub.image);
-    }
     if (image) {
-      hub.image = await this.fileService.storeImageFromFileUpload(image);
+      const imageFile = await this.fileService.storeImageFromFileUpload(image, userId);
+      hub.coverImage = imageFile as any;
     }
 
     // repository.create => save pattern used to so that the @BeforeInsert decorated method
@@ -169,9 +170,14 @@ export class HubService {
     } else if (this.isNotOwner(userHubRelationship)) {
       throw new Error(`userId: ${userId} is not an owner of hubId: ${hubId}`);
     }
-    const hub = await this.hubRepository.findOne({ id: hubId });
-    if (hub.image) {
-      await this.fileService.delete(hub.image);
+    const hub = await this.hubRepository.findOne({ id: hubId }, {
+      populate: ['coverImage']
+    });
+    if (hub.legacyImage) {
+      await this.fileService.delete(hub.legacyImage);
+    }
+    if (hub.coverImage) {
+      await this.fileService.delete((await hub.coverImage.load()).fileName);
     }
     await this.hubRepository.removeAndFlush(hub);
   }
@@ -187,18 +193,21 @@ export class HubService {
       user: userId,
       hub: value.id,
       isOwner: true,
+    }, {
+      populate: ['hub']
     });
 
-    if (value?.image && value?.image?.includes('base64')) {
-      await this.fileService.delete(value.image).catch(err => this.logger.warn(err));
-      value.image = await this.fileService.storeImageFromBase64(value.image);
-    } else if (image) {
-      if (value?.image) {
-        await this.fileService.delete(value.image).catch(err => this.logger.warn(err));
+    if (image) {
+      if (value?.legacyImage) {
+        await this.fileService.delete(value.legacyImage).catch(err => this.logger.warn(err));
       }
-      value.image = await this.fileService.storeImageFromFileUpload(image);
+      if (value?.coverImage) {
+        await this.fileService.delete((await value.coverImage.load()).fileName).catch(err => this.logger.warn(err));
+      }
+      const imageFile = await this.fileService.storeImageFromFileUpload(image, userId);
+      value.coverImage = imageFile as any; 
     } else {
-        delete value?.image;
+        delete value?.legacyImage;
     }
 
     let hub = await joinUserHubResult.hub.load();
@@ -257,7 +266,7 @@ export class HubService {
           header: `${hub.name} had its location changed.`,
           text: `By ${user.firstName} ${user.lastName}`,
           date: Date.now().toString(),
-          thumbnail: hub.image,
+          thumbnail: (await hub.coverImage.load()).fileName,
           actionLink: undefined,
         },
       );
@@ -268,27 +277,6 @@ export class HubService {
         click_action: undefined,
       });
     }
-
-    return hub;
-  }
-
-  async changeHubImage(userId: any, hubId: number, newImage: string) {
-    this.logger.debug(this.changeHubImage.name);
-    const joinUserHubResult = await this.joinUserHubRepository.findOne({
-      user: userId,
-      hub: hubId,
-      isOwner: true,
-    });
-
-    const hub = await joinUserHubResult.hub.load();
-
-    if (hub.image) {
-      await this.fileService.delete(hub.image);
-    }
-    const imageUrl = await this.fileService.storeImageFromBase64(newImage);
-
-    hub.image = imageUrl;
-    await this.hubRepository.persistAndFlush(hub);
 
     return hub;
   }

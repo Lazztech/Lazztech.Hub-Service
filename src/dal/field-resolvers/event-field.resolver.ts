@@ -1,11 +1,11 @@
-import { EntityRepository } from '@mikro-orm/core';
-import { InjectRepository } from '@mikro-orm/nestjs';
 import { Context, Float, Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { UserId } from '../../decorators/user.decorator';
 import { FileUrlService } from '../../file/file-url/file-url.service';
+import { BlocksByUserLoader } from '../dataloaders/blocks-by-user.loader';
+import { FilesByFileIdLoader } from '../dataloaders/files-by-fileId.loader';
 import { UsersByUserIdLoader } from '../dataloaders/users-by-userId.loader';
-import { Block } from '../entity/block.entity';
 import { Event } from '../entity/event.entity';
+import { File } from '../entity/file.entity';
 import { Hub } from '../entity/hub.entity';
 import { JoinUserEvent } from '../entity/joinUserEvent.entity';
 import { User } from '../entity/user.entity';
@@ -15,9 +15,9 @@ export class EventFieldResolver {
 
   constructor(
     private readonly fileUrlService: FileUrlService,
-    @InjectRepository(Block)
-    private blockRepository: EntityRepository<Block>,
     private readonly usersByUserIdLoader: UsersByUserIdLoader,
+    private readonly filesByFileIdLoader: FilesByFileIdLoader,
+    private readonly blocksByUserLoader: BlocksByUserLoader,
   ) {}
 
   @ResolveField(() => User, { nullable: true })
@@ -54,9 +54,18 @@ export class EventFieldResolver {
     return parent.hub?.load();
   }
 
+  @ResolveField(() => File, { nullable: true })
+  public async coverImage(@Parent() parent: Event): Promise<File> {
+    return parent?.coverImage?.id && this.filesByFileIdLoader.load(parent.coverImage.id);
+  }
+
   @ResolveField(() => String, { nullable: true })
-  image(@Parent() parent: Event, @Context() ctx: any): string {
-    return this.fileUrlService.getFileUrl(parent.image, ctx.req);
+  async image(@Parent() parent: Event, @Context() ctx: any): Promise<string> {
+    if (parent.coverImage) {
+      const coverImage = await this.filesByFileIdLoader.load(parent?.coverImage?.id);
+      return this.fileUrlService.getFileUrl(coverImage?.fileName, ctx.req);
+    }
+    return this.fileUrlService.getFileUrl(parent?.legacyImage, ctx.req);
   }
 
   @ResolveField(() => [JoinUserEvent], { nullable: true })
@@ -64,8 +73,8 @@ export class EventFieldResolver {
     @UserId() userId,
     @Parent() parent: Event,
   ): Promise<JoinUserEvent[]> {
-    const blocks = await this.blockRepository.find({ to: userId });
+    const blocks = await this.blocksByUserLoader.load(userId);
     const usersConnections = await parent.usersConnection.loadItems();
-    return usersConnections.filter(joinUserHub => !blocks.find(block => block.from.id === joinUserHub.user.id));    
+    return usersConnections.filter(joinUserHub => !blocks?.find(block => block.from.id === joinUserHub.user.id));    
   }
 }

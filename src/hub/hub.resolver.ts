@@ -45,7 +45,7 @@ export class HubResolver {
     return this.hubService.createHub(userId, {
       name,
       description,
-      image,
+      legacyImage: image,
       latitude,
       longitude,
       locationLabel
@@ -249,7 +249,7 @@ export class HubResolver {
       id: hubId,
       name,
       description,
-      image,
+      legacyImage: image,
       latitude,
       longitude,
       locationLabel,
@@ -293,21 +293,6 @@ export class HubResolver {
       latitude,
       longitude,
     );
-  }
-
-  @Mutation(() => Hub)
-  public async changeHubImage(
-    @UserId() userId,
-    @Args({ name: 'hubId', type: () => ID }) hubId: number,
-    @Args({ name: 'newImage', type: () => String }) newImage: string,
-  ): Promise<Hub> {
-    this.logger.debug(this.changeHubImage.name);
-    const result = await this.hubService.changeHubImage(
-      userId,
-      hubId,
-      newImage,
-    );
-    return result;
   }
 
   @Mutation(() => Boolean)

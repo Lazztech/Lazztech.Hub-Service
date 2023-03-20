@@ -67,19 +67,6 @@ export class UserResolver {
     return user;
   }
 
-  @Directive(
-    '@deprecated(reason: "Use updateUser instead.")',
-  )
-  @Mutation(() => User)
-  public async changeUserImage(
-    @UserId() userId,
-    @Args({ name: 'newImage', type: () => String }) newImage: string,
-  ): Promise<User> {
-    this.logger.debug(this.changeUserImage.name);
-    const user = await this.userService.changeUserImage(userId, newImage);
-    return user;
-  }
-
   @Mutation(() => Block)
   public async blockUser(
     @UserId() userId,

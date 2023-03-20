@@ -90,7 +90,7 @@ describe('HubActivityService', () => {
           id: hubId,
           load: jest.fn().mockResolvedValueOnce({
             name: 'HubName',
-            image: 'HubImage',
+            coverImage: { load: jest.fn().mockResolvedValueOnce({ fileName: 'HubImage' }) },
           })
         } as any,
       },
@@ -100,7 +100,7 @@ describe('HubActivityService', () => {
           id: hubId,
           load: jest.fn().mockResolvedValueOnce({
             name: 'HubName',
-            image: 'HubImage',
+            coverImage: { load: jest.fn().mockResolvedValueOnce({ fileName: 'HubImage' }) },
           })
         } as any,
       },

@@ -1,5 +1,6 @@
 import { Collection, Entity, IdentifiedReference, ManyToOne, OneToMany, PrimaryKey, Property, types } from "@mikro-orm/core";
 import { Field, ID, ObjectType } from "@nestjs/graphql";
+import { File } from "./file.entity";
 import { Hub } from "./hub.entity";
 import { JoinUserEvent } from "./joinUserEvent.entity";
 import { ShareableId } from "./shareableId.entity";
@@ -46,10 +47,21 @@ export class Event extends ShareableId {
   public endDateTime?: string;
 
   /**
+   * Exposed as a field resolver
+   */
+   @ManyToOne({
+    entity: () => File,
+    wrappedReference: true,
+    nullable: true,
+  })
+  public coverImage?: IdentifiedReference<File>;
+
+  /**
+   * @deprecated use file based field instead 
    * Handled with a field resolver
    */
-  @Property({ nullable: true })
-  public image?: string;
+  @Property({ nullable: true, fieldName: 'image', })
+  public legacyImage?: string;
 
   /**
    * Exposed as a field resolver
@@ -84,9 +96,6 @@ export class Event extends ShareableId {
    */
   @OneToMany(() => JoinUserEvent, (joinUserEvent) => joinUserEvent.event)
   public usersConnection = new Collection<JoinUserEvent>(this);
-
-  @Property({ nullable: true })
-  public flagged?: boolean;
 
   @Property({ nullable: true })
   public banned?: boolean;

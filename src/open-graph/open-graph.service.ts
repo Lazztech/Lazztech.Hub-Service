@@ -25,24 +25,28 @@ export class OpenGraphService {
     ) {}
     
     public async getHubTagValues(shareableId: string, req: Request): Promise<OpenGraphTagValues> {
-        const hub = await this.hubRepository.findOne({ shareableId });
+        const hub = await this.hubRepository.findOne({ shareableId }, {
+            populate: ['coverImage']
+        });
         const ogUrl = `${req.protocol}://${req.get('host')}/hub/${shareableId}`;
         return {
             ogUrl,
             ogTitle: hub?.name,
             ogDescription: hub?.description,
-            ogImage: hub?.image && this.fileUrlService.getWatermarkedFileUrl(hub.image, req),
+            ogImage: hub?.legacyImage && this.fileUrlService.getWatermarkedFileUrl((await hub.coverImage.load())?.fileName, req),
           };
     }
 
     public async getEventTagValues(shareableId: string, req: Request): Promise<OpenGraphTagValues> {
-        const event = await this.eventRepository.findOne({ shareableId });
+        const event = await this.eventRepository.findOne({ shareableId }, {
+            populate: ['coverImage']
+        });
         const ogUrl = `${req.protocol}://${req.get('host')}/event/${shareableId}`;
         return {
             ogUrl,
             ogTitle: event?.name,
             ogDescription: event?.description,
-            ogImage: event?.image && this.fileUrlService.getWatermarkedFileUrl(event.image, req),
+            ogImage: event?.coverImage && this.fileUrlService.getWatermarkedFileUrl((await event.coverImage.load()).fileName, req),
           };
     }
 

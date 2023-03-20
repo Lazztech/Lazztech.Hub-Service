@@ -9,6 +9,7 @@ import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/core';
 import { Block } from '../dal/entity/block.entity';
 import { FileUpload } from 'src/file/interfaces/file-upload.interface';
+import { File } from '../dal/entity/file.entity';
 
 @Injectable()
 export class UserService {
@@ -23,6 +24,8 @@ export class UserService {
     private userRepository: EntityRepository<User>,
     @InjectRepository(Block)
     private blockRepository: EntityRepository<Block>,
+    @InjectRepository(File)
+    private fileRepository: EntityRepository<File>,
   ) {
     this.logger.debug('constructor');
   }
@@ -73,14 +76,19 @@ export class UserService {
   }
 
   public async updateUser(userId: any, value: User, image: Promise<FileUpload>): Promise<User> {
-    let user = await this.userRepository.findOneOrFail({ id: userId });
+    let user = await this.userRepository.findOneOrFail({ id: userId }, {
+      populate: ['profileImage']
+    }) as User;
 
     if (image) {
-      if (user.image) {
-        await this.fileService.delete(user.image);
+      if (user.legacyImage) {
+        await this.fileService.delete(user.legacyImage);
       }
-      const imageUrl = await this.fileService.storeImageFromFileUpload(image);
-      user.image = imageUrl;
+      if (user.profileImage) {
+        await this.fileService.delete((await user.profileImage.load()).fileName);
+      }
+      const imageFile = await this.fileService.storeImageFromFileUpload(image, userId);
+      user.profileImage = imageFile as any;
     }
 
     user = this.userRepository.assign(user, value);
@@ -92,18 +100,6 @@ export class UserService {
     this.logger.debug(this.changeEmail.name);
     const user = await this.userRepository.findOne({ id: userId });
     user.email = newEmail;
-    await this.userRepository.persistAndFlush(user);
-    return user;
-  }
-
-  public async changeUserImage(userId: any, newImage: string) {
-    this.logger.debug(this.changeUserImage.name);
-    const user = await this.userRepository.findOne(userId);
-    if (user.image) {
-      await this.fileService.delete(user.image);
-    }
-    const imageUrl = await this.fileService.storeImageFromBase64(newImage);
-    user.image = imageUrl;
     await this.userRepository.persistAndFlush(user);
     return user;
   }

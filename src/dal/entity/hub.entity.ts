@@ -3,8 +3,9 @@ import { JoinUserHub } from './joinUserHub.entity';
 import { MicroChat } from './microChat.entity';
 import { Invite } from './invite.entity';
 import { ShareableId } from './shareableId.entity'
-import { Collection, Entity, OneToMany, PrimaryKey, Property, types } from '@mikro-orm/core';
+import { Collection, Entity, IdentifiedReference, ManyToOne, OneToMany, PrimaryKey, Property, types } from '@mikro-orm/core';
 import { Event } from './event.entity';
+import { File } from './file.entity';
 
  /* eslint-disable */ // needed for mikroorm default value & type which conflicts with typescript-eslint/no-unused-vars
 @ObjectType()
@@ -27,10 +28,21 @@ export class Hub extends ShareableId {
   public active: boolean = true;
 
   /**
+   * Exposed as a field resolver
+   */
+   @ManyToOne({
+    entity: () => File,
+    wrappedReference: true,
+    nullable: true,
+  })
+  public coverImage?: IdentifiedReference<File>;
+
+  /**
+   * @deprecated use file based field instead 
    * Handled with a field resolver
    */
-  @Property({ nullable: true })
-  public image?: string;
+  @Property({ nullable: true, fieldName: 'image', })
+  public legacyImage?: string;
 
   @Field({ nullable: true })
   @Property({ type: 'float', nullable: true })
@@ -67,9 +79,6 @@ export class Hub extends ShareableId {
    */
   @OneToMany(() => Invite, (invite) => invite.hub)
   public invites = new Collection<Invite>(this);
-
-  @Property({ nullable: true })
-  public flagged?: boolean;
 
   @Property({ nullable: true })
   public banned?: boolean;

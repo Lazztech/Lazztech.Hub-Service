@@ -14,6 +14,7 @@ import { NotificationService } from '../notification/notification.service';
 import { HttpModule } from '@nestjs/axios';
 import { InAppNotification } from '../dal/entity/inAppNotification.entity';
 import { UserDevice } from '../dal/entity/userDevice.entity';
+import { File } from '../dal/entity/file.entity';
 
 describe('EventResolver', () => {
   let resolver: EventResolver;
@@ -54,6 +55,10 @@ describe('EventResolver', () => {
         },
         {
           provide: getRepositoryToken(UserDevice),
+          useClass: EntityRepository,
+        },
+        {
+          provide: getRepositoryToken(File),
           useClass: EntityRepository,
         },
       ],

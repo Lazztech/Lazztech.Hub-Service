@@ -14,6 +14,11 @@ import * as path from 'path';
 import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
 import { DataloadersModule } from './dal/dataloaders/dataloaders.module';
+import { Event } from './dal/entity/event.entity';
+import { File } from './dal/entity/file.entity';
+import { Hub } from './dal/entity/hub.entity';
+import { JoinUserHub } from './dal/entity/joinUserHub.entity';
+import { User } from './dal/entity/user.entity';
 import { FieldResolversModule } from './dal/field-resolvers/field-resolvers.module';
 import { EmailModule } from './email/email.module';
 import { EventModule } from './event/event.module';
@@ -29,6 +34,13 @@ import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
+    MikroOrmModule.forFeature([
+      Hub,
+      User,
+      File,
+      Event,
+      JoinUserHub,
+    ]),
     OpenTelemetryModule.forRoot({
       metrics: {
         hostMetrics: true, // Includes Host Metrics
