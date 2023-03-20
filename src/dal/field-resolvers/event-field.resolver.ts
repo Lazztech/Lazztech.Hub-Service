@@ -3,9 +3,11 @@ import { InjectRepository } from '@mikro-orm/nestjs';
 import { Context, Float, Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { UserId } from '../../decorators/user.decorator';
 import { FileUrlService } from '../../file/file-url/file-url.service';
+import { FilesByFileIdLoader } from '../dataloaders/files-by-fileId.loader';
 import { UsersByUserIdLoader } from '../dataloaders/users-by-userId.loader';
 import { Block } from '../entity/block.entity';
 import { Event } from '../entity/event.entity';
+import { File } from '../entity/file.entity';
 import { Hub } from '../entity/hub.entity';
 import { JoinUserEvent } from '../entity/joinUserEvent.entity';
 import { User } from '../entity/user.entity';
@@ -18,7 +20,13 @@ export class EventFieldResolver {
     @InjectRepository(Block)
     private blockRepository: EntityRepository<Block>,
     private readonly usersByUserIdLoader: UsersByUserIdLoader,
+    private readonly filesByFileIdLoader: FilesByFileIdLoader,
   ) {}
+
+  @ResolveField(() => File, { nullable: true })
+  public async coverImage(@Parent() parent: Event): Promise<File> {
+    return this.filesByFileIdLoader.load(parent?.coverImage?.id);
+  }
 
   @ResolveField(() => User, { nullable: true })
   public createdBy(@Parent() parent: Event): Promise<User> {

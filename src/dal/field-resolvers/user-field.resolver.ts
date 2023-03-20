@@ -3,7 +3,9 @@ import { Context, Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { UserId } from '../../decorators/user.decorator';
 import { FileUrlService } from '../../file/file-url/file-url.service';
 import { BlocksByCompositKeyLoader } from '../dataloaders/blocks-by-compositKey.loader';
+import { FilesByFileIdLoader } from '../dataloaders/files-by-fileId.loader';
 import { Block } from '../entity/block.entity';
+import { File } from '../entity/file.entity';
 import { User } from '../entity/user.entity';
 import { UserDevice } from '../entity/userDevice.entity';
 
@@ -14,7 +16,13 @@ export class UserFieldResolver {
   constructor(
     private readonly fileUrlService: FileUrlService,
     private readonly blocksByCompositKeyLoader: BlocksByCompositKeyLoader,
+    private readonly filesByFileIdLoader: FilesByFileIdLoader,
   ) {}
+
+  @ResolveField(() => File, { nullable: true })
+  async profileImage(@Parent() parent: User): Promise<File> {
+    return this.filesByFileIdLoader.load(parent?.profileImage?.id);
+  }
 
   @ResolveField(() => String, { nullable: true })
   async image(@Parent() user: User, @Context() ctx: any): Promise<string> {
