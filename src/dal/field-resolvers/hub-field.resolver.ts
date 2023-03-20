@@ -32,7 +32,7 @@ export class HubFieldResolver {
   @ResolveField(() => String, { nullable: true })
   async image(@Parent() hub: Hub, @Context() ctx: any): Promise<string> {
     if (hub.coverImage) {
-      const coverImage = await hub?.coverImage?.load();
+      const coverImage = await this.filesByFileIdLoader.load(hub?.coverImage?.id);
       return this.fileUrlService.getFileUrl(coverImage?.fileName, ctx.req);
     }
     return this.fileUrlService.getFileUrl(hub?.legacyImage, ctx.req);

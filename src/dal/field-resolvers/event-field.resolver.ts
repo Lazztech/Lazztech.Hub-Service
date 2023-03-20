@@ -23,11 +23,6 @@ export class EventFieldResolver {
     private readonly filesByFileIdLoader: FilesByFileIdLoader,
   ) {}
 
-  @ResolveField(() => File, { nullable: true })
-  public async coverImage(@Parent() parent: Event): Promise<File> {
-    return this.filesByFileIdLoader.load(parent?.coverImage?.id);
-  }
-
   @ResolveField(() => User, { nullable: true })
   public createdBy(@Parent() parent: Event): Promise<User> {
     return this.usersByUserIdLoader.load(parent.createdBy.id);
@@ -62,10 +57,15 @@ export class EventFieldResolver {
     return parent.hub?.load();
   }
 
+  @ResolveField(() => File, { nullable: true })
+  public async coverImage(@Parent() parent: Event): Promise<File> {
+    return this.filesByFileIdLoader.load(parent?.coverImage?.id);
+  }
+
   @ResolveField(() => String, { nullable: true })
   async image(@Parent() parent: Event, @Context() ctx: any): Promise<string> {
     if (parent.coverImage) {
-      const coverImage = await parent?.coverImage?.load();
+      const coverImage = await this.filesByFileIdLoader.load(parent?.coverImage?.id);
       return this.fileUrlService.getFileUrl(coverImage?.fileName, ctx.req);
     }
     return this.fileUrlService.getFileUrl(parent?.legacyImage, ctx.req);
