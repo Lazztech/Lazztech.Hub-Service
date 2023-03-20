@@ -83,7 +83,7 @@ describe('HubMicroChatService', () => {
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce({
       id: userId,
       firstName: 'Gian',
-      image: 'image.png',
+      profileImage: { load: jest.fn().mockResolvedValueOnce({ fileName: 'image.png' })} ,
     } as any);
     jest.spyOn(hubRepo, 'findOne').mockResolvedValueOnce({
       id: hubId,
