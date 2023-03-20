@@ -22,7 +22,7 @@ import { HubTasksService } from './hub-tasks/hub-tasks.service';
 import { ScheduleModule } from '@nestjs/schedule';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Block } from '../dal/entity/block.entity';
-import { File } from 'src/dal/entity/file.entity';
+import { File } from '../dal/entity/file.entity';
 
 @Module({
   imports: [

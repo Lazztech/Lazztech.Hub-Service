@@ -85,7 +85,7 @@ export class HubActivityService {
       await this.notificationService.addInAppNotificationForUser(
         joinUserHub.user.id,
         {
-          thumbnail: (await hub.coverImage.load()).fileName,
+          thumbnail: (await hub.coverImage?.load())?.fileName,
           header: `"${hub.name}" hub became active`,
           text: `Touch to go to hub.`,
           date: Date.now().toString(),

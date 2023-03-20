@@ -8,7 +8,7 @@ import { S3FileService } from './s3-file/s3-file.service';
 import { FileUrlService } from './file-url/file-url.service';
 import * as path from 'path';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
-import { File } from 'src/dal/entity/file.entity';
+import { File } from '../dal/entity/file.entity';
 
 export const fileServiceFactory = {
   provide: FILE_SERVICE,
