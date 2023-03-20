@@ -21,7 +21,7 @@ export class UserFieldResolver {
 
   @ResolveField(() => File, { nullable: true })
   async profileImage(@Parent() parent: User): Promise<File> {
-    return this.filesByFileIdLoader.load(parent?.profileImage?.id);
+    return parent?.profileImage?.id && this.filesByFileIdLoader.load(parent.profileImage.id);
   }
 
   @ResolveField(() => String, { nullable: true })

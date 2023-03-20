@@ -59,7 +59,7 @@ export class EventFieldResolver {
 
   @ResolveField(() => File, { nullable: true })
   public async coverImage(@Parent() parent: Event): Promise<File> {
-    return this.filesByFileIdLoader.load(parent?.coverImage?.id);
+    return parent?.coverImage?.id && this.filesByFileIdLoader.load(parent.coverImage.id);
   }
 
   @ResolveField(() => String, { nullable: true })

@@ -26,7 +26,7 @@ export class HubFieldResolver {
 
   @ResolveField(() => File, { nullable: true })
   async coverImage(@Parent() parent: Hub): Promise<File> {
-    return this.filesByFileIdLoader.load(parent?.coverImage?.id);
+    return parent?.coverImage?.id && this.filesByFileIdLoader.load(parent.coverImage.id);
   }
 
   @ResolveField(() => String, { nullable: true })
