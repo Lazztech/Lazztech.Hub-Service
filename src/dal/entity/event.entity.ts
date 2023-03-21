@@ -61,7 +61,7 @@ export class Event extends ShareableId {
    * Handled with a field resolver
    */
   @Property({ nullable: true, fieldName: 'image', })
-  public legacyImage?: string;
+  private legacyImage?: string;
 
   /**
    * Exposed as a field resolver

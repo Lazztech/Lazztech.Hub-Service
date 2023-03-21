@@ -56,7 +56,7 @@ export class User extends ShareableId {
    * Exposed as a field resolver
    */
   @Property({ nullable: true, fieldName: 'image', })
-  public legacyImage?: string;
+  private legacyImage?: string;
 
   @Field({ nullable: true })
   @Unique()

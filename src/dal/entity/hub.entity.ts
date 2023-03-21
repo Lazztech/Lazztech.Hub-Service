@@ -42,7 +42,7 @@ export class Hub extends ShareableId {
    * Handled with a field resolver
    */
   @Property({ nullable: true, fieldName: 'image', })
-  public legacyImage?: string;
+  private legacyImage?: string;
 
   @Field({ nullable: true })
   @Property({ type: 'float', nullable: true })
