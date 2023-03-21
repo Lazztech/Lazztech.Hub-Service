@@ -52,8 +52,8 @@ export class User extends ShareableId {
   public profileImage?: IdentifiedReference<File>;
 
   /**
-   * @deprecated use file based field instead 
-   * Exposed as a field resolver
+   * @deprecated Use file based field instead.
+   * Left over as private to retain image column data in db for if needed later.
    */
   @Property({ nullable: true, fieldName: 'image', })
   private legacyImage?: string;

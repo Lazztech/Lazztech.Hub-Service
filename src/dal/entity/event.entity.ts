@@ -57,8 +57,8 @@ export class Event extends ShareableId {
   public coverImage?: IdentifiedReference<File>;
 
   /**
-   * @deprecated use file based field instead 
-   * Handled with a field resolver
+   * @deprecated Use file based field instead.
+   * Left over as private to retain image column data in db for if needed later.
    */
   @Property({ nullable: true, fieldName: 'image', })
   private legacyImage?: string;
