@@ -2,7 +2,6 @@ import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import request from 'supertest';
 import { AppModule } from './../src/app.module';
-import { base64_encoded_1x1px_jpeg_for_testing } from './e2e-helpers';
 
  /* eslint-disable */
 describe('AppController (e2e)', () => {
@@ -154,7 +153,6 @@ describe('AppController (e2e)', () => {
         `,
         variables: {
           description: 'test',
-          image: base64_encoded_1x1px_jpeg_for_testing,
           latitude: 0,
           longitude: 0,
           name: 'test',
