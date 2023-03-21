@@ -1,27 +1,25 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { Hub } from '../dal/entity/hub.entity';
-import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
-import { User } from '../dal/entity/user.entity';
-import { UserService } from './user.service';
-import { EmailService } from '../email/email.service';
-import { Invite } from '../dal/entity/invite.entity';
-import { ConfigService } from '@nestjs/config';
-import { PasswordReset } from '../dal/entity/passwordReset.entity';
-import { EditUserDetails } from './dto/editUserDetails.input';
-import { ImageFileService } from '../file/image-file/image-file.service';
-import { FileServiceInterface } from '../file/interfaces/file-service.interface';
-import { LocalFileService } from '../file/local-file/local-file.service';
-import { FILE_SERVICE } from '../file/file-service.token';
-import { getRepositoryToken } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/core';
+import { getRepositoryToken } from '@mikro-orm/nestjs';
+import { ConfigService } from '@nestjs/config';
+import { Test, TestingModule } from '@nestjs/testing';
 import { Block } from '../dal/entity/block.entity';
 import { File } from '../dal/entity/file.entity';
+import { Hub } from '../dal/entity/hub.entity';
+import { Invite } from '../dal/entity/invite.entity';
+import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
+import { PasswordReset } from '../dal/entity/passwordReset.entity';
+import { User } from '../dal/entity/user.entity';
+import { EmailService } from '../email/email.service';
+import { FILE_SERVICE } from '../file/file-service.token';
+import { ImageFileService } from '../file/image-file/image-file.service';
+import { LocalFileService } from '../file/local-file/local-file.service';
+import { EditUserDetails } from './dto/editUserDetails.input';
+import { UserService } from './user.service';
 
 describe('UserService', () => {
   let service: UserService;
   let joinUserHubRepo: EntityRepository<JoinUserHub>;
   let userRepo: EntityRepository<User>;
-  let fileService: FileServiceInterface;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -67,7 +65,6 @@ describe('UserService', () => {
       getRepositoryToken(JoinUserHub),
     );
     userRepo = module.get<EntityRepository<User>>(getRepositoryToken(User));
-    fileService = module.get<FileServiceInterface>(FILE_SERVICE);
   });
 
   it('should be defined', async () => {

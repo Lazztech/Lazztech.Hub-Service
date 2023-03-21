@@ -81,9 +81,6 @@ export class UserService {
     }) as User;
 
     if (image) {
-      if (user.legacyImage) {
-        await this.fileService.delete(user.legacyImage);
-      }
       if (user.profileImage) {
         await this.fileService.delete((await user.profileImage.load()).fileName);
       }

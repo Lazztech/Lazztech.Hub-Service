@@ -336,7 +336,7 @@ describe('HubService', () => {
       isOwner: true,
     } as any);
     jest.spyOn(hubRepo, 'findOne').mockResolvedValueOnce({
-      legacyImage: 'imageTest',
+      coverImage: { load: jest.fn().mockResolvedValueOnce({ fileName: 'imageTest' }) },
     } as any);
     const deleteImageCall = jest
       .spyOn(fileService, 'delete')

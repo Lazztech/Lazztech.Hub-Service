@@ -4,7 +4,6 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { FileUpload } from 'src/file/interfaces/file-upload.interface';
 import { v4 as uuid } from 'uuid';
 import { Event } from '../dal/entity/event.entity';
-import { File } from '../dal/entity/file.entity';
 import { JoinUserEvent, RSVP } from '../dal/entity/joinUserEvent.entity';
 import { User } from '../dal/entity/user.entity';
 import { FILE_SERVICE } from '../file/file-service.token';
@@ -174,16 +173,11 @@ export class EventService {
             populate: ['coverImage']
         }) as Event;
         if (image) {
-            if (value?.legacyImage) {
-              await this.fileService.delete(value.legacyImage).catch(err => this.logger.warn(err));
-            }
             if (value?.coverImage) {
                 await this.fileService.delete((await value?.coverImage.load()).fileName).catch(err => this.logger.warn(err));
             }
             const imageFile = await this.fileService.storeImageFromFileUpload(image, userId);
             value.coverImage = imageFile as any;
-        } else {
-            delete value?.legacyImage;
         }
 
         event = this.eventRepository.assign(event, value);
