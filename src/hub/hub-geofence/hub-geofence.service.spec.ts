@@ -427,7 +427,6 @@ describe('HubGeofenceService', () => {
     const mockHub = {
       id: 1,
       name: 'testHub',
-      legacyImage: 'testImage'
     } as Hub;
     const mockUser = {
       id: 1,
@@ -488,7 +487,6 @@ describe('HubGeofenceService', () => {
     const mockHub = {
       id: 1,
       name: 'testHub',
-      legacyImage: 'testImage'
     } as Hub;
     const mockUser = {
       id: 1,
