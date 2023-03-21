@@ -35,7 +35,6 @@ export class HubResolver {
     @UserId() userId,
     @Args({ name: 'name', type: () => String }) name: string,
     @Args({ name: 'description', type: () => String, nullable: true }) description: string,
-    @Args({ name: 'image', type: () => String, nullable: true }) image: string,
     @Args({ name: 'latitude', type: () => Float }) latitude: number,
     @Args({ name: 'longitude', type: () => Float }) longitude: number,
     @Args({ name: 'locationLabel', type: () => String, nullable: true }) locationLabel: string,
@@ -45,7 +44,6 @@ export class HubResolver {
     return this.hubService.createHub(userId, {
       name,
       description,
-      legacyImage: image,
       latitude,
       longitude,
       locationLabel
@@ -238,7 +236,6 @@ export class HubResolver {
     @Args({ name: 'hubId', type: () => ID }) hubId: number,
     @Args({ name: 'name', type: () => String }) name: string,
     @Args({ name: 'description', type: () => String, nullable: true }) description: string,
-    @Args({ name: 'image', type: () => String, nullable: true }) image: string,
     @Args({ name: 'latitude', type: () => Float }) latitude: number,
     @Args({ name: 'longitude', type: () => Float }) longitude: number,
     @Args({ name: 'locationLabel', type: () => String, nullable: true }) locationLabel: string,
@@ -249,7 +246,6 @@ export class HubResolver {
       id: hubId,
       name,
       description,
-      legacyImage: image,
       latitude,
       longitude,
       locationLabel,

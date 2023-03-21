@@ -35,7 +35,6 @@ export class HubFieldResolver {
       const coverImage = await this.filesByFileIdLoader.load(hub?.coverImage?.id);
       return this.fileUrlService.getFileUrl(coverImage?.fileName, ctx.req);
     }
-    return this.fileUrlService.getFileUrl(hub?.legacyImage, ctx.req);
   }
 
   @ResolveField(() => [JoinUserHub], { nullable: true })

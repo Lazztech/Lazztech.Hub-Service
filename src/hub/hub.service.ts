@@ -173,9 +173,6 @@ export class HubService {
     const hub = await this.hubRepository.findOne({ id: hubId }, {
       populate: ['coverImage']
     });
-    if (hub.legacyImage) {
-      await this.fileService.delete(hub.legacyImage);
-    }
     if (hub.coverImage) {
       await this.fileService.delete((await hub.coverImage.load()).fileName);
     }
@@ -198,16 +195,11 @@ export class HubService {
     });
 
     if (image) {
-      if (value?.legacyImage) {
-        await this.fileService.delete(value.legacyImage).catch(err => this.logger.warn(err));
-      }
       if (value?.coverImage) {
         await this.fileService.delete((await value.coverImage.load()).fileName).catch(err => this.logger.warn(err));
       }
       const imageFile = await this.fileService.storeImageFromFileUpload(image, userId);
       value.coverImage = imageFile as any; 
-    } else {
-        delete value?.legacyImage;
     }
 
     let hub = await joinUserHubResult.hub.load();
