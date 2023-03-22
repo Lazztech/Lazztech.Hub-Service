@@ -30,7 +30,7 @@ export class FileController {
   @Header('content-type', 'image/jpeg')
   async watermark(@Param('shareableId') shareableId: string, @Res() response: Response) {
     const watermark = await sharp(
-      join(process.cwd(), 'public', 'assets', 'lazztech_icon.png')
+      join(process.cwd(), 'public', 'assets', 'lazztech_icon.webp')
     ).resize(150, 150)
       .extend({
         top: 0,
