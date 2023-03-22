@@ -96,6 +96,16 @@ export class S3FileService implements FileServiceInterface {
       .createReadStream() as ReadStream;
   }
 
+  async getByShareableId(shareableId: string): Promise<ReadStream> {
+    const file = await this.fileRepository.findOneOrFail({ shareableId });
+    return this.s3
+      .getObject({
+        Bucket: this.bucketName,
+        Key: file.fileName,
+      })
+      .createReadStream() as ReadStream;
+  }
+
   private async ensureBucketExists() {
     this.logger.debug(this.ensureBucketExists.name);
     const list = await this.s3.listBuckets().promise();

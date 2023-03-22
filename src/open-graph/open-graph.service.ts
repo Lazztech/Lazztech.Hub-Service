@@ -33,7 +33,7 @@ export class OpenGraphService {
             ogUrl,
             ogTitle: hub?.name,
             ogDescription: hub?.description,
-            ogImage: this.fileUrlService.getWatermarkedFileUrl((await hub.coverImage.load())?.fileName, req),
+            ogImage: this.fileUrlService.getWatermarkedFileUrl((await hub.coverImage.load())?.shareableId, req),
           };
     }
 
@@ -46,7 +46,7 @@ export class OpenGraphService {
             ogUrl,
             ogTitle: event?.name,
             ogDescription: event?.description,
-            ogImage: event?.coverImage && this.fileUrlService.getWatermarkedFileUrl((await event.coverImage.load()).fileName, req),
+            ogImage: event?.coverImage && this.fileUrlService.getWatermarkedFileUrl((await event.coverImage.load()).shareableId, req),
           };
     }
 
