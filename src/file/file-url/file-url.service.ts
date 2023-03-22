@@ -11,11 +11,7 @@ export class FileUrlService {
     }
   }
 
-  getWatermarkedFileUrl(fileName: string, req: Request): string {
-    if (fileName) {
-      return `${req.protocol}://${req.get('host')}/file/watermark/${fileName}`;
-    } else {
-      return fileName;
-    }
+  getWatermarkedFileUrl(shareableId: string, req: Request): string {
+    return `${req.protocol}://${req.get('host')}/file/watermark/${shareableId}`;
   }
 }

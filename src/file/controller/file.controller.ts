@@ -25,33 +25,34 @@ export class FileController {
     }).pipe(response);
   }
 
-  @Get('watermark/:fileName')
+  @Get('watermark/:shareableId')
   @Header('Cache-Control', 'public, max-age=86400') // public for CDN, max-age= 24hrs in seconds
   @Header('content-type', 'image/jpeg')
-  async watermark(@Param('fileName') fileName: string, @Res() response: Response) {
+  async watermark(@Param('shareableId') shareableId: string, @Res() response: Response) {
     const watermark = await sharp(
-      join(process.cwd(), 'public', 'assets', 'lazztech_icon.png')
+      join(process.cwd(), 'public', 'assets', 'lazztech_icon.webp')
     ).resize(150, 150)
-    .extend({
-      top: 0,
-      bottom: 20,
-      left: 20,
-      right: 0,
-      background: { r: 0, g: 0, b: 0, alpha: 0 }
-    })
-    .composite([
-      {
-        input: Buffer.from([0,0,0,200]),
-        raw: {
-          width: 1,
-          height: 1,
-          channels: 4,
-        },
-        tile: true,
-        blend: 'dest-in',
-      }
-    ]).toBuffer();
-    this.fileService.get(fileName).pipe(
+      .extend({
+        top: 0,
+        bottom: 20,
+        left: 20,
+        right: 0,
+        background: { r: 0, g: 0, b: 0, alpha: 0 }
+      })
+      .composite([
+        {
+          input: Buffer.from([0, 0, 0, 200]),
+          raw: {
+            width: 1,
+            height: 1,
+            channels: 4,
+          },
+          tile: true,
+          blend: 'dest-in',
+        }
+      ]).toBuffer();
+    const fileStream = await this.fileService.getByShareableId(shareableId);
+    fileStream.pipe(
       sharp()
         .jpeg()
         .resize(1080, 1080, { fit: sharp.fit.inside })

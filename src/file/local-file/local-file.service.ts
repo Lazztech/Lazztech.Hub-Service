@@ -61,6 +61,15 @@ export class LocalFileService implements FileServiceInterface {
     }
   }
 
+  async getByShareableId(shareableId: string): Promise<fs.ReadStream> {
+    const file = await this.fileRepository.findOneOrFail({ shareableId });
+    if (fs.existsSync(path.join(this.directory, file.fileName))) {
+      return fs.createReadStream(path.join(this.directory, file.fileName));
+    } else {
+      throw new NotFoundException(file.fileName);
+    }
+  }
+
   async delete(fileName: string): Promise<void> {
     return fs.promises.unlink(path.join(this.directory, fileName))
       .catch(err => this.logger.warn(err));
