@@ -1,5 +1,5 @@
 import { Logger, UseGuards } from '@nestjs/common';
-import { Args, Float, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Float, ID, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GqlJwtAuthGuard } from '../auth/guards/gql-jwt-auth.guard';
 import { Event } from '../dal/entity/event.entity';
 import { JoinUserEvent } from '../dal/entity/joinUserEvent.entity';
@@ -24,6 +24,8 @@ export class EventResolver {
         @Args({ name: 'name', type: () => String }) name: string,
         @Args({ name: 'description', type: () => String, nullable: true }) description: string,
         @Args({ name: 'startDateTime', type: () => String, nullable: true }) startDateTime: string,
+        @Args({ name: 'minimumCapacity', type: () => Int, nullable: true }) minimumCapacity: number,
+        @Args({ name: 'maximumCapacity', type: () => Int, nullable: true }) maximumCapacity: number,
         @Args({ name: 'endDateTime', type: () => String, nullable: true }) endDateTime: string,
         @Args({ name: 'hubId', type: () => String, nullable: true }) hubId: any,
         @Args({ name: 'latitude', type: () => Float, nullable: true }) latitude: number,
@@ -37,6 +39,8 @@ export class EventResolver {
             description,
             startDateTime,
             endDateTime,
+            minimumCapacity,
+            maximumCapacity,
             hub: hubId,
             latitude,
             longitude,
@@ -131,6 +135,8 @@ export class EventResolver {
         @Args({ name: 'description', type: () => String, nullable: true }) description: string,
         @Args({ name: 'startDateTime', type: () => String, nullable: true }) startDateTime: string,
         @Args({ name: 'endDateTime', type: () => String, nullable: true }) endDateTime: string,
+        @Args({ name: 'minimumCapacity', type: () => Int, nullable: true }) minimumCapacity: number,
+        @Args({ name: 'maximumCapacity', type: () => Int, nullable: true }) maximumCapacity: number,
         @Args({ name: 'hubId', type: () => String, nullable: true }) hubId: any,
         @Args({ name: 'latitude', type: () => Float, nullable: true }) latitude: number,
         @Args({ name: 'longitude', type: () => Float, nullable: true }) longitude: number,
@@ -144,6 +150,8 @@ export class EventResolver {
             description,
             startDateTime,
             endDateTime,
+            minimumCapacity,
+            maximumCapacity,
             hub: hubId,
             latitude,
             longitude,
