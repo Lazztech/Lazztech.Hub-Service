@@ -46,9 +46,11 @@ export class Event extends ShareableId {
   @Property({ nullable: true })
   public endDateTime?: string;
 
+  @Field({ nullable: true })
   @Property({ type: 'float', nullable: true })
   public minimumCapacity?: number;
 
+  @Field({ nullable: true })
   @Property({ type: 'float', nullable: true })
   public maximumCapacity?: number;
 
