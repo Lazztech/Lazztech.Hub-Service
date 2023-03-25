@@ -28,6 +28,9 @@ export class EventService {
 
     async createEvent(userId: any, event: Event, image?: Promise<FileUpload>): Promise<JoinUserEvent> {
         this.logger.debug(this.createEvent.name);
+        if ((event?.maximumCapacity <= event?.minimumCapacity)) {
+            throw Error('Maximum capacity must be greater than minimum capacity.');
+        }
         if (image) {
             const imageFile = await this.fileService.storeImageFromFileUpload(image, userId);
             event.coverImage = imageFile as any;
@@ -166,6 +169,9 @@ export class EventService {
 
     async updateEvent(userId: any, value: Event, image?: Promise<FileUpload>): Promise<Event> {
         this.logger.debug(this.updateEvent.name);
+        if ((value?.maximumCapacity <= value?.minimumCapacity)) {
+            throw Error('Maximum capacity must be greater than minimum capacity.');
+        }
         let event = await this.eventRepository.findOneOrFail({
             createdBy: userId,
             id: value.id

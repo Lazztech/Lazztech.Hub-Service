@@ -972,6 +972,24 @@
           "nullable": true,
           "mappedType": "string"
         },
+        "minimum_capacity": {
+          "name": "minimum_capacity",
+          "type": "real",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "float"
+        },
+        "maximum_capacity": {
+          "name": "maximum_capacity",
+          "type": "real",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "float"
+        },
         "cover_image_id": {
           "name": "cover_image_id",
           "type": "int",
