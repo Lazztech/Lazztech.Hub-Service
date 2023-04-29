@@ -12,6 +12,7 @@ import { ModerationInterceptor } from './moderation/moderation.interceptor';
 import { LogLevel } from '@nestjs/common';
 import { join } from 'path';
 import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
+import { createProxyMiddleware } from 'http-proxy-middleware';
 
 async function bootstrap() {
   // Start SDK before nestjs factory create
@@ -46,6 +47,12 @@ async function bootstrap() {
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
+
+    // Proxy endpoints
+    app.use('/protomaps-sample-datasets/protomaps-basemap-opensource-20230408.pmtiles', createProxyMiddleware({
+      target: 'https://r2-public.protomaps.com',
+      changeOrigin: true,
+    }));
 
   app.useGlobalInterceptors(new ModerationInterceptor());
   await app.listen(process.env.PORT || 8080);

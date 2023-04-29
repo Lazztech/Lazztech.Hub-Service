@@ -26,7 +26,6 @@ import { NotificationModule } from './notification/notification.module';
 import { OpenGraphModule } from './open-graph/open-graph.module';
 import otelSDK from './tracing';
 import { UserModule } from './user/user.module';
-import { ProtomapsModule } from './protomaps/protomaps.module';
 
 @Module({
   imports: [
@@ -281,7 +280,6 @@ import { ProtomapsModule } from './protomaps/protomaps.module';
     DataloadersModule,
     LoggerModule,
     OpenGraphModule,
-    ProtomapsModule,
   ],
   providers: [
     {
