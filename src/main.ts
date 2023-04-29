@@ -49,8 +49,11 @@ async function bootstrap() {
   });
 
     // Proxy endpoints
-    app.use('/protomaps-sample-datasets/protomaps-basemap-opensource-20230408.pmtiles', createProxyMiddleware({
+    app.use('/protomaps/tiles.pmtiles', createProxyMiddleware({
       target: 'https://r2-public.protomaps.com',
+      pathRewrite: {
+        '^/protomaps/tiles.pmtiles': '/protomaps-sample-datasets/protomaps-basemap-opensource-20230408.pmtiles', // rewrite path
+      },
       changeOrigin: true,
     }));
 
