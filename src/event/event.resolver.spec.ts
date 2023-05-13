@@ -15,6 +15,7 @@ import { HttpModule } from '@nestjs/axios';
 import { InAppNotification } from '../dal/entity/inAppNotification.entity';
 import { UserDevice } from '../dal/entity/userDevice.entity';
 import { File } from '../dal/entity/file.entity';
+import { EventGeofenceService } from './event-geofence/event-geofence.service';
 
 describe('EventResolver', () => {
   let resolver: EventResolver;
@@ -29,6 +30,7 @@ describe('EventResolver', () => {
         HttpModule,
       ],
       providers: [
+        EventGeofenceService,
         EventService,
         EventResolver,
         ImageFileService,

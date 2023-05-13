@@ -4,18 +4,19 @@ import { GqlJwtAuthGuard } from '../auth/guards/gql-jwt-auth.guard';
 import { Event } from '../dal/entity/event.entity';
 import { JoinUserEvent } from '../dal/entity/joinUserEvent.entity';
 import { UserId } from '../decorators/user.decorator';
-import { HubResolver } from '../hub/hub.resolver';
 import { EventService } from './event.service';
 import GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 import { FileUpload } from 'src/file/interfaces/file-upload.interface';
+import { EventGeofenceService } from './event-geofence/event-geofence.service';
 
 @UseGuards(GqlJwtAuthGuard)
 @Resolver()
 export class EventResolver {
-    private logger = new Logger(HubResolver.name);
+    private logger = new Logger(EventResolver.name);
 
     constructor(
         private readonly eventService: EventService,
+        private readonly eventGeofenceService: EventGeofenceService,
     ) {}
 
     @Mutation(() => JoinUserEvent)
@@ -157,5 +158,32 @@ export class EventResolver {
             longitude,
             locationLabel
           } as Event, imageFile);
+    }
+
+    @Mutation(() => JoinUserEvent)
+    public async enteredEventGeofence(
+      @UserId() userId,
+      @Args({ name: 'eventId', type: () => ID }) eventId: number,
+    ): Promise<JoinUserEvent> {
+      this.logger.debug(this.enteredEventGeofence.name);
+      return await this.eventGeofenceService.enteredEventGeofence(userId, eventId);
+    }
+  
+    @Mutation(() => JoinUserEvent)
+    public async dwellEventGeofence(
+      @UserId() userId,
+      @Args({ name: 'eventId', type: () => ID }) eventId: number,
+    ): Promise<JoinUserEvent> {
+      this.logger.debug(this.dwellEventGeofence.name);
+      return await this.eventGeofenceService.dwellEventGeofence(userId, eventId);
+    }
+  
+    @Mutation(() => JoinUserEvent)
+    public async exitedEventGeofence(
+      @UserId() userId,
+      @Args({ name: 'eventId', type: () => ID }) eventId: number,
+    ): Promise<JoinUserEvent> {
+      this.logger.debug(this.exitedEventGeofence.name);
+      return await this.eventGeofenceService.exitedEventGeofence(userId, eventId);
     }
 }

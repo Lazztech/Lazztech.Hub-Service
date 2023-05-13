@@ -10,6 +10,7 @@ import { EventResolver } from './event.resolver';
 import { EventService } from './event.service';
 import { NotificationModule } from '../notification/notification.module';
 import { File } from '../dal/entity/file.entity';
+import { EventGeofenceService } from './event-geofence/event-geofence.service';
 
 @Module({
   imports: [
@@ -24,6 +25,6 @@ import { File } from '../dal/entity/file.entity';
     FileModule,
     NotificationModule,
   ],
-  providers: [EventResolver, EventService]
+  providers: [EventResolver, EventService, EventGeofenceService]
 })
 export class EventModule {}
