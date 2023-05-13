@@ -1,7 +1,7 @@
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/postgresql';
 import { Injectable, Logger } from '@nestjs/common';
-import { GeofenceEvent, JoinUserEvent } from 'src/dal/entity/joinUserEvent.entity';
+import { GeofenceEvent, JoinUserEvent } from '../../dal/entity/joinUserEvent.entity';
 
 @Injectable()
 export class EventGeofenceService {
