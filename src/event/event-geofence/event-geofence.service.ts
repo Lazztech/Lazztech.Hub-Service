@@ -31,6 +31,42 @@ export class EventGeofenceService {
     
         return eventRelationship;
     }
-    async dwellEventGeofence() {}
-    async exitedEventGeofence() {}
+
+    async dwellEventGeofence(userId: any, eventId: number) {
+        this.logger.debug(this.dwellEventGeofence.name);
+        const eventRelationship = await this.joinUserEventRepository.findOneOrFail({
+          user: userId,
+          event: eventId,
+        });
+    
+        eventRelationship.lastUpdated = Date.now().toString();
+        eventRelationship.lastGeofenceEvent = GeofenceEvent.DWELL;
+    
+        if (!eventRelationship.isPresent) {
+          eventRelationship.isPresent = true;
+        }
+    
+        await this.joinUserEventRepository.persistAndFlush(eventRelationship);
+        return eventRelationship;
+    }
+
+    async exitedEventGeofence(userId: any, eventId: number) {
+        this.logger.debug(this.dwellEventGeofence.name);
+        const eventRelationship = await this.joinUserEventRepository.findOneOrFail({
+          user: userId,
+          event: eventId,
+        });
+    
+        eventRelationship.lastUpdated = Date.now().toString();
+        eventRelationship.lastGeofenceEvent = GeofenceEvent.EXITED;
+    
+        if (eventRelationship.isPresent) {
+          eventRelationship.isPresent = false;
+          await this.joinUserEventRepository.persistAndFlush(eventRelationship);
+        } else {
+          await this.joinUserEventRepository.persistAndFlush(eventRelationship);
+        }
+    
+        return eventRelationship;
+    }
 }
