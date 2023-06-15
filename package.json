@@ -79,7 +79,7 @@
     "@sentry/tracing": "^7.55.2",
     "adorable-avatars": "^0.5.0",
     "apollo-server-express": "^3.10.3",
-    "aws-sdk": "^2.1241.0",
+    "aws-sdk": "^2.1397.0",
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
