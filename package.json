@@ -111,7 +111,7 @@
     "rimraf": "^3.0.2",
     "rxjs": "^7.5.7",
     "sharp": "^0.25.3",
-    "sqlite3": "^5.1.2",
+    "sqlite3": "^5.1.6",
     "typedi": "^0.10.0",
     "unique-username-generator": "^1.1.3"
   },
