@@ -39,6 +39,7 @@ export class UserFieldResolver {
   ): Promise<UserDevice[]> {
     this.logger.debug(this.userDevices.name);
     if (userId === user.id) {
+      // TODO: add dataloader
       return user.userDevices.loadItems();
     } else {
       throw new Error('Not allowed to access other users device information');
@@ -52,6 +53,7 @@ export class UserFieldResolver {
   ): Promise<Block[]> {
     this.logger.debug(this.blocks.name);
     if (userId === parent.id) {
+      // TODO: add dataloader
       return parent.blocks.loadItems();
     } else {
       throw new Error('Not allowed to access other users blocks');

@@ -12,6 +12,7 @@ import { Hub } from '../entity/hub.entity';
 import { Invite } from '../entity/invite.entity';
 import { JoinUserHub } from '../entity/joinUserHub.entity';
 import { MicroChat } from '../entity/microChat.entity';
+import { JoinHubFile } from '../entity/joinHubFile.entity';
 
 @Resolver(() => Hub)
 export class HubFieldResolver {
@@ -47,8 +48,15 @@ export class HubFieldResolver {
     return usersConnections.filter(joinUserHub => !blocks?.find(block => block.from.id === joinUserHub.user.id)); 
   }
 
+  @ResolveField(() => [JoinHubFile], { nullable: true })
+  public fileUploads(@Parent() parent: Hub): Promise<JoinHubFile[]> {
+    // TODO: add dataloader
+    return parent.fileUploads.loadItems();
+  }
+
   @ResolveField(() => [MicroChat], { nullable: true })
   public microChats(@Parent() hub: Hub): Promise<MicroChat[]> {
+    // TODO: add dataloader
     return hub.microChats.loadItems();
   }
 
@@ -70,6 +78,7 @@ export class HubFieldResolver {
 
   @ResolveField(() => [Invite], { nullable: true })
   public invites(@Parent() hub: Hub): Promise<Invite[]> {
+    // TODO: add dataloader
     return hub.invites.loadItems();
   }
 }
