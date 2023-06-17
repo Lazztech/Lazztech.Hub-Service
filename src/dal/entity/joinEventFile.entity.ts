@@ -40,9 +40,8 @@ export class JoinEventFile {
     entity: () => User,
     fieldName: 'userId',
     onDelete: 'cascade', 
-    primary: true,
     wrappedReference: true
   })
-  public approvedBy!: IdentifiedReference<User>;
+  public approvedBy?: IdentifiedReference<User>;
 
 }
