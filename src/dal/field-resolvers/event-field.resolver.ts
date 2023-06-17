@@ -9,6 +9,7 @@ import { File } from '../entity/file.entity';
 import { Hub } from '../entity/hub.entity';
 import { JoinUserEvent } from '../entity/joinUserEvent.entity';
 import { User } from '../entity/user.entity';
+import { HubsByHubIdLoader } from '../dataloaders/hubs-by-hubId.loader';
 
 @Resolver(() => Event)
 export class EventFieldResolver {
@@ -18,6 +19,7 @@ export class EventFieldResolver {
     private readonly usersByUserIdLoader: UsersByUserIdLoader,
     private readonly filesByFileIdLoader: FilesByFileIdLoader,
     private readonly blocksByUserLoader: BlocksByUserLoader,
+    private readonly hubsByHubIdLoader: HubsByHubIdLoader,
   ) {}
 
   @ResolveField(() => User, { nullable: true })
@@ -28,7 +30,7 @@ export class EventFieldResolver {
   @ResolveField(() => Float, { nullable: true, description: 'Returns from Hub if available, or else value from Event is returned' })
   public async latitude(@Parent() parent: Event): Promise<number> {
     if (parent.hub?.id) {
-      return (await parent.hub?.load()).latitude;
+      return this.hubsByHubIdLoader.load(parent.hub?.id).then(x => x.latitude);
     }
     return parent.latitude;
   }
@@ -36,7 +38,7 @@ export class EventFieldResolver {
   @ResolveField(() => Float, { nullable: true, description: 'Returns from Hub if available, or else value from Event is returned' })
   public async longitude(@Parent() parent: Event): Promise<number> {
     if (parent.hub?.id) {
-      return (await parent.hub?.load()).longitude;
+      return this.hubsByHubIdLoader.load(parent.hub?.id).then(x => x.longitude);
     }
     return parent.longitude;
   }
@@ -44,14 +46,16 @@ export class EventFieldResolver {
   @ResolveField(() => String, { nullable: true, description: 'Returns value from Hub if available, or else value from Event is returned' })
   public async locationLabel(@Parent() parent: Event): Promise<string> {
     if (parent.hub?.id) {
-      return (await parent.hub?.load()).locationLabel;
+      return this.hubsByHubIdLoader.load(parent.hub?.id).then(x => x.locationLabel);
     }
     return parent.locationLabel;
   }
 
   @ResolveField(() => Hub, { nullable: true })
   public hub(@Parent() parent: Event): Promise<Hub> {
-    return parent.hub?.load();
+    if (parent.hub?.id) {
+      return this.hubsByHubIdLoader.load(parent.hub?.id);
+    }
   }
 
   @ResolveField(() => File, { nullable: true })
