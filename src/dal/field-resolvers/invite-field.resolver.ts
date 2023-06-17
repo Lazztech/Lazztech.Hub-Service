@@ -3,12 +3,14 @@ import { UsersByUserIdLoader } from "../dataloaders/users-by-userId.loader";
 import { Hub } from "../entity/hub.entity";
 import { Invite } from "../entity/invite.entity";
 import { User } from "../entity/user.entity";
+import { HubsByHubIdLoader } from "../dataloaders/hubs-by-hubId.loader";
 
 @Resolver(() => Invite)
 export class InviteFieldResolver {
 
     constructor(
         private readonly usersByUserIdLoader: UsersByUserIdLoader,
+        private readonly hubsByHubIdLoader: HubsByHubIdLoader,
     ) {}
 
     @ResolveField(() => ID)
@@ -38,7 +40,9 @@ export class InviteFieldResolver {
 
     @ResolveField(() => Hub, { nullable: true })
     async hub(@Parent() parent: Invite) {
-        return parent.hub.load();
+        if (parent.hub?.id) {
+            return this.hubsByHubIdLoader.load(parent.hub?.id);
+        }
     }
     
 }
