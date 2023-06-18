@@ -62,6 +62,7 @@ export class HubFieldResolver {
 
   @ResolveField(() => [Event], { nullable: true })
   public async events(@UserId() userId, @Parent() parent: Hub): Promise<Event[]> {
+    // TODO: add dataloader?
     // should only show events that the current use is invited to
     const events = await parent.events?.init({
       where: {
