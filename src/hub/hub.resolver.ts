@@ -50,6 +50,16 @@ export class HubResolver {
     } as Hub, imageFile);
   }
 
+  @Mutation(() => JoinUserHub)
+  public async uploadHubFiles(
+    @UserId() userId,
+    @Args({ name: 'hubId', type: () => ID }) hubId: number,
+    @Args({ name: 'files', nullable: true, type: () => [GraphQLUpload] }) files: [Promise<FileUpload>],
+  ): Promise<JoinUserHub> {
+    this.logger.debug(this.uploadHubFiles.name);
+    return this.hubService.uploadHubFiles(userId, hubId, files);
+  }
+
   @Query(() => JoinUserHub)
   public async hub(
     @UserId() userId,
