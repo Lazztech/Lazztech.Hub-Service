@@ -9,6 +9,7 @@ import { User } from '../dal/entity/user.entity';
 import { FILE_SERVICE } from '../file/file-service.token';
 import { FileServiceInterface } from '../file/interfaces/file-service.interface';
 import { NotificationService } from '../notification/notification.service';
+import { JoinEventFile } from 'src/dal/entity/joinEventFile.entity';
 
 @Injectable()
 export class EventService {
@@ -23,8 +24,32 @@ export class EventService {
         private readonly eventRepository: EntityRepository<Event>,
         @InjectRepository(User)
         private readonly userRepository: EntityRepository<User>,
+        @InjectRepository(JoinEventFile)
+        private readonly joinEventFileRepository: EntityRepository<JoinEventFile>,
         private readonly notificationService: NotificationService,
     ) {}
+
+    async uploadEventFiles(userId: any, eventId: any, files: [Promise<FileUpload>]): Promise<JoinUserEvent> {
+        const joinUserEvent = await this.joinUserEventRepository.findOneOrFail({ 
+            user: userId, event: eventId
+        }, { populate: ['event'] });
+        const createdById = (await joinUserEvent.event.load()).createdBy.id;
+        const storedFiles = await Promise.all(files.map(file => this.fileService.storeImageFromFileUpload(file, userId)));
+        const fileEntities = storedFiles.map(file => {
+            return this.joinEventFileRepository.create({
+              event: eventId,
+              approvedBy: createdById === userId ? userId : undefined,
+              file: {
+                createdBy: userId,
+                createdOn: new Date().toISOString(),
+                fileName: file.fileName,
+              }
+            })
+          });
+        
+        await this.joinEventFileRepository.persistAndFlush(fileEntities);
+        return joinUserEvent;
+    }
 
     async createEvent(userId: any, event: Event, image?: Promise<FileUpload>): Promise<JoinUserEvent> {
         this.logger.debug(this.createEvent.name);

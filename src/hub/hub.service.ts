@@ -125,10 +125,12 @@ export class HubService {
   }
 
   async uploadHubFiles(userId: any, hubId: any, files: [Promise<FileUpload>]): Promise<JoinUserHub> {
+    const joinUserHub = await this.joinUserHubRepository.findOneOrFail({ user: userId, hub: hubId });
     const storedFiles = await Promise.all(files.map(file => this.fileService.storeImageFromFileUpload(file, userId)));
     const fileEntities = storedFiles.map(file => {
       return this.joinHubFileRepository.create({
         hub: hubId,
+        approvedBy: joinUserHub.isOwner ? userId : undefined,
         file: {
           createdBy: userId,
           createdOn: new Date().toISOString(),
@@ -138,7 +140,7 @@ export class HubService {
     });
 
     await this.joinHubFileRepository.persistAndFlush(fileEntities);
-    return this.joinUserHubRepository.findOneOrFail({ user: userId, hub: hubId });
+    return joinUserHub;
   }
 
   async createHub(userId: any, hub: Hub, image?: Promise<FileUpload>) {
