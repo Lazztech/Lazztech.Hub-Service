@@ -17,6 +17,7 @@ import { getRepositoryToken } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/core';
 import { Block } from '../dal/entity/block.entity';
 import { File } from '../dal/entity/file.entity';
+import { JoinHubFile } from '../dal/entity/joinHubFile.entity';
 
 describe('HubService', () => {
   let hubService: HubService;
@@ -73,6 +74,10 @@ describe('HubService', () => {
         },
         {
           provide: getRepositoryToken(File),
+          useClass: EntityRepository,
+        },
+        {
+          provide: getRepositoryToken(JoinHubFile),
           useClass: EntityRepository,
         },
       ],

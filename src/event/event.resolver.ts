@@ -50,6 +50,16 @@ export class EventResolver {
     }
 
     @Mutation(() => JoinUserEvent)
+    public async uploadEventFiles(
+        @UserId() userId,
+        @Args({ name: 'eventId', type: () => ID }) eventId: number,
+        @Args({ name: 'files', nullable: true, type: () => [GraphQLUpload] }) files: [Promise<FileUpload>],
+    ): Promise<JoinUserEvent> {
+        this.logger.debug(this.uploadEventFiles.name);
+        return this.eventService.uploadEventFiles(userId, eventId, files);
+    }
+
+    @Mutation(() => JoinUserEvent)
     public async rsvp(
         @UserId() userId,
         @Args({ name: 'eventId', type: () => ID }) eventId: number,

@@ -19,6 +19,7 @@ import { Block } from '../dal/entity/block.entity';
 import { Event } from '../dal/entity/event.entity';
 import { JoinUserEvent } from '../dal/entity/joinUserEvent.entity';
 import { File } from '../dal/entity/file.entity';
+import { JoinHubFile } from '../dal/entity/joinHubFile.entity';
 
 describe('ModerationService', () => {
   let service: ModerationService;
@@ -80,6 +81,10 @@ describe('ModerationService', () => {
         },
         {
           provide: getRepositoryToken(File),
+          useClass: EntityRepository,
+        },
+        {
+          provide: getRepositoryToken(JoinHubFile),
           useClass: EntityRepository,
         },
       ],

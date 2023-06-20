@@ -7,6 +7,8 @@ import { FileFieldResolver } from './file-field.resolver';
 import { HubFieldResolver } from './hub-field.resolver';
 import { InAppNotificationFieldResolver } from './inAppNotification-field.resolver';
 import { InviteFieldResolver } from './invite-field.resolver';
+import { JoinEventFileResolver } from './joinEventFile-field.resolver';
+import { JoinHubFileResolver } from './joinHubFile-field.resolver';
 import { JoinUserEventFieldResolver } from './joinUserEvent-field.resolver';
 import { JoinUserHubsResolver as JoinUserHubsFieldResolver } from './joinUserHub-field.resolver';
 import { MicroChatFieldResolver } from './microChat-field.resolver';
@@ -30,6 +32,8 @@ import { UserDeviceFieldResolver } from './userDevice-field.resolver';
     JoinUserEventFieldResolver,
     EventFieldResolver,
     FileFieldResolver,
+    JoinHubFileResolver,
+    JoinEventFileResolver,
   ],
 })
 export class FieldResolversModule {}

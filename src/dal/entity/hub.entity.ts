@@ -6,6 +6,7 @@ import { ShareableId } from './shareableId.entity'
 import { Collection, Entity, IdentifiedReference, ManyToOne, OneToMany, PrimaryKey, Property, types } from '@mikro-orm/core';
 import { Event } from './event.entity';
 import { File } from './file.entity';
+import { JoinHubFile } from './joinHubFile.entity';
 
  /* eslint-disable */ // needed for mikroorm default value & type which conflicts with typescript-eslint/no-unused-vars
 @ObjectType()
@@ -61,6 +62,12 @@ export class Hub extends ShareableId {
    */
   @OneToMany(() => JoinUserHub, (joinUserHub) => joinUserHub.hub)
   public usersConnection = new Collection<JoinUserHub>(this);
+
+  /**
+   * Handled with a field resolver
+   */
+  @OneToMany(() => JoinHubFile, (joinHubFile) => joinHubFile.hub)
+  public fileUploads = new Collection<JoinHubFile>(this);
 
   /**
    * Handled with a field resolver

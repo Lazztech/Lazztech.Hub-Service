@@ -10,6 +10,7 @@ import { Hub } from '../entity/hub.entity';
 import { JoinUserEvent } from '../entity/joinUserEvent.entity';
 import { User } from '../entity/user.entity';
 import { HubsByHubIdLoader } from '../dataloaders/hubs-by-hubId.loader';
+import { JoinEventFile } from '../entity/joinEventFile.entity';
 
 @Resolver(() => Event)
 export class EventFieldResolver {
@@ -77,7 +78,14 @@ export class EventFieldResolver {
     @Parent() parent: Event,
   ): Promise<JoinUserEvent[]> {
     const blocks = await this.blocksByUserLoader.load(userId);
+    // TODO: add dataloader
     const usersConnections = await parent.usersConnection.loadItems();
     return usersConnections.filter(joinUserHub => !blocks?.find(block => block.from.id === joinUserHub.user.id));    
+  }
+
+  @ResolveField(() => [JoinEventFile], { nullable: true })
+  public fileUploads(@Parent() parent: Event): Promise<JoinEventFile[]> {
+    // TODO: add dataloader
+    return parent.fileUploads.loadItems();
   }
 }

@@ -5,6 +5,7 @@ import { Hub } from "./hub.entity";
 import { JoinUserEvent } from "./joinUserEvent.entity";
 import { ShareableId } from "./shareableId.entity";
 import { User } from "./user.entity";
+import { JoinEventFile } from "./joinEventFile.entity";
 
 /* eslint-disable */ // needed for mikroorm default value & type which conflicts with typescript-eslint/no-unused-vars
 @ObjectType()
@@ -104,6 +105,12 @@ export class Event extends ShareableId {
    */
   @OneToMany(() => JoinUserEvent, (joinUserEvent) => joinUserEvent.event)
   public usersConnection = new Collection<JoinUserEvent>(this);
+
+  /**
+   * Handled with a field resolver
+   */
+  @OneToMany(() => JoinEventFile, (joinEventFile) => joinEventFile.event)
+  public fileUploads = new Collection<JoinEventFile>(this);
 
   @Property({ nullable: true })
   public banned?: boolean;

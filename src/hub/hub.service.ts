@@ -11,7 +11,7 @@ import { EntityRepository } from '@mikro-orm/core';
 import { Block } from '../dal/entity/block.entity';
 import { v4 as uuid } from 'uuid';
 import { FileUpload } from 'src/file/interfaces/file-upload.interface';
-import { File } from '../dal/entity/file.entity';
+import { JoinHubFile } from '../dal/entity/joinHubFile.entity';
 
 @Injectable()
 export class HubService {
@@ -27,8 +27,8 @@ export class HubService {
     private inviteRepository: EntityRepository<Invite>,
     @InjectRepository(Block)
     private blockRepository: EntityRepository<Block>,
-    @InjectRepository(File)
-    private fileRepository: EntityRepository<File>,
+    @InjectRepository(JoinHubFile)
+    private joinHubFileRepository: EntityRepository<JoinHubFile>,
     private notificationService: NotificationService,
   ) {
     this.logger.debug('constructor');
@@ -121,6 +121,21 @@ export class HubService {
 
     const blocks = await this.blockRepository.find({ to: userId });
     return uniqueUsers.filter(user => !blocks.find(block => block.from.id === user.id));
+  }
+
+  async uploadHubFiles(userId: any, hubId: any, files: [Promise<FileUpload>]): Promise<JoinUserHub> {
+    const joinUserHub = await this.joinUserHubRepository.findOneOrFail({ user: userId, hub: hubId });
+    const storedFiles = await Promise.all(files.map(file => this.fileService.storeImageFromFileUpload(file, userId)));
+    const fileEntities = storedFiles.map(file => {
+      return this.joinHubFileRepository.create({
+        hub: hubId,
+        approvedBy: joinUserHub.isOwner ? userId : undefined,
+        file: file.id
+      });
+    });
+
+    await this.joinHubFileRepository.persistAndFlush(fileEntities);
+    return joinUserHub;
   }
 
   async createHub(userId: any, hub: Hub, image?: Promise<FileUpload>) {

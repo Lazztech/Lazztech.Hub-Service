@@ -784,6 +784,93 @@
     },
     {
       "columns": {
+        "fileId": {
+          "name": "fileId",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "hubId": {
+          "name": "hubId",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "userId": {
+          "name": "userId",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        }
+      },
+      "name": "join_hub_file",
+      "schema": "public",
+      "indexes": [
+        {
+          "keyName": "join_hub_file_pkey",
+          "columnNames": [
+            "fileId",
+            "hubId"
+          ],
+          "composite": true,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "join_hub_file_fileId_foreign": {
+          "constraintName": "join_hub_file_fileId_foreign",
+          "columnNames": [
+            "fileId"
+          ],
+          "localTableName": "public.join_hub_file",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.file",
+          "deleteRule": "cascade",
+          "updateRule": "cascade"
+        },
+        "join_hub_file_hubId_foreign": {
+          "constraintName": "join_hub_file_hubId_foreign",
+          "columnNames": [
+            "hubId"
+          ],
+          "localTableName": "public.join_hub_file",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.hub",
+          "deleteRule": "cascade",
+          "updateRule": "cascade"
+        },
+        "join_hub_file_userId_foreign": {
+          "constraintName": "join_hub_file_userId_foreign",
+          "columnNames": [
+            "userId"
+          ],
+          "localTableName": "public.join_hub_file",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.user",
+          "deleteRule": "cascade",
+          "updateRule": "cascade"
+        }
+      }
+    },
+    {
+      "columns": {
         "id": {
           "name": "id",
           "type": "serial",
@@ -1206,6 +1293,93 @@
             "id"
           ],
           "referencedTableName": "public.event",
+          "deleteRule": "cascade",
+          "updateRule": "cascade"
+        }
+      }
+    },
+    {
+      "columns": {
+        "fileId": {
+          "name": "fileId",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "eventId": {
+          "name": "eventId",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "userId": {
+          "name": "userId",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        }
+      },
+      "name": "join_event_file",
+      "schema": "public",
+      "indexes": [
+        {
+          "keyName": "join_event_file_pkey",
+          "columnNames": [
+            "fileId",
+            "eventId"
+          ],
+          "composite": true,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "join_event_file_fileId_foreign": {
+          "constraintName": "join_event_file_fileId_foreign",
+          "columnNames": [
+            "fileId"
+          ],
+          "localTableName": "public.join_event_file",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.file",
+          "deleteRule": "cascade",
+          "updateRule": "cascade"
+        },
+        "join_event_file_eventId_foreign": {
+          "constraintName": "join_event_file_eventId_foreign",
+          "columnNames": [
+            "eventId"
+          ],
+          "localTableName": "public.join_event_file",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.event",
+          "deleteRule": "cascade",
+          "updateRule": "cascade"
+        },
+        "join_event_file_userId_foreign": {
+          "constraintName": "join_event_file_userId_foreign",
+          "columnNames": [
+            "userId"
+          ],
+          "localTableName": "public.join_event_file",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.user",
           "deleteRule": "cascade",
           "updateRule": "cascade"
         }
