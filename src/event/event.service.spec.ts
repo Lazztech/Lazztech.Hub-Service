@@ -14,6 +14,7 @@ import { InAppNotification } from '../dal/entity/inAppNotification.entity';
 import { NotificationService } from '../notification/notification.service';
 import { UserDevice } from '../dal/entity/userDevice.entity';
 import { File } from '../dal/entity/file.entity';
+import { JoinEventFile } from '../dal/entity/joinEventFile.entity';
 
 describe('EventService', () => {
   let service: EventService;
@@ -57,6 +58,10 @@ describe('EventService', () => {
         },
         {
           provide: getRepositoryToken(File),
+          useClass: EntityRepository,
+        },
+        {
+          provide: getRepositoryToken(JoinEventFile),
           useClass: EntityRepository,
         },
       ],

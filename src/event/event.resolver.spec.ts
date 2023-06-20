@@ -16,6 +16,7 @@ import { InAppNotification } from '../dal/entity/inAppNotification.entity';
 import { UserDevice } from '../dal/entity/userDevice.entity';
 import { File } from '../dal/entity/file.entity';
 import { EventGeofenceService } from './event-geofence/event-geofence.service';
+import { JoinEventFile } from '../dal/entity/joinEventFile.entity';
 
 describe('EventResolver', () => {
   let resolver: EventResolver;
@@ -61,6 +62,10 @@ describe('EventResolver', () => {
         },
         {
           provide: getRepositoryToken(File),
+          useClass: EntityRepository,
+        },
+        {
+          provide: getRepositoryToken(JoinEventFile),
           useClass: EntityRepository,
         },
       ],
