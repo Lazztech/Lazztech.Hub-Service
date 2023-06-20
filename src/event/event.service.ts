@@ -9,7 +9,7 @@ import { User } from '../dal/entity/user.entity';
 import { FILE_SERVICE } from '../file/file-service.token';
 import { FileServiceInterface } from '../file/interfaces/file-service.interface';
 import { NotificationService } from '../notification/notification.service';
-import { JoinEventFile } from 'src/dal/entity/joinEventFile.entity';
+import { JoinEventFile } from '../dal/entity/joinEventFile.entity';
 
 @Injectable()
 export class EventService {
