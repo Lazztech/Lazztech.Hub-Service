@@ -11,7 +11,7 @@ import { EventService } from './event.service';
 import { NotificationModule } from '../notification/notification.module';
 import { File } from '../dal/entity/file.entity';
 import { EventGeofenceService } from './event-geofence/event-geofence.service';
-import { JoinEventFile } from 'src/dal/entity/joinEventFile.entity';
+import { JoinEventFile } from '../dal/entity/joinEventFile.entity';
 
 @Module({
   imports: [
