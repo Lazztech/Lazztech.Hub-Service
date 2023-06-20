@@ -39,12 +39,8 @@ export class EventService {
             return this.joinEventFileRepository.create({
               event: eventId,
               approvedBy: createdById === userId ? userId : undefined,
-              file: {
-                createdBy: userId,
-                createdOn: new Date().toISOString(),
-                fileName: file.fileName,
-              }
-            })
+              file: file.id,
+            });
           });
         
         await this.joinEventFileRepository.persistAndFlush(fileEntities);

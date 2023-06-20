@@ -131,12 +131,8 @@ export class HubService {
       return this.joinHubFileRepository.create({
         hub: hubId,
         approvedBy: joinUserHub.isOwner ? userId : undefined,
-        file: {
-          createdBy: userId,
-          createdOn: new Date().toISOString(),
-          fileName: file.fileName,
-        }
-      })
+        file: file.id
+      });
     });
 
     await this.joinHubFileRepository.persistAndFlush(fileEntities);
