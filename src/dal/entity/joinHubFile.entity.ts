@@ -40,7 +40,8 @@ export class JoinHubFile {
     entity: () => User,
     fieldName: 'userId',
     onDelete: 'cascade', 
-    wrappedReference: true
+    wrappedReference: true,
+    nullable: true,
   })
   public approvedBy?: IdentifiedReference<User>;
 
