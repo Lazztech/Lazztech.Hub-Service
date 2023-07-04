@@ -112,6 +112,12 @@ export class User extends ShareableId {
   public blocks = new Collection<Block>(this);
 
   /**
+   * Exposed as a field resolver
+   */
+  @OneToMany(() => File, (file) => file.createdBy)
+  public fileUploads = new Collection<File>(this);
+
+  /**
    * Not exposed out
    */
   @OneToMany(() => Block, (block) => block.to)
