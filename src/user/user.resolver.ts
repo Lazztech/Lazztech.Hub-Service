@@ -1,5 +1,5 @@
 import { Logger, UseGuards } from '@nestjs/common';
-import { Args, Directive, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Directive, ID, Mutation, Query, Resolver, createUnionType } from '@nestjs/graphql';
 import { GqlJwtAuthGuard } from '../auth/guards/gql-jwt-auth.guard';
 import { Block } from '../dal/entity/block.entity';
 import { User } from '../dal/entity/user.entity';
@@ -8,6 +8,13 @@ import { UpdateUserInput } from './dto/updateUser.input';
 import { UserService } from './user.service';
 import GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 import { FileUpload } from 'src/file/interfaces/file-upload.interface';
+import { JoinHubFile } from 'src/dal/entity/joinHubFile.entity';
+import { JoinEventFile } from 'src/dal/entity/joinEventFile.entity';
+
+const FileUploadJoinUnion = createUnionType({
+  name: "FileUploadJoinUnion", // the name of the GraphQL union
+  types: () => [JoinEventFile, JoinHubFile] as const, // function that returns tuple of object types classes
+});
 
 @UseGuards(GqlJwtAuthGuard)
 @Resolver()
@@ -24,6 +31,12 @@ export class UserResolver {
   public async me(@UserId() userId): Promise<User> {
     this.logger.debug(this.me.name);
     return await this.userService.getUser(userId);
+  }
+
+  @Query(() => [FileUploadJoinUnion], { nullable: true })
+  public async fileUploads(@UserId() userId): Promise<Array<JoinHubFile | JoinEventFile>> {
+    this.logger.debug(this.fileUploads.name);
+    return this.userService.getFileUploads(userId);
   }
 
   @Directive(
