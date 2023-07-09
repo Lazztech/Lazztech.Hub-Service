@@ -45,8 +45,8 @@ export class UserService {
     return await this.userRepository.findOne({ id: userId });
   }
 
-  public async getFileUploads(userId: any) {
-    this.logger.debug(this.getFileUploads.name);
+  public async getUsersFileUploads(userId: any) {
+    this.logger.debug(this.getUsersFileUploads.name);
     const a = await this.joinEventFileRepository.find({
       file: { createdBy: userId },
     });

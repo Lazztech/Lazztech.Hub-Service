@@ -34,9 +34,9 @@ export class UserResolver {
   }
 
   @Query(() => [FileUploadJoinUnion], { nullable: true })
-  public async fileUploads(@UserId() userId): Promise<Array<JoinHubFile | JoinEventFile>> {
-    this.logger.debug(this.fileUploads.name);
-    return this.userService.getFileUploads(userId);
+  public async myFileUploads(@UserId() userId): Promise<Array<JoinHubFile | JoinEventFile>> {
+    this.logger.debug(this.myFileUploads.name);
+    return this.userService.getUsersFileUploads(userId);
   }
 
   @Directive(
