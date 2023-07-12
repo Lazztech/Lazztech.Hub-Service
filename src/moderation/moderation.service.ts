@@ -104,9 +104,9 @@ export class ModerationService {
         await this.userRepository.persistAndFlush(user);
     }
 
-    public async reportFileAsInappropriate(userId: any, fileId: any) {
+    public async reportFileAsInappropriate(userId: any, fileName: any) {
         const file = await this.fileRepository.findOneOrFail({
-            id: fileId
+            fileName
         });
         file.flagged = true;
         await this.fileRepository.persistAndFlush(file);

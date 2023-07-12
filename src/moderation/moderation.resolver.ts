@@ -46,9 +46,9 @@ export class ModerationResolver {
   @Mutation(() => Boolean)
   public async reportFileAsInappropriate(
     @UserId() userId,
-    @Args({ name: 'fileId', type: () => ID }) fileId: number,
+    @Args({ name: 'filename', type: () => ID }) filename: number,
   ) {
-    await this.moderationService.reportFileAsInappropriate(userId, fileId);
+    await this.moderationService.reportFileAsInappropriate(userId, filename);
     return true;
   }
 }
