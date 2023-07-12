@@ -108,7 +108,10 @@ export class ModerationService {
         const file = await this.fileRepository.findOneOrFail({
             fileName
         });
-        file.flagged = true;
-        await this.fileRepository.persistAndFlush(file);
+        // should not be able to report your own file
+        if (file.createdBy.id !== userId) {
+            file.flagged = true;
+            await this.fileRepository.persistAndFlush(file);
+        }
     }
 }
