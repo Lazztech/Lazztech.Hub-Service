@@ -53,6 +53,13 @@ export class ModerationService {
             event.banned  = true;
         });
         await this.eventRepository.persistAndFlush(events);
+
+        // mark files
+        const files = await this.fileRepository.find({ flagged: true });
+        files.forEach(file => {
+            file.banned = true;
+        });
+        await this.fileRepository.persistAndFlush(files);
     }
 
     public async reportHubAsInappropriate(userId: any, hubId: number) {
