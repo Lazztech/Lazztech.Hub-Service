@@ -8,6 +8,7 @@ import { ModerationResolver } from './moderation.resolver';
 import { HubModule } from '../hub/hub.module';
 import { Event } from '../dal/entity/event.entity';
 import { JoinUserEvent } from '../dal/entity/joinUserEvent.entity';
+import { File } from 'src/dal/entity/file.entity';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { JoinUserEvent } from '../dal/entity/joinUserEvent.entity';
       Hub,
       Event,
       JoinUserEvent,
+      File,
     ]),
     HubModule
   ],

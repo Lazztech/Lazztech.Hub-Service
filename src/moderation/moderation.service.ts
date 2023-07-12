@@ -8,6 +8,7 @@ import { Hub } from '../dal/entity/hub.entity';
 import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
 import { User } from '../dal/entity/user.entity';
 import { HubService } from '../hub/hub.service';
+import { File } from 'src/dal/entity/file.entity';
 
 @Injectable()
 export class ModerationService {
@@ -24,6 +25,8 @@ export class ModerationService {
         private eventRepository: EntityRepository<Event>,
         @InjectRepository(JoinUserEvent)
         private joinUserEventRepository: EntityRepository<JoinUserEvent>,
+        @InjectRepository(File)
+        private readonly fileRepository: EntityRepository<File>,
         private hubService: HubService
     ) {}
 
@@ -92,5 +95,13 @@ export class ModerationService {
         const user = await this.userRepository.findOneOrFail({ id: toUserId });
         user.flagged = true;
         await this.userRepository.persistAndFlush(user);
+    }
+
+    public async reportFileAsInappropriate(userId: any, fileId: any) {
+        const file = await this.fileRepository.findOneOrFail({
+            id: fileId
+        });
+        file.flagged = true;
+        await this.fileRepository.persistAndFlush(file);
     }
 }

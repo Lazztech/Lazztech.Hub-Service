@@ -42,4 +42,13 @@ export class ModerationResolver {
     await this.moderationService.reportEventAsInappropriate(userId, eventId);
     return true;
   }
+
+  @Mutation(() => Boolean)
+  public async reportFileAsInappropriate(
+    @UserId() userId,
+    @Args({ name: 'fileId', type: () => ID }) fileId: number,
+  ) {
+    await this.moderationService.reportFileAsInappropriate(userId, fileId);
+    return true;
+  }
 }
