@@ -122,7 +122,4 @@ export class User extends ShareableId {
    */
   @OneToMany(() => Block, (block) => block.to)
   public blockedBy = new Collection<Block>(this);
-
-  @Property({ nullable: true })
-  public banned?: boolean;
 }
