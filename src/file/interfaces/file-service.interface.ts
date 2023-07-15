@@ -10,6 +10,7 @@ export interface FileServiceInterface {
    */
   storeImageFromFileUpload(upload: Promise<FileUpload> | FileUpload, userId: any): Promise<File>;
   delete(fileName: string): Promise<void>;
+  deleteById(fileId: any, userId: any): Promise<any>;
   get(fileName: string): ReadStream;
   getByShareableId(shareableId: string): Promise<ReadStream>;
 }

@@ -112,7 +112,7 @@ export class User extends ShareableId {
   public blocks = new Collection<Block>(this);
 
   /**
-   * Exposed as a field resolver
+   * Not exposed out
    */
   @OneToMany(() => File, (file) => file.createdBy)
   public fileUploads = new Collection<File>(this);
@@ -122,7 +122,4 @@ export class User extends ShareableId {
    */
   @OneToMany(() => Block, (block) => block.to)
   public blockedBy = new Collection<Block>(this);
-
-  @Property({ nullable: true })
-  public banned?: boolean;
 }

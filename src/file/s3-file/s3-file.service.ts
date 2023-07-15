@@ -87,6 +87,17 @@ export class S3FileService implements FileServiceInterface {
     this.logger.debug(`Deleted image with result: ${result.$response}`);
   }
 
+  public async deleteById(fileId: any, userId: any): Promise<any> {
+    const file = await this.fileRepository.findOneOrFail({ id: fileId, createdBy: userId });
+    await this.s3
+      .deleteObject({
+        Bucket: this.bucketName,
+        Key: file.fileName,
+      })
+      .promise();
+    return this.fileRepository.removeAndFlush(file);
+  }
+
   get(fileName: string): ReadStream {
     return this.s3
       .getObject({

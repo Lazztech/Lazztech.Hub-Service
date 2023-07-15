@@ -112,6 +112,4 @@ export class Event extends ShareableId {
   @OneToMany(() => JoinEventFile, (joinEventFile) => joinEventFile.event)
   public fileUploads = new Collection<JoinEventFile>(this);
 
-  @Property({ nullable: true })
-  public banned?: boolean;
 }

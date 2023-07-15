@@ -75,6 +75,13 @@ export class LocalFileService implements FileServiceInterface {
       .catch(err => this.logger.warn(err));
   }
 
+  public async deleteById(fileId: any, userId: any): Promise<any> {
+    const file = await this.fileRepository.findOneOrFail({ id: fileId, createdBy: userId });
+    await fs.promises.unlink(path.join(this.directory, file.fileName))
+      .catch(err => this.logger.warn(err));
+    return this.fileRepository.removeAndFlush(file);
+  }
+
   private saveFile(fileName: string, data: Buffer | string | Stream): Promise<void> {
     return fs.promises.writeFile(path.join(this.directory, fileName), data);
   }

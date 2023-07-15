@@ -70,6 +70,15 @@
           "nullable": true,
           "mappedType": "boolean"
         },
+        "banned": {
+          "name": "banned",
+          "type": "boolean",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "boolean"
+        },
         "username": {
           "name": "username",
           "type": "varchar(255)",
@@ -177,15 +186,6 @@
           "primary": false,
           "nullable": true,
           "mappedType": "integer"
-        },
-        "banned": {
-          "name": "banned",
-          "type": "boolean",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": true,
-          "mappedType": "boolean"
         }
       },
       "name": "user",
@@ -383,6 +383,15 @@
           "nullable": true,
           "mappedType": "boolean"
         },
+        "banned": {
+          "name": "banned",
+          "type": "boolean",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "boolean"
+        },
         "file_name": {
           "name": "file_name",
           "type": "varchar(255)",
@@ -487,6 +496,15 @@
           "nullable": true,
           "mappedType": "boolean"
         },
+        "banned": {
+          "name": "banned",
+          "type": "boolean",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "boolean"
+        },
         "name": {
           "name": "name",
           "type": "varchar(255)",
@@ -559,15 +577,6 @@
           "primary": false,
           "nullable": true,
           "mappedType": "string"
-        },
-        "banned": {
-          "name": "banned",
-          "type": "boolean",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": true,
-          "mappedType": "boolean"
         }
       },
       "name": "hub",
@@ -1014,6 +1023,15 @@
           "nullable": true,
           "mappedType": "boolean"
         },
+        "banned": {
+          "name": "banned",
+          "type": "boolean",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "boolean"
+        },
         "name": {
           "name": "name",
           "type": "varchar(255)",
@@ -1130,15 +1148,6 @@
           "primary": false,
           "nullable": true,
           "mappedType": "string"
-        },
-        "banned": {
-          "name": "banned",
-          "type": "boolean",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": true,
-          "mappedType": "boolean"
         }
       },
       "name": "event",

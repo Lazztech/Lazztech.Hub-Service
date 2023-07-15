@@ -9,6 +9,7 @@ import { FileUrlService } from './file-url/file-url.service';
 import * as path from 'path';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { File } from '../dal/entity/file.entity';
+import { FileResolver } from './resolver/file.resolver';
 
 export const fileServiceFactory = {
   provide: FILE_SERVICE,
@@ -53,6 +54,7 @@ export const fileServiceFactory = {
     LocalFileService,
     ImageFileService,
     FileUrlService,
+    FileResolver,
   ],
   exports: [FILE_SERVICE, FileUrlService],
 })

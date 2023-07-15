@@ -17,5 +17,8 @@ export abstract class ShareableId {
 
   @Property({ nullable: true })
   public flagged?: boolean;
+
+  @Property({ nullable: true })
+  public banned?: boolean;
   
 }

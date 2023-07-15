@@ -10,6 +10,8 @@ import { EntityRepository } from '@mikro-orm/core';
 import { Block } from '../dal/entity/block.entity';
 import { FileUpload } from 'src/file/interfaces/file-upload.interface';
 import { File } from '../dal/entity/file.entity';
+import { JoinEventFile } from '../dal/entity/joinEventFile.entity';
+import { JoinHubFile } from '../dal/entity/joinHubFile.entity';
 
 @Injectable()
 export class UserService {
@@ -26,6 +28,10 @@ export class UserService {
     private blockRepository: EntityRepository<Block>,
     @InjectRepository(File)
     private fileRepository: EntityRepository<File>,
+    @InjectRepository(JoinEventFile)
+    private joinEventFileRepository: EntityRepository<JoinEventFile>,
+    @InjectRepository(JoinHubFile)
+    private joinHubFileRepository: EntityRepository<JoinHubFile>,
   ) {
     this.logger.debug('constructor');
   }
@@ -37,6 +43,17 @@ export class UserService {
   public async getUser(userId: any) {
     this.logger.debug(this.getUser.name);
     return await this.userRepository.findOne({ id: userId });
+  }
+
+  public async getUsersFileUploads(userId: any) {
+    this.logger.debug(this.getUsersFileUploads.name);
+    const a = await this.joinEventFileRepository.find({
+      file: { createdBy: userId },
+    });
+    const b = await this.joinHubFileRepository.find({
+      file: { createdBy: userId }
+    });
+    return [...a, ...b];
   }
 
   public async getUsersOwnedHubs(userId: number): Promise<Hub[]> {

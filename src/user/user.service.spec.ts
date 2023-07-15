@@ -15,6 +15,8 @@ import { ImageFileService } from '../file/image-file/image-file.service';
 import { LocalFileService } from '../file/local-file/local-file.service';
 import { EditUserDetails } from './dto/editUserDetails.input';
 import { UserService } from './user.service';
+import { JoinEventFile } from '../dal/entity/joinEventFile.entity';
+import { JoinHubFile } from '../dal/entity/joinHubFile.entity';
 
 describe('UserService', () => {
   let service: UserService;
@@ -54,6 +56,14 @@ describe('UserService', () => {
         },
         {
           provide: getRepositoryToken(File),
+          useClass: EntityRepository,
+        },
+        {
+          provide: getRepositoryToken(JoinEventFile),
+          useClass: EntityRepository,
+        },
+        {
+          provide: getRepositoryToken(JoinHubFile),
           useClass: EntityRepository,
         },
       ],
