@@ -1,7 +1,7 @@
 import { Inject, UseGuards } from '@nestjs/common';
 import { Args, ID, Mutation, Resolver } from '@nestjs/graphql';
-import { GqlJwtAuthGuard } from 'src/auth/guards/gql-jwt-auth.guard';
-import { UserId } from 'src/decorators/user.decorator';
+import { GqlJwtAuthGuard } from '../../auth/guards/gql-jwt-auth.guard';
+import { UserId } from '../../decorators/user.decorator';
 import { FILE_SERVICE } from '../file-service.token';
 import { FileServiceInterface } from '../interfaces/file-service.interface';
 

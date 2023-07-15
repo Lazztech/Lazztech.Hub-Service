@@ -8,7 +8,7 @@ import { Hub } from '../dal/entity/hub.entity';
 import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
 import { User } from '../dal/entity/user.entity';
 import { HubService } from '../hub/hub.service';
-import { File } from 'src/dal/entity/file.entity';
+import { File } from '../dal/entity/file.entity';
 
 @Injectable()
 export class ModerationService {

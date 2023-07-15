@@ -10,8 +10,8 @@ import { EntityRepository } from '@mikro-orm/core';
 import { Block } from '../dal/entity/block.entity';
 import { FileUpload } from 'src/file/interfaces/file-upload.interface';
 import { File } from '../dal/entity/file.entity';
-import { JoinEventFile } from 'src/dal/entity/joinEventFile.entity';
-import { JoinHubFile } from 'src/dal/entity/joinHubFile.entity';
+import { JoinEventFile } from '../dal/entity/joinEventFile.entity';
+import { JoinHubFile } from '../dal/entity/joinHubFile.entity';
 
 @Injectable()
 export class UserService {
