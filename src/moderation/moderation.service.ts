@@ -104,9 +104,9 @@ export class ModerationService {
         await this.userRepository.persistAndFlush(user);
     }
 
-    public async reportFileAsInappropriate(userId: any, fileName: any) {
+    public async reportFileAsInappropriate(userId: any, fileId: any) {
         const file = await this.fileRepository.findOneOrFail({
-            fileName
+            id: fileId
         });
         // should not be able to report your own file
         if (file.createdBy.id !== userId) {
