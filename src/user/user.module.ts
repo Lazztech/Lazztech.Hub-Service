@@ -9,8 +9,8 @@ import { EmailModule } from '../email/email.module';
 import { FileModule } from '../file/file.module';
 import { UserResolver } from './user.resolver';
 import { UserService } from './user.service';
-import { JoinEventFile } from 'src/dal/entity/joinEventFile.entity';
-import { JoinHubFile } from 'src/dal/entity/joinHubFile.entity';
+import { JoinEventFile } from '../dal/entity/joinEventFile.entity';
+import { JoinHubFile } from '../dal/entity/joinHubFile.entity';
 
 @Module({
   imports: [

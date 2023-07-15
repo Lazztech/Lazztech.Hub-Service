@@ -8,8 +8,8 @@ import { UpdateUserInput } from './dto/updateUser.input';
 import { UserService } from './user.service';
 import GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 import { FileUpload } from 'src/file/interfaces/file-upload.interface';
-import { JoinHubFile } from 'src/dal/entity/joinHubFile.entity';
-import { JoinEventFile } from 'src/dal/entity/joinEventFile.entity';
+import { JoinHubFile } from '../dal/entity/joinHubFile.entity';
+import { JoinEventFile } from '../dal/entity/joinEventFile.entity';
 
 const FileUploadJoinUnion = createUnionType({
   name: "FileUploadJoinUnion", // the name of the GraphQL union

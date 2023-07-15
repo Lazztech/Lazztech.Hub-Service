@@ -24,7 +24,7 @@ import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Block } from '../dal/entity/block.entity';
 import { File } from '../dal/entity/file.entity';
 import { JoinHubFile } from '../dal/entity/joinHubFile.entity';
-import { JoinEventFile } from 'src/dal/entity/joinEventFile.entity';
+import { JoinEventFile } from '../dal/entity/joinEventFile.entity';
 
 @Module({
   imports: [
