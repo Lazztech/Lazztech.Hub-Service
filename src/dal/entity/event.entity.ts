@@ -20,6 +20,10 @@ export class Event extends ShareableId {
   public name!: string;
 
   @Field({ nullable: true })
+  @Property({ nullable: true })
+  public url?: string;
+
+  @Field({ nullable: true })
   @Property({ nullable: true, type: types.text })
   public description?: string;
 

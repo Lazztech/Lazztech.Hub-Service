@@ -25,6 +25,10 @@ export class Hub extends ShareableId {
   public description?: string;
 
   @Field({ nullable: true })
+  @Property({ nullable: true })
+  public url?: string;
+
+  @Field({ nullable: true })
   @Property({ default: true })
   public active: boolean = true;
 
