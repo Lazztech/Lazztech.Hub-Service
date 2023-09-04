@@ -34,6 +34,7 @@ export class HubResolver {
   public async createHub(
     @UserId() userId,
     @Args({ name: 'name', type: () => String }) name: string,
+    @Args({ name: 'url', nullable: true, type: () => String }) url: string,
     @Args({ name: 'description', type: () => String, nullable: true }) description: string,
     @Args({ name: 'latitude', type: () => Float }) latitude: number,
     @Args({ name: 'longitude', type: () => Float }) longitude: number,
@@ -43,6 +44,7 @@ export class HubResolver {
     this.logger.debug(this.createHub.name);
     return this.hubService.createHub(userId, {
       name,
+      url,
       description,
       latitude,
       longitude,
@@ -245,6 +247,7 @@ export class HubResolver {
     @UserId() userId,
     @Args({ name: 'hubId', type: () => ID }) hubId: number,
     @Args({ name: 'name', type: () => String }) name: string,
+    @Args({ name: 'url', nullable: true, type: () => String }) url: string,
     @Args({ name: 'description', type: () => String, nullable: true }) description: string,
     @Args({ name: 'latitude', type: () => Float }) latitude: number,
     @Args({ name: 'longitude', type: () => Float }) longitude: number,
@@ -255,6 +258,7 @@ export class HubResolver {
     return this.hubService.updateHub(userId, {
       id: hubId,
       name,
+      url,
       description,
       latitude,
       longitude,

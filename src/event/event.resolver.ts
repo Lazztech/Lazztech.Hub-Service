@@ -23,6 +23,7 @@ export class EventResolver {
     public async createEvent(
         @UserId() userId,
         @Args({ name: 'name', type: () => String }) name: string,
+        @Args({ name: 'url', nullable: true, type: () => String }) url: string,
         @Args({ name: 'description', type: () => String, nullable: true }) description: string,
         @Args({ name: 'startDateTime', type: () => String, nullable: true }) startDateTime: string,
         @Args({ name: 'minimumCapacity', type: () => Int, nullable: true }) minimumCapacity: number,
@@ -38,6 +39,7 @@ export class EventResolver {
         return this.eventService.createEvent(userId, {
             name,
             description,
+            url,
             startDateTime,
             endDateTime,
             minimumCapacity,
@@ -143,6 +145,7 @@ export class EventResolver {
         @UserId() userId,
         @Args({ name: 'eventId', type: () => ID }) eventId: number,
         @Args({ name: 'name', type: () => String }) name: string,
+        @Args({ name: 'url', nullable: true, type: () => String }) url: string,
         @Args({ name: 'description', type: () => String, nullable: true }) description: string,
         @Args({ name: 'startDateTime', type: () => String, nullable: true }) startDateTime: string,
         @Args({ name: 'endDateTime', type: () => String, nullable: true }) endDateTime: string,
@@ -158,6 +161,7 @@ export class EventResolver {
         return this.eventService.updateEvent(userId, {
             id: eventId,
             name,
+            url,
             description,
             startDateTime,
             endDateTime,
