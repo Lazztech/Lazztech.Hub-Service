@@ -50,9 +50,9 @@ async function bootstrap() {
 
     // Proxy endpoints
     app.use('/protomaps/tiles.pmtiles', createProxyMiddleware({
-      target: 'https://r2-public.protomaps.com',
+      target: 'https://lazztech-hub.sfo3.digitaloceanspaces.com', // used 'Origin Endpoint' not 'CDN Endpoint'
       pathRewrite: {
-        '^/protomaps/tiles.pmtiles': '/protomaps-sample-datasets/protomaps-basemap-opensource-20230408.pmtiles', // rewrite path
+        '^/protomaps/tiles.pmtiles': '/protomaps/maps.pmtiles', // rewrite path
       },
       changeOrigin: true,
     }));
