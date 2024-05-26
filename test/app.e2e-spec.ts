@@ -171,6 +171,7 @@ describe('AppController (e2e)', () => {
         },
       })
       .expect(200);
+
     expect(result.body?.data?.createHub?.hub).toBeDefined();
     expect(result.body?.data?.createHub?.hubId).toBeDefined();
     hubId = result.body?.data?.createHub?.hubId;
@@ -391,6 +392,73 @@ describe('AppController (e2e)', () => {
     expect(result.body?.data?.deleteHub).toBeDefined();
   });
 
+  it('/graphql createEvent', async () => {
+    const result = await request(app.getHttpServer())
+      .post('/graphql')
+      .set({ authorization: `Bearer ${token}` })
+      .send({
+        operationName: null,
+        query: `mutation createEvent(
+          $name: String!
+          $hubId: String
+          $description: String
+          $startDateTime: String
+          $endDateTime: String
+          $minimumCapacity: Int
+          $maximumCapacity: Int
+          $latitude: Float
+          $longitude: Float
+          $locationLabel: String
+          $imageFile: Upload
+        ) {
+          createEvent(
+            name: $name
+            hubId: $hubId
+            description: $description
+            startDateTime: $startDateTime
+            endDateTime: $endDateTime
+            minimumCapacity: $minimumCapacity
+            maximumCapacity: $maximumCapacity
+            latitude: $latitude
+            longitude: $longitude
+            locationLabel: $locationLabel
+            imageFile: $imageFile
+          ) {
+            userId
+            eventId
+            user {
+              id
+              firstName
+              lastName
+              description
+              image
+              email
+              shareableId
+            }
+            event {
+              id
+              name
+              description
+              startDateTime
+              endDateTime
+              latitude
+              longitude
+              shareableId
+            }
+            rsvp
+            lastGeofenceEvent
+            lastUpdated
+          }
+        }`,
+        variables: {
+          name: 'test event',
+        },
+      })
+      .expect(200);
+
+    expect(result.body?.data?.createEvent).toBeDefined();
+  });
+
   it('/graphql deleteAccount', async () => {
     const result = await request(app.getHttpServer())
       .post('/graphql')
@@ -414,5 +482,6 @@ describe('AppController (e2e)', () => {
       .expect(200);
 
     expect(result.body?.data?.deleteAccount).toBeDefined();
+    return result;
   });
 });
