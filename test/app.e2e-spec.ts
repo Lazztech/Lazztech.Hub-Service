@@ -125,41 +125,52 @@ describe('AppController (e2e)', () => {
       .set({ authorization: `Bearer ${token}` })
       .send({
         operationName: null,
-        query: `mutation createHub($image: String!, $name: String!, $description: String!, $latitude: Float!, $longitude: Float!) {
-          createHub(image: $image, name: $name, description: $description, latitude: $latitude, longitude: $longitude) {
-            userId
-            hubId
-            isOwner
-            starred
-            isPresent
-            hub {
-              id
-              name
-              description
-              active
-              image
-              latitude
-              longitude
-              usersConnection {
-                isPresent
-                isOwner
-                __typename
+        query: `mutation createHub(
+          $name: String!
+          $description: String
+          $latitude: Float!
+          $longitude: Float!
+          $locationLabel: String
+          $imageFile: Upload
+      ){
+          createHub(
+              name: $name, 
+              description: $description,
+              latitude: $latitude,
+              longitude: $longitude
+              locationLabel: $locationLabel
+              imageFile: $imageFile
+              ) {
+                  userId
+                  hubId
+                  isOwner
+                  starred
+                  isPresent
+                  hub {
+                      id
+                      name
+                      description
+                      active
+                      image
+                      latitude
+                      longitude
+                      usersConnection {
+                          isPresent
+                          isOwner
+                      }
+                  }
               }
-              __typename
-            }
-            __typename
-          }
-        }
+      }
         `,
         variables: {
           description: 'test',
           latitude: 0,
           longitude: 0,
           name: 'test',
+          locationLabel: 'test location label'
         },
       })
       .expect(200);
-
     expect(result.body?.data?.createHub?.hub).toBeDefined();
     expect(result.body?.data?.createHub?.hubId).toBeDefined();
     hubId = result.body?.data?.createHub?.hubId;
