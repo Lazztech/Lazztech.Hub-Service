@@ -1175,6 +1175,7 @@
             "id"
           ],
           "referencedTableName": "public.user",
+          "deleteRule": "cascade",
           "updateRule": "cascade"
         },
         "event_cover_image_id_foreign": {
