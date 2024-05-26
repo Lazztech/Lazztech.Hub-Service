@@ -1,7 +1,7 @@
 import { Plugin } from '@nestjs/apollo'
-import { ApolloServerPlugin, GraphQLRequestListener } from 'apollo-server-plugin-base'
+import { ApolloServerPlugin, GraphQLRequestListener, GraphQLRequestContext } from '@apollo/server'
 import { InjectSentry, SentryService } from '@ntegral/nestjs-sentry'
-import { GraphQLRequestContext } from 'apollo-server-types'
+
 import '@sentry/tracing'
 
 /**
@@ -16,7 +16,7 @@ import '@sentry/tracing'
 export class SentryPlugin implements ApolloServerPlugin {
   constructor(@InjectSentry() private readonly sentry: SentryService) {}
 
-  async requestDidStart({ request, context }: GraphQLRequestContext): Promise<GraphQLRequestListener> {
+  async requestDidStart({ request, context }: any): Promise<GraphQLRequestListener<any>> {
     const transaction = this.sentry.instance().startTransaction({
       op: 'gql',
       name: request.operationName ? `graphql: ${request.operationName}` : 'GraphQLTransaction'

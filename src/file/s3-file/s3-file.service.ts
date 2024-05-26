@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { InjectS3, S3 } from 'nestjs-s3';
 import { FileServiceInterface } from '../interfaces/file-service.interface';
 import { ImageFileService } from '../image-file/image-file.service';
-import uuidv1 from 'uuid/v1';
+import { v1 as uuidv1 } from 'uuid';
 import { ConfigService } from '@nestjs/config';
 import { ReadStream } from 'fs';
 import { FileUpload } from '../interfaces/file-upload.interface';

@@ -8,7 +8,6 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { GraphqlInterceptor, SentryModule } from '@ntegral/nestjs-sentry';
 import { SeverityLevel } from '@sentry/node';
 import * as Joi from 'joi';
-import { OpenTelemetryModule } from 'nestjs-otel';
 import { S3Module, S3ModuleOptions } from 'nestjs-s3';
 import * as path from 'path';
 import { AppController } from './app.controller';
@@ -20,23 +19,13 @@ import { EventModule } from './event/event.module';
 import { FileModule } from './file/file.module';
 import { HealthModule } from './health/health.module';
 import { HubModule } from './hub/hub.module';
-import { LoggerModule } from './logger/logger.module';
 import { ModerationModule } from './moderation/moderation.module';
 import { NotificationModule } from './notification/notification.module';
 import { OpenGraphModule } from './open-graph/open-graph.module';
-import otelSDK from './tracing';
 import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
-    OpenTelemetryModule.forRoot({
-      metrics: {
-        hostMetrics: true, // Includes Host Metrics
-        apiMetrics: {
-          enable: true, // Includes api metrics
-        },
-      },
-    }),
     SentryModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
@@ -265,10 +254,6 @@ import { UserModule } from './user/user.module';
       autoSchemaFile: true,
       context: ({ req, res }) => ({ req, res }),
       fieldResolverEnhancers: ['interceptors'],
-      cors: {
-        credentials: true,
-        origin: true,
-      },
     }),
     AuthModule,
     FieldResolversModule,
@@ -278,7 +263,6 @@ import { UserModule } from './user/user.module';
     ModerationModule,
     EventModule,
     DataloadersModule,
-    LoggerModule,
     OpenGraphModule,
   ],
   providers: [
@@ -297,15 +281,5 @@ export class AppModule implements OnModuleInit {
 
   async onModuleInit(): Promise<void> {
     await this.orm.getMigrator().up();
-  }
-
-  onApplicationShutdown(signal: string) {
-    otelSDK
-      .shutdown()
-      .then(
-        () => console.log('SDK shut down successfully'),
-        err => console.log('Error shutting down SDK', err)
-      )
-      .finally(() => process.exit(0));
   }
 }
