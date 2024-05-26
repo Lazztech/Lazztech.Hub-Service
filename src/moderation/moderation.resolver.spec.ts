@@ -11,7 +11,6 @@ import { ImageFileService } from '../file/image-file/image-file.service';
 import { LocalFileService } from '../file/local-file/local-file.service';
 import { HubService } from '../hub/hub.service';
 import { NotificationService } from '../notification/notification.service';
-import { Block } from 'ts-morph';
 import { Hub } from '../dal/entity/hub.entity';
 import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
 import { User } from '../dal/entity/user.entity';
@@ -21,6 +20,7 @@ import { Event } from '../dal/entity/event.entity';
 import { JoinUserEvent } from '../dal/entity/joinUserEvent.entity';
 import { File } from '../dal/entity/file.entity';
 import { JoinHubFile } from '../dal/entity/joinHubFile.entity';
+import { Block } from 'src/dal/entity/block.entity';
 
 describe('ModerationResolver', () => {
   let resolver: ModerationResolver;
