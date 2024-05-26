@@ -20,7 +20,7 @@ import { Event } from '../dal/entity/event.entity';
 import { JoinUserEvent } from '../dal/entity/joinUserEvent.entity';
 import { File } from '../dal/entity/file.entity';
 import { JoinHubFile } from '../dal/entity/joinHubFile.entity';
-import { Block } from 'src/dal/entity/block.entity';
+import { Block } from '../dal/entity/block.entity';
 
 describe('ModerationResolver', () => {
   let resolver: ModerationResolver;
