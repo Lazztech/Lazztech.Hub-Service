@@ -254,10 +254,6 @@ import { UserModule } from './user/user.module';
       autoSchemaFile: true,
       context: ({ req, res }) => ({ req, res }),
       fieldResolverEnhancers: ['interceptors'],
-      cors: {
-        credentials: true,
-        origin: true,
-      },
     }),
     AuthModule,
     FieldResolversModule,
