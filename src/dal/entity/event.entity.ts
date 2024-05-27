@@ -29,6 +29,7 @@ export class Event extends ShareableId {
   @ManyToOne({
     entity: () => User,
     fieldName: 'createdByUserId',
+    onDelete: 'cascade',
     wrappedReference: true
   })
   public createdBy!: IdentifiedReference<User>;
