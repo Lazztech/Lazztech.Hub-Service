@@ -216,28 +216,11 @@ $ npm run migration:log:all
 $ npm run migration:show:all
 ```
 
-## Open Telemetry
-This service is setup with OTel(Open Telemetry) for vendor agnostic observability. It's setup to export to the grafana stack.
+## Web Push Notifications
 
 ```bash
-# create a grafana-agent.local.yml and replace <GRAFANA-CLOUD-API-KEY> with your api-key
-$ cp telemetry/grafana-agent.yml telemetry/grafana-agent.local.yml
-
-# install agent on mac via brew
-$ brew install grafana-agent
-
-# start grafana agent locally to export metrics
-# tracing ports: jaeger 6832, grpc 4317, & http 4318
-$ docker run \
-  -v /tmp/agent:/etc/agent/data \
-  -v $(pwd)/telemetry/grafana-agent.local.yml:/etc/agent/agent.yaml \
-  -p 6832:6832 -p 4317:4317 -p 4318:4318 \
-  grafana/agent:v0.28.0
-
-# otel-collector
-$ cp telemetry/otel-collector.yml telemetry/otel-collector.local.yml
-$ cd telemetry
-$ docker-compose up
+# generate public and private vapid keys
+$ npx web-push generate-vapid-keys
 ```
 
 
@@ -254,6 +237,8 @@ $ ./scripts/preCommit.sh && ./scripts/buildTagAndPushDocker.sh && ./scripts/depl
 | ----------- | ----------- | ----------- | ----------- |
 | APP_NAME | Used when sending emails to call out the name of the service | ❌ | Lazztech Hub |
 | ACCESS_TOKEN_SECRET | Used for jwt tokens | ❌ |
+| PUBLIC_VAPID_KEY | Used for web push notifications | ✅ |
+| PRIVATE_VAPID_KEY | Used for web push notifications | ✅ |
 | FIREBASE_SERVER_KEY | Used for push notifications | ❌ |
 | PUSH_NOTIFICATION_ENDPOINT | Used for triggering push notifications via http | ❌ |
 | EMAIL_TRANSPORT | Used for emailing users | ✅ | 'gmail' or 'mailgun' defaults to gmail |

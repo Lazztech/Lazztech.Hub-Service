@@ -13,6 +13,8 @@ import {
 } from '../dal/pagination/paginatedResponse.helper';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/core';
+import webpush from 'web-push';
+import _ from 'lodash';
 
 @Service()
 export class NotificationService {
@@ -22,6 +24,16 @@ export class NotificationService {
   private sendEndpoint: string = this.configService.get<string>(
     'PUSH_NOTIFICATION_ENDPOINT',
   );
+
+  private webPushOptions: webpush.RequestOptions['vapidDetails'] = {
+      subject: 'https://lazz.tech/contact/',
+      publicKey: this.configService.get<string>(
+        'PUBLIC_VAPID_KEY',
+      ),
+      privateKey: this.configService.get<string>(
+        'PRIVATE_VAPID_KEY',
+      ),
+    };
 
   private logger = new Logger(NotificationService.name);
 
@@ -36,6 +48,13 @@ export class NotificationService {
     private userDeviceRepository: EntityRepository<UserDevice>,
   ) {
     this.logger.debug('constructor');
+    if (this.webPushOptions.subject && this.webPushOptions.publicKey && this.webPushOptions.privateKey) {
+      webpush.setVapidDetails(
+        this.webPushOptions.subject,
+        this.webPushOptions.publicKey,
+        this.webPushOptions.privateKey,
+      ); 
+    }
   }
 
   public async addUserFcmNotificationToken(
@@ -54,6 +73,25 @@ export class NotificationService {
       // TODO notify via email that a new device has been used on the account for security.
     } else {
       this.logger.warn('User device token already stored.');
+    }
+  }
+
+  public async addUserWebPushNotificationSubscription(
+    userId: any,
+    subscription: webpush.PushSubscription,
+  ): Promise<void> {
+    this.logger.debug(this.addUserFcmNotificationToken.name);
+    const user = await this.userRepository.findOne({ id: userId });
+
+    if (!(await user.userDevices.loadItems()).find((x) => _.isEqual(x.webPushSubscription, subscription))) {
+      const userDevice = this.userDeviceRepository.create({
+        user: { id: user.id },
+        webPushSubscription: subscription,
+      });
+      await this.userDeviceRepository.persistAndFlush(userDevice);
+      // TODO notify via email that a new device has been used on the account for security.
+    } else {
+      this.logger.warn('User device web push notification subscription already stored.');
     }
   }
 
@@ -113,19 +151,29 @@ export class NotificationService {
     notification: PushNotificationDto,
   ): Promise<void> {
     this.logger.debug(this.sendPushToUser.name);
-
     const user = await this.userRepository.findOne({ id: userId });
+
+    // web push notifications
+    const webPushSubscriptions = (await user.userDevices.loadItems()).map(
+      (x) => x.webPushSubscription,
+    ).filter(val => val);
+    this.logger.debug(
+      `${webPushSubscriptions.length} web push notification subscriptions found for userId: ${userId}`,
+    );
+    for (const subscription of webPushSubscriptions) {
+      await this.sendWebPushNotification(notification, subscription);
+      this.logger.debug(`Sent web push notification to subscription: ${JSON.stringify(subscription)}`);
+    }
+
+    // native push notifications
     const fcmUserTokens = (await user.userDevices.loadItems()).map(
       (x) => x.fcmPushUserToken,
     );
-
     this.logger.debug(
       `${fcmUserTokens.length} push notification tokens found for userId: ${userId}`,
     );
-
     for (const iterator of fcmUserTokens) {
       await this.sendPushNotification(notification, iterator);
-
       this.logger.debug(`Sent push notification to fcmToken ${iterator}`);
     }
   }
@@ -139,6 +187,7 @@ export class NotificationService {
       notification,
       to,
     };
+
     const result = await this.httpService
       .post(this.sendEndpoint, data, {
         headers: {
@@ -149,5 +198,27 @@ export class NotificationService {
       .catch((e) => this.logger.debug(e));
 
     return result;
+  }
+
+  async sendWebPushNotification(
+    notification: PushNotificationDto,
+    to: webpush.PushSubscription,
+  ) {
+    this.logger.debug(this.sendWebPushNotification.name);
+    if (!this.webPushOptions.subject || !this.webPushOptions.publicKey || !this.webPushOptions.privateKey) return;
+    webpush
+      .sendNotification(
+        to,
+        JSON.stringify({
+          notification
+        }),
+      )
+      .then((log) => {
+        console.log('Push notification sent.');
+        console.log(log);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 }

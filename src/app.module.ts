@@ -23,6 +23,7 @@ import { ModerationModule } from './moderation/moderation.module';
 import { NotificationModule } from './notification/notification.module';
 import { OpenGraphModule } from './open-graph/open-graph.module';
 import { UserModule } from './user/user.module';
+import GraphQLJSON from 'graphql-type-json';
 
 @Module({
   imports: [
@@ -57,6 +58,8 @@ import { UserModule } from './user/user.module';
       validationSchema: Joi.object({
         APP_NAME: Joi.string().required(),
         ACCESS_TOKEN_SECRET: Joi.string().required(),
+        PUBLIC_VAPID_KEY: Joi.optional(),
+        PRIVATE_VAPID_KEY: Joi.optional(),
         FIREBASE_SERVER_KEY: Joi.string().required(),
         PUSH_NOTIFICATION_ENDPOINT: Joi.string().required(),
         EMAIL_TRANSPORT: Joi.string()
@@ -254,6 +257,7 @@ import { UserModule } from './user/user.module';
       autoSchemaFile: true,
       context: ({ req, res }) => ({ req, res }),
       fieldResolverEnhancers: ['interceptors'],
+      resolvers: { JSON: GraphQLJSON },
     }),
     AuthModule,
     FieldResolversModule,
