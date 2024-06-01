@@ -50,6 +50,11 @@ export class NotificationService {
     private userDeviceRepository: EntityRepository<UserDevice>,
   ) {
     this.logger.debug('constructor');
+    webpush.setVapidDetails(
+      this.webPushOptions.vapidDetails.subject,
+      this.webPushOptions.vapidDetails.publicKey,
+      this.webPushOptions.vapidDetails.privateKey,
+    );
   }
 
   public async addUserFcmNotificationToken(
@@ -177,7 +182,6 @@ export class NotificationService {
         JSON.stringify({
           notification
         }),
-        this.webPushOptions,
       )
       .then((log) => {
         console.log('Push notification sent.');
