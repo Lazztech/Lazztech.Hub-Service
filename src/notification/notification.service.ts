@@ -13,6 +13,7 @@ import {
 } from '../dal/pagination/paginatedResponse.helper';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/core';
+import webpush from 'web-push';
 
 @Service()
 export class NotificationService {
@@ -22,6 +23,19 @@ export class NotificationService {
   private sendEndpoint: string = this.configService.get<string>(
     'PUSH_NOTIFICATION_ENDPOINT',
   );
+
+  private webPushOptions: webpush.RequestOptions = {
+    vapidDetails: {
+      subject: 'example_email@example.com',
+      publicKey: this.configService.get<string>(
+        'PUBLIC_VAPID_KEY',
+      ),
+      privateKey: this.configService.get<string>(
+        'PRIVATE_VAPID_KEY',
+      ),
+    },
+    TTL: 60,
+  };
 
   private logger = new Logger(NotificationService.name);
 
@@ -135,19 +149,35 @@ export class NotificationService {
     to: string,
   ) {
     this.logger.debug(this.sendPushNotification.name);
-    const data = {
-      notification,
-      to,
-    };
-    const result = await this.httpService
-      .post(this.sendEndpoint, data, {
-        headers: {
-          Authorization: 'key=' + this.serverKey,
-        },
+    // const data = {
+    //   notification,
+    //   to,
+    // };
+    webpush
+      .sendNotification(
+        subscription,
+        JSON.stringify({
+          notification
+        }),
+        this.webPushOptions,
+      )
+      .then((log) => {
+        console.log('Push notification sent.');
+        console.log(log);
       })
-      .toPromise()
-      .catch((e) => this.logger.debug(e));
+      .catch((error) => {
+        console.log(error);
+      });
 
-    return result;
+    // const result = await this.httpService
+    //   .post(this.sendEndpoint, data, {
+    //     headers: {
+    //       Authorization: 'key=' + this.serverKey,
+    //     },
+    //   })
+    //   .toPromise()
+    //   .catch((e) => this.logger.debug(e));
+
+    // return result;
   }
 }
