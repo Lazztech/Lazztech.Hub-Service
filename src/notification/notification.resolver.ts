@@ -15,6 +15,8 @@ import {
   PageableOptions,
   PaginatedInAppNotificationsResponse,
 } from '../dal/pagination/paginatedResponse.helper';
+import GraphQLJSON from 'graphql-type-json';
+import webpush from 'web-push';
 
 @UseGuards(GqlJwtAuthGuard)
 @Resolver()
@@ -32,6 +34,16 @@ export class NotificationResolver {
   ): Promise<boolean> {
     this.logger.debug(this.addUserFcmNotificationToken.name);
     await this.notificationService.addUserFcmNotificationToken(userId, token);
+    return true;
+  }
+
+  @Mutation(() => Boolean)
+  public async addUserWebPushNotificationSubscription(
+    @UserId() userId,
+    @Args({ name: 'subscription', type: () => GraphQLJSON }) subscription: webpush.PushSubscription,
+  ): Promise<boolean> {
+    this.logger.debug(this.addUserWebPushNotificationSubscription.name);
+    await this.notificationService.addUserWebPushNotificationSubscription(userId, subscription);
     return true;
   }
 

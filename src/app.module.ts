@@ -23,6 +23,7 @@ import { ModerationModule } from './moderation/moderation.module';
 import { NotificationModule } from './notification/notification.module';
 import { OpenGraphModule } from './open-graph/open-graph.module';
 import { UserModule } from './user/user.module';
+import GraphQLJSON from 'graphql-type-json';
 
 @Module({
   imports: [
@@ -256,6 +257,7 @@ import { UserModule } from './user/user.module';
       autoSchemaFile: true,
       context: ({ req, res }) => ({ req, res }),
       fieldResolverEnhancers: ['interceptors'],
+      resolvers: { JSON: GraphQLJSON },
     }),
     AuthModule,
     FieldResolversModule,

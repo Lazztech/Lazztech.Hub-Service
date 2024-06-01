@@ -25,18 +25,15 @@ export class NotificationService {
     'PUSH_NOTIFICATION_ENDPOINT',
   );
 
-  private webPushOptions: webpush.RequestOptions = {
-    vapidDetails: {
-      subject: 'example_email@example.com',
+  private webPushOptions: webpush.RequestOptions['vapidDetails'] = {
+      subject: 'https://lazz.tech/contact/',
       publicKey: this.configService.get<string>(
         'PUBLIC_VAPID_KEY',
       ),
       privateKey: this.configService.get<string>(
         'PRIVATE_VAPID_KEY',
       ),
-    },
-    TTL: 60,
-  };
+    };
 
   private logger = new Logger(NotificationService.name);
 
@@ -52,9 +49,9 @@ export class NotificationService {
   ) {
     this.logger.debug('constructor');
     webpush.setVapidDetails(
-      this.webPushOptions.vapidDetails.subject,
-      this.webPushOptions.vapidDetails.publicKey,
-      this.webPushOptions.vapidDetails.privateKey,
+      this.webPushOptions.subject,
+      this.webPushOptions.publicKey,
+      this.webPushOptions.privateKey,
     );
   }
 
