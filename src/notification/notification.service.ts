@@ -154,18 +154,6 @@ export class NotificationService {
     this.logger.debug(this.sendPushToUser.name);
     const user = await this.userRepository.findOne({ id: userId });
 
-    // native push notifications
-    const fcmUserTokens = (await user.userDevices.loadItems()).map(
-      (x) => x.fcmPushUserToken,
-    );
-    this.logger.debug(
-      `${fcmUserTokens.length} push notification tokens found for userId: ${userId}`,
-    );
-    for (const iterator of fcmUserTokens) {
-      await this.sendPushNotification(notification, iterator);
-      this.logger.debug(`Sent push notification to fcmToken ${iterator}`);
-    }
-
     // web push notifications
     const webPushSubscriptions = (await user.userDevices.loadItems()).map(
       (x) => x.webPushSubscription,
@@ -176,6 +164,18 @@ export class NotificationService {
     for (const subscription of webPushSubscriptions) {
       await this.sendWebPushNotification(notification, subscription);
       this.logger.debug(`Sent web push notification to subscription: ${JSON.stringify(subscription)}`);
+    }
+
+    // native push notifications
+    const fcmUserTokens = (await user.userDevices.loadItems()).map(
+      (x) => x.fcmPushUserToken,
+    );
+    this.logger.debug(
+      `${fcmUserTokens.length} push notification tokens found for userId: ${userId}`,
+    );
+    for (const iterator of fcmUserTokens) {
+      await this.sendPushNotification(notification, iterator);
+      this.logger.debug(`Sent push notification to fcmToken ${iterator}`);
     }
   }
 
