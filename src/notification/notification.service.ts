@@ -149,10 +149,28 @@ export class NotificationService {
     to: string,
   ) {
     this.logger.debug(this.sendPushNotification.name);
-    // const data = {
-    //   notification,
-    //   to,
-    // };
+    const data = {
+      notification,
+      to,
+    };
+
+    const result = await this.httpService
+      .post(this.sendEndpoint, data, {
+        headers: {
+          Authorization: 'key=' + this.serverKey,
+        },
+      })
+      .toPromise()
+      .catch((e) => this.logger.debug(e));
+
+    return result;
+  }
+
+  private async sendWebPushNotification(
+    notification: PushNotificationDto,
+    to: string,
+  ) {
+    this.logger.debug(this.sendWebPushNotification.name);
     webpush
       .sendNotification(
         subscription,
@@ -168,16 +186,5 @@ export class NotificationService {
       .catch((error) => {
         console.log(error);
       });
-
-    // const result = await this.httpService
-    //   .post(this.sendEndpoint, data, {
-    //     headers: {
-    //       Authorization: 'key=' + this.serverKey,
-    //     },
-    //   })
-    //   .toPromise()
-    //   .catch((e) => this.logger.debug(e));
-
-    // return result;
   }
 }
