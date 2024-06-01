@@ -48,11 +48,13 @@ export class NotificationService {
     private userDeviceRepository: EntityRepository<UserDevice>,
   ) {
     this.logger.debug('constructor');
-    webpush.setVapidDetails(
-      this.webPushOptions.subject,
-      this.webPushOptions.publicKey,
-      this.webPushOptions.privateKey,
-    );
+    if (this.webPushOptions.subject && this.webPushOptions.publicKey && this.webPushOptions.privateKey) {
+      webpush.setVapidDetails(
+        this.webPushOptions.subject,
+        this.webPushOptions.publicKey,
+        this.webPushOptions.privateKey,
+      ); 
+    }
   }
 
   public async addUserFcmNotificationToken(
@@ -154,7 +156,7 @@ export class NotificationService {
     // web push notifications
     const webPushSubscriptions = (await user.userDevices.loadItems()).map(
       (x) => x.webPushSubscription,
-    );
+    ).filter(val => val);
     this.logger.debug(
       `${webPushSubscriptions.length} web push notification subscriptions found for userId: ${userId}`,
     );
@@ -198,11 +200,12 @@ export class NotificationService {
     return result;
   }
 
-  private async sendWebPushNotification(
+  async sendWebPushNotification(
     notification: PushNotificationDto,
     to: webpush.PushSubscription,
   ) {
     this.logger.debug(this.sendWebPushNotification.name);
+    if (!this.webPushOptions.subject || !this.webPushOptions.publicKey || !this.webPushOptions.privateKey) return;
     webpush
       .sendNotification(
         to,

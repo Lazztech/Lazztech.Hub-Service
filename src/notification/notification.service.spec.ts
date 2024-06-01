@@ -187,14 +187,16 @@ describe('NotificationService', () => {
     const testUser = {
       id: userId,
       userDevices: {
-        loadItems: jest.fn().mockResolvedValueOnce([
+        loadItems: jest.fn().mockResolvedValue([
           {
             id: 1,
             fcmPushUserToken: 'token1',
+            webPushSubscription: {}
           },
           {
             id: 2,
             fcmPushUserToken: 'token2',
+            webPushSubscription: {}
           },
           {
             id: 3,
@@ -207,9 +209,13 @@ describe('NotificationService', () => {
     const sendPushNotification = jest
       .spyOn(httpService, 'post')
       .mockImplementation(() => of({} as AxiosResponse<any>));
+    const sendWebPushNotification = jest
+      .spyOn(service, 'sendWebPushNotification')
+      .mockImplementation(() => undefined);
     // Act
     await service.sendPushToUser(userId, testNotification);
     // Assert
+    expect(sendWebPushNotification).toHaveBeenCalledTimes(2);
     expect(sendPushNotification).toHaveBeenCalledTimes(3);
   });
 });
