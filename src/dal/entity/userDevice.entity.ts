@@ -1,6 +1,7 @@
 import { Entity, IdentifiedReference, ManyToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { User } from './user.entity';
+import webpush from 'web-push';
 
 @ObjectType()
 @Entity()
@@ -13,6 +14,9 @@ export class UserDevice {
   @Unique()
   @Property({ fieldName: 'fcmPushUserToken' })
   public fcmPushUserToken!: string;
+
+  @Property({ type: 'json', nullable: true })
+  webPushSubscription?: webpush.PushSubscription;
 
   @ManyToOne({
     entity: () => User,

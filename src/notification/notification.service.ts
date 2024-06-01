@@ -14,6 +14,7 @@ import {
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/core';
 import webpush from 'web-push';
+import _ from 'lodash';
 
 @Service()
 export class NotificationService {
@@ -76,6 +77,25 @@ export class NotificationService {
     }
   }
 
+  public async addUserWebPushNotificationSubscription(
+    userId: any,
+    subscription: webpush.PushSubscription,
+  ): Promise<void> {
+    this.logger.debug(this.addUserFcmNotificationToken.name);
+    const user = await this.userRepository.findOne({ id: userId });
+
+    if (!(await user.userDevices.loadItems()).find((x) => _.isEqual(x.webPushSubscription, subscription))) {
+      const userDevice = this.userDeviceRepository.create({
+        user: { id: user.id },
+        webPushSubscription: subscription,
+      });
+      await this.userDeviceRepository.persistAndFlush(userDevice);
+      // TODO notify via email that a new device has been used on the account for security.
+    } else {
+      this.logger.warn('User device web push notification subscription already stored.');
+    }
+  }
+
   /**
    * Fetch a users in app notifications, with optional pagination
    * @param userId users id
@@ -132,20 +152,30 @@ export class NotificationService {
     notification: PushNotificationDto,
   ): Promise<void> {
     this.logger.debug(this.sendPushToUser.name);
-
     const user = await this.userRepository.findOne({ id: userId });
+
+    // native push notifications
     const fcmUserTokens = (await user.userDevices.loadItems()).map(
       (x) => x.fcmPushUserToken,
     );
-
     this.logger.debug(
       `${fcmUserTokens.length} push notification tokens found for userId: ${userId}`,
     );
-
     for (const iterator of fcmUserTokens) {
       await this.sendPushNotification(notification, iterator);
-
       this.logger.debug(`Sent push notification to fcmToken ${iterator}`);
+    }
+
+    // web push notifications
+    const webPushSubscriptions = (await user.userDevices.loadItems()).map(
+      (x) => x.webPushSubscription,
+    );
+    this.logger.debug(
+      `${webPushSubscriptions.length} web push notification subscriptions found for userId: ${userId}`,
+    );
+    for (const subscription of webPushSubscriptions) {
+      await this.sendWebPushNotification(notification, subscription);
+      this.logger.debug(`Sent web push notification to subscription: ${JSON.stringify(subscription)}`);
     }
   }
 
@@ -173,12 +203,12 @@ export class NotificationService {
 
   private async sendWebPushNotification(
     notification: PushNotificationDto,
-    to: string,
+    to: webpush.PushSubscription,
   ) {
     this.logger.debug(this.sendWebPushNotification.name);
     webpush
       .sendNotification(
-        subscription,
+        to,
         JSON.stringify({
           notification
         }),
