@@ -12,7 +12,7 @@ export class UserDevice {
 
   @Field()
   @Unique()
-  @Property({ fieldName: 'fcmPushUserToken' })
+  @Property({ fieldName: 'fcmPushUserToken', nullable: true })
   public fcmPushUserToken!: string;
 
   @Property({ type: 'json', nullable: true })
