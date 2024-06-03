@@ -88,6 +88,14 @@ export class EventService {
         });
         userEvent.rsvp = rsvp;
         await this.joinUserEventRepository.persistAndFlush(userEvent);
+
+        const user = await userEvent.user.load();
+        await this.notificationService.sendPushToUser((await userEvent.event.load()).createdBy.id, {
+            title: `${(user.firstName || user.username)} RSVP'd ${rsvp} to ${(await userEvent.event.load()).name}.`,
+            body: `View the event.`,
+            click_action: `event/${eventId}`,
+        });
+
         return userEvent;
     }
 
