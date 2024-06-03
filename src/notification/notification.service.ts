@@ -210,7 +210,10 @@ export class NotificationService {
       .sendNotification(
         to,
         JSON.stringify({
-          notification
+          notification: {
+            ...notification,
+            icon: 'https://hub.lazz.tech/assets/lazztech_icon.webp'
+          }
         }),
       )
       .then((log) => {
