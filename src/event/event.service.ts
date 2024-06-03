@@ -90,8 +90,9 @@ export class EventService {
         await this.joinUserEventRepository.persistAndFlush(userEvent);
 
         const user = await userEvent.user.load();
-        await this.notificationService.sendPushToUser((await userEvent.event.load()).createdBy.id, {
-            title: `${(user.firstName || user.username)} RSVP'd ${rsvp} to ${(await userEvent.event.load()).name}.`,
+        const event = await userEvent.event.load();
+        await this.notificationService.sendPushToUser(event.createdBy.id, {
+            title: `${(user.firstName || user.username)} RSVP'd ${rsvp} to ${event.name}.`,
             body: `View the event.`,
             click_action: `event/${eventId}`,
         });
