@@ -92,8 +92,8 @@ export class EventService {
         const user = await userEvent.user.load();
         const event = await userEvent.event.load();
         await this.notificationService.sendPushToUser(event.createdBy.id, {
-            title: `${(user.firstName || user.username)} RSVP'd ${rsvp} to ${event.name}.`,
-            body: `View the event.`,
+            title: `${(user.firstName || user.username)} RSVP'd ${rsvp}.`,
+            body: `to ${event.name}`,
             click_action: `event/${eventId}`,
         });
 
