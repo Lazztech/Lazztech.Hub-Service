@@ -10,7 +10,7 @@ export class AppController {
       message: 'Hello world!',
       ogTitle: 'Lazztech Hub - Social App',
       ogDescription: 'From app to the real world - Foster Community',
-      ogImage: 'https://hub.lazz.tech/assets/banner.jpg',
+      ogImage: 'https://hub.lazz.tech/assets/banner.webp',
     };
   }
 }
