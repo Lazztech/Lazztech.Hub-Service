@@ -10,7 +10,6 @@ import { FILE_SERVICE } from '../file/file-service.token';
 import { FileServiceInterface } from '../file/interfaces/file-service.interface';
 import { NotificationService } from '../notification/notification.service';
 import { JoinEventFile } from '../dal/entity/joinEventFile.entity';
-import { forEach } from 'lodash';
 
 @Injectable()
 export class EventService {
@@ -226,18 +225,17 @@ export class EventService {
             { event, user: { $ne: createdById } },
             { populate: ['user'] } );
 
-            await Promise.allSettled( joins.map(u => {
-                this.notificationService.sendPushToUser(
-                    u.user.id,
-                     { title: `"${event.name}" has been updated`,
-                       body: `View the event to see changes.`,
-                       click_action: `event/${event?.id}`,
-                     }
-                    )
-                })
+        joins.forEach(j => 
+            this.notificationService.sendPushToUser(
+                j.user.id,
+                    { title: `"${event.name}" has been updated`,
+                    body: `View the event to see changes.`,
+                    click_action: `event/${event?.id}`,
+                    }
+                )
             );
-            
-            return event;
+        
+        return event;
     }
 
     async deleteEvent(userId: any, eventId: number) {
