@@ -1,4 +1,6 @@
 {
   "recommendations": [
+    //The 1 extension(s) below, in workspace recommendations have issues: (bad format) Expected: <provider>.<name>
+    "cweijan.vscode-database-client2"
   ]
 }
