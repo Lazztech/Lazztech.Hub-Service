@@ -218,6 +218,23 @@ export class EventService {
 
         event = this.eventRepository.assign(event, value);
         await this.eventRepository.persistAndFlush(event);
+  
+        const createdById = event.createdBy.id;
+        
+        const joins = await this.joinUserEventRepository.find(
+            { event, user: { $ne: createdById } },
+            { populate: ['user'] } );
+
+        joins.forEach(j => 
+            this.notificationService.sendPushToUser(
+                j.user.id,
+                    { title: `"${event.name}" has been updated`,
+                    body: `View the event to see changes.`,
+                    click_action: `event/${event?.id}`,
+                    }
+                )
+            );
+        
         return event;
     }
 
