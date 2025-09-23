@@ -111,7 +111,6 @@ describe('HubService', () => {
             user: {},
           },
         ] as any,
-        microChats: [{}],
       } as any,
     } as JoinUserHub;
     jest

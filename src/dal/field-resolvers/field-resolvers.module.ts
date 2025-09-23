@@ -11,7 +11,6 @@ import { JoinEventFileResolver } from './joinEventFile-field.resolver';
 import { JoinHubFileResolver } from './joinHubFile-field.resolver';
 import { JoinUserEventFieldResolver } from './joinUserEvent-field.resolver';
 import { JoinUserHubsResolver as JoinUserHubsFieldResolver } from './joinUserHub-field.resolver';
-import { MicroChatFieldResolver } from './microChat-field.resolver';
 import { UserFieldResolver } from './user-field.resolver';
 import { UserDeviceFieldResolver } from './userDevice-field.resolver';
 
@@ -25,7 +24,6 @@ import { UserDeviceFieldResolver } from './userDevice-field.resolver';
     HubFieldResolver,
     UserFieldResolver,
     InAppNotificationFieldResolver,
-    MicroChatFieldResolver,
     UserDeviceFieldResolver,
     InviteFieldResolver,
     BlockFieldResolver,

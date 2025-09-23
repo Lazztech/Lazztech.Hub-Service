@@ -4,14 +4,12 @@ import { GqlJwtAuthGuard } from '../auth/guards/gql-jwt-auth.guard';
 import { Hub } from '../dal/entity/hub.entity';
 import { Invite } from '../dal/entity/invite.entity';
 import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
-import { MicroChat } from '../dal/entity/microChat.entity';
 import { User } from '../dal/entity/user.entity';
 import { UserId } from '../decorators/user.decorator';
 import { UserService } from '../user/user.service';
 import { HubActivityService } from './hub-activity/hub-activity.service';
 import { HubGeofenceService } from './hub-geofence/hub-geofence.service';
 import { HubInviteService } from './hub-invite/hub-invite.service';
-import { HubMicroChatService } from './hub-micro-chat/hub-micro-chat.service';
 import { HubService } from './hub.service';
 import GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 import { FileUpload } from 'src/file/interfaces/file-upload.interface';
@@ -25,7 +23,6 @@ export class HubResolver {
     private hubService: HubService,
     private hubActivityService: HubActivityService,
     private hubGeofenceService: HubGeofenceService,
-    private hubMicroChatService: HubMicroChatService,
     private hubInviteService: HubInviteService,
     private userService: UserService,
   ) {}
@@ -384,43 +381,6 @@ export class HubResolver {
     this.logger.debug(this.deactivateHub.name);
     const result = await this.hubActivityService.deactivateHub(userId, hubId);
     return result;
-  }
-
-  @Mutation(() => Boolean)
-  public async microChatToHub(
-    @UserId() userId,
-    @Args({ name: 'hubId', type: () => ID }) hubId: number,
-    @Args({ name: 'microChatId', type: () => ID }) microChatId: number,
-  ) {
-    this.logger.debug(this.microChatToHub.name);
-    await this.hubMicroChatService.microChatToHub(userId, hubId, microChatId);
-    return true;
-  }
-
-  @Mutation(() => MicroChat)
-  public async createMicroChat(
-    @UserId() userId,
-    @Args({ name: 'hubId', type: () => ID }) hubId: number,
-    @Args({ name: 'microChatText', type: () => String }) microChatText: string,
-  ) {
-    this.logger.debug(this.createMicroChat.name);
-    const microChat = await this.hubMicroChatService.createMicroChat(
-      userId,
-      hubId,
-      microChatText,
-    );
-    return microChat;
-  }
-
-  @Mutation(() => Boolean)
-  public async deleteMicroChat(
-    @UserId() userId,
-    @Args({ name: 'hubId', type: () => ID }) hubId: number,
-    @Args({ name: 'microChatId', type: () => ID }) microChatId: number,
-  ) {
-    this.logger.debug(this.deleteMicroChat.name);
-    await this.hubMicroChatService.deleteMicroChat(userId, hubId, microChatId);
-    return true;
   }
 
 }
