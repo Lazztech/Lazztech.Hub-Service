@@ -195,6 +195,7 @@ Custom scripts have been added to streamline and simplify handling migrations wi
 ```bash
 # each script comes in sqlite | postgres | all variations
 # scripts ending with "all" perform the action on both databases
+# Note: due to configuration differences, run build before generating sqlite migrations!
 
 # create a migration generated from the entity schema
 $ npm run migration:generate:<sqlite|postgres|all>
