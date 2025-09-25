@@ -201,13 +201,13 @@ Custom scripts have been added to streamline and simplify handling migrations wi
 $ npm run migration:generate:<sqlite|postgres|all>
 
 # create a blank migration
-$  npm run migration:create:<sqlite|postgres|all>
+$ npm run migration:create:<sqlite|postgres|all>
 
 # apply migrations
-$ npm run migration:apply:<sqlite|postgres|all>
+$ npm run migration:up:<sqlite|postgres|all>
 
 # revert most recently applied migration
-$ npm run migration:revert:<sqlite|postgres|all>
+$ npm run migration:down:<sqlite|postgres|all>
 
 # lists pending queries to executed based on the entity schema
 $ npm run migration:log:all
