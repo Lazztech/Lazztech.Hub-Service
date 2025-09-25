@@ -11,7 +11,6 @@ import { File } from '../entity/file.entity';
 import { Hub } from '../entity/hub.entity';
 import { Invite } from '../entity/invite.entity';
 import { JoinUserHub } from '../entity/joinUserHub.entity';
-import { MicroChat } from '../entity/microChat.entity';
 import { JoinHubFile } from '../entity/joinHubFile.entity';
 
 @Resolver(() => Hub)
@@ -52,12 +51,6 @@ export class HubFieldResolver {
   public fileUploads(@Parent() parent: Hub): Promise<JoinHubFile[]> {
     // TODO: add dataloader
     return parent.fileUploads.loadItems();
-  }
-
-  @ResolveField(() => [MicroChat], { nullable: true })
-  public microChats(@Parent() hub: Hub): Promise<MicroChat[]> {
-    // TODO: add dataloader
-    return hub.microChats.loadItems();
   }
 
   @ResolveField(() => [Event], { nullable: true })

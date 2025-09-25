@@ -241,10 +241,6 @@ describe('AppController (e2e)', () => {
                 isOwner
                 isPresent
               }
-              microChats {
-                id
-                text
-              }
             }
           }
         }`,

@@ -1,6 +1,5 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { JoinUserHub } from './joinUserHub.entity';
-import { MicroChat } from './microChat.entity';
 import { Invite } from './invite.entity';
 import { ShareableId } from './shareableId.entity'
 import { Collection, Entity, IdentifiedReference, ManyToOne, OneToMany, PrimaryKey, Property, types } from '@mikro-orm/core';
@@ -74,12 +73,6 @@ export class Hub extends ShareableId {
    */
    @OneToMany(() => Event, (event) => event.hub)
    public events = new Collection<Event>(this);
-
-  /**
-   * Handled with a field resolver
-   */
-  @OneToMany(() => MicroChat, (microChat) => microChat.hub)
-  public microChats = new Collection<MicroChat>(this);
 
   /**
    * Handled with a field resolver

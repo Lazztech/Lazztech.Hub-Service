@@ -611,66 +611,6 @@
     },
     {
       "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "unsigned": true,
-          "autoincrement": true,
-          "primary": true,
-          "nullable": false,
-          "mappedType": "integer"
-        },
-        "hubId": {
-          "name": "hubId",
-          "type": "int",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "integer"
-        },
-        "text": {
-          "name": "text",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "string"
-        }
-      },
-      "name": "micro_chat",
-      "schema": "public",
-      "indexes": [
-        {
-          "keyName": "micro_chat_pkey",
-          "columnNames": [
-            "id"
-          ],
-          "composite": false,
-          "primary": true,
-          "unique": true
-        }
-      ],
-      "checks": [],
-      "foreignKeys": {
-        "micro_chat_hubId_foreign": {
-          "constraintName": "micro_chat_hubId_foreign",
-          "columnNames": [
-            "hubId"
-          ],
-          "localTableName": "public.micro_chat",
-          "referencedColumnNames": [
-            "id"
-          ],
-          "referencedTableName": "public.hub",
-          "deleteRule": "cascade",
-          "updateRule": "cascade"
-        }
-      }
-    },
-    {
-      "columns": {
         "userId": {
           "name": "userId",
           "type": "int",
