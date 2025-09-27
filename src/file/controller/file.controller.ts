@@ -3,7 +3,6 @@ import { Response } from 'express';
 import { join } from 'path';
 import sharp from 'sharp';
 import { FILE_SERVICE } from '../file-service.token';
-import { ImageFileService } from '../image-file/image-file.service';
 import { FileServiceInterface } from '../interfaces/file-service.interface';
 
 @Controller('file')
@@ -13,7 +12,6 @@ export class FileController {
   constructor(
     @Inject(FILE_SERVICE)
     private readonly fileService: FileServiceInterface,
-    private readonly imageService: ImageFileService,
   ) {}
 
   @Get(':fileName')

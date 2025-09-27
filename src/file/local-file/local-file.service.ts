@@ -2,7 +2,6 @@ import { HttpException, HttpStatus, Injectable, Logger, NotFoundException } from
 import { ConfigService } from '@nestjs/config';
 import { v1 as uuidv1 } from 'uuid';
 import { FileServiceInterface } from '../interfaces/file-service.interface';
-import { ImageFileService } from '../image-file/image-file.service';
 import * as fs from 'fs';
 import * as path from 'path';
 import { FileUpload } from '../interfaces/file-upload.interface';
@@ -22,7 +21,6 @@ export class LocalFileService implements FileServiceInterface {
 
   constructor(
     private readonly configService: ConfigService,
-    private readonly imageFileService: ImageFileService,
     @InjectRepository(File)
     private readonly fileRepository: EntityRepository<File>,
   ) {

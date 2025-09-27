@@ -2,7 +2,6 @@ import { FactoryProvider, Logger, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { FILE_SERVICE } from './file-service.token';
 import { FileController } from './controller/file.controller';
-import { ImageFileService } from './image-file/image-file.service';
 import { LocalFileService } from './local-file/local-file.service';
 import { S3FileService } from './s3-file/s3-file.service';
 import { FileUrlService } from './file-url/file-url.service';
@@ -52,7 +51,6 @@ export const fileServiceFactory = {
     fileServiceFactory,
     S3FileService,
     LocalFileService,
-    ImageFileService,
     FileUrlService,
     FileResolver,
   ],
