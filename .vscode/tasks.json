@@ -88,51 +88,6 @@
             "problemMatcher": []
         },
         {
-            "label": "New Server Typeorm Migration",
-            "type": "shell",
-            "command": "npm run build && typeorm migration:generate -n ${input:MigrationName}",
-            "options": {
-                "cwd": "${workspaceRoot}/server"
-            },
-            "problemMatcher": []
-        },
-        {
-            "label": "Run Server Typeorm Migrations",
-            "type": "shell",
-            "command": "npm run build && typeorm migration:run",
-            "options": {
-                "cwd": "${workspaceRoot}/server"
-            },
-            "problemMatcher": []
-        },
-        {
-            "label": "Revert Server Typeorm Migration",
-            "type": "shell",
-            "command": "npm run build && typeorm migration:revert",
-            "options": {
-                "cwd": "${workspaceRoot}/server"
-            },
-            "problemMatcher": []
-        },
-        {
-            "label": "New Empty Server Typeorm Migration",
-            "type": "shell",
-            "command": "npm run build && typeorm migration:create -n ${input:MigrationName}",
-            "options": {
-                "cwd": "${workspaceRoot}/server"
-            },
-            "problemMatcher": []
-        },
-        {
-            "label": "Drop DB Tables",
-            "type": "shell",
-            "command": "typeorm schema:drop",
-            "options": {
-                "cwd": "${workspaceRoot}/server"
-            },
-            "problemMatcher": []
-        },
-        {
             "label": "Npm Install All Projects",
             "type": "shell",
             "command": "cd googleAssistant/functions && npm install && cd ${workspaceRoot} && cd client && npm install && cd .. && cd server && npm install && cd ../ionic/Face && npm install",
@@ -226,12 +181,6 @@
         {
             "id": "GenericInput",
             "description": "Enter Input",
-            "default": "",
-            "type": "promptString"
-        }
-        {
-            "id": "MigrationName",
-            "description": "Enter Typeorm Migration Name",
             "default": "",
             "type": "promptString"
         },
