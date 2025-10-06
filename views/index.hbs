@@ -328,12 +328,12 @@
                     $(document).ready(function () {
                         if (window.location.href.match('/hub/')) {
                             const parts = window.location.href.split('/hub/');
-                            const redirect = parts.shift() + '/app/hub/' + parts.pop();
+                            const redirect = parts.shift() + '/app/tabs/hub/' + parts.pop();
                             window.location.href = redirect;
                         }
                         if (window.location.href.match('/event/')) {
                             const parts = window.location.href.split('/event/');
-                            const redirect = parts.shift() + '/app/event/' + parts.pop();
+                            const redirect = parts.shift() + '/app/tabs/event/' + parts.pop();
                             window.location.href = redirect;
                         }
                     })
