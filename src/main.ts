@@ -48,7 +48,11 @@ async function bootstrap() {
       pathRewrite: {
         '^/protomaps/tiles.pmtiles': '/protomaps/maps.pmtiles', // rewrite path
       },
-      changeOrigin: true,
+        changeOrigin: true,
+        onProxyRes: (proxyRes, req, res) => {
+        proxyRes.headers['cache-control'] = 'public, max-age=31536000, immutable';
+        proxyRes.headers['accept-ranges'] = 'bytes';
+      },
     }));
 
   app.useGlobalInterceptors(new ModerationInterceptor());
