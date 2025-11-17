@@ -43,6 +43,29 @@
     posthog.init('phc_rlAGH2vTNstyGtFXUJ5NzdJQTAM85wI6E9ibvA8LZai',{api_host:'https://us.i.posthog.com', person_profiles: 'identified_only' // or 'always' to create profiles for anonymous users as well
         })
 </script>
+
+  <style>
+    /* Center the mockup on small screens */
+    @media only screen and (max-width: 992px) {
+      .container {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .mockup-wrapper {
+        display: flex;
+        justify-content: center;
+        margin-block: 1.5rem;    
+      }
+
+      .iphoneScreen {
+        display: block;
+        max-width: min(360px, 90vw); 
+        width: 100%;
+        height: auto;
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -72,7 +95,8 @@
                         </ul>
                     </nav>
                 </header>
-                <div>                   
+                
+                <div class="mockup-wrapper">                   
                      <img class="iphoneScreen" src="/assets/screenshot/Lazztech_Hub_Mockup_3x copy.png" alt="Lazztech Hub demo screenshot">
                 </div>
                <!--  <div class="iphonePreview">
