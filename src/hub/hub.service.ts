@@ -274,14 +274,14 @@ export class HubService {
           text: `By ${user.firstName} ${user.lastName}`,
           date: Date.now().toString(),
           thumbnail: (await hub.coverImage.load()).fileName,
-          actionLink: undefined,
+          actionLink: `tabs/hub/${hub?.id}`,
         },
       );
 
       await this.notificationService.sendPushToUser(relationship.user.id, {
         title: `${hub.name} had its location changed.`,
         body: `By ${user.firstName} ${user.lastName}`,
-        click_action: undefined,
+        click_action: `tabs/hub/${hub?.id}`,
       });
     }
 
