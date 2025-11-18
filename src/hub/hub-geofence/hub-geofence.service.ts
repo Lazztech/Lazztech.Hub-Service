@@ -107,7 +107,7 @@ export class HubGeofenceService {
       if (!relation.muted) {
         await this.notificationService.sendPushToUser(relation.user.id, {
           title: message,
-          click_action: undefined,
+          click_action: `tabs/hub/${hub?.id}`,
           body: `at the "${hub.name}" hub.`,
         });
       }
@@ -130,7 +130,7 @@ export class HubGeofenceService {
       if (!relation.muted) {
         await this.notificationService.sendPushToUser(relation.user.id, {
           title: message,
-          click_action: undefined,
+          click_action: `tabs/hub/${hub?.id}`,
           body: `the "${hub.name}" hub`,
         });
       }

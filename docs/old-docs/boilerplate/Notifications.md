@@ -30,7 +30,7 @@ curl -X POST -H "Authorization: key=SERVER_KEY" -H "Content-Type: application/js
 "notification": {
     "title": "Web Push Notifications",
     "body": "Hey, Hello World",
-    "click_action": "https://mywebsite.ccom"
+    "click_action": "https://mywebsite.com"
 },
 "to": "USER_TOKEN"
 }' "https://fcm.googleapis.com/fcm/send"

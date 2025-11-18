@@ -136,13 +136,13 @@ export class HubInviteService {
       header: `${invitee.firstName} accepted invite`,
       text: `to "${hub.name}" hub.`,
       date: Date.now().toString(),
-      actionLink: null,
+      actionLink: `tabs/hub/${hub?.id}`,
     });
 
     await this.notificationService.sendPushToUser(invitee.id, {
       title: `${invitee.firstName} accepted invite`,
       body: `to "${hub.name}" hub.`,
-      click_action: null,
+      click_action: `tabs/hub/${hub?.id}`,
     });
 
     return newRelationship;
