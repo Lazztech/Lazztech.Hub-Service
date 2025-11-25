@@ -94,7 +94,7 @@ export class EventService {
         await this.notificationService.sendPushToUser(event.createdBy.id, {
             title: `${(user.firstName || user.username)} RSVP'd ${rsvp}.`,
             body: `to ${event.name}`,
-            click_action: `tabs/event/${eventId}`,
+            click_action: `https://hub.lazz.tech/app/tabs/event/${eventId}`,
         });
 
         return userEvent;
@@ -117,7 +117,7 @@ export class EventService {
         await this.notificationService.sendPushToUser(invitee.id, {
             title: `You're invited to "${event.name}" event.`,
             body: `View the invite.`,
-            click_action: `tabs/event/${eventId}`,
+            click_action: `https://hub.lazz.tech/app/tabs/event/${eventId}`,
         });
         return joinUserEvent;
     }
@@ -166,7 +166,7 @@ export class EventService {
             await this.notificationService.sendPushToUser(event?.createdBy?.id, {
                 title: `You're invited to "${event.name}" event.`,
                 body: `View the invite.`,
-                click_action: `tabs/event/${event?.id}`,
+                click_action: `https://hub.lazz.tech/app/tabs/event/${event?.id}`,
             });
     
             return joinUserEvent;   
@@ -230,7 +230,7 @@ export class EventService {
                 j.user.id,
                     { title: `"${event.name}" has been updated`,
                     body: `View the event to see changes.`,
-                    click_action: `tabs/event/${event?.id}`,
+                    click_action: `https://hub.lazz.tech/app/tabs/event/${event?.id}`,
                     }
                 )
             );

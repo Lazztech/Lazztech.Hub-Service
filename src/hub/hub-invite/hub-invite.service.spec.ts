@@ -133,7 +133,7 @@ describe('HubInviteService', () => {
         }" hub.`,
         text: `View the invite.`,
         // date: Date.now().toString(),
-        actionLink: `preview-hub/${mockedFindOneJoinUserHub.hub.id}`,
+        actionLink: `https://hub.lazz.tech/app/preview-hub/${mockedFindOneJoinUserHub.hub.id}`,
       }),
     );
     expect(sendPushToUser).toHaveBeenCalledWith(
@@ -143,7 +143,7 @@ describe('HubInviteService', () => {
           (await mockedFindOneJoinUserHub.hub.load()).name
         }" hub.`,
         body: `View the invite.`,
-        click_action: `preview-hub/${(await mockedFindOneJoinUserHub.hub.load()).id}`,
+        click_action: `https://hub.lazz.tech/app/preview-hub/${(await mockedFindOneJoinUserHub.hub.load()).id}`,
       }),
     );
   });
