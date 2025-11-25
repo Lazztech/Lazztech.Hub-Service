@@ -99,13 +99,13 @@ export class HubInviteService {
       header: `You're invited to "${hub.name}" hub.`,
       text: `View the invite.`,
       date: Date.now().toString(),
-      actionLink: `preview-hub/${hubId}`,
+      actionLink: `https://hub.lazz.tech/app/preview-hub/${hubId}`,
     });
 
     await this.notificationService.sendPushToUser(invitee.id, {
       title: `You're invited to "${hub.name}" hub.`,
       body: `View the invite.`,
-      click_action: `preview-hub/${hubId}`,
+      click_action: `https://hub.lazz.tech/app/preview-hub/${hubId}`,
     });
 
     return invite;
@@ -136,13 +136,13 @@ export class HubInviteService {
       header: `${invitee.firstName} accepted invite`,
       text: `to "${hub.name}" hub.`,
       date: Date.now().toString(),
-      actionLink: `tabs/hub/${hub?.id}`,
+      actionLink: `https://hub.lazz.tech/app/tabs/hub/${hub?.id}`,
     });
 
     await this.notificationService.sendPushToUser(invitee.id, {
       title: `${invitee.firstName} accepted invite`,
       body: `to "${hub.name}" hub.`,
-      click_action: `tabs/hub/${hub?.id}`,
+      click_action: `https://hub.lazz.tech/app/tabs/hub/${hub?.id}`,
     });
 
     return newRelationship;

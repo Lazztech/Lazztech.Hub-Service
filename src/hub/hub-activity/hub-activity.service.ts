@@ -79,7 +79,7 @@ export class HubActivityService {
       await this.notificationService.sendPushToUser(joinUserHub.user.id, {
         title: `"${hub.name}" hub became active`,
         body: `Touch to go to hub.`,
-        click_action: `tabs/hub/${hub?.id}`,
+        click_action: `https://hub.lazz.tech/app/tabs/hub/${hub?.id}`,
       } as PushNotificationDto);
 
       await this.notificationService.addInAppNotificationForUser(
@@ -89,7 +89,7 @@ export class HubActivityService {
           header: `"${hub.name}" hub became active`,
           text: `Touch to go to hub.`,
           date: Date.now().toString(),
-          actionLink: `tabs/hub/${hub?.id}`,
+          actionLink: `https://hub.lazz.tech/app/tabs/hub/${hub?.id}`,
         },
       );
     }
