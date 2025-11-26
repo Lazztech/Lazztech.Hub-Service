@@ -212,7 +212,7 @@ export class NotificationService {
         JSON.stringify({
           notification: {
             ...notification,
-            icon: 'https://hub.lazz.tech/assets/lazztech_icon.webp'
+            icon: 'https://noun.lazz.tech/assets/lazztech_icon.webp'
           }
         }),
       )
