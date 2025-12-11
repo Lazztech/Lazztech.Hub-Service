@@ -8,7 +8,7 @@ export class AppController {
   root() {
     return {
       message: 'Hello world!',
-      ogTitle: 'Lazztech Hub - Social App',
+      ogTitle: 'Lazztech Noun - Social App',
       ogDescription: 'From app to the real world - Foster Community',
       ogImage: 'https://noun.lazz.tech/assets/banner.webp',
     };
