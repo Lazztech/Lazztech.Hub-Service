@@ -1,4 +1,4 @@
-import { EntityRepository } from '@mikro-orm/core';
+import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
@@ -27,7 +27,8 @@ export class ModerationService {
         private joinUserEventRepository: EntityRepository<JoinUserEvent>,
         @InjectRepository(File)
         private readonly fileRepository: EntityRepository<File>,
-        private hubService: HubService
+        private hubService: HubService,
+        private readonly em: EntityManager,
     ) {}
 
     @Cron(CronExpression.EVERY_12_HOURS)
@@ -38,28 +39,28 @@ export class ModerationService {
         users.forEach(user => {
             user.banned = true;
         });
-        await this.userRepository.persistAndFlush(users);
+        await this.em.persist(users).flush();
 
         // mark hubs
         const hubs = await this.hubRepository.find({ flagged: true });
         hubs.forEach(hub => {
             hub.banned = true;
         });
-        await this.joinUserHubRepository.persistAndFlush(hubs);
+        await this.em.persist(hubs).flush();
 
         // mark events
         const events = await this.eventRepository.find({ flagged: true });
         events.forEach(event => {
             event.banned  = true;
         });
-        await this.eventRepository.persistAndFlush(events);
+        await this.em.persist(events).flush();
 
         // mark files
         const files = await this.fileRepository.find({ flagged: true });
         files.forEach(file => {
             file.banned = true;
         });
-        await this.fileRepository.persistAndFlush(files);
+        await this.em.persist(files).flush();
     }
 
     public async reportHubAsInappropriate(userId: any, hubId: number) {
@@ -77,8 +78,8 @@ export class ModerationService {
             const owner = await ownerRelation.user.load();
             owner.flagged = true;
         }
-        await this.joinUserHubRepository.persistAndFlush(adminRelations);
-        await this.hubRepository.persistAndFlush(hub);
+        await this.em.persist(adminRelations).flush();
+        await this.em.persist(hub).flush();
     }
 
     async reportEventAsInappropriate(userId: any, eventId: number) {
@@ -90,8 +91,8 @@ export class ModerationService {
         event.flagged = true;
         const createdByUser = await event.createdBy.load();
         createdByUser.flagged = true;
-        await this.joinUserEventRepository.persistAndFlush(event);
-        await this.userRepository.persistAndFlush(createdByUser);
+        await this.em.persist(event).flush();
+        await this.em.persist(createdByUser).flush();
       }
 
     public async reportUserAsInappropriate(userId: any, toUserId: number) {
@@ -101,7 +102,7 @@ export class ModerationService {
         }
         const user = await this.userRepository.findOneOrFail({ id: toUserId });
         user.flagged = true;
-        await this.userRepository.persistAndFlush(user);
+        await this.em.persist(user).flush();
     }
 
     public async reportFileAsInappropriate(userId: any, fileId: any) {
@@ -111,7 +112,7 @@ export class ModerationService {
         // should not be able to report your own file
         if (file.createdBy.id !== userId) {
             file.flagged = true;
-            await this.fileRepository.persistAndFlush(file);
+            await this.em.persist(file).flush();
         }
     }
 }

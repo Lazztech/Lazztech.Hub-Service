@@ -7,7 +7,7 @@ import { FileServiceInterface } from '../file/interfaces/file-service.interface'
 import { FILE_SERVICE } from '../file/file-service.token';
 import { NotificationService } from '../notification/notification.service';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { EntityRepository } from '@mikro-orm/core';
+import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { Block } from '../dal/entity/block.entity';
 import { v4 as uuid } from 'uuid';
 import { FileUpload } from 'src/file/interfaces/file-upload.interface';
@@ -30,6 +30,7 @@ export class HubService {
     @InjectRepository(JoinHubFile)
     private joinHubFileRepository: EntityRepository<JoinHubFile>,
     private notificationService: NotificationService,
+    private readonly em: EntityManager,
   ) {
     this.logger.debug('constructor');
   }
@@ -53,7 +54,7 @@ export class HubService {
         hub: hub.id,
         isOwner: false,
       } as any);
-      await this.joinUserHubRepository.persistAndFlush(joinUserHub);
+      await this.em.persist(joinUserHub).flush();
       return joinUserHub; 
     }
   }
@@ -63,7 +64,7 @@ export class HubService {
     const userHub = await this.joinUserHubRepository.findOneOrFail({ user: userId, hub: hubId, isOwner: true });
     const hub = await userHub.hub.load();
     hub.shareableId = uuid();
-    this.hubRepository.persistAndFlush(hub);
+    this.em.persist(hub).flush();
     return userHub;
 }
 
@@ -134,7 +135,7 @@ export class HubService {
       });
     });
 
-    await this.joinHubFileRepository.persistAndFlush(fileEntities);
+    await this.em.persist(fileEntities).flush();
     return joinUserHub;
   }
 
@@ -148,14 +149,14 @@ export class HubService {
     // repository.create => save pattern used to so that the @BeforeInsert decorated method
     // will fire generating a uuid for the shareableId
     hub = this.hubRepository.create(hub);
-    await this.hubRepository.persistAndFlush(hub);
+    await this.em.persist(hub).flush();
     
     const joinUserHub = this.joinUserHubRepository.create({
       user: userId,
       hub: hub.id,
       isOwner: true,
     } as any);
-    await this.joinUserHubRepository.persistAndFlush(joinUserHub);
+    await this.em.persist(joinUserHub).flush();
     return joinUserHub;
   }
 
@@ -168,7 +169,7 @@ export class HubService {
       );
     }
     const userToBeRemoved = await this.joinUserHubRepository.findOneOrFail({ user: otherUsersId, hub: hubId });
-    await this.joinUserHubRepository.removeAndFlush(userToBeRemoved);
+    await this.em.remove(userToBeRemoved).flush();
   }
 
   async deleteHub(userId: any, hubId: number) {
@@ -191,7 +192,7 @@ export class HubService {
     if (hub.coverImage) {
       await this.fileService.delete((await hub.coverImage.load()).fileName);
     }
-    await this.hubRepository.removeAndFlush(hub);
+    await this.em.remove(hub).flush();
   }
 
   private isNotOwner(userHubRelationship: JoinUserHub) {
@@ -219,7 +220,7 @@ export class HubService {
 
     let hub = await joinUserHubResult.hub.load();
     hub = this.hubRepository.assign(hub, value);
-    await this.hubRepository.persistAndFlush(hub);
+    await this.em.persist(hub).flush();
     return hub;
   }
 
@@ -237,7 +238,7 @@ export class HubService {
     const hub = await joinUserHubResult.hub.load();
     hub.name = name;
     hub.description = description;
-    await this.hubRepository.persistAndFlush(hub);
+    await this.em.persist(hub).flush();
     return hub;
   }
 
@@ -260,7 +261,7 @@ export class HubService {
     const hub = await joinUserHubResult.hub.load();
     hub.latitude = latitude;
     hub.longitude = longitude;
-    await this.hubRepository.persistAndFlush(hub);
+    await this.em.persist(hub).flush();
 
     const relationships = await this.joinUserHubRepository.find({
       hub: hubId,
@@ -294,13 +295,13 @@ export class HubService {
       user: userId,
       hub: hubId,
     });
-    await this.joinUserHubRepository.removeAndFlush(joinUserHub);
+    await this.em.remove(joinUserHub).flush();
 
     const invite = await this.inviteRepository.findOne({
       invitee: userId,
       hub: hubId,
     });
-    await this.inviteRepository.removeAndFlush(invite);
+    await this.em.remove(invite).flush();
   }
 
   async setHubStarred(userId: any, hubId: number) {
@@ -310,7 +311,7 @@ export class HubService {
       hub: hubId,
     });
     hubRelationship.starred = true;
-    await this.joinUserHubRepository.persistAndFlush(hubRelationship);
+    await this.em.persist(hubRelationship).flush();
     return hubRelationship;
   }
 
@@ -321,7 +322,7 @@ export class HubService {
       hub: hubId,
     });
     hubRelationship.starred = false;
-    await this.joinUserHubRepository.persistAndFlush(hubRelationship);
+    await this.em.persist(hubRelationship).flush();
     return hubRelationship;
   }
 
@@ -332,7 +333,7 @@ export class HubService {
       hub: hubId,
     });
     hubRelationship.muted = true;
-    await this.joinUserHubRepository.persistAndFlush(hubRelationship);
+    await this.em.persist(hubRelationship).flush();
     return hubRelationship;
   }
 
@@ -343,7 +344,7 @@ export class HubService {
       hub: hubId,
     });
     hubRelationship.muted = false;
-    await this.joinUserHubRepository.persistAndFlush(hubRelationship);
+    await this.em.persist(hubRelationship).flush();
     return hubRelationship;
   }
 

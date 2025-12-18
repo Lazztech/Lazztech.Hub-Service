@@ -1,4 +1,4 @@
-import { EntityRepository } from '@mikro-orm/core';
+import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable, Logger } from '@nestjs/common';
 import { Hub } from '../../dal/entity/hub.entity';
@@ -19,6 +19,7 @@ export class HubActivityService {
     @InjectRepository(InAppNotification)
     private inAppNotificationRepository: EntityRepository<InAppNotification>,
     private notificationService: NotificationService,
+    private readonly em: EntityManager,
   ) {
     this.logger.debug('constructor');
   }
@@ -39,7 +40,7 @@ export class HubActivityService {
 
     const hub = await hubRelationship.hub.load();
     hub.active = true;
-    await this.hubRepository.persistAndFlush(hub);
+    await this.em.persist(hub).flush();
 
     await this.notifyOfHubActivated(hubId);
     return hub;
@@ -61,7 +62,7 @@ export class HubActivityService {
 
     const hub = await hubRelationship.hub.load();
     hub.active = false;
-    await this.hubRepository.persistAndFlush(hub);
+    await this.em.persist(hub).flush();
     return hub;
   }
 

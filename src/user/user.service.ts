@@ -6,7 +6,7 @@ import { FileServiceInterface } from 'src/file/interfaces/file-service.interface
 import { EditUserDetails } from './dto/editUserDetails.input';
 import { FILE_SERVICE } from '../file/file-service.token';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { EntityRepository } from '@mikro-orm/core';
+import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { Block } from '../dal/entity/block.entity';
 import { FileUpload } from 'src/file/interfaces/file-upload.interface';
 import { File } from '../dal/entity/file.entity';
@@ -32,6 +32,7 @@ export class UserService {
     private joinEventFileRepository: EntityRepository<JoinEventFile>,
     @InjectRepository(JoinHubFile)
     private joinHubFileRepository: EntityRepository<JoinHubFile>,
+    private readonly em: EntityManager,
   ) {
     this.logger.debug('constructor');
   }
@@ -88,7 +89,7 @@ export class UserService {
     user.firstName = details.firstName;
     user.lastName = details.lastName;
     user.description = details.description;
-    await this.userRepository.persistAndFlush(user);
+    await this.em.persist(user).flush();
     return user;
   }
 
@@ -106,7 +107,7 @@ export class UserService {
     }
 
     user = this.userRepository.assign(user, value);
-    await this.userRepository.persistAndFlush(user);
+    await this.em.persist(user).flush();
     return user;
   }
 
@@ -114,14 +115,14 @@ export class UserService {
     this.logger.debug(this.changeEmail.name);
     const user = await this.userRepository.findOne({ id: userId });
     user.email = newEmail;
-    await this.userRepository.persistAndFlush(user);
+    await this.em.persist(user).flush();
     return user;
   }
 
   public async updateLastOnline(user: User) {
     this.logger.debug(this.updateLastOnline.name);
     user.lastOnline = Date.now().toString();
-    await this.userRepository.persistAndFlush(user);
+    await this.em.persist(user).flush();
   }
 
   public async blockUser(fromUserId: any, toUserId: any) {
@@ -129,7 +130,7 @@ export class UserService {
       from: fromUserId,
       to: toUserId
     });
-    await this.blockRepository.persistAndFlush(block);
+    await this.em.persist(block).flush();
     return block;
   }
 
@@ -138,7 +139,7 @@ export class UserService {
       from: fromUserId,
       to: toUserId
     });
-    await this.blockRepository.removeAndFlush(block);
+    await this.em.remove(block).flush();
     return block;
   }
 }

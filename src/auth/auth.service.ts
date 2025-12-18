@@ -9,7 +9,7 @@ import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { Payload } from './dto/payload.dto';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { EntityRepository } from '@mikro-orm/core';
+import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { ExpeditedRegistration } from './dto/expeditedRegistration.dto';
 import { generateUsername } from "unique-username-generator";
 import * as crypto from "crypto";
@@ -25,6 +25,7 @@ export class AuthService {
     private userRepository: EntityRepository<User>,
     private userService: UserService,
     private jwtService: JwtService,
+    private readonly em: EntityManager,
   ) {}
 
   async expeditedRegistration(): Promise<ExpeditedRegistration> {
@@ -36,7 +37,7 @@ export class AuthService {
       username,
       password: hashedPassword,
     });
-    await this.userRepository.persistAndFlush(user);
+    await this.em.persist(user).flush();
     return { 
       username,
       jwt: this.jwtService.sign({ userId: user.id } as Payload),
@@ -93,7 +94,7 @@ export class AuthService {
       password: hashedPassword,
       phoneNumber,
     } as any);
-    await this.userRepository.persistAndFlush(user);
+    await this.em.persist(user).flush();
 
     await this.notificationService.addInAppNotificationForUser(user.id, {
       text: `You'll find your notifications here.
@@ -130,7 +131,7 @@ export class AuthService {
     if (valid) {
       const newHashedPassword = await bcrypt.hash(details.newPassword, 12);
       user.password = newHashedPassword;
-      await this.userRepository.persistAndFlush(user);
+      await this.em.persist(user).flush();
 
       return true;
     } else {
@@ -145,7 +146,7 @@ export class AuthService {
     const valid = await bcrypt.compare(password, user.password);
 
     if (valid && email === user.email) {
-      await this.userRepository.removeAndFlush(user);
+      await this.em.remove(user).flush();
       return true;
     } else {
       return false;

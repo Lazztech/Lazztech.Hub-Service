@@ -6,7 +6,7 @@ import { EmailService } from '../../email/email.service';
 import * as crypto from 'crypto';
 import * as bcrypt from 'bcryptjs';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { EntityRepository } from '@mikro-orm/core';
+import { EntityManager, EntityRepository } from '@mikro-orm/core';
 
 @Injectable()
 export class AuthPasswordResetService {
@@ -18,6 +18,7 @@ export class AuthPasswordResetService {
     private passwordResetRepository: EntityRepository<PasswordReset>,
     @InjectRepository(User)
     private userRepository: EntityRepository<User>,
+    private readonly em: EntityManager,
   ) {}
 
   public async resetPassword(details: ResetPassword) {
@@ -31,7 +32,7 @@ export class AuthPasswordResetService {
     if (passwordReset?.pin === details.resetPin) {
       const hashedPassword = await bcrypt.hash(details.newPassword, 12);
       user.password = hashedPassword;
-      await this.userRepository.persistAndFlush(user);
+      await this.em.persist(user).flush();
       return true;
     } else {
       return false;
@@ -52,7 +53,7 @@ export class AuthPasswordResetService {
       });
 
       const passwordReset = this.passwordResetRepository.create({ pin, user });
-      await this.passwordResetRepository.persistAndFlush(passwordReset);
+      await this.em.persist(passwordReset).flush();
 
       return true;
     } else {

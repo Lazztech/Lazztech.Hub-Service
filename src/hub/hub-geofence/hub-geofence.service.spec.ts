@@ -1,4 +1,4 @@
-import { EntityRepository } from '@mikro-orm/core';
+import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { getRepositoryToken } from '@mikro-orm/nestjs';
 import { HttpModule } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
@@ -19,6 +19,8 @@ describe('HubGeofenceService', () => {
   let hubRepository: EntityRepository<Hub>;
   let blockRepository: EntityRepository<Block>;
   let notificationService: NotificationService;
+  let entityManager: EntityManager;
+  
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -48,6 +50,14 @@ describe('HubGeofenceService', () => {
         {
           provide: getRepositoryToken(Block),
           useClass: EntityRepository,
+        },
+        {
+          provide: EntityManager,
+          useValue: {
+            persist: jest.fn().mockReturnThis(),
+            remove: jest.fn().mockReturnThis(),
+            flush: jest.fn().mockResolvedValue(undefined),
+          },
         },
         {
           provide: ConfigService,
@@ -82,6 +92,7 @@ describe('HubGeofenceService', () => {
       getRepositoryToken(Block),
     );
     notificationService = module.get<NotificationService>(NotificationService);
+    entityManager = module.get<EntityManager>(EntityManager);
   });
 
   it('should be defined', () => {

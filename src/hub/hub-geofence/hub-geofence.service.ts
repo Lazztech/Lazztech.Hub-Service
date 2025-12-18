@@ -1,4 +1,4 @@
-import { EntityRepository } from '@mikro-orm/core';
+import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable, Logger } from '@nestjs/common';
 import { Block } from '../../dal/entity/block.entity';
@@ -21,6 +21,7 @@ export class HubGeofenceService {
     @InjectRepository(Block)
     private blockRepository: EntityRepository<Block>,
     private notificationService: NotificationService,
+    private readonly em: EntityManager,
   ) {}
 
   async enteredHubGeofence(userId: any, hubId: number) {
@@ -35,14 +36,14 @@ export class HubGeofenceService {
 
     if (!hubRelationship.isPresent) {
       hubRelationship.isPresent = true;  
-      await this.joinUserHubRepository.persistAndFlush(hubRelationship);
+      await this.em.persist(hubRelationship).flush();
 
       // const hub = await hubRelationship.hub.load();
       // if (hub.active) {
       //   await this.notifyMembersOfArrival(userId, hubId);
       // }
     } else {
-      await this.joinUserHubRepository.persistAndFlush(hubRelationship);
+      await this.em.persist(hubRelationship).flush();
     }
 
     return hubRelationship;
@@ -62,7 +63,7 @@ export class HubGeofenceService {
       hubRelationship.isPresent = true;
     }
 
-    await this.joinUserHubRepository.persistAndFlush(hubRelationship);
+    await this.em.persist(hubRelationship).flush();
     return hubRelationship;
   }
 
@@ -78,14 +79,14 @@ export class HubGeofenceService {
 
     if (hubRelationship.isPresent) {
       hubRelationship.isPresent = false;
-      await this.joinUserHubRepository.persistAndFlush(hubRelationship);
+      await this.em.persist(hubRelationship).flush();
 
       // const hub = await hubRelationship.hub.load();
       // if (hub.active) {
       //   await this.notifyMembersOfExit(userId, hubId);
       // }
     } else {
-      await this.joinUserHubRepository.persistAndFlush(hubRelationship);
+      await this.em.persist(hubRelationship).flush();
     }
 
     return hubRelationship;
