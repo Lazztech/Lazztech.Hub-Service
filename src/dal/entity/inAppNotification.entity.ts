@@ -1,4 +1,4 @@
-import { Entity, IdentifiedReference, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+import { Entity, Ref, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { User } from './user.entity';
 
@@ -33,9 +33,9 @@ export class InAppNotification {
 
   @ManyToOne({
     entity: () => User,
-    onDelete: 'CASCADE',
+    deleteRule: 'CASCADE',
     joinColumn: 'userId',
-    wrappedReference: true
+    ref: true
   })
-  public user: IdentifiedReference<User>;
+  public user: Ref<User>;
 }

@@ -1,4 +1,4 @@
-import { Entity, IdentifiedReference, OneToOne, PrimaryKey, Property } from '@mikro-orm/core';
+import { Entity, Ref, OneToOne, PrimaryKey, Property } from '@mikro-orm/core';
 import { Field, ID } from '@nestjs/graphql';
 import { User } from './user.entity';
 
@@ -14,8 +14,8 @@ export class PasswordReset {
   @OneToOne({
     entity: () => User,
     nullable: false,
-    wrappedReference: true,
+    ref: true,
     mappedBy: 'passwordReset'
   })
-  public user!: IdentifiedReference<User>;
+  public user!: Ref<User>;
 }

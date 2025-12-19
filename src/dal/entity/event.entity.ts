@@ -1,4 +1,4 @@
-import { Collection, Entity, IdentifiedReference, ManyToOne, OneToMany, PrimaryKey, Property, types } from "@mikro-orm/core";
+import { Collection, Entity, Ref, ManyToOne, OneToMany, PrimaryKey, Property, types } from "@mikro-orm/core";
 import { Field, ID, ObjectType } from "@nestjs/graphql";
 import { File } from "./file.entity";
 import { Hub } from "./hub.entity";
@@ -29,10 +29,10 @@ export class Event extends ShareableId {
   @ManyToOne({
     entity: () => User,
     fieldName: 'createdByUserId',
-    onDelete: 'cascade',
-    wrappedReference: true
+    deleteRule: 'cascade',
+    ref: true
   })
-  public createdBy!: IdentifiedReference<User>;
+  public createdBy!: Ref<User>;
 
   @Field({
     nullable: true,
@@ -61,10 +61,10 @@ export class Event extends ShareableId {
    */
    @ManyToOne({
     entity: () => File,
-    wrappedReference: true,
+    ref: true,
     nullable: true,
   })
-  public coverImage?: IdentifiedReference<File>;
+  public coverImage?: Ref<File>;
 
   /**
    * @deprecated Use file based field instead.
@@ -78,10 +78,10 @@ export class Event extends ShareableId {
    */
   @ManyToOne({ 
     entity: () => Hub,
-    wrappedReference: true,
+    ref: true,
     nullable: true,
   })
-  public hub?: IdentifiedReference<Hub>;
+  public hub?: Ref<Hub>;
 
   /**
    * Handled with a field resolver

@@ -6,7 +6,7 @@ import { PasswordReset } from './passwordReset.entity';
 import { UserDevice } from './userDevice.entity';
 import { ShareableId } from './shareableId.entity';
 import { Block } from './block.entity';
-import { Cascade, Collection, Entity, IdentifiedReference, ManyToOne, OneToMany, OneToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+import { Cascade, Collection, Entity, Ref, ManyToOne, OneToMany, OneToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
 import { File } from './file.entity';
 
  /* eslint-disable */ // needed for mikroorm default value & type which conflicts with typescript-eslint/no-unused-vars
@@ -46,10 +46,10 @@ export class User extends ShareableId {
    */
    @ManyToOne({
     entity: () => File,
-    wrappedReference: true,
+    ref: true,
     nullable: true,
   })
-  public profileImage?: IdentifiedReference<File>;
+  public profileImage?: Ref<File>;
 
   /**
    * @deprecated Use file based field instead.
@@ -88,10 +88,10 @@ export class User extends ShareableId {
     cascade: [Cascade.ALL],
     fieldName: 'passwordResetId',
     nullable: true,
-    wrappedReference: true,
+    ref: true,
     inversedBy: 'user',
   })
-  public passwordReset!: IdentifiedReference<PasswordReset>;
+  public passwordReset!: Ref<PasswordReset>;
 
   /**
    * Exposed as a field resolver

@@ -19,7 +19,7 @@ describe('HubGeofenceService', () => {
   let hubRepository: EntityRepository<Hub>;
   let blockRepository: EntityRepository<Block>;
   let notificationService: NotificationService;
-  let entityManager: EntityManager;
+  let em: EntityManager;
   
 
   beforeEach(async () => {
@@ -92,7 +92,7 @@ describe('HubGeofenceService', () => {
       getRepositoryToken(Block),
     );
     notificationService = module.get<NotificationService>(NotificationService);
-    entityManager = module.get<EntityManager>(EntityManager);
+    em = module.get<EntityManager>(EntityManager);
   });
 
   it('should be defined', () => {
@@ -114,13 +114,13 @@ describe('HubGeofenceService', () => {
       .spyOn(service, 'notifyMembersOfArrival')
       .mockResolvedValue();
 
-    const persistAndFlushCall = jest
-      .spyOn(joinUserHubRepository, 'persistAndFlush')
-      .mockImplementationOnce(() => Promise.resolve());
+    const persistSpy = jest.spyOn(em, 'persist');
+    const flushSpy = jest.spyOn(em, 'flush');
 
     // Act & Assert
     await expect(service.enteredHubGeofence(userId, hubId)).rejects.toThrow();
-    expect(persistAndFlushCall).not.toHaveBeenCalled();
+    expect(persistSpy).not.toHaveBeenCalled();
+    expect(flushSpy).not.toHaveBeenCalled();
     expect(notifyMembersSpy).not.toHaveBeenCalled();
   });
 
@@ -146,15 +146,15 @@ describe('HubGeofenceService', () => {
       .spyOn(service, 'notifyMembersOfArrival')
       .mockResolvedValue();
 
-    const persistAndFlushCall = jest
-      .spyOn(joinUserHubRepository, 'persistAndFlush')
-      .mockImplementationOnce(() => Promise.resolve());
+    const persistSpy = jest.spyOn(em, 'persist');
+    const flushSpy = jest.spyOn(em, 'flush');
 
     // Act
     await service.enteredHubGeofence(userId, hubId);
 
     // Assert
-    expect(persistAndFlushCall).toHaveBeenCalled();
+    expect(persistSpy).toHaveBeenCalled();
+    expect(flushSpy).toHaveBeenCalled();
     expect(notifyMembersSpy).not.toHaveBeenCalled();
   });
 
@@ -180,15 +180,15 @@ describe('HubGeofenceService', () => {
       .spyOn(service, 'notifyMembersOfArrival')
       .mockResolvedValue();
 
-    const persistAndFlushCall = jest
-      .spyOn(joinUserHubRepository, 'persistAndFlush')
-      .mockImplementationOnce(() => Promise.resolve());
+    const persistSpy = jest.spyOn(em, 'persist');
+    const flushSpy = jest.spyOn(em, 'flush');
 
     // Act
     await service.enteredHubGeofence(userId, hubId);
 
     // Assert
-    expect(persistAndFlushCall).toHaveBeenCalled();
+    expect(persistSpy).toHaveBeenCalled();
+    expect(flushSpy).toHaveBeenCalled();
     expect(notifyMembersSpy).not.toHaveBeenCalled();
   });
 
@@ -214,15 +214,15 @@ describe('HubGeofenceService', () => {
       .spyOn(service, 'notifyMembersOfArrival')
       .mockResolvedValue();
 
-    const persistAndFlushCall = jest
-      .spyOn(joinUserHubRepository, 'persistAndFlush')
-      .mockImplementationOnce(() => Promise.resolve());
+    const persistSpy = jest.spyOn(em, 'persist');
+    const flushSpy = jest.spyOn(em, 'flush');
 
     // Act
     await service.enteredHubGeofence(userId, hubId);
 
     // Assert
-    expect(persistAndFlushCall).toHaveBeenCalled();
+    expect(persistSpy).toHaveBeenCalled();
+    expect(flushSpy).toHaveBeenCalled();
     expect(notifyMembersSpy).not.toHaveBeenCalled();
   });
 
@@ -241,13 +241,13 @@ describe('HubGeofenceService', () => {
       .spyOn(service, 'notifyMembersOfArrival')
       .mockResolvedValue();
 
-    const persistAndFlushCall = jest
-      .spyOn(joinUserHubRepository, 'persistAndFlush')
-      .mockImplementationOnce(() => Promise.resolve());
+    const persistSpy = jest.spyOn(em, 'persist');
+    const flushSpy = jest.spyOn(em, 'flush');
 
     // Act & Assert
     await expect(service.dwellHubGeofence(userId, hubId)).rejects.toThrow();
-    expect(persistAndFlushCall).not.toHaveBeenCalled();
+    expect(persistSpy).not.toHaveBeenCalled();
+    expect(flushSpy).not.toHaveBeenCalled();
     expect(notifyMembersSpy).not.toHaveBeenCalled();
   });
 
@@ -273,13 +273,13 @@ describe('HubGeofenceService', () => {
       .spyOn(service, 'notifyMembersOfArrival')
       .mockResolvedValue();
 
-    const persistAndFlushCall = jest
-      .spyOn(joinUserHubRepository, 'persistAndFlush')
-      .mockImplementationOnce(() => Promise.resolve());
+    const persistSpy = jest.spyOn(em, 'persist');
+    const flushSpy = jest.spyOn(em, 'flush');
     // Act
     await service.dwellHubGeofence(userId, hubId);
     // Assert
-    expect(persistAndFlushCall).toHaveBeenCalled();
+    expect(persistSpy).toHaveBeenCalled();
+    expect(flushSpy).toHaveBeenCalled();
     expect(notifyMembersSpy).not.toHaveBeenCalled();
   });
 
@@ -305,13 +305,13 @@ describe('HubGeofenceService', () => {
       .spyOn(service, 'notifyMembersOfArrival')
       .mockResolvedValue();
 
-    const persistAndFlushCall = jest
-      .spyOn(joinUserHubRepository, 'persistAndFlush')
-      .mockImplementationOnce(() => Promise.resolve());
+    const persistSpy = jest.spyOn(em, 'persist');
+    const flushSpy = jest.spyOn(em, 'flush');
     // Act
     await service.dwellHubGeofence(userId, hubId);
     // Assert
-    expect(persistAndFlushCall).toHaveBeenCalled();
+    expect(persistSpy).toHaveBeenCalled();
+    expect(flushSpy).toHaveBeenCalled();
     expect(notifyMembersSpy).not.toHaveBeenCalled();
   });
 
@@ -329,13 +329,13 @@ describe('HubGeofenceService', () => {
       .spyOn(service, 'notifyMembersOfExit')
       .mockResolvedValue();
 
-    const persistAndFlushCall = jest
-      .spyOn(joinUserHubRepository, 'persistAndFlush')
-      .mockImplementationOnce(() => Promise.resolve());
+    const persistSpy = jest.spyOn(em, 'persist');
+    const flushSpy = jest.spyOn(em, 'flush');
 
     // Act & Assert
     await expect(service.exitedHubGeofence(userId, hubId)).rejects.toThrow();
-    expect(persistAndFlushCall).not.toHaveBeenCalled();
+    expect(persistSpy).not.toHaveBeenCalled();
+    expect(flushSpy).not.toHaveBeenCalled();
     expect(notifyMembersSpy).not.toHaveBeenCalled();
   });
 
@@ -360,13 +360,13 @@ describe('HubGeofenceService', () => {
       .spyOn(service, 'notifyMembersOfExit')
       .mockResolvedValue();
 
-    const persistAndFlushCall = jest
-      .spyOn(joinUserHubRepository, 'persistAndFlush')
-      .mockImplementationOnce(() => Promise.resolve());
+    const persistSpy = jest.spyOn(em, 'persist');
+    const flushSpy = jest.spyOn(em, 'flush');
     // Act
     await service.exitedHubGeofence(userId, hubId);
     // Assert
-    expect(persistAndFlushCall).toHaveBeenCalled();
+    expect(persistSpy).toHaveBeenCalled();
+    expect(flushSpy).toHaveBeenCalled();
     expect(notifyMembersSpy).not.toHaveBeenCalled();
   });
 
@@ -391,13 +391,13 @@ describe('HubGeofenceService', () => {
       .spyOn(service, 'notifyMembersOfExit')
       .mockResolvedValue();
 
-    const persistAndFlushCall = jest
-      .spyOn(joinUserHubRepository, 'persistAndFlush')
-      .mockImplementationOnce(() => Promise.resolve());
+    const persistSpy = jest.spyOn(em, 'persist');
+    const flushSpy = jest.spyOn(em, 'flush');
     // Act
     await service.exitedHubGeofence(userId, hubId);
     // Assert
-    expect(persistAndFlushCall).toHaveBeenCalled();
+    expect(persistSpy).toHaveBeenCalled();
+    expect(flushSpy).toHaveBeenCalled();
     expect(notifyMembersSpy).not.toHaveBeenCalled();
   });
 
@@ -422,13 +422,13 @@ describe('HubGeofenceService', () => {
       .spyOn(service, 'notifyMembersOfExit')
       .mockResolvedValue();
 
-    const persistAndFlushCall = jest
-      .spyOn(joinUserHubRepository, 'persistAndFlush')
-      .mockImplementationOnce(() => Promise.resolve());
+    const persistSpy = jest.spyOn(em, 'persist');
+    const flushSpy = jest.spyOn(em, 'flush');
     // Act
     await service.exitedHubGeofence(userId, hubId);
     // Assert
-    expect(persistAndFlushCall).toHaveBeenCalled();
+    expect(persistSpy).toHaveBeenCalled();
+    expect(flushSpy).toHaveBeenCalled();
     expect(notifyMembersSpy).not.toHaveBeenCalled();
   });
 

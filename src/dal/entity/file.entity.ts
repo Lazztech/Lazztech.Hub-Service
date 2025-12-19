@@ -1,4 +1,4 @@
-import { Entity, IdentifiedReference, ManyToOne, PrimaryKey, Property, Unique } from "@mikro-orm/core";
+import { Entity, Ref, ManyToOne, PrimaryKey, Property, Unique } from "@mikro-orm/core";
 import { Field, ID, ObjectType } from "@nestjs/graphql";
 import { ShareableId } from "./shareableId.entity";
 import { User } from './user.entity';
@@ -29,7 +29,7 @@ export class File extends ShareableId {
     @ManyToOne({
         entity: () => User,
         fieldName: 'createdByUserId',
-        wrappedReference: true,
+        ref: true,
     })
-    public createdBy!: IdentifiedReference<User>;
+    public createdBy!: Ref<User>;
 }

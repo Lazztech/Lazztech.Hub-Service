@@ -24,6 +24,8 @@ import { NotificationModule } from './notification/notification.module';
 import { OpenGraphModule } from './open-graph/open-graph.module';
 import { UserModule } from './user/user.module';
 import GraphQLJSON from 'graphql-type-json';
+import { BetterSqliteDriver } from '@mikro-orm/better-sqlite';
+import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 
 @Module({
   imports: [
@@ -183,7 +185,7 @@ import GraphQLJSON from 'graphql-type-json';
                 ...commonSettings.migrations,
                 path: __dirname + '/dal/migrations/sqlite/',
               },
-              type: 'sqlite',
+              driver: BetterSqliteDriver,
               baseDir: __dirname,
               dbName: configService.get(
                 'DATABASE_SCHEMA',
@@ -203,7 +205,7 @@ import GraphQLJSON from 'graphql-type-json';
                 ...commonSettings.migrations,
                 path: __dirname + '/dal/migrations/postgres/'
               },
-              type: 'postgresql',
+              driver: PostgreSqlDriver,
               dbName: configService.get('DATABASE_SCHEMA', 'postgres'),
               host: configService.get('DATABASE_HOST', 'localhost'),
               port: configService.get<number>('DATABASE_PORT', 5432),

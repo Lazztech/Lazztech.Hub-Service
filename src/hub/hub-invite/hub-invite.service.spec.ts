@@ -9,7 +9,7 @@ import { NotificationService } from '../../notification/notification.service';
 import { InAppNotification } from '../../dal/entity/inAppNotification.entity';
 import { UserDevice } from '../../dal/entity/userDevice.entity';
 import { getRepositoryToken } from '@mikro-orm/nestjs';
-import { EntityRepository } from '@mikro-orm/core';
+import { EntityManager, EntityRepository } from '@mikro-orm/core';
 
 describe('HubInviteService', () => {
   let service: HubInviteService;
@@ -17,6 +17,7 @@ describe('HubInviteService', () => {
   let joinUserHubRepo: EntityRepository<JoinUserHub>;
   let userRepo: EntityRepository<User>;
   let notificationService: NotificationService;
+  let em: EntityManager;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -50,6 +51,14 @@ describe('HubInviteService', () => {
           provide: getRepositoryToken(UserDevice),
           useClass: EntityRepository,
         },
+        {
+          provide: EntityManager,
+          useValue: {
+          persist: jest.fn().mockReturnThis(),
+          remove: jest.fn().mockReturnThis(),
+          flush: jest.fn().mockResolvedValue(undefined),
+          },
+        },
       ],
     }).compile();
 
@@ -60,6 +69,7 @@ describe('HubInviteService', () => {
     );
     userRepo = module.get<EntityRepository<User>>(getRepositoryToken(User));
     notificationService = module.get<NotificationService>(NotificationService);
+    em = module.get<EntityManager>(EntityManager);
   });
 
   it('should be defined', () => {
@@ -117,13 +127,13 @@ describe('HubInviteService', () => {
       .spyOn(notificationService, 'sendPushToUser')
       .mockImplementationOnce(() => Promise.resolve());
 
-    const saveCall = jest
-      .spyOn(inviteRepo, 'persistAndFlush')
-      .mockImplementationOnce(() => Promise.resolve());
+    const persistSpy = jest.spyOn(em, 'persist');
+    const flushSpy = jest.spyOn(em, 'flush');
     // Act
     await service.inviteUserToHub(userId, hubId, invitee.email);
     // Assert
-    expect(saveCall).toHaveBeenCalled();
+    expect(persistSpy).toHaveBeenCalled();
+    expect(flushSpy).toHaveBeenCalled();
     expect(addInAppNotificationForUserCall).toHaveBeenCalledWith(
       invitee.id,
       expect.objectContaining({

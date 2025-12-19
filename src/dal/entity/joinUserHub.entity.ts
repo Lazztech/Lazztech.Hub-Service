@@ -1,4 +1,4 @@
-import { Entity, IdentifiedReference, ManyToOne, Property } from '@mikro-orm/core';
+import { Entity, Ref, ManyToOne, Property } from '@mikro-orm/core';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Hub } from './hub.entity';
 import { User } from './user.entity';
@@ -20,11 +20,11 @@ export class JoinUserHub {
   @ManyToOne({
     entity: () => User,
     fieldName: 'userId',
-    onDelete: 'cascade', 
+    deleteRule: 'cascade', 
     primary: true,
-    wrappedReference: true
+    ref: true
   })
-  public user!: IdentifiedReference<User>;
+  public user!: Ref<User>;
 
   /**
    * Exposed as a field resolver
@@ -32,11 +32,11 @@ export class JoinUserHub {
   @ManyToOne({ 
     entity: () => Hub,
     fieldName: 'hubId',
-    onDelete: 'cascade',
+    deleteRule: 'cascade',
     primary: true,
-    wrappedReference: true
+    ref: true
   })
-  public hub!: IdentifiedReference<Hub>;
+  public hub!: Ref<Hub>;
 
   @Field()
   @Property({ fieldName: 'isOwner' })

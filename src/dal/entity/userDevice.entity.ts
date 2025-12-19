@@ -1,4 +1,4 @@
-import { Entity, IdentifiedReference, ManyToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+import { Entity, Ref, ManyToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { User } from './user.entity';
 import webpush from 'web-push';
@@ -21,8 +21,8 @@ export class UserDevice {
   @ManyToOne({
     entity: () => User,
     fieldName: 'userId',
-    onDelete: 'cascade',
-    wrappedReference: true
+    deleteRule: 'cascade',
+    ref: true
   })
-  public user!: IdentifiedReference<User>;
+  public user!: Ref<User>;
 }
