@@ -1,9 +1,11 @@
 import { Options } from '@mikro-orm/core';
+import { Migrator } from '@mikro-orm/migrations';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 
 export default {
   name: 'postgre',
   driver: PostgreSqlDriver,
+  extensions: [Migrator],
   host: 'localhost',
   port: 5432,
   user: 'postgres',

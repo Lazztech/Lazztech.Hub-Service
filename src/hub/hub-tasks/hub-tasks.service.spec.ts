@@ -10,7 +10,7 @@ import { HttpModule } from '@nestjs/axios';
 import { InAppNotification } from '../../dal/entity/inAppNotification.entity';
 import { UserDevice } from '../../dal/entity/userDevice.entity';
 import { getRepositoryToken } from '@mikro-orm/nestjs';
-import { EntityRepository } from '@mikro-orm/core';
+import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { Block } from '../../dal/entity/block.entity';
 
 describe('HubTasksService', () => {
@@ -54,6 +54,14 @@ describe('HubTasksService', () => {
         {
           provide: getRepositoryToken(Block),
           useClass: EntityRepository
+        },
+        {
+          provide: EntityManager,
+          useValue: {
+            persist: jest.fn().mockReturnThis(),
+            remove: jest.fn().mockReturnThis(),
+            flush: jest.fn().mockResolvedValue(undefined),
+          },
         },
       ],
     }).compile();

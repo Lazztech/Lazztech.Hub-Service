@@ -15,6 +15,7 @@ import { NotificationService } from '../notification/notification.service';
 import { UserDevice } from '../dal/entity/userDevice.entity';
 import { File } from '../dal/entity/file.entity';
 import { JoinEventFile } from '../dal/entity/joinEventFile.entity';
+import { EntityManager } from '@mikro-orm/core';
 
 describe('EventService', () => {
   let service: EventService;
@@ -63,6 +64,14 @@ describe('EventService', () => {
         {
           provide: getRepositoryToken(JoinEventFile),
           useClass: EntityRepository,
+        },
+        {
+          provide: EntityManager,
+          useValue: {
+            persist: jest.fn().mockReturnThis(),
+            remove: jest.fn().mockReturnThis(),
+            flush: jest.fn().mockResolvedValue(undefined),
+          },
         },
       ],
     }).compile();

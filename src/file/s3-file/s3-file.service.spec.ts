@@ -6,6 +6,7 @@ import { S3Module, S3ModuleOptions } from 'nestjs-s3';
 import { File } from '../../dal/entity/file.entity';
 import { ImageFileService } from '../image-file/image-file.service';
 import { S3FileService } from './s3-file.service';
+import { EntityManager } from '@mikro-orm/core';
 
 describe('S3FileService', () => {
   let service: S3FileService;
@@ -30,6 +31,14 @@ describe('S3FileService', () => {
         {
           provide: getRepositoryToken(File),
           useClass: EntityRepository,
+        },
+        {
+          provide: EntityManager,
+          useValue: {
+            persist: jest.fn().mockReturnThis(),
+            remove: jest.fn().mockReturnThis(),
+            flush: jest.fn().mockResolvedValue(undefined),
+          },
         },
       ],
     }).compile();

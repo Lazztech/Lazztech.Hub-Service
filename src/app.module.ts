@@ -26,6 +26,7 @@ import { UserModule } from './user/user.module';
 import GraphQLJSON from 'graphql-type-json';
 import { BetterSqliteDriver } from '@mikro-orm/better-sqlite';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
+import { Migrator } from '@mikro-orm/migrations';
 
 @Module({
   imports: [
@@ -161,6 +162,7 @@ import { PostgreSqlDriver } from '@mikro-orm/postgresql';
           logger: (message) => console.log(message),
           allowGlobalContext: true,
           debug: configService.get('NODE_ENV') == 'development' ? true : false,
+          extensions: [Migrator],
           migrations: {
             pattern: /^.*\.(js|ts)$/, // ends with .js or .ts
             transactional: true,

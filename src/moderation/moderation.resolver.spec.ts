@@ -21,6 +21,7 @@ import { JoinUserEvent } from '../dal/entity/joinUserEvent.entity';
 import { File } from '../dal/entity/file.entity';
 import { JoinHubFile } from '../dal/entity/joinHubFile.entity';
 import { Block } from '../dal/entity/block.entity';
+import { EntityManager } from '@mikro-orm/core';
 
 describe('ModerationResolver', () => {
   let resolver: ModerationResolver;
@@ -88,6 +89,14 @@ describe('ModerationResolver', () => {
         {
           provide: getRepositoryToken(JoinHubFile),
           useClass: EntityRepository,
+        },
+        {
+          provide: EntityManager,
+          useValue: {
+            persist: jest.fn().mockReturnThis(),
+            remove: jest.fn().mockReturnThis(),
+            flush: jest.fn().mockResolvedValue(undefined),
+          },
         },
       ],
     }).compile();

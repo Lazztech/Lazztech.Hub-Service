@@ -17,6 +17,7 @@ import { UserDevice } from '../dal/entity/userDevice.entity';
 import { File } from '../dal/entity/file.entity';
 import { EventGeofenceService } from './event-geofence/event-geofence.service';
 import { JoinEventFile } from '../dal/entity/joinEventFile.entity';
+import { EntityManager } from '@mikro-orm/core';
 
 describe('EventResolver', () => {
   let resolver: EventResolver;
@@ -67,6 +68,14 @@ describe('EventResolver', () => {
         {
           provide: getRepositoryToken(JoinEventFile),
           useClass: EntityRepository,
+        },
+        {
+          provide: EntityManager,
+          useValue: {
+            persist: jest.fn().mockReturnThis(),
+            remove: jest.fn().mockReturnThis(),
+            flush: jest.fn().mockResolvedValue(undefined),
+          },
         },
       ],
     }).compile();

@@ -3,6 +3,7 @@ import { EntityRepository } from '@mikro-orm/postgresql';
 import { Test, TestingModule } from '@nestjs/testing';
 import { JoinUserEvent } from '../../dal/entity/joinUserEvent.entity';
 import { EventGeofenceService } from './event-geofence.service';
+import { EntityManager } from '@mikro-orm/core';
 
 describe('EventGeofenceService', () => {
   let service: EventGeofenceService;
@@ -14,6 +15,14 @@ describe('EventGeofenceService', () => {
         {
           provide: getRepositoryToken(JoinUserEvent),
           useClass: EntityRepository,
+        },
+        {
+          provide: EntityManager,
+          useValue: {
+            persist: jest.fn().mockReturnThis(),
+            remove: jest.fn().mockReturnThis(),
+            flush: jest.fn().mockResolvedValue(undefined),
+          },
         },
       ],
     }).compile();
