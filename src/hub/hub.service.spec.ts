@@ -14,7 +14,7 @@ import { Invite } from '../dal/entity/invite.entity';
 import { LocalFileService } from '../file/local-file/local-file.service';
 import { FILE_SERVICE } from '../file/file-service.token';
 import { getRepositoryToken } from '@mikro-orm/nestjs';
-import { EntityRepository } from '@mikro-orm/core';
+import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { Block } from '../dal/entity/block.entity';
 import { File } from '../dal/entity/file.entity';
 import { JoinHubFile } from '../dal/entity/joinHubFile.entity';
@@ -25,6 +25,7 @@ describe('HubService', () => {
   let blockRepo: EntityRepository<Block>;
   let hubRepo: EntityRepository<Hub>;
   let fileService: FileServiceInterface;
+  let em: EntityManager;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -80,6 +81,14 @@ describe('HubService', () => {
           provide: getRepositoryToken(JoinHubFile),
           useClass: EntityRepository,
         },
+        {
+          provide: EntityManager,
+          useValue: {
+            persist: jest.fn().mockReturnThis(),
+            remove: jest.fn().mockReturnThis(),
+            flush: jest.fn().mockResolvedValue(undefined),
+          },
+        },
       ],
     }).compile();
 
@@ -92,6 +101,7 @@ describe('HubService', () => {
     );
     hubRepo = module.get<EntityRepository<Hub>>(getRepositoryToken(Hub));
     fileService = module.get<FileServiceInterface>(FILE_SERVICE);
+    em = module.get<EntityManager>(EntityManager);
   });
 
   it('should be defined', () => {
@@ -315,19 +325,18 @@ describe('HubService', () => {
 
     jest.spyOn(fileService, 'storeImageFromFileUpload').mockResolvedValueOnce(image);
     jest.spyOn(hubRepo, 'create').mockReturnValueOnce(hub as any);
-    jest.spyOn(hubRepo, 'persistAndFlush').mockImplementationOnce(() => Promise.resolve());
 
     jest.spyOn(joinUserHubRepo, 'create').mockReturnValueOnce({...joinUserHub, hub} as any);
-    const saveCall = jest
-      .spyOn(joinUserHubRepo, 'persistAndFlush')
-      .mockImplementationOnce(() => Promise.resolve());
+    const persistSpy = jest.spyOn(em, 'persist');
+    const flushSpy = jest.spyOn(em, 'flush');
 
     // Act
     const result = await hubService.createHub(userId, hub, image as any);
 
     // Assert
     expect(result).toEqual(expectedResult);
-    expect(saveCall).toHaveBeenCalled();
+    expect(persistSpy).toHaveBeenCalled();
+    expect(flushSpy).toHaveBeenCalled();
   });
 
   it('should remove for deleteHub', async () => {
@@ -345,14 +354,14 @@ describe('HubService', () => {
     const deleteImageCall = jest
       .spyOn(fileService, 'delete')
       .mockImplementation(() => Promise.resolve());
-    const removeCall = jest
-      .spyOn(hubRepo, 'removeAndFlush')
-      .mockImplementationOnce(() => Promise.resolve());
+    const removeSpy = jest.spyOn(em, 'remove');
+    const flushSpy = jest.spyOn(em, 'flush');
     // Act
     await hubService.deleteHub(1, 1);
     // Assert
     expect(deleteImageCall).toHaveBeenCalled();
-    expect(removeCall).toHaveBeenCalled();
+    expect(removeSpy).toHaveBeenCalled();
+    expect(flushSpy).toHaveBeenCalled();
   });
 
   it('should return for editHub', async () => {
@@ -371,9 +380,8 @@ describe('HubService', () => {
         load: jest.fn().mockResolvedValueOnce(expectedResult as any)
       } as any,
     } as any);
-    const saveCall = jest
-      .spyOn(hubRepo, 'persistAndFlush')
-      .mockImplementationOnce(() => Promise.resolve());
+    const persistSpy = jest.spyOn(em, 'persist');
+    const flushSpy = jest.spyOn(em, 'flush');
     // Act
     const result = await hubService.editHub(
       userId,
@@ -383,7 +391,8 @@ describe('HubService', () => {
     );
     // Assert
     expect(result).toEqual(expectedResult);
-    expect(saveCall).toHaveBeenCalled();
+    expect(persistSpy).toHaveBeenCalled();
+    expect(flushSpy).toHaveBeenCalled();
   });
 
   it('should resolve for setHubStarred', async () => {
@@ -399,14 +408,14 @@ describe('HubService', () => {
       user: { id: userId },
       hub: { id: hubId },
     } as any);
-    const saveCall = jest
-      .spyOn(joinUserHubRepo, 'persistAndFlush')
-      .mockImplementationOnce(() => Promise.resolve());
+    const persistSpy = jest.spyOn(em, 'persist');
+    const flushSpy = jest.spyOn(em, 'flush');
     // Act
     const result = await hubService.setHubStarred(userId, hubId);
     // Assert
     expect(result).toEqual(expectedResult);
-    expect(saveCall).toHaveBeenCalled();
+    expect(persistSpy).toHaveBeenCalled();
+    expect(flushSpy).toHaveBeenCalled();
   });
 
   it('should resolve for setHubNotStarred', async () => {
@@ -422,14 +431,14 @@ describe('HubService', () => {
       user: { id: userId },
       hub: { id: hubId },
     } as any);
-    const saveCall = jest
-      .spyOn(joinUserHubRepo, 'persistAndFlush')
-      .mockImplementationOnce(() => Promise.resolve());
+    const persistSpy = jest.spyOn(em, 'persist');
+    const flushSpy = jest.spyOn(em, 'flush');
     // Act
     const result = await hubService.setHubNotStarred(userId, hubId);
     // Assert
     expect(result).toEqual(expectedResult);
-    expect(saveCall).toHaveBeenCalled();
+    expect(persistSpy).toHaveBeenCalled();
+    expect(flushSpy).toHaveBeenCalled();
   });
 
   it('should return for searchHubByName', async () => {

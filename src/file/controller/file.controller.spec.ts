@@ -6,7 +6,7 @@ import { ImageFileService } from '../image-file/image-file.service';
 import { LocalFileService } from '../local-file/local-file.service';
 import { getRepositoryToken } from '@mikro-orm/nestjs';
 import { File } from '../../dal/entity/file.entity';
-import { EntityRepository } from '@mikro-orm/core';
+import { EntityManager, EntityRepository } from '@mikro-orm/core';
 
 describe('FileController', () => {
   let controller: FileController;
@@ -24,6 +24,14 @@ describe('FileController', () => {
         {
           provide: getRepositoryToken(File),
           useClass: EntityRepository,
+        },
+        {
+          provide: EntityManager,
+          useValue: {
+            persist: jest.fn().mockReturnThis(),
+            remove: jest.fn().mockReturnThis(),
+            flush: jest.fn().mockResolvedValue(undefined),
+          },
         },
       ],
     }).compile();

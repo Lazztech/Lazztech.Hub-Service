@@ -6,13 +6,14 @@ import { User } from '../../dal/entity/user.entity';
 import { ConfigService } from '@nestjs/config';
 import { ResetPassword } from '../dto/resetPassword.input';
 import { getRepositoryToken } from '@mikro-orm/nestjs';
-import { EntityRepository } from '@mikro-orm/core';
+import { EntityManager, EntityRepository } from '@mikro-orm/core';
 
 describe('AuthPasswordResetService', () => {
   let service: AuthPasswordResetService;
   let userRepo: EntityRepository<User>;
   let emailService: EmailService;
   let passwordResetRepo: EntityRepository<PasswordReset>;
+  let em: EntityManager;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -28,6 +29,13 @@ describe('AuthPasswordResetService', () => {
           provide: getRepositoryToken(PasswordReset),
           useClass: EntityRepository,
         },
+        {
+          provide: EntityManager,
+          useValue: {
+          persist: jest.fn().mockReturnThis(),
+          flush: jest.fn().mockResolvedValue(undefined),
+          },
+        },
       ],
     }).compile();
 
@@ -37,6 +45,7 @@ describe('AuthPasswordResetService', () => {
     passwordResetRepo = module.get<EntityRepository<PasswordReset>>(
       getRepositoryToken(PasswordReset),
     );
+    em = module.get<EntityManager>(EntityManager);
   });
 
   it('should be defined', () => {
@@ -58,14 +67,14 @@ describe('AuthPasswordResetService', () => {
         })
       },
     } as any);
-    const saveCall = jest
-      .spyOn(userRepo, 'persistAndFlush')
-      .mockImplementationOnce(() => Promise.resolve());
+    const persistSpy = jest.spyOn(em, 'persist');
+    const flushSpy = jest.spyOn(em, 'flush');
     // Act
     const result = await service.resetPassword(details);
     // Assert
     expect(result).toBeTruthy();
-    expect(saveCall).toHaveBeenCalled();
+    expect(persistSpy).toHaveBeenCalled();
+    expect(flushSpy).toHaveBeenCalled();
   });
 
   it('should return for sendPasswordResetEmail', async () => {
@@ -83,13 +92,13 @@ describe('AuthPasswordResetService', () => {
       .mockResolvedValueOnce('id');
     jest.spyOn(passwordResetRepo, 'create')
       .mockImplementationOnce(value => value as any);
-    const saveCall = jest
-      .spyOn(passwordResetRepo, 'persistAndFlush')
-      .mockImplementationOnce(() => Promise.resolve());
+    const persistSpy = jest.spyOn(em, 'persist');
+    const flushSpy = jest.spyOn(em, 'flush');
     // Act
     const result = await service.sendPasswordResetEmail(email);
     // Assert
     expect(result).toBeTruthy();
-    expect(saveCall).toHaveBeenCalled();
+    expect(persistSpy).toHaveBeenCalled();
+    expect(flushSpy).toHaveBeenCalled();
   });
 });

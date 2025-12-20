@@ -1,4 +1,4 @@
-import { Entity, IdentifiedReference, ManyToOne } from '@mikro-orm/core';
+import { Entity, Ref, ManyToOne } from '@mikro-orm/core';
 import { ObjectType } from '@nestjs/graphql';
 import { User } from './user.entity';
 
@@ -7,17 +7,17 @@ import { User } from './user.entity';
 export class Block {
   @ManyToOne({
     entity: () => User,
-    onDelete: 'cascade',
+    deleteRule: 'cascade',
     primary: true,
-    wrappedReference: true,
+    ref: true,
   })
-  public from!: IdentifiedReference<User>;
+  public from!: Ref<User>;
 
   @ManyToOne({
     entity: () => User,
-    onDelete: 'cascade',
+    deleteRule: 'cascade',
     primary: true,
-    wrappedReference: true
+    ref: true
   })
-  public to!: IdentifiedReference<User>;
+  public to!: Ref<User>;
 }

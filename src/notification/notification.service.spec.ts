@@ -10,7 +10,7 @@ import { of } from 'rxjs';
 import { UserDevice } from '../dal/entity/userDevice.entity';
 import { AxiosResponse } from 'axios';
 import { getRepositoryToken } from '@mikro-orm/nestjs';
-import { EntityRepository } from '@mikro-orm/core';
+import { EntityManager, EntityRepository } from '@mikro-orm/core';
 
 describe('NotificationService', () => {
   let service: NotificationService;
@@ -18,6 +18,7 @@ describe('NotificationService', () => {
   let inAppNotificationRepo: EntityRepository<InAppNotification>;
   let httpService: HttpService;
   let userDeviceRepo: EntityRepository<UserDevice>;
+  let em: EntityManager;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -51,6 +52,14 @@ describe('NotificationService', () => {
           provide: getRepositoryToken(UserDevice),
           useClass: EntityRepository,
         },
+        {
+          provide: EntityManager,
+          useValue: {
+          persist: jest.fn().mockReturnThis(),
+          remove: jest.fn().mockReturnThis(),
+          flush: jest.fn().mockResolvedValue(undefined),
+          },
+        },
       ],
     }).compile();
 
@@ -63,6 +72,7 @@ describe('NotificationService', () => {
     userDeviceRepo = module.get<EntityRepository<UserDevice>>(
       getRepositoryToken(UserDevice),
     );
+    em = module.get<EntityManager>(EntityManager);
   });
 
   it('should be defined', () => {
@@ -85,13 +95,13 @@ describe('NotificationService', () => {
       } as any,
     } as any);
     jest.spyOn(userDeviceRepo, 'create').mockImplementationOnce(value => value as any);
-    const saveCall = jest
-      .spyOn(userDeviceRepo, 'persistAndFlush')
-      .mockImplementationOnce(() => Promise.resolve());
+    const persistSpy = jest.spyOn(em, 'persist');
+    const flushSpy = jest.spyOn(em, 'flush');
     // Act
     await service.addUserFcmNotificationToken(userId, token);
     // Assert
-    expect(saveCall).toHaveBeenCalled();
+    expect(persistSpy).toHaveBeenCalled();
+    expect(flushSpy).toHaveBeenCalled();
   });
 
   it('should return for getInAppNotifications', async () => {
@@ -128,13 +138,13 @@ describe('NotificationService', () => {
     jest
       .spyOn(inAppNotificationRepo, 'create')
       .mockReturnValueOnce({ ...details, user: { id: userId }} as any);
-    const saveCall1 = jest
-      .spyOn(inAppNotificationRepo, 'persistAndFlush')
-      .mockImplementationOnce(() => Promise.resolve());
+    const persistSpy = jest.spyOn(em, 'persist');
+    const flushSpy = jest.spyOn(em, 'flush');
     // Act
     await service.addInAppNotificationForUser(userId, details);
     // Assert
-    expect(saveCall1).toHaveBeenCalled();
+    expect(persistSpy).toHaveBeenCalled();
+    expect(flushSpy).toHaveBeenCalled();
   });
 
   it('should resolve for deleteInAppNotification', async () => {
@@ -144,13 +154,13 @@ describe('NotificationService', () => {
     jest.spyOn(inAppNotificationRepo, 'findOne').mockResolvedValueOnce({
       user: { id: userId },
     } as any);
-    const removeCall = jest
-      .spyOn(inAppNotificationRepo, 'removeAndFlush')
-      .mockImplementationOnce(() => Promise.resolve());
+    const removeSpy = jest.spyOn(em, 'remove');
+    const flushSpy = jest.spyOn(em, 'flush');
     // Act
     await service.deleteInAppNotification(userId, inAppNotificationId);
     // Assert
-    expect(removeCall).toHaveBeenCalled();
+    expect(removeSpy).toHaveBeenCalled();
+    expect(flushSpy).toHaveBeenCalled();
   });
 
   it('should resolve for deleteAllInAppNotifications', async () => {
@@ -167,13 +177,13 @@ describe('NotificationService', () => {
         user: { id: userId },
       },
     ] as any[]);
-    const removeCall = jest
-      .spyOn(inAppNotificationRepo, 'removeAndFlush')
-      .mockImplementationOnce(() => Promise.resolve());
+    const removeSpy = jest.spyOn(em, 'remove');
+    const flushSpy = jest.spyOn(em, 'flush');
     // Act
     await service.deleteAllInAppNotifications(userId);
     // Assert
-    expect(removeCall).toHaveBeenCalled();
+    expect(removeSpy).toHaveBeenCalled();
+    expect(flushSpy).toHaveBeenCalled();
   });
 
   it('sendPushToUser should sendPushNotification to each device fcmToken', async () => {

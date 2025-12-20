@@ -1,4 +1,4 @@
-import { EntityRepository, QueryOrder } from '@mikro-orm/core';
+import { EntityManager, EntityRepository, QueryOrder } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { FileUpload } from 'src/file/interfaces/file-upload.interface';
@@ -27,6 +27,7 @@ export class EventService {
         @InjectRepository(JoinEventFile)
         private readonly joinEventFileRepository: EntityRepository<JoinEventFile>,
         private readonly notificationService: NotificationService,
+        private readonly em: EntityManager,
     ) {}
 
     async uploadEventFiles(userId: any, eventId: any, files: [Promise<FileUpload>]): Promise<JoinUserEvent> {
@@ -43,7 +44,7 @@ export class EventService {
             });
           });
         
-        await this.joinEventFileRepository.persistAndFlush(fileEntities);
+        await this.em.persist(fileEntities).flush();
         return joinUserEvent;
     }
 
@@ -58,14 +59,14 @@ export class EventService {
         }
 
         event = this.eventRepository.create({ ...event, createdBy: userId });
-        await this.eventRepository.persistAndFlush(event);
+        await this.em.persist(event).flush();
 
         const joinUserEvent = this.joinUserEventRepository.create({
             user: userId,
             event: event.id,
             rsvp: RSVP.GOING,
         } as any);
-        await this.joinUserEventRepository.persistAndFlush(joinUserEvent);
+        await this.em.persist(joinUserEvent).flush();
         return joinUserEvent;
     }
 
@@ -87,7 +88,7 @@ export class EventService {
             event: eventId,
         });
         userEvent.rsvp = rsvp;
-        await this.joinUserEventRepository.persistAndFlush(userEvent);
+        await this.em.persist(userEvent).flush();
 
         const user = await userEvent.user.load();
         const event = await userEvent.event.load();
@@ -112,7 +113,7 @@ export class EventService {
             event: event.id,
             isPresent: false,
         });
-        await this.joinUserEventRepository.persistAndFlush(joinUserEvent);
+        await this.em.persist(joinUserEvent).flush();
 
         await this.notificationService.sendPushToUser(invitee.id, {
             title: `You're invited to "${event.name}" event.`,
@@ -138,7 +139,7 @@ export class EventService {
         if (createdBy.id !== userId) {
             throw new Error('Only the event creater may remove people');
         }
-        await this.joinUserEventRepository.removeAndFlush(join);
+        await this.em.remove(join).flush();
     }
 
     async getOneUserEvent(userId: any, eventId: number) {
@@ -160,7 +161,7 @@ export class EventService {
                 event: event.id,
                 isPresent: false,
             });
-            await this.joinUserEventRepository.persistAndFlush(joinUserEvent);
+            await this.em.persist(joinUserEvent).flush();
     
             await event.createdBy.load();
             await this.notificationService.sendPushToUser(event?.createdBy?.id, {
@@ -182,7 +183,7 @@ export class EventService {
             throw new Error('Only the event creator can reset the shareable ID');
         }
         event.shareableId = uuid();
-        this.eventRepository.persistAndFlush(event);
+        await this.em.persist(event).flush();
         return userEvent;
     }
 
@@ -217,7 +218,7 @@ export class EventService {
         }
 
         event = this.eventRepository.assign(event, value);
-        await this.eventRepository.persistAndFlush(event);
+        await this.em.persist(event).flush();
   
         const createdById = event.createdBy.id;
         
@@ -244,6 +245,6 @@ export class EventService {
             createdBy: userId,
             id: eventId
         });
-        await this.eventRepository.removeAndFlush(event);
+        await this.em.remove(event).flush();
     }
 }

@@ -1,7 +1,5 @@
-import { Connection, IDatabaseDriver, MikroORM } from '@mikro-orm/core';
-import { MikroOrmModule, MikroOrmModuleOptions } from '@mikro-orm/nestjs';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { Logger, Module, OnModuleInit } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { GraphQLModule } from '@nestjs/graphql';
@@ -24,6 +22,7 @@ import { NotificationModule } from './notification/notification.module';
 import { OpenGraphModule } from './open-graph/open-graph.module';
 import { UserModule } from './user/user.module';
 import GraphQLJSON from 'graphql-type-json';
+import { DalModule } from './dal/dal.module';
 
 @Module({
   imports: [
@@ -149,83 +148,6 @@ import GraphQLJSON from 'graphql-type-json';
       },
       isGlobal: true,
     }),
-    MikroOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: async (
-        configService: ConfigService,
-      ) => {
-        const commonSettings = {
-          logger: (message) => console.log(message),
-          allowGlobalContext: true,
-          debug: configService.get('NODE_ENV') == 'development' ? true : false,
-          migrations: {
-            pattern: /^.*\.(js|ts)$/, // ends with .js or .ts
-            transactional: true,
-            disableForeignKeys: false
-          },
-          entities: [__dirname + '/dal/entity/**/*.*.*'],
-        }  as MikroOrmModuleOptions<IDatabaseDriver<Connection>>;
-        switch (configService.get('DATABASE_TYPE', 'sqlite')) {
-          case 'sqlite':
-            AppModule.logger.log(
-              `Using sqlite db: ${path.join(
-                process.cwd(),
-                configService.get(
-                  'DATABASE_SCHEMA',
-                  path.join('data', 'sqlite3.db'),
-                )
-              )}`,
-            );
-            return {
-              ...commonSettings,
-              migrations: {
-                ...commonSettings.migrations,
-                path: __dirname + '/dal/migrations/sqlite/',
-              },
-              type: 'sqlite',
-              baseDir: __dirname,
-              dbName: configService.get(
-                'DATABASE_SCHEMA',
-                path.join('data', 'sqlite3.db'),
-              ),
-            } as MikroOrmModuleOptions<IDatabaseDriver<Connection>>;
-          case 'postgres':
-            AppModule.logger.log(
-              `Using postgres db: ${configService.get(
-                'DATABASE_SCHEMA',
-                'postgres',
-              )}, host: ${configService.get('DATABASE_HOST', 'localhost')}`,
-            );
-            return {
-              ...commonSettings,
-              migrations: {
-                ...commonSettings.migrations,
-                path: __dirname + '/dal/migrations/postgres/'
-              },
-              type: 'postgresql',
-              dbName: configService.get('DATABASE_SCHEMA', 'postgres'),
-              host: configService.get('DATABASE_HOST', 'localhost'),
-              port: configService.get<number>('DATABASE_PORT', 5432),
-              user: configService.get('DATABASE_USER', 'postgres'),
-              password: configService.get('DATABASE_PASS', 'postgres'),
-              driverOptions: {
-                connection: {
-                  ssl: configService.get('DATABASE_SSL')
-                  ? {
-                      rejectUnauthorized: false,
-                    }
-                  : undefined,
-                }
-              },
-            } as MikroOrmModuleOptions<IDatabaseDriver<Connection>>;
-          default:
-            throw new Error(
-              'Invalid database type selected. It must be either sqlite (default) or postgres.',
-            );
-        }
-      },
-    }),
     S3Module.forRootAsync({
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
@@ -268,6 +190,7 @@ import GraphQLJSON from 'graphql-type-json';
     EventModule,
     DataloadersModule,
     OpenGraphModule,
+    DalModule,
   ],
   providers: [
     {
@@ -278,12 +201,4 @@ import GraphQLJSON from 'graphql-type-json';
   ],
   controllers: [AppController]
 })
-export class AppModule implements OnModuleInit {
-  public static logger = new Logger(AppModule.name);
-
-  constructor(private readonly orm: MikroORM) {}
-
-  async onModuleInit(): Promise<void> {
-    await this.orm.getMigrator().up();
-  }
-}
+export class AppModule {}

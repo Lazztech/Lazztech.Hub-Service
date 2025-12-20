@@ -11,7 +11,7 @@ export abstract class ShareableId {
 
   // Only fires is repostiory.create is used for before save
   @BeforeCreate()
-  private addId(){
+  public addId(){
     this.shareableId = uuid();
   }
 

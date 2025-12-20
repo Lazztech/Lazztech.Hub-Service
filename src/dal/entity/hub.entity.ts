@@ -2,7 +2,7 @@ import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { JoinUserHub } from './joinUserHub.entity';
 import { Invite } from './invite.entity';
 import { ShareableId } from './shareableId.entity'
-import { Collection, Entity, IdentifiedReference, ManyToOne, OneToMany, PrimaryKey, Property, types } from '@mikro-orm/core';
+import { Collection, Entity, Ref, ManyToOne, OneToMany, PrimaryKey, Property, types } from '@mikro-orm/core';
 import { Event } from './event.entity';
 import { File } from './file.entity';
 import { JoinHubFile } from './joinHubFile.entity';
@@ -32,10 +32,10 @@ export class Hub extends ShareableId {
    */
    @ManyToOne({
     entity: () => File,
-    wrappedReference: true,
+    ref: true,
     nullable: true,
   })
-  public coverImage?: IdentifiedReference<File>;
+  public coverImage?: Ref<File>;
 
   /**
    * @deprecated Use file based field instead.

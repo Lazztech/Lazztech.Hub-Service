@@ -9,7 +9,7 @@ import { FileUpload } from '../interfaces/file-upload.interface';
 import sharp from 'sharp';
 import { Stream } from 'stream';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { EntityRepository } from '@mikro-orm/core';
+import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { File } from '../../dal/entity/file.entity';
 
 @Injectable()
@@ -25,6 +25,7 @@ export class LocalFileService implements FileServiceInterface {
     private readonly imageFileService: ImageFileService,
     @InjectRepository(File)
     private readonly fileRepository: EntityRepository<File>,
+    private readonly em: EntityManager,
   ) {
     this.logger.debug('constructor');
     this.setupDir();
@@ -49,7 +50,7 @@ export class LocalFileService implements FileServiceInterface {
       createdOn: new Date().toISOString(),
       createdBy: userId,
     });
-    await this.fileRepository.persistAndFlush(file);
+    await this.em.persist(file).flush();
     return file;
   }
 
@@ -79,7 +80,7 @@ export class LocalFileService implements FileServiceInterface {
     const file = await this.fileRepository.findOneOrFail({ id: fileId, createdBy: userId });
     await fs.promises.unlink(path.join(this.directory, file.fileName))
       .catch(err => this.logger.warn(err));
-    return this.fileRepository.removeAndFlush(file);
+    return this.em.remove(file).flush;
   }
 
   private saveFile(fileName: string, data: Buffer | string | Stream): Promise<void> {

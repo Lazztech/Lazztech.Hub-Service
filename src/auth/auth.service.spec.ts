@@ -14,7 +14,7 @@ import { S3Module, S3ModuleOptions } from 'nestjs-s3';
 import { ImageFileService } from '../file/image-file/image-file.service';
 import { FILE_SERVICE } from '../file/file-service.token';
 import { getRepositoryToken } from '@mikro-orm/nestjs';
-import { EntityRepository } from '@mikro-orm/core';
+import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { Block } from '../dal/entity/block.entity';
 import { File } from '../dal/entity/file.entity';
 import { JoinEventFile } from '../dal/entity/joinEventFile.entity';
@@ -24,6 +24,7 @@ describe('AuthService', () => {
   let service: AuthService;
   let userRepo: EntityRepository<User>;
   let notificationService: NotificationService;
+  let em: EntityManager;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -56,6 +57,14 @@ describe('AuthService', () => {
         {
           provide: FILE_SERVICE,
           useClass: S3FileService,
+        },
+        {
+          provide: EntityManager,
+          useValue: {
+            persist: jest.fn().mockReturnThis(),
+            remove: jest.fn().mockReturnThis(),
+            flush: jest.fn().mockResolvedValue(undefined),
+          },
         },
         {
           provide: getRepositoryToken(User),
@@ -95,6 +104,7 @@ describe('AuthService', () => {
     service = module.get<AuthService>(AuthService);
     userRepo = module.get<EntityRepository<User>>(getRepositoryToken(User));
     notificationService = module.get(NotificationService);
+    em = module.get<EntityManager>(EntityManager);
   });
 
   it('should be defined', () => {
@@ -117,7 +127,10 @@ describe('AuthService', () => {
       password,
       id: 1,
     } as any);
-    const saveCall = jest.spyOn(userRepo, 'persistAndFlush').mockImplementationOnce(() => Promise.resolve());
+
+    const persistSpy = jest.spyOn(em, 'persist');
+    const flushSpy = jest.spyOn(em, 'flush');
+
     jest
       .spyOn(notificationService, 'addInAppNotificationForUser')
       .mockImplementationOnce(() => Promise.resolve());
@@ -131,7 +144,8 @@ describe('AuthService', () => {
     );
     // Assert
     expect(result).toBeDefined();
-    expect(saveCall).toHaveBeenCalled();
+    expect(persistSpy).toHaveBeenCalled();
+    expect(flushSpy).toHaveBeenCalled();
   });
 
   it('should return accessToken for login', async () => {
@@ -163,9 +177,9 @@ describe('AuthService', () => {
     } as User;
     const newPassword = 'NewPassword123';
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser as any);
-    const saveCall = jest
-      .spyOn(userRepo, 'persistAndFlush')
-      .mockImplementationOnce(() => Promise.resolve());
+
+    const persistSpy = jest.spyOn(em, 'persist');
+    const flushSpy = jest.spyOn(em, 'flush');
     // Act
     const result = await service.changePassword(testUser.id, {
       oldPassword: password,
@@ -173,7 +187,8 @@ describe('AuthService', () => {
     });
     // Assert
     expect(result).toBeTruthy();
-    expect(saveCall).toHaveBeenCalled();
+    expect(persistSpy).toHaveBeenCalled();
+    expect(flushSpy).toHaveBeenCalled();
   });
 
   it('should return for deleteAccount', async () => {
@@ -185,9 +200,8 @@ describe('AuthService', () => {
       password: '$2a$12$kYPNrlyLr7z4D.V3dEHFn.kQD2nRC0x7fINzPgfoSW4D4GQhyeGTO',
     } as User;
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser as any);
-    const removeCall = jest
-      .spyOn(userRepo, 'removeAndFlush')
-      .mockImplementationOnce(() => Promise.resolve());
+    const removeSpy = jest.spyOn(em, 'remove');
+    const flushSpy = jest.spyOn(em, 'flush');
     // Act
     const result = await service.deleteAccount(
       testUser.id,
@@ -196,6 +210,7 @@ describe('AuthService', () => {
     );
     // Assert
     expect(result).toBeTruthy();
-    expect(removeCall).toHaveBeenCalled();
+    expect(removeSpy).toHaveBeenCalled();
+    expect(flushSpy).toHaveBeenCalled();
   });
 });

@@ -1,4 +1,4 @@
-import { Entity, IdentifiedReference, ManyToOne, Property } from '@mikro-orm/core';
+import { Entity, Ref, ManyToOne, Property } from '@mikro-orm/core';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Event } from './event.entity';
 import { User } from './user.entity';
@@ -26,11 +26,11 @@ export class JoinUserEvent {
   @ManyToOne({
     entity: () => User,
     fieldName: 'userId',
-    onDelete: 'cascade', 
+    deleteRule: 'cascade', 
     primary: true,
-    wrappedReference: true
+    ref: true
   })
-  public user!: IdentifiedReference<User>;
+  public user!: Ref<User>;
 
   /**
    * Exposed as a field resolver
@@ -38,11 +38,11 @@ export class JoinUserEvent {
   @ManyToOne({ 
     entity: () => Event,
     fieldName: 'eventId',
-    onDelete: 'cascade',
+    deleteRule: 'cascade',
     primary: true,
-    wrappedReference: true
+    ref: true
   })
-  public event!: IdentifiedReference<Event>;
+  public event!: Ref<Event>;
 
   /**
    * Exposed as a field resolver

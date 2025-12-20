@@ -1,4 +1,4 @@
-import { Entity, IdentifiedReference, ManyToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
+import { Entity, Ref, ManyToOne, PrimaryKey, Property, Unique } from '@mikro-orm/core';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Hub } from './hub.entity';
 import { User } from './user.entity';
@@ -22,10 +22,10 @@ export class Invite {
   @ManyToOne({ 
     entity: () => User,
     fieldName: 'invitersId',
-    onDelete: 'cascade',
-    wrappedReference: true
+    deleteRule: 'cascade',
+    ref: true
   })
-  public inviter!: IdentifiedReference<User>;
+  public inviter!: Ref<User>;
 
   /**
    * Exposed as a field resolver
@@ -33,10 +33,10 @@ export class Invite {
   @ManyToOne({
     entity: () => User,
     fieldName: 'inviteesId',
-    onDelete: 'cascade',
-    wrappedReference: true
+    deleteRule: 'cascade',
+    ref: true
   })
-  public invitee!: IdentifiedReference<User>;
+  public invitee!: Ref<User>;
 
   /**
    * Exposed as a field resolver
@@ -44,8 +44,8 @@ export class Invite {
   @ManyToOne({ 
     entity: () => Hub, 
     fieldName: 'hubId',
-    onDelete: 'cascade',
-    wrappedReference: true
+    deleteRule: 'cascade',
+    ref: true
   })
-  public hub!: IdentifiedReference<Hub>;
+  public hub!: Ref<Hub>;
 }

@@ -10,7 +10,7 @@ import sharp from 'sharp';
 import { Stream } from 'stream';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { File } from '../../dal/entity/file.entity';
-import { EntityRepository } from '@mikro-orm/core';
+import { EntityManager, EntityRepository } from '@mikro-orm/core';
 
 @Injectable()
 export class S3FileService implements FileServiceInterface {
@@ -23,6 +23,7 @@ export class S3FileService implements FileServiceInterface {
     private readonly configService: ConfigService,
     @InjectRepository(File)
     private readonly fileRepository: EntityRepository<File>,
+    private readonly em: EntityManager,
   ) {}
 
   public async storeImageFromFileUpload(upload: Promise<FileUpload> | FileUpload, userId: any): Promise<File> {
@@ -57,7 +58,7 @@ export class S3FileService implements FileServiceInterface {
           createdOn: new Date().toISOString(),
           createdBy: userId,
         });
-        await this.fileRepository.persistAndFlush(file);
+        await this.em.persist(file).flush();
         resolve(file);
       });
     });
@@ -95,7 +96,7 @@ export class S3FileService implements FileServiceInterface {
         Key: file.fileName,
       })
       .promise();
-    return this.fileRepository.removeAndFlush(file);
+    return this.em.remove(file).flush();
   }
 
   get(fileName: string): ReadStream {

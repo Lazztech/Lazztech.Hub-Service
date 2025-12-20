@@ -1,4 +1,4 @@
-import { EntityRepository } from '@mikro-orm/core';
+import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { getRepositoryToken } from '@mikro-orm/nestjs';
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -22,6 +22,7 @@ describe('UserService', () => {
   let service: UserService;
   let joinUserHubRepo: EntityRepository<JoinUserHub>;
   let userRepo: EntityRepository<User>;
+  let em: EntityManager;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -66,6 +67,13 @@ describe('UserService', () => {
           provide: getRepositoryToken(JoinHubFile),
           useClass: EntityRepository,
         },
+        {
+          provide: EntityManager,
+          useValue: {
+          persist: jest.fn().mockReturnThis(),
+          flush: jest.fn().mockResolvedValue(undefined),
+          },
+        },
       ],
     }).compile();
 
@@ -75,6 +83,7 @@ describe('UserService', () => {
       getRepositoryToken(JoinUserHub),
     );
     userRepo = module.get<EntityRepository<User>>(getRepositoryToken(User));
+    em = module.get<EntityManager>(EntityManager);
   });
 
   it('should be defined', async () => {
@@ -176,11 +185,14 @@ describe('UserService', () => {
       description: testDetails.description,
     } as User;
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser as any);
-    jest.spyOn(userRepo, 'persistAndFlush').mockImplementationOnce(() => Promise.resolve());
+    const persistSpy = jest.spyOn(em, 'persist');
+    const flushSpy = jest.spyOn(em, 'flush');
     // Act
     const result = await service.editUserDetails(userId, testDetails);
     // Assert
     expect(result).toEqual(expectedResult);
+    expect(persistSpy).toHaveBeenCalled();
+    expect(flushSpy).toHaveBeenCalled();
   });
 
   it('should return for changeEmail', async () => {
@@ -198,11 +210,14 @@ describe('UserService', () => {
       email: newEmail,
     } as User;
     jest.spyOn(userRepo, 'findOne').mockResolvedValueOnce(testUser as any);
-    jest.spyOn(userRepo, 'persistAndFlush').mockImplementationOnce(() => Promise.resolve());
+    const persistSpy = jest.spyOn(em, 'persist');
+    const flushSpy = jest.spyOn(em, 'flush');
     // Act
     const result = await service.changeEmail(userId, newEmail);
     // Assert
     expect(result).toEqual(expectedResult);
+    expect(persistSpy).toHaveBeenCalled();
+    expect(flushSpy).toHaveBeenCalled();
   });
 
 });

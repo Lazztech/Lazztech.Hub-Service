@@ -12,7 +12,7 @@ import {
   PageableOptions,
 } from '../dal/pagination/paginatedResponse.helper';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { EntityRepository } from '@mikro-orm/core';
+import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import webpush from 'web-push';
 import _ from 'lodash';
 
@@ -46,6 +46,7 @@ export class NotificationService {
     private inAppNotificationRepository: EntityRepository<InAppNotification>,
     @InjectRepository(UserDevice)
     private userDeviceRepository: EntityRepository<UserDevice>,
+    private readonly em: EntityManager,
   ) {
     this.logger.debug('constructor');
     if (this.webPushOptions.subject && this.webPushOptions.publicKey && this.webPushOptions.privateKey) {
@@ -69,7 +70,7 @@ export class NotificationService {
         user: { id: user.id },
         fcmPushUserToken: token,
       });
-      await this.userDeviceRepository.persistAndFlush(userDevice);
+      await this.em.persist(userDevice).flush();
       // TODO notify via email that a new device has been used on the account for security.
     } else {
       this.logger.warn('User device token already stored.');
@@ -88,7 +89,7 @@ export class NotificationService {
         user: { id: user.id },
         webPushSubscription: subscription,
       });
-      await this.userDeviceRepository.persistAndFlush(userDevice);
+      await this.em.persist(userDevice).flush();
       // TODO notify via email that a new device has been used on the account for security.
     } else {
       this.logger.warn('User device web push notification subscription already stored.');
@@ -123,7 +124,7 @@ export class NotificationService {
       ...details,
       user: userId,
     });
-    await this.inAppNotificationRepository.persistAndFlush(inAppNotification);
+    await this.em.persist(inAppNotification).flush();
   }
 
   async deleteInAppNotification(
@@ -135,7 +136,7 @@ export class NotificationService {
       id: inAppNotificationId,
       user: userId,
     });
-    await this.inAppNotificationRepository.removeAndFlush(inAppNotification);
+    await this.em.remove(inAppNotification).flush();
   }
 
   async deleteAllInAppNotifications(userId: any): Promise<void> {
@@ -143,7 +144,7 @@ export class NotificationService {
     const inAppNotifications = await this.inAppNotificationRepository.find({
       user: userId,
     });
-    await this.inAppNotificationRepository.removeAndFlush(inAppNotifications);
+    await this.em.remove(inAppNotifications).flush();
   }
 
   public async sendPushToUser(

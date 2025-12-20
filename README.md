@@ -191,29 +191,64 @@ services:
 ```
 
 ## Migrations
-Custom scripts have been added to streamline and simplify handling migrations with two database contexts.
+
+Migrations are managed via the mikro-orm CLI.
+
+Config values are available via the following:
+
 ```bash
-# each script comes in sqlite | postgres | all variations
-# scripts ending with "all" perform the action on both databases
 # Note: due to configuration differences, run build before generating sqlite migrations!
 
-# create a migration generated from the entity schema
-$ npm run migration:generate:<sqlite|postgres|all>
+# Create a Sqlite Migration
+$ npx mikro-orm migration:create --config mikro-orm.sqlite.cli-config.ts
 
-# create a blank migration
-$ npm run migration:create:<sqlite|postgres|all>
+# Create a Postgresql Migration
+$ npx mikro-orm migration:create --config mikro-orm.postgres.cli-config.ts
+```
 
-# apply migrations
-$ npm run migration:up:<sqlite|postgres|all>
+```bash
+$ npx mikro-orm
+Usage: mikro-orm <command> [options]
 
-# revert most recently applied migration
-$ npm run migration:down:<sqlite|postgres|all>
+Commands:
+  mikro-orm cache:clear             Clear metadata cache
+  mikro-orm cache:generate          Generate metadata cache
+  mikro-orm generate-entities       Generate entities based on current database
+                                    schema
+  mikro-orm database:create         Create your database if it does not exist
+  mikro-orm database:import <file>  Imports the SQL file to the database
+  mikro-orm seeder:run              Seed the database using the seeder class
+  mikro-orm seeder:create <seeder>  Create a new seeder class
+  mikro-orm schema:create           Create database schema based on current
+                                    metadata
+  mikro-orm schema:drop             Drop database schema based on current
+                                    metadata
+  mikro-orm schema:update           Update database schema based on current
+                                    metadata
+  mikro-orm schema:fresh            Drop and recreate database schema based on
+                                    current metadata
+  mikro-orm migration:create        Create new migration with current schema
+                                    diff
+  mikro-orm migration:up            Migrate up to the latest version
+  mikro-orm migration:down          Migrate one step down
+  mikro-orm migration:list          List all executed migrations
+  mikro-orm migration:check         Check if migrations are needed. Useful for
+                                    bash scripts.
+  mikro-orm migration:pending       List all pending migrations
+  mikro-orm migration:fresh         Clear the database and rerun all migrations
+  mikro-orm debug                   Debug CLI configuration
 
-# lists pending queries to executed based on the entity schema
-$ npm run migration:log:all
+Options:
+      --config                  Set path to the ORM configuration file   [array]
+      --contextName, --context  Set name of config to load out of the ORM
+                                configuration file. Used when config file
+                                exports an array or a function
+                                                   [string] [default: "default"]
+  -v, --version                 Show version number                    [boolean]
+  -h, --help                    Show help                              [boolean]
 
-# displays what migrations have been applied to the databases
-$ npm run migration:show:all
+Examples:
+  mikro-orm schema:update --run  Runs schema synchronization
 ```
 
 ## Web Push Notifications

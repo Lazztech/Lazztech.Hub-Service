@@ -1,4 +1,4 @@
-import { Entity, IdentifiedReference, ManyToOne } from '@mikro-orm/core';
+import { Entity, Ref, ManyToOne } from '@mikro-orm/core';
 import { ObjectType } from '@nestjs/graphql';
 import { Event } from './event.entity';
 import { File } from './file.entity';
@@ -15,11 +15,11 @@ export class JoinEventFile {
   @ManyToOne({
     entity: () => File,
     fieldName: 'fileId',
-    onDelete: 'cascade', 
+    deleteRule: 'cascade', 
     primary: true,
-    wrappedReference: true
+    ref: true
   })
-  public file!: IdentifiedReference<File>;
+  public file!: Ref<File>;
 
   /**
    * Exposed as a field resolver
@@ -27,11 +27,11 @@ export class JoinEventFile {
   @ManyToOne({ 
     entity: () => Event,
     fieldName: 'eventId',
-    onDelete: 'cascade',
+    deleteRule: 'cascade',
     primary: true,
-    wrappedReference: true
+    ref: true
   })
-  public event!: IdentifiedReference<Event>;
+  public event!: Ref<Event>;
 
   /**
    * Exposed as a field resolver
@@ -39,10 +39,10 @@ export class JoinEventFile {
   @ManyToOne({
     entity: () => User,
     fieldName: 'userId',
-    onDelete: 'cascade', 
-    wrappedReference: true,
+    deleteRule: 'cascade', 
+    ref: true,
     nullable: true,
   })
-  public approvedBy?: IdentifiedReference<User>;
+  public approvedBy?: Ref<User>;
 
 }

@@ -2,6 +2,7 @@ import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/postgresql';
 import { Injectable, Logger } from '@nestjs/common';
 import { GeofenceEvent, JoinUserEvent } from '../../dal/entity/joinUserEvent.entity';
+import { EntityManager } from '@mikro-orm/core';
 
 @Injectable()
 export class EventGeofenceService {
@@ -10,6 +11,7 @@ export class EventGeofenceService {
     constructor(
         @InjectRepository(JoinUserEvent)
         private joinUserEventRepository: EntityRepository<JoinUserEvent>,
+        private readonly em: EntityManager,
     ) {}
 
     async enteredEventGeofence(userId: any, eventId: number) {
@@ -24,9 +26,9 @@ export class EventGeofenceService {
     
         if (!eventRelationship.isPresent) {
           eventRelationship.isPresent = true;  
-          await this.joinUserEventRepository.persistAndFlush(eventRelationship);
+          await this.em.persist(eventRelationship).flush();
         } else {
-          await this.joinUserEventRepository.persistAndFlush(eventRelationship);
+          await this.em.persist(eventRelationship).flush();
         }
     
         return eventRelationship;
@@ -45,8 +47,8 @@ export class EventGeofenceService {
         if (!eventRelationship.isPresent) {
           eventRelationship.isPresent = true;
         }
-    
-        await this.joinUserEventRepository.persistAndFlush(eventRelationship);
+        await this.em.persist(eventRelationship).flush();
+
         return eventRelationship;
     }
 
@@ -62,9 +64,10 @@ export class EventGeofenceService {
     
         if (eventRelationship.isPresent) {
           eventRelationship.isPresent = false;
-          await this.joinUserEventRepository.persistAndFlush(eventRelationship);
+          await this.em.persist(eventRelationship).flush();
+
         } else {
-          await this.joinUserEventRepository.persistAndFlush(eventRelationship);
+          await this.em.persist(eventRelationship).flush();
         }
     
         return eventRelationship;
