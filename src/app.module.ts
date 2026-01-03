@@ -23,9 +23,49 @@ import { OpenGraphModule } from './open-graph/open-graph.module';
 import { UserModule } from './user/user.module';
 import GraphQLJSON from 'graphql-type-json';
 import { DalModule } from './dal/dal.module';
+import { LoggerModule } from 'nestjs-pino';
 
 @Module({
   imports: [
+    LoggerModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => {
+        const options = {
+          singleLine: true,
+          colorize: true,
+          levelFirst: false,
+          translateTime: 'yyyy-mm-dd HH:MM:ss',
+          destination: 1,
+        };
+        return {
+          pinoHttp: {
+            transport: {
+              targets: [
+                {
+                  target: 'pino-pretty',
+                  level: 'info',
+                  options,
+                },
+                {
+                  target: 'pino-pretty',
+                  level: 'info',
+                  options: {
+                    ...options,
+                    // app.log file in data path
+                    destination: path.join(
+                      configService.getOrThrow('DATA_PATH'),
+                      'app.log',
+                    ),
+                    mkdir: true,
+                  },
+                },
+              ],
+            },
+          },
+        };
+      },
+    }),
     SentryModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
@@ -56,6 +96,7 @@ import { DalModule } from './dal/dal.module';
       envFilePath: ['.env.local', '.env'],
       validationSchema: Joi.object({
         APP_NAME: Joi.string().required(),
+        DATA_PATH: Joi.string().default(path.join(process.cwd(), 'data')), 
         ACCESS_TOKEN_SECRET: Joi.string().required(),
         PUBLIC_VAPID_KEY: Joi.optional(),
         PRIVATE_VAPID_KEY: Joi.optional(),
