@@ -8,22 +8,21 @@ import { AppModule } from './app.module';
 /* eslint-disable */
 import express = require('express');
 import { ModerationInterceptor } from './moderation/moderation.interceptor';
-import { LogLevel } from '@nestjs/common';
 import { join } from 'path';
 import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
 import { createProxyMiddleware } from 'http-proxy-middleware';
+import { Logger } from 'nestjs-pino';
 
 async function bootstrap() {
   const instance = express();
   instance.use('/avatars', require('adorable-avatars/dist/index'));
-  const logLevels: LogLevel[] = process.env.NODE_ENV === 'development' 
-  ? ['log', 'debug', 'error', 'verbose', 'warn'] 
-  : ['error'];
+
   const app: NestExpressApplication = await NestFactory.create(
     AppModule,
-    new ExpressAdapter(instance),
-    { logger: logLevels, }
-  );
+    new ExpressAdapter(instance), {
+    bufferLogs: true,
+    });
+    app.useLogger(app.get(Logger));
 
   // for MVC server side rendering
   app.useStaticAssets(join(__dirname, '..', 'public'));
