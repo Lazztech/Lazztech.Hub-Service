@@ -1,67 +1,82 @@
-import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import { InjectS3, S3 } from 'nestjs-s3';
-import { FileServiceInterface } from '../interfaces/file-service.interface';
 import { ImageFileService } from '../image-file/image-file.service';
-import { v1 as uuidv1 } from 'uuid';
 import { ConfigService } from '@nestjs/config';
-import { ReadStream } from 'fs';
-import { FileUpload } from '../interfaces/file-upload.interface';
 import sharp from 'sharp';
-import { Stream } from 'stream';
+import { Readable, Stream } from 'stream';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { File } from '../../dal/entity/file.entity';
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
+import { FileService } from '../file-service.abstract';
+import { MultipartFileStream } from '@proventuslabs/nestjs-multipart-form';
+import { lastValueFrom, mergeMap, Observable, tap } from 'rxjs';
+import { randomUUID } from 'crypto';
+import { pipeline } from 'stream/promises';
 
 @Injectable()
-export class S3FileService implements FileServiceInterface {
-  private logger = new Logger(S3FileService.name);
+export class S3FileService extends FileService{
   private bucketName = this.configService.get('OBJECT_STORAGE_BUCKET_NAME');
 
   constructor(
     @InjectS3() private readonly s3: S3,
     private readonly imageFileService: ImageFileService,
-    private readonly configService: ConfigService,
+    readonly configService: ConfigService,
     @InjectRepository(File)
     private readonly fileRepository: EntityRepository<File>,
     private readonly em: EntityManager,
-  ) {}
+  ) {
+    super(configService);
+  }
+  public watermark: Promise<Buffer<ArrayBufferLike>>;
+  getWatermark(): Promise<Buffer<ArrayBufferLike>> {
+    throw new Error('Method not implemented.');
+  }
+  watermarkImage(fileStream: Stream.Readable | undefined): Promise<Readable | undefined> {
+    throw new Error('Method not implemented.');
+  }
 
-  public async storeImageFromFileUpload(upload: Promise<FileUpload> | FileUpload, userId: any): Promise<File> {
-    const { createReadStream, mimetype } = await upload;
-    console.log(upload)
-    return new Promise(async (resolve) => {
-      if (!mimetype?.startsWith('image/')) {
-        throw new HttpException('Wrong filetype', HttpStatus.BAD_REQUEST);
-      }
 
-      const fileName = uuidv1() + '.webp';
-  
-      const transformer = sharp()
-        .webp({ quality: 100 })
-        .resize(1080, 1080, { fit: sharp.fit.inside });
+  public async storeImageFromFileUpload(
+    upload$: Observable<MultipartFileStream>,
+    userId: any,
+  ): Promise<File> {
+    const fileName = randomUUID() + '.webp';
+    const transformer = sharp()
+      .webp({ quality: 100 })
+      .resize(1080, 1080, { fit: sharp.fit.inside });
+    const uploadStream = this.uploadStream(fileName);
 
-      const uploadStream = this.uploadStream(fileName);
-      
-      createReadStream()
-        .pipe(transformer)
-        .pipe(uploadStream.writeStream)
-        .on('error', () => {
-          new HttpException('Could not save image', HttpStatus.BAD_REQUEST);
-        });
-      
-      // await completion of upload
-      await uploadStream.promise.then(async () => {
-        // repository.create => save pattern used to so that the @BeforeInsert decorated method
-        // will fire generating a uuid for the shareableId
-        const file = this.fileRepository.create({
-          fileName,
-          createdOn: new Date().toISOString(),
-          createdBy: userId,
-        });
-        await this.em.persist(file).flush();
-        resolve(file);
-      });
+    try {
+      // https://rxjs.dev/api/index/function/lastValueFrom
+      await lastValueFrom(
+        upload$.pipe(
+          // https://rxjs.dev/api/operators/tap
+          tap((fileStream: MultipartFileStream) => {
+            if (!fileStream.mimetype?.startsWith('image/')) {
+              throw new HttpException('Wrong filetype', HttpStatus.BAD_REQUEST);
+            }
+          }),
+          // transform and write using node stream pipeline which returns a Promise
+          // https://rxjs.dev/api/operators/mergeMap
+          mergeMap((fileStream: MultipartFileStream) =>
+            // https://stackoverflow.com/questions/58875655/whats-the-difference-between-pipe-and-pipeline-on-streams
+            pipeline(fileStream, transformer, uploadStream.writeStream),
+          ),
+        ),
+      );
+      uploadStream.writeStream.destroy();
+    } catch (error) {
+      uploadStream.writeStream.destroy();
+      throw error;
+    }
+
+    const file = this.fileRepository.create({
+      fileName,
+      createdOn: new Date().toISOString(),
+      createdBy: userId,
     });
+    await this.em.persistAndFlush(file);
+    return file;
   }
 
   private uploadStream(key: string) {
@@ -99,24 +114,24 @@ export class S3FileService implements FileServiceInterface {
     return this.em.remove(file).flush();
   }
 
-  get(fileName: string): ReadStream {
-    return this.s3
-      .getObject({
-        Bucket: this.bucketName,
-        Key: fileName,
-      })
-      .createReadStream() as ReadStream;
-  }
+  async get(fileName: string): Promise<Readable | undefined> {
+  const result = await this.s3.getObject({
+      Bucket: this.bucketName,
+      Key: fileName,
+    })
+    .promise();
+  return result.Body as Readable;
+}
 
-  async getByShareableId(shareableId: string): Promise<ReadStream> {
-    const file = await this.fileRepository.findOneOrFail({ shareableId });
-    return this.s3
-      .getObject({
-        Bucket: this.bucketName,
-        Key: file.fileName,
-      })
-      .createReadStream() as ReadStream;
-  }
+  async getByShareableId(shareableId: string): Promise<Readable | undefined> {
+  const file = await this.fileRepository.findOneOrFail({ shareableId });
+  const result = await this.s3.getObject({
+      Bucket: this.bucketName,
+      Key: file.fileName,
+    })
+    .promise();
+  return result.Body as Readable;
+}
 
   private async ensureBucketExists() {
     this.logger.debug(this.ensureBucketExists.name);
