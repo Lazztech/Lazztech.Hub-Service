@@ -1,24 +1,35 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { FileResolver } from './file.resolver';
-import { FILE_SERVICE } from '../file-service.token';
 import { LocalFileService } from '../local-file/local-file.service';
 import { ConfigService } from '@nestjs/config';
 import { ImageFileService } from '../image-file/image-file.service';
 import { getRepositoryToken } from '@mikro-orm/nestjs';
 import { File } from '../../dal/entity/file.entity';
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
+import { FileService } from '../file-service.abstract';
+import fs from 'fs';
+
+jest.mock('fs');
 
 describe('FileResolver', () => {
   let resolver: FileResolver;
 
   beforeEach(async () => {
+    (fs.existsSync as jest.Mock).mockReturnValue(true);
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    (fs.mkdirSync as jest.Mock).mockImplementation(() => {});
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         {
-          provide: FILE_SERVICE,
+          provide: FileService,
           useClass: LocalFileService,
         },
-        ConfigService,
+        {
+          provide: ConfigService,
+          useValue: {
+            getOrThrow: jest.fn(() => ''),
+          },
+        },
         ImageFileService,
         FileResolver,
         {

@@ -12,12 +12,12 @@ import { NotificationService } from '../notification/notification.service';
 import { HubService } from './hub.service';
 import { Invite } from '../dal/entity/invite.entity';
 import { LocalFileService } from '../file/local-file/local-file.service';
-import { FILE_SERVICE } from '../file/file-service.token';
 import { getRepositoryToken } from '@mikro-orm/nestjs';
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { Block } from '../dal/entity/block.entity';
 import { File } from '../dal/entity/file.entity';
 import { JoinHubFile } from '../dal/entity/joinHubFile.entity';
+import { FileService } from '../file/file-service.abstract';
 
 describe('HubService', () => {
   let hubService: HubService;
@@ -41,7 +41,7 @@ describe('HubService', () => {
         NotificationService,
         ImageFileService,
         {
-          provide: FILE_SERVICE,
+          provide: FileService,
           useClass: LocalFileService,
         },
         NotificationService,
@@ -100,7 +100,7 @@ describe('HubService', () => {
       getRepositoryToken(Block)
     );
     hubRepo = module.get<EntityRepository<Hub>>(getRepositoryToken(Hub));
-    fileService = module.get<FileServiceInterface>(FILE_SERVICE);
+    fileService = module.get<FileServiceInterface>(FileService);
     em = module.get<EntityManager>(EntityManager);
   });
 

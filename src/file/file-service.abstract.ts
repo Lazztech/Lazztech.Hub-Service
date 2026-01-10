@@ -5,9 +5,10 @@ import { join } from 'path';
 import sharp from 'sharp';
 import { File } from 'src/dal/entity/file.entity';
 import Stream, { Readable } from 'stream';
-import { Observable } from 'rxjs';
-import { MultipartFileStream } from '@proventuslabs/nestjs-multipart-form';
 import { FileServiceInterface } from './interfaces/file-service.interface';
+import { FileUpload } from './interfaces/file-upload.interface';
+import { ReadStream } from 'fs';
+
 
 @Injectable()
 export abstract class FileService implements FileServiceInterface {
@@ -18,13 +19,13 @@ export abstract class FileService implements FileServiceInterface {
   constructor(readonly configService: ConfigService) {}
 
   abstract storeImageFromFileUpload(
-    upload$: Observable<MultipartFileStream>,
+    upload: Promise<FileUpload> | FileUpload,
     userId: any,
   ): Promise<File>;
   abstract delete(fileName: string): Promise<void>;
   abstract deleteById(fileId: any, userId: any): Promise<any>;
-  abstract get(fileName: string): Promise<Readable | undefined>;
-  abstract getByShareableId(shareableId: string): Promise<Readable | undefined>;
+  abstract get(fileName: string): Promise<Readable>;
+  abstract getByShareableId(shareableId: string): Promise<Readable>;
 
   async getWatermark() {
     return sharp(

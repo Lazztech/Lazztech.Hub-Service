@@ -1,7 +1,6 @@
 import { getRepositoryToken } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/postgresql';
 import { Test, TestingModule } from '@nestjs/testing';
-import { FILE_SERVICE } from '../file/file-service.token';
 import { LocalFileService } from '../file/local-file/local-file.service';
 import { Event } from '../dal/entity/event.entity';
 import { JoinUserEvent } from '../dal/entity/joinUserEvent.entity';
@@ -16,6 +15,7 @@ import { UserDevice } from '../dal/entity/userDevice.entity';
 import { File } from '../dal/entity/file.entity';
 import { JoinEventFile } from '../dal/entity/joinEventFile.entity';
 import { EntityManager } from '@mikro-orm/core';
+import { FileService } from '../file/file-service.abstract';
 
 describe('EventService', () => {
   let service: EventService;
@@ -34,7 +34,7 @@ describe('EventService', () => {
         ImageFileService,
         NotificationService,
         {
-          provide: FILE_SERVICE,
+          provide: FileService,
           useClass: LocalFileService,
         },
         {

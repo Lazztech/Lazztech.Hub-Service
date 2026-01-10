@@ -2,16 +2,14 @@ import { Inject, UseGuards } from '@nestjs/common';
 import { Args, ID, Mutation, Resolver } from '@nestjs/graphql';
 import { GqlJwtAuthGuard } from '../../auth/guards/gql-jwt-auth.guard';
 import { UserId } from '../../decorators/user.decorator';
-import { FILE_SERVICE } from '../file-service.token';
-import { FileServiceInterface } from '../interfaces/file-service.interface';
-
+import { FileService } from '../file-service.abstract';
 @UseGuards(GqlJwtAuthGuard)
 @Resolver()
 export class FileResolver {
 
     constructor(
-        @Inject(FILE_SERVICE)
-        private readonly fileService: FileServiceInterface,
+      @Inject()
+      private readonly fileService: FileService,
     ) {}
 
     @Mutation(() => Boolean)

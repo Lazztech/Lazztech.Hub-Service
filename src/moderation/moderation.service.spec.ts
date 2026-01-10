@@ -9,7 +9,6 @@ import { ModerationService } from './moderation.service';
 import { ConfigModule } from '@nestjs/config';
 import { NotificationService } from '../notification/notification.service';
 import { ImageFileService } from '../file/image-file/image-file.service';
-import { FILE_SERVICE } from '../file/file-service.token';
 import { LocalFileService } from '../file/local-file/local-file.service';
 import { InAppNotification } from '../dal/entity/inAppNotification.entity';
 import { UserDevice } from '../dal/entity/userDevice.entity';
@@ -20,6 +19,7 @@ import { Event } from '../dal/entity/event.entity';
 import { JoinUserEvent } from '../dal/entity/joinUserEvent.entity';
 import { File } from '../dal/entity/file.entity';
 import { JoinHubFile } from '../dal/entity/joinHubFile.entity';
+import { FileService } from '../file/file-service.abstract';
 
 describe('ModerationService', () => {
   let service: ModerationService;
@@ -39,7 +39,7 @@ describe('ModerationService', () => {
         NotificationService,
         ImageFileService,
         {
-          provide: FILE_SERVICE,
+          provide: FileService,
           useClass: LocalFileService,
         },
         NotificationService,

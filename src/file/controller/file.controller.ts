@@ -1,8 +1,5 @@
 import { Controller, Get, Header, Inject, Logger, Param, Res } from '@nestjs/common';
 import { Response } from 'express';
-import { join } from 'path';
-import sharp from 'sharp';
-import { FILE_SERVICE } from '../file-service.token';
 import { ImageFileService } from '../image-file/image-file.service';
 import { FileService } from '../file-service.abstract';
 
@@ -11,7 +8,7 @@ export class FileController {
   private logger = new Logger(FileController.name);
 
   constructor(
-    @Inject(FILE_SERVICE)
+    @Inject()
     private readonly fileService: FileService,
     private readonly imageService: ImageFileService,
   ) {}

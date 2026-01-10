@@ -6,18 +6,17 @@ import { v4 as uuid } from 'uuid';
 import { Event } from '../dal/entity/event.entity';
 import { JoinUserEvent, RSVP } from '../dal/entity/joinUserEvent.entity';
 import { User } from '../dal/entity/user.entity';
-import { FILE_SERVICE } from '../file/file-service.token';
-import { FileServiceInterface } from '../file/interfaces/file-service.interface';
 import { NotificationService } from '../notification/notification.service';
 import { JoinEventFile } from '../dal/entity/joinEventFile.entity';
+import { FileService } from '../file/file-service.abstract';
 
 @Injectable()
 export class EventService {
     private readonly logger = new Logger(EventService.name);
 
     constructor(
-        @Inject(FILE_SERVICE)
-        private readonly fileService: FileServiceInterface,
+        @Inject()
+        private readonly fileService: FileService,
         @InjectRepository(JoinUserEvent)
         private readonly joinUserEventRepository: EntityRepository<JoinUserEvent>,
         @InjectRepository(Event)

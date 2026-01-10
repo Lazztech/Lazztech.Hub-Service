@@ -1,30 +1,45 @@
-import { EntityManager, EntityRepository } from '@mikro-orm/core';
+import { EntityManager } from '@mikro-orm/core';
 import { getRepositoryToken } from '@mikro-orm/nestjs';
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
+import fs from 'fs';
 import { File } from '../../dal/entity/file.entity';
-import { ImageFileService } from '../image-file/image-file.service';
 import { LocalFileService } from './local-file.service';
+
+jest.mock('fs');
 
 describe('LocalFileService', () => {
   let service: LocalFileService;
 
   beforeEach(async () => {
+    jest.clearAllMocks();
+    (fs.existsSync as jest.Mock).mockReturnValue(true);
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    (fs.mkdirSync as jest.Mock).mockImplementation(() => {});
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        ConfigService, 
-        ImageFileService, 
         LocalFileService,
         {
+          provide: ConfigService,
+          useValue: {
+            getOrThrow: jest.fn(() => ''),
+          },
+        },
+        {
           provide: getRepositoryToken(File),
-          useClass: EntityRepository,
+          useValue: {
+            findOne: jest.fn(),
+            find: jest.fn(),
+            persistAndFlush: jest.fn(),
+          },
         },
         {
           provide: EntityManager,
           useValue: {
-            persist: jest.fn().mockReturnThis(),
-            remove: jest.fn().mockReturnThis(),
-            flush: jest.fn().mockResolvedValue(undefined),
+            query: jest.fn(),
+            // you can mock other functions inside
+            // the entity manager object, my case only needed query method
           },
         },
       ],
@@ -37,3 +52,4 @@ describe('LocalFileService', () => {
     expect(service).toBeDefined();
   });
 });
+

@@ -10,13 +10,16 @@ import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
 import { PasswordReset } from '../dal/entity/passwordReset.entity';
 import { User } from '../dal/entity/user.entity';
 import { EmailService } from '../email/email.service';
-import { FILE_SERVICE } from '../file/file-service.token';
 import { ImageFileService } from '../file/image-file/image-file.service';
 import { LocalFileService } from '../file/local-file/local-file.service';
 import { EditUserDetails } from './dto/editUserDetails.input';
 import { UserService } from './user.service';
 import { JoinEventFile } from '../dal/entity/joinEventFile.entity';
 import { JoinHubFile } from '../dal/entity/joinHubFile.entity';
+import { FileService } from '../file/file-service.abstract';
+import fs from 'fs';
+
+jest.mock('fs');
 
 describe('UserService', () => {
   let service: UserService;
@@ -25,16 +28,25 @@ describe('UserService', () => {
   let em: EntityManager;
 
   beforeEach(async () => {
+    (fs.existsSync as jest.Mock).mockReturnValue(true);
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    (fs.mkdirSync as jest.Mock).mockImplementation(() => {});
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         UserService,
         ImageFileService,
         {
-          provide: FILE_SERVICE,
+          provide: FileService,
           useClass: LocalFileService,
         },
         EmailService,
-        ConfigService,
+        {
+          provide: ConfigService,
+          useValue: {
+            getOrThrow: jest.fn(() => ''),
+            get: jest.fn(() => ''),
+          },
+        },
         {
           provide: getRepositoryToken(PasswordReset),
           useClass: EntityRepository,

@@ -5,7 +5,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ImageFileService } from '../file/image-file/image-file.service';
 import { Event } from '../dal/entity/event.entity';
 import { JoinUserEvent } from '../dal/entity/joinUserEvent.entity';
-import { FILE_SERVICE } from '../file/file-service.token';
 import { LocalFileService } from '../file/local-file/local-file.service';
 import { EventResolver } from './event.resolver';
 import { EventService } from './event.service';
@@ -18,6 +17,7 @@ import { File } from '../dal/entity/file.entity';
 import { EventGeofenceService } from './event-geofence/event-geofence.service';
 import { JoinEventFile } from '../dal/entity/joinEventFile.entity';
 import { EntityManager } from '@mikro-orm/core';
+import { FileService } from '../file/file-service.abstract';
 
 describe('EventResolver', () => {
   let resolver: EventResolver;
@@ -38,7 +38,7 @@ describe('EventResolver', () => {
         ImageFileService,
         NotificationService,
         {
-          provide: FILE_SERVICE,
+          provide: FileService,
           useClass: LocalFileService,
         },
         {

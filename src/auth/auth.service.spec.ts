@@ -12,13 +12,13 @@ import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { S3Module, S3ModuleOptions } from 'nestjs-s3';
 import { ImageFileService } from '../file/image-file/image-file.service';
-import { FILE_SERVICE } from '../file/file-service.token';
 import { getRepositoryToken } from '@mikro-orm/nestjs';
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { Block } from '../dal/entity/block.entity';
 import { File } from '../dal/entity/file.entity';
 import { JoinEventFile } from '../dal/entity/joinEventFile.entity';
 import { JoinHubFile } from '../dal/entity/joinHubFile.entity';
+import { FileService } from '../file/file-service.abstract';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -55,7 +55,7 @@ describe('AuthService', () => {
         UserService,
         ImageFileService,
         {
-          provide: FILE_SERVICE,
+          provide: FileService,
           useClass: S3FileService,
         },
         {
