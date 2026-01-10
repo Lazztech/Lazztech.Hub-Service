@@ -23,7 +23,10 @@ export class LocalFileService extends FileService {
   ) {
     super(configService);
     this.logger.debug('constructor');
-    this.directory = configService.getOrThrow('DATA_PATH');
+    this.directory = configService.get(
+      'FILE_STORAGE_DIR',
+      path.join('data', 'uploads'),
+    );
     this.setupDir();
   }
 
