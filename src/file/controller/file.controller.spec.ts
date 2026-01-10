@@ -28,6 +28,7 @@ describe('FileController', () => {
         {
           provide: ConfigService,
           useValue: {
+            get: jest.fn(() => ''),
             getOrThrow: jest.fn(() => ''),
           },
         },

@@ -27,6 +27,7 @@ describe('FileResolver', () => {
         {
           provide: ConfigService,
           useValue: {
+            get: jest.fn(() => ''),
             getOrThrow: jest.fn(() => ''),
           },
         },

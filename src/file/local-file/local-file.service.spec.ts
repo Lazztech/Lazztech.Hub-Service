@@ -23,6 +23,7 @@ describe('LocalFileService', () => {
         {
           provide: ConfigService,
           useValue: {
+            get: jest.fn(() => ''),
             getOrThrow: jest.fn(() => ''),
           },
         },
