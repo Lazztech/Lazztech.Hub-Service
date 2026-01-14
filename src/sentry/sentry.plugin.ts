@@ -1,5 +1,5 @@
 import { Plugin } from '@nestjs/apollo'
-import { ApolloServerPlugin, GraphQLRequestListener, GraphQLRequestContext } from '@apollo/server'
+import { ApolloServerPlugin, GraphQLRequestListener } from '@apollo/server'
 import { InjectSentry, SentryService } from '@ntegral/nestjs-sentry'
 
 import '@sentry/tracing'

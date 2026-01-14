@@ -7,10 +7,10 @@ import { NotificationService } from '../notification/notification.service';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { Block } from '../dal/entity/block.entity';
-import { v4 as uuid } from 'uuid';
 import { FileUpload } from '../file/interfaces/file-upload.interface';
 import { JoinHubFile } from '../dal/entity/joinHubFile.entity';
 import { FileService } from '../file/file-service.abstract';
+import { randomUUID } from 'crypto';
 
 @Injectable()
 export class HubService {
@@ -62,7 +62,7 @@ export class HubService {
     this.logger.debug(this.resetShareableID.name);
     const userHub = await this.joinUserHubRepository.findOneOrFail({ user: userId, hub: hubId, isOwner: true });
     const hub = await userHub.hub.load();
-    hub.shareableId = uuid();
+    hub.shareableId = randomUUID();
     this.em.persist(hub).flush();
     return userHub;
 }

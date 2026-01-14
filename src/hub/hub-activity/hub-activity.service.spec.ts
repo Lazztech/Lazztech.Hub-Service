@@ -14,7 +14,6 @@ import { EntityManager, EntityRepository } from '@mikro-orm/core';
 describe('HubActivityService', () => {
   let service: HubActivityService;
   let joinUserHubRepo: EntityRepository<JoinUserHub>;
-  let hubRepo: EntityRepository<Hub>;
   let notificationService: NotificationService;
   let em: EntityManager;
 
@@ -64,7 +63,6 @@ describe('HubActivityService', () => {
     joinUserHubRepo = module.get<EntityRepository<JoinUserHub>>(
       getRepositoryToken(JoinUserHub),
     );
-    hubRepo = module.get<EntityRepository<Hub>>(getRepositoryToken(Hub));
     notificationService = module.get(NotificationService);
     em = module.get<EntityManager>(EntityManager);
   });

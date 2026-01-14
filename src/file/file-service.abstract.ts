@@ -1,14 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { type Response } from 'express';
 import { join } from 'path';
 import sharp from 'sharp';
 import { File } from 'src/dal/entity/file.entity';
 import Stream, { Readable } from 'stream';
 import { FileServiceInterface } from './interfaces/file-service.interface';
 import { FileUpload } from './interfaces/file-upload.interface';
-import { ReadStream } from 'fs';
-
 
 @Injectable()
 export abstract class FileService implements FileServiceInterface {

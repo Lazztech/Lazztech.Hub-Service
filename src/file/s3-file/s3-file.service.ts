@@ -29,10 +29,6 @@ export class S3FileService extends FileService{
   getWatermark(): Promise<Buffer<ArrayBufferLike>> {
     throw new Error('Method not implemented.');
   }
-  watermarkImage(fileStream: Stream.Readable | undefined): Promise<Readable | undefined> {
-    throw new Error('Method not implemented.');
-  }
-
 
   public async storeImageFromFileUpload(upload: Promise<FileUpload> | FileUpload, userId: any): Promise<File> {
     const { createReadStream, mimetype } = await upload;

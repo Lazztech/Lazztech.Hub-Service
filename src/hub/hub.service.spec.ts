@@ -6,7 +6,6 @@ import { InAppNotification } from '../dal/entity/inAppNotification.entity';
 import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
 import { User } from '../dal/entity/user.entity';
 import { UserDevice } from '../dal/entity/userDevice.entity';
-import { FileServiceInterface } from '../file/interfaces/file-service.interface';
 import { ImageFileService } from '../file/image-file/image-file.service';
 import { NotificationService } from '../notification/notification.service';
 import { HubService } from './hub.service';
@@ -24,7 +23,7 @@ describe('HubService', () => {
   let joinUserHubRepo: EntityRepository<JoinUserHub>;
   let blockRepo: EntityRepository<Block>;
   let hubRepo: EntityRepository<Hub>;
-  let fileService: FileServiceInterface;
+  let fileService: FileService;
   let em: EntityManager;
 
   beforeEach(async () => {
@@ -100,7 +99,7 @@ describe('HubService', () => {
       getRepositoryToken(Block)
     );
     hubRepo = module.get<EntityRepository<Hub>>(getRepositoryToken(Hub));
-    fileService = module.get<FileServiceInterface>(FileService);
+    fileService = module.get<FileService>(FileService);
     em = module.get<EntityManager>(EntityManager);
   });
 

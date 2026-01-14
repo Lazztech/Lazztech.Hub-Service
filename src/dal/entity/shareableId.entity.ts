@@ -1,7 +1,6 @@
 import { BeforeCreate, Property } from '@mikro-orm/core';
 import { Field, ObjectType } from '@nestjs/graphql';
-import { v4 as uuid } from 'uuid';
-
+import { randomUUID } from 'crypto';
 @ObjectType({ isAbstract: true })
 export abstract class ShareableId {
 
@@ -12,7 +11,7 @@ export abstract class ShareableId {
   // Only fires is repostiory.create is used for before save
   @BeforeCreate()
   public addId(){
-    this.shareableId = uuid();
+    this.shareableId = randomUUID();
   }
 
   @Property({ nullable: true })
