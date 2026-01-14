@@ -2,24 +2,23 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Hub } from '../dal/entity/hub.entity';
 import { JoinUserHub } from '../dal/entity/joinUserHub.entity';
 import { User } from '../dal/entity/user.entity';
-import { FileServiceInterface } from 'src/file/interfaces/file-service.interface';
 import { EditUserDetails } from './dto/editUserDetails.input';
-import { FILE_SERVICE } from '../file/file-service.token';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { Block } from '../dal/entity/block.entity';
-import { FileUpload } from 'src/file/interfaces/file-upload.interface';
+import { FileUpload } from '../file/interfaces/file-upload.interface';
 import { File } from '../dal/entity/file.entity';
 import { JoinEventFile } from '../dal/entity/joinEventFile.entity';
 import { JoinHubFile } from '../dal/entity/joinHubFile.entity';
+import { FileService } from '../file/file-service.abstract';
 
 @Injectable()
 export class UserService {
   private logger = new Logger(UserService.name);
 
   constructor(
-    @Inject(FILE_SERVICE)
-    private readonly fileService: FileServiceInterface,
+    @Inject()
+    private readonly fileService: FileService,
     @InjectRepository(JoinUserHub)
     private joinUserHubRepository: EntityRepository<JoinUserHub>,
     @InjectRepository(User)

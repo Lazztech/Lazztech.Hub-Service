@@ -1,33 +1,32 @@
-import { HttpException, HttpStatus, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { v1 as uuidv1 } from 'uuid';
-import { FileServiceInterface } from '../interfaces/file-service.interface';
-import { ImageFileService } from '../image-file/image-file.service';
 import * as fs from 'fs';
 import * as path from 'path';
-import { FileUpload } from '../interfaces/file-upload.interface';
 import sharp from 'sharp';
-import { Stream } from 'stream';
+import { Readable, Stream } from 'stream';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { File } from '../../dal/entity/file.entity';
+import { FileService } from '../file-service.abstract';
+import { randomUUID } from 'crypto';
+import { FileUpload } from '../interfaces/file-upload.interface';
 
 @Injectable()
-export class LocalFileService implements FileServiceInterface {
-  private logger = new Logger(LocalFileService.name);
-  private directory: string = this.configService.get(
-    'FILE_STORAGE_DIR',
-    path.join('data', 'uploads'),
-  );
+export class LocalFileService extends FileService {
+  private directory: string;
 
   constructor(
-    private readonly configService: ConfigService,
-    private readonly imageFileService: ImageFileService,
+    readonly configService: ConfigService,
     @InjectRepository(File)
     private readonly fileRepository: EntityRepository<File>,
     private readonly em: EntityManager,
   ) {
+    super(configService);
     this.logger.debug('constructor');
+    this.directory = configService.get(
+      'FILE_STORAGE_DIR',
+      path.join('data', 'uploads'),
+    );
     this.setupDir();
   }
 
@@ -37,7 +36,7 @@ export class LocalFileService implements FileServiceInterface {
       throw new HttpException('Wrong filetype', HttpStatus.BAD_REQUEST);
     }
 
-    const fileName = uuidv1() + '.webp';
+    const fileName = randomUUID() + '.webp';
     const transformer = sharp()
       .webp({ quality: 100 })
       .resize(1080, 1080, { fit: sharp.fit.inside });
@@ -54,22 +53,21 @@ export class LocalFileService implements FileServiceInterface {
     return file;
   }
 
-  get(fileName: string): fs.ReadStream {
-    if (fs.existsSync(path.join(this.directory, fileName))) {
-      return fs.createReadStream(path.join(this.directory, fileName));
-    } else {
-      throw new NotFoundException(fileName);
-    }
+async get(fileName: string): Promise<Readable> {
+  if (fs.existsSync(path.join(this.directory, fileName))) {
+    return fs.createReadStream(path.join(this.directory, fileName));
   }
+  throw new NotFoundException(fileName);
+}
 
-  async getByShareableId(shareableId: string): Promise<fs.ReadStream> {
-    const file = await this.fileRepository.findOneOrFail({ shareableId });
-    if (fs.existsSync(path.join(this.directory, file.fileName))) {
-      return fs.createReadStream(path.join(this.directory, file.fileName));
-    } else {
-      throw new NotFoundException(file.fileName);
-    }
+async getByShareableId(shareableId: string): Promise<Readable> {
+  const file = await this.fileRepository.findOneOrFail({ shareableId });
+
+  if (fs.existsSync(path.join(this.directory, file.fileName))) {
+    return fs.createReadStream(path.join(this.directory, file.fileName));
   }
+  throw new NotFoundException(file.fileName);
+}
 
   async delete(fileName: string): Promise<void> {
     return fs.promises.unlink(path.join(this.directory, fileName))

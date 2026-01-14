@@ -6,7 +6,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { InAppNotification } from '../dal/entity/inAppNotification.entity';
 import { Invite } from '../dal/entity/invite.entity';
 import { UserDevice } from '../dal/entity/userDevice.entity';
-import { FILE_SERVICE } from '../file/file-service.token';
 import { ImageFileService } from '../file/image-file/image-file.service';
 import { LocalFileService } from '../file/local-file/local-file.service';
 import { HubService } from '../hub/hub.service';
@@ -22,6 +21,7 @@ import { File } from '../dal/entity/file.entity';
 import { JoinHubFile } from '../dal/entity/joinHubFile.entity';
 import { Block } from '../dal/entity/block.entity';
 import { EntityManager } from '@mikro-orm/core';
+import { FileService } from '../file/file-service.abstract';
 
 describe('ModerationResolver', () => {
   let resolver: ModerationResolver;
@@ -42,7 +42,7 @@ describe('ModerationResolver', () => {
         NotificationService,
         ImageFileService,
         {
-          provide: FILE_SERVICE,
+          provide: FileService,
           useClass: LocalFileService,
         },
         NotificationService,

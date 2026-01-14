@@ -1,6 +1,5 @@
 import { FactoryProvider, Logger, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { FILE_SERVICE } from './file-service.token';
 import { FileController } from './controller/file.controller';
 import { ImageFileService } from './image-file/image-file.service';
 import { LocalFileService } from './local-file/local-file.service';
@@ -10,9 +9,10 @@ import * as path from 'path';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { File } from '../dal/entity/file.entity';
 import { FileResolver } from './resolver/file.resolver';
+import { FileService } from './file-service.abstract';
 
 export const fileServiceFactory = {
-  provide: FILE_SERVICE,
+  provide: FileService,
   useFactory: (
     configService: ConfigService,
     localFileService: LocalFileService,
@@ -56,7 +56,7 @@ export const fileServiceFactory = {
     FileUrlService,
     FileResolver,
   ],
-  exports: [FILE_SERVICE, FileUrlService],
+  exports: [FileService, FileUrlService],
 })
 export class FileModule {
   public static logger = new Logger(FileModule.name);
