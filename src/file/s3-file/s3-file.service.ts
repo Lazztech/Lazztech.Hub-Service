@@ -1,5 +1,4 @@
 import { HttpException, HttpStatus, Injectable} from '@nestjs/common';
-import { ImageFileService } from '../image-file/image-file.service';
 import { ConfigService } from '@nestjs/config';
 import sharp from 'sharp';
 import { Readable, Stream } from 'stream';
@@ -17,7 +16,6 @@ export class S3FileService extends FileService{
 
   constructor(
     @InjectS3() private readonly s3: S3,
-    private readonly imageFileService: ImageFileService,
     readonly configService: ConfigService,
     @InjectRepository(File)
     private readonly fileRepository: EntityRepository<File>,
@@ -25,10 +23,7 @@ export class S3FileService extends FileService{
   ) {
     super(configService);
   }
-  public watermark: Promise<Buffer<ArrayBufferLike>>;
-  getWatermark(): Promise<Buffer<ArrayBufferLike>> {
-    throw new Error('Method not implemented.');
-  }
+
 
   public async storeImageFromFileUpload(upload: Promise<FileUpload> | FileUpload, userId: any): Promise<File> {
     const { createReadStream, mimetype } = await upload;

@@ -4,7 +4,6 @@ import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { S3Module, S3ModuleOptions } from 'nestjs-s3';
 import { File } from '../../dal/entity/file.entity';
-import { ImageFileService } from '../image-file/image-file.service';
 import { S3FileService } from './s3-file.service';
 import { EntityManager } from '@mikro-orm/core';
 
@@ -26,7 +25,6 @@ describe('S3FileService', () => {
       ],
       providers: [
         S3FileService, 
-        ImageFileService, 
         ConfigService,
         {
           provide: getRepositoryToken(File),
