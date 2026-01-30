@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import sharp from 'sharp';
 import { Readable, Stream } from 'stream';
 import { InjectS3, type S3 } from 'nestjs-s3';
+import { Upload } from '@aws-sdk/lib-storage';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { File } from '../../dal/entity/file.entity';
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
@@ -37,20 +38,29 @@ export class S3FileService extends FileService{
       .webp({ quality: 100 })
       .resize(1080, 1080, { fit: sharp.fit.inside });
 
-    const uploadStream = this.uploadStream(fileName);
+    const passThrough = new Stream.PassThrough();
     
+    // Pipe the upload stream through sharp transformer to passThrough
     createReadStream()
       .pipe(transformer)
-      .pipe(uploadStream.writeStream)
-      .on('error', () => {
-        new HttpException('Could not save image', HttpStatus.BAD_REQUEST);
-      });
-    
-    // await completion of upload
+      .pipe(passThrough);
+
+    // Use AWS SDK v3 Upload for streaming multipart uploads
+    const s3Upload = new Upload({
+      client: this.s3,
+      params: {
+        Bucket: this.bucketName,
+        Key: fileName,
+        Body: passThrough,
+        ContentType: 'image/webp',
+      },
+    });
+
+    // Handle upload completion
     try {
-      await uploadStream.promise;
+      await s3Upload.done();
     } catch (err) {
-      uploadStream.writeStream.destroy()
+      passThrough.destroy();
       throw new HttpException('Could not save image', HttpStatus.BAD_REQUEST);
     }
 
@@ -61,18 +71,6 @@ export class S3FileService extends FileService{
     });
     await this.em.persistAndFlush(file);
     return file;
-  }
-
-  private uploadStream(key: string) {
-    const pass = new Stream.PassThrough();
-    return {
-      writeStream: pass,
-      promise: this.s3.putObject({
-        Bucket: this.bucketName,
-        Key: key,
-        Body: pass,
-      }),
-    };
   }
 
   public async delete(url: string): Promise<void> {
